@@ -1,0 +1,131 @@
+// /* eslint import/no-default-export: off */
+// import { NextSeo } from "next-seo";
+// import { allDocuments } from "../.contentlayer/generated";
+// import { useMDXComponent } from "next-contentlayer/hooks";
+
+// // import { CustomLink, Pre, BlogsList } from "@flowershow/core";
+
+// import { getPageData } from "../lib/getPageData";
+// import layouts from "../layouts";
+// import { siteConfig } from "../config/siteConfig";
+// import Layout from "../components/_shared/Layout";
+// import TopBar from "../components/_shared/TopBar";
+
+// // workaround solution to allow importing components
+// // that import from "next" package (e.g. next/link) in MDX pages
+// // more info: https://github.com/contentlayerdev/contentlayer/issues/288
+// const codePrefix = `
+// if (typeof process === 'undefined') {
+//   globalThis.process = { env: {} }
+// }
+// `;
+
+// // this is a workaround for error's thrown in contentlayer's
+// // useMDXComponent hook when md file is empty
+// const defaultCode = `
+// return {default: () => React.createElement('div', null, '')}
+// `;
+
+// export default function Page({ globals, body, ...meta }) {
+//   const pageCode = body.code.length > 0 ? body.code : defaultCode;
+//   const MDXPage = useMDXComponent(`${codePrefix}${pageCode}`, globals);
+//   const { image, title, description } = meta;
+
+//   const MDXComponents = {
+//     /* Head, */ // TODO why do we need this here?
+//     a: (props) => (
+//       <CustomLink
+//         data={allDocuments}
+//         usehook={useMDXComponent}
+//         preview={siteConfig.showLinkPreviews}
+//         {...props}
+//       />
+//     ),
+//     pre: Pre,
+//     /* eslint no-unused-vars: off */
+//     // TODO this is a temporary workaround for errors resulting from importing this component directly in mdx file
+//     // see this issue for ref: https://github.com/kentcdodds/mdx-bundler/issues/156
+//     BlogsList,
+//     wrapper: ({ components, layout, ...props }) => {
+//       const Layout = layouts[layout];
+//       return <Layout {...props} />;
+//     },
+//     // user defined MDX components could be added here
+//     // ...userMDXComponents
+//   };
+
+//   // Handle SEO Image urls in frontmatter
+//   // TODO why do we remove the "/" at the end? Should images be in form of "/some_image.png"?
+//   const websiteUrl = siteConfig.authorUrl.replace(/\/+$/, "");
+//   const seoImageUrl =
+//     image && image.startsWith("http") ? image : websiteUrl + image;
+
+//   return (
+//     <>
+//       <Layout>
+//         <section className="row-start-1 row-end-3 col-span-full">
+//           <div
+//             className="bg-cover h-full bg-center bg-no-repeat bg-black flex flex-col"
+//             style={{
+//               backgroundImage: "url('/images/backgrounds/SearchHero.avif')",
+//             }}
+//           >
+//             <TopBar />
+//           </div>
+//         </section>
+//         <NextSeo
+//           title={title}
+//           openGraph={{
+//             title: title,
+//             description: description,
+//             images: image
+//               ? [
+//                   {
+//                     url: seoImageUrl,
+//                     width: 1200,
+//                     height: 627,
+//                     alt: title,
+//                   },
+//                 ]
+//               : siteConfig?.nextSeo?.openGraph?.images || [],
+//           }}
+//         />
+//         <MDXPage
+//           components={MDXComponents}
+//           frontMatter={{ ...meta }}
+//           {...meta}
+//         />
+//       </Layout>
+//     </>
+//   );
+// }
+
+// export async function getStaticProps({ params }) {
+//   // params.slug is undefined for root index page
+//   const urlPath = params.slug ? params.slug.join("/") : "";
+//   // TODO types
+//   const page: any = allDocuments.find((p) => p.url_path === urlPath);
+//   const globals = await getPageData(page.data);
+//   // TODO this is a temporary solution used to pass authors to blog layout
+//   // const authorsDetails = getAuthorsDetails(page.authors);
+
+//   return { props: { ...page, globals } };
+// }
+
+// export async function getStaticPaths() {
+//   const paths = allDocuments
+//     .filter((page) => !page?.isDraft)
+//     .map((page) => {
+//       const parts = page.url_path.split("/");
+//       return { params: { slug: parts } };
+//     });
+
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+// }
+
+export default function Page() {
+  return <div>slug for flowershow commented out</div>;
+}

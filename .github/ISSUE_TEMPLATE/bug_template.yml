@@ -59,7 +59,7 @@ body:
     attributes:
       label: "📋 Logs"
       description: "Share any relevant log output or error messages."
-  
+
   - type: dropdown
     id: browsers
     attributes:
@@ -79,7 +79,7 @@ body:
       label: "💻 Operating System"
       description: "Which operating system(s) is affected?"
       multiple: true
-      options: 
+      options:
         - Windows
         - Linux
         - macOS

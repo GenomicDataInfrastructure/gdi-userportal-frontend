@@ -26,6 +26,6 @@ jobs:
           npm run lint
       - name: Prettier
         run: |
-          npx prettier --check .
+          npm run format
       - name: REUSE Compliance Check
         uses: fsfe/reuse-action@v2

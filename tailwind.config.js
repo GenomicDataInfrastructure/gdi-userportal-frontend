@@ -1,9 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-import type { Config } from "tailwindcss";
-
-const config: Config = {
+module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -20,4 +18,3 @@ const config: Config = {
   },
   plugins: [],
 };
-export default config;

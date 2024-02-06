@@ -29,6 +29,19 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+body {
+  @apply font-sans;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-medium;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

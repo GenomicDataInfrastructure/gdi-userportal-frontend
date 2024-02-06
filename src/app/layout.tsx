@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import type { Metadata } from "next";
 import Navbar from "../components/navbar";
 import { exposeFont, satoshiFont, tabularFont } from "../utils/fonts";

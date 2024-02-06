@@ -9,6 +9,11 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+
+  --color-wine-berry: #480837;
+  --color-claret: #7b1c58;
+  --color-scampi-blue: #7276b1;
+  --color-grandis-yellow: #ffdb95;
 }
 
 @media (prefers-color-scheme: dark) {

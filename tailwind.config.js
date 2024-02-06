@@ -9,6 +9,19 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        // Functional color names
+        primary: "var(--color-wine-berry)",
+        secondary: "var(--color-claret)",
+        info: "var(--color-scampi-blue)",
+        warning: "var(--color-grandis-yellow)",
+
+        // Descriptive color names as an alternative reference or for specific use cases.
+        "wine-berry": "var(--color-wine-berry)",
+        claret: "var(--color-claret)",
+        "scampi-blue": "var(--color-scampi-blue)",
+        "grandis-yellow": "var(--color-grandis-yellow)",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

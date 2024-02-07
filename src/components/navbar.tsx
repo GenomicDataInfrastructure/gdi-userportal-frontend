@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 "use client";
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../public/egdi-logo-horizontal-full-color-rgb.svg";
@@ -83,28 +83,28 @@ function Header() {
                 </div>
               )}
               {!isAuthenticated && (
-                <a
+                <button
                   onClick={login}
-                  className="text-primary hover:bg-secondary hover:text-white block px-4 py-2"
+                  className="text-primary hover:bg-secondary hover:text-white block px-4 py-2 w-full text-left"
                 >
                   <FontAwesomeIcon icon={faRightToBracket} className="mr-2" />
                   Login
-                </a>
+                </button>
               )}
               {isAuthenticated && (
-                <a
+                <button
                   onClick={logout}
-                  className="text-primary hover:bg-secondary hover:text-white block px-4 py-2"
+                  className="text-primary hover:bg-secondary hover:text-white block px-4 py-2 w-full text-left"
                 >
                   <FontAwesomeIcon icon={faRightFromBracket} className="mr-2" />
                   Logout
-                </a>
+                </button>
               )}
             </div>
           )}
         </div>
       </div>
-      <div className="flex justify-end bg-info border-t-8 border-secondary pr-4 py-4 text-lg text-white">
+      <div className="flex justify-end bg-primary border-t-8 border-warning pr-4 py-4 text-lg text-white">
         <Link href="/" className="hover:text-primary">
           Home
         </Link>

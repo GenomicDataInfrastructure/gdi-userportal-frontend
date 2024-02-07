@@ -2,6 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-export default function Home() {
-  return <h1>Home</h1>;
+export default function DatasetPage() {
+  return <h1>Datasets</h1>;
 }

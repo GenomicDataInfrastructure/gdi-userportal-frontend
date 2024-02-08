@@ -18,7 +18,6 @@ import logo from "../public/egdi-logo-horizontal-full-color-rgb.svg";
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const activeTab = usePathname();
-  console.log(activeTab);
 
   // Mock authentication state and functions
   const isAuthenticated = false;

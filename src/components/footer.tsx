@@ -18,7 +18,7 @@ function Footer() {
     <footer className="bg-white-smoke flex flex-col md:flex-row justify-between p-7 gap-y-4 items-center md:gap-y-0 md:gap-x-4 border-t-[#7B1C58] border-t-4">
       <div className="flex items-center gap-4">
         <Image src={flag} alt="EU flag" width={80} />
-        <p className="text-[10px] md:text-[12px] text-black">
+        <p className="text-[10px] md:text-[12px]">
           GDI project receives funding from the European Union’s Digital Europe
           <br />
           Programme under grant agreement number 101081813.

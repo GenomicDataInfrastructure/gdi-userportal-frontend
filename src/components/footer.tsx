@@ -51,7 +51,6 @@ function Footer() {
             />
           </a>
           <a
-            mat-icon-button
             color="primary"
             href="https://github.com/GenomicDataInfrastructure"
             target="_blank"
@@ -61,7 +60,6 @@ function Footer() {
             <FontAwesomeIcon icon={faGithub} className="text-lg md:text-2xl" />
           </a>
           <a
-            mat-icon-button
             color="primary"
             href="https://gdi.onemilliongenomes.eu/"
             target="_blank"

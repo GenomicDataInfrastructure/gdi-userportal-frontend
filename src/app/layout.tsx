@@ -3,9 +3,12 @@
 // SPDX-License-Identifier: Apache-2.0
 import Disclaimer from "@/components/disclaimer";
 import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
+import Header from "@/components/header";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 import { exposeFont, satoshiFont, tabularFont } from "../utils/fonts";
 import "./globals.css";
+config.autoAddCss = false;
 
 export default function RootLayout({
   children,
@@ -23,8 +26,8 @@ export default function RootLayout({
       </head>
       <body>
         <div className="grid h-screen grid-rows-[auto_1fr_auto] w-screen">
-          <div className="bg-[#f5f5f5]">
-            <Navbar />
+          <div>
+            <Header />
           </div>
           <div>{children}</div>
           <div>

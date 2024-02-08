@@ -19,6 +19,7 @@ module.exports = {
         // Descriptive color names as an alternative reference or for specific use cases.
         "wine-berry": "var(--color-wine-berry)",
         claret: "var(--color-claret)",
+        "white-smoke": "var(--color-white-smoke)",
         "scampi-blue": "var(--color-scampi-blue)",
         "grandis-yellow": "var(--color-grandis-yellow)",
       },

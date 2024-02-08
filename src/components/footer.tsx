@@ -1,7 +1,7 @@
-"use client";
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+"use client";
 import {
   faGithub,
   faLinkedin,
@@ -15,7 +15,7 @@ import flag from "../public/eu-flag.png";
 
 function Footer() {
   return (
-    <footer className="bg-[#f5f5f5] flex flex-col md:flex-row justify-between p-7 gap-y-4 items-center md:gap-y-0 md:gap-x-4 border-t-[#7B1C58] border-t-4">
+    <footer className="bg-white-smoke flex flex-col md:flex-row justify-between p-7 gap-y-4 items-center md:gap-y-0 md:gap-x-4 border-t-[#7B1C58] border-t-4">
       <div className="flex items-center gap-4">
         <Image src={flag} alt="EU flag" width={80} />
         <p className="text-[10px] md:text-[12px] text-black">

@@ -24,7 +24,7 @@ function Header() {
   const logout = () => console.log("Logout");
 
   return (
-    <div className="flex items-center justify-between bg-info-100 w-full px-4">
+    <div className="flex items-center justify-between bg-white-smoke w-full px-4">
       <Link href="/">
         <Image
           src={logo}

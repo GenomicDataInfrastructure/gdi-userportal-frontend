@@ -11,7 +11,7 @@ function Disclaimer() {
       <div className="text-2xl">
         <FontAwesomeIcon icon={faExclamationCircle} />
       </div>
-      <div className="text-[10px] md:text-[12px] text-pretty">
+      <div className="text-xs md:text-sm text-pretty">
         Please note that this version of GDI User Portal is the result of
         deliverable &quot;MS11 - Development of the user portal deployed&quot;,
         which is still undergoing further feature developments and testing

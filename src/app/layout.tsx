@@ -25,7 +25,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
-        <div className="grid h-screen grid-rows-[auto_1fr_auto] w-screen">
+        <div className="grid h-screen w-screen grid-rows-[auto_1fr_auto]">
           <div>
             <Header />
           </div>

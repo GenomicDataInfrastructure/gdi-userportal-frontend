@@ -26,17 +26,17 @@ function Header() {
   const logout = () => console.log("Logout");
 
   return (
-    <div className="flex items-center justify-between bg-white-smoke w-full px-4">
+    <div className="flex w-full items-center justify-between bg-white-smoke px-4">
       <Link href="/">
         <Image
           src={logo}
           alt="Logo"
-          className="mt-4 mb-4"
+          className="mb-4 mt-4"
           width="190"
           height="69"
         />
       </Link>
-      <div className="sm:flex items-center text-primary text-lg">
+      <div className="items-center text-lg text-primary sm:flex">
         <Link
           href="/"
           className={`mr-10 hover:text-info ${activeTab === "/" ? "text-secondary" : ""}`}
@@ -59,7 +59,7 @@ function Header() {
         {isAuthenticated && <span>{username()}</span>}
         {!isAuthenticated && (
           <button
-            className="bg-secondary border-2 hover:bg-transparent hover:border-2 hover:text-secondary hover:border-secondary text-white text-sm font-bold py-2 px-4 rounded"
+            className="rounded border-2 bg-secondary px-4 py-2 text-sm font-bold text-white hover:border-2 hover:border-secondary hover:bg-transparent hover:text-secondary"
             onClick={login}
           >
             <FontAwesomeIcon icon={faRightToBracket} /> Sign In
@@ -71,7 +71,7 @@ function Header() {
           </button>
         )}
       </div>
-      <div className="sm:hidden relative">
+      <div className="relative sm:hidden">
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="text-primary focus:outline-none"
@@ -79,27 +79,27 @@ function Header() {
           <FontAwesomeIcon icon={faBars} />
         </button>
         {isMenuOpen && (
-          <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white">
+          <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg">
             <Link
               href="/"
-              className="text-primary hover:bg-secondary hover:text-white block px-4 py-2"
+              className="block px-4 py-2 text-primary hover:bg-secondary hover:text-white"
             >
               Home
             </Link>
             <Link
               href="/datasets"
-              className="text-primary hover:bg-secondary hover:text-white block px-4 py-2"
+              className="block px-4 py-2 text-primary hover:bg-secondary hover:text-white"
             >
               Datasets
             </Link>
             <Link
               href="/about"
-              className="text-primary hover:bg-secondary hover:text-white block px-4 py-2"
+              className="block px-4 py-2 text-primary hover:bg-secondary hover:text-white"
             >
               About
             </Link>
             {isAuthenticated && (
-              <div className="px-4 py-2 border-b border-gray-200">
+              <div className="border-b border-gray-200 px-4 py-2">
                 <FontAwesomeIcon icon={faUser} className="mr-2" />
                 {username()}
               </div>
@@ -107,7 +107,7 @@ function Header() {
             {!isAuthenticated && (
               <button
                 onClick={login}
-                className="text-primary hover:bg-secondary hover:text-white block px-4 py-2 w-full text-left"
+                className="block w-full px-4 py-2 text-left text-primary hover:bg-secondary hover:text-white"
               >
                 <FontAwesomeIcon icon={faRightToBracket} className="mr-2" />
                 Login
@@ -116,7 +116,7 @@ function Header() {
             {isAuthenticated && (
               <button
                 onClick={logout}
-                className="text-primary hover:bg-secondary hover:text-white block px-4 py-2 w-full text-left"
+                className="block w-full px-4 py-2 text-left text-primary hover:bg-secondary hover:text-white"
               >
                 <FontAwesomeIcon icon={faRightFromBracket} className="mr-2" />
                 Logout

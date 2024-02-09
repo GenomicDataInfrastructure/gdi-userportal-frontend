@@ -7,11 +7,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Disclaimer() {
   return (
-    <div className="m-5 mt-20 md:mt-15 p-5 bg-claret text-white rounded-lg flex flex-row gap-4 items-center">
+    <div className="md:mt-15 m-5 mt-20 flex flex-row items-center gap-4 rounded-lg bg-claret p-5 text-white">
       <div className="text-2xl">
         <FontAwesomeIcon icon={faExclamationCircle} />
       </div>
-      <div className="text-xs md:text-sm text-pretty">
+      <div className="text-pretty text-xs md:text-sm">
         Please note that this version of GDI User Portal is the result of
         deliverable &quot;MS11 - Development of the user portal deployed&quot;,
         which is still undergoing further feature developments and testing

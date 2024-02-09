@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+import { Dataset } from './dataset.interface';
+
 export interface PackageSearchOptions {
   tags?: string[];
   orgs?: string[];

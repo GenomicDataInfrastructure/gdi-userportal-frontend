@@ -65,7 +65,7 @@ export default class CKAN {
 
   private mapDatasets(rawDatasets: RawDataset[]): Dataset[] {
     return rawDatasets.map((rawDataset: RawDataset) => {
-      const mappedDataset: { [key: string]: any } = {};
+      const mappedDataset: { [key: string]: any } = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
       Object.keys(rawDataset).forEach((key) => {
         const camelCaseKey = this.toCamelCase(key);
         mappedDataset[camelCaseKey] = rawDataset[key];

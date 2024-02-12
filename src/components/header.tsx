@@ -20,7 +20,7 @@ function Header() {
   const activeTab = usePathname();
 
   // Mock authentication state and functions
-  const isAuthenticated = false;
+  const isAuthenticated = true;
   const username = () => "User";
   const login = () => console.log("Login");
   const logout = () => console.log("Logout");
@@ -36,22 +36,22 @@ function Header() {
           height="69"
         />
       </Link>
-      <div className="items-center text-lg text-primary sm:flex">
+      <div className="hidden items-center gap-x-5 text-[16px] text-primary sm:flex md:gap-x-11 md:text-lg">
         <Link
           href="/"
-          className={`mr-10 hover:text-info ${activeTab === "/" ? "text-secondary" : ""}`}
+          className={`hover:text-info ${activeTab === "/" ? "text-secondary" : ""}`}
         >
           Home
         </Link>
         <Link
           href="/datasets"
-          className={`mr-10 hover:text-info ${activeTab.includes("datasets") ? "text-secondary" : ""}`}
+          className={`hover:text-info ${activeTab.includes("datasets") ? "text-secondary" : ""}`}
         >
           Datasets
         </Link>
         <Link
           href="/about"
-          className={`mr-10 hover:text-info ${activeTab === "/about" ? "text-secondary" : ""}`}
+          className={`hover:text-info ${activeTab === "/about" ? "text-secondary" : ""}`}
         >
           About
         </Link>
@@ -59,7 +59,7 @@ function Header() {
         {isAuthenticated && <span>{username()}</span>}
         {!isAuthenticated && (
           <button
-            className="rounded border-2 bg-secondary px-4 py-2 text-sm font-bold text-white hover:border-2 hover:border-secondary hover:bg-transparent hover:text-secondary"
+            className="rounded-lg border-2 bg-secondary px-4 py-2 text-sm font-bold text-white hover:border-2 hover:border-secondary hover:bg-transparent hover:text-secondary"
             onClick={login}
           >
             <FontAwesomeIcon icon={faRightToBracket} /> Sign In
@@ -76,7 +76,7 @@ function Header() {
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="text-primary focus:outline-none"
         >
-          <FontAwesomeIcon icon={faBars} />
+          <FontAwesomeIcon icon={faBars} className="text-xl" />
         </button>
         {isMenuOpen && (
           <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg">

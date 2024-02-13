@@ -4,16 +4,12 @@
 import axios from 'axios';
 import { Dataset } from './../../interfaces/dataset.interface';
 import { PackageSearchOptions, PackageSearchResult } from './../../interfaces/packageSearch.interface';
-import { snakeToCamelCase } from './../../utils/snakeToCamelCase';
-
-interface RawDataset {
-  [key: string]: string | string[] | null;
-}
+import { RawDataset, mapDataset, constructCkanActionUrl } from './utils';
 
 export const makePackageSearch = (DMS: string) => {
   return async (options: PackageSearchOptions): Promise<PackageSearchResult> => {
     const queryParams = constructQueryParams(options);
-    const url = `${DMS}/api/3/action/package_search?${queryParams}`;
+    const url = constructCkanActionUrl(DMS, 'package_search', queryParams);
 
     try {
       const response = await axios.get(url);
@@ -56,12 +52,5 @@ const constructQueryParams = (options: PackageSearchOptions): string => {
 };
 
 const mapDatasets = (rawDatasets: RawDataset[]): Dataset[] => {
-  return rawDatasets.map((rawDataset: RawDataset) => {
-    const mappedDataset: { [key: string]: any } = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-    Object.keys(rawDataset).forEach((key) => {
-      const camelCaseKey = snakeToCamelCase(key);
-      mappedDataset[camelCaseKey] = rawDataset[key];
-    });
-    return mappedDataset as Dataset;
-  });
+  return rawDatasets.map(mapDataset);
 };

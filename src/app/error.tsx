@@ -17,7 +17,9 @@ export default function ErrorBoundary({
   statusCode,
 }: ErrorBoundaryProps) {
   useEffect(() => {
-    console.error(error);
+    if (error) {
+      console.error(error);
+    }
   }, [error]);
 
   let heading = "Something Went Wrong";
@@ -41,7 +43,7 @@ export default function ErrorBoundary({
     <section>
       <div className="container mx-auto w-full max-w-3xl p-4 md:p-8">
         <div>
-          {process.env.NODE_ENV !== "development" && error && (
+          {process.env.NODE_ENV === "development" && error && (
             <div className="bg-primary p-4 text-warning">
               <p className="font-medium">{error.message}</p>
               {error.stack && (

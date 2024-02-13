@@ -10,7 +10,7 @@ services:
       context: .
     restart: unless-stopped
     environment:
-      - BACKEND_URL=https://ckan-test.healthdata.nl
+      - CKAN_URL=https://ckan-test.healthdata.nl
       - IDENTITY_SERVER_HOST_URL=https://keycloak-test.healthdata.nl
       - IDENTITY_SERVER_URL=https://keycloak-test.healthdata.nl/realms/ckan
       - IDENTITY_SERVER_CLIENT_ID=ckan

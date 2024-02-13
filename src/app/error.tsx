@@ -27,6 +27,11 @@ export default function Error({ error, statusCode }: ErrorProps) {
       message =
         "The page you're looking for doesn't seem to exist. It might have been moved or deleted.";
       break;
+    case 401:
+      heading = "Unauthorized";
+      message =
+        "You're not authorized to access this page. Please log in and try again.";
+      break;
   }
 
   return (

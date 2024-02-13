@@ -7,20 +7,33 @@ import { useEffect } from "react";
 import Button from "@/components/Button";
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
 
-export default function Error({
-  error,
-}: {
+interface ErrorProps {
   error: Error & { digest?: string };
-}) {
+  statusCode?: number;
+}
+
+export default function Error({ error, statusCode }: ErrorProps) {
   useEffect(() => {
     console.error(error);
   }, [error]);
+
+  let heading = "Something Went Wrong";
+  let message =
+    "Our apologies, but our server has encountered an internal error that prevents it from fulfilling your request. This is a temporary issue, and we're on the case to get it fixed. Please try again in a little while.";
+
+  switch (statusCode) {
+    case 404:
+      heading = "Page Not Found";
+      message =
+        "The page you're looking for doesn't seem to exist. It might have been moved or deleted.";
+      break;
+  }
 
   return (
     <section>
       <div className="container mx-auto w-full max-w-3xl p-4 md:p-8">
         <div>
-          {process.env.NODE_ENV !== "development" && (
+          {process.env.NODE_ENV !== "development" && error && (
             <div className="bg-primary p-4 text-warning">
               <p className="font-medium">{error.message}</p>
               {error.stack && (
@@ -29,14 +42,9 @@ export default function Error({
             </div>
           )}
           <h1 className="mt-3 text-2xl font-semibold text-primary md:text-3xl">
-            Internal Server Error
+            {heading}
           </h1>
-          <p className="mt-4 text-secondary">
-            Our apologies, but our server has encountered an internal error that
-            prevents it from fulfilling your request. This is a temporary issue,
-            and we&apos;re on the case to get it fixed. Please try again in a
-            little while
-          </p>
+          <p className="mt-4 text-secondary">{message}</p>
           <div className="mt-6">
             <Button href="/" text="Take me home" icon={faHouse} />
           </div>

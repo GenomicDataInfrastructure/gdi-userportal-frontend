@@ -37,7 +37,7 @@ function Header() {
           height="69"
         />
       </Link>
-      <div className="items-center text-lg text-primary sm:flex">
+      <div className="items-center text-lg text-primary hidden md:flex">
         <Link
           href="/"
           className={`mr-10 hover:text-info ${activeTab === "/" ? "text-secondary" : ""}`}

@@ -14,6 +14,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import logo from "../public/egdi-logo-horizontal-full-color-rgb.svg";
+import Button from "@/components/Button";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -58,12 +59,7 @@ function Header() {
         {isAuthenticated && <FontAwesomeIcon icon={faUser} />}
         {isAuthenticated && <span>{username()}</span>}
         {!isAuthenticated && (
-          <button
-            className="rounded border-2 bg-secondary px-4 py-2 text-sm font-bold text-white hover:border-2 hover:border-secondary hover:bg-transparent hover:text-secondary"
-            onClick={login}
-          >
-            <FontAwesomeIcon icon={faRightToBracket} /> Sign In
-          </button>
+          <Button icon={faRightToBracket} onClick={login} text="Sign In" />
         )}
         {isAuthenticated && (
           <button onClick={logout}>

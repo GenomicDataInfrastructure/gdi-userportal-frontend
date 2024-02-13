@@ -7,12 +7,15 @@ import { useEffect } from "react";
 import Button from "@/components/Button";
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
 
-interface ErrorProps {
+interface ErrorBoundaryProps {
   error: Error & { digest?: string };
   statusCode?: number;
 }
 
-export default function Error({ error, statusCode }: ErrorProps) {
+export default function ErrorBoundary({
+  error,
+  statusCode,
+}: ErrorBoundaryProps) {
   useEffect(() => {
     console.error(error);
   }, [error]);

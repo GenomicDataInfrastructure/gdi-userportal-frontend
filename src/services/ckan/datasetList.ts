@@ -5,7 +5,7 @@ import axios from 'axios';
 import { PackageSearchOptions, PackageSearchResult } from './types/packageSearch.types';
 import { mapCKANPackageToDataset, constructCkanActionUrl } from './utils';
 
-export const makePackageSearch = (DMS: string) => {
+export const makeDatasetList = (DMS: string) => {
   return async (options: PackageSearchOptions): Promise<PackageSearchResult> => {
     const queryParams = constructQueryParams(options);
     const url = constructCkanActionUrl(DMS, 'package_search', queryParams);

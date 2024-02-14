@@ -3,13 +3,13 @@
 // SPDX-License-Identifier: Apache-2.0
 import { jest } from '@jest/globals';
 import axios from 'axios';
-import { makePackageSearch } from '../packageSearch';
+import { makeDatasetList } from '../datasetList';
 import { packageFixture } from '../fixtures/packageFixtures';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-describe('packageSearch', () => {
+describe('datasetList', () => {
   const mockApiResponse = {
     data: {
       result: {
@@ -28,8 +28,8 @@ describe('packageSearch', () => {
   });
 
   test('maps and asserts the full server response', async () => {
-    const packageSearch = makePackageSearch('https://mock-ckan-instance.com');
-    const { datasets, count } = await packageSearch({});
+    const datasetList = makeDatasetList('https://mock-ckan-instance.com');
+    const { datasets, count } = await datasetList({});
 
     expect(count).toEqual(1);
     const dataset = datasets[0];
@@ -92,31 +92,31 @@ describe('packageSearch', () => {
   });
 
   test('applies tag filters correctly', async () => {
-    const packageSearch = makePackageSearch('https://mock-ckan-instance.com');
+    const datasetList = makeDatasetList('https://mock-ckan-instance.com');
     const searchOptions = {
       tags: ['education', 'science'],
       limit: 1,
     };
 
-    await packageSearch(searchOptions);
+    await datasetList(searchOptions);
 
     expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining('tags:(education OR science)'));
   });
 
   test('applies organization filters correctly', async () => {
-    const packageSearch = makePackageSearch('https://mock-ckan-instance.com');
+    const datasetList = makeDatasetList('https://mock-ckan-instance.com');
     const searchOptions = {
       orgs: ['org1', 'org2'],
       limit: 1,
     };
 
-    await packageSearch(searchOptions);
+    await datasetList(searchOptions);
 
     expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining('organization:(org1 OR org2)'));
   });
 
   test('combines multiple filters correctly', async () => {
-    const packageSearch = makePackageSearch('https://mock-ckan-instance.com');
+    const datasetList = makeDatasetList('https://mock-ckan-instance.com');
     const searchOptions = {
       tags: ['technology'],
       orgs: ['org1'],
@@ -125,7 +125,7 @@ describe('packageSearch', () => {
       limit: 1,
     };
 
-    await packageSearch(searchOptions);
+    await datasetList(searchOptions);
 
     expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining('tags:(technology)'));
     expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining('organization:(org1)'));

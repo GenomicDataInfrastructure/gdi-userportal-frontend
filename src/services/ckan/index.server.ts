@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 import { makeDatasetList } from './datasetList';
-import { makePackageShow } from './packageShow';
+import { makeDatasetGet } from './datasetGet';
 import serverConfig from '../../config/serverConfig';
 
 const DMS_URL = serverConfig.ckanUrl;
 const datasetList = makeDatasetList(DMS_URL);
-const packageShow = makePackageShow(DMS_URL);
+const datasetGet = makeDatasetGet(DMS_URL);
 
-export { datasetList, packageShow };
+export { datasetList, datasetGet };

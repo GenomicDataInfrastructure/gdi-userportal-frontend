@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 import axios from 'axios';
-import { Dataset } from './../../interfaces/dataset.interface';
+import { Dataset } from './../../types/dataset.types';
 import { mapCKANPackageToDataset, constructCkanActionUrl } from './utils';
 
 export const makePackageShow = (DMS: string) => {

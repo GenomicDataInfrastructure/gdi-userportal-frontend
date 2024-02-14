@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 import axios from 'axios';
-import { PackageSearchOptions, PackageSearchResult } from './../../interfaces/packageSearch.interface';
+import { PackageSearchOptions, PackageSearchResult } from './types/packageSearch.types';
 import { mapCKANPackageToDataset, constructCkanActionUrl } from './utils';
 
 export const makePackageSearch = (DMS: string) => {

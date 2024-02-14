@@ -1,8 +1,8 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-import { Dataset } from './../../interfaces/dataset.interface';
-import { CKANPackage } from './../../interfaces/ckan.interface';
+import { Dataset } from './../../types/dataset.types';
+import { CKANPackage } from './types/package.types';
 
 export const mapCKANPackageToDataset = (ckanPackage: CKANPackage): Dataset => {
   return {

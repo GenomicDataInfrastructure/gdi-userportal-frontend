@@ -2,9 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 import axios from 'axios';
-import { Dataset } from './../../interfaces/dataset.interface';
 import { PackageSearchOptions, PackageSearchResult } from './../../interfaces/packageSearch.interface';
-import { RawDataset, mapDataset, constructCkanActionUrl } from './utils';
+import { mapCKANPackageToDataset, constructCkanActionUrl } from './utils';
 
 export const makePackageSearch = (DMS: string) => {
   return async (options: PackageSearchOptions): Promise<PackageSearchResult> => {
@@ -14,7 +13,7 @@ export const makePackageSearch = (DMS: string) => {
     try {
       const response = await axios.get(url);
       return {
-        datasets: mapDatasets(response.data.result.results),
+        datasets: response.data.result.results.map(mapCKANPackageToDataset),
         count: response.data.result.count,
       };
     } catch (error) {
@@ -49,8 +48,4 @@ const constructQueryParams = (options: PackageSearchOptions): string => {
   queryParams += options.include_private ? `&include_private=${options.include_private}` : '';
 
   return queryParams;
-};
-
-const mapDatasets = (rawDatasets: RawDataset[]): Dataset[] => {
-  return rawDatasets.map(mapDataset);
 };

@@ -9,21 +9,30 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import logo from "../public/egdi-logo-horizontal-full-color-rgb.svg";
+import Avatar from "./avatar";
+import LogInOutButton from "./logInOutButton";
 
 function Header() {
+  const { data: session, status } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const activeTab = usePathname();
 
-  // Mock authentication state and functions
-  const isAuthenticated = true;
-  const username = () => "User";
-  const login = () => console.log("Login");
-  const logout = () => console.log("Logout");
+  const buttonMsg = session ? "Log Out" : "Log In";
+  const handleClick = session ? handleSignOut : handleSignIn;
+
+  function handleSignIn() {
+    signIn("keycloak");
+  }
+
+  function handleSignOut() {
+    signOut({ callbackUrl: "/" });
+  }
 
   return (
     <div className="flex w-full items-center justify-between bg-white-smoke px-4">
@@ -55,22 +64,10 @@ function Header() {
         >
           About
         </Link>
-        {isAuthenticated && <FontAwesomeIcon icon={faUser} />}
-        {isAuthenticated && <span>{username()}</span>}
-        {!isAuthenticated && (
-          <button
-            className="rounded-lg border-2 bg-secondary px-4 py-2 text-sm font-bold text-white hover:border-2 hover:border-secondary hover:bg-transparent hover:text-secondary"
-            onClick={login}
-          >
-            <FontAwesomeIcon icon={faRightToBracket} /> Sign In
-          </button>
-        )}
-        {isAuthenticated && (
-          <button onClick={logout}>
-            <FontAwesomeIcon icon={faRightFromBracket} />
-          </button>
-        )}
+        {session && <Avatar user={session?.user} />}
+        <LogInOutButton message={buttonMsg} handleClick={handleClick} />
       </div>
+
       <div className="relative sm:hidden">
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -98,7 +95,7 @@ function Header() {
             >
               About
             </Link>
-            {isAuthenticated && (
+            {session && (
               <div className="border-b border-gray-200 px-4 py-2">
                 <FontAwesomeIcon icon={faUser} className="mr-2" />
                 {username()}
@@ -106,16 +103,16 @@ function Header() {
             )}
             {!isAuthenticated && (
               <button
-                onClick={login}
+                onClick={handleSignIn}
                 className="block w-full px-4 py-2 text-left text-primary hover:bg-secondary hover:text-white"
               >
                 <FontAwesomeIcon icon={faRightToBracket} className="mr-2" />
                 Login
               </button>
             )}
-            {isAuthenticated && (
+            {session && (
               <button
-                onClick={logout}
+                onClick={handleSignOut}
                 className="block w-full px-4 py-2 text-left text-primary hover:bg-secondary hover:text-white"
               >
                 <FontAwesomeIcon icon={faRightFromBracket} className="mr-2" />

@@ -1,32 +1,67 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-export interface Dataset {
-  accessRights: string;
-  alternateIdentifier: string;
-  author: string;
-  authorEmail: string;
-  conformsTo: string[];
+
+interface DatasetContact {
   contactEmail: string;
   contactName: string;
   contactUri: string;
-  creator: string;
-  creatorUserId: string;
+}
+
+interface DatasetMaintainer {
+  name: string;
+  email: string;
+}
+
+interface DatasetPublisher {
+  email: string;
+  name: string;
+  type: string;
+  url: string;
+}
+
+interface DatasetCreator {
+  name: string;
+  userId: string;
+}
+
+interface DatasetAuthor {
+  name: string;
+  email: string;
+}
+
+interface DatasetLicense {
+  id: string;
+  title: string;
+}
+
+interface DatasetVersion {
+  hasVersion: string[];
+  isVersionOf: string;
+  version: string;
+  notes: string;
+}
+
+export interface Dataset {
+  author: DatasetAuthor;
+  contact: DatasetContact;
+  creator: DatasetCreator;
+  version: DatasetVersion;
+  license: DatasetLicense;
+  maintainer: DatasetMaintainer;
+  publisher: DatasetPublisher;
+  accessRights: string;
+  alternateIdentifier: string;
+  conformsTo: string[];
   dcatType: string;
   documentation: string;
   frequency: string;
-  hasVersion: string[];
   id: string;
   identifier: string;
   isReferencedBy: string;
-  isVersionOf: string;
   isOpen: boolean;
   landingPage: string;
   language: string[];
-  licenseId: string;
-  licenseTitle: string;
-  maintainer: string;
-  maintainerEmail: string;
   metadataCreated: string;
   metadataModified: string;
   name: string;
@@ -36,11 +71,6 @@ export interface Dataset {
   ownerOrg: string;
   private: boolean;
   provenance: string;
-  publisherEmail: string;
-  publisherName: string;
-  publisherType: string;
-  publisherUri: string;
-  publisherUrl: string;
   qualifiedAttribution: string;
   qualifiedRelation: string;
   relation: string;
@@ -54,7 +84,5 @@ export interface Dataset {
   title: string;
   type: string;
   url: string;
-  version: string;
-  versionNotes: string;
   wasGeneratedBy: string;
 }

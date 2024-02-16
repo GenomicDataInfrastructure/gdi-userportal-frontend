@@ -14,8 +14,9 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import logo from "../public/egdi-logo-horizontal-full-color-rgb.svg";
+import Button from "@/components/Button";
 import Avatar from "./avatar";
 import LogInOutButton from "./logInOutButton";
 
@@ -50,6 +51,25 @@ function Header() {
   function handleSignOut() {
     keycloackSessionLogOut().then(() => signOut({ callbackUrl: "/" }));
   }
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      const targetElement = event.target as Element;
+      if (isMenuOpen && !targetElement.closest(".menu-container")) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      window.removeEventListener("click", handleOutsideClick);
+    };
+  }, [isMenuOpen]);
 
   return (
     <div className="flex w-full items-center justify-between bg-white-smoke px-4">
@@ -101,18 +121,21 @@ function Header() {
             <Link
               href="/"
               className="block px-4 py-2 text-primary hover:bg-secondary hover:text-white"
+              onClick={closeMenu}
             >
               Home
             </Link>
             <Link
               href="/datasets"
               className="block px-4 py-2 text-primary hover:bg-secondary hover:text-white"
+              onClick={closeMenu}
             >
               Datasets
             </Link>
             <Link
               href="/about"
               className="block px-4 py-2 text-primary hover:bg-secondary hover:text-white"
+              onClick={closeMenu}
             >
               About
             </Link>

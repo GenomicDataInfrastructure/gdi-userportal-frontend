@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: 2024 PNED G.I.E.
 #
 # SPDX-License-Identifier: Apache-2.0
-
 version: "3"
 
 services:
@@ -10,14 +9,21 @@ services:
       context: .
     restart: unless-stopped
     environment:
-      - BACKEND_URL=https://ckan-test.healthdata.nl
+      - CKAN_URL=https://ckan-test.healthdata.nl
       - IDENTITY_SERVER_HOST_URL=https://keycloak-test.healthdata.nl
       - IDENTITY_SERVER_URL=https://keycloak-test.healthdata.nl/realms/ckan
       - IDENTITY_SERVER_CLIENT_ID=ckan
     healthcheck:
-      test: ["CMD", "service", "nginx", "status"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "-qO",
+          "-",
+          "http://localhost:3000/api/health",
+          "||",
+          "exit",
+          "1",
+        ]
     ports:
-      - "80:80"
-    extra_hosts:
-      - "catalogue.local.onemilliongenomes.eu:host-gateway"
-      - "id.local.onemilliongenomes.eu:host-gateway"
+      - "80:3000"

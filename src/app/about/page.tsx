@@ -3,14 +3,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from "react";
+import PageHeading from "@/components/PageHeading";
+import PageSubHeading from "@/components/PageSubHeading";
 
 const AboutPage: React.FC = () => {
   return (
     <div className="container mx-auto  px-4 sm:px-2 lg:px-0">
       <div className="mb-8 text-center"></div>
-      <h1 className="mb-4 text-2xl font-bold text-claret sm:text-3xl lg:text-4xl">
+      <PageHeading className="mb-4 text-secondary">
         About Genomic Data Infrastructure (GDI)
-      </h1>
+      </PageHeading>
       <p className="text-gray-700">
         The Genomic Data Infrastructure (GDI) project aims to enable access to
         genomic and related phenotypic and clinical data to improve research,
@@ -23,7 +25,9 @@ const AboutPage: React.FC = () => {
         of Europe).
       </p>
 
-      <h2 className="my-4 text-2xl font-bold text-claret">User Portal</h2>
+      <PageSubHeading className="my-4 text-secondary">
+        User Portal
+      </PageSubHeading>
       <p className="text-gray-700">
         The User Portal, developed by the Genomic Data Infrastructure (GDI)
         project, is the central entry point for accessing genomic data. As part
@@ -34,7 +38,9 @@ const AboutPage: React.FC = () => {
         and healthcare professionals.{" "}
       </p>
 
-      <h2 className="my-4 text-2xl font-bold text-claret">Key Objectives</h2>
+      <PageSubHeading className="my-4 text-secondary">
+        Key Objectives
+      </PageSubHeading>
       <ul className="list-inside list-disc text-gray-700">
         <li>
           To link and to provide cross-border access to genomic and related

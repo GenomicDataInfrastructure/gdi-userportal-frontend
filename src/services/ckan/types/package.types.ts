@@ -14,6 +14,14 @@ interface CKANOrganization {
   state: string;
 }
 
+interface CKANTag {
+  id: string;
+  name: string;
+  display_name: string;
+  state: string;
+  vocabulary_id: string;
+}
+
 interface CKANResource {
   access_services: string;
   access_url: string;
@@ -108,4 +116,5 @@ export interface CKANPackage {
   version_notes: string;
   was_generated_by: string;
   resources: CKANResource[];
+  tags: CKANTag[];
 }

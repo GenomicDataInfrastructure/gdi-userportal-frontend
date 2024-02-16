@@ -57,4 +57,11 @@ export const packageFixture = {
   version: '1.0',
   version_notes: 'Initial version',
   was_generated_by: 'Generation Process',
+  tags: [
+    {
+      id: 'keyword-1',
+      name: 'Keyword 1',
+      display_name: 'Keyword 1',
+    },
+  ],
 };

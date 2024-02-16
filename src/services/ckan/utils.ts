@@ -41,6 +41,11 @@ export const mapCKANPackageToDataset = (ckanPackage: CKANPackage): Dataset => {
       type: ckanPackage.publisher_type,
       url: ckanPackage.publisher_url,
     },
+    keywords: (ckanPackage.tags || []).map((tag) => ({
+      id: tag.id,
+      name: tag.name,
+      displayName: tag.display_name,
+    })),
     conformsTo: ckanPackage.conforms_to,
     dcatType: ckanPackage.dcat_type,
     documentation: ckanPackage.documentation,

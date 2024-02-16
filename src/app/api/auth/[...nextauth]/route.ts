@@ -1,6 +1,32 @@
-import type { NextAuthOptions } from 'next-auth';
+import { encrypt } from '@/lib/encryption';
+import { jwtDecode } from 'jwt-decode';
+import type { NextAuthOptions, Session } from 'next-auth';
+import { Account } from 'next-auth';
+import type { JWT } from 'next-auth/jwt';
 import NextAuth from 'next-auth/next';
 import Keycloack from 'next-auth/providers/keycloak';
+import { refreshAccessToken } from './utils';
+
+function completeTokenWithAccountInfo(token: JWT, account: Account): JWT {
+  return {
+    ...token,
+    decoded: jwtDecode(account.access_token!) as string,
+    access_token: account.access_token as string,
+    id_token: account.id_token as string,
+    refresh_token: account.refresh_token as string,
+    expires_at: account.expires_at as number,
+  };
+}
+
+type JWTCallbackEntry = {
+  token: JWT;
+  account: Account | null;
+};
+
+type SessionCallbackEntry = {
+  token: JWT;
+  session: Session;
+};
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -11,6 +37,34 @@ export const authOptions: NextAuthOptions = {
       authorization: { params: { scope: 'openid profile email offline_access' } },
     }),
   ],
+  callbacks: {
+    async jwt({ token, account }: JWTCallbackEntry) {
+      const currTimestamp = Math.floor(Date.now() / 1000);
+
+      if (account) {
+        return completeTokenWithAccountInfo(token, account);
+      } else if (currTimestamp < (token.expires_at as number)) {
+        return token;
+      } else {
+        try {
+          const refreshedToken = await refreshAccessToken(token);
+          return refreshedToken;
+        } catch (error) {
+          return { ...token, error: 'RefreshAccessTokenError' };
+        }
+      }
+    },
+
+    async session({ session, token }: SessionCallbackEntry) {
+      return {
+        ...session,
+        access_token: encrypt(token.access_token as string),
+        id_token: encrypt(token.id_token as string),
+        roles: (token.decoded as { realm_access?: { roles?: string[] } }).realm_access?.roles,
+        error: token.error,
+      };
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);

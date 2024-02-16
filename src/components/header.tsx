@@ -9,6 +9,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Session } from "next-auth";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,8 +19,24 @@ import logo from "../public/egdi-logo-horizontal-full-color-rgb.svg";
 import Avatar from "./avatar";
 import LogInOutButton from "./logInOutButton";
 
+async function keycloackSessionLogOut() {
+  try {
+    await fetch("/api/auth/logout");
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+type SessionExtended = Session & { error: string };
+
+function logOutIfSessionError(session: SessionExtended | null, status: string) {
+  if (session && status !== "loading" && session?.error) {
+    signOut({ callbackUrl: "/" });
+  }
+}
+
 function Header() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const activeTab = usePathname();
 
@@ -31,39 +48,43 @@ function Header() {
   }
 
   function handleSignOut() {
-    signOut({ callbackUrl: "/" });
+    keycloackSessionLogOut().then(() => signOut({ callbackUrl: "/" }));
   }
 
   return (
     <div className="flex w-full items-center justify-between bg-white-smoke px-4">
-      <Link href="/">
-        <Image
-          src={logo}
-          alt="Logo"
-          className="mb-4 mt-4"
-          width="190"
-          height="69"
-        />
-      </Link>
-      <div className="hidden items-center gap-x-5 text-[16px] text-primary sm:flex md:gap-x-11 md:text-lg">
-        <Link
-          href="/"
-          className={`hover:text-info ${activeTab === "/" ? "text-secondary" : ""}`}
-        >
-          Home
+      <div className="flex justify-between gap-x-24">
+        <Link href="/">
+          <Image
+            src={logo}
+            alt="Logo"
+            className="mb-4 mt-4"
+            width="190"
+            height="69"
+          />
         </Link>
-        <Link
-          href="/datasets"
-          className={`hover:text-info ${activeTab.includes("datasets") ? "text-secondary" : ""}`}
-        >
-          Datasets
-        </Link>
-        <Link
-          href="/about"
-          className={`hover:text-info ${activeTab === "/about" ? "text-secondary" : ""}`}
-        >
-          About
-        </Link>
+        <div className="hidden items-center gap-x-2 text-[14px] font-semibold text-primary sm:flex md:gap-x-5 md:text-lg">
+          <Link
+            href="/"
+            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-zinc-200 hover:shadow-sm md:px-7 ${activeTab === "/" ? "bg-zinc-200" : ""}`}
+          >
+            Home
+          </Link>
+          <Link
+            href="/datasets"
+            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-zinc-200 hover:shadow-sm md:px-7 ${activeTab.includes("datasets") ? "bg-zinc-200" : ""}`}
+          >
+            Datasets
+          </Link>
+          <Link
+            href="/about"
+            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-zinc-200 hover:shadow-sm md:px-7 ${activeTab === "/about" ? "bg-zinc-200" : ""}`}
+          >
+            About
+          </Link>
+        </div>
+      </div>
+      <div className="mr-3 flex items-center gap-x-7">
         {session && <Avatar user={session?.user} />}
         <LogInOutButton message={buttonMsg} handleClick={handleClick} />
       </div>

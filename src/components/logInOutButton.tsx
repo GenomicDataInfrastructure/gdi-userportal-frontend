@@ -6,7 +6,7 @@ type ButtonProps = {
 function LogInOutButton({ message, handleClick }: ButtonProps) {
   return (
     <button
-      className="rounded-lg border-2 bg-secondary px-4 py-2 text-sm font-bold text-white hover:opacity-90"
+      className="rounded-lg border-2 bg-secondary px-4 py-2 text-sm font-bold text-white shadow-sm hover:opacity-90"
       onClick={handleClick}
     >
       {message}

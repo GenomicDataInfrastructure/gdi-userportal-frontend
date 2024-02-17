@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 shadcn
+//
+// SPDX-License-Identifier: MIT License
+
 "use client";
 
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";

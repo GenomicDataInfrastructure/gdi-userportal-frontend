@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
 import { getToken } from '@/utils/auth';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../[...nextauth]/route';

@@ -4,7 +4,7 @@
 import Disclaimer from "@/components/disclaimer";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
-import SessionProviderWrapper from "@/utils/sessionProviderWrapper";
+import SessionProviderWrapper from "@/components/utils/sessionProviderWrapper";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { exposeFont, satoshiFont, tabularFont } from "../utils/fonts";

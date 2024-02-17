@@ -1,22 +1,14 @@
-import { encrypt } from '@/lib/encryption';
-import { jwtDecode } from 'jwt-decode';
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
+import { completeTokenWithAccountInfo, refreshAccessToken } from '@/utils/auth';
+import { encrypt } from '@/utils/encryption';
 import type { NextAuthOptions, Session } from 'next-auth';
 import { Account } from 'next-auth';
 import type { JWT } from 'next-auth/jwt';
 import NextAuth from 'next-auth/next';
 import Keycloack from 'next-auth/providers/keycloak';
-import { refreshAccessToken } from './utils';
-
-function completeTokenWithAccountInfo(token: JWT, account: Account): JWT {
-  return {
-    ...token,
-    decoded: jwtDecode(account.access_token!) as string,
-    access_token: account.access_token as string,
-    id_token: account.id_token as string,
-    refresh_token: account.refresh_token as string,
-    expires_at: account.expires_at as number,
-  };
-}
 
 type JWTCallbackEntry = {
   token: JWT;
@@ -40,10 +32,11 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, account }: JWTCallbackEntry) {
       const currTimestamp = Math.floor(Date.now() / 1000);
+      const isTokenExpired = token?.expires_at && (token?.expires_at as number) <= currTimestamp;
 
       if (account) {
         return completeTokenWithAccountInfo(token, account);
-      } else if (currTimestamp < (token.expires_at as number)) {
+      } else if (!isTokenExpired) {
         return token;
       } else {
         try {

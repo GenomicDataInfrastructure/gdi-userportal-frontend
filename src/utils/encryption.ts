@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
 import Cryptr from 'cryptr';
 
 export function encrypt(text: string) {

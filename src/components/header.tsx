@@ -20,8 +20,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import logo from "../public/egdi-logo-horizontal-full-color-rgb.svg";
-import Button from "./Button";
 import Avatar from "./avatar";
+import Button from "./button";
 import NotificationButton from "./notification";
 
 function Header() {

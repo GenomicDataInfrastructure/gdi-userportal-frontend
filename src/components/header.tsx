@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 import logo from "../public/egdi-logo-horizontal-full-color-rgb.svg";
 import Avatar from "./avatar";
 import Button from "./button";
-import NotificationButton from "./notification";
+import Notification from "./notification";
 
 function Header() {
   const { data: session } = useSession();
@@ -85,10 +85,10 @@ function Header() {
           </Link>
         </div>
       </div>
-      <div className="mr-3 hidden items-center gap-x-8 sm:flex">
+      <div className="mr-3 hidden items-center gap-x-5 sm:flex md:gap-x-8">
         {session ? (
           <>
-            <NotificationButton />
+            <Notification />
             <Avatar user={session.user as User} />
           </>
         ) : (

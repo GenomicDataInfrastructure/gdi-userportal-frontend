@@ -1,11 +1,10 @@
-// SPDX-FileCopyrightText: 2023 shadcn
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
-// SPDX-License-Identifier: MIT License
+// SPDX-License-Identifier: Apache-2.0
 
 "use client";
 
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import { Check, ChevronRight, Circle } from "lucide-react";
 import * as React from "react";
 
 import { cn } from "@/utils/tailwindMerge";

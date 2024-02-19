@@ -5,13 +5,16 @@
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function NotificationButton() {
+function Notification() {
   return (
     <div className="relative">
-      <FontAwesomeIcon icon={faBell} className="text-[27px]" />
+      <FontAwesomeIcon
+        icon={faBell}
+        className="text-[24px] text-gray-400 md:text-[27px]"
+      />
       <div className="absolute right-0 top-0.5 h-3 w-3 rounded-full bg-info shadow-lg"></div>
     </div>
   );
 }
 
-export default NotificationButton;
+export default Notification;

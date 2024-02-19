@@ -11,7 +11,7 @@ services:
     environment:
       - CKAN_URL=https://ckan-test.healthdata.nl
       - NEXTAUTH_URL=http://localhost:3000
-      - NEXTAUTH_SECRET=VvBIryJIFxQFbhG45BDKEB4AQagzy27y873YM6B2Vcs=
+      - NEXTAUTH_SECRET=your-secret
       - KEYCLOAK_CLIENT_ID=ckan
       - KEYCLOAK_ISSUER_URL=https://keycloak-test.healthdata.nl/realms/ckan
       - END_SESSION_URL=https://keycloak-test.healthdata.nl/realms/ckan/protocol/openid-connect/logout
@@ -29,4 +29,4 @@ services:
           "1",
         ]
     ports:
-      - "80:3000"
+      - "3000:3000"

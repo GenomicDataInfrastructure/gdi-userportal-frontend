@@ -42,6 +42,12 @@ interface DatasetVersion {
   notes: string;
 }
 
+interface DatasetKeywords {
+  id: string;
+  displayName: string;
+  name: string;
+}
+
 export interface Dataset {
   author: DatasetAuthor;
   contact: DatasetContact;
@@ -50,6 +56,7 @@ export interface Dataset {
   license: DatasetLicense;
   maintainer: DatasetMaintainer;
   publisher: DatasetPublisher;
+  keywords: DatasetKeywords[];
   accessRights: string;
   alternateIdentifier: string;
   conformsTo: string[];

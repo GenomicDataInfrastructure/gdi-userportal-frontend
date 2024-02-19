@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User } from "@/types/user";
+import { User } from "@/types/user.types";
 import { keycloackSessionLogOut } from "@/utils/auth";
 import {
   faDatabase,

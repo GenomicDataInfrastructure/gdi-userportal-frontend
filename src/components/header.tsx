@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 "use client";
-import { User } from "@/types/user";
+import { User } from "@/types/user.types";
 import { keycloackSessionLogOut } from "@/utils/auth";
 import {
   faBars,

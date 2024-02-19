@@ -14,7 +14,13 @@ interface ButtonProps {
   onClick?: () => void;
 }
 
-const Button: React.FC<ButtonProps> = ({ text, type, icon, href, onClick }) => {
+const Button: React.FC<ButtonProps> = ({
+  text,
+  type = "primary",
+  icon,
+  href,
+  onClick,
+}) => {
   const common =
     "rounded-lg px-4 py-2 text-xs font-bold w-1/2 border-2 shadow-sm hover:opacity-90 transition-colors duration-200 tracking-wide sm:w-auto md:text-sm";
 

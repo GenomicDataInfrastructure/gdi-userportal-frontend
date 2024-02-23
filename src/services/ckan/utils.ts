@@ -55,7 +55,7 @@ export const mapCKANPackageToDataset = (ckanPackage: CKANPackage): Dataset => {
     isReferencedBy: ckanPackage.is_referenced_by,
     isOpen: ckanPackage.isopen,
     landingPage: ckanPackage.landing_page,
-    language: ckanPackage.language,
+    languages: ckanPackage.language,
     metadataCreated: ckanPackage.metadata_created,
     metadataModified: ckanPackage.metadata_modified,
     name: ckanPackage.name,

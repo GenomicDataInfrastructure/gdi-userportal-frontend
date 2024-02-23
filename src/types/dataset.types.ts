@@ -68,7 +68,7 @@ export interface Dataset {
   isReferencedBy: string;
   isOpen: boolean;
   landingPage: string;
-  language: string[];
+  languages: string[];
   metadataCreated: string;
   metadataModified: string;
   name: string;

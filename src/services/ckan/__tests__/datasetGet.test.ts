@@ -44,7 +44,7 @@ describe('datasetGet', () => {
     expect(dataset.isReferencedBy).toEqual('Reference Document');
     expect(dataset.isOpen).toBeFalsy();
     expect(dataset.landingPage).toEqual('http://landingpage.example.com');
-    expect(dataset.language).toEqual(['EN', 'FR']);
+    expect(dataset.languages).toEqual(['EN', 'FR']);
     expect(dataset.metadataCreated).toEqual('2024-02-09T10:27:47.585508');
     expect(dataset.metadataModified).toEqual('2024-02-09T10:27:58.301236');
     expect(dataset.name).toEqual('dummy-1');

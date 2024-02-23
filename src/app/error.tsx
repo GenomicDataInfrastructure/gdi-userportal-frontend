@@ -3,9 +3,9 @@
 // SPDX-License-Identifier: Apache-2.0
 "use client";
 
-import { useEffect } from "react";
-import Button from "@/components/Button";
+import Button from "@/components/button";
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
 
 interface ErrorBoundaryProps {
   error?: Error & { digest?: string };
@@ -56,7 +56,12 @@ export default function ErrorBoundary({
           </h1>
           <p className="mt-4 text-secondary">{message}</p>
           <div className="mt-6">
-            <Button href="/" text="Take me home" icon={faHouse} />
+            <Button
+              href="/"
+              text="Take me home"
+              icon={faHouse}
+              type="primary"
+            />
           </div>
         </div>
       </div>

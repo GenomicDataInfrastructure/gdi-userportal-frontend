@@ -10,9 +10,12 @@ services:
     restart: unless-stopped
     environment:
       - CKAN_URL=https://ckan-test.healthdata.nl
-      - IDENTITY_SERVER_HOST_URL=https://keycloak-test.healthdata.nl
-      - IDENTITY_SERVER_URL=https://keycloak-test.healthdata.nl/realms/ckan
-      - IDENTITY_SERVER_CLIENT_ID=ckan
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=your-secret
+      - KEYCLOAK_CLIENT_ID=ckan
+      - KEYCLOAK_ISSUER_URL=https://keycloak-test.healthdata.nl/realms/ckan
+      - END_SESSION_URL=https://keycloak-test.healthdata.nl/realms/ckan/protocol/openid-connect/logout
+      - REFRESH_TOKEN_URL=https://keycloak-test.healthdata.nl/realms/ckan/protocol/openid-connect/token
     healthcheck:
       test:
         [
@@ -26,4 +29,4 @@ services:
           "1",
         ]
     ports:
-      - "80:3000"
+      - "3000:3000"

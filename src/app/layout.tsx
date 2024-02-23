@@ -4,6 +4,7 @@
 import Disclaimer from "@/components/disclaimer";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
+import SessionProviderWrapper from "@/components/utils/sessionProviderWrapper";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { exposeFont, satoshiFont, tabularFont } from "../utils/fonts";
@@ -26,14 +27,16 @@ export default function RootLayout({
       </head>
       <body>
         <div className="grid h-screen w-screen grid-rows-[auto_1fr_auto]">
-          <div>
-            <Header />
-          </div>
-          <div>{children}</div>
-          <div>
-            <Disclaimer />
-            <Footer />
-          </div>
+          <SessionProviderWrapper>
+            <div>
+              <Header />
+            </div>
+            <div>{children}</div>
+            <div>
+              <Disclaimer />
+              <Footer />
+            </div>
+          </SessionProviderWrapper>
         </div>
       </body>
     </html>

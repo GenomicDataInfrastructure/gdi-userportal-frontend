@@ -2,6 +2,15 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-export default function Home() {
-  return <h1>Home</h1>;
+import { authOptions } from "@/utils/auth";
+import { getServerSession } from "next-auth";
+
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+
+  return (
+    <>
+      <p>{session ? `Welcome ${session?.user?.name}` : "Log in first"}</p>
+    </>
+  );
 }

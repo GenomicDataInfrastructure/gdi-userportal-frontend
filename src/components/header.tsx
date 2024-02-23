@@ -2,29 +2,36 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 "use client";
+import { User } from "@/types/user.types";
+import { keycloackSessionLogOut } from "@/utils/auth";
 import {
   faBars,
+  faDatabase,
+  faHome,
+  faInfoCircle,
   faRightFromBracket,
   faRightToBracket,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import logo from "../public/egdi-logo-horizontal-full-color-rgb.svg";
-import Button from "@/components/Button";
+import Avatar from "./avatar";
+import Button from "./button";
+import Notification from "./notification";
 
 function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { data: session } = useSession();
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const activeTab = usePathname();
 
-  // Mock authentication state and functions
-  const isAuthenticated = false;
-  const username = () => "User";
-  const login = () => console.log("Login");
-  const logout = () => console.log("Logout");
+  function handleSignOut() {
+    keycloackSessionLogOut().then(() => signOut({ callbackUrl: "/" }));
+  }
 
   const closeMenu = () => {
     setIsMenuOpen(false);
@@ -47,97 +54,104 @@ function Header() {
 
   return (
     <div className="flex w-full items-center justify-between bg-white-smoke px-4">
-      <Link href="/">
-        <Image
-          src={logo}
-          alt="Logo"
-          className="mb-4 mt-4"
-          width="190"
-          height="69"
-        />
-      </Link>
-      <div className="hidden items-center text-lg text-primary md:flex">
-        <Link
-          href="/"
-          className={`mr-10 hover:text-info ${activeTab === "/" ? "text-secondary" : ""}`}
-          onClick={closeMenu}
-        >
-          Home
+      <div className="flex justify-between gap-x-12 lg:gap-x-24">
+        <Link href="/">
+          <Image
+            src={logo}
+            alt="Logo"
+            className="mb-4 mt-4"
+            width="190"
+            height="69"
+          />
         </Link>
-        <Link
-          href="/datasets"
-          className={`mr-10 hover:text-info ${activeTab.includes("datasets") ? "text-secondary" : ""}`}
-          onClick={closeMenu}
-        >
-          Datasets
-        </Link>
-        <Link
-          href="/about"
-          className={`mr-10 hover:text-info ${activeTab === "/about" ? "text-secondary" : ""}`}
-          onClick={closeMenu}
-        >
-          About
-        </Link>
-        {isAuthenticated && <FontAwesomeIcon icon={faUser} />}
-        {isAuthenticated && <span>{username()}</span>}
-        {!isAuthenticated && (
-          <Button icon={faRightToBracket} onClick={login} text="Sign In" />
-        )}
-        {isAuthenticated && (
-          <button onClick={logout}>
-            <FontAwesomeIcon icon={faRightFromBracket} />
-          </button>
+        <div className="hidden items-center gap-x-3 text-base font-semibold text-primary sm:flex md:text-lg">
+          <Link
+            href="/"
+            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-zinc-200 hover:shadow-sm md:px-7 ${activeTab === "/" ? "bg-zinc-200" : ""}`}
+          >
+            Home
+          </Link>
+          <Link
+            href="/datasets"
+            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-zinc-200 hover:shadow-sm md:px-7 ${activeTab.includes("datasets") ? "bg-zinc-200" : ""}`}
+          >
+            Datasets
+          </Link>
+          <Link
+            href="/about"
+            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-zinc-200 hover:shadow-sm md:px-7 ${activeTab === "/about" ? "bg-zinc-200" : ""}`}
+          >
+            About
+          </Link>
+        </div>
+      </div>
+      <div className="mr-3 hidden items-center gap-x-5 sm:flex md:gap-x-8">
+        {session ? (
+          <>
+            <Notification />
+            <Avatar user={session.user as User} />
+          </>
+        ) : (
+          <Button
+            text="Log in"
+            type="secondary"
+            onClick={() => signIn("keycloak")}
+          />
         )}
       </div>
-      <div className="menu-container relative md:hidden">
+
+      <div className="menu-container relative sm:hidden">
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="text-primary focus:outline-none"
         >
-          <FontAwesomeIcon icon={faBars} />
+          <FontAwesomeIcon icon={faBars} className="text-xl" />
         </button>
         {isMenuOpen && (
           <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg">
             <Link
               href="/"
-              className="block px-4 py-2 text-primary hover:bg-secondary hover:text-white"
+              className="block px-4 py-2 hover:bg-secondary hover:text-white"
               onClick={closeMenu}
             >
+              <FontAwesomeIcon icon={faHome} className="mr-2" />
               Home
             </Link>
             <Link
               href="/datasets"
-              className="block px-4 py-2 text-primary hover:bg-secondary hover:text-white"
+              className="block px-4 py-2 hover:bg-secondary hover:text-white"
               onClick={closeMenu}
             >
+              <FontAwesomeIcon icon={faDatabase} className="mr-2" />
               Datasets
             </Link>
             <Link
               href="/about"
-              className="block px-4 py-2 text-primary hover:bg-secondary hover:text-white"
+              className="block px-4 py-2 hover:bg-secondary hover:text-white"
               onClick={closeMenu}
             >
+              <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
               About
             </Link>
-            {isAuthenticated && (
+            {session && (
               <div className="border-b border-gray-200 px-4 py-2">
                 <FontAwesomeIcon icon={faUser} className="mr-2" />
-                {username()}
+                {session?.user?.name}
               </div>
             )}
-            {!isAuthenticated && (
+            {!session && (
               <button
-                onClick={login}
-                className="block w-full px-4 py-2 text-left text-primary hover:bg-secondary hover:text-white"
+                onClick={() => signIn("keycloak")}
+                className="block w-full px-4 py-2 text-left hover:bg-secondary hover:text-white"
               >
                 <FontAwesomeIcon icon={faRightToBracket} className="mr-2" />
                 Login
               </button>
             )}
-            {isAuthenticated && (
+            {session && (
               <button
-                onClick={logout}
-                className="block w-full px-4 py-2 text-left text-primary hover:bg-secondary hover:text-white"
+                onClick={handleSignOut}
+                className="block w-full px-4 py-2 text-left hover:bg-secondary hover:text-white"
               >
                 <FontAwesomeIcon icon={faRightFromBracket} className="mr-2" />
                 Logout

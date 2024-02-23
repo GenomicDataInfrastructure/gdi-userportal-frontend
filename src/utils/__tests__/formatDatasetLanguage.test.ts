@@ -4,9 +4,7 @@
 import formatDatasetLanguage from '../formatDatasetLanguage';
 
 jest.mock('iso-639-3/iso6393', () => ({
-  iso6393: [
-    { name: 'English', type: 'living', scope: 'individual', iso6393: 'eng' },
-  ],
+  iso6393: [{ name: 'English', type: 'living', scope: 'individual', iso6393: 'eng' }],
 }));
 
 describe('formatDatasetLanguage', () => {

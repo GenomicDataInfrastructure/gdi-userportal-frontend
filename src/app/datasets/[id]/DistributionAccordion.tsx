@@ -46,49 +46,49 @@ export default function DistributionAccordion({
           >
             <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2">
               <div>
-                <strong className="block text-sm font-semibold text-gray-600">
+                <strong className="block text-sm font-semibold">
                   Description:
                 </strong>
                 <span className="text-sm">{distribution.description}</span>
               </div>
               <div>
-                <strong className="block text-sm font-semibold text-gray-600">
+                <strong className="block text-sm font-semibold">
                   Compress Format:
                 </strong>
                 <span className="text-sm">{distribution.compressFormat}</span>
               </div>
               <div>
-                <strong className="block text-sm font-semibold text-gray-600">
+                <strong className="block text-sm font-semibold">
                   Issued:
                 </strong>
                 <span className="text-sm">{distribution.issued}</span>
               </div>
               <div>
-                <strong className="block text-sm font-semibold text-gray-600">
+                <strong className="block text-sm font-semibold">
                   Last Modified:
                 </strong>
                 <span className="text-sm">{distribution.modified}</span>
               </div>
               <div>
-                <strong className="block text-sm font-semibold text-gray-600">
+                <strong className="block text-sm font-semibold">
                   Language:
                 </strong>
                 <span className="text-sm">{distribution.language}</span>
               </div>
               <div>
-                <strong className="block text-sm font-semibold text-gray-600">
+                <strong className="block text-sm font-semibold">
                   MIME Type:
                 </strong>
                 <span className="text-sm">{distribution.mimetype}</span>
               </div>
               <div>
-                <strong className="block text-sm font-semibold text-gray-600">
+                <strong className="block text-sm font-semibold">
                   Rights:
                 </strong>
                 <span className="text-sm">{distribution.rights}</span>
               </div>
               <div>
-                <strong className="block text-sm font-semibold text-gray-600">
+                <strong className="block text-sm font-semibold">
                   Spatial Resolution in Meters:
                 </strong>
                 <span className="text-sm">
@@ -96,7 +96,7 @@ export default function DistributionAccordion({
                 </span>
               </div>
               <div>
-                <strong className="block text-sm font-semibold text-gray-600">
+                <strong className="block text-sm font-semibold">
                   Temporal Resolution:
                 </strong>
                 <span className="text-sm">

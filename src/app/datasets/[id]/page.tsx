@@ -6,6 +6,7 @@ import Error from "@/app/error";
 import PageHeading from "@/components/PageHeading";
 import PageSubHeading from "@/components/PageSubHeading";
 import Sidebar from "./Sidebar";
+import DistributionAccordion from "./DistributionAccordion";
 import Chips from "@/components/Chips";
 
 export default async function Page({ params }: { params: { id: string } }) {
@@ -26,6 +27,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             chips={dataset.keywords.map((keyword) => keyword.displayName)}
           />
           <PageSubHeading>Distributions</PageSubHeading>
+          <DistributionAccordion distributions={dataset.distributions} />
         </div>
         <Sidebar dataset={dataset} />
       </div>

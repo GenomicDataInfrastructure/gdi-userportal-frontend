@@ -69,7 +69,7 @@ const AboutPage: React.FC = () => {
         For more detailed information, please visit the{" "}
         <a
           href="https://gdi.onemilliongenomes.eu/"
-          className="text-secondary hover:underline"
+          className="text-blue-500 hover:underline"
         >
           GDI Website
         </a>
@@ -79,7 +79,7 @@ const AboutPage: React.FC = () => {
         Please report any problems you find in{" "}
         <a
           href="https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/issues"
-          className="text-secondary hover:underline"
+          className="text-blue-500 hover:underline"
         >
           GitHub Issues
         </a>

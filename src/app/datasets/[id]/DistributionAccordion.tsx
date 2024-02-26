@@ -58,9 +58,7 @@ export default function DistributionAccordion({
                 <span className="text-sm">{distribution.compressFormat}</span>
               </div>
               <div>
-                <strong className="block text-sm font-semibold">
-                  Issued:
-                </strong>
+                <strong className="block text-sm font-semibold">Issued:</strong>
                 <span className="text-sm">{distribution.issued}</span>
               </div>
               <div>
@@ -82,9 +80,7 @@ export default function DistributionAccordion({
                 <span className="text-sm">{distribution.mimetype}</span>
               </div>
               <div>
-                <strong className="block text-sm font-semibold">
-                  Rights:
-                </strong>
+                <strong className="block text-sm font-semibold">Rights:</strong>
                 <span className="text-sm">{distribution.rights}</span>
               </div>
               <div>

@@ -28,6 +28,7 @@ export default function DistributionAccordion({
         <div className="mb-4 w-full" key={distribution.id}>
           <div
             onClick={() => toggleItem(index)}
+            onKeyPress={() => toggleItem(index)}
             className="flex transform cursor-pointer items-center justify-between bg-info p-4 text-white transition duration-300 ease-in-out hover:-translate-y-1"
           >
             <span>

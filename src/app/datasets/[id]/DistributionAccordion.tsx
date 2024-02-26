@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { DatasetDistribution } from "@/types/dataset.types";
+import { formatDate } from "@/utils/formatDate";
 
 export default function DistributionAccordion({
   distributions,
@@ -58,16 +59,18 @@ export default function DistributionAccordion({
                 <span className="text-sm">{distribution.compressFormat}</span>
               </div>
               <div>
-                <strong className="block text-sm font-semibold">
-                  Issued:
-                </strong>
-                <span className="text-sm">{distribution.issued}</span>
+                <strong className="block text-sm font-semibold">Issued:</strong>
+                <span className="text-sm">
+                  {distribution.issued && formatDate(distribution.issued)}
+                </span>
               </div>
               <div>
                 <strong className="block text-sm font-semibold">
                   Last Modified:
                 </strong>
-                <span className="text-sm">{distribution.modified}</span>
+                <span className="text-sm">
+                  {distribution.modified && formatDate(distribution.modified)}
+                </span>
               </div>
               <div>
                 <strong className="block text-sm font-semibold">
@@ -82,9 +85,7 @@ export default function DistributionAccordion({
                 <span className="text-sm">{distribution.mimetype}</span>
               </div>
               <div>
-                <strong className="block text-sm font-semibold">
-                  Rights:
-                </strong>
+                <strong className="block text-sm font-semibold">Rights:</strong>
                 <span className="text-sm">{distribution.rights}</span>
               </div>
               <div>

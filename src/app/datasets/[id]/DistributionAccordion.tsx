@@ -12,11 +12,13 @@ import {
 import { DatasetDistribution } from "@/types/dataset.types";
 import { formatDate } from "@/utils/formatDate";
 
-export default function DistributionAccordion({
-  distributions,
-}: {
+interface DistributionAccordionProps {
   distributions: DatasetDistribution[];
-}) {
+}
+
+const DistributionAccordion = ({
+  distributions,
+}: DistributionAccordionProps) => {
   const [openIndex, setOpenIndex] = useState<null | number>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -152,4 +154,6 @@ export default function DistributionAccordion({
       ))}
     </div>
   );
-}
+};
+
+export default DistributionAccordion;

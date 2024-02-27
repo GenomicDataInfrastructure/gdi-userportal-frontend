@@ -5,7 +5,11 @@ import { Dataset } from "@/types/dataset.types";
 import formatDatasetLanguage from "@/utils/formatDatasetLanguage";
 import { formatDate } from "@/utils/formatDate";
 
-export default function Sidebar({ dataset }: { dataset: Dataset }) {
+interface SidebarProps {
+  dataset: Dataset;
+}
+
+const Sidebar = ({ dataset }: SidebarProps) => {
   return (
     <div className="flex w-full flex-col gap-3 rounded bg-secondary p-5 text-white lg:w-1/3">
       <div className="mb-3">
@@ -135,4 +139,6 @@ export default function Sidebar({ dataset }: { dataset: Dataset }) {
       </div>
     </div>
   );
-}
+};
+
+export default Sidebar;

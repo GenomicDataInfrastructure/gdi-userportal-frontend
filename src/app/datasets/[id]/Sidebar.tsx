@@ -6,7 +6,7 @@ import formatDatasetLanguage from "@/utils/formatDatasetLanguage";
 
 export default function Sidebar({ dataset }: { dataset: Dataset }) {
   return (
-    <div className="flex w-full flex-col gap-3 bg-secondary p-5 text-white lg:w-1/3">
+    <div className="flex w-full flex-col gap-3 rounded bg-secondary p-5 text-white lg:w-1/3">
       <div className="mb-3">
         <h3 className="text-base text-warning sm:text-lg lg:text-xl">
           Metadata Created

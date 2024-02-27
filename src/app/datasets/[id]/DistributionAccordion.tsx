@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { DatasetDistribution } from "@/types/dataset.types";
@@ -13,6 +13,11 @@ export default function DistributionAccordion({
   distributions: DatasetDistribution[];
 }) {
   const [openIndex, setOpenIndex] = useState<null | number>(null);
+  const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    contentRefs.current = contentRefs.current.slice(0, distributions.length);
+  }, [distributions]);
 
   const toggleItem = (index: number) => {
     if (openIndex === index) {
@@ -25,11 +30,11 @@ export default function DistributionAccordion({
   return (
     <div className="accordion flex w-full flex-col items-center justify-center">
       {distributions.map((distribution, index) => (
-        <div className="mb-4 w-full" key={distribution.id}>
+        <div className="mb-2 w-full" key={distribution.id}>
           <div
             onClick={() => toggleItem(index)}
             onKeyPress={() => toggleItem(index)}
-            className="flex transform cursor-pointer items-center justify-between bg-info p-4 text-white transition duration-300 ease-in-out hover:-translate-y-1"
+            className="flex transform cursor-pointer items-center justify-between rounded bg-info p-4 text-white transition duration-300 ease-in-out"
           >
             <span>
               {distribution.name}
@@ -42,7 +47,15 @@ export default function DistributionAccordion({
             />
           </div>
           <div
-            className={`accordion-content transition-max-height overflow-hidden duration-500 ease-in-out ${openIndex === index ? "max-h-[1000px]" : "max-h-0"}`}
+            ref={(el) => (contentRefs.current[index] = el)}
+            style={{
+              maxHeight:
+                openIndex === index
+                  ? `${contentRefs.current[index]?.scrollHeight}px`
+                  : "0",
+              overflow: "hidden",
+              transition: "max-height 0.5s ease",
+            }}
           >
             <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2">
               <div>

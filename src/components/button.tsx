@@ -12,6 +12,8 @@ interface ButtonProps {
   icon?: IconDefinition;
   href?: string;
   onClick?: () => void;
+  className?: string;
+  props?: React.ComponentPropsWithoutRef<"a">;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -20,9 +22,11 @@ const Button: React.FC<ButtonProps> = ({
   icon,
   href,
   onClick,
+  className,
+  props,
 }) => {
   const common =
-    "rounded-lg px-4 py-2 text-xs font-bold w-1/2 border-2 shadow-sm hover:opacity-90 transition-colors duration-200 tracking-wide sm:w-auto md:text-sm";
+    "rounded-lg text-[12px] px-4 py-2 font-bold w-1/2 border-2 shadow-sm hover:opacity-90 transition-colors duration-200 tracking-wide sm:w-auto md:text-sm";
 
   const classes = {
     primary: "bg-primary text-white",
@@ -32,7 +36,12 @@ const Button: React.FC<ButtonProps> = ({
   };
 
   return (
-    <a href={href} className={cn(classes[type], common)} onClick={onClick}>
+    <a
+      href={href}
+      className={cn(classes[type], common, className)}
+      onClick={onClick}
+      {...props}
+    >
       {icon && <FontAwesomeIcon icon={icon} />}
       {text}
     </a>

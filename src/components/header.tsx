@@ -67,19 +67,19 @@ function Header() {
         <div className="hidden items-center gap-x-3 text-base font-semibold text-primary sm:flex md:text-lg">
           <Link
             href="/"
-            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-zinc-200 hover:shadow-sm md:px-7 ${activeTab === "/" ? "bg-zinc-200" : ""}`}
+            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-secondary hover:shadow-sm md:px-7 ${activeTab === "/" ? "bg-secondary text-white" : ""}`}
           >
             Home
           </Link>
           <Link
             href="/datasets"
-            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-zinc-200 hover:shadow-sm md:px-7 ${activeTab.includes("datasets") ? "bg-zinc-200" : ""}`}
+            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-secondary hover:shadow-sm md:px-7 ${activeTab.includes("datasets") ? "bg-secondary text-white" : ""}`}
           >
             Datasets
           </Link>
           <Link
             href="/about"
-            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-zinc-200 hover:shadow-sm md:px-7 ${activeTab === "/about" ? "bg-zinc-200" : ""}`}
+            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-secondary hover:shadow-sm md:px-7 ${activeTab === "/about" ? "bg-secondary text-white" : ""}`}
           >
             About
           </Link>

@@ -13,7 +13,7 @@ const AboutPage: React.FC = () => {
       <PageHeading className="mb-4 text-secondary">
         About Genomic Data Infrastructure (GDI)
       </PageHeading>
-      <p className="text-gray-700">
+      <p>
         The Genomic Data Infrastructure (GDI) project aims to enable access to
         genomic and related phenotypic and clinical data to improve research,
         policymaking and healthcare across Europe. The GDI project aims to
@@ -28,7 +28,7 @@ const AboutPage: React.FC = () => {
       <PageSubHeading className="my-4 text-secondary">
         User Portal
       </PageSubHeading>
-      <p className="text-gray-700">
+      <p>
         The User Portal, developed by the Genomic Data Infrastructure (GDI)
         project, is the central entry point for accessing genomic data. As part
         of the Genomic Data Infrastructure (GDI) project, it unlocks a vast
@@ -41,7 +41,7 @@ const AboutPage: React.FC = () => {
       <PageSubHeading className="my-4 text-secondary">
         Key Objectives
       </PageSubHeading>
-      <ul className="list-inside list-disc text-gray-700">
+      <ul className="list-inside list-disc">
         <li>
           To link and to provide cross-border access to genomic and related
           phenotypic datasets across Europe
@@ -65,18 +65,21 @@ const AboutPage: React.FC = () => {
         </li>
       </ul>
 
-      <p className="mt-20 text-gray-700">
+      <p className="mt-20">
         For more detailed information, please visit the{" "}
-        <a href="https://gdi.onemilliongenomes.eu/" className="text-blue-500">
+        <a
+          href="https://gdi.onemilliongenomes.eu/"
+          className="text-blue-500 hover:underline"
+        >
           GDI Website
         </a>
         .
       </p>
-      <p className="mt-4 text-gray-700">
+      <p className="mt-4">
         Please report any problems you find in{" "}
         <a
           href="https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/issues"
-          className="text-blue-500"
+          className="text-blue-500 hover:underline"
         >
           GitHub Issues
         </a>

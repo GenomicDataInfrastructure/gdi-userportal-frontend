@@ -10,7 +10,7 @@ const AboutPage: React.FC = () => {
   return (
     <div className="container mx-auto  px-4 sm:px-2 lg:px-0">
       <div className="mb-8 text-center"></div>
-      <PageHeading className="mb-4 text-secondary">
+      <PageHeading className="mb-4">
         About Genomic Data Infrastructure (GDI)
       </PageHeading>
       <p>
@@ -25,9 +25,7 @@ const AboutPage: React.FC = () => {
         of Europe).
       </p>
 
-      <PageSubHeading className="my-4 text-secondary">
-        User Portal
-      </PageSubHeading>
+      <PageSubHeading className="my-4">User Portal</PageSubHeading>
       <p>
         The User Portal, developed by the Genomic Data Infrastructure (GDI)
         project, is the central entry point for accessing genomic data. As part
@@ -38,9 +36,7 @@ const AboutPage: React.FC = () => {
         and healthcare professionals.{" "}
       </p>
 
-      <PageSubHeading className="my-4 text-secondary">
-        Key Objectives
-      </PageSubHeading>
+      <PageSubHeading className="my-4">Key Objectives</PageSubHeading>
       <ul className="list-inside list-disc">
         <li>
           To link and to provide cross-border access to genomic and related

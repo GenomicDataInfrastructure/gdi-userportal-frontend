@@ -41,12 +41,12 @@ const DistributionAccordion = ({
           <div
             onClick={() => toggleItem(index)}
             onKeyPress={() => toggleItem(index)}
-            className="flex transform cursor-pointer items-center justify-between rounded bg-warning p-4 transition duration-300 ease-in-out"
+            className="flex transform cursor-pointer items-center justify-between rounded border-2 border-b-0 bg-white-smoke p-4 transition duration-300 ease-in-out"
           >
             <span className="flex items-center">
               <FontAwesomeIcon icon={faFile} className="text-secondary" />
               <span className="ml-2">{distribution.name}</span>
-              <span className="ml-4 inline-block bg-secondary px-2.5 py-0.5 font-medium text-xs text-white">
+              <span className="ml-4 inline-block bg-warning px-2.5 py-0.5 font-medium text-xs text-black">
                 {distribution.format}
               </span>
             </span>
@@ -65,7 +65,7 @@ const DistributionAccordion = ({
               overflow: "hidden",
               transition: "max-height 0.5s ease",
             }}
-            className="rounded-b bg-white-smoke"
+            className="rounded-b border-2 border-t-0 bg-white"
           >
             <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2">
               <div>
@@ -132,7 +132,7 @@ const DistributionAccordion = ({
                     href={distribution.accessUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded bg-primary px-4 py-2 font-bold text-white transition duration-300 ease-in-out hover:bg-secondary"
+                    className="inline-flex items-center justify-center rounded bg-secondary px-4 py-2 font-bold text-white transition duration-300 ease-in-out hover:bg-primary"
                   >
                     Access URL
                   </a>
@@ -141,7 +141,7 @@ const DistributionAccordion = ({
                       href={distribution.downloadUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="ml-4 inline-flex items-center justify-center rounded bg-primary px-4 py-2 font-bold text-white transition duration-300 ease-in-out hover:bg-secondary"
+                      className="ml-4 inline-flex items-center justify-center rounded bg-secondary px-4 py-2 font-bold text-white transition duration-300 ease-in-out hover:bg-primary"
                     >
                       Download URL
                     </a>

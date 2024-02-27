@@ -14,7 +14,7 @@ const Chips: React.FC<ChipsProps> = ({ chips, className }) => (
     {chips.map((chip, index) => (
       <div
         key={index}
-        className="rounded bg-info px-2.5 py-0.5 text-sm font-semibold text-white"
+        className="rounded bg-warning px-2.5 py-0.5 text-sm font-semibold text-black"
       >
         {chip}
       </div>

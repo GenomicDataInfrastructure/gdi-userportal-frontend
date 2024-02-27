@@ -10,6 +10,7 @@ import {
   faFile,
 } from "@fortawesome/free-solid-svg-icons";
 import { DatasetDistribution } from "@/types/dataset.types";
+import { formatDate } from "@/utils/formatDate";
 
 export default function DistributionAccordion({
   distributions,
@@ -79,13 +80,17 @@ export default function DistributionAccordion({
               </div>
               <div>
                 <strong className="block text-sm font-semibold">Issued:</strong>
-                <span className="text-sm">{distribution.issued}</span>
+                <span className="text-sm">
+                  {distribution.issued && formatDate(distribution.issued)}
+                </span>
               </div>
               <div>
                 <strong className="block text-sm font-semibold">
                   Last Modified:
                 </strong>
-                <span className="text-sm">{distribution.modified}</span>
+                <span className="text-sm">
+                  {distribution.modified && formatDate(distribution.modified)}
+                </span>
               </div>
               <div>
                 <strong className="block text-sm font-semibold">

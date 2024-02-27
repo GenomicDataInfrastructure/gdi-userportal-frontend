@@ -4,7 +4,11 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronDown,
+  faChevronUp,
+  faFile,
+} from "@fortawesome/free-solid-svg-icons";
 import { DatasetDistribution } from "@/types/dataset.types";
 
 export default function DistributionAccordion({
@@ -34,16 +38,18 @@ export default function DistributionAccordion({
           <div
             onClick={() => toggleItem(index)}
             onKeyPress={() => toggleItem(index)}
-            className="flex transform cursor-pointer items-center justify-between rounded bg-info p-4 text-white transition duration-300 ease-in-out"
+            className="flex transform cursor-pointer items-center justify-between rounded bg-warning p-4 transition duration-300 ease-in-out"
           >
-            <span>
-              {distribution.name}
-              <span className="ml-2 inline-block bg-secondary px-2.5 py-0.5 font-medium text-xs text-white">
+            <span className="flex items-center">
+              <FontAwesomeIcon icon={faFile} className="text-secondary" />
+              <span className="ml-2">{distribution.name}</span>
+              <span className="ml-4 inline-block bg-secondary px-2.5 py-0.5 font-medium text-xs text-white">
                 {distribution.format}
               </span>
             </span>
             <FontAwesomeIcon
               icon={openIndex === index ? faChevronUp : faChevronDown}
+              className="text-secondary"
             />
           </div>
           <div
@@ -56,6 +62,7 @@ export default function DistributionAccordion({
               overflow: "hidden",
               transition: "max-height 0.5s ease",
             }}
+            className="rounded-b bg-white-smoke"
           >
             <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2">
               <div>

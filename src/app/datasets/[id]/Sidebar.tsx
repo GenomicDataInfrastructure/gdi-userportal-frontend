@@ -13,7 +13,7 @@ const Sidebar = ({ dataset }: SidebarProps) => {
   return (
     <div className="border-gray flex w-full flex-col gap-3 rounded-sm border-2 bg-white-smoke p-5 text-black lg:w-1/3">
       <div className="mb-3">
-        <h3 className="text-base text-secondary sm:text-lg lg:text-xl">
+        <h3 className="text-base text-primary sm:text-lg lg:text-xl">
           Metadata Created
         </h3>
         <span className="text-sm sm:text-base lg:text-lg">
@@ -21,7 +21,7 @@ const Sidebar = ({ dataset }: SidebarProps) => {
         </span>
       </div>
       <div className="mb-3">
-        <h3 className="text-base text-secondary sm:text-lg lg:text-xl">
+        <h3 className="text-base text-primary sm:text-lg lg:text-xl">
           Metadata Modified
         </h3>
         <span className="text-sm sm:text-base lg:text-lg">
@@ -29,9 +29,7 @@ const Sidebar = ({ dataset }: SidebarProps) => {
         </span>
       </div>
       <div className="mb-3">
-        <h3 className="text-base text-secondary sm:text-lg lg:text-xl">
-          Source
-        </h3>
+        <h3 className="text-base text-primary sm:text-lg lg:text-xl">Source</h3>
         <span className="break-words text-sm sm:text-base lg:text-lg">
           <a
             href={dataset.url}
@@ -44,7 +42,7 @@ const Sidebar = ({ dataset }: SidebarProps) => {
         </span>
       </div>
       <div className="mb-3">
-        <h3 className="text-base text-secondary sm:text-lg lg:text-xl">
+        <h3 className="text-base text-primary sm:text-lg lg:text-xl">
           Language
         </h3>
         <span className="break-words text-sm sm:text-base lg:text-lg">
@@ -62,7 +60,7 @@ const Sidebar = ({ dataset }: SidebarProps) => {
         </span>
       </div>
       <div className="mb-3">
-        <h3 className="text-base text-secondary sm:text-lg lg:text-xl">
+        <h3 className="text-base text-primary sm:text-lg lg:text-xl">
           Publisher Name
         </h3>
         <span className="text-sm sm:text-base lg:text-lg">
@@ -70,7 +68,7 @@ const Sidebar = ({ dataset }: SidebarProps) => {
         </span>
       </div>
       <div className="mb-3">
-        <h3 className="text-base text-secondary sm:text-lg lg:text-xl">
+        <h3 className="text-base text-primary sm:text-lg lg:text-xl">
           Identifier
         </h3>
         <span className="break-words text-sm sm:text-base lg:text-lg">
@@ -85,7 +83,7 @@ const Sidebar = ({ dataset }: SidebarProps) => {
         </span>
       </div>
       <div className="mb-3">
-        <h3 className="text-base text-secondary sm:text-lg lg:text-xl">
+        <h3 className="text-base text-primary sm:text-lg lg:text-xl">
           Spatial URI
         </h3>
         <span className="break-words text-sm sm:text-base lg:text-lg">
@@ -100,7 +98,7 @@ const Sidebar = ({ dataset }: SidebarProps) => {
         </span>
       </div>
       <div className="mb-3">
-        <h3 className="text-base text-secondary sm:text-lg lg:text-xl">
+        <h3 className="text-base text-primary sm:text-lg lg:text-xl">
           Has Version
         </h3>
         <span className="text-sm sm:text-base lg:text-lg">
@@ -108,7 +106,7 @@ const Sidebar = ({ dataset }: SidebarProps) => {
         </span>
       </div>
       <div className="mb-3">
-        <h3 className="text-base text-secondary sm:text-lg lg:text-xl">
+        <h3 className="text-base text-primary sm:text-lg lg:text-xl">
           Contact URI
         </h3>
         <span className="break-words text-sm sm:text-base lg:text-lg">
@@ -116,7 +114,7 @@ const Sidebar = ({ dataset }: SidebarProps) => {
         </span>
       </div>
       <div className="mb-3">
-        <h3 className="text-base text-secondary sm:text-lg lg:text-xl">
+        <h3 className="text-base text-primary sm:text-lg lg:text-xl">
           Access rights
         </h3>
         <span className="break-words text-sm sm:text-base lg:text-lg">
@@ -124,7 +122,7 @@ const Sidebar = ({ dataset }: SidebarProps) => {
         </span>
       </div>
       <div className="mb-3">
-        <h3 className="text-base text-secondary sm:text-lg lg:text-xl">
+        <h3 className="text-base text-primary sm:text-lg lg:text-xl">
           Conforms to
         </h3>
         <span className="break-words text-sm sm:text-base lg:text-lg">
@@ -132,7 +130,7 @@ const Sidebar = ({ dataset }: SidebarProps) => {
         </span>
       </div>
       <div className="mb-3">
-        <h3 className="text-base text-secondary sm:text-lg lg:text-xl">
+        <h3 className="text-base text-primary sm:text-lg lg:text-xl">
           Provenance
         </h3>
         <span className="text-sm sm:text-base lg:text-lg">

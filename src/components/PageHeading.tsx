@@ -11,7 +11,7 @@ interface PageHeadingProps {
 
 const PageHeading: React.FC<PageHeadingProps> = ({ children, className }) => (
   <h1
-    className={`text-2xl font-bold text-secondary sm:text-3xl lg:text-4xl ${className}`}
+    className={`text-2xl font-bold text-primary sm:text-3xl lg:text-4xl ${className}`}
   >
     {children}
   </h1>

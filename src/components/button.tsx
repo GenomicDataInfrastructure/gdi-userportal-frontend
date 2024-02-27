@@ -22,11 +22,11 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
 }) => {
   const common =
-    "rounded-lg px-4 py-2 text-xs font-bold w-1/2 border-2 shadow-sm hover:opacity-90 transition-colors duration-200 tracking-wide sm:w-auto md:text-sm";
+    "rounded-lg px-4 py-2 font-bold border-2 transition-colors duration-200 tracking-wide sm:w-auto hover:bg-secondary cursor-pointer";
 
   const classes = {
     primary: "bg-primary text-white",
-    secondary: "bg-secondary text-white",
+    secondary: "bg-secondary text-white hover",
     info: "bg-info text-white",
     warning: "bg-warning text-black",
   };

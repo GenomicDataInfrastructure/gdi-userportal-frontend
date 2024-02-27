@@ -44,7 +44,7 @@ const DistributionAccordion = ({
             className="flex transform cursor-pointer items-center justify-between rounded border-2 border-b-0 bg-white-smoke p-4 transition duration-300 ease-in-out"
           >
             <span className="flex items-center">
-              <FontAwesomeIcon icon={faFile} className="text-secondary" />
+              <FontAwesomeIcon icon={faFile} className="text-primary" />
               <span className="ml-2">{distribution.name}</span>
               <span className="ml-4 inline-block bg-warning px-2.5 py-0.5 font-medium text-xs text-black">
                 {distribution.format}
@@ -52,7 +52,7 @@ const DistributionAccordion = ({
             </span>
             <FontAwesomeIcon
               icon={openIndex === index ? faChevronUp : faChevronDown}
-              className="text-secondary"
+              className="text-primary"
             />
           </div>
           <div
@@ -132,7 +132,7 @@ const DistributionAccordion = ({
                     href={distribution.accessUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded bg-secondary px-4 py-2 font-bold text-white transition duration-300 ease-in-out hover:bg-primary"
+                    className="inline-flex items-center justify-center rounded bg-primary px-4 py-2 font-bold text-white transition duration-300 ease-in-out hover:bg-secondary"
                   >
                     Access URL
                   </a>
@@ -141,7 +141,7 @@ const DistributionAccordion = ({
                       href={distribution.downloadUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="ml-4 inline-flex items-center justify-center rounded bg-secondary px-4 py-2 font-bold text-white transition duration-300 ease-in-out hover:bg-primary"
+                      className="ml-4 inline-flex items-center justify-center rounded bg-primary px-4 py-2 font-bold text-white transition duration-300 ease-in-out hover:bg-secondary"
                     >
                       Download URL
                     </a>

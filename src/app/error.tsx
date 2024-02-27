@@ -54,7 +54,7 @@ export default function ErrorBoundary({
           <h1 className="mt-3 text-2xl font-semibold text-primary md:text-3xl">
             {heading}
           </h1>
-          <p className="mt-4 text-secondary">{message}</p>
+          <p className="mt-4 text-primary">{message}</p>
           <div className="mt-6">
             <Button
               href="/"

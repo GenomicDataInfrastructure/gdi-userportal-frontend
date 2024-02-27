@@ -11,8 +11,8 @@ module.exports = {
     extend: {
       colors: {
         // Functional color names
-        primary: "var(--color-wine-berry)",
-        secondary: "var(--color-claret)",
+        primary: "var(--color-claret)",
+        secondary: "var(--color-wine-berry)",
         info: "var(--color-scampi-blue)",
         warning: "var(--color-grandis-yellow)",
 

@@ -9,7 +9,7 @@ import React from "react";
 
 interface ButtonProps {
   text: string;
-  type: "primary" | "secondary" | "info" | "warning";
+  type?: "primary" | "secondary" | "info" | "warning";
   icon?: IconDefinition;
   href?: string;
   onClick?: () => void;
@@ -19,7 +19,7 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({
   text,
-  type = "primary",
+  type,
   icon,
   href,
   onClick,
@@ -39,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <a
       href={href}
-      className={cn(classes[type], common, className)}
+      className={cn(classes[type] || "", common, className)}
       onClick={onClick}
       {...props}
     >

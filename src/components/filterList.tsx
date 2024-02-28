@@ -114,7 +114,11 @@ const options = [
   },
 ];
 
-function FilterList() {
+type FilterListProps = {
+  displayContinueButton?: boolean;
+};
+
+function FilterList({ displayContinueButton = false }: FilterListProps) {
   return (
     <div className="flex flex-col gap-y-10 rounded-lg bg-white-smoke px-6 py-8">
       <h1 className="text-xl">
@@ -131,12 +135,20 @@ function FilterList() {
           key={option.placeholder}
         />
       ))}
-      <div className="mt-4">
+      <div className="mt-4 flex justify-between">
         <Button
           text="Clear Filters"
           type="secondary"
-          className="text-[7px] md:text-xs"
+          className="w-fit text-xs"
         ></Button>
+        {displayContinueButton && (
+          <Button
+            text="Continue"
+            type="info"
+            className="w-fit text-xs"
+            onClick={() => "ok"}
+          ></Button>
+        )}
       </div>
     </div>
   );

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useWindowSize } from "@/hooks";
-import { truncateDescription } from "@/utils/textTransformation";
+import { truncateDescription } from "@/utils/textProcessing";
 import Link from "next/link";
 import Chips from "./Chips";
 

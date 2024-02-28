@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+
 export const packageFixture = {
   access_rights: 'public',
   alternate_identifier: 'alt-id',

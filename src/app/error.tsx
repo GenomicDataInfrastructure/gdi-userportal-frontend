@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+
 "use client";
 
 import Button from "@/components/button";

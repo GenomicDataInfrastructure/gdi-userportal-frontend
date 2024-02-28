@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+
 import Disclaimer from "@/components/disclaimer";
 import Footer from "@/components/footer";
 import Header from "@/components/header";

@@ -1,11 +1,12 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-import { datasetGet } from "@/services/ckan/index.server";
+
 import Error from "@/app/error";
+import Chips from "@/components/Chips";
 import PageHeading from "@/components/PageHeading";
 import PageSubHeading from "@/components/PageSubHeading";
-import Chips from "@/components/Chips";
+import { datasetGet } from "@/services/ckan/index.server";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;

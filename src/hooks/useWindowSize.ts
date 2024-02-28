@@ -1,13 +1,13 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-'use client';
+
 import { useEffect, useState } from 'react';
 
 function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: 1024,
+    height: 1024,
   });
 
   useEffect(() => {
@@ -18,10 +18,10 @@ function useWindowSize() {
       });
     }
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
-    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return windowSize;

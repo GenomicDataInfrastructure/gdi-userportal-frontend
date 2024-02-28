@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+
 import * as React from "react";
 
 import { ButtonProps, buttonVariants } from "@/components/ui/button";

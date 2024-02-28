@@ -1,10 +1,11 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+
 import { jest } from '@jest/globals';
 import axios from 'axios';
-import { packageFixture } from '../fixtures/packageFixtures';
 import { makeDatasetGet } from '../datasetGet';
+import { packageFixture } from '../fixtures/packageFixtures';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;

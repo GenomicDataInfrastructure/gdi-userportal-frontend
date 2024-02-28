@@ -1,7 +1,9 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+
 "use client";
+
 import { User } from "@/types/user.types";
 import { keycloackSessionLogOut } from "@/utils/auth";
 import {

@@ -10,10 +10,10 @@ enum SCREEN_SIZE {
 }
 
 function pixelWidthToScreenSize(width: number): SCREEN_SIZE {
-  if (width < 640) return SCREEN_SIZE.SM;
-  else if (width < 768 && width >= 640) return SCREEN_SIZE.MD;
-  else if (width < 1024 && width >= 768) return SCREEN_SIZE.LG;
+  if (width < 768) return SCREEN_SIZE.SM;
+  else if (width < 1024 && width >= 768) return SCREEN_SIZE.MD;
+  else if (width < 1280 && width >= 1024) return SCREEN_SIZE.LG;
   return SCREEN_SIZE.XL;
 }
 
-export { pixelWidthToScreenSize };
+export { SCREEN_SIZE, pixelWidthToScreenSize };

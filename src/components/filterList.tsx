@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
 import {
   faBook,
   faFile,
@@ -9,7 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "./button";
-import MultipleSelector from "./ui/multipleSelector";
+import FilterItem from "./filterItem";
 
 const options = [
   {
@@ -112,45 +115,27 @@ const options = [
 
 function FilterList() {
   return (
-    <div className="flex flex-col gap-y-10 rounded-lg px-6 py-8">
-      <h1 className="text-lg">
+    <div className="flex flex-col gap-y-10 rounded-lg bg-white-smoke px-6 py-8">
+      <h1 className="text-xl">
         <span className="mr-2">
           <FontAwesomeIcon icon={faFilter} />
         </span>
         Filters
       </h1>
-      {options.map((option) => {
-        return (
-          <div key={option.placeholder}>
-            <div className="mb-3 flex items-center gap-x-3">
-              <FontAwesomeIcon
-                icon={option.icon}
-                className="text-xs font-extrabold text-info"
-              />
-              <p className="text-bold text-info">{option.placeholder}</p>
-            </div>
-            <MultipleSelector
-              defaultOptions={option.data}
-              placeholder={option.placeholder}
-              className="text-[0.8rem]"
-              emptyIndicator={
-                <p className="text-center text-[0.8rem] leading-10">
-                  No results found.
-                </p>
-              }
-              badgeClassName="bg-warning text-black text-[0.7rem]"
-            />
-          </div>
-        );
-      })}
+      {options.map((option) => (
+        <FilterItem
+          label={option.placeholder}
+          data={option.data}
+          icon={option.icon}
+          key={option.placeholder}
+        />
+      ))}
       <div className="mt-4">
-        {
-          <Button
-            text="Clear Filters"
-            type="secondary"
-            className="w-full text-[7px] md:text-xs"
-          ></Button>
-        }
+        <Button
+          text="Clear Filters"
+          type="secondary"
+          className="text-[7px] md:text-xs"
+        ></Button>
       </div>
     </div>
   );

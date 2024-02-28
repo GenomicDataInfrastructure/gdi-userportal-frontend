@@ -1,9 +1,12 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
 "use client";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import Button from "./button";
 
-export default function Search() {
+function SearchBar() {
   const [query, setQuery] = useState("");
 
   function handleQueryChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -35,3 +38,5 @@ export default function Search() {
     </form>
   );
 }
+
+export default SearchBar;

@@ -6,7 +6,8 @@ import Error from "@/app/error";
 import Chips from "@/components/Chips";
 import PageHeading from "@/components/PageHeading";
 import PageSubHeading from "@/components/PageSubHeading";
-import { datasetGet } from "@/services/ckan/index.server";
+import DistributionAccordion from "./DistributionAccordion";
+import Sidebar from "./Sidebar";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -26,15 +27,9 @@ export default async function Page({ params }: { params: { id: string } }) {
             chips={dataset.keywords.map((keyword) => keyword.displayName)}
           />
           <PageSubHeading>Distributions</PageSubHeading>
+          <DistributionAccordion distributions={dataset.distributions} />
         </div>
-        <div className="flex w-full flex-col gap-3 bg-gray-100 p-5 lg:w-1/3">
-          {/* Example for author, similar structure for other sidebar details */}
-          <div>
-            <h3 className="font-semibold">Author</h3>
-            <span>{dataset.author.name}</span>
-          </div>
-          {/* Add other details similarly */}
-        </div>
+        <Sidebar dataset={dataset} />
       </div>
     );
   } catch (error) {

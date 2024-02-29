@@ -27,19 +27,19 @@ const Button: React.FC<ButtonProps> = ({
   props,
 }) => {
   const common =
-    "rounded-lg text-[12px] px-4 py-2 font-bold w-1/2 border-2 shadow-sm hover:opacity-90 transition-colors duration-200 tracking-wide sm:w-auto md:text-sm";
+    "rounded-lg px-4 py-2 font-bold border-2 transition-colors duration-200 tracking-wide sm:w-auto cursor-pointer";
 
   const classes = {
-    primary: "bg-primary text-white",
-    secondary: "bg-secondary text-white",
-    info: "bg-info text-white",
-    warning: "bg-warning text-black",
+    primary: "bg-primary text-white hover:bg-secondary",
+    secondary: "bg-secondary text-white hover:opacity-80",
+    info: "bg-info text-white hover:opacity-80",
+    warning: "bg-warning text-black hover:opacity-80",
   };
 
   return (
     <a
       href={href}
-      className={cn(classes[type] || "", common, className)}
+      className={cn(classes[type!] || "", common, className)}
       onClick={onClick}
       {...props}
     >

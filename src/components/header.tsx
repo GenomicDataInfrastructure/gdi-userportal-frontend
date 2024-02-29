@@ -69,19 +69,19 @@ function Header() {
         <div className="hidden items-center gap-x-3 text-base font-semibold text-primary sm:flex md:text-lg">
           <Link
             href="/"
-            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-zinc-200 hover:shadow-sm md:px-7 ${activeTab === "/" ? "bg-zinc-200" : ""}`}
+            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-primary hover:shadow-sm md:px-7 ${activeTab === "/" ? "bg-primary text-white" : ""}`}
           >
             Home
           </Link>
           <Link
             href="/datasets"
-            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-zinc-200 hover:shadow-sm md:px-7 ${activeTab.includes("datasets") ? "bg-zinc-200" : ""}`}
+            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-primary hover:shadow-sm md:px-7 ${activeTab.includes("datasets") ? "bg-primary text-white" : ""}`}
           >
             Datasets
           </Link>
           <Link
             href="/about"
-            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-zinc-200 hover:shadow-sm md:px-7 ${activeTab === "/about" ? "bg-zinc-200" : ""}`}
+            className={`rounded-full border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-primary hover:shadow-sm md:px-7 ${activeTab === "/about" ? "bg-primary text-white" : ""}`}
           >
             About
           </Link>
@@ -96,7 +96,7 @@ function Header() {
         ) : (
           <Button
             text="Log in"
-            type="secondary"
+            type="primary"
             onClick={() => signIn("keycloak")}
           />
         )}
@@ -113,7 +113,7 @@ function Header() {
           <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg">
             <Link
               href="/"
-              className="block px-4 py-2 hover:bg-secondary hover:text-white"
+              className="block px-4 py-2 hover:bg-primary hover:text-white"
               onClick={closeMenu}
             >
               <FontAwesomeIcon icon={faHome} className="mr-2" />
@@ -121,7 +121,7 @@ function Header() {
             </Link>
             <Link
               href="/datasets"
-              className="block px-4 py-2 hover:bg-secondary hover:text-white"
+              className="block px-4 py-2 hover:bg-primary hover:text-white"
               onClick={closeMenu}
             >
               <FontAwesomeIcon icon={faDatabase} className="mr-2" />
@@ -129,7 +129,7 @@ function Header() {
             </Link>
             <Link
               href="/about"
-              className="block px-4 py-2 hover:bg-secondary hover:text-white"
+              className="block px-4 py-2 hover:bg-primary hover:text-white"
               onClick={closeMenu}
             >
               <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
@@ -144,7 +144,7 @@ function Header() {
             {!session && (
               <button
                 onClick={() => signIn("keycloak")}
-                className="block w-full px-4 py-2 text-left hover:bg-secondary hover:text-white"
+                className="block w-full px-4 py-2 text-left hover:bg-primary hover:text-white"
               >
                 <FontAwesomeIcon icon={faRightToBracket} className="mr-2" />
                 Login
@@ -153,7 +153,7 @@ function Header() {
             {session && (
               <button
                 onClick={handleSignOut}
-                className="block w-full px-4 py-2 text-left hover:bg-secondary hover:text-white"
+                className="block w-full px-4 py-2 text-left hover:bg-primary hover:text-white"
               >
                 <FontAwesomeIcon icon={faRightFromBracket} className="mr-2" />
                 Logout

@@ -30,7 +30,7 @@ function DatasetPage() {
           <FilterList displayContinueButton={true} />
           <Button
             icon={faX}
-            className="absolute right-0 top-0 w-fit hover:bg-secondary hover:text-white"
+            className="absolute right-0 top-0 w-fit hover:bg-primary hover:text-white"
             text=""
             onClick={() => setIsFilterOpen(false)}
           />
@@ -43,7 +43,6 @@ function DatasetPage() {
               3 results found
             </p>
             <Button
-              type="primary"
               icon={faFilter}
               className="absolute -right-16 top-1 h-10 w-fit bg-white-smoke text-xs text-info hover:border-info md:text-xs xl:hidden"
               text=""

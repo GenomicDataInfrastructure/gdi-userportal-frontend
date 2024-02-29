@@ -138,7 +138,7 @@ function FilterList({ displayContinueButton = false }: FilterListProps) {
       <div className="mt-4 flex justify-between">
         <Button
           text="Clear Filters"
-          type="secondary"
+          type="primary"
           className="w-fit text-xs"
         ></Button>
         {displayContinueButton && (
@@ -146,7 +146,7 @@ function FilterList({ displayContinueButton = false }: FilterListProps) {
             text="Continue"
             type="info"
             className="w-fit text-xs"
-            onClick={() => "ok"}
+            onClick={() => console.log("Continue button clicked")}
           ></Button>
         )}
       </div>

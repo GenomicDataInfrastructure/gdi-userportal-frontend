@@ -15,7 +15,9 @@ const PageSubHeading: React.FC<PageSubHeadingProps> = ({
   children,
   className,
 }) => (
-  <h3 className={`text-lg font-bold sm:text-xl lg:text-2xl ${className}`}>
+  <h3
+    className={`text-lg font-bold text-primary sm:text-xl lg:text-2xl ${className}`}
+  >
     {children}
   </h3>
 );

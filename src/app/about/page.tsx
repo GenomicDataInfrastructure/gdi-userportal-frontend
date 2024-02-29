@@ -10,10 +10,10 @@ const AboutPage: React.FC = () => {
   return (
     <div className="container mx-auto  px-4 sm:px-2 lg:px-0">
       <div className="mb-8 text-center"></div>
-      <PageHeading className="mb-4 text-secondary">
+      <PageHeading className="mb-4">
         About Genomic Data Infrastructure (GDI)
       </PageHeading>
-      <p className="text-gray-700">
+      <p>
         The Genomic Data Infrastructure (GDI) project aims to enable access to
         genomic and related phenotypic and clinical data to improve research,
         policymaking and healthcare across Europe. The GDI project aims to
@@ -25,10 +25,8 @@ const AboutPage: React.FC = () => {
         of Europe).
       </p>
 
-      <PageSubHeading className="my-4 text-secondary">
-        User Portal
-      </PageSubHeading>
-      <p className="text-gray-700">
+      <PageSubHeading className="my-4">User Portal</PageSubHeading>
+      <p>
         The User Portal, developed by the Genomic Data Infrastructure (GDI)
         project, is the central entry point for accessing genomic data. As part
         of the Genomic Data Infrastructure (GDI) project, it unlocks a vast
@@ -38,10 +36,8 @@ const AboutPage: React.FC = () => {
         and healthcare professionals.{" "}
       </p>
 
-      <PageSubHeading className="my-4 text-secondary">
-        Key Objectives
-      </PageSubHeading>
-      <ul className="list-inside list-disc text-gray-700">
+      <PageSubHeading className="my-4">Key Objectives</PageSubHeading>
+      <ul className="list-inside list-disc">
         <li>
           To link and to provide cross-border access to genomic and related
           phenotypic datasets across Europe
@@ -65,18 +61,21 @@ const AboutPage: React.FC = () => {
         </li>
       </ul>
 
-      <p className="mt-20 text-gray-700">
+      <p className="mt-20">
         For more detailed information, please visit the{" "}
-        <a href="https://gdi.onemilliongenomes.eu/" className="text-blue-500">
+        <a
+          href="https://gdi.onemilliongenomes.eu/"
+          className="text-blue-500 hover:underline"
+        >
           GDI Website
         </a>
         .
       </p>
-      <p className="mt-4 text-gray-700">
+      <p className="mt-4">
         Please report any problems you find in{" "}
         <a
           href="https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/issues"
-          className="text-blue-500"
+          className="text-blue-500 hover:underline"
         >
           GitHub Issues
         </a>

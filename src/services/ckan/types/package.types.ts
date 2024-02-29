@@ -56,6 +56,8 @@ interface CKANResource {
   temporal_resolution: string;
   url: string;
   url_type: string;
+  modified: string;
+  issued: string;
 }
 
 export interface CKANPackage {

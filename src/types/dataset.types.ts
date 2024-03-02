@@ -13,6 +13,12 @@ interface DatasetMaintainer {
   email: string;
 }
 
+interface DatasetOrganization {
+  id: string;
+  name: string;
+  title: string;
+}
+
 interface DatasetPublisher {
   email: string;
   name: string;
@@ -55,6 +61,7 @@ export interface Dataset {
   version: DatasetVersion;
   license: DatasetLicense;
   maintainer: DatasetMaintainer;
+  organization: DatasetOrganization;
   publisher: DatasetPublisher;
   keywords: DatasetKeywords[];
   accessRights: string;

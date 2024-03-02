@@ -8,6 +8,7 @@ import PageHeading from "@/components/PageHeading";
 import PageSubHeading from "@/components/PageSubHeading";
 import DistributionAccordion from "./DistributionAccordion";
 import Sidebar from "./Sidebar";
+import { datasetGet } from "@/services/ckan/index.server";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;

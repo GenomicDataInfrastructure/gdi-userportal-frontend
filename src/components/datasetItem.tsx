@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+"use client";
 
 import { useWindowSize } from "@/hooks";
 import { truncateDescription } from "@/utils/textProcessing";
@@ -28,7 +29,7 @@ function DatasetItem({
   const truncatedDesc = truncateDescription(description, screenWidth);
 
   return (
-    <li className="rounded-lg border bg-white-smoke p-8 duration-200 hover:border-info hover:shadow-md hover:ring-offset-1">
+    <div className="rounded-lg border bg-white-smoke p-8 duration-200 hover:border-info hover:shadow-md hover:ring-offset-1">
       <Link href={`/dataset/${id}`}>
         <div className="mb-4 flex justify-between">
           <h3 className="text-xl text-info md:text-2xl">{title}</h3>
@@ -41,7 +42,7 @@ function DatasetItem({
           className="bg-warning text-xs text-black md:text-sm "
         />
       </Link>
-    </li>
+    </div>
   );
 }
 

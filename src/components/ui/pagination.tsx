@@ -12,6 +12,7 @@ import {
   faEllipsisH,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 
 const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
   <nav
@@ -46,7 +47,7 @@ PaginationItem.displayName = "PaginationItem";
 type PaginationLinkProps = {
   isActive?: boolean;
 } & Pick<ButtonProps, "size"> &
-  React.ComponentProps<"a">;
+  React.ComponentProps<typeof Link>;
 
 const PaginationLink = ({
   className,
@@ -54,17 +55,20 @@ const PaginationLink = ({
   size = "icon",
   ...props
 }: PaginationLinkProps) => (
-  <a
-    aria-current={isActive ? "page" : undefined}
-    className={cn(
-      buttonVariants({
-        variant: isActive ? "outline" : "ghost",
-        size,
-      }),
-      className,
-    )}
-    {...props}
-  />
+  <PaginationItem>
+    <a
+      aria-current={isActive ? "page" : undefined}
+      className={cn(
+        buttonVariants({
+          variant: isActive ? "outline" : "ghost",
+          size,
+        }),
+        className,
+      )}
+    >
+      <Link {...props} />
+    </a>
+  </PaginationItem>
 );
 PaginationLink.displayName = "PaginationLink";
 

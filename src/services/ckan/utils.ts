@@ -31,6 +31,11 @@ export const mapCKANPackageToDataset = (ckanPackage: CKANPackage): Dataset => {
       id: ckanPackage.license_id,
       title: ckanPackage.license_title,
     },
+    organization: {
+      id: ckanPackage.organization.id,
+      name: ckanPackage.organization.name,
+      title: ckanPackage.organization.title,
+    },
     maintainer: {
       name: ckanPackage.maintainer,
       email: ckanPackage.maintainer_email,
@@ -56,8 +61,8 @@ export const mapCKANPackageToDataset = (ckanPackage: CKANPackage): Dataset => {
     isOpen: ckanPackage.isopen,
     landingPage: ckanPackage.landing_page,
     languages: ckanPackage.language,
-    metadataCreated: ckanPackage.metadata_created,
-    metadataModified: ckanPackage.metadata_modified,
+    metadataCreated: ckanPackage.metadata_created?.split('T')[0],
+    metadataModified: ckanPackage.metadata_modified?.split('T')[0],
     name: ckanPackage.name,
     notes: ckanPackage.notes,
     numResources: ckanPackage.num_resources,

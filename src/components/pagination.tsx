@@ -12,30 +12,106 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-function Pagination() {
+type PaginationProps = {
+  datasetCount: number;
+  datasetPerPage: number;
+  pathname: string;
+  queryParams: Record<string, string | string[] | undefined>;
+};
+
+function Pagination({
+  datasetCount,
+  datasetPerPage,
+  pathname,
+  queryParams,
+}: PaginationProps) {
+  const currentPage = Number(queryParams.page) || 1;
+  const lastPageNb = Math.ceil(datasetCount / datasetPerPage) || 1;
+
+  function createHref(page: number) {
+    const params = new URLSearchParams(queryParams as any);
+    params.set("page", page.toString());
+    return `${pathname}?${params}`;
+  }
+
   return (
     <PaginationBase>
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious href="#" />
+          {currentPage !== 1 && (
+            <PaginationPrevious href={createHref(currentPage - 1)} />
+          )}
         </PaginationItem>
+
         <PaginationItem>
-          <PaginationLink href="#" isActive>
+          <PaginationLink href={createHref(1)} isActive={currentPage === 1}>
             1
           </PaginationLink>
         </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">2</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationNext href="#" />
-        </PaginationItem>
+
+        {currentPage > 4 && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )}
+
+        {currentPage > 3 && (
+          <PaginationItem>
+            <PaginationLink href={createHref(currentPage - 2)}>
+              {currentPage - 2}
+            </PaginationLink>
+          </PaginationItem>
+        )}
+        {Number(currentPage) > 2 && (
+          <PaginationItem>
+            <PaginationLink href={createHref(currentPage - 1)}>
+              {currentPage - 1}
+            </PaginationLink>
+          </PaginationItem>
+        )}
+
+        {currentPage !== 1 && (
+          <PaginationItem>
+            <PaginationLink href={createHref(currentPage)} isActive>
+              {currentPage}
+            </PaginationLink>
+          </PaginationItem>
+        )}
+        {currentPage < lastPageNb - 1 && (
+          <PaginationItem>
+            <PaginationLink href={createHref(currentPage + 1)}>
+              {currentPage + 1}
+            </PaginationLink>
+          </PaginationItem>
+        )}
+
+        {currentPage < lastPageNb - 2 && (
+          <PaginationItem>
+            <PaginationLink href={createHref(currentPage + 2)}>
+              {currentPage + 2}
+            </PaginationLink>
+          </PaginationItem>
+        )}
+
+        {currentPage < lastPageNb - 3 && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )}
+
+        {currentPage !== lastPageNb && (
+          <PaginationItem>
+            <PaginationLink href={createHref(lastPageNb)}>
+              {lastPageNb}
+            </PaginationLink>
+          </PaginationItem>
+        )}
+
+        {currentPage !== lastPageNb && (
+          <PaginationItem>
+            <PaginationNext href={createHref(currentPage + 1)} />
+          </PaginationItem>
+        )}
       </PaginationContent>
     </PaginationBase>
   );

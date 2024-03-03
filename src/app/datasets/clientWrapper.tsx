@@ -6,6 +6,7 @@
 
 import Button from "@/components/button";
 import DatasetList from "@/components/datasetList";
+import FilterList from "@/components/filterList";
 import Pagination from "@/components/pagination";
 import SearchBar from "@/components/searchBar";
 import { useWindowSize } from "@/hooks";

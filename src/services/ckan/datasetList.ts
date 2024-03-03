@@ -9,6 +9,7 @@ export const makeDatasetList = (DMS: string) => {
   return async (options: PackageSearchOptions): Promise<PackageSearchResult> => {
     const queryParams = constructQueryParams(options);
     const url = constructCkanActionUrl(DMS, 'package_search', queryParams);
+    console.log(url);
 
     try {
       const response = await axios.get(url);
@@ -24,7 +25,10 @@ export const makeDatasetList = (DMS: string) => {
 
 const buildFilterQueryPart = (filters: string[]): string => {
   return filters.length > 0
-    ? `(${filters.map((filter: string) => (filter.startsWith('http') ? `"${filter}"` : filter)).join(' OR ')})`
+    ? `(${filters
+        .map((filter: string) => (filter.startsWith('http') ? `"${filter}"` : filter))
+        .map((value: string) => (value.includes(' ') ? `"${value}"` : value))
+        .join(' OR ')})`
     : '';
 };
 

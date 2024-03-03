@@ -23,7 +23,9 @@ export const makeDatasetList = (DMS: string) => {
 };
 
 const buildFilterQueryPart = (filters: string[]): string => {
-  return filters.length > 0 ? `(${filters.join(' OR ')})` : '';
+  return filters.length > 0
+    ? `(${filters.map((filter: string) => (filter.startsWith('http') ? `"${filter}"` : filter)).join(' OR ')})`
+    : '';
 };
 
 const constructQueryParams = (options: PackageSearchOptions): string => {
@@ -37,7 +39,7 @@ const constructQueryParams = (options: PackageSearchOptions): string => {
     groupFilter && `groups:${groupFilter}`,
     orgFilter && `organization:${orgFilter}`,
     tagFilter && `tags:${tagFilter}`,
-    publisherFilter && `publisher:${tagFilter}`,
+    publisherFilter && `publisher:${publisherFilter}`,
     resFormatFilter && `res_format:${resFormatFilter}`,
   ]
     .filter(Boolean)

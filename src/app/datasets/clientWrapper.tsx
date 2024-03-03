@@ -1,11 +1,15 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 "use client";
 
 import Button from "@/components/button";
 import DatasetList from "@/components/datasetList";
-import FilterList from "@/components/filterList";
 import Pagination from "@/components/pagination";
 import SearchBar from "@/components/searchBar";
 import { useWindowSize } from "@/hooks";
+import { FieldDetails } from "@/services/ckan/types/fieldDetails.types";
 import { PackageSearchResult } from "@/services/ckan/types/packageSearch.types";
 import { SCREEN_SIZE, pixelWidthToScreenSize } from "@/utils/windowSize";
 import { faFilter, faX } from "@fortawesome/free-solid-svg-icons";
@@ -15,12 +19,14 @@ type ClientWrapperProps = {
   datasets: PackageSearchResult;
   datasetPerPage: number;
   queryParams: Record<string, string | string[] | undefined>;
+  filterData: FieldDetails[];
 };
 
 export default function ClientWrapper({
   datasets,
   datasetPerPage,
   queryParams,
+  filterData,
 }: ClientWrapperProps) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { width } = useWindowSize();
@@ -34,7 +40,12 @@ export default function ClientWrapper({
     <div className="mt-10 grid grid-cols-12 gap-x-12 gap-y-7">
       {isFilterOpen ? (
         <div className="relative col-span-10 col-start-2 rounded-lg border bg-white-smoke p-6">
-          <FilterList displayContinueButton={true} />
+          <FilterList
+            filterData={filterData}
+            displayContinueButton={true}
+            setIsFilterOpen={setIsFilterOpen}
+            queryParams={queryParams}
+          />
           <Button
             icon={faX}
             className="absolute right-0 top-0 w-fit hover:bg-primary hover:text-white"
@@ -57,7 +68,11 @@ export default function ClientWrapper({
             />
           </div>
           <div className="border-1 col-start-2 col-end-5 hidden rounded-lg border bg-white-smoke p-6 xl:block">
-            <FilterList />
+            <FilterList
+              filterData={filterData}
+              setIsFilterOpen={setIsFilterOpen}
+              queryParams={queryParams}
+            />
           </div>
           <div className="col-span-8 col-start-3 xl:col-span-6 xl:col-start-5">
             <DatasetList datasets={datasets.datasets} />

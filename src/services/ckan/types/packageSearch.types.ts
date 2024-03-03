@@ -7,6 +7,7 @@ export interface PackageSearchOptions {
   tags?: string[];
   orgs?: string[];
   groups?: string[];
+  publishers?: string[];
   resFormat?: string[];
   offset?: number;
   limit?: number;

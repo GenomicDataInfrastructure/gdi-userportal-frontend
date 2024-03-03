@@ -23,6 +23,7 @@ function FilterItem({ label, data, icon }: FilterItemProps) {
         <p className="text-bold text-info">{label}</p>
       </div>
       <MultipleSelector
+        label={label}
         defaultOptions={data}
         placeholder={label}
         className="text-[0.8rem]"

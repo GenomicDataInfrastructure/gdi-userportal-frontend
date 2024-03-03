@@ -128,12 +128,14 @@ function FilterList({ displayContinueButton = false }: FilterListProps) {
         Filters
       </h1>
       {options.map((option) => (
-        <FilterItem
-          label={option.placeholder}
-          data={option.data}
-          icon={option.icon}
-          key={option.placeholder}
-        />
+        <li key={option.placeholder} className="list-none">
+          <FilterItem
+            label={option.placeholder}
+            data={option.data}
+            icon={option.icon}
+            key={option.placeholder}
+          />
+        </li>
       ))}
       <div className="mt-4 flex justify-between">
         <Button

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import axios from 'axios';
 import { PackageSearchOptions, PackageSearchResult } from './types/packageSearch.types';
-import { mapCKANPackageToDataset, constructCkanActionUrl } from './utils';
+import { constructCkanActionUrl, mapCKANPackageToDataset } from './utils';
 
 export const makeDatasetList = (DMS: string) => {
   return async (options: PackageSearchOptions): Promise<PackageSearchResult> => {
@@ -30,12 +30,14 @@ const constructQueryParams = (options: PackageSearchOptions): string => {
   const groupFilter = buildFilterQueryPart(options.groups || []);
   const orgFilter = buildFilterQueryPart(options.orgs || []);
   const tagFilter = buildFilterQueryPart(options.tags || []);
+  const publisherFilter = buildFilterQueryPart(options.publishers || []);
   const resFormatFilter = buildFilterQueryPart(options.resFormat || []);
 
   const filters = [
     groupFilter && `groups:${groupFilter}`,
     orgFilter && `organization:${orgFilter}`,
     tagFilter && `tags:${tagFilter}`,
+    publisherFilter && `publisher:${tagFilter}`,
     resFormatFilter && `res_format:${resFormatFilter}`,
   ]
     .filter(Boolean)

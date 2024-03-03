@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/utils/tailwindMerge";
 import { Command as CommandPrimitive, useCommandState } from "cmdk";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { forwardRef, useEffect } from "react";
 
 export interface Option {
@@ -33,6 +34,7 @@ interface GroupOption {
 }
 
 interface MultipleSelectorProps {
+  label: string;
   value?: Option[];
   defaultOptions?: Option[];
   /** manually controlled options */
@@ -165,6 +167,7 @@ const MultipleSelector = React.forwardRef<
 >(
   (
     {
+      label,
       value,
       onChange,
       placeholder,
@@ -200,6 +203,14 @@ const MultipleSelector = React.forwardRef<
     const [inputValue, setInputValue] = React.useState("");
     const debouncedSearchTerm = useDebounce(inputValue, delay || 500);
 
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const params = React.useMemo(
+      () => new URLSearchParams(searchParams),
+      [searchParams],
+    );
+
     React.useImperativeHandle(
       ref,
       () => ({
@@ -211,11 +222,24 @@ const MultipleSelector = React.forwardRef<
 
     const handleUnselect = React.useCallback(
       (option: Option) => {
-        const newOptions = selected.filter((s) => s.value !== option.value);
-        setSelected(newOptions);
+        const newOptions = convertQueryStringToOptions(
+          params.get(label.toLowerCase()) as string,
+        ).filter((o) => o.value !== option.value);
+
+        if (newOptions.length === 0) {
+          params.delete(label.toLowerCase());
+        } else {
+          params.set(
+            label.toLowerCase(),
+            convertOptionsToQueryString(newOptions),
+          );
+        }
+
+        router.push(`${pathname}?${params}`);
+
         onChange?.(newOptions);
       },
-      [selected],
+      [onChange, label, params, router, pathname],
     );
 
     const handleKeyDown = React.useCallback(
@@ -233,14 +257,34 @@ const MultipleSelector = React.forwardRef<
           }
         }
       },
-      [selected],
+      [selected, handleUnselect],
     );
 
     useEffect(() => {
       if (value) {
-        setSelected(value);
+        params.set(label.toLowerCase(), convertOptionsToQueryString(value));
+        router.push(`${pathname}?${params}`);
       }
-    }, [value]);
+    }, [value, label, params, router, pathname]);
+
+    useEffect(() => {
+      if (!params.has(label.toLowerCase())) {
+        setSelected([]);
+        return;
+      }
+
+      const values = convertQueryStringToOptions(
+        params.get(label.toLowerCase()) as string,
+      );
+
+      const existingValues = values.filter((v: Option) =>
+        arrayDefaultOptions.find(
+          (defautOption) => defautOption.value === v.value,
+        ),
+      );
+
+      setSelected(existingValues || []);
+    }, [params, label, arrayDefaultOptions]);
 
     useEffect(() => {
       /** If `onSearch` is provided, do not trigger options updated. */
@@ -274,7 +318,18 @@ const MultipleSelector = React.forwardRef<
       };
 
       void exec();
-    }, [debouncedSearchTerm, open]);
+    }, [debouncedSearchTerm, open, onSearch, triggerSearchOnFocus, groupBy]);
+
+    const convertQueryStringToOptions = (queryString: string): Option[] => {
+      return queryString
+        .slice(1, -1)
+        .split(",")
+        .map((v: string) => ({ value: v, label: v }));
+    };
+
+    const convertOptionsToQueryString = (options: Option[]): string => {
+      return `(${options.map((option) => option.value).join(",")})`;
+    };
 
     const CreatableItem = () => {
       if (!creatable) return undefined;
@@ -487,7 +542,11 @@ const MultipleSelector = React.forwardRef<
                                 }
                                 setInputValue("");
                                 const newOptions = [...selected, option];
-                                setSelected(newOptions);
+                                params.set(
+                                  label.toLowerCase(),
+                                  convertOptionsToQueryString(newOptions),
+                                );
+                                router.push(`${pathname}?${params}`);
                                 onChange?.(newOptions);
                               }}
                               className={cn(

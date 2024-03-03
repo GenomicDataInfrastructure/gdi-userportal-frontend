@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-  Pagination as PaginationBase,
+  Pagination,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
@@ -19,7 +19,7 @@ type PaginationProps = {
   queryParams: Record<string, string>;
 };
 
-function Pagination({
+function PaginationContainer({
   datasetCount,
   datasetPerPage,
   pathname,
@@ -35,26 +35,23 @@ function Pagination({
   }
 
   return (
-    <PaginationBase>
+    <Pagination>
       <PaginationContent>
-        <PaginationItem>
-          {currentPage !== 1 && (
+        {currentPage !== 1 && (
+          <PaginationItem>
             <PaginationPrevious href={createHref(currentPage - 1)} />
-          )}
-        </PaginationItem>
-
+          </PaginationItem>
+        )}
         <PaginationItem>
           <PaginationLink href={createHref(1)} isActive={currentPage === 1}>
             1
           </PaginationLink>
         </PaginationItem>
-
         {currentPage > 4 && (
           <PaginationItem>
             <PaginationEllipsis />
           </PaginationItem>
         )}
-
         {currentPage > 3 && (
           <PaginationItem>
             <PaginationLink href={createHref(currentPage - 2)}>
@@ -69,7 +66,6 @@ function Pagination({
             </PaginationLink>
           </PaginationItem>
         )}
-
         {currentPage !== 1 && (
           <PaginationItem>
             <PaginationLink href={createHref(currentPage)} isActive>
@@ -84,7 +80,6 @@ function Pagination({
             </PaginationLink>
           </PaginationItem>
         )}
-
         {currentPage < lastPageNb - 2 && (
           <PaginationItem>
             <PaginationLink href={createHref(currentPage + 2)}>
@@ -92,13 +87,11 @@ function Pagination({
             </PaginationLink>
           </PaginationItem>
         )}
-
         {currentPage < lastPageNb - 3 && (
           <PaginationItem>
             <PaginationEllipsis />
           </PaginationItem>
         )}
-
         {currentPage !== lastPageNb && (
           <PaginationItem>
             <PaginationLink href={createHref(lastPageNb)}>
@@ -106,15 +99,14 @@ function Pagination({
             </PaginationLink>
           </PaginationItem>
         )}
-
         {currentPage !== lastPageNb && (
           <PaginationItem>
             <PaginationNext href={createHref(currentPage + 1)} />
           </PaginationItem>
         )}
       </PaginationContent>
-    </PaginationBase>
+    </Pagination>
   );
 }
 
-export default Pagination;
+export default PaginationContainer;

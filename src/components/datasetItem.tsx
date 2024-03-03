@@ -29,7 +29,7 @@ function DatasetItem({
   const truncatedDesc = truncateDescription(description, screenWidth);
 
   return (
-    <div className="rounded-lg border bg-white-smoke p-8 duration-200 hover:border-info hover:shadow-md hover:ring-offset-1">
+    <div className="box break-words rounded-lg border bg-white-smoke p-8 duration-200 hover:border-info hover:shadow-md hover:ring-offset-1">
       <Link href={`/datasets/${id}`}>
         <div className="mb-4 flex justify-between">
           <h3 className="text-xl text-info md:text-2xl">{title}</h3>
@@ -39,7 +39,7 @@ function DatasetItem({
         <p className="mb-4 text-xs md:text-sm">{truncatedDesc}</p>
         <Chips
           chips={themes}
-          className="bg-warning text-xs text-black md:text-sm "
+          className="break-all bg-warning text-xs text-black md:text-sm"
         />
       </Link>
     </div>

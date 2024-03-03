@@ -19,7 +19,7 @@ import { useEffect, useState } from "react";
 type ClientWrapperProps = {
   datasets: PackageSearchResult;
   datasetPerPage: number;
-  queryParams: Record<string, string | string[] | undefined>;
+  queryParams: Record<string, string>;
   filterData: FieldDetails[];
 };
 

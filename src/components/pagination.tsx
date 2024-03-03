@@ -16,7 +16,7 @@ type PaginationProps = {
   datasetCount: number;
   datasetPerPage: number;
   pathname: string;
-  queryParams: Record<string, string | string[] | undefined>;
+  queryParams: Record<string, string>;
 };
 
 function Pagination({
@@ -29,7 +29,7 @@ function Pagination({
   const lastPageNb = Math.ceil(datasetCount / datasetPerPage) || 1;
 
   function createHref(page: number) {
-    const params = new URLSearchParams(queryParams as any);
+    const params = new URLSearchParams(queryParams);
     params.set("page", page.toString());
     return `${pathname}?${params}`;
   }

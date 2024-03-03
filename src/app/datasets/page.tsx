@@ -9,7 +9,7 @@ import { PackageSearchOptions } from "@/services/ckan/types/packageSearch.types"
 import { redirect } from "next/navigation";
 
 type DatasetPageProps = {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Record<string, string>;
 };
 
 async function DatasetPage({ searchParams }: DatasetPageProps) {

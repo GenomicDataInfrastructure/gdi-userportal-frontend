@@ -7,7 +7,7 @@
 import Button from "@/components/button";
 import DatasetList from "@/components/datasetList";
 import FilterList from "@/components/filterList";
-import Pagination from "@/components/pagination";
+import PaginationContainer from "@/components/paginationContainer";
 import SearchBar from "@/components/searchBar";
 import { useWindowSize } from "@/hooks";
 import { FieldDetails } from "@/services/ckan/types/fieldDetails.types";
@@ -79,7 +79,7 @@ export default function ClientWrapper({
             <DatasetList datasets={datasets.datasets} />
           </div>
           <div className="col-span-4 col-start-5 mt-20 text-info">
-            <Pagination
+            <PaginationContainer
               datasetCount={datasets.count}
               datasetPerPage={datasetPerPage}
               pathname="/datasets"

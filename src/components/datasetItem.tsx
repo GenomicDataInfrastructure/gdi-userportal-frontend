@@ -30,7 +30,7 @@ function DatasetItem({
 
   return (
     <div className="rounded-lg border bg-white-smoke p-8 duration-200 hover:border-info hover:shadow-md hover:ring-offset-1">
-      <Link href={`/dataset/${id}`}>
+      <Link href={`/datasets/${id}`}>
         <div className="mb-4 flex justify-between">
           <h3 className="text-xl text-info md:text-2xl">{title}</h3>
           <p className="text-sm text-info md:text-base">{publicationDate}</p>

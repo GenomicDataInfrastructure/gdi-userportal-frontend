@@ -2,123 +2,68 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import { type FieldDetails } from "@/services/ckan/types/fieldDetails.types";
 import {
   faBook,
-  faFile,
   faFilter,
   faMagnifyingGlass,
-  faSort,
   faTags,
   faUser,
+  type IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 import Button from "./button";
-import FilterItem from "./filterItem";
+import FilterItem, { FilterItemProps } from "./filterItem";
 
-const options = [
-  {
-    data: [
-      {
-        label: "Anka Bolka",
-        value: "Anka Bolka",
-      },
-      { label: "Afdeling NKR-analyse", value: "Afdeling NKR-analyse" },
-      { label: "Aleksandar Medarevic", value: "Aleksandar Medarevic" },
-      {
-        label: "Data and Policy Information Service",
-        value: "Data and Policy Information Service",
-      },
-      {
-        label: "Prof. Dr. Martin Steinlechner",
-        value: "Prof. Dr. Martin Steinlechner",
-      },
-    ],
-    placeholder: "Publishers",
-    icon: faUser,
-  },
-  {
-    data: [
-      {
-        label: "UMCG",
-        value: "UMCG",
-      },
-      { label: "LUMC", value: "LUMC" },
-      { label: "EU", value: "EU" },
-      { label: "LNDS", value: "LNDS" },
-    ],
-    placeholder: "Catalogues",
-    icon: faBook,
-  },
-  {
-    data: [
-      {
-        label: "http://purl.obolibrary.org/obo/SCDO_0000494",
-        value: "http://purl.obolibrary.org/obo/SCDO_0000494",
-      },
-      {
-        label: "https://www.wikidata.org/wiki/Q11000047",
-        value: "https://www.wikidata.org/wiki/Q11000047",
-      },
-      {
-        label: "https://www.wikidata.org/wiki/Q12131",
-        value: "https://www.wikidata.org/wiki/Q12131",
-      },
-      {
-        label: "https://www.wikidata.org/wiki/Q9349858",
-        value: "https://www.wikidata.org/wiki/Q9349858",
-      },
-      {
-        label: "https://www.wikidata.org/wiki/Q232323",
-        value: "https://www.wikidata.org/wiki/Q232323",
-      },
-    ],
-    placeholder: "Themes",
-    icon: faTags,
-  },
-  {
-    data: [
-      {
-        label: "Addiction",
-        value: "Addiction",
-      },
-      { label: "Antiviral", value: "Antiviral" },
-      { label: "Biomedical Research", value: "Biomedical Research" },
-      { label: "Data Bank", value: "Data Bank" },
-    ],
-    placeholder: "Keywords",
-    icon: faMagnifyingGlass,
-  },
-  {
-    data: [
-      {
-        label: "CSV",
-        value: "CSV",
-      },
-      { label: "JSON", value: "JSON" },
-      { label: "XLSX", value: "XLSX" },
-    ],
-    placeholder: "Formats",
-    icon: faFile,
-  },
-  {
-    data: [
-      {
-        label: "Relevance",
-        value: "Relevance",
-      },
-      { label: "Last Created", value: "Last Created" },
-      { label: "Last Modified", value: "Last Modified" },
-    ],
-    placeholder: "Sorting",
-    icon: faSort,
-  },
-];
-
-type FilterListProps = {
-  displayContinueButton?: boolean;
+const fieldToIconMap: Record<string, IconDefinition> = {
+  publisher: faUser,
+  catalogue: faBook,
+  theme: faTags,
+  keyword: faMagnifyingGlass,
 };
 
-function FilterList({ displayContinueButton = false }: FilterListProps) {
+function convertDataToFilterItemProps(data: FieldDetails[]): FilterItemProps[] {
+  return data.map((fieldDetails: FieldDetails) => {
+    return {
+      label:
+        fieldDetails.field.charAt(0).toUpperCase() +
+        fieldDetails.field.slice(1) +
+        "s",
+      data: fieldDetails.values.map((v: string) => {
+        return {
+          label: v.charAt(0).toUpperCase() + v.slice(1),
+          value: v,
+        };
+      }),
+      icon: fieldToIconMap[fieldDetails.field],
+    };
+  });
+}
+
+type FilterListProps = {
+  filterData: FieldDetails[];
+  displayContinueButton?: boolean;
+  setIsFilterOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  queryParams: Record<string, string | string[] | undefined>;
+};
+
+function FilterList({
+  filterData,
+  displayContinueButton = false,
+  setIsFilterOpen,
+  queryParams,
+}: FilterListProps) {
+  const filterItemProps: FilterItemProps[] =
+    convertDataToFilterItemProps(filterData);
+
+  function isAnyFilterApplied() {
+    if (!queryParams) return false;
+    return Object.keys(queryParams).some(
+      (key) => key !== "page" && key !== "q" && queryParams[key],
+    );
+  }
+
   return (
     <div className="flex flex-col gap-y-10 rounded-lg bg-white-smoke px-6 py-8">
       <h1 className="text-xl">
@@ -127,28 +72,29 @@ function FilterList({ displayContinueButton = false }: FilterListProps) {
         </span>
         Filters
       </h1>
-      {options.map((option) => (
-        <li key={option.placeholder} className="list-none">
-          <FilterItem
-            label={option.placeholder}
-            data={option.data}
-            icon={option.icon}
-            key={option.placeholder}
-          />
+      {filterItemProps.map((props) => (
+        <li key={props.label} className="list-none">
+          <FilterItem label={props.label} data={props.data} icon={props.icon} />
         </li>
       ))}
       <div className="mt-4 flex justify-between">
-        <Button
-          text="Clear Filters"
-          type="primary"
-          className="w-fit text-xs"
-        ></Button>
+        {isAnyFilterApplied() && (
+          <Link
+            href={`/datasets?page=1${queryParams.q ? `&q=${queryParams.q}` : ""}`}
+          >
+            <Button
+              text="Clear Filters"
+              type="primary"
+              className="w-fit text-xs"
+            />
+          </Link>
+        )}
         {displayContinueButton && (
           <Button
             text="Continue"
             type="info"
             className="w-fit text-xs"
-            onClick={() => console.log("Continue button clicked")}
+            onClick={() => setIsFilterOpen(false)}
           ></Button>
         )}
       </div>

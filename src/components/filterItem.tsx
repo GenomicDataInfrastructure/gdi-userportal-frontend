@@ -6,7 +6,7 @@ import { type IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MultipleSelector, { type Option } from "./ui/multipleSelector";
 
-type FilterItemProps = {
+export type FilterItemProps = {
   label: string;
   data: Option[];
   icon: IconDefinition;
@@ -32,7 +32,7 @@ function FilterItem({ label, data, icon }: FilterItemProps) {
             No results found.
           </p>
         }
-        badgeClassName="bg-warning text-black text-[0.7rem]"
+        badgeClassName="bg-warning text-black text-[0.7rem] max-w-full break-all"
       />
     </div>
   );

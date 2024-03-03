@@ -22,7 +22,7 @@ import { forwardRef, useEffect } from "react";
 
 export interface Option {
   value: string;
-  label: string;
+  label?: string;
   disable?: boolean;
   /** fixed option that can't be removed. */
   fixed?: boolean;
@@ -234,7 +234,6 @@ const MultipleSelector = React.forwardRef<
             convertOptionsToQueryString(newOptions),
           );
         }
-
         router.push(`${pathname}?${params}`);
 
         onChange?.(newOptions);
@@ -278,9 +277,7 @@ const MultipleSelector = React.forwardRef<
       );
 
       const existingValues = values.filter((v: Option) =>
-        arrayDefaultOptions.find(
-          (defautOption) => defautOption.value === v.value,
-        ),
+        arrayDefaultOptions.find((option: Option) => option.value === v.value),
       );
 
       setSelected(existingValues || []);
@@ -295,7 +292,7 @@ const MultipleSelector = React.forwardRef<
       if (JSON.stringify(newOption) !== JSON.stringify(options)) {
         setOptions(newOption);
       }
-    }, [arrayDefaultOptions, arrayOptions, groupBy, onSearch, options]);
+    }, [arrayOptions, groupBy, onSearch, options]);
 
     useEffect(() => {
       const doSearch = async () => {
@@ -324,7 +321,10 @@ const MultipleSelector = React.forwardRef<
       return queryString
         .slice(1, -1)
         .split(",")
-        .map((v: string) => ({ value: v, label: v }));
+        .map((v: string) => ({
+          value: v,
+          label: v.charAt(0).toUpperCase() + v.slice(1),
+        }));
     };
 
     const convertOptionsToQueryString = (options: Option[]): string => {
@@ -348,7 +348,10 @@ const MultipleSelector = React.forwardRef<
               return;
             }
             setInputValue("");
-            const newOptions = [...selected, { value, label: value }];
+            const newOptions = [
+              ...selected,
+              { value, label: value.charAt(0).toUpperCase() + value.slice(1) },
+            ];
             setSelected(newOptions);
             onChange?.(newOptions);
           }}
@@ -423,7 +426,7 @@ const MultipleSelector = React.forwardRef<
       >
         <div
           className={cn(
-            "border-input ring-offset-background focus-within:ring-ring hover:border-input-hover group rounded-md border bg-white px-3 py-2 text-sm ring-info transition-all duration-200 ease-in-out focus-within:ring-2 focus-within:ring-offset-2 hover:border-2",
+            "border-input ring-offset-background focus-within:ring-ring hover:border-input-hover group rounded-md border bg-white px-3 py-2 text-sm ring-info transition-all duration-200 ease-in-out focus-within:ring-2 focus-within:ring-offset-2",
             className,
           )}
         >
@@ -470,7 +473,7 @@ const MultipleSelector = React.forwardRef<
             {selected.map((option) => {
               return (
                 <Badge
-                  key={option.value}
+                  key={option.label}
                   className={cn(
                     "data-[disabled]:bg-muted-foreground data-[disabled]:text-muted data-[disabled]:hover:bg-muted-foreground",
                     "data-[fixed]:bg-muted-foreground data-[fixed]:text-muted data-[fixed]:hover:bg-muted-foreground",

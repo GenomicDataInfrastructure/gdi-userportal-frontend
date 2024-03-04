@@ -123,7 +123,7 @@ describe('datasetList', () => {
   test('combines multiple filters correctly', async () => {
     const datasetList = makeDatasetList('https://mock-ckan-instance.com');
     const searchOptions = {
-      tags: ['technology'],
+      tags: ['technology', 'http://example.com/other-tag'],
       publishers: ['A random publisher'],
       orgs: ['org1'],
       groups: ['group1'],
@@ -133,7 +133,7 @@ describe('datasetList', () => {
 
     await datasetList(searchOptions);
 
-    expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining('tags:(technology)'));
+    expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining('tags:(technology OR "http://example.com/other-tag")'));
     expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining('publisher:("A random publisher")'));
     expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining('organization:(org1)'));
     expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining('groups:(group1)'));

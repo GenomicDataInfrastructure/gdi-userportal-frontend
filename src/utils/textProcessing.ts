@@ -30,4 +30,11 @@ function removeEndingPunctuation(text: string): string {
   return text.slice(0, text.length - 1) + text[text.length - 1].replace(/[.,:;!?]$/, '');
 }
 
-export { truncateDescription };
+function parseFilterValuesSingleQueryString(filterValues: string): string[] {
+  return filterValues
+    .slice(1, -1)
+    .split(',')
+    .map((value) => value.toLowerCase());
+}
+
+export { parseFilterValuesSingleQueryString, truncateDescription };

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import axios from 'axios';
 import { Dataset } from './../../types/dataset.types';
-import { mapCKANPackageToDataset, constructCkanActionUrl } from './utils';
+import { constructCkanActionUrl, mapCKANPackageToDataset } from './utils';
 
 export const makeDatasetGet = (DMS: string) => {
   return async (id: string): Promise<Dataset> => {

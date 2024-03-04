@@ -9,7 +9,6 @@ export const makeDatasetList = (DMS: string) => {
   return async (options: PackageSearchOptions): Promise<PackageSearchResult> => {
     const queryParams = constructQueryParams(options);
     const url = constructCkanActionUrl(DMS, 'package_search', queryParams);
-    console.log(url);
 
     try {
       const response = await axios.get(url);

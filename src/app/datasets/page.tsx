@@ -6,6 +6,7 @@ import ClientWrapper from "@/app/datasets/clientWrapper";
 import { datasetList, fieldDetailsGet } from "@/services/ckan/index.server";
 import { Field } from "@/services/ckan/types/fieldDetails.types";
 import { PackageSearchOptions } from "@/services/ckan/types/packageSearch.types";
+import { parseFilterValuesSingleQueryString } from "@/utils/textProcessing";
 import { redirect } from "next/navigation";
 
 type DatasetPageProps = {
@@ -18,25 +19,18 @@ async function DatasetPage({ searchParams }: DatasetPageProps) {
   }
   const DATASET_PER_PAGE = 12;
 
-  function parseFilterValuesFromUrl(filterValues: string): string[] {
-    return filterValues
-      .slice(1, -1)
-      .split(",")
-      .map((value) => value.toLowerCase());
-  }
-
   const options: PackageSearchOptions = {
     tags: searchParams.keywords
-      ? parseFilterValuesFromUrl(searchParams.keywords as string)
+      ? parseFilterValuesSingleQueryString(searchParams.keywords as string)
       : undefined,
     orgs: searchParams.catalogues
-      ? parseFilterValuesFromUrl(searchParams.catalogues as string)
+      ? parseFilterValuesSingleQueryString(searchParams.catalogues as string)
       : undefined,
     groups: searchParams.themes
-      ? parseFilterValuesFromUrl(searchParams.themes as string)
+      ? parseFilterValuesSingleQueryString(searchParams.themes as string)
       : undefined,
     publishers: searchParams.publishers
-      ? parseFilterValuesFromUrl(searchParams.publishers as string)
+      ? parseFilterValuesSingleQueryString(searchParams.publishers as string)
       : undefined,
     resFormat: [],
     offset: Number(searchParams.page) || 1,

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { type FieldDetails } from "@/services/ckan/types/fieldDetails.types";
+import { convertDataToFilterItemProps } from "@/utils/dto";
 import {
   faBook,
   faFilter,
@@ -23,24 +24,6 @@ const fieldToIconMap: Record<string, IconDefinition> = {
   keyword: faMagnifyingGlass,
 };
 
-function convertDataToFilterItemProps(data: FieldDetails[]): FilterItemProps[] {
-  return data.map((fieldDetails: FieldDetails) => {
-    return {
-      label:
-        fieldDetails.field.charAt(0).toUpperCase() +
-        fieldDetails.field.slice(1) +
-        "s",
-      data: fieldDetails.values.map((v: string) => {
-        return {
-          label: v.charAt(0).toUpperCase() + v.slice(1),
-          value: v,
-        };
-      }),
-      icon: fieldToIconMap[fieldDetails.field],
-    };
-  });
-}
-
 type FilterListProps = {
   filterData: FieldDetails[];
   displayContinueButton?: boolean;
@@ -54,8 +37,10 @@ function FilterList({
   setIsFilterOpen,
   queryParams,
 }: FilterListProps) {
-  const filterItemProps: FilterItemProps[] =
-    convertDataToFilterItemProps(filterData);
+  const filterItemProps: FilterItemProps[] = convertDataToFilterItemProps(
+    filterData,
+    fieldToIconMap,
+  );
 
   function isAnyFilterApplied() {
     if (!queryParams) return false;

@@ -11,10 +11,11 @@ export const makeFieldDetailsGet = (DMS: string) => {
     try {
       const response = await fetch(url);
       const data = await response.json();
+      const uniqueData = Array.from(new Set<string>(data.result.results)).sort((a: string, b: string) => a.localeCompare(b));
       return {
         field,
-        count: data.result.count,
-        values: Array.from(new Set<string>(data.result.results)).sort((a: string, b: string) => a.localeCompare(b)),
+        count: uniqueData.length,
+        values: uniqueData,
       };
     } catch (error) {
       throw new Error(`HTTP error! ${error}`);

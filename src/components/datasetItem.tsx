@@ -33,7 +33,9 @@ function DatasetItem({
       <Link href={`/datasets/${id}`}>
         <div className="mb-4 flex justify-between">
           <h3 className="text-xl text-info md:text-2xl">{title}</h3>
-          <p className="text-sm text-info md:text-base">{publicationDate}</p>
+          <p className="text-sm text-info md:text-base">
+            {publicationDate?.split("T")[0]}
+          </p>
         </div>
         <p className="mb-4 text-sm text-info md:text-base">{catalogue}</p>
         <p className="mb-4 text-xs md:text-sm">{truncatedDesc}</p>

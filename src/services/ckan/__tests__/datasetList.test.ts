@@ -86,6 +86,10 @@ describe('datasetList', () => {
     expect(dataset.license.title).toEqual('CC Zero');
     expect(dataset.maintainer.name).toEqual('Maintainer Name');
     expect(dataset.maintainer.email).toEqual('maintainer@example.com');
+    expect(dataset.organization.id).toEqual('710cdc4f-43c4-4062-a59f-a4048e4f785a');
+    expect(dataset.organization.title).toEqual('Organization Title');
+    expect(dataset.organization.name).toEqual('Organization Name');
+    expect(dataset.organization.id).toEqual('710cdc4f-43c4-4062-a59f-a4048e4f785a');
     expect(dataset.publisher.email).toEqual('publisher@example.com');
     expect(dataset.publisher.name).toEqual('Publisher Name');
     expect(dataset.publisher.type).toEqual('Publisher Type');
@@ -120,6 +124,7 @@ describe('datasetList', () => {
     const datasetList = makeDatasetList('https://mock-ckan-instance.com');
     const searchOptions = {
       tags: ['technology'],
+      publishers: ['A random publisher'],
       orgs: ['org1'],
       groups: ['group1'],
       resFormat: ['PDF', 'CSV'],
@@ -129,6 +134,7 @@ describe('datasetList', () => {
     await datasetList(searchOptions);
 
     expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining('tags:(technology)'));
+    expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining('publisher:("A random publisher")'));
     expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining('organization:(org1)'));
     expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining('groups:(group1)'));
     expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining('res_format:(PDF OR CSV)'));

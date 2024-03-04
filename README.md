@@ -33,9 +33,19 @@ The GDI User Portal Front-end serves as the user-friendly interface for this ini
 
 ## Installation
 
+### Locally
+
 Before using the GDI User Portal Front-end, make sure you have the required dependencies installed. Follow the installation instructions below:
 
 `npm install`
+
+You also have to create a new `env.local` file in the root directory, and copy the content of `.env.local.example` into the new file. Feel free to modify the environment variables as you wish.
+
+### Using Docker
+
+Alternatively, you can run the docker-compose file that provides a running instance of the application. Use the following command to run docker-compose:
+
+`docker compose up` or `docker-compose up` depending on your docker compose version.
 
 ## Development server
 

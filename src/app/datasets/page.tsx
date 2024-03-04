@@ -33,7 +33,7 @@ async function DatasetPage({ searchParams }: DatasetPageProps) {
       ? parseFilterValuesSingleQueryString(searchParams.publishers as string)
       : undefined,
     resFormat: [],
-    offset: Number(searchParams.page) || 1,
+    offset: searchParams.page ? Number(searchParams.page) - 1 : 0,
     limit: DATASET_PER_PAGE,
     query: searchParams?.q as string | undefined,
     sort: searchParams?.sort as string | "relevance",

@@ -48,7 +48,7 @@ function DatasetItem({ dataset }: DatasetItemProps) {
         chips={dataset.theme || []}
         className="break-all bg-warning text-xs text-black md:text-sm"
       />
-      <div className="w-fulln flex justify-end">
+      <div className="w-fulln mt-4 flex justify-end">
         <Button
           text={isInBasket ? "Remove from basket" : "Add to basket"}
           icon={isInBasket ? faMinusCircle : faPlusCircle}

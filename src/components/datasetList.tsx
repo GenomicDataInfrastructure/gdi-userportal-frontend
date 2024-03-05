@@ -11,7 +11,7 @@ type DatasetListProps = {
 
 function DatasetList({ datasets }: DatasetListProps) {
   return (
-    <ul className="flex flex-col gap-y-12">
+    <ul className="flex flex-col gap-y-12 w-full">
       {datasets.map((dataset: Dataset) => (
         <li key={dataset.id}>
           <DatasetItem dataset={dataset} />

@@ -16,6 +16,7 @@ import {
   faUser,
   faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
+import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
@@ -31,6 +32,7 @@ function Header() {
   const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const activeTab = usePathname();
+  const { basket } = useDatasetBasket();
 
   function handleSignOut() {
     keycloackSessionLogOut().then(() => signOut({ callbackUrl: "/" }));
@@ -91,7 +93,7 @@ function Header() {
       <div className="mr-3 hidden items-center gap-x-5 sm:flex md:gap-x-8">
         <Button
           icon={faShoppingCart}
-          text="Basket"
+          text={`Basket (${basket.length})`}
           type="info"
           href="/basket"
         />
@@ -142,6 +144,14 @@ function Header() {
             >
               <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
               About
+            </Link>
+            <Link
+              href="/basket"
+              className="block px-4 py-2 hover:bg-primary hover:text-white"
+              onClick={closeMenu}
+            >
+              <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
+              {`Basket (${basket.length})`}
             </Link>
             {session && (
               <div className="border-b border-gray-200 px-4 py-2">

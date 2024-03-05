@@ -12,10 +12,12 @@ import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 export default function Page() {
   const { basket } = useDatasetBasket();
 
+  const heading = `Your Basket (${basket.length})`;
+
   return (
     <div className="w-full p-10">
-      <PageHeading>Your Basket</PageHeading>
-      <div className="m-auto flex w-full flex-col items-center gap-5 p-5 lg:w-2/3">
+      <PageHeading>{heading}</PageHeading>
+      <div className="m-auto flex w-full flex-col items-center gap-4 p-5 lg:w-2/3">
         <div className="flex w-full justify-between">
           {basket.length > 0 && (
             <Button
@@ -32,7 +34,7 @@ export default function Page() {
         {basket.length > 0 ? (
           <DatasetList datasets={basket} />
         ) : (
-          <div className="flex w-full flex-col items-center justify-center gap-5">
+          <div className="flex w-full flex-col items-center justify-center gap-4">
             <p className="text-center text-lg text-primary">
               Your basket is empty.
             </p>

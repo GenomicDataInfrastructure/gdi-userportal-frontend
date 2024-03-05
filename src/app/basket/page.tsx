@@ -10,9 +10,21 @@ import { faPaperPlane, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 
 export default function Page() {
-  const { basket } = useDatasetBasket();
+  const { basket, isLoading } = useDatasetBasket();
 
   const heading = `Your Basket (${basket.length})`;
+
+  if (isLoading) {
+    return (
+      <div className="w-full" style={{ height: "calc(100vh - 100px)" }}>
+        <div className="flex h-full items-center justify-center">
+          <div className="text-lg font-semibold text-primary">
+            Loading your basket...
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full p-10">

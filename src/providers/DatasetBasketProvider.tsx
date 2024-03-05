@@ -2,13 +2,20 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 "use client";
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import { Dataset } from "@/types/dataset.types";
 
 interface DatasetBasketContextType {
   basket: Dataset[];
   addDatasetToBasket: (dataset: Dataset) => void;
   removeDatasetFromBasket: (dataset: Dataset) => void;
+  isLoading: boolean;
 }
 
 const DatasetBasketContext = createContext<
@@ -21,6 +28,21 @@ export const DatasetBasketProvider = ({
   children: ReactNode;
 }) => {
   const [basket, setBasket] = useState<Dataset[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const basketInLocalStorage = localStorage.getItem("basket");
+      setBasket(basketInLocalStorage ? JSON.parse(basketInLocalStorage) : []);
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isLoading) {
+      localStorage.setItem("basket", JSON.stringify(basket));
+    }
+  }, [basket, isLoading]);
 
   const addDatasetToBasket = (dataset: Dataset) => {
     setBasket((prevBasket) => [...prevBasket, dataset]);
@@ -32,7 +54,7 @@ export const DatasetBasketProvider = ({
 
   return (
     <DatasetBasketContext.Provider
-      value={{ basket, addDatasetToBasket, removeDatasetFromBasket }}
+      value={{ basket, addDatasetToBasket, removeDatasetFromBasket, isLoading }}
     >
       {children}
     </DatasetBasketContext.Provider>

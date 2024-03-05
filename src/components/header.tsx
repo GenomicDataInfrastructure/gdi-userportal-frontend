@@ -32,7 +32,7 @@ function Header() {
   const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const activeTab = usePathname();
-  const { basket } = useDatasetBasket();
+  const { basket, isLoading } = useDatasetBasket();
 
   function handleSignOut() {
     keycloackSessionLogOut().then(() => signOut({ callbackUrl: "/" }));
@@ -93,7 +93,7 @@ function Header() {
       <div className="mr-3 hidden items-center gap-x-5 sm:flex md:gap-x-8">
         <Button
           icon={faShoppingCart}
-          text={`Basket (${basket.length})`}
+          text={isLoading ? "Basket" : `Basket (${basket.length})`}
           type="info"
           href="/basket"
         />
@@ -151,7 +151,7 @@ function Header() {
               onClick={closeMenu}
             >
               <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
-              {`Basket (${basket.length})`}
+              {isLoading ? "Basket" : `Basket (${basket.length})`}
             </Link>
             {session && (
               <div className="border-b border-gray-200 px-4 py-2">

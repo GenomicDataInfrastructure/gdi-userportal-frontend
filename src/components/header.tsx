@@ -92,7 +92,7 @@ function Header() {
         <Button
           icon={faShoppingCart}
           text="Basket"
-          type="secondary"
+          type="info"
           href="/basket"
         />
         {session ? (

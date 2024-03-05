@@ -27,7 +27,7 @@ const Button: React.FC<ButtonProps> = ({
   props,
 }) => {
   const common =
-    "rounded-lg px-4 py-2 font-bold border-2 transition-colors duration-200 tracking-wide sm:w-auto cursor-pointer";
+    "rounded-lg px-4 py-2 font-bold transition-colors duration-200 tracking-wide sm:w-auto cursor-pointer";
 
   const classes = {
     primary: "bg-primary text-white hover:bg-secondary",
@@ -43,8 +43,8 @@ const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       {...props}
     >
-      {icon && <FontAwesomeIcon icon={icon} />}
-      {text}
+      {icon && <FontAwesomeIcon icon={icon} className="mr-2" />}
+      <span>{text}</span>
     </a>
   );
 };

@@ -9,38 +9,19 @@ import Link from "next/link";
 import { faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/button";
 import Chips from "./Chips";
+import { Dataset } from "@/types/dataset.types";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 
 type DatasetItemProps = {
-  id: string;
-  title: string;
-  publicationDate: string;
-  catalogue: string;
-  description: string;
-  themes: string[];
+  dataset: Dataset;
 };
 
-function DatasetItem({
-  id,
-  title,
-  publicationDate,
-  catalogue,
-  description,
-  themes,
-}: DatasetItemProps) {
+function DatasetItem({ dataset }: DatasetItemProps) {
   const { width: screenWidth } = useWindowSize();
-  const truncatedDesc = truncateDescription(description, screenWidth);
+  const truncatedDesc = truncateDescription(dataset.notes, screenWidth);
   const { basket, addDatasetToBasket, removeDatasetFromBasket } =
     useDatasetBasket();
-  const isInBasket = basket.some((dataset) => dataset.id === id);
-  const dataset = {
-    id,
-    title,
-    publicationDate,
-    catalogue,
-    description,
-    themes,
-  };
+  const isInBasket = basket.some((ds) => ds.id === dataset.id);
   const toggleDatasetInBasket = () => {
     if (isInBasket) {
       removeDatasetFromBasket(dataset);
@@ -51,18 +32,20 @@ function DatasetItem({
 
   return (
     <div className="box break-words rounded-lg border bg-white-smoke p-8">
-      <Link href={`/datasets/${id}`} className="hover:underline">
+      <Link href={`/datasets/${dataset.id}`} className="hover:underline">
         <div className="mb-4 flex justify-between">
-          <h3 className="text-xl text-info md:text-2xl">{title}</h3>
+          <h3 className="text-xl text-info md:text-2xl">{dataset.title}</h3>
           <p className="text-sm text-info md:text-base">
-            {publicationDate?.split("T")[0]}
+            {dataset.metadataCreated?.split("T")[0]}
           </p>
         </div>
       </Link>
-      <p className="mb-4 text-sm text-info md:text-base">{catalogue}</p>
+      <p className="mb-4 text-sm text-info md:text-base">
+        {dataset.organization.title}
+      </p>
       <p className="mb-4 text-xs md:text-sm">{truncatedDesc}</p>
       <Chips
-        chips={themes}
+        chips={dataset.theme || []}
         className="break-all bg-warning text-xs text-black md:text-sm"
       />
       <div className="w-fulln flex justify-end">

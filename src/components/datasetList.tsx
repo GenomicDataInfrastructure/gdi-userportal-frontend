@@ -14,14 +14,7 @@ function DatasetList({ datasets }: DatasetListProps) {
     <ul className="flex flex-col gap-y-12">
       {datasets.map((dataset: Dataset) => (
         <li key={dataset.id}>
-          <DatasetItem
-            id={dataset.id}
-            title={dataset.title}
-            publicationDate={dataset.metadataCreated}
-            catalogue={dataset.organization.title}
-            description={dataset.notes}
-            themes={dataset.theme || []}
-          />
+          <DatasetItem dataset={dataset} />
         </li>
       ))}
     </ul>

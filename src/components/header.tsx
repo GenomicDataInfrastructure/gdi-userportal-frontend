@@ -14,6 +14,7 @@ import {
   faRightFromBracket,
   faRightToBracket,
   faUser,
+  faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signIn, signOut, useSession } from "next-auth/react";
@@ -88,6 +89,12 @@ function Header() {
         </div>
       </div>
       <div className="mr-3 hidden items-center gap-x-5 sm:flex md:gap-x-8">
+        <Button
+          icon={faShoppingCart}
+          text="Basket"
+          type="secondary"
+          href="/basket"
+        />
         {session ? (
           <>
             <Notification />
@@ -95,7 +102,8 @@ function Header() {
           </>
         ) : (
           <Button
-            text="Log in"
+            icon={faUser}
+            text="Login"
             type="primary"
             onClick={() => signIn("keycloak")}
           />

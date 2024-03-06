@@ -12,7 +12,10 @@ import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 export default function Page() {
   const { basket } = useDatasetBasket();
 
-  const heading = `Your Basket (${basket.length})`;
+  let heading = "Your Basket";
+  if (basket.length > 0) {
+    heading = `Your Basket (${basket.length})`;
+  }
 
   return (
     <div className="w-full p-10">

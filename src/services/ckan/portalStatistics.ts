@@ -4,10 +4,11 @@
 
 import axios from 'axios';
 import { constructCkanActionUrl } from './utils';
+import { PortalStatistics } from './types/portalStatistics.types';
 
 export const makePortalStatistics = (DMS: string) => {
-  return async (): Promise<{ [key: string]: number }> => {
-    const props = ['theme', 'catalogue', 'keyword'];
+  return async (): Promise<PortalStatistics> => {
+    const props: Array<'theme' | 'catalogue' | 'keyword'> = ['theme', 'catalogue', 'keyword'];
     const counts = await Promise.all(
       props.map(async (prop) => {
         const url = constructCkanActionUrl(DMS, `${prop}_list`);
@@ -16,11 +17,19 @@ export const makePortalStatistics = (DMS: string) => {
       }),
     );
 
-    const countsObject = props.reduce<{ [key: string]: number }>((acc, prop, index) => {
-      const propKey = `${prop.charAt(0).toUpperCase()}${prop.slice(1)}s`;
-      acc[propKey] = counts[index];
-      return acc;
-    }, {});
+    const countsObject = props.reduce<PortalStatistics>(
+      (acc, prop, index) => {
+        const propKey = (prop + 's') as keyof PortalStatistics;
+        acc[propKey] = counts[index];
+        return acc;
+      },
+      {
+        catalogues: 0,
+        keywords: 0,
+        themes: 0,
+      },
+    );
+
     return countsObject;
   };
 };

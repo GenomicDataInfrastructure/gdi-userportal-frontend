@@ -32,9 +32,9 @@ describe('makePortalStatistics', () => {
     const portalStatistics = await getPortalStatistics();
 
     expect(portalStatistics).toEqual({
-      Themes: 379,
-      Catalogues: 5,
-      Keywords: 490,
+      themes: 379,
+      catalogues: 5,
+      keywords: 490,
     });
 
     expect(mockedAxios.get).toHaveBeenNthCalledWith(1, `${DMS_URL}/api/3/action/theme_list?`);

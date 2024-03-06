@@ -1,11 +1,28 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-
+"use client";
+import React, { useEffect, useState } from "react";
 import { portalStatistics } from "@/services/ckan/index.server";
+import { PortalStatistics as IPortalStatistics } from "@/services/ckan/types/portalStatistics.types";
 
-export async function PortalStatistics() {
-  const propCounters = await portalStatistics();
+export function PortalStatistics() {
+  const [propCounters, setPropCounters] = useState<IPortalStatistics | null>(
+    null,
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await portalStatistics();
+      setPropCounters(data);
+    };
+
+    fetchData();
+  }, []);
+
+  if (propCounters === null) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="mt-4 px-4">

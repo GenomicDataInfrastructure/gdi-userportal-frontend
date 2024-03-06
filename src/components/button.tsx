@@ -31,7 +31,8 @@ const Button: React.FC<ButtonProps> = ({
 
   const classes = {
     primary: "bg-primary text-white hover:bg-secondary",
-    secondary: "bg-secondary text-white hover:opacity-80",
+    secondary:
+      "bg-transparent text-primary border-2 border-primary hover:bg-secondary hover:text-white hover:border-transparent",
     info: "bg-info text-white hover:opacity-80",
     warning: "bg-warning text-black hover:opacity-80",
   };

@@ -19,7 +19,7 @@ type DatasetItemProps = {
 function DatasetItem({ dataset }: DatasetItemProps) {
   const { width: screenWidth } = useWindowSize();
   const truncatedDesc = truncateDescription(dataset.notes, screenWidth);
-  const { basket, addDatasetToBasket, removeDatasetFromBasket } =
+  const { basket, addDatasetToBasket, removeDatasetFromBasket, isLoading } =
     useDatasetBasket();
   const isInBasket = basket.some((ds) => ds.id === dataset.id);
   const toggleDatasetInBasket = () => {
@@ -48,13 +48,15 @@ function DatasetItem({ dataset }: DatasetItemProps) {
         chips={dataset.theme || []}
         className="break-all bg-warning text-xs text-black md:text-sm"
       />
-      <div className="w-fulln mt-4 flex justify-end">
-        <Button
-          text={isInBasket ? "Remove from basket" : "Add to basket"}
-          icon={isInBasket ? faMinusCircle : faPlusCircle}
-          onClick={toggleDatasetInBasket}
-          type={isInBasket ? "warning" : "primary"}
-        />
+      <div className="mt-4 flex w-full justify-end">
+        {!isLoading && (
+          <Button
+            text={isInBasket ? "Remove from basket" : "Add to basket"}
+            icon={isInBasket ? faMinusCircle : faPlusCircle}
+            onClick={toggleDatasetInBasket}
+            type={isInBasket ? "warning" : "primary"}
+          />
+        )}
       </div>
     </div>
   );

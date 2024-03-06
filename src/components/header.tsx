@@ -91,12 +91,17 @@ function Header() {
         </div>
       </div>
       <div className="mr-3 hidden items-center gap-x-5 sm:flex md:gap-x-8">
-        <Button
-          icon={faShoppingCart}
-          text={isLoading ? "Basket" : `Basket (${basket.length})`}
-          type="info"
+        <Link
           href="/basket"
-        />
+          className="relative flex items-center text-info hover:text-primary"
+        >
+          <FontAwesomeIcon icon={faShoppingCart} size="lg" />
+          {!isLoading && basket.length > 0 && (
+            <span className="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-2 py-1 text-xs font-bold leading-none text-red-100">
+              {basket.length}
+            </span>
+          )}
+        </Link>
         {session ? (
           <>
             <Notification />

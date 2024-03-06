@@ -25,7 +25,7 @@ function AddToBasketBtn({ dataset }: AddToBasketBtnProps) {
   };
 
   return (
-    <div className="flex w-full justify-end">
+    <div className="flex w-1/3 lg:justify-end">
       {!isLoading && (
         <Button
           text={isInBasket ? "Remove from basket" : "Add to basket"}

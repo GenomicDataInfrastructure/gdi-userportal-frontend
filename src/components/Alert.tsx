@@ -27,7 +27,7 @@ const Alert = ({ type, message, onClose }: AlertProps) => {
       ? "text-white hover:text-secondary"
       : "text-primary hover:text-secondary";
   const leftBorderStyle =
-    type === "success" ? "border-secondary" : "border-primary";
+    type === "success" ? "border-warning" : "border-primary";
 
   return (
     <div

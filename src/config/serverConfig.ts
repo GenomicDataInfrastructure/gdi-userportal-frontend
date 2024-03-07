@@ -4,6 +4,7 @@
 
 interface ServerConfig {
   ckanUrl: string;
+  daamUrl: string;
 }
 
 function getEnvVariable(key: string, defaultValue: string): string {
@@ -12,6 +13,7 @@ function getEnvVariable(key: string, defaultValue: string): string {
 
 const serverConfig: ServerConfig = {
   ckanUrl: getEnvVariable('CKAN_URL', 'https://ckan-test.healthdata.nl'),
+  daamUrl: getEnvVariable('DAAM_URL', 'http://localhost:8080'),
 };
 
 export default serverConfig;

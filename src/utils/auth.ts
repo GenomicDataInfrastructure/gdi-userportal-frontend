@@ -11,7 +11,7 @@ import Keycloack from 'next-auth/providers/keycloak';
 import { signOut } from 'next-auth/react';
 import { decrypt } from './encryption';
 
-type ExtendedSession = Session & { id_token: string; access_token: string; error?: string };
+export type ExtendedSession = Session & { id_token: string; access_token: string; error?: string };
 
 type JWTCallbackEntry = {
   token: JWT;
@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
       clientId: `${process.env.KEYCLOAK_CLIENT_ID}`,
       clientSecret: `${process.env.KEYCLOAK_CLIENT_SECRET}`,
       issuer: process.env.KEYCLOAK_ISSUER_URL,
-      authorization: { params: { scope: 'openid profile email offline_access' } },
+      authorization: { params: { scope: 'openid profile email' } },
     }),
   ],
   callbacks: {

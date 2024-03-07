@@ -7,8 +7,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { User } from "@/types/user.types";
@@ -33,7 +31,8 @@ function getInitials(name?: string) {
   return name
     .split(" ")
     .map((n) => n[0])
-    .join("");
+    .join("")
+    .toUpperCase();
 }
 
 function handleSignOut() {
@@ -44,34 +43,32 @@ function Avatar({ user }: AvatarProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="rounded-full bg-gray-400 p-[8px] text-xs text-white shadow-sm transition-all duration-300 hover:opacity-90 md:p-[10px] md:text-[13px]">
+        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-info p-[8px] text-xs text-white shadow-sm transition-all duration-300 hover:opacity-90 md:h-9 md:w-9 md:p-[10px] md:text-[13px]">
           {user?.image ? (
             <Image src={user.image} alt="avatar" className="rounded-full" />
           ) : (
-            <p>{getInitials(user?.name)}</p>
+            <p className="flex items-center justify-center">
+              {getInitials(user?.name)}
+            </p>
           )}
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-white">
-        <DropdownMenuLabel className="font-bold text-gray-400">
-          My Account
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="gap-x-3 transition-all duration-300 hover:bg-white-smoke">
+          <DropdownMenuItem className="cursor-pointer gap-x-3 transition-all duration-300 hover:bg-primary hover:text-white">
             <FontAwesomeIcon icon={faDatabase} className="text-sm" />
             <span>Datasets</span>
           </DropdownMenuItem>
-          <DropdownMenuItem className="gap-x-3 transition-all duration-300 hover:bg-white-smoke">
+          <DropdownMenuItem className="cursor-pointer gap-x-3 transition-all duration-300 hover:bg-primary hover:text-white">
             <FontAwesomeIcon icon={faFolder} className="text-sm" />
             <span>Applications</span>
           </DropdownMenuItem>
-          <DropdownMenuItem className="gap-x-3 transition-all duration-300 hover:bg-white-smoke">
+          <DropdownMenuItem className="cursor-pointer gap-x-3 transition-all duration-300 hover:bg-primary hover:text-white">
             <FontAwesomeIcon icon={faGear} className="text-sm" />
             <span>Settings</span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="gap-x-3 transition-all duration-300 hover:bg-white-smoke"
+            className="cursor-pointer gap-x-3 transition-all duration-300 hover:bg-primary hover:text-white"
             onClick={handleSignOut}
           >
             <FontAwesomeIcon icon={faSignOut} className="text-sm" />

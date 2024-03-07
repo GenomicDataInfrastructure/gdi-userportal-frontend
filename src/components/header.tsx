@@ -29,7 +29,7 @@ import Button from "./button";
 import Notification from "./notification";
 
 function Header() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const activeTab = usePathname();
   const { basket, isLoading } = useDatasetBasket();
@@ -56,6 +56,24 @@ function Header() {
       window.removeEventListener("click", handleOutsideClick);
     };
   }, [isMenuOpen]);
+
+  let loginBtn;
+
+  if (status !== "loading") {
+    loginBtn = session ? (
+      <>
+        <Notification />
+        <Avatar user={session.user as User} />
+      </>
+    ) : (
+      <Button
+        icon={faUser}
+        text="Login"
+        type="primary"
+        onClick={() => signIn("keycloak")}
+      />
+    );
+  }
 
   return (
     <div className="flex w-full items-center justify-between bg-white-smoke px-4">
@@ -102,19 +120,7 @@ function Header() {
             </span>
           )}
         </Link>
-        {session ? (
-          <>
-            <Notification />
-            <Avatar user={session.user as User} />
-          </>
-        ) : (
-          <Button
-            icon={faUser}
-            text="Login"
-            type="primary"
-            onClick={() => signIn("keycloak")}
-          />
-        )}
+        {loginBtn}
       </div>
 
       <div className="menu-container relative sm:hidden">

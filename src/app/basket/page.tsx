@@ -10,7 +10,7 @@ import Alert, { AlertState } from "@/components/Alert";
 import Button from "@/components/button";
 import { faPaperPlane, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
-import { createApplication } from "@/services/daam";
+import { createApplication } from "@/services/daam/index.client";
 import { useSession, signIn } from "next-auth/react";
 
 export default function Page() {

@@ -14,7 +14,7 @@ import { createApplication } from "@/services/daam";
 import { useSession, signIn } from "next-auth/react";
 
 export default function Page() {
-  const { basket, isLoading } = useDatasetBasket();
+  const { basket, isLoading, emptyBasket } = useDatasetBasket();
   const [alert, setAlert] = useState<AlertState | null>(null);
   const { data: session, status } = useSession();
 
@@ -42,6 +42,7 @@ export default function Page() {
         message: "Application created successfully",
         type: "success",
       });
+      emptyBasket();
     } catch (error) {
       setAlert({
         message: "Somethng went wrong. Please try again.",

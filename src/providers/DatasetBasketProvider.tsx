@@ -15,6 +15,7 @@ interface DatasetBasketContextType {
   basket: Dataset[];
   addDatasetToBasket: (dataset: Dataset) => void;
   removeDatasetFromBasket: (dataset: Dataset) => void;
+  emptyBasket: () => void;
   isLoading: boolean;
 }
 
@@ -52,9 +53,19 @@ export const DatasetBasketProvider = ({
     setBasket((prevBasket) => prevBasket.filter((d) => d.id !== dataset.id));
   };
 
+  const emptyBasket = () => {
+    setBasket([]);
+  };
+
   return (
     <DatasetBasketContext.Provider
-      value={{ basket, addDatasetToBasket, removeDatasetFromBasket, isLoading }}
+      value={{
+        basket,
+        addDatasetToBasket,
+        removeDatasetFromBasket,
+        isLoading,
+        emptyBasket,
+      }}
     >
       {children}
     </DatasetBasketContext.Provider>

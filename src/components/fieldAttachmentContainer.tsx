@@ -21,7 +21,7 @@ function FieldAttachmentContainer({
         </div>
         <Button
           type="info"
-          text="Upload files"
+          text="Upload file"
           className="text-xs"
           icon={faPlusCircle}
         />

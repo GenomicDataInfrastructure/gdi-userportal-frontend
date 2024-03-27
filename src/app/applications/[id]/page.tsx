@@ -5,6 +5,7 @@
 import ApplicationDetailsContainer from "@/components/applicationDetailsContainer";
 import Button from "@/components/button";
 import FieldAttachmentContainer from "@/components/fieldAttachmentContainer";
+import { faPaperPlane, faSave } from "@fortawesome/free-solid-svg-icons";
 
 type ApplicationDetailsPageProps = {
   params: { id: string };
@@ -19,10 +20,20 @@ export default function ApplicationDetailsPage({
       <div className="col-span-6 col-start-3">
         <div className="px-3">
           <div className="flex justify-between">
-            <h1 className="text-3xl text-primary">Application Title</h1>
+            <h1 className="text-3xl text-primary">Application {id}</h1>
             <div className="flex gap-x-3">
-              <Button type="warning" text="Save changes" className="text-xs" />
-              <Button type="primary" text="Submit" className="text-xs" />
+              <Button
+                type="warning"
+                text="Save changes"
+                icon={faSave}
+                className="text-xs"
+              />
+              <Button
+                type="primary"
+                text="Submit"
+                className="text-xs"
+                icon={faPaperPlane}
+              />
             </div>
           </div>
           <p className="mt-5">Last Event: blablabla</p>
@@ -35,7 +46,7 @@ export default function ApplicationDetailsPage({
         <FieldAttachmentContainer fieldName="Field 3" />
       </div>
 
-      <aside className="col-span-3 col-start-9 flex flex-col gap-y-6 rounded-lg border bg-white-smoke p-8">
+      <aside className="col-span-3 col-start-9 flex h-fit flex-col gap-y-6 rounded-lg border bg-white-smoke p-8">
         <ApplicationDetailsContainer />
       </aside>
     </div>

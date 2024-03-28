@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import PageHeading from "@/components/PageHeading";
 import Sidebar from "@/components/Sidebar";
 import Button from "@/components/button";
 import FieldAttachmentContainer from "@/components/fieldAttachmentContainer";
@@ -22,7 +23,7 @@ export default function ApplicationDetailsPage({
       <div className="col-span-6 col-start-3">
         <div className="px-3">
           <div className="flex justify-between">
-            <h1 className="text-3xl text-primary">Application {id}</h1>
+            <PageHeading>Application {id}</PageHeading>
             <div className="flex gap-x-3">
               <Button
                 type="warning"

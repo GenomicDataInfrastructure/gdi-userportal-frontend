@@ -2,10 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import ApplicationDetailsContainer from "@/components/applicationDetailsContainer";
+import Sidebar from "@/components/Sidebar";
 import Button from "@/components/button";
 import FieldAttachmentContainer from "@/components/fieldAttachmentContainer";
 import { faPaperPlane, faSave } from "@fortawesome/free-solid-svg-icons";
+import { createApplicationSidebarItems } from "./sidebarItems";
 
 type ApplicationDetailsPageProps = {
   params: { id: string };
@@ -15,6 +16,7 @@ export default function ApplicationDetailsPage({
   params,
 }: ApplicationDetailsPageProps) {
   const { id } = params;
+  const sidebarItems = createApplicationSidebarItems();
   return (
     <div className="mt-20 grid grid-cols-12 gap-x-20">
       <div className="col-span-6 col-start-3">
@@ -46,8 +48,8 @@ export default function ApplicationDetailsPage({
         <FieldAttachmentContainer fieldName="Field 3" />
       </div>
 
-      <aside className="col-span-3 col-start-9 flex h-fit flex-col gap-y-6 rounded-lg border bg-white-smoke p-8">
-        <ApplicationDetailsContainer />
+      <aside className="col-span-3 col-start-9">
+        <Sidebar items={sidebarItems} />
       </aside>
     </div>
   );

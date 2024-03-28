@@ -19,22 +19,22 @@ export default function ApplicationDetailsPage({
   const { id } = params;
   const sidebarItems = createApplicationSidebarItems();
   return (
-    <div className="mt-20 grid grid-cols-12 gap-x-20">
-      <div className="col-span-6 col-start-3">
+    <div className="mx-8 mt-20 md:mx-auto md:w-3/4 xl:mx-0 xl:grid xl:w-full xl:grid-cols-12 xl:gap-x-20">
+      <div className="col-span-8 col-start-3 xl:col-span-6 xl:col-start-3">
         <div className="px-3">
-          <div className="flex justify-between">
+          <div className="sm:flex sm:justify-between">
             <PageHeading>Application {id}</PageHeading>
-            <div className="flex gap-x-3">
+            <div className="mt-4 flex gap-x-3 sm:mt-0">
               <Button
                 type="warning"
                 text="Save changes"
                 icon={faSave}
-                className="text-xs"
+                className="h-fit text-[10px] sm:text-xs"
               />
               <Button
                 type="primary"
                 text="Submit"
-                className="text-xs"
+                className="h-fit text-[10px] sm:text-xs"
                 icon={faPaperPlane}
               />
             </div>
@@ -44,12 +44,18 @@ export default function ApplicationDetailsPage({
 
         <div className="mt-5 h-[2px] bg-secondary opacity-80"></div>
 
+        <div className="mt-10 w-full xl:hidden">
+          <Sidebar items={sidebarItems} />
+        </div>
+
+        <div className="mt-5 h-[2px] bg-secondary opacity-80 xl:hidden"></div>
+
         <FieldAttachmentContainer fieldName="Field 1" />
         <FieldAttachmentContainer fieldName="Field 2" />
         <FieldAttachmentContainer fieldName="Field 3" />
       </div>
 
-      <aside className="col-span-3 col-start-9">
+      <aside className="col-span-3 col-start-9 hidden xl:block">
         <Sidebar items={sidebarItems} />
       </aside>
     </div>

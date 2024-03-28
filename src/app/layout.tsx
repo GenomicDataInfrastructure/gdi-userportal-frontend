@@ -9,9 +9,9 @@ import SessionProviderWrapper from "@/components/utils/sessionProviderWrapper";
 import { DatasetBasketProvider } from "@/providers/DatasetBasketProvider";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import { PublicEnvScript } from "next-runtime-env";
 import { exposeFont, satoshiFont, tabularFont } from "../utils/fonts";
 import "./globals.css";
-import { PublicEnvScript } from "next-runtime-env";
 config.autoAddCss = false;
 
 export default function RootLayout({
@@ -31,7 +31,7 @@ export default function RootLayout({
       </head>
       <body>
         <DatasetBasketProvider>
-          <div className="grid h-screen w-screen grid-rows-[auto_1fr_auto]">
+          <div className="grid h-screen w-full grid-rows-[auto_1fr_auto]">
             <SessionProviderWrapper>
               <div>
                 <Header />

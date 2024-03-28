@@ -7,8 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function FileUploaded() {
   return (
-    <div className="relative mt-5 flex items-center justify-between gap-x-3 rounded border-2 bg-white-smoke px-3 py-1.5">
-      <div className="flex items-center gap-x-4">
+    <div className="relative mt-5 flex items-center justify-between gap-x-1 rounded border-2 bg-white-smoke px-3 py-1.5 sm:gap-x-3">
+      <div className="flex items-center gap-x-2 sm:gap-x-4">
         <FontAwesomeIcon
           icon={faFileCircleCheck}
           className="text-base text-info"

@@ -4,7 +4,9 @@
 "use client";
 
 import { useState } from "react";
+import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
+import CenteredListContainer from "@/components/CenteredListContainer";
 import DatasetList from "@/components/datasetList";
 import Alert, { AlertState } from "@/components/Alert";
 import Button from "@/components/button";
@@ -80,7 +82,7 @@ export default function Page() {
   }
 
   return (
-    <div className="w-full p-10">
+    <PageContainer>
       {alert && (
         <Alert
           type={alert.type}
@@ -89,7 +91,7 @@ export default function Page() {
         />
       )}
       <PageHeading>{heading}</PageHeading>
-      <div className="m-auto flex w-full flex-col items-center gap-4 p-5 lg:w-2/3">
+      <CenteredListContainer>
         <div className="flex w-full justify-between">
           {basket.length > 0 && (
             <Button
@@ -116,7 +118,7 @@ export default function Page() {
             />
           </div>
         )}
-      </div>
-    </div>
+      </CenteredListContainer>
+    </PageContainer>
   );
 }

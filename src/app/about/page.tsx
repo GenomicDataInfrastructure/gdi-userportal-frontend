@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
 import PageSubHeading from "@/components/PageSubHeading";
 import React from "react";
 
 const AboutPage: React.FC = () => {
   return (
-    <div className="container mx-auto  px-4 sm:px-2 lg:px-0">
-      <div className="mb-8 text-center"></div>
+    <PageContainer>
       <PageHeading className="mb-4">
         About Genomic Data Infrastructure (GDI)
       </PageHeading>
@@ -81,7 +81,7 @@ const AboutPage: React.FC = () => {
         </a>
         .
       </p>
-    </div>
+    </PageContainer>
   );
 };
 

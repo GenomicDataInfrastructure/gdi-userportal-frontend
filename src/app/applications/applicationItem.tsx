@@ -19,10 +19,9 @@ export default function ApplicationItem({
 
   return collapsable && collapsed ? (
     <button
-      className="mt-4 flex w-5/6 cursor-pointer items-center justify-between rounded-lg border-2 bg-white-smoke p-4"
+      className="flex w-full cursor-pointer items-center justify-between"
       onClick={toggleCollapsed}
     >
-      <div></div>
       <span className="text-xl text-primary">
         Application Id: {application.id}
       </span>
@@ -32,13 +31,12 @@ export default function ApplicationItem({
       />
     </button>
   ) : (
-    <div className="mt-4 w-5/6 rounded-lg border-2 bg-white-smoke">
-      <div className="flex flex-col items-center">
+    <div className="flex w-full flex-col items-center">
+      <div className="w-full">
         <button
-          className="flex w-full cursor-pointer items-center justify-between rounded-lg bg-white-smoke p-4"
+          className="flex w-full cursor-pointer items-center justify-between"
           onClick={toggleCollapsed}
         >
-          <div></div>
           <span className="text-xl text-primary">
             Application Id: {application.id}
           </span>
@@ -51,7 +49,6 @@ export default function ApplicationItem({
             <div></div>
           )}
         </button>
-        <span className="text-xl">Title: {application.title}</span>
       </div>
 
       <div className="flex justify-center gap-10 p-6">

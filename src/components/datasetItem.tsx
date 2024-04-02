@@ -31,7 +31,7 @@ function DatasetItem({ dataset }: DatasetItemProps) {
   };
 
   return (
-    <div className="box break-words rounded-lg border bg-white-smoke p-8">
+    <>
       <Link href={`/datasets/${dataset.id}`} className="hover:underline">
         <div className="mb-4 flex justify-between">
           <h3 className="text-xl text-info md:text-2xl">{dataset.title}</h3>
@@ -58,7 +58,7 @@ function DatasetItem({ dataset }: DatasetItemProps) {
           />
         )}
       </div>
-    </div>
+    </>
   );
 }
 

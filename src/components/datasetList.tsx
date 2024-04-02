@@ -3,6 +3,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Dataset } from "@/types/dataset.types";
+import List from "@/components/List";
+import ListItem from "@/components/List/ListItem";
 import DatasetItem from "./datasetItem";
 
 type DatasetListProps = {
@@ -11,13 +13,13 @@ type DatasetListProps = {
 
 function DatasetList({ datasets }: DatasetListProps) {
   return (
-    <ul className="flex w-full flex-col gap-y-4">
+    <List>
       {datasets.map((dataset: Dataset) => (
-        <li key={dataset.id}>
+        <ListItem key={dataset.id}>
           <DatasetItem dataset={dataset} />
-        </li>
+        </ListItem>
       ))}
-    </ul>
+    </List>
   );
 }
 

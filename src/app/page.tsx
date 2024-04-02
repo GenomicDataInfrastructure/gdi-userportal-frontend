@@ -6,6 +6,7 @@
 
 import { DatasetCounter } from "@/components/DatasetCounter";
 import { PortalStatistics } from "@/components/PortalStatistics";
+import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/SearchBar";
 import Image from "next/image";
 import logo from "../public/gdi-logo.png";
@@ -20,7 +21,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="container mx-auto space-y-20 px-4 pt-20">
+    <PageContainer>
       <div className="mb-20 grid gap-10 md:grid-cols-[2fr,1fr]">
         <div className="text-center lg:text-left">
           <DatasetCounter />
@@ -143,7 +144,7 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 };
 

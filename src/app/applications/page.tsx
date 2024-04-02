@@ -7,7 +7,11 @@
 import { listApplications } from "@/services/daam/index.client";
 import React, { useEffect, useState } from "react";
 import ApplicationItem from "./applicationItem";
+import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
+import CenteredListContainer from "@/components/CenteredListContainer";
+import List from "@/components/List";
+import ListItem from "@/components/List/ListItem";
 import { ListedApplication } from "@/types/application.types";
 
 const ApplicationsPage: React.FC = () => {
@@ -21,20 +25,23 @@ const ApplicationsPage: React.FC = () => {
   const collapsable = data.length > collapseLimit;
 
   return (
-    <div className="container mx-auto px-5">
-      <PageHeading className="mt-8">Manage your Applications</PageHeading>
+    <PageContainer>
+      <PageHeading className="mb-4">Manage your Applications</PageHeading>
       <span>View and update your submited applications</span>
 
-      <div className="mt-5 flex grow flex-col items-center">
-        {data.map((item) => (
-          <ApplicationItem
-            key={item.id}
-            application={item}
-            collapsable={collapsable}
-          />
-        ))}
-      </div>
-    </div>
+      <CenteredListContainer>
+        <List>
+          {data.map((item) => (
+            <ListItem
+              key={item.id}
+              className="flex items-center justify-between"
+            >
+              <ApplicationItem application={item} collapsable={collapsable} />
+            </ListItem>
+          ))}
+        </List>
+      </CenteredListContainer>
+    </PageContainer>
   );
 };
 

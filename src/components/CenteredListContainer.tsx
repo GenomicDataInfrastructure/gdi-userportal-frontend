@@ -17,7 +17,7 @@ function CenteredListContainer({
 }: CenteredListContainerProps) {
   return (
     <div
-      className={`m-auto flex w-full flex-col items-center gap-4 p-5 lg:w-2/3 ${className}`}
+      className={`m-auto flex w-full flex-col items-center gap-4 mt-8 lg:w-2/3 ${className}`}
     >
       {children}
     </div>

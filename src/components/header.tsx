@@ -31,8 +31,9 @@ import Notification from "./notification";
 function Header() {
   const { data: session, status } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const activeTab = usePathname();
   const { basket, isLoading } = useDatasetBasket();
+  
+  const activeTab = usePathname();
 
   function handleSignOut() {
     keycloackSessionLogOut().then(() => signOut({ callbackUrl: "/" }));
@@ -90,19 +91,19 @@ function Header() {
         <div className="hidden items-center gap-x-3 text-base font-semibold text-primary sm:flex md:text-lg">
           <Link
             href="/"
-            className={`rounded-lg border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-primary hover:shadow-sm md:px-7 ${activeTab === "/" ? "bg-primary text-white" : ""}`}
+            className={`rounded-lg border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-primary hover:shadow-sm ${activeTab === "/" ? "bg-primary text-white" : ""}`}
           >
             Home
           </Link>
           <Link
             href="/datasets"
-            className={`rounded-lg border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-primary hover:shadow-sm md:px-7 ${activeTab.includes("datasets") ? "bg-primary text-white" : ""}`}
+            className={`rounded-lg border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-primary hover:shadow-sm ${activeTab.includes("datasets") ? "bg-primary text-white" : ""}`}
           >
             Datasets
           </Link>
           <Link
             href="/about"
-            className={`rounded-lg border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-primary hover:shadow-sm md:px-7 ${activeTab === "/about" ? "bg-primary text-white" : ""}`}
+            className={`rounded-lg border-[1.5px] border-white-smoke px-3 py-1 transition-colors duration-300 hover:border-primary hover:shadow-sm ${activeTab === "/about" ? "bg-primary text-white" : ""}`}
           >
             About
           </Link>
@@ -133,7 +134,7 @@ function Header() {
           <FontAwesomeIcon icon={faBars} className="text-xl" />
         </button>
         {isMenuOpen && (
-          <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg">
+          <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg z-10">
             <Link
               href="/"
               className="block px-4 py-2 hover:bg-primary hover:text-white"

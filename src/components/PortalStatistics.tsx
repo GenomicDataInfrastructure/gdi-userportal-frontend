@@ -27,7 +27,7 @@ export function PortalStatistics() {
   return (
     <div className="mt-4 px-4">
       <div className="mx-auto max-w-7xl">
-        <div className="grid grid-cols-1 gap-20 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
           {Object.entries(propCounters).map(([key, value]) => (
             <div key={key}>
               <div className="rounded-lg bg-white p-4 text-center shadow-md">

@@ -23,10 +23,10 @@ const HomePage = () => {
   return (
     <PageContainer>
       <div className="mb-20 grid gap-10 md:grid-cols-[2fr,1fr]">
-        <div className="text-center lg:text-left">
+        <div className="text-center lg:text-left md:pr-4 md:pl-4">
           <DatasetCounter />
           <SearchBar queryParams={initialQueryParams} size="large" />
-          <div className="mx-auto mt-12 w-full rounded-lg bg-white transition-shadow duration-300 ease-in-out hover:shadow-sm lg:mx-0 lg:w-1/2">
+          <div className="mx-auto mt-12 w-full rounded-lg bg-white transition-shadow duration-300 ease-in-out hover:shadow-sm lg:mx-0">
             <h2 className="mb-4 text-4xl font-bold text-primary">
               WELCOME TO GDI
             </h2>
@@ -105,8 +105,7 @@ const HomePage = () => {
           <h2 className="mb-6 text-2xl font-bold text-warning md:mb-0 md:text-3xl lg:text-4xl">
             PARTICIPATE
           </h2>
-          <div className="flex flex-1 flex-col items-center justify-center text-center">
-            <div className="flex w-full flex-wrap justify-around text-warning">
+            <div className="flex flex-wrap gap-4 text-warning">
               <a
                 href="https://b1mg-project.eu/"
                 target="_blank"
@@ -124,7 +123,6 @@ const HomePage = () => {
                 Learn more about GDI
               </a>
             </div>
-          </div>
         </div>
       </div>
 

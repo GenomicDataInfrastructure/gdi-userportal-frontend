@@ -32,7 +32,6 @@ function Header() {
   const { data: session, status } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const { basket, isLoading } = useDatasetBasket();
-  
   const activeTab = usePathname();
 
   function handleSignOut() {
@@ -134,7 +133,7 @@ function Header() {
           <FontAwesomeIcon icon={faBars} className="text-xl" />
         </button>
         {isMenuOpen && (
-          <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg z-10">
+          <div className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg">
             <Link
               href="/"
               className="block px-4 py-2 hover:bg-primary hover:text-white"

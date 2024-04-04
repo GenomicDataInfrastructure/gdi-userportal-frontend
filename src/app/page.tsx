@@ -26,7 +26,7 @@ const HomePage = () => {
         <div className="text-center md:pl-4 md:pr-4 lg:text-left">
           <DatasetCounter />
           <SearchBar queryParams={initialQueryParams} size="large" />
-          <div className="mx-auto mt-12 w-full rounded-lg bg-white transition-shadow duration-300 ease-in-out hover:shadow-sm lg:mx-0">
+          <div className="mx-auto mt-12 w-full rounded-lg bg-white transition-shadow duration-300 ease-in-out hover:shadow-sm lg:mx-0 lg:w-1/2">
             <h2 className="mb-4 text-4xl font-bold text-primary">
               WELCOME TO GDI
             </h2>

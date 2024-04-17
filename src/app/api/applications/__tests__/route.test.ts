@@ -67,14 +67,14 @@ describe('POST function', () => {
   test('returns error if Axios request fails', async () => {
     const encryptedToken = encrypt('decryptedToken');
     mockedGetServerSession.mockResolvedValueOnce({ access_token: encryptedToken });
-    mockedAxios.post.mockRejectedValueOnce(new Error('Axios error'));
+    mockedAxios.post.mockRejectedValueOnce(new Error('server error'));
 
     const datasetIds = ['123', '456'];
     const request = new Request('http://localhost', { method: 'POST', body: JSON.stringify({ datasetIds }) });
     const response = await POST(request);
 
     expect(response.status).toBe(500);
-    expect(await response.json()).toEqual({ error: 'Failed to create application' });
+    expect(await response.json()).toEqual({ error: 'server error' });
   });
 });
 
@@ -95,12 +95,12 @@ describe('GET function', () => {
   test('returns error if Axios request fails', async () => {
     const encryptedToken = encrypt('decryptedToken');
     mockedGetServerSession.mockResolvedValueOnce({ access_token: encryptedToken });
-    mockedAxios.post.mockRejectedValueOnce(new Error('Axios error'));
+    mockedAxios.get.mockRejectedValueOnce(new Error('Server error'));
 
     const response = await GET();
 
     expect(response.status).toBe(500);
-    expect(await response.json()).toEqual({ error: 'Failed to list applications' });
+    expect(await response.json()).toEqual({ error: 'Server error' });
   });
 
   test('successfully gets applications', async () => {

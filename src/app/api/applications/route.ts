@@ -6,7 +6,7 @@ import { authOptions, ExtendedSession } from '@/utils/auth';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 import { createApplication, listApplications } from '@/services/daam/index.server';
-import { AxiosError } from 'axios';
+import axios from 'axios';
 
 export async function POST(request: Request) {
   const session: ExtendedSession | null = await getServerSession(authOptions);
@@ -24,13 +24,13 @@ export async function POST(request: Request) {
 
     return NextResponse.json(response.data);
   } catch (error) {
-    if (error instanceof AxiosError) {
-      return NextResponse.json({ error: error.message }, { status: error.response?.status });
+    if (axios.isAxiosError(error)) {
+      return NextResponse.json({ error: error.response?.data }, { status: error.response?.status });
     } else if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ error: 'something went wrong' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to create application' }, { status: 500 });
   }
 }
 
@@ -44,12 +44,12 @@ export async function GET() {
     const response = await listApplications(session);
     return NextResponse.json(response.data);
   } catch (error) {
-    if (error instanceof AxiosError) {
-      return NextResponse.json({ error: error.message }, { status: error.response?.status });
+    if (axios.isAxiosError(error)) {
+      return NextResponse.json({ error: error.response?.data }, { status: error.response?.status });
     } else if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ error: 'something went wrong' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to list applications' }, { status: 500 });
   }
 }

@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: Apache-2.0
 "use client";
 
-import Chips from "@/components/Chips";
 import Button from "@/components/Button";
+import Chips from "@/components/Chips";
 import { useWindowSize } from "@/hooks";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { SearchedDataset } from "@/services/discovery/types/dataset.types";

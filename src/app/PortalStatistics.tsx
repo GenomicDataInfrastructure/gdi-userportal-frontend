@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 "use client";
-import React, { useEffect, useState } from "react";
-import { PortalStatistics as IPortalStatistics } from "@/services/discovery/types/portalStatistics.types";
 import { portalStatistics } from "@/services/discovery/index.public";
+import { PortalStatistics as IPortalStatistics } from "@/services/discovery/types/portalStatistics.types";
+import { useEffect, useState } from "react";
 
 export function PortalStatistics() {
   const [propCounters, setPropCounters] = useState<IPortalStatistics | null>(

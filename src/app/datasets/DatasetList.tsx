@@ -4,8 +4,8 @@
 
 import List from "@/components/List";
 import ListItem from "@/components/List/ListItem";
-import DatasetItem from "./datasetItem";
 import { SearchedDataset } from "@/services/discovery/types/dataset.types";
+import DatasetItem from "./DatasetItem";
 
 type DatasetListProps = {
   datasets: SearchedDataset[];

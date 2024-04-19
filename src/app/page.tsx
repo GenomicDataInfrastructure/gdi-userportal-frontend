@@ -13,8 +13,8 @@ import dna from "../public/dna.jpg";
 import logo from "../public/gdi-logo.png";
 import gdi_visuals from "../public/gdi-visuals.png";
 import office from "../public/office.jpg";
-import { DatasetCounter } from "./datasetCounter";
-import { PortalStatistics } from "./portalStatistics";
+import { DatasetCounter } from "./DatasetCounter";
+import { PortalStatistics } from "./PortalStatistics";
 
 const HomePage = () => {
   const queryParams = useSearchParams();

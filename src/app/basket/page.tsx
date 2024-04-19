@@ -14,7 +14,7 @@ import { createApplication } from "@/services/daam/index.client";
 import { faPaperPlane, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { signIn, useSession } from "next-auth/react";
 import { useState } from "react";
-import DatasetList from "../datasets/datasetList";
+import DatasetList from "../datasets/DatasetList";
 
 export default function Page() {
   const { basket, isLoading, emptyBasket } = useDatasetBasket();

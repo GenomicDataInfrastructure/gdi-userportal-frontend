@@ -23,8 +23,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AxiosError } from "axios";
 import { redirect, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import DatasetList from "./DatasetList";
 import FilterList from "./FilterList";
-import DatasetList from "./datasetList";
 
 function parseFacets(queryParams: URLSearchParams): DatasetSearchQueryFacet[] {
   const facetsQuery: DatasetSearchQueryFacet[] = [];

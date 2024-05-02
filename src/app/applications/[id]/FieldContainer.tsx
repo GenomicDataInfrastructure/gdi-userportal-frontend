@@ -32,7 +32,7 @@ function FieldContainer({ formId, field }: FieldContainerProps) {
     field.title[0].name;
 
   return (
-    <div className="mt-10 rounded border p-6">
+    <div className="rounded border p-4">
       <div className="flex justify-between">
         <div>
           <h3 className="text-lg text-primary sm:text-xl">{`${fieldTitle}`}</h3>

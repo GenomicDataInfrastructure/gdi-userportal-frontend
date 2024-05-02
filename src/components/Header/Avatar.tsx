@@ -54,7 +54,7 @@ function Avatar({ user }: AvatarProps) {
 
   return (
     <div className="flex gap-x-2">
-      <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-info p-[8px] text-xs text-white shadow-sm transition-colors duration-300 hover:bg-primary md:h-9 md:w-9 md:p-[10px] md:text-[13px]">
+      <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-info p-[8px] text-xs text-white shadow-sm transition-colors duration-300 hover:bg-hover-color md:h-9 md:w-9 md:p-[10px] md:text-[13px]">
         <Link href="/profile">
           {user?.image ? (
             <Image src={user.image} alt="avatar" className="rounded-full" />

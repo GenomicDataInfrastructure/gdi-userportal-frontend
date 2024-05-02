@@ -26,7 +26,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Button from "../Button";
-import ApplicationIcon from "./ApplicationIcon";
 import Avatar from "./Avatar";
 
 function Header() {
@@ -34,14 +33,6 @@ function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const activeTab = usePathname();
   const { basket, isLoading } = useDatasetBasket();
-
-  function handleSignOut() {
-    keycloackSessionLogOut().then(() => signOut({ callbackUrl: "/" }));
-  }
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -58,14 +49,19 @@ function Header() {
     };
   }, [isMenuOpen]);
 
+  function handleSignOut() {
+    keycloackSessionLogOut().then(() => signOut({ callbackUrl: "/" }));
+  }
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   let loginBtn;
 
   if (status !== "loading") {
     loginBtn = session ? (
-      <>
-        <ApplicationIcon />
-        <Avatar user={session.user as User} />
-      </>
+      <Avatar user={session.user as User} />
     ) : (
       <Button
         icon={faUser}
@@ -115,7 +111,10 @@ function Header() {
             href="/basket"
             className="relative flex items-center text-info hover:text-primary"
           >
-            <FontAwesomeIcon icon={faShoppingCart} size="lg" />
+            <FontAwesomeIcon
+              icon={faShoppingCart}
+              className="text-lg md:text-xl "
+            />
             {basket.length > 0 && (
               <span className="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-2 py-1 text-xs font-bold leading-none text-red-100">
                 {basket.length}

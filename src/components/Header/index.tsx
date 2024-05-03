@@ -28,8 +28,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Button from "../Button";
-import ApplicationIcon from "./ApplicationIcon";
 import Avatar from "./Avatar";
+import RequestIcon from "./RequestIcon";
 
 function Header() {
   const { data: session, status } = useSession();
@@ -66,7 +66,7 @@ function Header() {
   if (status !== "loading") {
     loginBtn = session ? (
       <>
-        <ApplicationIcon isActive={activeTab.includes("applications")} />
+        <RequestIcon isActive={activeTab.includes("requests")} />
         <Avatar user={session.user as User} />
       </>
     ) : (
@@ -163,7 +163,7 @@ function Header() {
               onClick={closeMenu}
             >
               <FontAwesomeIcon icon={faFileText} className="mr-2" />
-              Applications
+              Requests
             </Link>
             <Link
               href="/about"

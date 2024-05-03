@@ -7,17 +7,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import React from "react";
 
-interface ApplicationIconProps {
+interface RequestIconProps {
   isActive: boolean;
 }
 
-const ApplicationIcon: React.FC<ApplicationIconProps> = ({ isActive }) => (
+const RequestIcon: React.FC<RequestIconProps> = ({ isActive }) => (
   <Link
-    href="/applications"
+    href="/requests"
     className={`flex items-center text-info hover:text-hover-color ${isActive ? "text-primary" : ""}`}
   >
     <FontAwesomeIcon icon={faFolderOpen} className="text-xl lg:text-2xl" />
   </Link>
 );
 
-export default ApplicationIcon;
+export default RequestIcon;

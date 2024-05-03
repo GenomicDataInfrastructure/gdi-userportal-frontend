@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import React from "react";
-import Link from "next/link";
-import { faFileText } from "@fortawesome/free-solid-svg-icons";
+import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
+import React from "react";
 
 interface ApplicationIconProps {
   isActive: boolean;
@@ -16,7 +16,7 @@ const ApplicationIcon: React.FC<ApplicationIconProps> = ({ isActive }) => (
     href="/applications"
     className={`flex items-center text-info hover:text-hover-color ${isActive ? "text-primary" : ""}`}
   >
-    <FontAwesomeIcon icon={faFileText} size="xl" />
+    <FontAwesomeIcon icon={faFolderOpen} className="text-xl lg:text-2xl" />
   </Link>
 );
 

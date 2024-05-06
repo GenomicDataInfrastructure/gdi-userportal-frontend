@@ -12,11 +12,13 @@ export function makeSubmitApplication(daamUrl: string) {
     applicationId: string,
     session: ExtendedSession,
   ): Promise<AxiosResponse<void | ErrorResponse | ValidationWarnings>> => {
-    return await axios.post(`${daamUrl}/api/v1/applications/${applicationId}/submit`, null, {
+    const response = await axios.post(`${daamUrl}/api/v1/applications/${applicationId}/submit`, null, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${decrypt(session.access_token)}`,
       },
+      validateStatus: () => true,
     });
+    return response;
   };
 }

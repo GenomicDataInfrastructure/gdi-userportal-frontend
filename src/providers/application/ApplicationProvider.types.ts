@@ -16,6 +16,7 @@ export enum ApplicationActionType {
   ATTACHMENT_DELETED = 'application/attachment/deleted',
   FORM_SAVED = 'application/form/saved',
   REJECTED = 'rejected',
+  CLEAR_ERROR = 'clear_error',
 }
 
 export type ApplicationState = {
@@ -28,4 +29,5 @@ export type ApplicationContextState = ApplicationState & {
   addAttachment: (formId: number, fieldId: number, formData: FormData) => Promise<void>;
   deleteAttachment: (formId: number, fieldId: number, attachmentId: number) => void;
   submitApplication: () => void;
+  clearError: () => void;
 };

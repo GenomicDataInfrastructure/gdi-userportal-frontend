@@ -27,7 +27,12 @@ export default function ApplicationDetailsPage() {
     setAlert(null);
   };
 
-  const { application, submitApplication, error } = useApplicationDetails();
+  const { application, error, submitApplication, clearError } =
+    useApplicationDetails();
+  const handleSubmission = () => {
+    clearError();
+    submitApplication();
+  };
 
   useEffect(() => {
     if (error) {
@@ -50,7 +55,10 @@ export default function ApplicationDetailsPage() {
         <Alert
           type={alert.type}
           message={alert.message}
-          onClose={onCloseAlert}
+          onClose={() => {
+            onCloseAlert();
+            clearError();
+          }}
           className="mb-8"
         />
       )}
@@ -69,7 +77,7 @@ export default function ApplicationDetailsPage() {
                   type="primary"
                   text="Submit"
                   icon={faPaperPlane}
-                  onClick={submitApplication}
+                  onClick={handleSubmission}
                 />
               )}
             </div>

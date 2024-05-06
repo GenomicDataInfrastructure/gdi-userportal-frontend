@@ -95,6 +95,9 @@ function reducer(
     case ApplicationActionType.FORM_SAVED:
       return { ...state, isLoading: false };
 
+    case ApplicationActionType.CLEAR_ERROR:
+      return { ...state, error: null };
+
     case ApplicationActionType.REJECTED:
       return { ...state, error: action.payload as string, isLoading: false };
 
@@ -118,6 +121,10 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
     reducer,
     initialState,
   );
+
+  const clearError = () => {
+    dispatch({ type: ApplicationActionType.CLEAR_ERROR });
+  };
 
   const { id } = useParams<{ id: string }>();
 
@@ -239,24 +246,34 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
 
   async function submitApplication() {
     dispatch({ type: ApplicationActionType.LOADING });
-    const response = await fetch(
-      `/api/applications/${application!.id}/submit`,
-      {
-        method: "POST",
-      },
-    );
-    if (response.ok) {
-      fetchApplication();
-    } else {
-      const responseJson = await response.json();
-      const message = responseJson.detail || "Failed to submit application";
 
+    try {
+      const response = await fetch(
+        `/api/applications/${application!.id}/submit`,
+        { method: "POST" },
+      );
+
+      if (response.ok) {
+        dispatch({ type: ApplicationActionType.CLEAR_ERROR });
+        fetchApplication();
+      } else {
+        const errorResponse = await response.json();
+        const errorMessage =
+          errorResponse.error || "An unexpected error occurred.";
+        dispatch({
+          type: ApplicationActionType.REJECTED,
+          payload: errorMessage,
+        });
+      }
+    } catch (error) {
       dispatch({
         type: ApplicationActionType.REJECTED,
-        payload: message,
+        payload:
+          "Failed to submit application due to a network or server issue.",
       });
     }
   }
+
   return (
     <ApplicationContext.Provider
       value={{
@@ -266,6 +283,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
         addAttachment,
         deleteAttachment,
         submitApplication,
+        clearError,
       }}
     >
       {children}

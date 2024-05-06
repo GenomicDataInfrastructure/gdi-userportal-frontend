@@ -17,6 +17,7 @@ import {
   DatasetSearchQueryFacet,
   FacetGroup,
 } from "@/services/discovery/types/datasetSearch.types";
+import { SCREEN_SIZE } from "@/utils/windowSize";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AxiosError } from "axios";

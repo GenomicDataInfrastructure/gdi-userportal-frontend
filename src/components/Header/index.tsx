@@ -141,6 +141,12 @@ function Header() {
         </button>
         {isMenuOpen && (
           <div className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg">
+            {session && (
+              <div className="border-b border-gray-200 px-4 py-2">
+                <FontAwesomeIcon icon={faUser} className="mr-2" />
+                {session?.user?.name}
+              </div>
+            )}
             <Link
               href="/"
               className="block px-4 py-2 hover:bg-hover-color hover:text-white"
@@ -158,35 +164,29 @@ function Header() {
               Datasets
             </Link>
             <Link
-              href="/applications"
-              className="block px-4 py-2 hover:bg-hover-color hover:text-white"
-              onClick={closeMenu}
-            >
-              <FontAwesomeIcon icon={faFileText} className="mr-2" />
-              Requests
-            </Link>
-            <Link
               href="/about"
-              className="block px-4 py-2 hover:bg-hover-color hover:text-white"
+              className="block border-b border-gray-200 px-4 py-2 hover:bg-hover-color hover:text-white"
               onClick={closeMenu}
             >
               <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
               About
             </Link>
             <Link
+              href="/requests"
+              className="border-200-gray block px-4 py-2 hover:bg-hover-color hover:text-white"
+              onClick={closeMenu}
+            >
+              <FontAwesomeIcon icon={faFileText} className="mr-2" />
+              Requests
+            </Link>
+            <Link
               href="/basket"
-              className="block px-4 py-2 hover:bg-hover-color hover:text-white"
+              className="border-200-gray block border-b px-4 py-2 hover:bg-hover-color hover:text-white"
               onClick={closeMenu}
             >
               <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
               {isLoading ? "Basket" : `Basket (${basket.length})`}
             </Link>
-            {session && (
-              <div className="border-b border-gray-200 px-4 py-2">
-                <FontAwesomeIcon icon={faUser} className="mr-2" />
-                {session?.user?.name}
-              </div>
-            )}
             {!session && (
               <button
                 onClick={() => signIn("keycloak")}

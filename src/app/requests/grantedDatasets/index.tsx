@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import List from "@/components/List";
 import ListContainer from "@/components/ListContainer";
 import PageContainer from "@/components/PageContainer";

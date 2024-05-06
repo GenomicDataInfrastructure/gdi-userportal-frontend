@@ -50,7 +50,7 @@ function RequestPage() {
       <div className="flex">
         <button
           onClick={setActiveTab}
-          className={`flex w-1/2 flex-1 items-center justify-center gap-x-3 px-32 py-4 hover:bg-white-smoke focus:text-primary ${activeTab === ActiveTab.APPLICATIONS.toLowerCase() ? "text-primary" : "text-black"} transition-all duration-300 ease-linear`}
+          className={`flex w-1/2 flex-1 items-center justify-center gap-x-3 py-4 hover:bg-white-smoke focus:text-primary lg:px-20 xl:px-32 ${activeTab === ActiveTab.APPLICATIONS.toLowerCase() ? "text-primary" : "text-black"} transition-all duration-300 ease-linear`}
         >
           <FontAwesomeIcon icon={faFileText} />
           <span className="md:text-md text-sm font-bold">
@@ -59,7 +59,7 @@ function RequestPage() {
         </button>
         <button
           onClick={setActiveTab}
-          className={`flex w-1/2 flex-1 items-center justify-center gap-x-3 px-32 py-4 text-center hover:bg-white-smoke ${activeTab === ActiveTab.DATASETS.toLowerCase() ? "text-primary" : "text-black"} transition-all duration-300 ease-linear`}
+          className={`flex w-1/2 flex-1 items-center justify-center gap-x-3 py-4 text-center hover:bg-white-smoke lg:px-20 xl:px-32 ${activeTab === ActiveTab.DATASETS.toLowerCase() ? "text-primary" : "text-black"} transition-all duration-300 ease-linear`}
         >
           <FontAwesomeIcon icon={faDatabase} />
           <span className="md:text-md text-sm font-bold">

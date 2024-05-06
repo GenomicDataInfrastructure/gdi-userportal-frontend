@@ -71,7 +71,7 @@ const ApplicationsPage: React.FC = () => {
           </List>
         ) : (
           <div className="flex w-full flex-col items-center justify-center gap-4">
-            <p className="text-center text-lg text-primary">
+            <p className="text-md text-center text-primary">
               You don&apos;t have any applications yet.
             </p>
             <Button
@@ -79,6 +79,7 @@ const ApplicationsPage: React.FC = () => {
               text="Add datasets"
               href="/datasets"
               type="primary"
+              className="text-xs"
             />
           </div>
         )}

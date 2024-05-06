@@ -18,9 +18,9 @@ type DatasetItemProps = {
 };
 
 function DatasetItem({ dataset }: DatasetItemProps) {
-  const { width: screenWidth } = useWindowSize();
+  const screenSize = useWindowSize();
   const truncatedDesc = dataset.description
-    ? truncateDescription(dataset.description, screenWidth)
+    ? truncateDescription(dataset.description, screenSize)
     : null;
   const { basket, addDatasetToBasket, removeDatasetFromBasket, isLoading } =
     useDatasetBasket();

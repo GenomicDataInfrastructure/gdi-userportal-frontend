@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { pixelWidthToScreenSize } from './windowSize';
+import { SCREEN_SIZE } from './windowSize';
 
 const SCREEN_SIZE_TO_MAX_WORDS = {
   XL: 100,
@@ -11,8 +11,8 @@ const SCREEN_SIZE_TO_MAX_WORDS = {
   SM: 30,
 };
 
-function truncateDescription(description: string, screenWidth: number): string {
-  const maxWords = getMaxWordsForScreenSize(screenWidth);
+function truncateDescription(description: string, screenSize: SCREEN_SIZE): string {
+  const maxWords = getMaxWordsForScreenSize(screenSize);
   const words = description.split(' ');
   if (words.length > maxWords) {
     const truncatedDesc = words.slice(0, maxWords).join(' ');
@@ -21,9 +21,8 @@ function truncateDescription(description: string, screenWidth: number): string {
   return description;
 }
 
-function getMaxWordsForScreenSize(width: number): number {
-  const screenSize = pixelWidthToScreenSize(width);
-  return SCREEN_SIZE_TO_MAX_WORDS[screenSize];
+function getMaxWordsForScreenSize(size: SCREEN_SIZE): number {
+  return SCREEN_SIZE_TO_MAX_WORDS[size];
 }
 
 function removeEndingPunctuation(text: string): string {

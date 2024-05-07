@@ -5,8 +5,8 @@
 "use client";
 
 import PageContainer from "@/components/PageContainer";
+import { ITabItem, TabComponent } from "@/components/Tab";
 import { faDatabase, faFileText } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   redirect,
   usePathname,
@@ -16,9 +16,17 @@ import {
 import ApplicationsPage from "./applications";
 import GrantedDatasetsPage from "./grantedDatasets";
 
-enum ActiveTab {
-  APPLICATIONS = "APPLICATIONS",
-  DATASETS = "GRANTED DATASETS",
+function createTabItems(): ITabItem[] {
+  return [
+    {
+      name: "applications",
+      icon: faFileText,
+    },
+    {
+      name: "granted datasets",
+      icon: faDatabase,
+    },
+  ];
 }
 
 function RequestPage() {
@@ -26,58 +34,32 @@ function RequestPage() {
   const searchParams = useSearchParams();
   const path = usePathname();
 
-  const activeTab: ActiveTab = searchParams.get("tab") as ActiveTab;
+  const activeTab: string = searchParams.get("tab") as string;
 
-  if (
-    !activeTab ||
-    !Object.values(ActiveTab).includes(activeTab.toUpperCase() as ActiveTab)
-  ) {
-    const newPath = `${path}?tab=${ActiveTab.APPLICATIONS.toLowerCase()}`;
+  const tabItems = createTabItems();
+  const tabNames = tabItems.map(
+    (tabItem: ITabItem) => tabItem.name,
+  ) as ReadonlyArray<string>;
+
+  if (!activeTab || !tabNames.includes(activeTab)) {
+    const newPath = `${path}?tab=${tabNames[0]}`;
     redirect(newPath);
   }
 
-  function setActiveTab(e: React.MouseEvent<HTMLButtonElement>) {
-    const newTab = e.currentTarget.textContent!.toLowerCase();
-    if (newTab === activeTab) return;
-
+  function setActiveTab(activeTab: string) {
     const newParams = new URLSearchParams();
-    newParams.set("tab", newTab);
+    newParams.set("tab", activeTab.toLowerCase());
     router.push(`${path}?${newParams.toString()}`);
   }
 
   return (
-    <PageContainer className="pt-6">
-      <div className="flex">
-        <button
-          onClick={setActiveTab}
-          className={`flex w-1/2 flex-1 items-center justify-center gap-x-3 py-4 hover:bg-white-smoke focus:text-primary lg:px-20 xl:px-32 ${activeTab === ActiveTab.APPLICATIONS.toLowerCase() ? "text-primary" : "text-black"} transition-all duration-300 ease-linear`}
-        >
-          <FontAwesomeIcon icon={faFileText} />
-          <span className="md:text-md text-sm font-bold">
-            {ActiveTab.APPLICATIONS}
-          </span>
-        </button>
-        <button
-          onClick={setActiveTab}
-          className={`flex w-1/2 flex-1 items-center justify-center gap-x-3 py-4 text-center hover:bg-white-smoke lg:px-20 xl:px-32 ${activeTab === ActiveTab.DATASETS.toLowerCase() ? "text-primary" : "text-black"} transition-all duration-300 ease-linear`}
-        >
-          <FontAwesomeIcon icon={faDatabase} />
-          <span className="md:text-md text-sm font-bold">
-            {ActiveTab.DATASETS}
-          </span>
-        </button>
-      </div>
-      <div className="border border-white-smoke"></div>
-      <div className="flex justify-around">
-        <div
-          className={`relative -top-0.5 w-full flex-1 border transition-all duration-300 ease-linear ${activeTab === ActiveTab.APPLICATIONS.toLowerCase() ? "border-primary" : "borders-white-smoke"}`}
-        ></div>
-        <div
-          className={`relative -top-0.5 w-full flex-1 border transition-all duration-300 ease-linear  ${activeTab === ActiveTab.DATASETS.toLowerCase() ? "border-primary" : "borders-white-smoke"}`}
-        ></div>
-      </div>
-
-      {activeTab === ActiveTab.APPLICATIONS.toLowerCase() ? (
+    <PageContainer className="pt-5">
+      <TabComponent
+        tabItems={tabItems}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
+      {activeTab === "applications" ? (
         <ApplicationsPage />
       ) : (
         <GrantedDatasetsPage />

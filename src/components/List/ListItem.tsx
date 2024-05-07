@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+import { cn } from "@/utils/tailwindMerge";
 import React from "react";
 
 interface ListItemProps {
@@ -11,7 +12,10 @@ interface ListItemProps {
 function ListItem({ children, className }: ListItemProps) {
   return (
     <li
-      className={`box break-words rounded-lg border bg-white-smoke p-8 ${className}`}
+      className={cn(
+        "break-words rounded-lg border bg-white-smoke p-8",
+        className,
+      )}
     >
       {children}
     </li>

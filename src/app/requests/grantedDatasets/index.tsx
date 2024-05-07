@@ -10,7 +10,7 @@ import DatasetList from "../applications/DatasetList";
 
 function GrantedDatasetsPage() {
   return (
-    <PageContainer className="pt-6 md:pt-10">
+    <PageContainer className="pt-5 md:pt-10">
       <PageHeading className="mb-4">Granted Datasets</PageHeading>
       <p>You have been granted access to these datasets</p>
       <ListContainer>

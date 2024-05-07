@@ -54,7 +54,7 @@ const ApplicationsPage: React.FC = () => {
   }
 
   return (
-    <PageContainer className="pt-6 md:pt-10">
+    <PageContainer className="pt-5 md:pt-10">
       <PageHeading className="mb-4">Manage your Applications</PageHeading>
       <span>View and update your submited applications</span>
       <ListContainer>

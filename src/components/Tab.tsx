@@ -57,7 +57,6 @@ function TabComponent({
           </ListItem>
         ))}
       </List>
-      <div className="border border-white-smoke"></div>
       <List className="flex flex-row justify-around">
         {tabItems.map((tabItem: ITabItem) => (
           <ListItem

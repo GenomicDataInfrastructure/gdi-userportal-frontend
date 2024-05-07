@@ -30,6 +30,7 @@ export default function ApplicationDetailsPage() {
   const { application, error, submitApplication, clearError } =
     useApplicationDetails();
   const handleSubmission = () => {
+    onCloseAlert();
     clearError();
     submitApplication();
   };

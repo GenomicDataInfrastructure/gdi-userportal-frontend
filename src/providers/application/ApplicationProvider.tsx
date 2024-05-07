@@ -247,33 +247,24 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   async function submitApplication() {
     dispatch({ type: ApplicationActionType.LOADING });
 
-    try {
-      const response = await fetch(
-        `/api/applications/${application!.id}/submit`,
-        { method: "POST" },
-      );
+    const response = await fetch(
+      `/api/applications/${application!.id}/submit`,
+      { method: "POST" },
+    );
 
-      if (response.ok) {
-        dispatch({ type: ApplicationActionType.CLEAR_ERROR });
-        fetchApplication();
-      } else {
-        const errorResponse = await response.json();
-        const errorMessage =
-          errorResponse.error || "An unexpected error occurred.";
-        dispatch({
-          type: ApplicationActionType.REJECTED,
-          payload: errorMessage,
-        });
-      }
-    } catch (error) {
+    if (response.ok) {
+      dispatch({ type: ApplicationActionType.CLEAR_ERROR });
+      fetchApplication();
+    } else {
+      const errorResponse = await response.json();
+      const errorMessage =
+        errorResponse.error || "An unexpected error occurred.";
       dispatch({
         type: ApplicationActionType.REJECTED,
-        payload:
-          "Failed to submit application due to a network or server issue.",
+        payload: errorMessage,
       });
     }
   }
-
   return (
     <ApplicationContext.Provider
       value={{

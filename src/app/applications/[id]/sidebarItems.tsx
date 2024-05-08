@@ -2,14 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import DatasetList from "@/app/requests/applications/DatasetList";
 import { SidebarItem, createTextItem } from "@/components/Sidebar";
 import { RetrievedApplication } from "@/types/application.types";
 import { formatApplicationProp } from "@/utils/application";
 import { formatDateTime } from "@/utils/formatDate";
 import { faHistory } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import DatasetList from "../DatasetList";
 
 function createApplicationSidebarItems(
   application: RetrievedApplication,

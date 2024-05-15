@@ -1,12 +1,11 @@
 # SPDX-FileCopyrightText: 2024 PNED G.I.E.
-#
 # SPDX-License-Identifier: Apache-2.0
 
 name: Scan Latest Two Semantically Versioned Docker Image Tags with ORT
 
 on:
   schedule:
-    - cron: "0 14 * * 1" # Every Monday at 14:00 UTC
+    - cron: "0 14 * * 1" # Works on Every Monday at 14:00 UTC
   workflow_dispatch:
 
 env:

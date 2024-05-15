@@ -3,9 +3,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { createApplication, listApplications } from '@/services/daam/index.server';
-import { ExtendedSession, authOptions } from '@/utils/auth';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
+import { authOptions } from '../auth/[...nextauth]/route';
+import { ExtendedSession } from '../auth/auth.types';
 import { handleErrorResponse } from '../errorHandling';
 
 export async function POST(request: Request) {

@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
 import { User } from "@/types/user.types";
-import { keycloackSessionLogOut } from "@/utils/auth";
+import { keycloackSessionLogOut } from "@/utils/logout";
 import { faSignOut } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signOut } from "next-auth/react";

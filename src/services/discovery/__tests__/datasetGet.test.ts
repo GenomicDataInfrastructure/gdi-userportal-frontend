@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import { ExtendedSession } from '@/app/api/auth/auth.types';
+import { encrypt } from '@/utils/encryption';
 import { jest } from '@jest/globals';
 import axios from 'axios';
 import { makeDatasetGet } from '../datasetGet';
 import { retrivedDatasetFixture } from '../fixtures/datasetFixtures';
-import { ExtendedSession } from '@/utils/auth';
-import { encrypt } from '@/utils/encryption';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;

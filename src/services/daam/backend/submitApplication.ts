@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import { ExtendedSession } from '@/app/api/auth/auth.types';
 import { ErrorResponse, ValidationWarnings } from '@/types/api.types';
-import { ExtendedSession } from '@/utils/auth';
 import { decrypt } from '@/utils/encryption';
 import axios, { AxiosResponse } from 'axios';
 

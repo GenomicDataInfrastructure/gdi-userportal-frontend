@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-import { ExtendedSession } from '@/utils/auth';
+import { ExtendedSession } from '@/app/api/auth/auth.types';
 import { decrypt } from '@/utils/encryption';
 import { DatasetSearchQuery, FacetGroup, facetToLabelMapping } from './types/datasetSearch.types';
 

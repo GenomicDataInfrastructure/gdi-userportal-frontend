@@ -9,7 +9,7 @@ import { SCREEN_SIZE } from "@/hooks/useWindowSize";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import logo from "@/public/egdi-logo-horizontal-full-color-rgb.svg";
 import { User } from "@/types/user.types";
-import { keycloackSessionLogOut } from "@/utils/auth";
+import { keycloackSessionLogOut } from "@/utils/logout";
 import {
   faBars,
   faDatabase,

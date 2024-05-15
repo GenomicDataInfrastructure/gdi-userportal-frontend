@@ -4,10 +4,11 @@
 
 import { datasetList } from '@/services/discovery';
 import { mapFacetGroups } from '@/services/discovery/utils';
-import { ExtendedSession, authOptions } from '@/utils/auth';
+import axios from 'axios';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
-import axios from 'axios';
+import { authOptions } from '../auth/[...nextauth]/route';
+import { ExtendedSession } from '../auth/auth.types';
 
 export async function POST(request: Request) {
   const session: ExtendedSession | null = await getServerSession(authOptions);

@@ -16,6 +16,7 @@ export async function GET() {
     try {
       await fetch(url);
     } catch (err) {
+      console.error(`Could not log out from Keycloak`, err);
       return new Response(null, { status: 500 });
     }
   }

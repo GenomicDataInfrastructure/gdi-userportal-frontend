@@ -5,8 +5,8 @@
 import { retrieveApplication } from '@/services/daam/index.server';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
-import { authOptions } from '../../auth/[...nextauth]/route';
 import { ExtendedSession } from '../../auth/auth.types';
+import { authOptions } from '../../auth/config';
 import { handleErrorResponse } from '../../errorHandling';
 
 export async function GET(request: Request, params: { params: { id: string } }) {

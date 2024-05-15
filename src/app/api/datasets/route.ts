@@ -7,8 +7,8 @@ import { mapFacetGroups } from '@/services/discovery/utils';
 import axios from 'axios';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
-import { authOptions } from '../auth/[...nextauth]/route';
 import { ExtendedSession } from '../auth/auth.types';
+import { authOptions } from '../auth/config';
 
 export async function POST(request: Request) {
   const session: ExtendedSession | null = await getServerSession(authOptions);

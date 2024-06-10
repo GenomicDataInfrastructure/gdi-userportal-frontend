@@ -1,4 +1,6 @@
 {
+  "_comment": "SPDX-FileCopyrightText: 2024 PNED G.I.E.",
+  "license": "SPDX-License-Identifier: Apache-2.0",
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "prHourlyLimit": 10,
   "repositoryCache": "enabled",

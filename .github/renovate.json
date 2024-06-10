@@ -1,0 +1,41 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "prHourlyLimit": 10,
+  "repositoryCache": "enabled",
+  "autodiscover": false,
+  "onboarding": false,
+  "repositories": ["GenomicDataInfrastructure/gdi-userportal-frontend"],
+  "onboardingConfig": {
+    "extends": ["config:recommended"]
+  },
+  "platform": "github",
+  "username": "renovate-bot",
+  "gitAuthor": "Renovate Bot <Renovatebot@lnds.lu>",
+  "requireConfig": true,
+  "packageRules": [
+    {
+      "depTypeList": ["devDependencies", "require-dev"],
+      "updateTypes": ["patch", "minor", "major"],
+      "groupName": "devDependencies"
+    },
+    {
+      "description": "Trigger fix release for patch updates",
+      "matchPackageNames": [
+        "renovate/renovate",
+        "ghcr.io/renovatebot/renovate"
+      ],
+      "automerge": true,
+      "matchUpdateTypes": ["patch"],
+      "semanticCommitType": "fix",
+      "automergeType": "pr"
+    }
+  ],
+  "extends": [
+    "config:base",
+    ":preserveSemverRanges",
+    ":dependencyDashboard",
+    ":rebaseStalePrs",
+    ":enableVulnerabilityAlertsWithLabel('security')",
+    "group:recommended"
+  ]
+}

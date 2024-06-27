@@ -11,13 +11,13 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 type DateFieldProps = {
-  field: FormField;
-  formId: number;
-  title: string;
+  readonly field: FormField;
+  readonly formId: number;
+  readonly title: string;
 };
 
 function DateField({ formId, field, title }: DateFieldProps) {
-  const { updateInputFields } = useApplicationDetails();
+  const { isLoading, updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState<Date | null>(
     field.value ? new Date(field.value) : null,
   );

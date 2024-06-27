@@ -137,6 +137,9 @@ export enum FieldType {
   TEXT = 'text',
   TEXT_AREA = 'texta',
   ATTACHMENT = 'attachment',
+  PHONE = 'phone-number',
+  DATE = 'date',
+  EMAIL = 'email',
 }
 
 interface SaveDUOCodeRestriction {

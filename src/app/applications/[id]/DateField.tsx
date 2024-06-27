@@ -17,7 +17,7 @@ type DateFieldProps = {
 };
 
 function DateField({ formId, field, title }: DateFieldProps) {
-  const { isLoading, updateInputFields } = useApplicationDetails();
+  const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState<Date | null>(
     field.value ? new Date(field.value) : null,
   );

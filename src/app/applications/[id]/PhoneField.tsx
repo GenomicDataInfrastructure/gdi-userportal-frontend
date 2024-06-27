@@ -5,8 +5,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Input } from "@/components/shadcn/input";
 import { FormField } from "@/types/application.types";
+import GenericInputField from "./GenericInputField";
 
 type PhoneFieldProps = {
   readonly field: FormField;
@@ -20,10 +20,6 @@ function PhoneField({ field, formId, title }: PhoneFieldProps) {
 
   const handlePrefixChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPrefix(e.target.value);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
   };
 
   return (
@@ -42,14 +38,12 @@ function PhoneField({ field, formId, title }: PhoneFieldProps) {
           <option value="+44">+44</option>
           <option value="+91">+91</option>
         </select>
-        <Input
+        <GenericInputField
+          field={{ ...field, value: inputValue }}
+          formId={formId}
           type="tel"
-          id="phone"
-          name="phone"
-          value={inputValue}
-          onChange={handleInputChange}
-          className="block w-full rounded-md border-2 border-primary p-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
           placeholder="Enter your phone number"
+          onChange={setInputValue}
         />
       </div>
     </div>

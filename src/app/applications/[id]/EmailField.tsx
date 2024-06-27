@@ -9,18 +9,19 @@ import { FormField } from "@/types/application.types";
 import GenericInputField from "./GenericInputField";
 
 type EmailFieldProps = {
-  readonly field: FormField;
-  readonly formId: number;
-  readonly title: string;
+  field: FormField;
+  formId: number;
+  title: string;
 };
 
-function EmailField({ field, formId }: EmailFieldProps) {
+function EmailField({ field, formId, title }: EmailFieldProps) {
   return (
     <GenericInputField
       field={field}
       formId={formId}
       type="email"
       placeholder="Enter your email address"
+      title={title}
     />
   );
 }

@@ -9,14 +9,13 @@ import { FormField } from "@/types/application.types";
 import GenericInputField from "./GenericInputField";
 
 type PhoneFieldProps = {
-  readonly field: FormField;
-  readonly formId: number;
-  readonly title: string;
+  field: FormField;
+  formId: number;
+  title: string;
 };
 
 function PhoneField({ field, formId, title }: PhoneFieldProps) {
   const [prefix, setPrefix] = useState("+352");
-  const [inputValue, setInputValue] = useState(field.value);
 
   const handlePrefixChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPrefix(e.target.value);
@@ -39,11 +38,11 @@ function PhoneField({ field, formId, title }: PhoneFieldProps) {
           <option value="+91">+91</option>
         </select>
         <GenericInputField
-          field={{ ...field, value: inputValue }}
+          field={field}
           formId={formId}
           type="tel"
           placeholder="Enter your phone number"
-          onChange={setInputValue}
+          title={title}
         />
       </div>
     </div>

@@ -11,9 +11,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 type DateFieldProps = {
-  readonly field: FormField;
-  readonly formId: number;
-  readonly title: string;
+  field: FormField;
+  formId: number;
+  title: string;
 };
 
 function DateField({ formId, field, title }: DateFieldProps) {

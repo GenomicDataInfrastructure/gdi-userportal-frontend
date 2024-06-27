@@ -14,7 +14,7 @@ type GenericInputFieldProps = {
   formId: number;
   type: string;
   placeholder: string;
-  value?: string;
+  title: string;
   onChange?: (value: string) => void;
 };
 
@@ -23,11 +23,11 @@ function GenericInputField({
   formId,
   type,
   placeholder,
-  value,
+  title,
   onChange,
 }: GenericInputFieldProps) {
   const { isLoading, updateInputFields } = useApplicationDetails();
-  const [inputValue, setInputValue] = useState(value || field.value);
+  const [inputValue, setInputValue] = useState(field.value);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -50,7 +50,7 @@ function GenericInputField({
     <div className="rounded border p-4">
       <div className="flex flex-col justify-between">
         <div>
-          <h3 className="text-lg text-primary sm:text-xl">{`${field.title.find((label) => label.language === "en")?.name || field.title[0].name} ${field.optional ? "(Optional)" : ""}`}</h3>
+          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${field.optional ? "(Optional)" : ""}`}</h3>
         </div>
         <Input
           type={type}

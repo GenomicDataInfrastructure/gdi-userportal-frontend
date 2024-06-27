@@ -21,6 +21,7 @@ function InputFormField({ formId, field, title }: InputFormFieldProps) {
       formId={formId}
       type="text"
       placeholder={title}
+      title={title}
     />
   );
 }

@@ -4,7 +4,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { FormField } from "@/types/application.types";
 import GenericInputField from "./GenericInputField";
 
@@ -14,38 +14,22 @@ type PhoneFieldProps = {
   title: string;
 };
 
-function PhoneField({ field, formId, title }: PhoneFieldProps) {
-  const [prefix, setPrefix] = useState("+352");
-
-  const handlePrefixChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setPrefix(e.target.value);
-  };
-
+function PhoneField({ formId, field, title }: PhoneFieldProps) {
   return (
-    <div className="rounded border p-4">
-      <label htmlFor="phone" className="mb-2 block font-bold text-secondary">
-        {title}
-      </label>
-      <div className="flex items-center">
-        <select
-          value={prefix}
-          onChange={handlePrefixChange}
-          className="mr-2 rounded-md border-2 border-primary p-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
-        >
-          <option value="+352">+352</option>
-          <option value="+1">+1</option>
-          <option value="+44">+44</option>
-          <option value="+91">+91</option>
-        </select>
-        <GenericInputField
-          field={field}
-          formId={formId}
-          type="tel"
-          placeholder="Enter your phone number"
-          title={title}
-        />
-      </div>
-    </div>
+    <GenericInputField
+      field={field}
+      formId={formId}
+      type="tel"
+      placeholder="Enter your phone number"
+      title={title}
+    >
+      <select className="mr-2 h-12 rounded-md border-2 border-primary p-2 text-base focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary">
+        <option value="+352">+352</option>
+        <option value="+1">+1</option>
+        <option value="+44">+44</option>
+        <option value="+91">+91</option>
+      </select>
+    </GenericInputField>
   );
 }
 

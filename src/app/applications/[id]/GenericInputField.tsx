@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-"use client";
-
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/shadcn/input";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
@@ -16,6 +14,7 @@ type GenericInputFieldProps = {
   placeholder: string;
   title: string;
   onChange?: (value: string) => void;
+  children?: React.ReactNode;
 };
 
 function GenericInputField({
@@ -25,6 +24,7 @@ function GenericInputField({
   placeholder,
   title,
   onChange,
+  children,
 }: GenericInputFieldProps) {
   const { isLoading, updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
@@ -52,16 +52,19 @@ function GenericInputField({
         <div>
           <h3 className="text-lg text-primary sm:text-xl">{`${title} ${field.optional ? "(Optional)" : ""}`}</h3>
         </div>
-        <Input
-          type={type}
-          id={field.id.toString()}
-          name={field.id.toString()}
-          value={inputValue}
-          onChange={handleInputChange}
-          className="mt-4 w-full rounded-md border-2 border-primary p-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
-          placeholder={placeholder}
-          disabled={isLoading}
-        />
+        <div className="mt-4 flex items-center">
+          {children}
+          <Input
+            type={type}
+            id={field.id.toString()}
+            name={field.id.toString()}
+            value={inputValue}
+            onChange={handleInputChange}
+            className="h-12 w-full rounded-lg border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
+            placeholder={placeholder}
+            disabled={isLoading}
+          />
+        </div>
       </div>
     </div>
   );

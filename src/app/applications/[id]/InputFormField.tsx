@@ -4,7 +4,6 @@
 
 "use client";
 
-import React from "react";
 import { FormField } from "@/types/application.types";
 import GenericInputField from "./GenericInputField";
 

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/shadcn/input";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FormField } from "@/types/application.types";

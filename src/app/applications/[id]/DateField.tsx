@@ -4,7 +4,7 @@
 
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FormField } from "@/types/application.types";
 import DatePicker from "react-datepicker";
@@ -24,13 +24,14 @@ function DateField({ formId, field, title }: DateFieldProps) {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (inputValue?.toISOString() !== field.value) {
-        updateInputFields(formId, field.id, inputValue?.toISOString() || "");
+      const newValue = inputValue?.toISOString() || "";
+      if (newValue !== field.value) {
+        updateInputFields(formId, field.id, newValue);
       }
     }, 2000);
 
     return () => clearTimeout(timeoutId);
-  }, [inputValue, formId, field, updateInputFields]);
+  }, [inputValue, formId, field.id, field.value, updateInputFields]);
 
   const handleDateChange = (date: Date | null) => {
     setInputValue(date);

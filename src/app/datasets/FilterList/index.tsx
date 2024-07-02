@@ -43,7 +43,7 @@ function FilterList({
   }
 
   return (
-    <div className="flex flex-col gap-y-10 rounded-lg bg-white-smoke px-6 py-8">
+    <div className="flex flex-col gap-y-10 rounded-lg bg-surface px-6 py-8">
       <div className="flex items-center justify-between">
         <h1 className="text-xl text-primary">
           <span className="mr-2">

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import localFont from 'next/font/local';
+import { Roboto } from 'next/font/google';
 
 export const exposeFont = localFont({
   src: [
@@ -22,7 +23,7 @@ export const exposeFont = localFont({
       style: 'normal',
     },
   ],
-  variable: '--font-expose',
+  variable: '--font-medium',
   display: 'swap',
 });
 
@@ -44,7 +45,7 @@ export const tabularFont = localFont({
       style: 'normal',
     },
   ],
-  variable: '--font-tabular',
+  variable: '--font-sans',
   display: 'swap',
 });
 
@@ -66,6 +67,13 @@ export const satoshiFont = localFont({
       style: 'normal',
     },
   ],
-  variable: '--font-satoshi',
+  variable: '--font-light',
+  display: 'swap',
+});
+
+export const robotoFont = Roboto({
+  weight: ['400', '500', '700'],
+  subsets: ['latin'],
+  variable: '--font-sans',
   display: 'swap',
 });

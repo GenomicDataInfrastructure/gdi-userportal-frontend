@@ -17,7 +17,7 @@ import flag from "../public/eu-flag.png";
 
 function Footer() {
   return (
-    <footer className="mt-8 flex flex-col items-center justify-between gap-y-4 border-t-4 border-t-primary bg-white-smoke p-7 md:flex-row md:gap-x-4 md:gap-y-0">
+    <footer className="mt-8 flex flex-col items-center justify-between gap-y-4 border-t-4 border-t-primary bg-surface p-7 md:flex-row md:gap-x-4 md:gap-y-0">
       <div className="flex items-center gap-4">
         <Image src={flag} alt="EU flag" width={80} />
         <p className="text-xs md:text-sm">

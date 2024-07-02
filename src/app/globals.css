@@ -11,12 +11,15 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 
-  --color-white-smoke: #f5f5f5;
-  --color-wine-berry: #480837;
-  --color-claret: #7b1c58;
-  --color-scampi-blue: #7276b1;
+  --color-primary: #7b1c58;
+  --color-secondary: #480837;
+  --color-info: #7276b1;
+  --color-warning: #ffdb95;
+  --color-hover: #480837;
+  --color-disclaimer: #7b1c58;
+  --color-surface: #f5f5f5;
+
   --color-scampi-blue-100: #f0f1f7;
-  --color-grandis-yellow: #ffdb95;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,6 +27,16 @@
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
+
+    --color-primary: #7b1c58;
+    --color-secondary: #480837;
+    --color-info: #7276b1;
+    --color-warning: #ffdb95;
+    --color-hover: #480837;
+    --color-disclaimer: #7b1c58;
+    --color-surface: #f5f5f5;
+
+    --color-scampi-blue-100: #f0f1f7;
   }
 }
 

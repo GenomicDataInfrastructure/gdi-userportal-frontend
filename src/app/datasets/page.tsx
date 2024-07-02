@@ -128,7 +128,7 @@ export default function DatasetPage() {
               if (group.facets.length > 0) {
                 return (
                   <div
-                    className="col-start-0 col-span-12 rounded-lg border bg-white-smoke"
+                    className="col-start-0 col-span-12 rounded-lg border bg-surface"
                     key={group.key}
                   >
                     <FilterList
@@ -153,14 +153,16 @@ export default function DatasetPage() {
               </button>
             </div>
             <p className="col-start-0 col-span-12 mb-12 mt-5 text-center text-sm text-info">
-              {`${response.datasetCount!} ${response.datasetCount! > 1 ? "datasets" : "dataset"} found`}
+              {`${response.datasetCount!} ${
+                response.datasetCount! > 1 ? "datasets" : "dataset"
+              } found`}
             </p>
             <div className="col-start-0 col-span-4 flex flex-col gap-4">
               {response.facetGroups?.map((group) => {
                 if (group.facets.length > 0) {
                   return (
                     <div
-                      className="border-1 col-start-0 col-span-4 mr-6 hidden h-fit rounded-lg border bg-white-smoke xl:block"
+                      className="border-1 col-start-0 col-span-4 mr-6 hidden h-fit rounded-lg border bg-surface xl:block"
                       key={group.key}
                     >
                       <FilterList

@@ -11,7 +11,9 @@ export async function GET() {
 
   if (session) {
     const idToken = await getToken('id_token');
-    const url = `${process.env.END_SESSION_URL}?id_token_hint=${idToken}&post_logout_redirect_uri=${encodeURIComponent(process.env.NEXTAUTH_URL!)}`;
+    const url = `${process.env.END_SESSION_URL}?id_token_hint=${idToken}&post_logout_redirect_uri=${encodeURIComponent(
+      process.env.NEXTAUTH_URL!,
+    )}`;
 
     try {
       await fetch(url);

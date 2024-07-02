@@ -454,7 +454,9 @@ const MultipleSelector = React.forwardRef<
                   : placeholder
               }
               className={cn(
-                `placeholder:text-muted-foreground placeholder:text-md ml-2 flex-1 bg-transparent outline-none placeholder:text-black ${selected.length ? "mb-2" : ""}`,
+                `placeholder:text-muted-foreground placeholder:text-md ml-2 flex-1 bg-transparent outline-none placeholder:text-black ${
+                  selected.length ? "mb-2" : ""
+                }`,
                 inputProps?.className,
               )}
             />
@@ -553,7 +555,7 @@ const MultipleSelector = React.forwardRef<
                                 onChange?.(newOptions);
                               }}
                               className={cn(
-                                "cursor-pointer hover:bg-white-smoke",
+                                "cursor-pointer hover:bg-surface",
                                 option.disable &&
                                   "text-muted-foreground cursor-default",
                               )}

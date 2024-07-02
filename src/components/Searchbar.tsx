@@ -113,7 +113,7 @@ function SearchBar({ queryParams, size }: SearchBarProps) {
           onKeyDown={handleEnter}
         ></input>
         {suggestions.length > 0 && (
-          <div className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border border-white-smoke bg-white shadow-lg">
+          <div className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border border-surface bg-white shadow-lg">
             {suggestions.map((suggestion) => (
               <button
                 key={suggestion.id}

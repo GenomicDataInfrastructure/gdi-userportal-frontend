@@ -99,7 +99,9 @@ export default function ApplicationDetailsPage() {
               )}
             </div>
           </div>
-          <p>{`Last Event: ${formatApplicationProp(lastEvent.eventType)} at ${formatDateTime(lastEvent.eventTime.toString())}`}</p>
+          <p>{`Last Event: ${formatApplicationProp(
+            lastEvent.eventType,
+          )} at ${formatDateTime(lastEvent.eventTime.toString())}`}</p>
           <div>
             <div className="h-[2px] bg-secondary opacity-80"></div>
 

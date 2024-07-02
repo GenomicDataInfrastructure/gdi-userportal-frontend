@@ -7,11 +7,11 @@ import { DatasetBasketProvider } from "@/providers/DatasetBasketProvider";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { PublicEnvScript } from "next-runtime-env";
-import { exposeFont, satoshiFont, tabularFont } from "../utils/fonts";
 import Footer from "./Footer";
 import SessionProviderWrapper from "./SessionProviderWrapper";
 import "./globals.css";
 config.autoAddCss = false;
+import { fontVariables } from "@/utils/fontSelector";
 
 export default function RootLayout({
   children,
@@ -19,14 +19,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${exposeFont.variable} ${tabularFont.variable} ${satoshiFont.variable}`}
-    >
+    <html lang="en" className={fontVariables}>
       <head>
-        <title>GDI - User Portal</title>
+        <title>{process.env.NEXT_PUBLIC_SITE_TITLE}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          name="description"
+          content={process.env.NEXT_PUBLIC_SITE_DESCRIPTION}
+        />
         <PublicEnvScript />
+        {process.env.NEXT_PUBLIC_CUSTOM_STYLE_URL && (
+          <link
+            rel="stylesheet"
+            href={process.env.NEXT_PUBLIC_CUSTOM_STYLE_URL}
+          />
+        )}
       </head>
       <body>
         <DatasetBasketProvider>

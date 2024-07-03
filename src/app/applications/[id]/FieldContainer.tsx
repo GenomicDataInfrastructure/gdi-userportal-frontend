@@ -10,6 +10,9 @@ import { isApplicationEditable } from "@/utils/application";
 import FileUploadField from "./FileUploadFormField";
 import InputFormField from "./InputFormField";
 import TextAreaFormField from "./TextAreaFormField";
+import DateField from "./DateField";
+import EmailField from "./EmailField";
+import PhoneField from "./PhoneField";
 
 type FieldContainerProps = {
   formId: number;
@@ -37,6 +40,12 @@ function FieldContainer({ formId, field }: FieldContainerProps) {
         return (
           <TextAreaFormField field={field} formId={formId} title={fieldTitle} />
         );
+      case FieldType.PHONE:
+        return <PhoneField field={field} formId={formId} title={fieldTitle} />;
+      case FieldType.DATE:
+        return <DateField field={field} formId={formId} title={fieldTitle} />;
+      case FieldType.EMAIL:
+        return <EmailField field={field} formId={formId} title={fieldTitle} />;
     }
   }
 

@@ -7,22 +7,22 @@
 import { FormField } from "@/types/application.types";
 import GenericInputField from "./GenericInputField";
 
-type InputFormFieldProps = {
+type EmailFieldProps = {
   field: FormField;
   formId: number;
   title: string;
 };
 
-function InputFormField({ formId, field, title }: InputFormFieldProps) {
+function EmailField({ field, formId, title }: EmailFieldProps) {
   return (
     <GenericInputField
       field={field}
       formId={formId}
-      type="text"
-      placeholder={title}
+      type="email"
+      placeholder="Enter your email address"
       title={title}
     />
   );
 }
 
-export default InputFormField;
+export default EmailField;

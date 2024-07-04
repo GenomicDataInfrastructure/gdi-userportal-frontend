@@ -5,20 +5,35 @@
 import { portalStatistics } from "@/services/discovery/index.public";
 import { PortalStatistics as IPortalStatistics } from "@/services/discovery/types/portalStatistics.types";
 import { useEffect, useState } from "react";
+import { useAlert } from "@/providers/AlertProvider";
+import { AxiosError } from "axios";
 
 export function PortalStatistics() {
+  const { setAlert } = useAlert();
   const [propCounters, setPropCounters] = useState<IPortalStatistics | null>(
     null,
   );
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await portalStatistics();
-      setPropCounters(data);
+      try {
+        const data = await portalStatistics();
+        setPropCounters(data);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          setAlert({
+            type: "error",
+            message:
+              error.response?.data?.title ||
+              `Failed to fetch portal statistics, status code: ${error.response?.status}`,
+            details: error.response?.data?.detail,
+          });
+        }
+      }
     };
 
     fetchData();
-  }, []);
+  }, [setAlert]);
 
   if (propCounters === null) {
     return <div>Loading...</div>;

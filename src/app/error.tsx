@@ -6,26 +6,28 @@
 
 import Button from "@/components/Button";
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
-import { useEffect } from "react";
 
 interface ErrorBoundaryProps {
-  error?: Error & { digest?: string };
+  errorTitle?: string;
+  errorDetail?: string;
+  stack?: string;
   statusCode?: number;
 }
 
 export default function ErrorBoundary({
-  error,
+  errorTitle,
+  errorDetail,
+  stack,
   statusCode,
 }: ErrorBoundaryProps) {
-  useEffect(() => {
-    if (error) {
-      console.error(error);
-    }
-  }, [error]);
-
   let heading = "Something Went Wrong";
   let message =
     "Our apologies, but our server has encountered an internal error that prevents it from fulfilling your request. This is a temporary issue, and we're on the case to get it fixed. Please try again in a little while.";
+
+  if (errorTitle && errorDetail) {
+    heading = errorTitle;
+    message = errorDetail;
+  }
 
   switch (statusCode) {
     case 404:
@@ -44,12 +46,9 @@ export default function ErrorBoundary({
     <section>
       <div className="container mx-auto w-full max-w-3xl p-4 md:p-8">
         <div>
-          {process.env.NODE_ENV === "development" && error && (
+          {process.env.NODE_ENV === "development" && stack && (
             <div className="bg-primary p-4 text-warning">
-              <p className="font-medium">{error.message}</p>
-              {error.stack && (
-                <pre className="mt-4 overflow-x-auto">{error.stack}</pre>
-              )}
+              <pre className="overflow-x-auto">{stack}</pre>
             </div>
           )}
           <h1 className="mt-3 text-2xl font-semibold text-primary md:text-3xl">

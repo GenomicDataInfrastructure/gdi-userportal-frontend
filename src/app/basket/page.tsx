@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 "use client";
 
-import Alert, { AlertState } from "@/components/Alert";
+import { useAlert } from "@/providers/AlertProvider";
 import Button from "@/components/Button";
 import ListContainer from "@/components/ListContainer";
 import LoadingContainer from "@/components/LoadingContainer";
@@ -13,12 +13,12 @@ import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { createApplication } from "@/services/daam/index.client";
 import { faPaperPlane, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { signIn, useSession } from "next-auth/react";
-import { useState } from "react";
 import DatasetList from "../../components/DatasetList";
+import { AxiosError } from "axios";
 
 export default function Page() {
   const { basket, isLoading, emptyBasket } = useDatasetBasket();
-  const [alert, setAlert] = useState<AlertState | null>(null);
+  const { setAlert } = useAlert();
   const { data: session, status } = useSession();
 
   let heading = "Your Basket";
@@ -40,15 +40,16 @@ export default function Page() {
       emptyBasket();
       window.location.href = `/applications/${response.data.applicationId}`;
     } catch (error) {
-      setAlert({
-        message: "Something went wrong. Please try again.",
-        type: "error",
-      });
+      if (error instanceof AxiosError) {
+        setAlert({
+          type: "error",
+          message:
+            error.response?.data?.title ||
+            `Failed to create application, status code: ${error.response?.status}`,
+          details: error.response?.data?.detail,
+        });
+      }
     }
-  };
-
-  const onCloseAlert = () => {
-    setAlert(null);
   };
 
   let actionBtn = null;
@@ -77,13 +78,6 @@ export default function Page() {
 
   return (
     <PageContainer>
-      {alert && (
-        <Alert
-          type={alert.type}
-          message={alert.message}
-          onClose={onCloseAlert}
-        />
-      )}
       <PageHeading>{heading}</PageHeading>
       <ListContainer>
         <div className="flex w-full justify-between">

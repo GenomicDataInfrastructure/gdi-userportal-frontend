@@ -60,6 +60,6 @@ describe('POST function', () => {
     const response = await POST(request);
 
     expect(response.status).toBe(500);
-    expect(await response.json()).toEqual({ error: 'Failed to retrive datasets' });
+    expect(await response.json()).toEqual({ error: 'Unexpected error occurred' });
   });
 });

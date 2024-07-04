@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server';
 
 export function handleErrorResponse(error: unknown) {
   if (axios.isAxiosError(error)) {
-    return NextResponse.json({ error: error.response?.data }, { status: error.response?.status });
+    return NextResponse.json(error.response?.data, { status: error.response?.status });
   } else if (error instanceof Error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

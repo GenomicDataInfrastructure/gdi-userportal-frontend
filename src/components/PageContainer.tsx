@@ -5,6 +5,8 @@
 "use client";
 
 import React from "react";
+import { useAlert } from "@/providers/AlertProvider";
+import Alert from "@/components/Alert";
 
 interface PageContainerProps {
   children: React.ReactNode;
@@ -12,8 +14,18 @@ interface PageContainerProps {
 }
 
 function PageContainer({ children, className }: PageContainerProps) {
+  const { alert, onCloseAlert } = useAlert();
+
   return (
     <div className={`container mx-auto px-4 pt-20 ${className}`}>
+      {alert && (
+        <Alert
+          type={alert.type}
+          message={alert.message}
+          details={alert.details}
+          onClose={onCloseAlert}
+        />
+      )}
       {children}
     </div>
   );

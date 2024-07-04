@@ -7,6 +7,7 @@ import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
 import PageSubHeading from "@/components/PageSubHeading";
 import { datasetGet } from "@/services/discovery";
+import { isErrorResponse } from "@/utils/ErrorResponse";
 import AddToBasketBtn from "./AddToBasketBtn";
 import ClientSidebar from "./ClientSidebar";
 import DistributionAccordion from "./DistributionAccordion";
@@ -45,6 +46,16 @@ export default async function Page({ params }: { params: { id: string } }) {
       </PageContainer>
     );
   } catch (error) {
-    return <Error statusCode={404} />;
+    if (isErrorResponse(error)) {
+      return (
+        <Error
+          statusCode={error.response.status}
+          errorTitle={error.response.data.title}
+          errorDetail={error.response.data.detail}
+        />
+      );
+    }
+
+    return <Error statusCode={500} />;
   }
 }

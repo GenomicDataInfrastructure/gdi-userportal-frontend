@@ -10,17 +10,17 @@ import PageHeading from "@/components/PageHeading";
 import { useEffect, useState } from "react";
 import { Status } from "@/utils/pageStatus.types";
 import { retrieveEntitlements } from "@/services/daam/index.client";
-import { AxiosError } from "axios";
 import { DatasetEntitlement } from "@/services/discovery/types/dataset.types";
 import { createDatasetEntitlements } from "@/utils/datasetEntitlements";
 import EntitlementsList from "./EntitlementsList";
 import LoadingContainer from "@/components/LoadingContainer";
 import Error from "@/app/error";
+import { isErrorResponse, ErrorResponse } from "@/utils/ErrorResponse";
 
 interface EntitelementsResponse {
   datasetEntitlements?: DatasetEntitlement[];
+  error?: ErrorResponse;
   status: Status;
-  errorCode?: number;
 }
 
 function EntitelementsPage() {
@@ -42,11 +42,11 @@ function EntitelementsPage() {
           status: "success",
         });
       } catch (error) {
-        if (error instanceof AxiosError) {
-          setResponse({ status: "error", errorCode: error.response?.status });
+        if (isErrorResponse(error)) {
+          setResponse({ status: "error", error: error });
           console.error(error);
         } else {
-          setResponse({ status: "error", errorCode: 500 });
+          setResponse({ status: "error" });
           console.error(error);
         }
       }
@@ -61,8 +61,16 @@ function EntitelementsPage() {
         className="text-center"
       />
     );
+  } else if (response.status === "error" && response.error) {
+    return (
+      <Error
+        statusCode={response.error.response.status}
+        errorTitle={response.error.response.data.title}
+        errorDetail={response.error.response.data.detail}
+      />
+    );
   } else if (response.status === "error") {
-    return <Error statusCode={response.errorCode} />;
+    return <Error statusCode={500} />;
   }
 
   return (

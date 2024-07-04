@@ -4,11 +4,11 @@
 
 import { datasetList } from '@/services/discovery';
 import { mapFacetGroups } from '@/services/discovery/utils';
-import axios from 'axios';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 import { ExtendedSession } from '../auth/auth.types';
 import { authOptions } from '../auth/config';
+import { handleErrorResponse } from '../errorHandling';
 
 export async function POST(request: Request) {
   const session: ExtendedSession | null = await getServerSession(authOptions);
@@ -25,12 +25,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json(result);
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      return NextResponse.json({ error: error.response?.data }, { status: error.response?.status });
-    } else if (error instanceof Error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    return NextResponse.json({ error: 'Failed to retrive datasets' }, { status: 500 });
+    return handleErrorResponse(error);
   }
 }

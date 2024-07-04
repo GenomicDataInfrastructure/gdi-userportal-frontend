@@ -4,6 +4,7 @@
 
 import Header from "@/components/Header";
 import { DatasetBasketProvider } from "@/providers/DatasetBasketProvider";
+import { AlertProvider } from "@/providers/AlertProvider";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { PublicEnvScript } from "next-runtime-env";
@@ -36,17 +37,19 @@ export default function RootLayout({
         )}
       </head>
       <body>
-        <DatasetBasketProvider>
-          <div className="grid h-screen w-full grid-rows-[auto_1fr_auto]">
-            <SessionProviderWrapper>
-              <div>
-                <Header />
-              </div>
-              <div>{children}</div>
-              <Footer />
-            </SessionProviderWrapper>
-          </div>
-        </DatasetBasketProvider>
+        <AlertProvider>
+          <DatasetBasketProvider>
+            <div className="grid h-screen w-full grid-rows-[auto_1fr_auto]">
+              <SessionProviderWrapper>
+                <div>
+                  <Header />
+                </div>
+                <div>{children}</div>
+                <Footer />
+              </SessionProviderWrapper>
+            </div>
+          </DatasetBasketProvider>
+        </AlertProvider>
       </body>
     </html>
   );

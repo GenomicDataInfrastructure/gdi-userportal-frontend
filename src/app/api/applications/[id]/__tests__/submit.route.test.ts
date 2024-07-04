@@ -74,7 +74,7 @@ describe('Submit an application', () => {
     const response = await POST(request, { params: { id: '9' } });
 
     expect(response.status).toBe(428);
-    expect(await response.json()).toEqual({ error: 'application not in submittable state' });
+    expect(await response.json()).toEqual('application not in submittable state');
   });
 
   test('returns the proper message and status if an error occurs', async () => {

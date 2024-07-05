@@ -4,6 +4,7 @@
 
 "use client";
 
+import Error from "@/app/error";
 import { useState, useEffect } from "react";
 import Alert, { AlertState } from "@/components/Alert";
 import Button from "@/components/Button";
@@ -27,8 +28,9 @@ export default function ApplicationDetailsPage() {
     setAlert(null);
   };
 
-  const { application, error, submitApplication, clearError } =
+  const { application, error, errorStatusCode, submitApplication, clearError } =
     useApplicationDetails();
+
   const handleSubmission = () => {
     onCloseAlert();
     clearError();
@@ -43,6 +45,10 @@ export default function ApplicationDetailsPage() {
       });
     }
   }, [error]);
+
+  if (errorStatusCode === 404) {
+    return <Error statusCode={404} />;
+  }
 
   if (!application) {
     return (

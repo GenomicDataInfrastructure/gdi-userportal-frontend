@@ -10,6 +10,7 @@ export type ApplicationAction = {
     | RetrievedApplication
     | { fieldId: number; formId: number; attachmentId: number }
     | { fieldId: number; formId: number; newValue: string }
+    | { message: string; statusCode: number }
     | string;
 };
 
@@ -28,6 +29,7 @@ export type ApplicationState = {
   application: RetrievedApplication | null;
   isLoading: boolean;
   error: string | null;
+  errorStatusCode: number | null;
 };
 
 export type ApplicationContextState = ApplicationState & {

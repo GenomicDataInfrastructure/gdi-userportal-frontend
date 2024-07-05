@@ -346,7 +346,7 @@ const handleErrors = (error: any, fallbackMessage: string, dispatch: any) => {
   if (error instanceof AxiosError) {
     dispatch({
       type: ApplicationActionType.REJECTED,
-      payload: `Status: ${error.response?.status} - ${error.response?.data}`,
+      payload: error.response?.data.title || fallbackMessage,
     });
   } else {
     dispatch({

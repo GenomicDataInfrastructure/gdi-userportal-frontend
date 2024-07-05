@@ -10,16 +10,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export interface AlertState {
   type: "success" | "error";
   message: string;
+  details?: string;
 }
 
 interface AlertProps {
   type: "success" | "error";
   message: string;
+  details?: string;
   onClose: () => void;
   className?: string;
 }
 
-const Alert = ({ type, message, onClose, className }: AlertProps) => {
+const Alert = ({ type, message, details, onClose, className }: AlertProps) => {
   const alertStyle =
     type === "success" ? "bg-primary text-white" : "bg-warning text-black";
 
@@ -36,7 +38,10 @@ const Alert = ({ type, message, onClose, className }: AlertProps) => {
       role="alert"
       style={{ whiteSpace: "pre-line" }}
     >
-      <p className="text-sm lg:text-base">{message}</p>
+      <div className="flex flex-col items-start">
+        <p className="text-sm font-bold lg:text-base">{message}</p>
+        {details && <p className="mt-2 text-xs lg:text-sm">{details}</p>}
+      </div>
       <FontAwesomeIcon
         icon={faXmark}
         className={`h-5 w-5 cursor-pointer ${closeBtnStyle}`}

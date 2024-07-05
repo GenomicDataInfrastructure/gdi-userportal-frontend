@@ -30,6 +30,7 @@ import {
   ApplicationContextState,
   ApplicationState,
 } from "./ApplicationProvider.types";
+import { AxiosError } from "axios";
 
 const ApplicationContext = createContext<ApplicationContextState | undefined>(
   undefined,
@@ -202,10 +203,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       const response = await saveFormAndDuos(updatedForms);
       if (response.ok) fetchApplication();
     } catch (error) {
-      dispatch({
-        type: ApplicationActionType.REJECTED,
-        payload: "Failed to add attachment",
-      });
+      handleErrors(error, "Failed to add attachment", dispatch);
     }
   }
 
@@ -235,10 +233,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       const response = await saveFormAndDuos(updatedForms);
       if (response.ok) fetchApplication();
     } catch (error) {
-      dispatch({
-        type: ApplicationActionType.REJECTED,
-        payload: "Failed to save application",
-      });
+      handleErrors(error, "Failed to save application", dispatch);
     }
   }
 
@@ -268,10 +263,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       const response = await saveFormAndDuos(updatedForms);
       if (response.ok) fetchApplication();
     } catch (error) {
-      dispatch({
-        type: ApplicationActionType.REJECTED,
-        payload: "Failed to delete attachment",
-      });
+      handleErrors(error, "Failed to delete attachment", dispatch);
     }
   }
 
@@ -348,5 +340,20 @@ function useApplicationDetails() {
   }
   return context;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const handleErrors = (error: any, fallbackMessage: string, dispatch: any) => {
+  if (error instanceof AxiosError) {
+    dispatch({
+      type: ApplicationActionType.REJECTED,
+      payload: error.response?.data.title || fallbackMessage,
+    });
+  } else {
+    dispatch({
+      type: ApplicationActionType.REJECTED,
+      payload: fallbackMessage,
+    });
+  }
+};
 
 export { ApplicationProvider, useApplicationDetails };

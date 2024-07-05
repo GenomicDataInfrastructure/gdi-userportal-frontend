@@ -1,12 +1,13 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 // SPDX-License-Identifier: Apache-2.0
 "use client";
-
+import { useAlert } from "@/providers/AlertProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { datasetList } from "@/services/discovery/index.public";
+import { AxiosError } from "axios";
 
 type SearchBarProps = {
   queryParams: URLSearchParams;
@@ -23,6 +24,7 @@ function SearchBar({ queryParams, size }: SearchBarProps) {
   const [suggestions, setSuggestions] = useState<DatasetSuggestion[]>([]);
   const [fetchSuggestions, setFetchSuggestions] = useState(false);
   const router = useRouter();
+  const { setAlert } = useAlert();
 
   let sizeClass = "h-11";
   if (size === "large") {
@@ -41,19 +43,31 @@ function SearchBar({ queryParams, size }: SearchBarProps) {
   useEffect(() => {
     if (fetchSuggestions && query.trim()) {
       const timeoutId = setTimeout(async () => {
-        const result = await datasetList({ query, limit: 5 });
-        setSuggestions(
-          result.data?.datasets.map((dataset) => ({
-            id: dataset.id,
-            title: dataset.title,
-          })),
-        );
+        try {
+          const result = await datasetList({ query, limit: 5 });
+          setSuggestions(
+            result.data?.datasets.map((dataset) => ({
+              id: dataset.id,
+              title: dataset.title,
+            })),
+          );
+        } catch (error) {
+          if (error instanceof AxiosError) {
+            setAlert({
+              type: "error",
+              message:
+                error.response?.data?.title ||
+                `Failed to fetch suggestions, status code: ${error.response?.status}`,
+              details: error.response?.data?.detail,
+            });
+          }
+        }
       }, 500);
       return () => clearTimeout(timeoutId);
     } else {
       setSuggestions([]);
     }
-  }, [query, fetchSuggestions]);
+  }, [query, fetchSuggestions, setAlert]);
 
   function handleQueryChange(e: React.ChangeEvent<HTMLInputElement>): void {
     setQuery(e.target.value);

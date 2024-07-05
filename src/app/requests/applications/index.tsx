@@ -14,16 +14,16 @@ import PageHeading from "@/components/PageHeading";
 import { listApplications } from "@/services/daam/index.client";
 import { ListedApplication } from "@/types/application.types";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import ApplicationItem from "./ApplicationItem";
 import { Status } from "@/utils/pageStatus.types";
 import LoadingContainer from "@/components/LoadingContainer";
+import { isErrorResponse, ErrorResponse } from "@/utils/ErrorResponse";
 
 interface ApplicationResponse {
   status: Status;
   applications?: ListedApplication[];
-  errorCode?: number;
+  error?: ErrorResponse;
 }
 
 const ApplicationsPage: React.FC = () => {
@@ -37,11 +37,11 @@ const ApplicationsPage: React.FC = () => {
         const response = await listApplications();
         setResponse({ applications: response.data, status: "success" });
       } catch (error) {
-        if (error instanceof AxiosError) {
-          setResponse({ status: "error", errorCode: error.response?.status });
+        if (isErrorResponse(error)) {
+          setResponse({ status: "error", error: error });
           console.error(error);
         } else {
-          setResponse({ status: "error", errorCode: 500 });
+          setResponse({ status: "error" });
           console.error(error);
         }
       }
@@ -56,8 +56,16 @@ const ApplicationsPage: React.FC = () => {
         className="text-center"
       />
     );
+  } else if (response.status === "error" && response.error) {
+    return (
+      <Error
+        statusCode={response.error.response.status}
+        errorTitle={response.error.response.data.title}
+        errorDetail={response.error.response.data.detail}
+      />
+    );
   } else if (response.status === "error") {
-    return <Error statusCode={response.errorCode} />;
+    return <Error statusCode={500} />;
   }
 
   return (

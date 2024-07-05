@@ -119,10 +119,19 @@ function reducer(
       return { ...state, isLoading: false };
 
     case ApplicationActionType.CLEAR_ERROR:
-      return { ...state, error: null };
+      return { ...state, error: null, errorStatusCode: null };
 
     case ApplicationActionType.REJECTED:
-      return { ...state, error: action.payload as string, isLoading: false };
+      const errorPayload = action.payload as {
+        message: string;
+        statusCode: number;
+      };
+      return {
+        ...state,
+        error: errorPayload!.message,
+        errorStatusCode: errorPayload!.statusCode,
+        isLoading: false,
+      };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
@@ -138,12 +147,11 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
     application: null,
     isLoading: false,
     error: null,
+    errorStatusCode: null,
   };
 
-  const [{ application, isLoading, error }, dispatch] = useReducer(
-    reducer,
-    initialState,
-  );
+  const [{ application, isLoading, error, errorStatusCode }, dispatch] =
+    useReducer(reducer, initialState);
 
   const clearError = () => {
     dispatch({ type: ApplicationActionType.CLEAR_ERROR });
@@ -162,9 +170,13 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
         payload: retrievedApplication,
       });
     } else {
+      const payload = {
+        message: "Failed to fetch application",
+        statusCode: response.status,
+      };
       dispatch({
         type: ApplicationActionType.REJECTED,
-        payload: "Failed to fetch application",
+        payload,
       });
     }
   }, [id]);
@@ -197,7 +209,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       dispatch(action);
 
       const { forms: updatedForms } = reducer(
-        { application, isLoading, error },
+        { application, isLoading, error, errorStatusCode },
         action,
       ).application as RetrievedApplication;
       const response = await saveFormAndDuos(updatedForms);
@@ -227,7 +239,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       dispatch(action);
 
       const { forms: updatedForms } = reducer(
-        { application, isLoading, error },
+        { application, isLoading, error, errorStatusCode },
         action,
       ).application as RetrievedApplication;
       const response = await saveFormAndDuos(updatedForms);
@@ -256,7 +268,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       dispatch(action);
 
       const { forms: updatedForms } = reducer(
-        { application, isLoading, error },
+        { application, isLoading, error, errorStatusCode },
         action,
       ).application as RetrievedApplication;
 
@@ -307,9 +319,14 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       const errorResponse = await response.json();
       const errorMessage =
         errorResponse.error || "An unexpected error occurred.";
+      const errorStatusCode = response.status;
+      const payload = {
+        message: errorMessage,
+        statusCode: errorStatusCode,
+      };
       dispatch({
         type: ApplicationActionType.REJECTED,
-        payload: errorMessage,
+        payload,
       });
     }
   }
@@ -319,6 +336,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
         application,
         isLoading,
         error,
+        errorStatusCode,
         addAttachment,
         deleteAttachment,
         submitApplication,
@@ -344,14 +362,24 @@ function useApplicationDetails() {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const handleErrors = (error: any, fallbackMessage: string, dispatch: any) => {
   if (error instanceof AxiosError) {
+    const payload = {
+      message: error.response?.data.title || fallbackMessage,
+      statusCode: error.response?.status,
+    };
+
     dispatch({
       type: ApplicationActionType.REJECTED,
-      payload: error.response?.data.title || fallbackMessage,
+      payload,
     });
   } else {
+    const payload = {
+      message: error.message || fallbackMessage,
+      statusCode: 500,
+    };
+
     dispatch({
       type: ApplicationActionType.REJECTED,
-      payload: fallbackMessage,
+      payload,
     });
   }
 };

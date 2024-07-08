@@ -26,7 +26,7 @@ type PhoneInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChan
 };
 
 const PhoneInput = forwardRef<React.ElementRef<typeof RPNInput.default>, PhoneInputProps>(
-  ({ className, onChange, ...props }, ref) => (
+  ({ onChange, ...props }, ref) => (
     <RPNInput.default
       ref={ref}
       className={cn("flex w-full")}
@@ -48,7 +48,7 @@ const InputComponent = forwardRef<HTMLInputElement, InputProps>(
       className={cn(
         "rounded-md h-12 w-full border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary",
         className,
-        "ml-2" // Add margin-left for space between flag and input
+        "ml-2"
       )}
       ref={ref}
       {...props}

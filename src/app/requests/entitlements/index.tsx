@@ -23,58 +23,6 @@ interface EntitelementsResponse {
   status: Status;
 }
 
-const mockEntitlements: DatasetEntitlement[] = [
-  {
-    dataset: {
-      id: "dataset1",
-      title: "Dataset 1",
-      description: "Description for Dataset 1",
-      catalogue: "catalogue1",
-      modifiedAt: "2023-12-31",
-      createdAt: "2023-01-01",
-      themes: [
-        {
-          label: "Theme 1",
-          value: "",
-        },
-        {
-          label: "Theme 2",
-          value: "",
-        },
-      ],
-      // other properties of the dataset
-    },
-    start: "2024-01-01",
-    end: "2024-12-31",
-  },
-  {
-    dataset: {
-      id: "dataset2",
-      title: "Dataset 2",
-      description: "Description for Dataset 2",
-      catalogue: "catalogue1",
-      modifiedAt: "2023-12-31",
-      createdAt: "2023-01-01",
-      // other properties of the dataset
-    },
-    start: "2024-02-01",
-    end: "2024-11-30",
-  },
-  {
-    dataset: {
-      id: "dataset3",
-      title: "Dataset 3",
-      description: "Description for Dataset 3",
-      catalogue: "catalogue1",
-      modifiedAt: "2023-12-31",
-      createdAt: "2023-01-01",
-      // other properties of the dataset
-    },
-    start: "2024-03-01",
-    end: "2024-10-31",
-  },
-];
-
 function EntitelementsPage() {
   const [response, setResponse] = useState<EntitelementsResponse>({
     status: "loading",
@@ -83,18 +31,14 @@ function EntitelementsPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        // Simulating a delay to see the loading state
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const entitlements = await retrieveEntitlements();
 
-        // Commenting out the real API call for now
-        // const entitlements = await retrieveEntitlements();
-
-        // const datasetEntitlements = await createDatasetEntitlements(
-        //   entitlements.data.entitlements,
-        // );
+        const datasetEntitlements = await createDatasetEntitlements(
+          entitlements.data.entitlements,
+        );
 
         setResponse({
-          datasetEntitlements: mockEntitlements,
+          datasetEntitlements: datasetEntitlements,
           status: "success",
         });
       } catch (error) {

@@ -5,6 +5,7 @@
 "use client";
 
 import React from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useAlert } from "@/providers/AlertProvider";
 import Alert from "@/components/Alert";
 
@@ -14,7 +15,13 @@ interface PageContainerProps {
 }
 
 function PageContainer({ children, className }: PageContainerProps) {
-  const { alert, onCloseAlert } = useAlert();
+  const { alert, onCloseAlert, setAlert } = useAlert();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  React.useEffect(() => {
+    setAlert(null);
+  }, [pathname, searchParams, setAlert]);
 
   return (
     <div className={`container mx-auto px-4 pt-20 ${className}`}>

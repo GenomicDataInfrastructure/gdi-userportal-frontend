@@ -7,7 +7,7 @@ import { AlertState } from "@/components/Alert";
 
 interface AlertContextType {
   alert: AlertState | null;
-  setAlert: (alert: AlertState) => void;
+  setAlert: (alert: AlertState | null) => void;
   onCloseAlert: () => void;
 }
 

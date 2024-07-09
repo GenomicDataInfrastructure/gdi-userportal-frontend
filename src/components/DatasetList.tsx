@@ -16,7 +16,7 @@ function DatasetList({ datasets }: Readonly<DatasetListProps>) {
     <List>
       {datasets.map((dataset: SearchedDataset) => (
         <ListItem key={dataset.id}>
-          <DatasetCard dataset={dataset} isEntitlement={false} />
+          <DatasetCard dataset={dataset} />
         </ListItem>
       ))}
     </List>

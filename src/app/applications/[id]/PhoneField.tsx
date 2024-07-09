@@ -50,18 +50,17 @@ function PhoneField({ formId, field, title }: PhoneFieldProps) {
 
   return (
     <div className="rounded border p-4">
-      <div className="flex flex-col justify-between">
+      <div className="flex flex-col">
         <div>
-          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
-            field.optional ? "(Optional)" : ""
-          }`}</h3>
+          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${field.optional ? "(Optional)" : ""
+            }`}</h3>
         </div>
-        <div className="mt-4 flex w-full items-center">
+        <div className="mt-4 flex w-full">
           <PhoneInput
             value={inputValue}
             onChange={handlePhoneChange}
             onBlur={handlePhoneBlur}
-            className="w-full"
+            className="flex w-full"
           />
         </div>
       </div>

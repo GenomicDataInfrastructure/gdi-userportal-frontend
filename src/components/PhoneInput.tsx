@@ -20,40 +20,44 @@ import { Popover, PopoverContent, PopoverTrigger } from "./shadcn/popover";
 import { cn } from "@/utils/tailwindMerge";
 import { ScrollArea } from "./shadcn/scroll-area";
 
-type PhoneInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> & {
+type PhoneInputProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "onChange" | "value"
+> & {
   value?: string;
   onChange?: (value: string) => void;
 };
 
-const PhoneInput = forwardRef<React.ElementRef<typeof RPNInput.default>, PhoneInputProps>(
-  ({ onChange, ...props }, ref) => (
-    <RPNInput.default
-      ref={ref}
-      className={cn("flex w-full")}
-      flagComponent={FlagComponent}
-      countrySelectComponent={(props) => (
-        <CountrySelect {...props} onChange={onChange} ref={ref} />
-      )}
-      inputComponent={InputComponent}
-      onChange={(value) => onChange?.(value ?? "")}
-      {...props}
-    />
-  )
-);
+const PhoneInput = forwardRef<
+  React.ElementRef<typeof RPNInput.default>,
+  PhoneInputProps
+>(({ onChange, ...props }, ref) => (
+  <RPNInput.default
+    ref={ref}
+    className={cn("flex w-full")}
+    flagComponent={FlagComponent}
+    countrySelectComponent={(props) => (
+      <CountrySelect {...props} onChange={onChange} ref={ref} />
+    )}
+    inputComponent={InputComponent}
+    onChange={(value) => onChange?.(value ?? "")}
+    {...props}
+  />
+));
 PhoneInput.displayName = "PhoneInput";
 
 const InputComponent = forwardRef<HTMLInputElement, InputProps>(
   ({ className, ...props }, ref) => (
     <Input
       className={cn(
-        "rounded-md h-12 w-full border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary",
+        "h-12 w-full rounded-md border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary",
         className,
-        "ml-2"
+        "ml-2",
       )}
       ref={ref}
       {...props}
     />
-  )
+  ),
 );
 InputComponent.displayName = "InputComponent";
 
@@ -73,12 +77,17 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
         const callingCode = RPNInput.getCountryCallingCode(country);
         onChange(`+${callingCode}`);
         setTimeout(() => {
-          if (ref && typeof ref === "object" && "current" in ref && ref.current) {
+          if (
+            ref &&
+            typeof ref === "object" &&
+            "current" in ref &&
+            ref.current
+          ) {
             (ref.current as HTMLElement).focus();
           }
         }, 100);
       },
-      [onChange, ref]
+      [onChange, ref],
     );
 
     return (
@@ -88,7 +97,7 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
             type="button"
             variant="outline"
             className={cn(
-              "flex items-center gap-1 rounded-l-md h-12 border-2 border-primary px-3"
+              "flex h-12 items-center gap-1 rounded-l-md border-2 border-primary px-3",
             )}
             disabled={disabled}
           >
@@ -96,7 +105,7 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
             <ChevronsUpDown
               className={cn(
                 "-mr-2 h-4 w-4 opacity-50",
-                !disabled && "opacity-100"
+                !disabled && "opacity-100",
               )}
             />
           </Button>
@@ -108,25 +117,32 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
                 <CommandInput placeholder="Search country..." />
                 <CommandEmpty>No country found.</CommandEmpty>
                 <CommandGroup>
-                  {options.filter((x) => x.value).map((option) => (
-                    <CommandItem
-                      className="gap-2"
-                      key={option.value}
-                      onSelect={() => handleSelect(option.value)}
-                    >
-                      <FlagComponent country={option.value} countryName={option.label} />
-                      <span className="flex-1 text-sm">{option.label}</span>
-                      <span className="text-foreground/50 text-sm">
-                        {`+${RPNInput.getCountryCallingCode(option.value)}`}
-                      </span>
-                      <CheckIcon
-                        className={cn(
-                          "ml-auto h-4 w-4",
-                          option.value === value ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                    </CommandItem>
-                  ))}
+                  {options
+                    .filter((x) => x.value)
+                    .map((option) => (
+                      <CommandItem
+                        className="gap-2"
+                        key={option.value}
+                        onSelect={() => handleSelect(option.value)}
+                      >
+                        <FlagComponent
+                          country={option.value}
+                          countryName={option.label}
+                        />
+                        <span className="flex-1 text-sm">{option.label}</span>
+                        <span className="text-foreground/50 text-sm">
+                          {`+${RPNInput.getCountryCallingCode(option.value)}`}
+                        </span>
+                        <CheckIcon
+                          className={cn(
+                            "ml-auto h-4 w-4",
+                            option.value === value
+                              ? "opacity-100"
+                              : "opacity-0",
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
                 </CommandGroup>
               </ScrollArea>
             </CommandList>
@@ -134,7 +150,7 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
         </PopoverContent>
       </Popover>
     );
-  }
+  },
 );
 CountrySelect.displayName = "CountrySelect";
 

@@ -177,7 +177,7 @@ export default function DatasetPage() {
             <div className="col-start-0 col-span-12 xl:col-span-8 xl:col-start-5">
               <DatasetList datasets={response.datasets!} />
             </div>
-            <div className="col-start-0 col-span-12 mt-10 xl:col-span-8 xl:col-start-5 ">
+            <div className="col-start-0 col-span-12 mt-10 xl:col-span-8 xl:col-start-5">
               <PaginationContainer
                 datasetCount={response.datasetCount!}
                 datasetPerPage={DATASET_PER_PAGE}

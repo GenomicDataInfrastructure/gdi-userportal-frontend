@@ -4,9 +4,7 @@
 
 "use client";
 
-import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FieldType, FormField } from "@/types/application.types";
-import { isApplicationEditable } from "@/utils/application";
 import FileUploadField from "./FileUploadFormField";
 import InputFormField from "./InputFormField";
 import TextAreaFormField from "./TextAreaFormField";
@@ -20,7 +18,6 @@ type FieldContainerProps = {
 };
 
 function FieldContainer({ formId, field }: FieldContainerProps) {
-  const { application } = useApplicationDetails();
 
   const fieldTitle =
     field.title.find((label) => label.language === "en")?.name ||
@@ -49,7 +46,7 @@ function FieldContainer({ formId, field }: FieldContainerProps) {
     }
   }
 
-  return <>{isApplicationEditable(application!) && getFieldComponent()}</>;
+  return <>{getFieldComponent()}</>;
 }
 
 export default FieldContainer;

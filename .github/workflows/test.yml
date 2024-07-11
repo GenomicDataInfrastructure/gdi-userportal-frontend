@@ -34,4 +34,4 @@ jobs:
         run: |
           npm run type-check
       - name: REUSE Compliance Check
-        uses: fsfe/reuse-action@v2
+        uses: fsfe/reuse-action@v4

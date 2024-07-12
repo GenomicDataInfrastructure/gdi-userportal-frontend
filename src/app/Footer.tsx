@@ -29,32 +29,24 @@ function Footer() {
   const footerText =
     process.env.NEXT_PUBLIC_FOOTER_TEXT ||
     "GDI project receives funding from the European Union’s Digital Europe Programme under grant agreement number 101081813.";
-  const bannerLink = process.env.NEXT_PUBLIC_BANNER_LINK;
+  const bannerLink = process.env.NEXT_PUBLIC_BANNER_LINK || "";
 
   return (
     <>
-      {bannerLink && (
+      <div className="bg-primary p-4 text-center">
         <a
-          href={`https://${bannerLink}`}
-          target="_blank"
-          rel="noopener noreferrer"
+          href={bannerLink ? `https://${bannerLink}` : "#"}
+          target={bannerLink ? "_blank" : ""}
+          rel={bannerLink ? "noopener noreferrer" : ""}
         >
-          <div className="bg-secondary p-4 text-center">
-            <FontAwesomeIcon
-              icon={faInfoCircle}
-              className="mr-2 text-warning"
-            />
-            <h2 className="inline text-lg font-bold text-warning">
-              How to use the data catalogue
-            </h2>
-            <FontAwesomeIcon
-              icon={faArrowRight}
-              className="ml-2 text-warning"
-            />
-          </div>
+          <FontAwesomeIcon icon={faInfoCircle} className="mr-2 text-warning" />
+          <h2 className="inline text-lg font-bold text-warning">
+            How to use the data portal
+          </h2>
+          <FontAwesomeIcon icon={faArrowRight} className="ml-2 text-warning" />
         </a>
-      )}
-      <footer className="flex flex-col items-center justify-between gap-y-4 border-t-4 border-t-primary bg-surface p-7 md:flex-row md:items-start md:gap-x-12 md:gap-y-0">
+      </div>
+      <footer className="flex flex-col items-center justify-between gap-y-4 border-t-primary bg-surface p-7 md:flex-row md:gap-x-12 md:gap-y-0 md:items-start">
         <div className="flex flex-col gap-16 md:flex-row md:gap-24">
           {/* First column: About the project */}
           <div className="flex flex-col items-start gap-4">
@@ -78,9 +70,7 @@ function Footer() {
           {/* Third column: Portal links */}
           <div className="flex flex-col gap-2 text-left">
             <h3 className="text-lg font-bold">Portal Links</h3>
-            <a href="/datasets" className="hover:text-info">
-              Datasets
-            </a>
+            <a className="hover:text-info">Datasets</a>
             <a className="hover:text-info">Themes</a>
             <a className="hover:text-info">Organizations</a>
           </div>

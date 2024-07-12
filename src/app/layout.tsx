@@ -14,6 +14,9 @@ import "./globals.css";
 config.autoAddCss = false;
 import { fontVariables } from "@/utils/fontSelector";
 
+const siteTitle = process.env.NEXT_PUBLIC_SITE_TITLE || "GDI - User Portal";
+const siteDescription = process.env.NEXT_PUBLIC_SITE_DESCRIPTION || "Genomic Data Infrastructure User Portal";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -22,12 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={fontVariables}>
       <head>
-        <title>{process.env.NEXT_PUBLIC_SITE_TITLE}</title>
+        <title>{siteTitle}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-          name="description"
-          content={process.env.NEXT_PUBLIC_SITE_DESCRIPTION}
-        />
+        <meta name="description" content={siteDescription} />
         <PublicEnvScript />
         {process.env.NEXT_PUBLIC_CUSTOM_STYLE_URL && (
           <link

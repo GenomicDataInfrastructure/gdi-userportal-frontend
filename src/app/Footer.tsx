@@ -16,31 +16,15 @@ import Image from "next/image";
 import footerLogo from "../public/footer-logo.png";
 
 function Footer() {
-  const linkedInUrl =
-    process.env.NEXT_PUBLIC_LINKEDIN_URL ||
-    "https://www.linkedin.com/company/gdi-euproject/";
-  const twitterUrl =
-    process.env.NEXT_PUBLIC_TWITTER_URL || "https://twitter.com/GDI_EUproject";
-  const githubUrl =
-    process.env.NEXT_PUBLIC_GITHUB_URL ||
-    "https://github.com/GenomicDataInfrastructure";
-  const gitlabUrl =
-    process.env.NEXT_PUBLIC_GITLAB_URL ||
-    "https://gitlab.com/GenomicDataInfrastructure";
-  const websiteUrl =
-    process.env.NEXT_PUBLIC_WEBSITE_URL || "https://gdi.onemilliongenomes.eu/";
-  const email =
-    process.env.NEXT_PUBLIC_EMAIL || "gdi-coordination@elixir-europe.org";
+  const linkedInUrl = process.env.NEXT_PUBLIC_LINKEDIN_URL;
+  const twitterUrl = process.env.NEXT_PUBLIC_TWITTER_URL;
+  const githubUrl = process.env.NEXT_PUBLIC_GITHUB_URL;
+  const gitlabUrl = process.env.NEXT_PUBLIC_GITLAB_URL;
+  const websiteUrl = process.env.NEXT_PUBLIC_WEBSITE_URL;
+  const email = process.env.NEXT_PUBLIC_EMAIL;
   const footerText =
     process.env.NEXT_PUBLIC_FOOTER_TEXT ||
     "GDI project receives funding from the European Union’s Digital Europe Programme under grant agreement number 101081813.";
-
-  const linkedInFlag = process.env.NEXT_PUBLIC_LINKEDIN_URL_FLAG !== "false";
-  const twitterFlag = process.env.NEXT_PUBLIC_TWITTER_URL_FLAG !== "false";
-  const githubFlag = process.env.NEXT_PUBLIC_GITHUB_URL_FLAG !== "false";
-  const gitlabFlag = process.env.NEXT_PUBLIC_GITLAB_URL_FLAG === "true";
-  const websiteFlag = process.env.NEXT_PUBLIC_WEBSITE_URL_FLAG !== "false";
-  const emailFlag = process.env.NEXT_PUBLIC_EMAIL_FLAG !== "false";
 
   return (
     <footer className="mt-8 flex flex-col items-center justify-between gap-y-4 border-t-4 border-t-primary bg-surface p-7 md:flex-row md:gap-x-4 md:gap-y-0">
@@ -58,7 +42,7 @@ function Footer() {
 
       <div className="flex flex-col gap-2">
         <div className="flex flex-row justify-center gap-11 text-primary">
-          {linkedInFlag && (
+          {linkedInUrl && (
             <a
               href={linkedInUrl}
               target="_blank"
@@ -71,7 +55,7 @@ function Footer() {
               />
             </a>
           )}
-          {twitterFlag && (
+          {twitterUrl && (
             <a
               color="primary"
               href={twitterUrl}
@@ -85,7 +69,7 @@ function Footer() {
               />
             </a>
           )}
-          {githubFlag && (
+          {githubUrl && (
             <a
               color="primary"
               href={githubUrl}
@@ -99,7 +83,7 @@ function Footer() {
               />
             </a>
           )}
-          {gitlabFlag && (
+          {gitlabUrl && (
             <a
               color="primary"
               href={gitlabUrl}
@@ -113,7 +97,7 @@ function Footer() {
               />
             </a>
           )}
-          {websiteFlag && (
+          {websiteUrl && (
             <a
               color="primary"
               href={websiteUrl}
@@ -125,7 +109,7 @@ function Footer() {
             </a>
           )}
         </div>
-        {emailFlag && (
+        {email && (
           <a
             className="text-xs hover:text-info md:text-left md:text-sm"
             href={`mailto:${encodeURIComponent(email)}`}

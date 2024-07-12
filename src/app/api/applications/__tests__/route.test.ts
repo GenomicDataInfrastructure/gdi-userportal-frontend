@@ -1,53 +1,68 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-import { jest } from '@jest/globals';
-import axios from 'axios';
-import { GET, POST } from './../route';
-import { getServerSession } from 'next-auth';
-import { encrypt } from '@/utils/encryption';
-import serverConfig from '@/config/serverConfig';
-import { ListedApplication } from '@/types/application.types';
+import { jest } from "@jest/globals";
+import axios from "axios";
+import { GET, POST } from "./../route";
+import { getServerSession } from "next-auth";
+import { encrypt } from "@/utils/encryption";
+import serverConfig from "@/config/serverConfig";
+import { ListedApplication } from "@/types/application.types";
 
-jest.mock('axios');
-jest.mock('next-auth/next');
+jest.mock("axios");
+jest.mock("next-auth/next");
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
-const mockedGetServerSession = getServerSession as jest.MockedFunction<typeof getServerSession>;
+const mockedGetServerSession = getServerSession as jest.MockedFunction<
+  typeof getServerSession
+>;
 
-describe('POST function', () => {
+describe("POST function", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
 
-  test('returns unauthorized if session is not available', async () => {
+  test("returns unauthorized if session is not available", async () => {
     mockedGetServerSession.mockResolvedValueOnce(null);
 
-    const request = new Request('http://localhost', { method: 'POST' });
+    const request = new Request("http://localhost", { method: "POST" });
     const response = await POST(request);
 
     expect(response.status).toBe(401);
-    expect(await response.json()).toEqual({ error: 'Unauthorized' });
+    expect(await response.json()).toEqual({ error: "Unauthorized" });
   });
 
-  test('returns error if datasetIds are not provided', async () => {
-    const encryptedToken = encrypt('decryptedToken');
-    mockedGetServerSession.mockResolvedValueOnce({ access_token: encryptedToken }); // Assume session is returned
+  test("returns error if datasetIds are not provided", async () => {
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    }); // Assume session is returned
 
-    const request = new Request('http://localhost', { method: 'POST', body: JSON.stringify({}) });
+    const request = new Request("http://localhost", {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
     const response = await POST(request);
 
     expect(response.status).toBe(400);
-    expect(await response.json()).toEqual({ error: 'datasetIds are required' });
+    expect(await response.json()).toEqual({ error: "datasetIds are required" });
   });
 
-  test('successfully creates an application', async () => {
-    const encryptedToken = encrypt('decryptedToken');
-    mockedGetServerSession.mockResolvedValueOnce({ access_token: encryptedToken });
-    mockedAxios.post.mockResolvedValueOnce({ status: 200, data: { applicationId: 100 } });
+  test("successfully creates an application", async () => {
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
+    mockedAxios.post.mockResolvedValueOnce({
+      status: 200,
+      data: { applicationId: 100 },
+    });
 
-    const datasetIds = ['123', '456'];
-    const request = new Request('http://localhost', { method: 'POST', body: JSON.stringify({ datasetIds }) });
+    const datasetIds = ["123", "456"];
+    const request = new Request("http://localhost", {
+      method: "POST",
+      body: JSON.stringify({ datasetIds }),
+    });
     const response = await POST(request);
 
     expect(response.status).toBe(200);
@@ -57,72 +72,81 @@ describe('POST function', () => {
       { datasetIds },
       {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer decryptedToken`,
         },
-      },
+      }
     );
   });
 
-  test('returns error if Axios request fails', async () => {
-    const encryptedToken = encrypt('decryptedToken');
-    mockedGetServerSession.mockResolvedValueOnce({ access_token: encryptedToken });
-    mockedAxios.post.mockRejectedValueOnce(new Error('server error'));
+  test("returns error if Axios request fails", async () => {
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
+    mockedAxios.post.mockRejectedValueOnce(new Error("server error"));
 
-    const datasetIds = ['123', '456'];
-    const request = new Request('http://localhost', { method: 'POST', body: JSON.stringify({ datasetIds }) });
+    const datasetIds = ["123", "456"];
+    const request = new Request("http://localhost", {
+      method: "POST",
+      body: JSON.stringify({ datasetIds }),
+    });
     const response = await POST(request);
 
     expect(response.status).toBe(500);
-    expect(await response.json()).toEqual({ error: 'server error' });
+    expect(await response.json()).toEqual({ error: "server error" });
   });
 });
 
-describe('GET function', () => {
+describe("GET function", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
 
-  test('returns unauthorized if session is not available', async () => {
+  test("returns unauthorized if session is not available", async () => {
     mockedGetServerSession.mockResolvedValueOnce(null);
 
     const response = await GET();
 
     expect(response.status).toBe(401);
-    expect(await response.json()).toEqual({ error: 'Unauthorized' });
+    expect(await response.json()).toEqual({ error: "Unauthorized" });
   });
 
-  test('returns error if Axios request fails', async () => {
-    const encryptedToken = encrypt('decryptedToken');
-    mockedGetServerSession.mockResolvedValueOnce({ access_token: encryptedToken });
-    mockedAxios.get.mockRejectedValueOnce(new Error('Server error'));
+  test("returns error if Axios request fails", async () => {
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
+    mockedAxios.get.mockRejectedValueOnce(new Error("Server error"));
 
     const response = await GET();
 
     expect(response.status).toBe(500);
-    expect(await response.json()).toEqual({ error: 'Server error' });
+    expect(await response.json()).toEqual({ error: "Server error" });
   });
 
-  test('successfully gets applications', async () => {
-    const encryptedToken = encrypt('decryptedToken');
+  test("successfully gets applications", async () => {
+    const encryptedToken = encrypt("decryptedToken");
     const mockApiResponse = {
       data: [
         {
           id: 1,
-          title: 'Test application 1',
-          stateChangedAt: '',
-          currentState: 'Submited',
+          title: "Test application 1",
+          stateChangedAt: "",
+          currentState: "Submited",
         },
         {
           id: 2,
-          title: 'Test application 2',
-          stateChangedAt: '',
-          currentState: 'Approved',
+          title: "Test application 2",
+          stateChangedAt: "",
+          currentState: "Approved",
         },
       ] as ListedApplication[],
     };
 
-    mockedGetServerSession.mockResolvedValueOnce({ access_token: encryptedToken });
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
     mockedAxios.get.mockResolvedValue(mockApiResponse);
 
     const response = await GET();
@@ -130,11 +154,14 @@ describe('GET function', () => {
 
     expect(response.status).toBe(200);
     expect(responseJson.length).toEqual(2);
-    expect(mockedAxios.get).toHaveBeenCalledWith(`${serverConfig.daamUrl}/api/v1/applications`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer decryptedToken`,
-      },
-    });
+    expect(mockedAxios.get).toHaveBeenCalledWith(
+      `${serverConfig.daamUrl}/api/v1/applications`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer decryptedToken`,
+        },
+      }
+    );
   });
 });

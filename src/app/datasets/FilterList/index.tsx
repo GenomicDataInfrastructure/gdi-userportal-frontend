@@ -29,7 +29,7 @@ function FilterList({
   function isAnyGroupFilterApplied() {
     if (!queryParams) return false;
     return Array.from(queryParams.keys()).some(
-      (key) => key !== "page" && key !== "q" && key.includes(facetGroup.key),
+      (key) => key !== "page" && key !== "q" && key.includes(facetGroup.key)
     );
   }
 

@@ -3,9 +3,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import axios from 'axios';
-import { DatasetsSearchResponse } from '../types/datasetSearch.types';
-import { DEFAULT_DATASET_SEARCH_QUERY, createHeaders } from '../utils';
+import axios from "axios";
+import { DatasetsSearchResponse } from "../types/datasetSearch.types";
+import { DEFAULT_DATASET_SEARCH_QUERY, createHeaders } from "../utils";
 
 export const makeDatasetCount = (discoveryUrl: string) => {
   return async (): Promise<number> => {
@@ -14,7 +14,7 @@ export const makeDatasetCount = (discoveryUrl: string) => {
       DEFAULT_DATASET_SEARCH_QUERY,
       {
         headers: await createHeaders(),
-      },
+      }
     );
 
     return response.data.count;

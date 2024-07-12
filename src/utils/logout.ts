@@ -4,7 +4,7 @@
 
 export async function keycloackSessionLogOut() {
   try {
-    await fetch('/api/auth/logout');
+    await fetch("/api/auth/logout");
   } catch (error) {
     throw new Error(`Could not log out from Keycloak`);
   }

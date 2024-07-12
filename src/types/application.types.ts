@@ -104,13 +104,13 @@ interface License {
 }
 
 enum State {
-  DRAFT = 'application.state/draft',
-  CLOSED = 'application.state/closed',
-  APPROVED = 'application.state/approved',
-  RETURNED = 'application.state/returned',
-  REJECTED = 'application.state/rejected',
-  REVOKED = 'application.state/revoked',
-  SUBMITTED = 'application.state/submitted',
+  DRAFT = "application.state/draft",
+  CLOSED = "application.state/closed",
+  APPROVED = "application.state/approved",
+  RETURNED = "application.state/returned",
+  REJECTED = "application.state/rejected",
+  REVOKED = "application.state/revoked",
+  SUBMITTED = "application.state/submitted",
 }
 
 interface Label {
@@ -134,12 +134,12 @@ export interface SaveDUOCode {
 }
 
 export enum FieldType {
-  TEXT = 'text',
-  TEXT_AREA = 'texta',
-  ATTACHMENT = 'attachment',
-  PHONE = 'phone-number',
-  DATE = 'date',
-  EMAIL = 'email',
+  TEXT = "text",
+  TEXT_AREA = "texta",
+  ATTACHMENT = "attachment",
+  PHONE = "phone-number",
+  DATE = "date",
+  EMAIL = "email",
 }
 
 interface SaveDUOCodeRestriction {

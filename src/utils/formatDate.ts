@@ -2,24 +2,24 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { enGB } from 'date-fns/locale/en-GB';
-import { formatInTimeZone } from 'date-fns-tz';
+import { enGB } from "date-fns/locale/en-GB";
+import { formatInTimeZone } from "date-fns-tz";
 
 function isClient() {
-  return typeof window !== 'undefined';
+  return typeof window !== "undefined";
 }
 
 export function formatDate(inputDate: string): string {
-  return _formatDate(inputDate, 'd MMMM yyyy');
+  return _formatDate(inputDate, "d MMMM yyyy");
 }
 
 export function formatDateTime(inputDate: string) {
-  return _formatDate(inputDate, 'd MMMM yyyy, HH.mm (zzz)');
+  return _formatDate(inputDate, "d MMMM yyyy, HH.mm (zzz)");
 }
 
 function getUserTimezone() {
   if (!isClient()) {
-    throw new Error('getUserTimezone must be called on the client side');
+    throw new Error("getUserTimezone must be called on the client side");
   }
 
   return Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -27,7 +27,7 @@ function getUserTimezone() {
 
 function _formatDate(inputDate: string, targetFormat: string) {
   if (!inputDate) {
-    return 'N/A';
+    return "N/A";
   }
 
   const date = new Date(inputDate);
@@ -36,7 +36,7 @@ function _formatDate(inputDate: string, targetFormat: string) {
   try {
     return formatInTimeZone(date, userTimeZone, targetFormat, { locale: enGB });
   } catch (error) {
-    if (process.env.NODE_ENV !== 'test') {
+    if (process.env.NODE_ENV !== "test") {
       console.error(error);
     }
     return inputDate;

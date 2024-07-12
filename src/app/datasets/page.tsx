@@ -40,7 +40,7 @@ function parseFacets(queryParams: URLSearchParams): DatasetSearchQueryFacet[] {
           facetGroup: group,
           facet: facet,
           value: v,
-        }),
+        })
       );
     }
   });
@@ -93,7 +93,10 @@ export default function DatasetPage() {
         });
       } catch (error) {
         if (error instanceof AxiosError) {
-          setResponse({ status: "error", errorCode: error.response?.status });
+          setResponse({
+            status: "error",
+            errorCode: error.response?.status,
+          });
           console.error(error);
         } else {
           setResponse({ status: "error", errorCode: 500 });

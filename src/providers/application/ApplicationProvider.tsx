@@ -33,12 +33,12 @@ import {
 import { AxiosError } from "axios";
 
 const ApplicationContext = createContext<ApplicationContextState | undefined>(
-  undefined,
+  undefined
 );
 
 function reducer(
   state: ApplicationState,
-  action: ApplicationAction,
+  action: ApplicationAction
 ): ApplicationState {
   switch (action.type) {
     case ApplicationActionType.LOADING:
@@ -66,7 +66,7 @@ function reducer(
             state.application!.forms,
             payload.formId,
             payload.fieldId,
-            payload.newValue,
+            payload.newValue
           ),
         } as RetrievedApplication,
         isLoading: false,
@@ -88,7 +88,7 @@ function reducer(
             attachPayload.formId,
             attachPayload.fieldId,
             attachPayload.attachmentId,
-            addAttachmentIdToFieldValue,
+            addAttachmentIdToFieldValue
           ) as Form[],
         } as RetrievedApplication,
         isLoading: false,
@@ -109,7 +109,7 @@ function reducer(
             deletePayload.formId,
             deletePayload.fieldId,
             deletePayload.attachmentId,
-            deleteAttachmentIdFromFieldValue,
+            deleteAttachmentIdFromFieldValue
           ) as Form[],
         } as RetrievedApplication,
         isLoading: false,
@@ -188,7 +188,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   async function addAttachment(
     formId: number,
     fieldId: number,
-    formData: FormData,
+    formData: FormData
   ): Promise<void> {
     try {
       dispatch({ type: ApplicationActionType.LOADING });
@@ -210,7 +210,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
 
       const { forms: updatedForms } = reducer(
         { application, isLoading, error, errorStatusCode },
-        action,
+        action
       ).application as RetrievedApplication;
       const response = await saveFormAndDuos(updatedForms);
       if (response.ok) fetchApplication();
@@ -222,7 +222,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   async function updateInputFields(
     formId: number,
     fieldId: number,
-    newValue: string,
+    newValue: string
   ): Promise<void> {
     try {
       dispatch({ type: ApplicationActionType.LOADING });
@@ -240,7 +240,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
 
       const { forms: updatedForms } = reducer(
         { application, isLoading, error, errorStatusCode },
-        action,
+        action
       ).application as RetrievedApplication;
       const response = await saveFormAndDuos(updatedForms);
       if (response.ok) fetchApplication();
@@ -252,7 +252,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   async function deleteAttachment(
     formId: number,
     fieldId: number,
-    attachmentId: number,
+    attachmentId: number
   ) {
     try {
       dispatch({ type: ApplicationActionType.LOADING });
@@ -269,7 +269,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
 
       const { forms: updatedForms } = reducer(
         { application, isLoading, error, errorStatusCode },
-        action,
+        action
       ).application as RetrievedApplication;
 
       const response = await saveFormAndDuos(updatedForms);
@@ -298,7 +298,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
           })),
           duoCodes: [],
         }),
-      },
+      }
     );
     dispatch({ type: ApplicationActionType.FORM_SAVED });
     return response;
@@ -309,7 +309,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
 
     const response = await fetch(
       `/api/applications/${application!.id}/submit`,
-      { method: "POST" },
+      { method: "POST" }
     );
 
     if (response.ok) {
@@ -353,7 +353,7 @@ function useApplicationDetails() {
   const context = useContext(ApplicationContext);
   if (context === undefined) {
     throw new Error(
-      "useAttachmentUpload must be used within a AttachmentUploadProvider",
+      "useAttachmentUpload must be used within a AttachmentUploadProvider"
     );
   }
   return context;

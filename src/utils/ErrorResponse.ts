@@ -13,5 +13,10 @@ export interface ErrorResponse {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isErrorResponse(error: any): error is ErrorResponse {
-  return error && error.response && typeof error.response.status === 'number' && error.response.data;
+  return (
+    error &&
+    error.response &&
+    typeof error.response.status === "number" &&
+    error.response.data
+  );
 }

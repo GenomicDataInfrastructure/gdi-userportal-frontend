@@ -49,7 +49,7 @@ function SearchBar({ queryParams, size }: SearchBarProps) {
             result.data?.datasets.map((dataset) => ({
               id: dataset.id,
               title: dataset.title,
-            })),
+            }))
           );
         } catch (error) {
           if (error instanceof AxiosError) {

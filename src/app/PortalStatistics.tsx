@@ -11,7 +11,7 @@ import { AxiosError } from "axios";
 export function PortalStatistics() {
   const { setAlert } = useAlert();
   const [propCounters, setPropCounters] = useState<IPortalStatistics | null>(
-    null,
+    null
   );
 
   useEffect(() => {

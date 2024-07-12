@@ -128,7 +128,7 @@ function removePickedOption(groupOption: GroupOption, picked: Option[]) {
 
   for (const [key, value] of Object.entries(cloneOption)) {
     cloneOption[key] = value.filter(
-      (val) => !picked.find((p) => p.value === val.value),
+      (val) => !picked.find((p) => p.value === val.value)
     );
   }
   return cloneOption;
@@ -190,7 +190,7 @@ const MultipleSelector = React.forwardRef<
       commandProps,
       inputProps,
     }: MultipleSelectorProps,
-    ref: React.Ref<MultipleSelectorRef>,
+    ref: React.Ref<MultipleSelectorRef>
   ) => {
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [open, setOpen] = React.useState(false);
@@ -198,7 +198,7 @@ const MultipleSelector = React.forwardRef<
 
     const [selected, setSelected] = React.useState<Option[]>(value || []);
     const [options, setOptions] = React.useState<GroupOption>(
-      transToGroupOption(arrayDefaultOptions, groupBy),
+      transToGroupOption(arrayDefaultOptions, groupBy)
     );
     const [inputValue, setInputValue] = React.useState("");
     const debouncedSearchTerm = useDebounce(inputValue, delay || 500);
@@ -208,7 +208,7 @@ const MultipleSelector = React.forwardRef<
     const searchParams = useSearchParams();
     const params = React.useMemo(
       () => new URLSearchParams(searchParams),
-      [searchParams],
+      [searchParams]
     );
 
     React.useImperativeHandle(
@@ -217,7 +217,7 @@ const MultipleSelector = React.forwardRef<
         selectedValue: [...selected],
         input: inputRef.current as HTMLInputElement,
       }),
-      [selected],
+      [selected]
     );
 
     const convertQueryStringToOptions = React.useCallback(
@@ -227,13 +227,13 @@ const MultipleSelector = React.forwardRef<
           label: arrayDefaultOptions.find((x) => x.value === v)?.label ?? v,
         }));
       },
-      [arrayDefaultOptions],
+      [arrayDefaultOptions]
     );
 
     const handleUnselect = React.useCallback(
       (option: Option) => {
         const newOptions = convertQueryStringToOptions(
-          params.get(field) as string,
+          params.get(field) as string
         ).filter((o) => o.value !== option.value);
 
         if (newOptions.length === 0) {
@@ -246,7 +246,7 @@ const MultipleSelector = React.forwardRef<
 
         onChange?.(newOptions);
       },
-      [onChange, field, params, router, pathname, convertQueryStringToOptions],
+      [onChange, field, params, router, pathname, convertQueryStringToOptions]
     );
 
     const handleKeyDown = React.useCallback(
@@ -264,7 +264,7 @@ const MultipleSelector = React.forwardRef<
           }
         }
       },
-      [selected, handleUnselect],
+      [selected, handleUnselect]
     );
 
     useEffect(() => {
@@ -284,7 +284,7 @@ const MultipleSelector = React.forwardRef<
       const values = convertQueryStringToOptions(params.get(field) as string);
 
       const existingValues = values.filter((v: Option) =>
-        arrayDefaultOptions.find((option: Option) => option.value === v.value),
+        arrayDefaultOptions.find((option: Option) => option.value === v.value)
       );
 
       setSelected(existingValues || []);
@@ -292,7 +292,7 @@ const MultipleSelector = React.forwardRef<
 
     useEffect(
       () => setOptions(transToGroupOption(arrayDefaultOptions, groupBy)),
-      [arrayDefaultOptions, groupBy],
+      [arrayDefaultOptions, groupBy]
     );
 
     useEffect(() => {
@@ -387,7 +387,7 @@ const MultipleSelector = React.forwardRef<
 
     const selectables = React.useMemo<GroupOption>(
       () => removePickedOption(options, selected),
-      [options, selected],
+      [options, selected]
     );
 
     /** Avoid Creatable Selector freezing or lagging when paste a long string. */
@@ -414,7 +414,7 @@ const MultipleSelector = React.forwardRef<
         }}
         className={cn(
           "overflow-visible bg-transparent",
-          commandProps?.className,
+          commandProps?.className
         )}
         shouldFilter={
           commandProps?.shouldFilter !== undefined
@@ -426,7 +426,7 @@ const MultipleSelector = React.forwardRef<
         <div
           className={cn(
             "border-input ring-offset-background focus-within:ring-ring hover:border-input-hover group rounded-md border bg-white px-3 py-2 text-sm ring-info transition-all duration-200 ease-in-out focus-within:ring-2 focus-within:ring-offset-2",
-            className,
+            className
           )}
         >
           <div className="flex items-center justify-between">
@@ -457,7 +457,7 @@ const MultipleSelector = React.forwardRef<
                 `placeholder:text-muted-foreground placeholder:text-md ml-2 flex-1 bg-transparent outline-none placeholder:text-black ${
                   selected.length ? "mb-2" : ""
                 }`,
-                inputProps?.className,
+                inputProps?.className
               )}
             />
             <FontAwesomeIcon
@@ -478,7 +478,7 @@ const MultipleSelector = React.forwardRef<
                   className={cn(
                     "data-[disabled]:bg-muted-foreground data-[disabled]:text-muted data-[disabled]:hover:bg-muted-foreground",
                     "data-[fixed]:bg-muted-foreground data-[fixed]:text-muted data-[fixed]:hover:bg-muted-foreground",
-                    badgeClassName,
+                    badgeClassName
                   )}
                   data-fixed={option.fixed}
                   data-disabled={disabled}
@@ -487,7 +487,7 @@ const MultipleSelector = React.forwardRef<
                   <button
                     className={cn(
                       "ring-offset-background focus:ring-ring ml-1 rounded-full outline-none focus:ring-2 focus:ring-offset-2",
-                      (disabled || option.fixed) && "hidden",
+                      (disabled || option.fixed) && "hidden"
                     )}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
@@ -548,7 +548,7 @@ const MultipleSelector = React.forwardRef<
                                 const newOptions = [...selected, option];
                                 params.set(
                                   field,
-                                  convertOptionsToQueryString(newOptions),
+                                  convertOptionsToQueryString(newOptions)
                                 );
                                 params.set("page", "1");
                                 router.push(`${pathname}?${params}`);
@@ -557,7 +557,7 @@ const MultipleSelector = React.forwardRef<
                               className={cn(
                                 "cursor-pointer hover:bg-surface",
                                 option.disable &&
-                                  "text-muted-foreground cursor-default",
+                                  "text-muted-foreground cursor-default"
                               )}
                             >
                               {option.label}
@@ -574,7 +574,7 @@ const MultipleSelector = React.forwardRef<
         </div>
       </Command>
     );
-  },
+  }
 );
 
 MultipleSelector.displayName = "MultipleSelector";

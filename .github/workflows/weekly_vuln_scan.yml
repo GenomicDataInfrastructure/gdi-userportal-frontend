@@ -60,7 +60,7 @@ jobs:
         with:
           repository: ${{ github.repository }}
 
-      - uses: oss-review-toolkit/ort-ci-github-action@81698a977ebcf51bb3d6ef5c6a04220cf60d3bde
+      - uses: oss-review-toolkit/ort-ci-github-action@v1
         with:
           allow-dynamic-versions: "true"
           fail-on: "issues"

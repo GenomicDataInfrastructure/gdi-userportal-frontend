@@ -15,7 +15,9 @@ config.autoAddCss = false;
 import { fontVariables } from "@/utils/fontSelector";
 
 const siteTitle = process.env.NEXT_PUBLIC_SITE_TITLE || "GDI - User Portal";
-const siteDescription = process.env.NEXT_PUBLIC_SITE_DESCRIPTION || "Genomic Data Infrastructure User Portal";
+const siteDescription =
+  process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
+  "Genomic Data Infrastructure User Portal";
 
 export default function RootLayout({
   children,

@@ -10,7 +10,11 @@ import {
   faXTwitter,
   faGitlab,
 } from "@fortawesome/free-brands-svg-icons";
-import { faGlobe } from "@fortawesome/free-solid-svg-icons";
+import {
+  faGlobe,
+  faInfoCircle,
+  faArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import footerLogo from "../public/footer-logo.png";
@@ -25,100 +29,127 @@ function Footer() {
   const footerText =
     process.env.NEXT_PUBLIC_FOOTER_TEXT ||
     "GDI project receives funding from the European Union’s Digital Europe Programme under grant agreement number 101081813.";
+  const bannerLink = process.env.NEXT_PUBLIC_BANNER_LINK;
 
   return (
-    <footer className="mt-8 flex flex-col items-center justify-between gap-y-4 border-t-4 border-t-primary bg-surface p-7 md:flex-row md:gap-x-4 md:gap-y-0">
-      <div className="flex items-center gap-4">
-        <Image src={footerLogo} alt="Footer logo" width={80} />
-        <p className="text-xs md:text-sm">
-          {footerText.split("\n").map((line, index) => (
-            <span key={index}>
-              {line}
-              {index < footerText.split("\n").length - 1 && <br />}
-            </span>
-          ))}
-        </p>
-      </div>
+    <>
+      {bannerLink && (
+        <a
+          href={`https://${bannerLink}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div className="bg-secondary p-4 text-center">
+            <FontAwesomeIcon
+              icon={faInfoCircle}
+              className="mr-2 text-warning"
+            />
+            <h2 className="inline text-lg font-bold text-warning">
+              How to use the data catalogue
+            </h2>
+            <FontAwesomeIcon
+              icon={faArrowRight}
+              className="ml-2 text-warning"
+            />
+          </div>
+        </a>
+      )}
+      <footer className="flex flex-col items-center justify-between gap-y-4 border-t-4 border-t-primary bg-surface p-7 md:flex-row md:gap-x-4 md:gap-y-0">
+        <div className="flex items-center gap-4">
+          <Image src={footerLogo} alt="Footer logo" width={80} />
+          <p className="text-xs md:text-sm">
+            {footerText.split("\n").map((line, index) => (
+              <span key={index}>
+                {line}
+                {index < footerText.split("\n").length - 1 && <br />}
+              </span>
+            ))}
+          </p>
+        </div>
 
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-row justify-center gap-11 text-primary">
-          {linkedInUrl && (
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-row justify-center gap-11 text-primary">
+            {linkedInUrl && (
+              <a
+                href={linkedInUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-info"
+              >
+                <FontAwesomeIcon
+                  icon={faLinkedin}
+                  className="text-lg md:text-2xl"
+                />
+              </a>
+            )}
+            {twitterUrl && (
+              <a
+                color="primary"
+                href={twitterUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-info"
+              >
+                <FontAwesomeIcon
+                  icon={faXTwitter}
+                  className="text-lg md:text-2xl"
+                />
+              </a>
+            )}
+            {githubUrl && (
+              <a
+                color="primary"
+                href={githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-info"
+              >
+                <FontAwesomeIcon
+                  icon={faGithub}
+                  className="text-lg md:text-2xl"
+                />
+              </a>
+            )}
+            {gitlabUrl && (
+              <a
+                color="primary"
+                href={gitlabUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-info"
+              >
+                <FontAwesomeIcon
+                  icon={faGitlab}
+                  className="text-lg md:text-2xl"
+                />
+              </a>
+            )}
+            {websiteUrl && (
+              <a
+                color="primary"
+                href={websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-info"
+              >
+                <FontAwesomeIcon
+                  icon={faGlobe}
+                  className="text-lg md:text-2xl"
+                />
+              </a>
+            )}
+          </div>
+          {email && (
             <a
-              href={linkedInUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-info"
+              className="text-xs hover:text-info md:text-left md:text-sm"
+              href={`mailto:${encodeURIComponent(email)}`}
             >
-              <FontAwesomeIcon
-                icon={faLinkedin}
-                className="text-lg md:text-2xl"
-              />
-            </a>
-          )}
-          {twitterUrl && (
-            <a
-              color="primary"
-              href={twitterUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-info"
-            >
-              <FontAwesomeIcon
-                icon={faXTwitter}
-                className="text-lg md:text-2xl"
-              />
-            </a>
-          )}
-          {githubUrl && (
-            <a
-              color="primary"
-              href={githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-info"
-            >
-              <FontAwesomeIcon
-                icon={faGithub}
-                className="text-lg md:text-2xl"
-              />
-            </a>
-          )}
-          {gitlabUrl && (
-            <a
-              color="primary"
-              href={gitlabUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-info"
-            >
-              <FontAwesomeIcon
-                icon={faGitlab}
-                className="text-lg md:text-2xl"
-              />
-            </a>
-          )}
-          {websiteUrl && (
-            <a
-              color="primary"
-              href={websiteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-info"
-            >
-              <FontAwesomeIcon icon={faGlobe} className="text-lg md:text-2xl" />
+              {email}
             </a>
           )}
         </div>
-        {email && (
-          <a
-            className="text-xs hover:text-info md:text-left md:text-sm"
-            href={`mailto:${encodeURIComponent(email)}`}
-          >
-            {email}
-          </a>
-        )}
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 }
 

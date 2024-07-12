@@ -34,7 +34,7 @@ function EntitelementsPage() {
         const entitlements = await retrieveEntitlements();
 
         const datasetEntitlements = await createDatasetEntitlements(
-          entitlements.data.entitlements,
+          entitlements.data.entitlements
         );
 
         setResponse({

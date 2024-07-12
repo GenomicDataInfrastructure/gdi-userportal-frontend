@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { datasetList } from '@/services/discovery';
-import { mapFacetGroups } from '@/services/discovery/utils';
-import { getServerSession } from 'next-auth';
-import { NextResponse } from 'next/server';
-import { ExtendedSession } from '../auth/auth.types';
-import { authOptions } from '../auth/config';
-import { handleErrorResponse } from '../errorHandling';
+import { datasetList } from "@/services/discovery";
+import { mapFacetGroups } from "@/services/discovery/utils";
+import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
+import { ExtendedSession } from "../auth/auth.types";
+import { authOptions } from "../auth/config";
+import { handleErrorResponse } from "../errorHandling";
 
 export async function POST(request: Request) {
   const session: ExtendedSession | null = await getServerSession(authOptions);

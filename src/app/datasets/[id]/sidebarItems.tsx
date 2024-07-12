@@ -35,7 +35,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
         dataset.languages?.map((language) => ({
           label: language.label,
           url: language.value,
-        })),
+        }))
       ),
     },
     {
@@ -59,7 +59,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
         dataset.hasVersions?.map((version) => ({
           label: version.label,
           url: version.value,
-        })),
+        }))
       ),
     },
     {
@@ -82,7 +82,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
         dataset.conformsTo?.map((conform) => ({
           label: conform.label,
           url: conform.value,
-        })),
+        }))
       ),
     },
     {

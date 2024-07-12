@@ -50,7 +50,9 @@ function GenericInputField({
     <div className="rounded border p-4">
       <div className="flex flex-col justify-between">
         <div>
-          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${field.optional ? "(Optional)" : ""}`}</h3>
+          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
+            field.optional ? "(Optional)" : ""
+          }`}</h3>
         </div>
         <div className="mt-4 flex items-center">
           {children}

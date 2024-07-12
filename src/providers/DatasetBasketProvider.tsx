@@ -76,7 +76,7 @@ export const useDatasetBasket = () => {
   const context = useContext(DatasetBasketContext);
   if (context === undefined) {
     throw new Error(
-      "useDatasetBasket must be used within a DatasetBasketProvider",
+      "useDatasetBasket must be used within a DatasetBasketProvider"
     );
   }
   return context;

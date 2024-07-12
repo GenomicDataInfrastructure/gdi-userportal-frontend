@@ -57,7 +57,7 @@ function FileUploadFormField({ field, formId, title }: FileUploadFieldProps) {
         {field.value &&
           field.value.split(",").map((attachmentId: string) => {
             const attachment = application?.attachments.find(
-              (a) => a.id === parseInt(attachmentId),
+              (a) => a.id === parseInt(attachmentId)
             );
             return (
               attachment && (

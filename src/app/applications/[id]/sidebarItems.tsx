@@ -11,7 +11,7 @@ import { faHistory } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function createApplicationSidebarItems(
-  application: RetrievedApplication,
+  application: RetrievedApplication
 ): SidebarItem[] {
   const { datasets, applicant, events } = application;
 

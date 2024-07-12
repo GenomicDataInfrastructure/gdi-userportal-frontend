@@ -3,10 +3,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 enum SCREEN_SIZE {
-  SM = 'SM',
-  MD = 'MD',
-  LG = 'LG',
-  XL = 'XL',
+  SM = "SM",
+  MD = "MD",
+  LG = "LG",
+  XL = "XL",
 }
 
 function pixelWidthToScreenSize(width: number): SCREEN_SIZE {

@@ -106,7 +106,7 @@ export default function ApplicationDetailsPage() {
             </div>
           </div>
           <p>{`Last Event: ${formatApplicationProp(
-            lastEvent.eventType,
+            lastEvent.eventType
           )} at ${formatDateTime(lastEvent.eventTime.toString())}`}</p>
           <div>
             <div className="h-[2px] bg-secondary opacity-80"></div>
@@ -123,7 +123,7 @@ export default function ApplicationDetailsPage() {
                     <li key={form.id}>
                       <FormContainer form={form} />
                     </li>
-                  ),
+                  )
               )}
             </ul>
           </div>

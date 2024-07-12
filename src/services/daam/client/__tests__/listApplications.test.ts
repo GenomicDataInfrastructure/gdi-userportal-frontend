@@ -2,28 +2,28 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { jest } from '@jest/globals';
-import axios from 'axios';
-import { listApplications } from '../listApplications';
-import { ListedApplication } from '@/types/application.types';
+import { jest } from "@jest/globals";
+import axios from "axios";
+import { listApplications } from "../listApplications";
+import { ListedApplication } from "@/types/application.types";
 
-jest.mock('axios');
+jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-describe('listApplications', () => {
+describe("listApplications", () => {
   const mockApiResponse = {
     data: [
       {
         id: 1,
-        title: 'Test application 1',
-        stateChangedAt: '',
-        currentState: 'Submited',
+        title: "Test application 1",
+        stateChangedAt: "",
+        currentState: "Submited",
       },
       {
         id: 2,
-        title: 'Test application 2',
-        stateChangedAt: '',
-        currentState: 'Approved',
+        title: "Test application 2",
+        stateChangedAt: "",
+        currentState: "Approved",
       },
     ] as ListedApplication[],
   };
@@ -36,10 +36,12 @@ describe('listApplications', () => {
     mockedAxios.get.mockClear();
   });
 
-  test('sends a GET request and retrives applications of signed in user', async () => {
+  test("sends a GET request and retrives applications of signed in user", async () => {
     const response = await listApplications();
 
     expect(response.data).toBe(mockApiResponse.data);
-    expect(mockedAxios.get).toHaveBeenCalledWith('/api/applications', { headers: { 'Content-Type': 'application/json' } });
+    expect(mockedAxios.get).toHaveBeenCalledWith("/api/applications", {
+      headers: { "Content-Type": "application/json" },
+    });
   });
 });

@@ -26,7 +26,7 @@ function EntitlementsList({ entitlements }: Readonly<EntitlementsListProps>) {
                 end={entitlement.end}
               />
             </ListItem>
-          ),
+          )
       )}
     </List>
   );

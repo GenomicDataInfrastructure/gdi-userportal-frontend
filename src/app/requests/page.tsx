@@ -38,7 +38,7 @@ function RequestPage() {
 
   const tabItems = createTabItems();
   const tabNames = tabItems.map(
-    (tabItem: ITabItem) => tabItem.name,
+    (tabItem: ITabItem) => tabItem.name
   ) as ReadonlyArray<string>;
 
   if (!activeTab || !tabNames.includes(activeTab)) {

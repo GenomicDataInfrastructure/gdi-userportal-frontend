@@ -7,7 +7,7 @@
 import { useWindowSize } from "@/hooks";
 import { SCREEN_SIZE } from "@/hooks/useWindowSize";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
-import logo from "@/public/egdi-logo-horizontal-full-color-rgb.svg";
+import logo from "@/public/header-logo.svg";
 import { User } from "@/types/user.types";
 import { keycloackSessionLogOut } from "@/utils/logout";
 import {

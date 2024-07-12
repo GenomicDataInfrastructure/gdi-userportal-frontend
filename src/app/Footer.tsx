@@ -33,7 +33,7 @@ function Footer() {
     process.env.NEXT_PUBLIC_EMAIL || "gdi-coordination@elixir-europe.org";
   const footerText =
     process.env.NEXT_PUBLIC_FOOTER_TEXT ||
-    "GDI project receives funding from the European Union’s Digital Europe \n Programme under grant agreement number 101081813.";
+    "GDI project receives funding from the European Union’s Digital Europe Programme under grant agreement number 101081813.";
 
   const linkedInFlag = process.env.NEXT_PUBLIC_LINKEDIN_URL_FLAG !== "false";
   const twitterFlag = process.env.NEXT_PUBLIC_TWITTER_URL_FLAG !== "false";
@@ -50,7 +50,7 @@ function Footer() {
           {footerText.split("\n").map((line, index) => (
             <span key={index}>
               {line}
-              <br />
+              {index < footerText.split("\n").length - 1 && <br />}
             </span>
           ))}
         </p>
@@ -62,7 +62,7 @@ function Footer() {
             <a
               href={linkedInUrl}
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               className="hover:text-info"
             >
               <FontAwesomeIcon
@@ -76,7 +76,7 @@ function Footer() {
               color="primary"
               href={twitterUrl}
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               className="hover:text-info"
             >
               <FontAwesomeIcon
@@ -90,7 +90,7 @@ function Footer() {
               color="primary"
               href={githubUrl}
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               className="hover:text-info"
             >
               <FontAwesomeIcon
@@ -104,7 +104,7 @@ function Footer() {
               color="primary"
               href={gitlabUrl}
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               className="hover:text-info"
             >
               <FontAwesomeIcon
@@ -118,7 +118,7 @@ function Footer() {
               color="primary"
               href={websiteUrl}
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               className="hover:text-info"
             >
               <FontAwesomeIcon icon={faGlobe} className="text-lg md:text-2xl" />

@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 // SPDX-License-Identifier: Apache-2.0
 "use client";
-import { useAlert } from "@/providers/AlertProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";

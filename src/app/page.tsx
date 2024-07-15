@@ -7,7 +7,8 @@ import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
 import { useSearchParams } from "next/navigation";
 import bgBackground from "../public/bg-background.png";
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 
 const HomePage = () => {
   const queryParams = useSearchParams();
@@ -60,7 +61,8 @@ const HomePage = () => {
             className="text-primary flex items-center gap-1 transition hover:underline duration-1000"
             href="/about"
           >
-            Read more <ArrowTopRightOnSquareIcon className="w-5 h-5" />
+            Read more
+            <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="w-4 h-4" />
           </a>
         </div>
       </div>

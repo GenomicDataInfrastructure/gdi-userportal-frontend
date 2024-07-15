@@ -15,16 +15,12 @@ import logo from "../public/gdi-logo.png";
 const HomePage = () => {
   const queryParams = useSearchParams();
   const applicationTitle = "WELCOME TO GDI";
-  const applicationSubtitle = (
-    <>
-      The Genomic Data Infrastructure (GDI) project is enabling access to
-      genomic and related phenotypic and clinical data across Europe.
-    </>
-  );
+  const applicationSubtitle =
+    "The Genomic Data Infrastructure (GDI) project is enabling access to genomic and related phenotypic and clinical data across Europe.";
 
   return (
     <PageContainer className="container mx-auto px-4 pt-5 text-center">
-      <div className="mb-8 mt-8">
+      <div className="my-8">
         <h1 className="font-bold text-4xl text-primary">{applicationTitle}</h1>
         <h2 className="text-xl mt-4 font-light">{applicationSubtitle}</h2>
       </div>

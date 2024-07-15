@@ -62,7 +62,10 @@ const HomePage = () => {
             href="/about"
           >
             Read more
-            <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="w-4 h-4" />
+            <FontAwesomeIcon
+              icon={faArrowUpRightFromSquare}
+              className="w-4 h-4"
+            />
           </a>
         </div>
       </div>

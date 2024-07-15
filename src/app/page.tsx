@@ -1,5 +1,4 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
-//
 // SPDX-License-Identifier: Apache-2.0
 
 "use client";
@@ -9,57 +8,65 @@ import SearchBar from "@/components/Searchbar";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import office from "../public/office.jpg";
 import dna from "../public/dna.jpg";
 import logo from "../public/gdi-logo.png";
-import gdi_visuals from "../public/gdi-visuals.png";
-import office from "../public/office.jpg";
-import { DatasetCounter } from "./DatasetCounter";
-import { PortalStatistics } from "./PortalStatistics";
 
 const HomePage = () => {
   const queryParams = useSearchParams();
+  const applicationTitle = "WELCOME TO GDI";
+  const applicationSubtitle = (
+    <>
+      The Genomic Data Infrastructure (GDI) project is enabling access to
+      genomic and related phenotypic and clinical data across Europe.
+    </>
+  );
 
   return (
-    <PageContainer className="container mx-auto px-4 pt-5">
-      <div className="grid gap-14 md:grid-cols-[2fr,1fr]">
-        <div className="text-center md:pl-4 md:pr-4 lg:text-left">
-          <DatasetCounter />
+    <PageContainer className="container mx-auto px-4 pt-5 text-center">
+      <div className="mb-8 mt-8">
+        <h1 className="font-bold text-4xl text-primary">{applicationTitle}</h1>
+        <h2 className="text-xl mt-4 font-light">{applicationSubtitle}</h2>
+      </div>
+      <div className="flex justify-center mb-8">
+        <div className="w-4/5">
           <SearchBar queryParams={queryParams} size="large" />
-          <div className="mx-auto mt-12 w-full rounded-lg bg-white transition-shadow duration-300 ease-in-out hover:shadow-sm lg:mx-0 lg:w-1/2">
-            <h2 className="mb-4 text-4xl font-bold text-primary">
-              WELCOME TO GDI
-            </h2>
-            <p className="mb-6 text-lg">
-              The Genomic Data Infrastructure (GDI) project is enabling access
-              to genomic and related phenotypic and clinical data across Europe.
-            </p>
-            <div className="flex justify-center lg:justify-start">
-              <Link href="/datasets">
-                <button className="inline-block rounded bg-primary px-4 py-2 font-bold text-white transition-colors duration-300 hover:bg-secondary">
-                  Discover GDI datasets
-                </button>
-              </Link>
-            </div>
-          </div>
         </div>
-        <div className="flex justify-center md:justify-end">
-          <div className="w-full max-w-[600px]">
-            <Image
-              src={gdi_visuals}
-              alt="GDI Visualization"
-              width={600}
-              height={400}
-              className="rounded-lg"
-            />
-          </div>
+      </div>
+      <div className="flex justify-center mb-6">
+        <Link href="/datasets">
+          <button className="inline-block rounded-lg bg-primary px-4 py-2 font-bold text-white transition-colors duration-300 hover:bg-secondary">
+            Discover GDI datasets
+          </button>
+        </Link>
+      </div>
+
+      <div className="mb-20">
+        <div className="rounded-lg bg-white p-8 shadow-md transition-shadow duration-300 ease-in-out hover:shadow-lg">
+          <h3 className="mb-4 text-2xl font-bold text-primary">Themes</h3>
+          <p className="text-lg">Mock theme boxes will be displayed here.</p>
         </div>
       </div>
 
-      <div className="flex h-40 w-full justify-center">
-        <PortalStatistics />
+      <div className="mb-20">
+        <div className="rounded-lg bg-white p-8 shadow-md transition-shadow duration-300 ease-in-out hover:shadow-lg">
+          <h3 className="mb-4 text-2xl font-bold text-primary">About</h3>
+          <p className="text-lg">Mock about text will be displayed here.</p>
+        </div>
       </div>
 
-      <div className="mb-36 grid items-center gap-10 md:grid-cols-2">
+      <div className="mb-20">
+        <div className="rounded-lg bg-white p-8 shadow-md transition-shadow duration-300 ease-in-out hover:shadow-lg">
+          <h3 className="mb-4 text-2xl font-bold text-primary">
+            Most Recent Datasets
+          </h3>
+          <p className="text-lg">
+            Mock most recent datasets will be displayed here.
+          </p>
+        </div>
+      </div>
+
+      <div className="mb-20 grid items-center gap-10 md:grid-cols-2">
         <div className="relative order-2 flex h-full items-center justify-center md:order-1">
           <Image
             src={office}
@@ -80,7 +87,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="mb-36 grid items-center gap-10 md:grid-cols-2">
+      <div className="mb-20 grid items-center gap-10 md:grid-cols-2">
         <div className="rounded-lg bg-white p-8 shadow-md transition-shadow duration-300 ease-in-out hover:shadow-lg">
           <h3 className="mb-4 text-2xl font-bold text-primary">The Data</h3>
           <p className="text-lg">
@@ -99,9 +106,9 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="mb-36 rounded-xl border bg-primary p-8 text-white">
+      <div className="mb-6 rounded-xl border bg-primary p-6 text-white">
         <div className="container mx-auto flex flex-wrap items-center justify-between md:flex-nowrap">
-          <h2 className="mb-6 text-2xl font-bold text-warning md:mb-0 md:text-3xl lg:text-4xl">
+          <h2 className="text-2xl font-bold text-warning md:mb-0 md:text-3xl lg:text-4xl">
             PARTICIPATE
           </h2>
           <div className="flex flex-wrap gap-4 text-warning">

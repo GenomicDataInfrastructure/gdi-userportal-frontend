@@ -15,7 +15,6 @@ type SearchBarProps = {
 function SearchBar({ queryParams, size }: SearchBarProps) {
   const [query, setQuery] = useState("");
   const router = useRouter();
-  const { setAlert } = useAlert();
 
   let sizeClass = "h-11";
   if (size === "large") {

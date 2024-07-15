@@ -6,6 +6,8 @@
 import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
+import bgBackground from "../public/bg_background.png";
 
 const HomePage = () => {
   const queryParams = useSearchParams();
@@ -34,8 +36,14 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="mb-20">
-        <div className="rounded-lg bg-white p-8 shadow-md transition-shadow duration-300 ease-in-out hover:shadow-lg text-left">
+      <div className="mb-20 relative p-8 text-left">
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-10"
+          style={{
+            backgroundImage: `url(${bgBackground.src})`,
+          }}
+        ></div>
+        <div className="relative z-10">
           <h3 className="mb-4 text-2xl font-bold text-primary">
             About the data portal
           </h3>

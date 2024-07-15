@@ -29,8 +29,7 @@ const HomePage = () => {
         </div>
       </div>
       <div className="mb-20">
-        <div className="rounded-lg bg-white p-8 shadow-md transition-shadow duration-300 ease-in-out hover:shadow-lg">
-          <h3 className="mb-4 text-2xl font-bold text-primary">Themes</h3>
+        <div className="rounded-lg bg-white p-8 shadow-md transition-shadow duration-300 ease-in-out hover:shadow-lg text-left">
           <p className="text-lg">Mock theme boxes will be displayed here.</p>
         </div>
       </div>
@@ -77,7 +76,7 @@ const HomePage = () => {
       </div>
 
       <div className="mb-20">
-        <div className="rounded-lg bg-white p-8 shadow-md transition-shadow duration-300 ease-in-out hover:shadow-lg">
+        <div className="rounded-lg bg-white p-8 shadow-md transition-shadow duration-300 ease-in-out hover:shadow-lg text-left">
           <h3 className="mb-4 text-2xl font-bold text-primary">
             Most Recent Datasets
           </h3>

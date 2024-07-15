@@ -6,7 +6,7 @@
 import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
 import { useSearchParams } from "next/navigation";
-import bgBackground from "../public/bg-background.png";
+import aboutBackground from "../public/bg-background.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 
@@ -41,7 +41,7 @@ const HomePage = () => {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url(${bgBackground.src})`,
+            backgroundImage: `url(${aboutBackground.src})`,
           }}
         ></div>
         <div className="relative z-10 w-full md:w-3/4 lg:w-2/3 xl:w-3/5 bg-white bg-opacity-75 p-8 rounded-lg">

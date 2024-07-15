@@ -9,16 +9,17 @@ import { useSearchParams } from "next/navigation";
 
 const HomePage = () => {
   const queryParams = useSearchParams();
-  const applicationTitle = process.env.NEXT_PUBLIC_APPLICATION_TITLE || "WELCOME TO GDI";
-  const applicationSubtitle =
-    process.env.NEXT_PUBLIC_APPLICATION_SUBTITLE ||
+  const homepageTitle =
+    process.env.NEXT_PUBLIC_HOMEPAGE_TITLE || "WELCOME TO GDI";
+  const homepageSubtitle =
+    process.env.NEXT_PUBLIC_HOMEPAGE_SUBTITLE ||
     "The Genomic Data Infrastructure (GDI) project is enabling access to genomic and related phenotypic and clinical data across Europe.";
 
   return (
     <PageContainer className="container mx-auto px-4 pt-5 text-center">
       <div className="my-8">
-        <h1 className="font-bold text-4xl text-primary">{applicationTitle}</h1>
-        <h2 className="text-xl mt-4 font-light">{applicationSubtitle}</h2>
+        <h1 className="font-bold text-4xl text-primary">{homepageTitle}</h1>
+        <h2 className="text-xl mt-4 font-light">{homepageSubtitle}</h2>
       </div>
       <div className="flex justify-center mb-8">
         <div className="w-3/5">

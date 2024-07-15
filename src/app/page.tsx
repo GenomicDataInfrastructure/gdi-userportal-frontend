@@ -6,8 +6,9 @@
 import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
 import { useSearchParams } from "next/navigation";
-import bgBackground from "../public/bg-background.png";
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
+import aboutBackground from "../public/homepage-about-background.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 
 const HomePage = () => {
   const queryParams = useSearchParams();
@@ -40,10 +41,10 @@ const HomePage = () => {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url(${bgBackground.src})`,
+            backgroundImage: `url(${aboutBackground.src})`,
           }}
         ></div>
-        <div className="relative z-10 w-full md:w-3/4 lg:w-2/3 xl:w-3/5 bg-white bg-opacity-75 p-8 rounded-lg">
+        <div className="relative z-10 w-full md:w-3/4 lg:w-2/3 xl:w-3/5 bg-white bg-opacity-75 p-8 rounded-lg min-h-[300px]">
           <h3 className="mb-4 text-2xl font-bold text-primary">
             About the data portal
           </h3>
@@ -60,7 +61,11 @@ const HomePage = () => {
             className="text-primary flex items-center gap-1 transition hover:underline duration-1000"
             href="/about"
           >
-            Read more <ArrowTopRightOnSquareIcon className="w-5 h-5" />
+            Read more
+            <FontAwesomeIcon
+              icon={faArrowUpRightFromSquare}
+              className="w-4 h-4"
+            />
           </a>
         </div>
       </div>

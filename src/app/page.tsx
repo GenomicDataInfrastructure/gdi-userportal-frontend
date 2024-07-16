@@ -7,12 +7,44 @@ import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
 import ThemesSection from "@/components/ThemesSection";
 import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { datasetList } from "@/services/discovery/index.public";
+import { SearchedDataset } from "@/services/discovery/types/dataset.types";
+import RecentDatasets from "@/components/RecentDatasets";
 import aboutBackground from "../public/homepage-about-background.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import { useAlert } from "@/providers/AlertProvider";
+import { AxiosError } from "axios";
 
 const HomePage = () => {
   const queryParams = useSearchParams();
+  const [datasets, setDatasets] = useState<SearchedDataset[]>([]);
+  const { setAlert } = useAlert();
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await datasetList({
+          limit: 4,
+          sort: "createdAt desc",
+        });
+        setDatasets(response.data.datasets);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          setAlert({
+            type: "error",
+            message:
+              error.response?.data?.title ||
+              `Failed to fetch datasets, status code: ${error.response?.status}`,
+            details: error.response?.data?.detail,
+          });
+        }
+      }
+    }
+    fetchData();
+  }, [setAlert]);
+
   const homepageTitle =
     process.env.NEXT_PUBLIC_HOMEPAGE_TITLE || "WELCOME TO GDI";
   const homepageSubtitle =
@@ -68,15 +100,8 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="mb-20">
-        <div className="rounded-lg bg-white p-8 shadow-md transition-shadow duration-300 ease-in-out hover:shadow-lg text-left">
-          <h3 className="mb-4 text-2xl font-bold text-primary">
-            Most Recent Datasets
-          </h3>
-          <p className="text-lg">
-            Mock most recent datasets will be displayed here.
-          </p>
-        </div>
+      <div className="mb-4">
+        <RecentDatasets datasets={datasets} />
       </div>
     </PageContainer>
   );

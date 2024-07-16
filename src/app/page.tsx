@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+// SPDX-License-Identifier: 2024 PNED G.I.E.
 // SPDX-License-Identifier: Apache-2.0
 
 "use client";
@@ -13,25 +13,36 @@ import RecentDatasets from "@/components/RecentDatasets";
 import aboutBackground from "../public/homepage-about-background.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import { useAlert } from "@/providers/AlertProvider";
+import { AxiosError } from "axios";
 
 const HomePage = () => {
   const queryParams = useSearchParams();
   const [datasets, setDatasets] = useState<SearchedDataset[]>([]);
+  const { setAlert } = useAlert();
 
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await datasetList({
-          limit: 200,
+          limit: 4,
           sort: "createdAt desc",
         });
         setDatasets(response.data.datasets);
       } catch (error) {
-        console.error("Error fetching datasets", error);
+        if (error instanceof AxiosError) {
+          setAlert({
+            type: "error",
+            message:
+              error.response?.data?.title ||
+              `Failed to fetch datasets, status code: ${error.response?.status}`,
+            details: error.response?.data?.detail,
+          });
+        }
       }
     }
     fetchData();
-  }, []);
+  }, [setAlert]);
 
   const homepageTitle =
     process.env.NEXT_PUBLIC_HOMEPAGE_TITLE || "WELCOME TO GDI";

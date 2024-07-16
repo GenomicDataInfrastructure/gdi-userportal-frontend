@@ -33,7 +33,7 @@ function Footer() {
 
   return (
     <>
-      <div className="bg-primary p-4 text-center">
+      <div className="bg-primary p-4 text-center mt-4">
         <a
           href={bannerLink ? `https://${bannerLink}` : "#"}
           target={bannerLink ? "_blank" : ""}

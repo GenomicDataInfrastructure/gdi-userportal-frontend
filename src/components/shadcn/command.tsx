@@ -46,10 +46,13 @@ const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
-  <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
+  <div
+    className="flex items-center border-b border-gray-300 px-3"
+    cmdk-input-wrapper=""
+  >
     <FontAwesomeIcon
       icon={faSearch}
-      className="mr-2 h-4 w-4 shrink-0 opacity-50"
+      className="mr-2 h-4 w-4 shrink-0 text-gray-500"
     />
     <CommandPrimitive.Input
       ref={ref}
@@ -70,7 +73,10 @@ const CommandList = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.List
     ref={ref}
-    className={cn("max-h-[300px] overflow-y-auto overflow-x-hidden", className)}
+    className={cn(
+      "max-h-[300px] overflow-y-auto overflow-x-hidden border border-gray-300 bg-white text-info",
+      className
+    )}
     {...props}
   />
 ));
@@ -83,7 +89,7 @@ const CommandEmpty = React.forwardRef<
 >((props, ref) => (
   <CommandPrimitive.Empty
     ref={ref}
-    className="py-6 text-center text-sm"
+    className="py-6 text-center text-sm text-info"
     {...props}
   />
 ));
@@ -112,7 +118,7 @@ const CommandSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Separator
     ref={ref}
-    className={cn("bg-border -mx-1 h-px", className)}
+    className={cn("-mx-1 h-px bg-gray-300", className)}
     {...props}
   />
 ));

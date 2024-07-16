@@ -4,8 +4,10 @@
 
 "use client";
 
+import { useState, useEffect } from "react";
+import PhoneInput from "@/components/PhoneInput";
+import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FormField } from "@/types/application.types";
-import GenericInputField from "./GenericInputField";
 
 type PhoneFieldProps = {
   field: FormField;
@@ -14,21 +16,56 @@ type PhoneFieldProps = {
 };
 
 function PhoneField({ formId, field, title }: PhoneFieldProps) {
+  const { updateInputFields } = useApplicationDetails();
+  const [inputValue, setInputValue] = useState(field.value);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (inputValue !== field.value) {
+        updateInputFields(formId, field.id, inputValue);
+      }
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
+  }, [inputValue, formId, field, updateInputFields]);
+
+  const handlePhoneChange = (value: string) => {
+    setInputValue(value);
+    field.value = value;
+  };
+
+  const handlePhoneBlur = () => {
+    if (inputValue) {
+      const formattedValue = formatPhoneNumber(inputValue);
+      updateInputFields(formId, field.id, formattedValue);
+    }
+  };
+
+  const formatPhoneNumber = (phone: string): string => {
+    if (!phone.startsWith("+")) {
+      phone = `+${phone}`;
+    }
+    return phone.replace(/\s+/g, "");
+  };
+
   return (
-    <GenericInputField
-      field={field}
-      formId={formId}
-      type="tel"
-      placeholder="Enter your phone number"
-      title={title}
-    >
-      <select className="mr-2 h-12 rounded-md border-2 border-primary p-2 text-base focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary">
-        <option value="+352">+352</option>
-        <option value="+1">+1</option>
-        <option value="+44">+44</option>
-        <option value="+91">+91</option>
-      </select>
-    </GenericInputField>
+    <div className="rounded border p-4">
+      <div className="flex flex-col">
+        <div>
+          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
+            field.optional ? "(Optional)" : ""
+          }`}</h3>
+        </div>
+        <div className="mt-4 flex w-full">
+          <PhoneInput
+            value={inputValue}
+            onChange={handlePhoneChange}
+            onBlur={handlePhoneBlur}
+            className="flex w-full"
+          />
+        </div>
+      </div>
+    </div>
   );
 }
 

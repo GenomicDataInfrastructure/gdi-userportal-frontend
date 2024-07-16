@@ -8,7 +8,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 type DatasetLinkProps = Pick<
   SearchedDataset,
-  "id" | "title" | "createdAt" | "description"
+  "title" | "createdAt" | "description"
 >;
 
 const RecentDatasets = ({ datasets }: { datasets: SearchedDataset[] }) => {
@@ -36,7 +36,6 @@ const RecentDatasets = ({ datasets }: { datasets: SearchedDataset[] }) => {
                 className="block w-full sm:w-[350px] shadow hover:shadow-bb2 rounded-lg hover:scale-105 transition duration-500 text-left"
               >
                 <DatasetLink
-                  id={dataset.id}
                   title={dataset.title}
                   createdAt={dataset.createdAt}
                   description={dataset.description}
@@ -59,7 +58,7 @@ const RecentDatasets = ({ datasets }: { datasets: SearchedDataset[] }) => {
   );
 };
 
-function DatasetLink({ id, title, createdAt, description }: DatasetLinkProps) {
+function DatasetLink({ title, createdAt, description }: DatasetLinkProps) {
   return (
     <div className="p-5 h-full flex flex-col">
       <span className="text-info flex items-center mb-2">

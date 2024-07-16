@@ -73,7 +73,7 @@ const ThemesSection = () => {
       </div>
       <div className="pt-4 px-8 sm:px-0 w-full flex">
         <a
-          className="text-primary flex items-center gap-1 transition hover:underline duration-1000 ml-auto"
+          className="text-primary flex items-center gap-1 transition hover:underline duration-500 ml-auto"
           href="/themes"
         >
           See all

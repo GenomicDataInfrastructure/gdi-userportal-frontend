@@ -5,6 +5,7 @@
 
 import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
+import ThemesSection from "@/components/ThemesSection";
 import { useSearchParams } from "next/navigation";
 import aboutBackground from "../public/homepage-about-background.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,16 +27,13 @@ const HomePage = () => {
         <h1 className="font-bold text-4xl text-primary">{homepageTitle}</h1>
         <h2 className="text-xl mt-4 font-light">{homepageSubtitle}</h2>
       </div>
-      <div className="flex justify-center mb-8">
-        <div className="w-3/5">
+      <div className="flex justify-center mb-24">
+        <div className="w-full lg:w-4/5 xl:w-3/4">
           <SearchBar queryParams={queryParams} size="large" />
         </div>
       </div>
-      <div className="mb-20">
-        <div className="rounded-lg bg-white p-8 shadow-md transition-shadow duration-300 ease-in-out hover:shadow-lg text-left">
-          <p className="text-lg">Mock theme boxes will be displayed here.</p>
-        </div>
-      </div>
+
+      <ThemesSection maxThemes={12} />
 
       <div className="mb-20 relative text-left flex items-center">
         <div

@@ -52,12 +52,12 @@ const InputComponent = forwardRef<HTMLInputElement, InputProps>(
       className={cn(
         "h-12 w-full rounded-md border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary",
         className,
-        "ml-2",
+        "ml-2"
       )}
       ref={ref}
       {...props}
     />
-  ),
+  )
 );
 InputComponent.displayName = "InputComponent";
 
@@ -87,7 +87,7 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
           }
         }, 100);
       },
-      [onChange, ref],
+      [onChange, ref]
     );
 
     return (
@@ -97,7 +97,7 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
             type="button"
             variant="outline"
             className={cn(
-              "flex h-12 items-center gap-1 rounded-l-md border-2 border-primary px-3",
+              "flex h-12 items-center gap-1 rounded-l-md border-2 border-primary px-3"
             )}
             disabled={disabled}
           >
@@ -105,7 +105,7 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
             <ChevronsUpDown
               className={cn(
                 "-mr-2 h-4 w-4 opacity-50",
-                !disabled && "opacity-100",
+                !disabled && "opacity-100"
               )}
             />
           </Button>
@@ -136,9 +136,7 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
                         <CheckIcon
                           className={cn(
                             "ml-auto h-4 w-4",
-                            option.value === value
-                              ? "opacity-100"
-                              : "opacity-0",
+                            option.value === value ? "opacity-100" : "opacity-0"
                           )}
                         />
                       </CommandItem>
@@ -150,7 +148,7 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
         </PopoverContent>
       </Popover>
     );
-  },
+  }
 );
 CountrySelect.displayName = "CountrySelect";
 

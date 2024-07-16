@@ -42,12 +42,11 @@
     "react": "^18",
     "react-datepicker": "^7.2.0",
     "react-dom": "^18",
-    "react-phone-input-2": "^2.15.1",
     "react-phone-number-input": "^3.4.3",
     "sharp": "^0.33.2",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
-    "utils": "^0.3.0"
+    "utils": "^0.2.2"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

@@ -28,7 +28,7 @@ const Command = React.forwardRef<
 ));
 Command.displayName = CommandPrimitive.displayName;
 
-interface CommandDialogProps extends DialogProps { }
+interface CommandDialogProps extends DialogProps {}
 
 const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
   return (
@@ -75,7 +75,7 @@ const CommandList = React.forwardRef<
     ref={ref}
     className={cn(
       "max-h-[300px] overflow-y-auto overflow-x-hidden border border-gray-300 bg-white text-info",
-      className,
+      className
     )}
     {...props}
   />

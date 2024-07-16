@@ -28,7 +28,7 @@ const HomePage = () => {
         <h2 className="text-xl mt-4 font-light">{homepageSubtitle}</h2>
       </div>
       <div className="flex justify-center mb-24">
-        <div className="w-3/5">
+        <div className="w-full lg:w-4/5 xl:w-3/4">
           <SearchBar queryParams={queryParams} size="large" />
         </div>
       </div>

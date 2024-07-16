@@ -2,12 +2,21 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { datasetList } from '@/services/discovery/index.public';
-import { DatasetEntitlement, SearchedDataset } from '@/services/discovery/types/dataset.types';
-import { DatasetSearchOptions, QueryOperator } from '@/services/discovery/types/datasetSearch.types';
-import { Entitlement } from '@/types/entitlements.types';
+import { datasetList } from "@/services/discovery/index.public";
+import {
+  DatasetEntitlement,
+  SearchedDataset,
+} from "@/services/discovery/types/dataset.types";
+import {
+  DatasetSearchOptions,
+  QueryOperator,
+} from "@/services/discovery/types/datasetSearch.types";
+import { Entitlement } from "@/types/entitlements.types";
 
-export const mapToDatasetEntitlement = (datasets: SearchedDataset[], entitlements: Entitlement[]): DatasetEntitlement[] => {
+export const mapToDatasetEntitlement = (
+  datasets: SearchedDataset[],
+  entitlements: Entitlement[]
+): DatasetEntitlement[] => {
   return entitlements.map((e) => ({
     dataset: datasets.find((x) => x.identifier === e.datasetId),
     start: e.start,
@@ -15,10 +24,16 @@ export const mapToDatasetEntitlement = (datasets: SearchedDataset[], entitlement
   }));
 };
 
-export const createDatasetEntitlements = async (entitlements: Entitlement[]): Promise<DatasetEntitlement[]> => {
+export const createDatasetEntitlements = async (
+  entitlements: Entitlement[]
+): Promise<DatasetEntitlement[]> => {
   const options: DatasetSearchOptions = {
     limit: 1000,
-    facets: entitlements.map((e) => ({ facetGroup: 'ckan', facet: 'identifier', value: e.datasetId })),
+    facets: entitlements.map((e) => ({
+      facetGroup: "ckan",
+      facet: "identifier",
+      value: e.datasetId,
+    })),
     operator: QueryOperator.Or,
   };
 

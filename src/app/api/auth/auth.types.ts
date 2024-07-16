@@ -2,10 +2,14 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { Account, Session } from 'next-auth';
-import { JWT } from 'next-auth/jwt';
+import { Account, Session } from "next-auth";
+import { JWT } from "next-auth/jwt";
 
-export type ExtendedSession = Session & { id_token: string; access_token: string; error?: string };
+export type ExtendedSession = Session & {
+  id_token: string;
+  access_token: string;
+  error?: string;
+};
 
 export type JWTCallbackEntry = {
   token: JWT;

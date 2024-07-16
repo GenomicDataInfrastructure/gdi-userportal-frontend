@@ -66,7 +66,7 @@ const PaginationLink = ({
           size,
         }),
         className,
-        isActive ? "bg-info text-white hover:text-white" : "",
+        isActive ? "bg-info text-white hover:text-white" : ""
       )}
     />
   </PaginationItem>

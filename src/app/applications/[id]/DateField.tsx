@@ -19,7 +19,7 @@ type DateFieldProps = {
 function DateField({ formId, field, title }: DateFieldProps) {
   const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState<Date | null>(
-    field.value ? new Date(field.value) : null,
+    field.value ? new Date(field.value) : null
   );
 
   useEffect(() => {
@@ -41,7 +41,9 @@ function DateField({ formId, field, title }: DateFieldProps) {
     <div className="rounded border p-4">
       <div className="flex flex-col justify-between">
         <div>
-          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${field.optional ? "(Optional)" : ""}`}</h3>
+          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
+            field.optional ? "(Optional)" : ""
+          }`}</h3>
         </div>
         <DatePicker
           selected={inputValue}

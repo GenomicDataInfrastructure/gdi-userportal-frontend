@@ -62,8 +62,8 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
       >
         {!!dataset.recordsCount && (
           <span className="mt-4 flex rounded bg-info px-2 py-1 text-xs font-bold text-white">
-            {dataset.recordsCount} record{dataset.recordsCount > 1 ? "s" : ""}{" "}
-            found
+            {dataset.recordsCount} record
+            {dataset.recordsCount > 1 ? "s" : ""} found
           </span>
         )}
         {!isLoading && (

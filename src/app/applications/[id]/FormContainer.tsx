@@ -24,7 +24,7 @@ function FormContainer({ form }: FormContainerProps) {
               <li key={field.id}>
                 <FieldContainer formId={form.id} field={field} />
               </li>
-            ),
+            )
         )}
       </ul>
     </div>

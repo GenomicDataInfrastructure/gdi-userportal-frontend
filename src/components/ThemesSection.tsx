@@ -11,6 +11,7 @@ import energyImg from "../public/themes/energy.svg";
 import envImg from "../public/themes/env.svg";
 import governmentImg from "../public/themes/government.svg";
 import healthImg from "../public/themes/health.svg";
+import internationalIssuesImg from "../public/themes/international_issues.svg";
 import justiceImg from "../public/themes/justice.svg";
 import populationImg from "../public/themes/population.svg";
 import regionsImg from "../public/themes/regions.svg";
@@ -29,14 +30,18 @@ const allThemes = [
     img: educationImg,
     desc: "Education, culture and sport",
   },
-  { name: "Energy", img: energyImg, desc: "Energy" },
-  { name: "Environment", img: envImg, desc: "Environment" },
+  { name: "Energy", img: energyImg },
+  { name: "Environment", img: envImg },
   {
     name: "Government",
     img: governmentImg,
     desc: "Government and public sector",
   },
-  { name: "Health", img: healthImg, desc: "Health" },
+  { name: "Health", img: healthImg },
+  {
+    name: "International Issues",
+    img: internationalIssuesImg,
+  },
   {
     name: "Justice",
     img: justiceImg,
@@ -45,7 +50,7 @@ const allThemes = [
   { name: "Population", img: populationImg, desc: "Population and society" },
   { name: "Regions", img: regionsImg, desc: "Regions and cities" },
   { name: "Tech", img: techImg, desc: "Science and technology" },
-  { name: "Transport", img: transportImg, desc: "Transport" },
+  { name: "Transport", img: transportImg },
 ];
 
 const getThemesFromEnv = () => {
@@ -56,24 +61,27 @@ const getThemesFromEnv = () => {
 
   try {
     const themesList = JSON.parse(themesEnv);
-    return allThemes.filter(theme => themesList.includes(theme.name));
+    return allThemes.filter((theme) => themesList.includes(theme.name));
   } catch (error) {
     console.error("Error parsing NEXT_PUBLIC_THEMES_LIST:", error);
     return allThemes;
   }
 };
 
-const ThemesSection = () => {
+const ThemesSection = ({ maxThemes }: { maxThemes?: number }) => {
   const themes = getThemesFromEnv();
+  const displayedThemes = maxThemes ? themes.slice(0, maxThemes) : themes;
 
   return (
     <section className="mb-20">
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-        {themes.map((theme) => (
+        {displayedThemes.map((theme) => (
           <a
             key={theme.name}
             className="bg-white py-6 flex items-center justify-center px-2 rounded-lg h-[166px] shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50"
-            href={`/datasets?group=${theme.name.toLowerCase()}`}
+            href={`/datasets?group=${theme.name
+              .toLowerCase()
+              .replace(/\s+/g, "_")}`}
           >
             <div className="flex flex-col justify-center items-center text-center">
               <img

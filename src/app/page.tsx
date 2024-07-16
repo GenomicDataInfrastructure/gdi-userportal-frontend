@@ -33,7 +33,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      <ThemesSection />
+      <ThemesSection maxThemes={12} />
 
       <div className="mb-20 relative text-left flex items-center">
         <div

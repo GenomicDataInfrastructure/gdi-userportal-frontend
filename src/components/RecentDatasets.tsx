@@ -5,6 +5,8 @@ import Link from "next/link";
 import { SearchedDataset } from "@/services/discovery/types/dataset.types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { formatDate } from "@/utils/formatDate";
+import { useMemo } from "react";
 
 type DatasetLinkProps = Pick<
   SearchedDataset,
@@ -12,12 +14,14 @@ type DatasetLinkProps = Pick<
 >;
 
 const RecentDatasets = ({ datasets }: { datasets: SearchedDataset[] }) => {
-  const sortedDatasets = [...datasets]
-    .sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    )
-    .slice(0, 4);
+  const sortedDatasets = useMemo(() => {
+    return [...datasets]
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
+      .slice(0, 4);
+  }, [datasets]);
 
   return (
     <div className="bg-white sm:p-4 rounded-lg pb-28 sm:pb-28 w-full">
@@ -33,7 +37,7 @@ const RecentDatasets = ({ datasets }: { datasets: SearchedDataset[] }) => {
               <Link
                 key={dataset.id}
                 href={`/datasets/${dataset.id}`}
-                className="block w-full sm:w-[350px] shadow hover:shadow-bb2 rounded-lg hover:scale-105 transition duration-500 text-left"
+                className="block w-full sm:w-full shadow hover:shadow-bb2 rounded-lg hover:scale-105 transition duration-500 text-left"
               >
                 <DatasetLink
                   title={dataset.title}
@@ -61,12 +65,8 @@ const RecentDatasets = ({ datasets }: { datasets: SearchedDataset[] }) => {
 function DatasetLink({ title, createdAt, description }: DatasetLinkProps) {
   return (
     <div className="p-5 h-full flex flex-col">
-      <span className="text-info flex items-center mb-2">
-        {new Intl.DateTimeFormat("en-GB", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        }).format(new Date(createdAt))}
+      <span className="text-info flex items-center mb-4">
+        {formatDate(createdAt)}
       </span>
       <h3 className="text-xl text-primary">{title}</h3>
       <div className="flex items-center gap-1 leading-6 tracking-tight pt-2 pb-2">

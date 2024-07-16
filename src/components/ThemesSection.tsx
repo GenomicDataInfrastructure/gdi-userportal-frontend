@@ -17,7 +17,7 @@ import regionsImg from "../public/themes/regions.svg";
 import techImg from "../public/themes/tech.svg";
 import transportImg from "../public/themes/transport.svg";
 
-const themes = [
+const allThemes = [
   {
     name: "Agriculture",
     img: agricultureImg,
@@ -48,7 +48,24 @@ const themes = [
   { name: "Transport", img: transportImg, desc: "Transport" },
 ];
 
+const getThemesFromEnv = () => {
+  const themesEnv = process.env.NEXT_PUBLIC_THEMES_LIST;
+  if (!themesEnv) {
+    return allThemes;
+  }
+
+  try {
+    const themesList = JSON.parse(themesEnv);
+    return allThemes.filter(theme => themesList.includes(theme.name));
+  } catch (error) {
+    console.error("Error parsing NEXT_PUBLIC_THEMES_LIST:", error);
+    return allThemes;
+  }
+};
+
 const ThemesSection = () => {
+  const themes = getThemesFromEnv();
+
   return (
     <section className="mb-20">
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">

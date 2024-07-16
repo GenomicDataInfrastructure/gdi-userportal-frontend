@@ -36,7 +36,7 @@
     "iso-639-3": "^3.0.1",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.401.0",
-    "next": "14.1.1",
+    "next": "14.2.5",
     "next-auth": "^4.24.5",
     "next-runtime-env": "^3.2.0",
     "react": "^18",
@@ -46,7 +46,7 @@
     "sharp": "^0.33.2",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
-    "utils": "^0.2.2"
+    "utils": "^0.3.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

@@ -13,11 +13,7 @@ import SessionProviderWrapper from "./SessionProviderWrapper";
 import "./globals.css";
 config.autoAddCss = false;
 import { fontVariables } from "@/utils/fontSelector";
-
-const siteTitle = process.env.NEXT_PUBLIC_SITE_TITLE || "GDI - User Portal";
-const siteDescription =
-  process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
-  "Genomic Data Infrastructure User Portal";
+import serverConfig from "@/config/serverConfig";
 
 export default function RootLayout({
   children,
@@ -27,9 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={fontVariables}>
       <head>
-        <title>{siteTitle}</title>
+        <title>{serverConfig.siteTitle}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content={siteDescription} />
+        <meta name="description" content={serverConfig.siteDescription} />
         <PublicEnvScript />
         {process.env.NEXT_PUBLIC_CUSTOM_STYLE_URL && (
           <link

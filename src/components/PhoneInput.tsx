@@ -26,33 +26,34 @@ type PhoneInputProps = Omit<
 > & {
   value?: string;
   onChange?: (value: string) => void;
+  isEditable?: boolean;
 };
 
 const PhoneInput = forwardRef<
   React.ElementRef<typeof RPNInput.default>,
   PhoneInputProps
->(({ onChange, ...props }, ref) => (
+>(({ onChange, isEditable, ...props }, ref) => (
   <RPNInput.default
     ref={ref}
     className={cn("flex w-full")}
     flagComponent={FlagComponent}
     countrySelectComponent={(props) => (
-      <CountrySelect {...props} onChange={onChange} ref={ref} />
+      <CountrySelect {...props} onChange={onChange} ref={ref} isEditable={isEditable} />
     )}
-    inputComponent={InputComponent}
+    inputComponent={(props) => <InputComponent {...props} isEditable={isEditable} />}
     onChange={(value) => onChange?.(value ?? "")}
     {...props}
   />
 ));
 PhoneInput.displayName = "PhoneInput";
 
-const InputComponent = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, ...props }, ref) => (
+const InputComponent = forwardRef<HTMLInputElement, InputProps & { isEditable?: boolean }>(
+  ({ className, isEditable, ...props }, ref) => (
     <Input
       className={cn(
-        "h-12 w-full rounded-md border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary",
+        "ml-2 h-12 w-full rounded-md border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary",
         className,
-        "ml-2"
+        !isEditable && "bg-surface"
       )}
       ref={ref}
       {...props}
@@ -68,6 +69,7 @@ type CountrySelectProps = {
   value: RPNInput.Country;
   onChange: (value: string) => void;
   options: CountrySelectOption[];
+  isEditable?: boolean;
 };
 
 const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(

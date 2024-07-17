@@ -42,15 +42,15 @@ function TextAreaFormField({
     <div className="rounded border p-4">
       <div className="flex flex-col justify-between">
         <div>
-          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
-            field.optional ? "(Optional)" : ""
-          }`}</h3>
+          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${field.optional ? "(Optional)" : ""
+            }`}</h3>
         </div>
         <textarea
           placeholder={title}
           rows={5}
           value={inputValue}
-          className="mt-4 w-full rounded-lg border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
+          className={`mt-4 w-full rounded-lg border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary ${!isEditable ? "bg-surface" : ""
+            }`}
           onChange={handleInputChange}
           disabled={isLoading || !isEditable}
         />

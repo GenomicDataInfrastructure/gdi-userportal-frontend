@@ -7,8 +7,16 @@
 import { useEffect, useState } from "react";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FormField } from "@/types/application.types";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { cn } from "@/utils/tailwindMerge";
+import { Button } from "@/components/shadcn/button";
+import { Calendar } from "@/components/shadcn/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/shadcn/popover";
 
 type DateFieldProps = {
   field: FormField;
@@ -18,8 +26,8 @@ type DateFieldProps = {
 
 function DateField({ formId, field, title }: DateFieldProps) {
   const { updateInputFields } = useApplicationDetails();
-  const [inputValue, setInputValue] = useState<Date | null>(
-    field.value ? new Date(field.value) : null
+  const [inputValue, setInputValue] = useState<Date | undefined>(
+    field.value ? new Date(field.value) : undefined
   );
 
   useEffect(() => {
@@ -33,8 +41,8 @@ function DateField({ formId, field, title }: DateFieldProps) {
     return () => clearTimeout(timeoutId);
   }, [inputValue, formId, field.id, field.value, updateInputFields]);
 
-  const handleDateChange = (date: Date | null) => {
-    setInputValue(date);
+  const handleDateChange = (date?: Date) => {
+    setInputValue(date || undefined);
   };
 
   return (
@@ -45,16 +53,33 @@ function DateField({ formId, field, title }: DateFieldProps) {
             field.optional ? "(Optional)" : ""
           }`}</h3>
         </div>
-        <DatePicker
-          selected={inputValue}
-          onChange={handleDateChange}
-          className="mt-4 h-12 w-full rounded-lg border-2 border-primary px-4 py-[9px] text-base shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
-          placeholderText="dd/mm/yyyy"
-          dateFormat="dd/MM/yyyy"
-          calendarClassName="rounded-lg shadow-lg p-2"
-          dayClassName={() => "p-2 rounded-full hover:bg-blue-200"}
-          popperPlacement="bottom-start"
-        />
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={cn(
+                "mt-4 h-12 w-full justify-start text-left font-normal",
+                !inputValue && "text-muted-foreground",
+                "rounded-lg border-2 border-primary px-4 py-[9px] text-base shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {inputValue ? (
+                format(inputValue, "dd/MM/yyyy")
+              ) : (
+                <span>Pick a date</span>
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0 rounded-lg shadow-lg">
+            <Calendar
+              mode="single"
+              selected={inputValue}
+              onSelect={handleDateChange as (date: Date | undefined) => void}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );

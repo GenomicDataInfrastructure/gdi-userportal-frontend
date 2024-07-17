@@ -68,7 +68,6 @@ function GenericInputField({
               !isEditable ? "pointer-events-none bg-surface" : ""
             }`}
             placeholder={placeholder}
-            readOnly={!isEditable}
           />
         </div>
       </div>

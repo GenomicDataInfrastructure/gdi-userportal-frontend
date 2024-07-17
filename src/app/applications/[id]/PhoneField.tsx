@@ -61,7 +61,7 @@ function PhoneField({ formId, field, title, isEditable }: PhoneFieldProps) {
             onChange={handlePhoneChange}
             onBlur={handlePhoneBlur}
             isEditable={isEditable}
-            className={`flex w-full ${!isEditable ? "pointer-events-none" : ""}`}
+            className={`flex w-full ${!isEditable ? "pointer-events-none bg-surface" : ""}`}
           />
         </div>
       </div>

@@ -36,18 +36,13 @@ type PhoneInputProps = Omit<
 const PhoneInput = forwardRef<
   React.ElementRef<typeof RPNInput.default>,
   PhoneInputProps
->(({ onChange, isEditable = true, ...props }, ref) => (
+>(({ onChange, ...props }, ref) => (
   <RPNInput.default
     ref={ref}
     className={cn("flex w-full")}
     flagComponent={FlagComponent}
     countrySelectComponent={(props) => (
-      <CountrySelect
-        {...props}
-        onChange={onChange}
-        ref={ref}
-        isEditable={isEditable}
-      />
+      <CountrySelect {...props} onChange={onChange} ref={ref} />
     )}
     inputComponent={InputComponent}
     onChange={(value) => onChange?.(value ?? "")}
@@ -59,15 +54,16 @@ PhoneInput.displayName = "PhoneInput";
 const InputComponent = forwardRef<
   HTMLInputElement,
   InputProps & { isEditable?: boolean }
->(({ className, isEditable = true, ...props }, ref) => (
+>(({ className, isEditable, ...props }, ref) => (
   <Input
     className={cn(
-      "h-12 w-full rounded-lg ml-2 border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary",
+      "h-12 w-full ml-2 rounded-lg border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary",
       className,
-      !isEditable && "bg-surface"
+      !isEditable && "pointer-events-none bg-surface"
     )}
     ref={ref}
     {...props}
+    readOnly={!isEditable}
   />
 ));
 InputComponent.displayName = "InputComponent";
@@ -75,7 +71,6 @@ InputComponent.displayName = "InputComponent";
 type CountrySelectOption = { label: string; value: RPNInput.Country };
 
 type CountrySelectProps = {
-  disabled?: boolean;
   value: RPNInput.Country;
   onChange: (value: string) => void;
   options: CountrySelectOption[];
@@ -83,7 +78,7 @@ type CountrySelectProps = {
 };
 
 const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
-  ({ disabled, value, onChange, options, isEditable = true }, ref) => {
+  ({ value, onChange, options, isEditable }, ref) => {
     const handleSelect = useCallback(
       (country: RPNInput.Country) => {
         const callingCode = RPNInput.getCountryCallingCode(country);
@@ -112,15 +107,9 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
               "flex h-12 items-center gap-1 rounded-l-md border-2 border-primary px-3",
               !isEditable && "pointer-events-none bg-surface"
             )}
-            disabled={disabled || !isEditable}
           >
             <FlagComponent country={value} countryName={value} />
-            <ChevronsUpDown
-              className={cn(
-                "-mr-2 h-4 w-4 opacity-50",
-                !disabled && "opacity-100"
-              )}
-            />
+            <ChevronsUpDown className={cn("-mr-2 h-4 w-4 opacity-50")} />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[300px] p-0">

@@ -13,6 +13,7 @@ type GenericInputFieldProps = {
   type: string;
   placeholder: string;
   title: string;
+  isEditable: boolean;
   onChange?: (value: string) => void;
   children?: React.ReactNode;
 };
@@ -23,10 +24,11 @@ function GenericInputField({
   type,
   placeholder,
   title,
+  isEditable,
   onChange,
   children,
 }: GenericInputFieldProps) {
-  const { isLoading, updateInputFields } = useApplicationDetails();
+  const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
 
   useEffect(() => {
@@ -62,9 +64,11 @@ function GenericInputField({
             name={field.id.toString()}
             value={inputValue}
             onChange={handleInputChange}
-            className="h-12 w-full rounded-lg border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
+            className={`h-12 w-full rounded-lg border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out ${
+              !isEditable ? "pointer-events-none" : ""
+            }`}
             placeholder={placeholder}
-            disabled={isLoading}
+            readOnly={!isEditable}
           />
         </div>
       </div>

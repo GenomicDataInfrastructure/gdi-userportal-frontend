@@ -11,9 +11,15 @@ type InputFormFieldProps = {
   field: FormField;
   formId: number;
   title: string;
+  isEditable: boolean;
 };
 
-function InputFormField({ formId, field, title }: InputFormFieldProps) {
+function InputFormField({
+  formId,
+  field,
+  title,
+  isEditable,
+}: InputFormFieldProps) {
   return (
     <GenericInputField
       field={field}
@@ -21,6 +27,7 @@ function InputFormField({ formId, field, title }: InputFormFieldProps) {
       type="text"
       placeholder={title}
       title={title}
+      isEditable={isEditable}
     />
   );
 }

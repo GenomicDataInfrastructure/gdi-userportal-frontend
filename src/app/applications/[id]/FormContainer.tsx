@@ -2,14 +2,17 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+"use client";
+
 import { Form } from "@/types/application.types";
 import FieldContainer from "./FieldContainer";
 
 type FormContainerProps = {
   form: Form;
+  isEditable: boolean;
 };
 
-function FormContainer({ form }: FormContainerProps) {
+function FormContainer({ form, isEditable }: FormContainerProps) {
   const formTitle =
     form.externalTitle.find((label) => label.language === "en")?.name ||
     form.externalTitle?.[0]?.name;
@@ -22,7 +25,11 @@ function FormContainer({ form }: FormContainerProps) {
           (field) =>
             field && (
               <li key={field.id}>
-                <FieldContainer formId={form.id} field={field} />
+                <FieldContainer
+                  formId={form.id}
+                  field={field}
+                  isEditable={isEditable}
+                />
               </li>
             )
         )}

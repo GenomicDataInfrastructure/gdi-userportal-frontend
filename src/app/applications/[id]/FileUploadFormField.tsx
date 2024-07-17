@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+"use client";
+
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FormField } from "@/types/application.types";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
@@ -12,9 +14,15 @@ type FileUploadFieldProps = {
   field: FormField;
   formId: number;
   title: string;
+  isEditable: boolean;
 };
 
-function FileUploadFormField({ field, formId, title }: FileUploadFieldProps) {
+function FileUploadFormField({
+  field,
+  formId,
+  title,
+  isEditable,
+}: FileUploadFieldProps) {
   const { application, isLoading, addAttachment } = useApplicationDetails();
 
   function onFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -33,24 +41,26 @@ function FileUploadFormField({ field, formId, title }: FileUploadFieldProps) {
             field.optional ? "(Optional)" : ""
           }`}</h3>
         </div>
-        <>
-          <input
-            type="file"
-            id={`input-file-${field.id}`}
-            disabled={isLoading}
-            onChange={onFileUpload}
-            className="hidden"
-          />
-          <label
-            htmlFor={`input-file-${field.id}`}
-            className={`cursor-pointer rounded-lg bg-info p-2 py-2 text-[9px] font-bold tracking-wide text-white transition-colors duration-200 hover:opacity-80 sm:w-auto sm:px-4 sm:text-xs ${
-              isLoading ? "cursor-not-allowed opacity-10" : ""
-            }`}
-          >
-            <FontAwesomeIcon icon={faPlusCircle} className="mr-2" />
-            <span>Upload File</span>
-          </label>
-        </>
+        {isEditable && (
+          <>
+            <input
+              type="file"
+              id={`input-file-${field.id}`}
+              disabled={isLoading}
+              onChange={onFileUpload}
+              className="hidden"
+            />
+            <label
+              htmlFor={`input-file-${field.id}`}
+              className={`cursor-pointer rounded-lg bg-info p-2 py-2 text-[9px] font-bold tracking-wide text-white transition-colors duration-200 hover:opacity-80 sm:w-auto sm:px-4 sm:text-xs ${
+                isLoading ? "cursor-not-allowed opacity-10" : ""
+              }`}
+            >
+              <FontAwesomeIcon icon={faPlusCircle} className="mr-2" />
+              <span>Upload File</span>
+            </label>
+          </>
+        )}
       </div>
 
       <ul className="mt-5 grid grid-cols-2 gap-x-6">
@@ -66,6 +76,7 @@ function FileUploadFormField({ field, formId, title }: FileUploadFieldProps) {
                     attachment={attachment}
                     formId={formId}
                     fieldId={field.id}
+                    isEditable={isEditable}
                   />
                 </li>
               )

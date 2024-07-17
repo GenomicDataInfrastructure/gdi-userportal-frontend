@@ -68,6 +68,7 @@ export default function ApplicationDetailsPage() {
     );
   }
 
+  const isEditable = isApplicationEditable(application);
   const events = application.events;
   const lastEvent = events[0];
   const sidebarItems = createApplicationSidebarItems(application);
@@ -95,7 +96,7 @@ export default function ApplicationDetailsPage() {
               )}
             </div>
             <div className="mt-4 flex gap-x-3 sm:mt-0">
-              {isApplicationEditable(application) && (
+              {isEditable && (
                 <Button
                   type="primary"
                   text="Submit"
@@ -121,7 +122,7 @@ export default function ApplicationDetailsPage() {
                 (form) =>
                   form && (
                     <li key={form.id}>
-                      <FormContainer form={form} />
+                      <FormContainer form={form} isEditable={isEditable} />
                     </li>
                   )
               )}

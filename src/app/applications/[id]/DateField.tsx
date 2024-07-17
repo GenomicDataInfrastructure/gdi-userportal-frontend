@@ -14,9 +14,10 @@ type DateFieldProps = {
   field: FormField;
   formId: number;
   title: string;
+  isEditable: boolean;
 };
 
-function DateField({ formId, field, title }: DateFieldProps) {
+function DateField({ formId, field, title, isEditable }: DateFieldProps) {
   const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState<Date | null>(
     field.value ? new Date(field.value) : null
@@ -54,6 +55,7 @@ function DateField({ formId, field, title }: DateFieldProps) {
           calendarClassName="rounded-lg shadow-lg p-2"
           dayClassName={() => "p-2 rounded-full hover:bg-blue-200"}
           popperPlacement="bottom-start"
+          disabled={!isEditable}
         />
       </div>
     </div>

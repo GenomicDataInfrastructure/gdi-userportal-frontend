@@ -12,9 +12,15 @@ type TextAreaFormFieldProps = {
   field: FormField;
   formId: number;
   title: string;
+  isEditable: boolean;
 };
 
-function TextAreaFormField({ formId, field, title }: TextAreaFormFieldProps) {
+function TextAreaFormField({
+  formId,
+  field,
+  title,
+  isEditable,
+}: TextAreaFormFieldProps) {
   const { isLoading, updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
 
@@ -46,7 +52,7 @@ function TextAreaFormField({ formId, field, title }: TextAreaFormFieldProps) {
           value={inputValue}
           className="mt-4 w-full rounded-lg border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
           onChange={handleInputChange}
-          disabled={isLoading}
+          disabled={isLoading || !isEditable}
         />
       </div>
     </div>

@@ -13,9 +13,10 @@ type PhoneFieldProps = {
   field: FormField;
   formId: number;
   title: string;
+  isEditable: boolean;
 };
 
-function PhoneField({ formId, field, title }: PhoneFieldProps) {
+function PhoneField({ formId, field, title, isEditable }: PhoneFieldProps) {
   const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
 
@@ -61,7 +62,7 @@ function PhoneField({ formId, field, title }: PhoneFieldProps) {
             value={inputValue}
             onChange={handlePhoneChange}
             onBlur={handlePhoneBlur}
-            className="flex w-full"
+            className={`flex w-full ${!isEditable ? "pointer-events-none" : ""}`}
           />
         </div>
       </div>

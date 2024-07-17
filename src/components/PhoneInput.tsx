@@ -42,7 +42,12 @@ const PhoneInput = forwardRef<
     className={cn("flex w-full")}
     flagComponent={FlagComponent}
     countrySelectComponent={(props) => (
-      <CountrySelect {...props} onChange={onChange} ref={ref} isEditable={isEditable} />
+      <CountrySelect
+        {...props}
+        onChange={onChange}
+        ref={ref}
+        isEditable={isEditable}
+      />
     )}
     inputComponent={InputComponent}
     onChange={(value) => onChange?.(value ?? "")}
@@ -51,19 +56,20 @@ const PhoneInput = forwardRef<
 ));
 PhoneInput.displayName = "PhoneInput";
 
-const InputComponent = forwardRef<HTMLInputElement, InputProps & { isEditable?: boolean }>(
-  ({ className, isEditable = true, ...props }, ref) => (
-    <Input
-      className={cn(
-        "h-12 w-full rounded-lg ml-2 border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary",
-        className,
-        !isEditable && "bg-surface"
-      )}
-      ref={ref}
-      {...props}
-    />
-  )
-);
+const InputComponent = forwardRef<
+  HTMLInputElement,
+  InputProps & { isEditable?: boolean }
+>(({ className, isEditable = true, ...props }, ref) => (
+  <Input
+    className={cn(
+      "h-12 w-full rounded-lg ml-2 border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary",
+      className,
+      !isEditable && "bg-surface"
+    )}
+    ref={ref}
+    {...props}
+  />
+));
 InputComponent.displayName = "InputComponent";
 
 type CountrySelectOption = { label: string; value: RPNInput.Country };

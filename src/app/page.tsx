@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { useAlert } from "@/providers/AlertProvider";
 import { AxiosError } from "axios";
+import serverConfig from "@/config/serverConfig";
 
 const HomePage = () => {
   const queryParams = useSearchParams();
@@ -45,19 +46,15 @@ const HomePage = () => {
     fetchData();
   }, [setAlert]);
 
-  const homepageTitle =
-    process.env.NEXT_PUBLIC_HOMEPAGE_TITLE || "WELCOME TO GDI";
-  const homepageSubtitle =
-    process.env.NEXT_PUBLIC_HOMEPAGE_SUBTITLE ||
-    "The Genomic Data Infrastructure (GDI) project is enabling access to genomic and related phenotypic and clinical data across Europe.";
-  const aboutContent =
-    process.env.NEXT_PUBLIC_HOMEPAGE_ABOUT_CONTENT || "About the data portal";
-
   return (
     <PageContainer className="container mx-auto px-4 pt-5 text-center">
       <div className="my-8">
-        <h1 className="font-bold text-4xl text-primary">{homepageTitle}</h1>
-        <h2 className="text-xl mt-4 font-light">{homepageSubtitle}</h2>
+        <h1 className="font-bold text-4xl text-primary">
+          {serverConfig.homepageTitle}
+        </h1>
+        <h2 className="text-xl mt-4 font-light">
+          {serverConfig.homepageSubtitle}
+        </h2>
       </div>
       <div className="flex justify-center mb-24">
         <div className="w-full lg:w-4/5 xl:w-3/4">
@@ -79,10 +76,12 @@ const HomePage = () => {
             About the data portal
           </h3>
           <p className="text-lg">
-            {aboutContent.split("\n").map((line, index) => (
+            {serverConfig.aboutContent.split("\n").map((line, index) => (
               <span key={index}>
                 {line}
-                {index < aboutContent.split("\n").length - 1 && <br />}
+                {index < serverConfig.aboutContent.split("\n").length - 1 && (
+                  <br />
+                )}
               </span>
             ))}
           </p>

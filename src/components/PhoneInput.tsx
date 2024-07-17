@@ -13,12 +13,16 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "./shadcn/command";
-import { Button } from "./shadcn/button";
-import { Input, InputProps } from "./shadcn/input";
-import { Popover, PopoverContent, PopoverTrigger } from "./shadcn/popover";
+} from "@/components/shadcn/command";
+import { Button } from "@/components/shadcn/button";
+import { Input, InputProps } from "@/components/shadcn/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@radix-ui/react-popover";
 import { cn } from "@/utils/tailwindMerge";
-import { ScrollArea } from "./shadcn/scroll-area";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 type PhoneInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -32,34 +36,40 @@ type PhoneInputProps = Omit<
 const PhoneInput = forwardRef<
   React.ElementRef<typeof RPNInput.default>,
   PhoneInputProps
->(({ onChange, isEditable, ...props }, ref) => (
+>(({ onChange, isEditable = true, ...props }, ref) => (
   <RPNInput.default
     ref={ref}
     className={cn("flex w-full")}
     flagComponent={FlagComponent}
     countrySelectComponent={(props) => (
-      <CountrySelect {...props} onChange={onChange} ref={ref} isEditable={isEditable} />
+      <CountrySelect
+        {...props}
+        onChange={onChange}
+        ref={ref}
+        isEditable={isEditable}
+      />
     )}
-    inputComponent={(props) => <InputComponent {...props} isEditable={isEditable} />}
+    inputComponent={InputComponent}
     onChange={(value) => onChange?.(value ?? "")}
     {...props}
   />
 ));
 PhoneInput.displayName = "PhoneInput";
 
-const InputComponent = forwardRef<HTMLInputElement, InputProps & { isEditable?: boolean }>(
-  ({ className, isEditable, ...props }, ref) => (
-    <Input
-      className={cn(
-        "ml-2 h-12 w-full rounded-md border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary",
-        className,
-        !isEditable && "bg-surface"
-      )}
-      ref={ref}
-      {...props}
-    />
-  )
-);
+const InputComponent = forwardRef<
+  HTMLInputElement,
+  InputProps & { isEditable?: boolean }
+>(({ className, isEditable = true, ...props }, ref) => (
+  <Input
+    className={cn(
+      "h-12 w-full rounded-md border-2 border-primary px-4 py-[9px] ml-2 shadow-sm transition-all duration-200 ease-in-out",
+      className,
+      !isEditable && "bg-surface"
+    )}
+    ref={ref}
+    {...props}
+  />
+));
 InputComponent.displayName = "InputComponent";
 
 type CountrySelectOption = { label: string; value: RPNInput.Country };
@@ -73,7 +83,7 @@ type CountrySelectProps = {
 };
 
 const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
-  ({ disabled, value, onChange, options }, ref) => {
+  ({ disabled, value, onChange, options, isEditable = true }, ref) => {
     const handleSelect = useCallback(
       (country: RPNInput.Country) => {
         const callingCode = RPNInput.getCountryCallingCode(country);
@@ -99,7 +109,8 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
             type="button"
             variant="outline"
             className={cn(
-              "flex h-12 items-center gap-1 rounded-l-md border-2 border-primary px-3"
+              "flex h-12 items-center gap-1 rounded-l-md border-2 border-primary px-3",
+              !isEditable && "pointer-events-none bg-surface"
             )}
             disabled={disabled}
           >

@@ -22,7 +22,7 @@ import {
   PopoverTrigger,
 } from "@radix-ui/react-popover";
 import { cn } from "@/utils/tailwindMerge";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { ScrollArea } from "./shadcn/scroll-area";
 
 type PhoneInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,

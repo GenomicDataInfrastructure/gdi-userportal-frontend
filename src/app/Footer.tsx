@@ -18,26 +18,16 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import footerLogo from "../public/footer-logo.png";
+import serverConfig from "@/config/serverConfig";
 
 function Footer() {
-  const linkedInUrl = process.env.NEXT_PUBLIC_LINKEDIN_URL;
-  const twitterUrl = process.env.NEXT_PUBLIC_TWITTER_URL;
-  const githubUrl = process.env.NEXT_PUBLIC_GITHUB_URL;
-  const gitlabUrl = process.env.NEXT_PUBLIC_GITLAB_URL;
-  const websiteUrl = process.env.NEXT_PUBLIC_WEBSITE_URL;
-  const email = process.env.NEXT_PUBLIC_EMAIL;
-  const footerText =
-    process.env.NEXT_PUBLIC_FOOTER_TEXT ||
-    "GDI project receives funding from the European Union’s Digital Europe Programme under grant agreement number 101081813.";
-  const bannerLink = process.env.NEXT_PUBLIC_BANNER_LINK || "";
-
   return (
     <>
       <div className="bg-primary p-4 text-center mt-4">
         <a
-          href={bannerLink ? `https://${bannerLink}` : "#"}
-          target={bannerLink ? "_blank" : ""}
-          rel={bannerLink ? "noopener noreferrer" : ""}
+          href={serverConfig.bannerLink}
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <FontAwesomeIcon icon={faInfoCircle} className="mr-2 text-warning" />
           <h2 className="inline text-lg font-bold text-warning">
@@ -52,10 +42,12 @@ function Footer() {
           <div className="flex flex-col items-start gap-4">
             <Image src={footerLogo} alt="Footer logo" width={80} />
             <p className="text-xs md:text-sm">
-              {footerText.split("\n").map((line, index) => (
+              {serverConfig.footerText.split("\n").map((line, index) => (
                 <span key={index}>
                   {line}
-                  {index < footerText.split("\n").length - 1 && <br />}
+                  {index < serverConfig.footerText.split("\n").length - 1 && (
+                    <br />
+                  )}
                 </span>
               ))}
             </p>
@@ -78,9 +70,9 @@ function Footer() {
           <div className="flex flex-col gap-2 text-left">
             <h3 className="text-lg font-bold">Contact Us</h3>
             <div className="flex gap-4">
-              {linkedInUrl && (
+              {serverConfig.linkedInUrl && (
                 <a
-                  href={linkedInUrl}
+                  href={serverConfig.linkedInUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-info"
@@ -91,10 +83,10 @@ function Footer() {
                   />
                 </a>
               )}
-              {twitterUrl && (
+              {serverConfig.twitterUrl && (
                 <a
                   color="primary"
-                  href={twitterUrl}
+                  href={serverConfig.twitterUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-info"
@@ -105,10 +97,10 @@ function Footer() {
                   />
                 </a>
               )}
-              {githubUrl && (
+              {serverConfig.githubUrl && (
                 <a
                   color="primary"
-                  href={githubUrl}
+                  href={serverConfig.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-info"
@@ -119,10 +111,10 @@ function Footer() {
                   />
                 </a>
               )}
-              {gitlabUrl && (
+              {serverConfig.gitlabUrl && (
                 <a
                   color="primary"
-                  href={gitlabUrl}
+                  href={serverConfig.gitlabUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-info"
@@ -133,10 +125,10 @@ function Footer() {
                   />
                 </a>
               )}
-              {websiteUrl && (
+              {serverConfig.websiteUrl && (
                 <a
                   color="primary"
-                  href={websiteUrl}
+                  href={serverConfig.websiteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-info"
@@ -148,12 +140,12 @@ function Footer() {
                 </a>
               )}
             </div>
-            {email && (
+            {serverConfig.email && (
               <a
                 className="text-xs hover:text-info md:text-left md:text-sm"
-                href={`mailto:${encodeURIComponent(email)}`}
+                href={`mailto:${encodeURIComponent(serverConfig.email)}`}
               >
-                {email}
+                {serverConfig.email}
               </a>
             )}
           </div>

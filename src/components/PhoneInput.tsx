@@ -63,7 +63,6 @@ const InputComponent = forwardRef<
     )}
     ref={ref}
     {...props}
-    readOnly={!isEditable}
   />
 ));
 InputComponent.displayName = "InputComponent";
@@ -78,7 +77,7 @@ type CountrySelectProps = {
 };
 
 const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
-  ({ value, onChange, options, isEditable }, ref) => {
+  ({ value, onChange, options }, ref) => {
     const handleSelect = useCallback(
       (country: RPNInput.Country) => {
         const callingCode = RPNInput.getCountryCallingCode(country);
@@ -104,8 +103,7 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
             type="button"
             variant="outline"
             className={cn(
-              "flex h-12 items-center gap-1 rounded-l-md border-2 border-primary px-3",
-              !isEditable && "pointer-events-none bg-surface"
+              "flex h-12 items-center gap-1 rounded-l-md border-2 border-primary px-3"
             )}
           >
             <FlagComponent country={value} countryName={value} />

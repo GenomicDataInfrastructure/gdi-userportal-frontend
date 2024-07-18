@@ -54,9 +54,7 @@ function PhoneField({ formId, field, title, isEditable }: PhoneFieldProps) {
     <div className="rounded border p-4">
       <div className="flex flex-col">
         <div>
-          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
-            field.optional ? "(Optional)" : ""
-          }`}</h3>
+          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${field.optional ? "(Optional)" : ""}`}</h3>
         </div>
         <div
           className={classnames("mt-4 flex w-full", {
@@ -68,9 +66,7 @@ function PhoneField({ formId, field, title, isEditable }: PhoneFieldProps) {
             onChange={handlePhoneChange}
             onBlur={handlePhoneBlur}
             isEditable={isEditable}
-            className={classnames("flex w-full", {
-              "pointer-events-none bg-surface": !isEditable,
-            })}
+            className={classnames("flex w-full")}
           />
         </div>
       </div>

@@ -66,8 +66,10 @@ function GenericInputField({
             value={inputValue}
             onChange={handleInputChange}
             className={classnames(
-              "h-12 w-full rounded-lg border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary",
-              isEditable ? "" : "pointer-events-none bg-surface"
+              "h-12 w-full rounded-lg border-2 border-primary px-4 py-[9px] text-base shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary",
+              isEditable
+                ? ""
+                : "pointer-events-none bg-surface border-none text-gray-500"
             )}
             placeholder={placeholder}
           />

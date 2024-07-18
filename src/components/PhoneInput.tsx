@@ -30,7 +30,7 @@ type PhoneInputProps = Omit<
 > & {
   value?: string;
   onChange?: (value: string) => void;
-  isEditable?: boolean;
+  isEditable: boolean;
 };
 
 const PhoneInput = forwardRef<

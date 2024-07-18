@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/shadcn/input";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FormField } from "@/types/application.types";
+import classnames from "classnames";
 
 type GenericInputFieldProps = {
   field: FormField;
@@ -64,9 +65,10 @@ function GenericInputField({
             name={field.id.toString()}
             value={inputValue}
             onChange={handleInputChange}
-            className={`h-12 w-full rounded-lg border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary ${
-              !isEditable ? "pointer-events-none bg-surface" : ""
-            }`}
+            className={classnames(
+              "h-12 w-full rounded-lg border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary",
+              isEditable ? "" : "pointer-events-none bg-surface"
+            )}
             placeholder={placeholder}
           />
         </div>

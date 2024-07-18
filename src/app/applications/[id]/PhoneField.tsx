@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import PhoneInput from "@/components/PhoneInput";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FormField } from "@/types/application.types";
+import classnames from "classnames";
 
 type PhoneFieldProps = {
   field: FormField;
@@ -53,15 +54,23 @@ function PhoneField({ formId, field, title, isEditable }: PhoneFieldProps) {
     <div className="rounded border p-4">
       <div className="flex flex-col">
         <div>
-          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${field.optional ? "(Optional)" : ""}`}</h3>
+          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
+            field.optional ? "(Optional)" : ""
+          }`}</h3>
         </div>
-        <div className={`mt-4 flex w-full ${!isEditable ? "bg-surface" : ""}`}>
+        <div
+          className={classnames("mt-4 flex w-full", {
+            "bg-surface": !isEditable,
+          })}
+        >
           <PhoneInput
             value={inputValue}
             onChange={handlePhoneChange}
             onBlur={handlePhoneBlur}
             isEditable={isEditable}
-            className={`flex w-full ${!isEditable ? "pointer-events-none bg-surface" : ""}`}
+            className={classnames("flex w-full", {
+              "pointer-events-none bg-surface": !isEditable,
+            })}
           />
         </div>
       </div>

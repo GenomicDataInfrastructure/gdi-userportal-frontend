@@ -11,14 +11,15 @@ import TextAreaFormField from "./TextAreaFormField";
 import DateField from "./DateField";
 import EmailField from "./EmailField";
 import PhoneField from "./PhoneField";
+import { useEditable } from "./EditableContext";
 
 type FieldContainerProps = {
   formId: number;
   field: FormField;
-  isEditable: boolean;
 };
 
-function FieldContainer({ formId, field, isEditable }: FieldContainerProps) {
+function FieldContainer({ formId, field }: FieldContainerProps) {
+  const isEditable = useEditable();
   const fieldTitle =
     field.title.find((label) => label.language === "en")?.name ||
     field.title[0].name;

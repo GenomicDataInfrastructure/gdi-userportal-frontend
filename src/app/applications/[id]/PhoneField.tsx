@@ -6,18 +6,25 @@
 
 import { useState, useEffect } from "react";
 import PhoneInput from "@/components/PhoneInput";
-import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FormField } from "@/types/application.types";
 import classnames from "classnames";
+import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 
 type PhoneFieldProps = {
   field: FormField;
   formId: number;
   title: string;
   isEditable: boolean;
+  onFieldChange: (fieldId: number, newValue: string) => void;
 };
 
-function PhoneField({ formId, field, title, isEditable }: PhoneFieldProps) {
+function PhoneField({
+  formId,
+  field,
+  title,
+  isEditable,
+  onFieldChange,
+}: PhoneFieldProps) {
   const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
 
@@ -33,13 +40,13 @@ function PhoneField({ formId, field, title, isEditable }: PhoneFieldProps) {
 
   const handlePhoneChange = (value: string) => {
     setInputValue(value);
-    field.value = value;
+    onFieldChange(field.id, value);
   };
 
   const handlePhoneBlur = () => {
     if (inputValue) {
       const formattedValue = formatPhoneNumber(inputValue);
-      updateInputFields(formId, field.id, formattedValue);
+      onFieldChange(field.id, formattedValue);
     }
   };
 
@@ -54,7 +61,9 @@ function PhoneField({ formId, field, title, isEditable }: PhoneFieldProps) {
     <div className="rounded border p-4">
       <div className="flex flex-col">
         <div>
-          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${field.optional ? "(Optional)" : ""}`}</h3>
+          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
+            field.optional ? "(Optional)" : ""
+          }`}</h3>
         </div>
         <div
           className={classnames("mt-4 flex w-full", {

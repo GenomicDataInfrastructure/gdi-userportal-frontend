@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import { useEffect, useState } from "react";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FormField } from "@/types/application.types";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
@@ -13,6 +14,7 @@ type FileUploadFieldProps = {
   formId: number;
   title: string;
   isEditable: boolean;
+  onFieldChange: (fieldId: number, newValue: string) => void;
 };
 
 function FileUploadFormField({
@@ -20,14 +22,28 @@ function FileUploadFormField({
   formId,
   title,
   isEditable,
+  onFieldChange,
 }: FileUploadFieldProps) {
-  const { application, isLoading, addAttachment } = useApplicationDetails();
+  const { application, isLoading, addAttachment, updateInputFields } =
+    useApplicationDetails();
+  const [inputValue] = useState(field.value);
 
-  function onFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (inputValue !== field.value) {
+        updateInputFields(formId, field.id, inputValue);
+      }
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
+  }, [inputValue, formId, field, updateInputFields]);
+
+  async function onFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files![0];
     const formData = new FormData();
     formData.set("file", file);
-    addAttachment(formId, field.id, formData);
+    await addAttachment(formId, field.id, formData);
+    onFieldChange(field.id, "");
     e.target.value = "";
   }
 
@@ -75,6 +91,7 @@ function FileUploadFormField({
                     formId={formId}
                     fieldId={field.id}
                     isEditable={isEditable}
+                    onFieldChange={onFieldChange}
                   />
                 </li>
               )

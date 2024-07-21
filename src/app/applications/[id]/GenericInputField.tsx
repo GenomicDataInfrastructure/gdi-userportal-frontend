@@ -15,7 +15,7 @@ type GenericInputFieldProps = {
   placeholder: string;
   title: string;
   isEditable: boolean;
-  onChange?: (value: string) => void;
+  onFieldChange: (fieldId: number, newValue: string) => void;
   children?: React.ReactNode;
 };
 
@@ -26,7 +26,7 @@ function GenericInputField({
   placeholder,
   title,
   isEditable,
-  onChange,
+  onFieldChange,
   children,
 }: GenericInputFieldProps) {
   const { updateInputFields } = useApplicationDetails();
@@ -43,10 +43,9 @@ function GenericInputField({
   }, [inputValue, formId, field, updateInputFields]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-    if (onChange) {
-      onChange(event.target.value);
-    }
+    const newValue = event.target.value;
+    setInputValue(newValue);
+    onFieldChange(field.id, newValue);
   };
 
   return (

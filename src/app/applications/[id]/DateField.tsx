@@ -5,20 +5,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FormField } from "@/types/application.types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import classnames from "classnames";
+import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 
 type DateFieldProps = {
   field: FormField;
   formId: number;
   title: string;
   isEditable: boolean;
+  onFieldChange: (fieldId: number, newValue: string) => void;
 };
 
-function DateField({ formId, field, title, isEditable }: DateFieldProps) {
+function DateField({
+  formId,
+  field,
+  title,
+  isEditable,
+  onFieldChange,
+}: DateFieldProps) {
   const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState<Date | null>(
     field.value ? new Date(field.value) : null
@@ -33,10 +40,11 @@ function DateField({ formId, field, title, isEditable }: DateFieldProps) {
     }, 2000);
 
     return () => clearTimeout(timeoutId);
-  }, [inputValue, formId, field.id, field.value, updateInputFields]);
+  }, [inputValue, formId, field, updateInputFields]);
 
   const handleDateChange = (date: Date | null) => {
     setInputValue(date);
+    onFieldChange(field.id, date ? date.toISOString() : "");
   };
 
   return (

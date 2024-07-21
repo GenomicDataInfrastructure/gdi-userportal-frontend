@@ -12,6 +12,7 @@ type FileUploadedProps = {
   formId: number;
   fieldId: number;
   isEditable: boolean;
+  onFieldChange: (fieldId: number, newValue: string) => void;
 };
 
 function FileUploaded({
@@ -19,8 +20,14 @@ function FileUploaded({
   formId,
   fieldId,
   isEditable,
+  onFieldChange,
 }: FileUploadedProps) {
   const { isLoading, deleteAttachment } = useApplicationDetails();
+
+  const handleDelete = async () => {
+    await deleteAttachment(formId, fieldId, attachment.id);
+    onFieldChange(fieldId, "");
+  };
 
   return (
     <div className="relative mt-5 flex items-center justify-between gap-x-1 break-all rounded border-2 bg-surface px-3 py-1.5 sm:gap-x-3">
@@ -37,7 +44,7 @@ function FileUploaded({
           className={`border-1 cursor-pointer rounded-full p-1.5 text-sm text-info transition-colors duration-200 hover:text-primary ${
             isLoading ? "pointer-events-none opacity-10" : ""
           }`}
-          onClick={() => deleteAttachment(formId, fieldId, attachment.id)}
+          onClick={handleDelete}
         />
       )}
     </div>

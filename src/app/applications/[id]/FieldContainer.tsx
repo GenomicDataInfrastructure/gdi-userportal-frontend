@@ -16,9 +16,10 @@ import { useEditable } from "./EditableContext";
 type FieldContainerProps = {
   formId: number;
   field: FormField;
+  onFieldChange: (fieldId: number, newValue: string) => void;
 };
 
-function FieldContainer({ formId, field }: FieldContainerProps) {
+function FieldContainer({ formId, field, onFieldChange }: FieldContainerProps) {
   const isEditable = useEditable();
   const fieldTitle =
     field.title.find((label) => label.language === "en")?.name ||
@@ -33,6 +34,7 @@ function FieldContainer({ formId, field }: FieldContainerProps) {
             formId={formId}
             title={fieldTitle}
             isEditable={isEditable}
+            onFieldChange={onFieldChange}
           />
         );
       case FieldType.TEXT:
@@ -42,6 +44,7 @@ function FieldContainer({ formId, field }: FieldContainerProps) {
             formId={formId}
             title={fieldTitle}
             isEditable={isEditable}
+            onFieldChange={onFieldChange}
           />
         );
       case FieldType.TEXT_AREA:
@@ -51,6 +54,7 @@ function FieldContainer({ formId, field }: FieldContainerProps) {
             formId={formId}
             title={fieldTitle}
             isEditable={isEditable}
+            onFieldChange={onFieldChange}
           />
         );
       case FieldType.PHONE:
@@ -60,6 +64,7 @@ function FieldContainer({ formId, field }: FieldContainerProps) {
             formId={formId}
             title={fieldTitle}
             isEditable={isEditable}
+            onFieldChange={onFieldChange}
           />
         );
       case FieldType.DATE:
@@ -69,6 +74,7 @@ function FieldContainer({ formId, field }: FieldContainerProps) {
             formId={formId}
             title={fieldTitle}
             isEditable={isEditable}
+            onFieldChange={onFieldChange}
           />
         );
       case FieldType.EMAIL:
@@ -78,6 +84,7 @@ function FieldContainer({ formId, field }: FieldContainerProps) {
             formId={formId}
             title={fieldTitle}
             isEditable={isEditable}
+            onFieldChange={onFieldChange}
           />
         );
     }

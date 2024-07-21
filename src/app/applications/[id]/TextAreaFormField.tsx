@@ -4,16 +4,17 @@
 
 "use client";
 
-import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
-import { FormField } from "@/types/application.types";
 import { useEffect, useState } from "react";
+import { FormField } from "@/types/application.types";
 import classnames from "classnames";
+import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 
 type TextAreaFormFieldProps = {
   field: FormField;
   formId: number;
   title: string;
   isEditable: boolean;
+  onFieldChange: (fieldId: number, newValue: string) => void;
 };
 
 function TextAreaFormField({
@@ -21,8 +22,9 @@ function TextAreaFormField({
   field,
   title,
   isEditable,
+  onFieldChange,
 }: TextAreaFormFieldProps) {
-  const { isLoading, updateInputFields } = useApplicationDetails();
+  const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
 
   useEffect(() => {
@@ -36,7 +38,9 @@ function TextAreaFormField({
   }, [inputValue, formId, field, updateInputFields]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValue(event.target.value);
+    const newValue = event.target.value;
+    setInputValue(newValue);
+    onFieldChange(field.id, newValue);
   };
 
   return (
@@ -58,7 +62,7 @@ function TextAreaFormField({
               : "pointer-events-none bg-surface border-none text-gray-500"
           )}
           onChange={handleInputChange}
-          disabled={isLoading || !isEditable}
+          disabled={!isEditable}
         />
       </div>
     </div>

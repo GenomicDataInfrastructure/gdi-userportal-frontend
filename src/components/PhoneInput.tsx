@@ -37,10 +37,10 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
   ({ onChange, value, isEditable, ...props }, ref) => {
     const initialCountry = value
       ? RPNInput.getCountries().find(
-        (country) =>
-          `+${RPNInput.getCountryCallingCode(country)}` ===
-          value.match(/^\+\d+/)?.[0]
-      )
+          (country) =>
+            `+${RPNInput.getCountryCallingCode(country)}` ===
+            value.match(/^\+\d+/)?.[0]
+        )
       : undefined;
     const initialNumber = value ? value.replace(/^\+\d+/, "") : "";
 

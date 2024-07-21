@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { RetrievedApplication } from "@/types/application.types";
+import { Form, RetrievedApplication } from "@/types/application.types";
 
 export type ApplicationAction = {
   type: ApplicationActionType;
@@ -50,4 +50,5 @@ export type ApplicationContextState = ApplicationState & {
   ) => Promise<void>;
   submitApplication: () => void;
   clearError: () => void;
+  saveFormAndDuos: (forms: Form[]) => Promise<Response>;
 };

@@ -238,12 +238,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
 
       dispatch(action);
 
-      const { forms: updatedForms } = reducer(
-        { application, isLoading, error, errorStatusCode },
-        action
-      ).application as RetrievedApplication;
-      const response = await saveFormAndDuos(updatedForms);
-      if (response.ok) fetchApplication();
+      fetchApplication();
     } catch (error) {
       handleErrors(error, "Failed to save application", dispatch);
     }
@@ -301,6 +296,15 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       }
     );
     dispatch({ type: ApplicationActionType.FORM_SAVED });
+    if (response.ok) {
+      await fetchApplication();
+    } else {
+      handleErrors(
+        new Error("Failed to save form and DUOS"),
+        "Failed to save form and DUOS",
+        dispatch
+      );
+    }
     return response;
   }
 
@@ -342,6 +346,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
         submitApplication,
         updateInputFields,
         clearError,
+        saveFormAndDuos,
       }}
     >
       {children}

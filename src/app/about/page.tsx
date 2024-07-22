@@ -77,7 +77,7 @@ const AboutPage: React.FC = () => {
         </a>
         .
       </p>
-      <p className="mt-4">
+      <p className="my-6">
         Please report any problems you find in{" "}
         <a
           href="https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/issues"

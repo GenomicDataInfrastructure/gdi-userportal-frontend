@@ -119,6 +119,14 @@ function Header() {
                 Datasets
               </Link>
               <Link
+                href="/themes"
+                className={`rounded-lg border-[1.5px] border-surface px-3 py-1 transition-colors duration-300 hover:border-hover-color lg:px-7 ${
+                  activeTab === "/themes" ? "bg-primary text-white" : ""
+                }`}
+              >
+                Themes
+              </Link>
+              <Link
                 href="/about"
                 className={`rounded-lg border-[1.5px] border-surface px-3 py-1 transition-colors duration-300 hover:border-hover-color lg:px-7 ${
                   activeTab === "/about" ? "bg-primary text-white" : ""

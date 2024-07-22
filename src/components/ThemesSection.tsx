@@ -18,39 +18,80 @@ import regionsImg from "../public/themes/regions.svg";
 import techImg from "../public/themes/tech.svg";
 import transportImg from "../public/themes/transport.svg";
 
-const allThemes = [
+export const allThemes = [
   {
     name: "Agriculture",
     img: agricultureImg,
     desc: "Agriculture, fisheries, forestry and food",
+    url: "http://publications.europa.eu/resource/authority/data-theme/AGRI",
   },
-  { name: "Economy", img: economyImg, desc: "Economy and finance" },
+  {
+    name: "Economy",
+    img: economyImg,
+    desc: "Economy and finance",
+    url: "http://publications.europa.eu/resource/authority/data-theme/ECON",
+  },
   {
     name: "Education",
     img: educationImg,
     desc: "Education, culture and sport",
+    url: "http://publications.europa.eu/resource/authority/data-theme/EDUC",
   },
-  { name: "Energy", img: energyImg },
-  { name: "Environment", img: envImg },
+  {
+    name: "Energy",
+    img: energyImg,
+    url: "http://publications.europa.eu/resource/authority/data-theme/ENER",
+  },
+  {
+    name: "Environment",
+    img: envImg,
+    url: "http://publications.europa.eu/resource/authority/data-theme/ENVI",
+  },
   {
     name: "Government",
     img: governmentImg,
     desc: "Government and public sector",
+    url: "http://publications.europa.eu/resource/authority/data-theme/GOVE",
   },
-  { name: "Health", img: healthImg },
+  {
+    name: "Health",
+    img: healthImg,
+    url: "http://publications.europa.eu/resource/authority/data-theme/HEAL",
+  },
   {
     name: "International Issues",
     img: internationalIssuesImg,
+    url: "http://publications.europa.eu/resource/authority/data-theme/INTR",
   },
   {
     name: "Justice",
     img: justiceImg,
     desc: "Justice, legal system and public safety",
+    url: "http://publications.europa.eu/resource/authority/data-theme/JUST",
   },
-  { name: "Population", img: populationImg, desc: "Population and society" },
-  { name: "Regions", img: regionsImg, desc: "Regions and cities" },
-  { name: "Tech", img: techImg, desc: "Science and technology" },
-  { name: "Transport", img: transportImg },
+  {
+    name: "Population",
+    img: populationImg,
+    desc: "Population and society",
+    url: "http://publications.europa.eu/resource/authority/data-theme/OP_DATPRO",
+  },
+  {
+    name: "Regions",
+    img: regionsImg,
+    desc: "Regions and cities",
+    url: "http://publications.europa.eu/resource/authority/data-theme/REGI",
+  },
+  {
+    name: "Tech",
+    img: techImg,
+    desc: "Science and technology",
+    url: "https://publications.europa.eu/resource/authority/data-theme/TECH",
+  },
+  {
+    name: "Transport",
+    img: transportImg,
+    url: "http://publications.europa.eu/resource/authority/data-theme/TRAN",
+  },
 ];
 
 const getThemesFromEnv = () => {
@@ -68,7 +109,13 @@ const getThemesFromEnv = () => {
   }
 };
 
-const ThemesSection = ({ maxThemes }: { maxThemes?: number }) => {
+const ThemesSection = ({
+  maxThemes,
+  showSeeAll = true,
+}: {
+  maxThemes?: number;
+  showSeeAll?: boolean;
+}) => {
   const themes = getThemesFromEnv();
   const displayedThemes = maxThemes ? themes.slice(0, maxThemes) : themes;
 
@@ -79,9 +126,7 @@ const ThemesSection = ({ maxThemes }: { maxThemes?: number }) => {
           <a
             key={theme.name}
             className="bg-white py-6 flex items-center justify-center px-2 rounded-lg h-[166px] shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50"
-            href={`/datasets?page=1&ckan-theme=${(theme.desc || theme.name)
-              .toLowerCase()
-              .replace(/[\s,]+/g, "-")}`}
+            href={`/datasets?page=1&ckan-theme=${encodeURIComponent(theme.url)}`}
           >
             <div className="flex flex-col justify-center items-center text-center">
               <img
@@ -96,15 +141,17 @@ const ThemesSection = ({ maxThemes }: { maxThemes?: number }) => {
           </a>
         ))}
       </div>
-      <div className="pt-4 px-8 sm:px-0 w-full flex">
-        <a
-          className="text-primary flex items-center gap-1 transition hover:underline duration-500 ml-auto"
-          href="/themes"
-        >
-          See all
-          <FontAwesomeIcon icon={faArrowRight} className="w-4 h-4" />
-        </a>
-      </div>
+      {showSeeAll && (
+        <div className="pt-4 px-8 sm:px-0 w-full flex">
+          <a
+            className="text-primary flex items-center gap-1 transition hover:underline duration-500 ml-auto"
+            href="/themes"
+          >
+            See all
+            <FontAwesomeIcon icon={faArrowRight} className="w-4 h-4" />
+          </a>
+        </div>
+      )}
     </section>
   );
 };

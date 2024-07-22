@@ -11,7 +11,6 @@ const ThemesPage = () => {
     <PageContainer className="container mx-auto px-8 pt-5">
       <div className="my-8">
         <h1 className="text-left font-bold text-4xl text-primary">
-          {" "}
           {allThemes.length} Themes
         </h1>
       </div>

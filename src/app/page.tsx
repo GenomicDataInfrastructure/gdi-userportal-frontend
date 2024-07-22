@@ -99,7 +99,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="relative text-left flex items-center">
+      <div className="text-left flex items-center">
         <div className="relative z-10 w-full my-8">
           <h3 className="mb-4 text-2xl font-bold text-primary">
             Most Recent Datasets

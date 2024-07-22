@@ -79,9 +79,9 @@ const ThemesSection = ({ maxThemes }: { maxThemes?: number }) => {
           <a
             key={theme.name}
             className="bg-white py-6 flex items-center justify-center px-2 rounded-lg h-[166px] shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50"
-            href={`/datasets?group=${theme.name
+            href={`/datasets?page=1&ckan-theme=${(theme.desc || theme.name)
               .toLowerCase()
-              .replace(/\s+/g, "_")}`}
+              .replace(/[\s,]+/g, "-")}`}
           >
             <div className="flex flex-col justify-center items-center text-center">
               <img

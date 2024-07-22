@@ -17,69 +17,70 @@ import populationImg from "../public/themes/population.svg";
 import regionsImg from "../public/themes/regions.svg";
 import techImg from "../public/themes/tech.svg";
 import transportImg from "../public/themes/transport.svg";
+import serverConfig from "@/config/serverConfig";
 
 export const allThemes = [
   {
     name: "Agriculture",
     img: agricultureImg,
     desc: "Agriculture, fisheries, forestry and food",
-    url: "http://publications.europa.eu/resource/authority/data-theme/AGRI",
+    url: "publications.europa.eu/resource/authority/data-theme/AGRI",
   },
   {
     name: "Economy",
     img: economyImg,
     desc: "Economy and finance",
-    url: "http://publications.europa.eu/resource/authority/data-theme/ECON",
+    url: "publications.europa.eu/resource/authority/data-theme/ECON",
   },
   {
     name: "Education",
     img: educationImg,
     desc: "Education, culture and sport",
-    url: "http://publications.europa.eu/resource/authority/data-theme/EDUC",
+    url: "publications.europa.eu/resource/authority/data-theme/EDUC",
   },
   {
     name: "Energy",
     img: energyImg,
-    url: "http://publications.europa.eu/resource/authority/data-theme/ENER",
+    url: "publications.europa.eu/resource/authority/data-theme/ENER",
   },
   {
     name: "Environment",
     img: envImg,
-    url: "http://publications.europa.eu/resource/authority/data-theme/ENVI",
+    url: "publications.europa.eu/resource/authority/data-theme/ENVI",
   },
   {
     name: "Government",
     img: governmentImg,
     desc: "Government and public sector",
-    url: "http://publications.europa.eu/resource/authority/data-theme/GOVE",
+    url: "publications.europa.eu/resource/authority/data-theme/GOVE",
   },
   {
     name: "Health",
     img: healthImg,
-    url: "http://publications.europa.eu/resource/authority/data-theme/HEAL",
+    url: "publications.europa.eu/resource/authority/data-theme/HEAL",
   },
   {
     name: "International Issues",
     img: internationalIssuesImg,
-    url: "http://publications.europa.eu/resource/authority/data-theme/INTR",
+    url: "publications.europa.eu/resource/authority/data-theme/INTR",
   },
   {
     name: "Justice",
     img: justiceImg,
     desc: "Justice, legal system and public safety",
-    url: "http://publications.europa.eu/resource/authority/data-theme/JUST",
+    url: "publications.europa.eu/resource/authority/data-theme/JUST",
   },
   {
     name: "Population",
     img: populationImg,
     desc: "Population and society",
-    url: "http://publications.europa.eu/resource/authority/data-theme/OP_DATPRO",
+    url: "publications.europa.eu/resource/authority/data-theme/OP_DATPRO",
   },
   {
     name: "Regions",
     img: regionsImg,
     desc: "Regions and cities",
-    url: "http://publications.europa.eu/resource/authority/data-theme/REGI",
+    url: "publications.europa.eu/resource/authority/data-theme/REGI",
   },
   {
     name: "Tech",
@@ -90,7 +91,7 @@ export const allThemes = [
   {
     name: "Transport",
     img: transportImg,
-    url: "http://publications.europa.eu/resource/authority/data-theme/TRAN",
+    url: "publications.europa.eu/resource/authority/data-theme/TRAN",
   },
 ];
 
@@ -107,6 +108,15 @@ const getThemesFromEnv = () => {
     console.error("Error parsing NEXT_PUBLIC_THEMES_LIST:", error);
     return allThemes;
   }
+};
+
+const constructUrl = (url: string) => {
+  if (serverConfig.useHttps && !url.startsWith("https")) {
+    return `https://${url}`;
+  } else if (!serverConfig.useHttps && !url.startsWith("http")) {
+    return `http://${url}`;
+  }
+  return url;
 };
 
 const ThemesSection = ({
@@ -126,7 +136,7 @@ const ThemesSection = ({
           <a
             key={theme.name}
             className="bg-white py-6 flex items-center justify-center px-2 rounded-lg h-[166px] shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50"
-            href={`/datasets?page=1&ckan-theme=${encodeURIComponent(theme.url)}`}
+            href={`/datasets?page=1&ckan-theme=${encodeURIComponent(constructUrl(theme.url))}`}
           >
             <div className="flex flex-col justify-center items-center text-center">
               <img

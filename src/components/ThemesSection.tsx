@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useSearchParams } from "next/navigation";
 
-// Import all theme images
 import agricultureImg from "../public/themes/agriculture.svg";
 import economyImg from "../public/themes/economy.svg";
 import educationImg from "../public/themes/education.svg";
@@ -61,7 +60,6 @@ const ThemesSection = ({ maxThemes }: { maxThemes?: number }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [maxScroll, setMaxScroll] = useState(0);
-  const queryParams = useSearchParams();
 
   const updateMaxScroll = () => {
     if (containerRef.current) {

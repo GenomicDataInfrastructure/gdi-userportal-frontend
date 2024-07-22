@@ -30,8 +30,14 @@ function FileUploadFormField({
     const formData = new FormData();
     formData.set("file", file);
     const attachment = await addAttachment(formId, field.id, formData);
-    const newValue = field.value ? `${field.value},${attachment}` : `${attachment}`;
-    onFieldChange(field.id, newValue);
+
+    if (attachment != null) {
+      const newValue = field.value
+        ? `${field.value},${attachment}`
+        : `${attachment}`;
+      onFieldChange(field.id, newValue);
+    }
+
     e.target.value = "";
   }
 
@@ -39,25 +45,30 @@ function FileUploadFormField({
     <div className="rounded border p-4">
       <div className="flex justify-between">
         <div>
-          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${field.optional ? "(Optional)" : ""}`}</h3>
+          <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
+            field.optional ? "(Optional)" : ""
+          }`}</h3>
         </div>
-        <>
-          <input
-            type="file"
-            id={`input-file-${field.id}`}
-            disabled={isLoading}
-            onChange={onFileUpload}
-            className="hidden"
-          />
-          <label
-            htmlFor={`input-file-${field.id}`}
-            className={`cursor-pointer rounded-lg bg-info p-2 py-2 text-[9px] font-bold tracking-wide text-white transition-colors duration-200 hover:opacity-80 sm:w-auto sm:px-4 sm:text-xs ${isLoading ? "cursor-not-allowed opacity-10" : ""
+        {isEditable && (
+          <>
+            <input
+              type="file"
+              id={`input-file-${field.id}`}
+              disabled={isLoading}
+              onChange={onFileUpload}
+              className="hidden"
+            />
+            <label
+              htmlFor={`input-file-${field.id}`}
+              className={`cursor-pointer rounded-lg bg-info p-2 py-2 text-[9px] font-bold tracking-wide text-white transition-colors duration-200 hover:opacity-80 sm:w-auto sm:px-4 sm:text-xs ${
+                isLoading ? "cursor-not-allowed opacity-10" : ""
               }`}
-          >
-            <FontAwesomeIcon icon={faPlusCircle} className="mr-2" />
-            <span>Upload File</span>
-          </label>
-        </>
+            >
+              <FontAwesomeIcon icon={faPlusCircle} className="mr-2" />
+              <span>Upload File</span>
+            </label>
+          </>
+        )}
       </div>
 
       <ul className="mt-5 grid grid-cols-2 gap-x-6">

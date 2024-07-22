@@ -56,22 +56,24 @@ const HomePage = () => {
           {serverConfig.homepageSubtitle}
         </h2>
       </div>
-      <div className="flex justify-center mb-24">
+      <div className="flex justify-center mb-8">
         <div className="w-full lg:w-4/5 xl:w-3/4">
           <SearchBar queryParams={queryParams} size="large" />
         </div>
       </div>
-
-      <ThemesSection maxThemes={12} />
-
-      <div className="mb-20 relative text-left flex items-center">
+      <div className="flex justify-center mb-12">
+        <div className="w-[305px] md:w-full">
+          <ThemesSection maxThemes={12} />
+        </div>
+      </div>
+      <div className="relative text-left flex items-center px-16">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: `url(${aboutBackground.src})`,
           }}
         ></div>
-        <div className="relative z-10 w-full md:w-3/4 lg:w-2/3 xl:w-3/5 bg-white bg-opacity-75 p-8 rounded-lg min-h-[300px]">
+        <div className="relative z-10 w-full md:w-3/4 lg:w-2/3 xl:w-3/5 bg-white bg-opacity-75 rounded-lg min-h-[300px]">
           <h3 className="mb-4 text-2xl font-bold text-primary">
             About the data portal
           </h3>
@@ -99,8 +101,13 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="mb-4">
-        <RecentDatasets datasets={datasets} />
+      <div className="relative text-left flex items-center">
+        <div className="relative z-10 w-full my-8 px-16">
+          <h3 className="mb-4 text-2xl font-bold text-primary">
+            Most Recent Datasets
+          </h3>
+          <RecentDatasets datasets={datasets} />
+        </div>
       </div>
     </PageContainer>
   );

@@ -36,8 +36,8 @@ function Footer() {
           <FontAwesomeIcon icon={faArrowRight} className="ml-2 text-warning" />
         </a>
       </div>
-      <footer className="flex flex-col items-center justify-between gap-y-4 border-t-primary bg-surface p-7 md:flex-row md:gap-x-12 md:gap-y-0 md:items-start">
-        <div className="flex flex-col gap-16 md:flex-row md:gap-24">
+      <footer className="flex flex-col items-center bg-surface justify-center gap-y-4 border-t-primary p-7 md:flex-row md:gap-x-12 md:gap-y-0">
+        <div className="container mx-auto flex flex-col gap-16 md:flex-row md:gap-24">
           {/* First column: About the project */}
           <div className="flex flex-col items-start gap-4">
             <Image src={footerLogo} alt="Footer logo" width={80} />

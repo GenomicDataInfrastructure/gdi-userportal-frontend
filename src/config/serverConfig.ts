@@ -19,7 +19,6 @@ interface ServerConfig {
   bannerLink: string;
   siteTitle: string;
   siteDescription: string;
-  useHttps: boolean;
 }
 
 const serverConfig: ServerConfig = {
@@ -46,7 +45,6 @@ const serverConfig: ServerConfig = {
   siteDescription:
     env("NEXT_PUBLIC_SITE_DESCRIPTION") ||
     "Genomic Data Infrastructure User Portal",
-  useHttps: env("NEXT_PUBLIC_USE_HTTPS") === "true",
 };
 
 export default serverConfig;

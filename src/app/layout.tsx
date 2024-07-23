@@ -13,7 +13,7 @@ import SessionProviderWrapper from "./SessionProviderWrapper";
 import "./globals.css";
 config.autoAddCss = false;
 import { fontVariables } from "@/utils/fontSelector";
-import serverConfig from "@/config/serverConfig";
+import contentConfig from "@/config/contentConfig";
 
 export default function RootLayout({
   children,
@@ -23,9 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={fontVariables}>
       <head>
-        <title>{serverConfig.siteTitle}</title>
+        <title>{contentConfig.siteTitle}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content={serverConfig.siteDescription} />
+        <meta name="description" content={contentConfig.siteDescription} />
         <PublicEnvScript />
         {process.env.NEXT_PUBLIC_CUSTOM_STYLE_URL && (
           <link

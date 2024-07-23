@@ -126,7 +126,9 @@ const ThemesSection = ({
           <a
             key={theme.name}
             className="bg-white py-6 flex items-center justify-center px-2 rounded-lg h-[166px] shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50"
-            href={`/datasets?page=1&ckan-theme=${encodeURIComponent(theme.url)}`}
+            href={`/datasets?page=1&ckan-theme=${encodeURIComponent(
+              theme.url
+            )}`}
           >
             <div className="flex flex-col justify-center items-center text-center">
               <img

@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { useAlert } from "@/providers/AlertProvider";
 import { AxiosError } from "axios";
-import serverConfig from "@/config/serverConfig";
+import contentConfig from "@/config/contentConfig";
 
 const HomePage = () => {
   const queryParams = useSearchParams();
@@ -50,10 +50,10 @@ const HomePage = () => {
     <PageContainer className="container mx-auto px-4 pt-5 text-center">
       <div className="my-8">
         <h1 className="font-bold text-4xl text-primary">
-          {serverConfig.homepageTitle}
+          {contentConfig.homepageTitle}
         </h1>
         <h2 className="text-xl mt-4 font-light">
-          {serverConfig.homepageSubtitle}
+          {contentConfig.homepageSubtitle}
         </h2>
       </div>
       <div className="flex justify-center mb-24">
@@ -76,10 +76,10 @@ const HomePage = () => {
             About the data portal
           </h3>
           <p className="text-lg">
-            {serverConfig.aboutContent.split("\n").map((line, index) => (
+            {contentConfig.aboutContent.split("\n").map((line, index) => (
               <span key={index}>
                 {line}
-                {index < serverConfig.aboutContent.split("\n").length - 1 && (
+                {index < contentConfig.aboutContent.split("\n").length - 1 && (
                   <br />
                 )}
               </span>

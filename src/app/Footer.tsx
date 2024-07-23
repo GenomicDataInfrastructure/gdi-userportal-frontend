@@ -18,14 +18,14 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import footerLogo from "../public/footer-logo.png";
-import serverConfig from "@/config/serverConfig";
+import contentConfig from "@/config/contentConfig";
 
 function Footer() {
   return (
     <>
       <div className="bg-primary p-4 text-center mt-4">
         <a
-          href={serverConfig.bannerLink}
+          href={contentConfig.bannerLink}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -42,10 +42,10 @@ function Footer() {
           <div className="flex flex-col items-start gap-4">
             <Image src={footerLogo} alt="Footer logo" width={80} />
             <p className="text-xs md:text-sm">
-              {serverConfig.footerText.split("\n").map((line, index) => (
+              {contentConfig.footerText.split("\n").map((line, index) => (
                 <span key={index}>
                   {line}
-                  {index < serverConfig.footerText.split("\n").length - 1 && (
+                  {index < contentConfig.footerText.split("\n").length - 1 && (
                     <br />
                   )}
                 </span>
@@ -70,9 +70,9 @@ function Footer() {
           <div className="flex flex-col gap-2 text-left">
             <h3 className="text-lg font-bold">Contact Us</h3>
             <div className="flex gap-4">
-              {serverConfig.linkedInUrl && (
+              {contentConfig.linkedInUrl && (
                 <a
-                  href={serverConfig.linkedInUrl}
+                  href={contentConfig.linkedInUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-info"
@@ -83,10 +83,10 @@ function Footer() {
                   />
                 </a>
               )}
-              {serverConfig.twitterUrl && (
+              {contentConfig.twitterUrl && (
                 <a
                   color="primary"
-                  href={serverConfig.twitterUrl}
+                  href={contentConfig.twitterUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-info"
@@ -97,10 +97,10 @@ function Footer() {
                   />
                 </a>
               )}
-              {serverConfig.githubUrl && (
+              {contentConfig.githubUrl && (
                 <a
                   color="primary"
-                  href={serverConfig.githubUrl}
+                  href={contentConfig.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-info"
@@ -111,10 +111,10 @@ function Footer() {
                   />
                 </a>
               )}
-              {serverConfig.gitlabUrl && (
+              {contentConfig.gitlabUrl && (
                 <a
                   color="primary"
-                  href={serverConfig.gitlabUrl}
+                  href={contentConfig.gitlabUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-info"
@@ -125,10 +125,10 @@ function Footer() {
                   />
                 </a>
               )}
-              {serverConfig.websiteUrl && (
+              {contentConfig.websiteUrl && (
                 <a
                   color="primary"
-                  href={serverConfig.websiteUrl}
+                  href={contentConfig.websiteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-info"
@@ -140,12 +140,12 @@ function Footer() {
                 </a>
               )}
             </div>
-            {serverConfig.email && (
+            {contentConfig.email && (
               <a
                 className="text-xs hover:text-info md:text-left md:text-sm"
-                href={`mailto:${encodeURIComponent(serverConfig.email)}`}
+                href={`mailto:${encodeURIComponent(contentConfig.email)}`}
               >
-                {serverConfig.email}
+                {contentConfig.email}
               </a>
             )}
           </div>

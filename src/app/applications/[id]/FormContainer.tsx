@@ -7,9 +7,10 @@ import FieldContainer from "./FieldContainer";
 
 type FormContainerProps = {
   form: Form;
+  editable: boolean;
 };
 
-function FormContainer({ form }: FormContainerProps) {
+function FormContainer({ form, editable }: FormContainerProps) {
   const formTitle =
     form.externalTitle.find((label) => label.language === "en")?.name ||
     form.externalTitle?.[0]?.name;
@@ -22,7 +23,11 @@ function FormContainer({ form }: FormContainerProps) {
           (field) =>
             field && (
               <li key={field.id}>
-                <FieldContainer formId={form.id} field={field} />
+                <FieldContainer
+                  formId={form.id}
+                  field={field}
+                  editable={editable}
+                />
               </li>
             )
         )}

@@ -15,9 +15,10 @@ import PhoneField from "./PhoneField";
 type FieldContainerProps = {
   formId: number;
   field: FormField;
+  editable: boolean;
 };
 
-function FieldContainer({ formId, field }: FieldContainerProps) {
+function FieldContainer({ formId, field, editable }: FieldContainerProps) {
   const fieldTitle =
     field.title.find((label) => label.language === "en")?.name ||
     field.title[0].name;
@@ -26,22 +27,58 @@ function FieldContainer({ formId, field }: FieldContainerProps) {
     switch (field.type) {
       case FieldType.ATTACHMENT:
         return (
-          <FileUploadField field={field} formId={formId} title={fieldTitle} />
+          <FileUploadField
+            field={field}
+            formId={formId}
+            title={fieldTitle}
+            editable={editable}
+          />
         );
       case FieldType.TEXT:
         return (
-          <InputFormField field={field} formId={formId} title={fieldTitle} />
+          <InputFormField
+            field={field}
+            formId={formId}
+            title={fieldTitle}
+            editable={editable}
+          />
         );
       case FieldType.TEXT_AREA:
         return (
-          <TextAreaFormField field={field} formId={formId} title={fieldTitle} />
+          <TextAreaFormField
+            field={field}
+            formId={formId}
+            title={fieldTitle}
+            editable={editable}
+          />
         );
       case FieldType.PHONE:
-        return <PhoneField field={field} formId={formId} title={fieldTitle} />;
+        return (
+          <PhoneField
+            field={field}
+            formId={formId}
+            title={fieldTitle}
+            editable={editable}
+          />
+        );
       case FieldType.DATE:
-        return <DateField field={field} formId={formId} title={fieldTitle} />;
+        return (
+          <DateField
+            field={field}
+            formId={formId}
+            title={fieldTitle}
+            editable={editable}
+          />
+        );
       case FieldType.EMAIL:
-        return <EmailField field={field} formId={formId} title={fieldTitle} />;
+        return (
+          <EmailField
+            field={field}
+            formId={formId}
+            title={fieldTitle}
+            editable={editable}
+          />
+        );
     }
   }
 

@@ -46,19 +46,24 @@ const PhoneInput = forwardRef<
 ));
 PhoneInput.displayName = "PhoneInput";
 
-const InputComponent = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, ...props }, ref) => (
-    <Input
-      className={cn(
-        "h-12 w-full rounded-md border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary",
-        className,
-        "ml-2"
-      )}
-      ref={ref}
-      {...props}
-    />
-  )
-);
+const InputComponent = forwardRef<
+  HTMLInputElement,
+  InputProps & { disabled?: boolean }
+>(({ className, disabled, ...props }, ref) => (
+  <Input
+    className={cn(
+      "h-12 w-full rounded-md border-2 px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out focus:border-transparent focus:outline-none focus:ring-2",
+      disabled
+        ? "border-info bg-background text-muted-foreground cursor-not-allowed opacity-50"
+        : "border-primary bg-white hover:shadow-md focus:ring-primary",
+      className,
+      "ml-2"
+    )}
+    ref={ref}
+    {...props}
+    disabled={disabled}
+  />
+));
 InputComponent.displayName = "InputComponent";
 
 type CountrySelectOption = { label: string; value: RPNInput.Country };
@@ -97,7 +102,8 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
             type="button"
             variant="outline"
             className={cn(
-              "flex h-12 items-center gap-1 rounded-l-md border-2 border-primary px-3"
+              "flex h-12 items-center gap-1 rounded-l-md border-2 px-3",
+              disabled ? "border-info" : "border-primary"
             )}
             disabled={disabled}
           >

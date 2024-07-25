@@ -25,7 +25,7 @@ function PhoneField({ formId, field, title, editable }: PhoneFieldProps) {
       if (inputValue !== field.value) {
         updateInputFields(formId, field.id, inputValue);
       }
-    }, 2000);
+    }, 500);
 
     return () => clearTimeout(timeoutId);
   }, [inputValue, formId, field, updateInputFields]);

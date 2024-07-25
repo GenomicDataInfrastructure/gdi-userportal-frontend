@@ -29,7 +29,7 @@ function DateField({ formId, field, title, editable }: DateFieldProps) {
       if (newValue !== field.value) {
         updateInputFields(formId, field.id, newValue);
       }
-    }, 2000);
+    }, 500);
 
     return () => clearTimeout(timeoutId);
   }, [inputValue, formId, field.id, field.value, updateInputFields]);

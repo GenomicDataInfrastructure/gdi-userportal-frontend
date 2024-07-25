@@ -5,9 +5,9 @@
 import { SidebarItem } from "@/components/Sidebar";
 import { RetrievedDataset } from "@/services/discovery/types/dataset.types";
 import Link from "next/link";
-import { formatDate } from "@/utils/formatDate";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
+import AddToBasketButton from "@/components/AddToBasketButton";
 
 function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
   const metaFormats = [
@@ -39,13 +39,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
           className="flex flex-col rounded-2xl p-6 gap-3"
         >
           <h1 className="font-bold">Request data access</h1>
-          <Link
-            href="https://lnds.lu/contact-us/"
-            className="flex justify-center items-center py-2 px-3.5 rounded-xl text-white hover:bg-[var(--color-hover)] w-fit transition ease-in-out duration-1000 text-[16px]medium"
-            style={{ backgroundColor: "var(--color-primary)" }}
-          >
-            Add to basket
-          </Link>
+          <AddToBasketButton dataset={dataset} />
         </div>
       ),
     },

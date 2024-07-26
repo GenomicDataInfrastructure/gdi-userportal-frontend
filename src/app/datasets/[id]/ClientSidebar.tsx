@@ -4,7 +4,6 @@
 
 "use client";
 
-import Sidebar from "@/components/Sidebar";
 import { RetrievedDataset } from "@/services/discovery/types/dataset.types";
 import { createDatasetSidebarItems } from "./sidebarItems";
 

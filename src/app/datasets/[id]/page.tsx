@@ -3,24 +3,17 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Error from "@/app/error";
-import Chips from "@/components/Chips";
 import PageContainer from "@/components/PageContainer";
-import PageHeading from "@/components/PageHeading";
-import PageSubHeading from "@/components/PageSubHeading";
 import { datasetGet } from "@/services/discovery";
 import { isErrorResponse } from "@/utils/ErrorResponse";
 import ClientSidebar from "./ClientSidebar";
 import DatasetMetadata from "./DatasetMetadata";
 import {
   parseDatasetRelationships,
-  formatRelationshipType,
 } from "@/utils/datasetRelationshipUtils";
 import {
   parseDatasetDictionary,
-  formatFieldName,
-  formatDescription,
 } from "@/utils/datasetDictionaryUtils";
-import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThLarge } from "@fortawesome/free-solid-svg-icons";
 

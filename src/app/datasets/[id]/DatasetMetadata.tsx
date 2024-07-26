@@ -18,7 +18,11 @@ import {
   faIdBadge,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
-import { Dataset, DatasetRelationship, DatasetDictionaryEntry } from "@/services/discovery/types/dataset.types";
+import {
+  Dataset,
+  DatasetRelationship,
+  DatasetDictionaryEntry,
+} from "@/services/discovery/types/dataset.types";
 import {
   formatRelationshipType,
   parseDatasetRelationships,
@@ -44,8 +48,13 @@ const DatasetMetadata = ({
       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 font-[400] text-gray">
         {dataset.createdAt && (
           <span className="inline flex gap-2 items-center">
-            <FontAwesomeIcon icon={faCalendarAlt} className="align-middle text-primary" />
-            <span className="align-middle">Created on {formatDate(dataset.createdAt)}</span>
+            <FontAwesomeIcon
+              icon={faCalendarAlt}
+              className="align-middle text-primary"
+            />
+            <span className="align-middle">
+              Created on {formatDate(dataset.createdAt)}
+            </span>
           </span>
         )}
         {dataset.createdAt && dataset.modifiedAt && (
@@ -53,8 +62,13 @@ const DatasetMetadata = ({
         )}
         {dataset.modifiedAt && (
           <span className="inline flex gap-2 items-center">
-            <FontAwesomeIcon icon={faSyncAlt} className="align-middle text-primary" />
-            <span className="align-middle">Modified on {formatDate(dataset.modifiedAt)}</span>
+            <FontAwesomeIcon
+              icon={faSyncAlt}
+              className="align-middle text-primary"
+            />
+            <span className="align-middle">
+              Modified on {formatDate(dataset.modifiedAt)}
+            </span>
           </span>
         )}
         {dataset.organization && (
@@ -62,7 +76,10 @@ const DatasetMetadata = ({
             <div className="text-lightaccent hidden sm:inline-block">|</div>
             <span className="inline sm:flex-row flex flex-col gap-2">
               <div className="flex gap-2 items-center">
-                <FontAwesomeIcon icon={faBuilding} className="align-middle text-primary" />
+                <FontAwesomeIcon
+                  icon={faBuilding}
+                  className="align-middle text-primary"
+                />
                 <span className="align-middle">Catalogue</span>
               </div>
               <div className="pl-5 sm:pl-0 lg:pl-0 flex items-center">
@@ -79,8 +96,13 @@ const DatasetMetadata = ({
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
             <span className="inline flex gap-2 items-center">
-              <FontAwesomeIcon icon={faTag} className="align-middle text-primary" />
-              <span className="align-middle">{dataset.access_rights || "No access rights information."}</span>
+              <FontAwesomeIcon
+                icon={faTag}
+                className="align-middle text-primary"
+              />
+              <span className="align-middle">
+                {dataset.access_rights || "No access rights information."}
+              </span>
             </span>
           </>
         )}
@@ -88,8 +110,13 @@ const DatasetMetadata = ({
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
             <span className="inline flex gap-2 items-center">
-              <FontAwesomeIcon icon={faIdBadge} className="align-middle text-primary" />
-              <span className="align-middle">Identifier: {dataset.identifier}</span>
+              <FontAwesomeIcon
+                icon={faIdBadge}
+                className="align-middle text-primary"
+              />
+              <span className="align-middle">
+                Identifier: {dataset.identifier}
+              </span>
             </span>
           </>
         )}
@@ -97,8 +124,14 @@ const DatasetMetadata = ({
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
             <span className="inline flex gap-2 items-center">
-              <FontAwesomeIcon icon={faLanguage} className="align-middle text-primary" />
-              <span className="align-middle">Languages: {dataset.languages?.map(lang => lang.label).join(", ")}</span>
+              <FontAwesomeIcon
+                icon={faLanguage}
+                className="align-middle text-primary"
+              />
+              <span className="align-middle">
+                Languages:{" "}
+                {dataset.languages?.map((lang) => lang.label).join(", ")}
+              </span>
             </span>
           </>
         )}
@@ -106,8 +139,13 @@ const DatasetMetadata = ({
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
             <span className="inline flex gap-2 items-center">
-              <FontAwesomeIcon icon={faFile} className="align-middle text-primary " />
-              <span className="align-middle">{dataset.distributions.length} Distribution(s)</span>
+              <FontAwesomeIcon
+                icon={faFile}
+                className="align-middle text-primary "
+              />
+              <span className="align-middle">
+                {dataset.distributions.length} Distribution(s)
+              </span>
             </span>
           </>
         )}
@@ -115,7 +153,10 @@ const DatasetMetadata = ({
       {dataset.keywords?.length > 0 && (
         <div className="mt-4">
           <span className="inline flex gap-2 items-center">
-            <FontAwesomeIcon icon={faKey} className="align-middle text-primary" />
+            <FontAwesomeIcon
+              icon={faKey}
+              className="align-middle text-primary"
+            />
             <span className="align-middle">Keywords:</span>
             <div className="flex flex-wrap gap-1">
               {dataset.keywords?.map((keyword) => (
@@ -142,7 +183,10 @@ const DatasetMetadata = ({
                   href={`/@${dataset.organization?.name}/${relationship.related_dataset}`}
                   className="group-hover:text-red hover:font-bold"
                 >
-                  <FontAwesomeIcon icon={faTag} className="align-middle text-primary" />
+                  <FontAwesomeIcon
+                    icon={faTag}
+                    className="align-middle text-primary"
+                  />
                   <span className="align-middle">
                     {formatRelationshipType(relationship.relationship_type)}:{" "}
                     {relationship.related_dataset}
@@ -162,7 +206,10 @@ const DatasetMetadata = ({
             {dictionary.map((entry, index) => (
               <div key={index} className="flex items-center gap-2">
                 <span className="inline-flex items-center gap-2 text-gray-800 text-[15px] font-bold">
-                  <FontAwesomeIcon icon={faTag} className="align-middle text-primary" />
+                  <FontAwesomeIcon
+                    icon={faTag}
+                    className="align-middle text-primary"
+                  />
                   {formatFieldName(entry.field_name)}
                 </span>
                 <span className="text-sm text-gray-800">

@@ -36,7 +36,9 @@ export default async function Page({ params }: { params: { id: string } }) {
       <PageContainer>
         <div className="flex flex-col items-start justify-start lg:flex-row">
           <div className="flex w-full flex-col gap-5 lg:w-2/3 lg:px-5">
-            <h1 className="text-primary text-[25px] font-semibold">{dataset.title}</h1>
+            <h1 className="text-primary text-[25px] font-semibold">
+              {dataset.title}
+            </h1>
             {dataset.themes && dataset.themes.length > 0 && (
               <div className="tracking-widest uppercase flex items-center gap-2">
                 <FontAwesomeIcon icon={faThLarge} className="text-primary" />

@@ -74,41 +74,87 @@ const DistributionAccordion = ({
             <div className="p-4">
               <div>
                 <strong className="block text-sm font-semibold">
-                  <FontAwesomeIcon icon={faFileAlt} className="text-primary align-middle mr-2" />
+                  <FontAwesomeIcon
+                    icon={faFileAlt}
+                    className="text-primary align-middle mr-2"
+                  />
                   Description:
                 </strong>
                 <span className="text-sm">{distribution.description}</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                 <div className="flex items-center">
-                  <FontAwesomeIcon icon={faCalendarAlt} className="text-primary align-middle mr-2" />
+                  <FontAwesomeIcon
+                    icon={faCalendarAlt}
+                    className="text-primary align-middle mr-2"
+                  />
                   <strong className="text-sm font-semibold">Created On:</strong>
-                  <span className="text-sm ml-2">{distribution.createdAt ? formatDate(distribution.createdAt) : "NA"}</span>
+                  <span className="text-sm ml-2">
+                    {distribution.createdAt
+                      ? formatDate(distribution.createdAt)
+                      : "NA"}
+                  </span>
                 </div>
                 <div className="flex items-center">
-                  <FontAwesomeIcon icon={faCalendarAlt} className="text-primary align-middle mr-2" />
-                  <strong className="text-sm font-semibold">Modified On:</strong>
-                  <span className="text-sm ml-2">{distribution.modifiedAt ? formatDate(distribution.modifiedAt) : "NA"}</span>
+                  <FontAwesomeIcon
+                    icon={faCalendarAlt}
+                    className="text-primary align-middle mr-2"
+                  />
+                  <strong className="text-sm font-semibold">
+                    Modified On:
+                  </strong>
+                  <span className="text-sm ml-2">
+                    {distribution.modifiedAt
+                      ? formatDate(distribution.modifiedAt)
+                      : "NA"}
+                  </span>
                 </div>
                 <div className="flex items-center">
-                  <FontAwesomeIcon icon={faFile} className="text-primary align-middle mr-2" />
+                  <FontAwesomeIcon
+                    icon={faFile}
+                    className="text-primary align-middle mr-2"
+                  />
                   <strong className="text-sm font-semibold">FileType:</strong>
-                  <span className="text-sm ml-2">{distribution.format?.label || "NA"}</span>
+                  <span className="text-sm ml-2">
+                    {distribution.format?.label || "NA"}
+                  </span>
                 </div>
                 <div className="flex items-center">
-                  <FontAwesomeIcon icon={faLanguage} className="text-primary align-middle mr-2" />
+                  <FontAwesomeIcon
+                    icon={faLanguage}
+                    className="text-primary align-middle mr-2"
+                  />
                   <strong className="text-sm font-semibold">Languages:</strong>
-                  <span className="text-sm ml-2">{distribution.languages?.map(lang => lang.label).join(", ") || "NA"}</span>
+                  <span className="text-sm ml-2">
+                    {distribution.languages
+                      ?.map((lang) => lang.label)
+                      .join(", ") || "NA"}
+                  </span>
                 </div>
                 <div className="flex items-center">
-                  <FontAwesomeIcon icon={faLock} className="text-primary align-middle mr-2" />
+                  <FontAwesomeIcon
+                    icon={faLock}
+                    className="text-primary align-middle mr-2"
+                  />
                   <strong className="text-sm font-semibold">Licenses:</strong>
-                  <span className="text-sm ml-2">{distribution.licenses?.map(license => license.label).join(", ") || "NA"}</span>
+                  <span className="text-sm ml-2">
+                    {distribution.licenses
+                      ?.map((license) => license.label)
+                      .join(", ") || "NA"}
+                  </span>
                 </div>
                 <div className="flex items-center">
-                  <FontAwesomeIcon icon={faLink} className="text-primary align-middle mr-2" />
+                  <FontAwesomeIcon
+                    icon={faLink}
+                    className="text-primary align-middle mr-2"
+                  />
                   <strong className="text-sm font-semibold">Link:</strong>
-                  <a href={distribution.uri} className="text-sm text-primary ml-2 break-all">Download</a>
+                  <a
+                    href={distribution.uri}
+                    className="text-sm text-primary ml-2 break-all"
+                  >
+                    Download
+                  </a>
                 </div>
               </div>
             </div>

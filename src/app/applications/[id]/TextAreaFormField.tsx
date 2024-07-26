@@ -52,7 +52,7 @@ function TextAreaFormField({
           placeholder={title}
           rows={5}
           value={inputValue}
-          className={`mt-4 w-full rounded-lg border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out ${isDisabled ? "border-info bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex text-sm file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" : "bg-white hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"}`}
+          className={`mt-4 w-full rounded-lg border-2 border-primary px-4 py-[9px] text-md shadow-sm transition-all duration-200 ease-in-out ${isDisabled ? "border-slate-200 bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" : "bg-white hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"}`}
           onChange={handleInputChange}
           disabled={isDisabled}
         />

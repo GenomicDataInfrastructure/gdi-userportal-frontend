@@ -52,9 +52,9 @@ const InputComponent = forwardRef<
 >(({ className, disabled, ...props }, ref) => (
   <Input
     className={cn(
-      "h-12 w-full rounded-md border-2 px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out focus:border-transparent focus:outline-none focus:ring-2",
+      "h-12 w-full rounded-md border-2 px-4 py-[9px] text-md shadow-sm transition-all duration-200 ease-in-out focus:border-transparent focus:outline-none focus:ring-2",
       disabled
-        ? "border-info bg-background text-muted-foreground cursor-not-allowed opacity-50"
+        ? "border-slate-200 bg-background text-muted-foreground cursor-not-allowed opacity-50"
         : "border-primary bg-white hover:shadow-md focus:ring-primary",
       className,
       "ml-2"
@@ -102,8 +102,8 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
             type="button"
             variant="outline"
             className={cn(
-              "flex h-12 items-center gap-1 rounded-l-md border-2 px-3",
-              disabled ? "border-info" : "border-primary"
+              "flex h-12 items-center gap-1 rounded-l-md border-2 px-4",
+              disabled ? "border-slate-200" : "border-primary"
             )}
             disabled={disabled}
           >

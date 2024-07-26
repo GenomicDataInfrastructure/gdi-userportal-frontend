@@ -14,7 +14,7 @@ type ClientSidebarProps = {
 
 function ClientSidebar({ dataset }: ClientSidebarProps) {
   const sidebarItems = createDatasetSidebarItems(dataset);
-
+  console.log("Dataset properties:", dataset);
   return (
     <aside className="w-full lg:w-1/3 lg:sticky top-24">
       <div className="flex flex-col gap-4 pb-8">

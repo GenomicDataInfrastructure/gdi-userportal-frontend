@@ -8,6 +8,11 @@ import {
   faChevronDown,
   faChevronUp,
   faFile,
+  faCalendarAlt,
+  faFileAlt,
+  faLanguage,
+  faLock,
+  faLink,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
 import { RetrievedDistribution } from "@/services/discovery/types/dataset.types";
@@ -48,11 +53,6 @@ const DistributionAccordion = ({
               <span className="struncate ml-2 break-all">
                 {distribution.title}
               </span>
-              {distribution.format && (
-                <span className="mx-2 inline-block bg-warning px-2.5 py-0.5 font-medium text-xs text-black">
-                  {distribution.format.label}
-                </span>
-              )}
             </span>
             <FontAwesomeIcon
               icon={openIndex === index ? faChevronUp : faChevronDown}
@@ -71,30 +71,46 @@ const DistributionAccordion = ({
             }}
             className="rounded-b border-2 border-t-0 bg-white"
           >
-            <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2">
+            <div className="p-4">
               <div>
                 <strong className="block text-sm font-semibold">
+                  <FontAwesomeIcon icon={faFileAlt} className="text-primary align-middle mr-2" />
                   Description:
                 </strong>
                 <span className="text-sm">{distribution.description}</span>
               </div>
-              <div>
-                <strong className="block text-sm font-semibold">Issued:</strong>
-                <span className="font-date text-sm">
-                  {distribution.createdAt && formatDate(distribution.createdAt)}
-                </span>
-              </div>
-              {distribution.modifiedAt && (
-                <div>
-                  <strong className="block text-sm font-semibold">
-                    Last Modified:
-                  </strong>
-                  <span className="font-date text-sm">
-                    {distribution.modifiedAt &&
-                      formatDate(distribution.modifiedAt)}
-                  </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                <div className="flex items-center">
+                  <FontAwesomeIcon icon={faCalendarAlt} className="text-primary align-middle mr-2" />
+                  <strong className="text-sm font-semibold">Created On:</strong>
+                  <span className="text-sm ml-2">{distribution.createdAt ? formatDate(distribution.createdAt) : "NA"}</span>
                 </div>
-              )}
+                <div className="flex items-center">
+                  <FontAwesomeIcon icon={faCalendarAlt} className="text-primary align-middle mr-2" />
+                  <strong className="text-sm font-semibold">Modified On:</strong>
+                  <span className="text-sm ml-2">{distribution.modifiedAt ? formatDate(distribution.modifiedAt) : "NA"}</span>
+                </div>
+                <div className="flex items-center">
+                  <FontAwesomeIcon icon={faFile} className="text-primary align-middle mr-2" />
+                  <strong className="text-sm font-semibold">FileType:</strong>
+                  <span className="text-sm ml-2">{distribution.format?.label || "NA"}</span>
+                </div>
+                <div className="flex items-center">
+                  <FontAwesomeIcon icon={faLanguage} className="text-primary align-middle mr-2" />
+                  <strong className="text-sm font-semibold">Languages:</strong>
+                  <span className="text-sm ml-2">{distribution.languages?.map(lang => lang.label).join(", ") || "NA"}</span>
+                </div>
+                <div className="flex items-center">
+                  <FontAwesomeIcon icon={faLock} className="text-primary align-middle mr-2" />
+                  <strong className="text-sm font-semibold">Licenses:</strong>
+                  <span className="text-sm ml-2">{distribution.licenses?.map(license => license.label).join(", ") || "NA"}</span>
+                </div>
+                <div className="flex items-center">
+                  <FontAwesomeIcon icon={faLink} className="text-primary align-middle mr-2" />
+                  <strong className="text-sm font-semibold">Link:</strong>
+                  <a href={distribution.uri} className="text-sm text-primary ml-2 break-all">Download</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>

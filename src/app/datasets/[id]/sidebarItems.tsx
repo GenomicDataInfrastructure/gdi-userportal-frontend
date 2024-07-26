@@ -22,7 +22,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
     {
       format: "ttl",
       label: "TTL",
-      style: { backgroundColor: "var(--color-info)" },
+      style: { backgroundColor: "var(--color-info)", color: "white" },
     },
     {
       format: "jsonld",
@@ -54,7 +54,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
             {metaFormats.map((item) => (
               <div key={item.format}>
                 <Link
-                  href={`https://ckan.data.lnds.lu/dataset/data-available-via-the-luxembourg-microdata-platform-on-labour-and-social-protection.${item.format}`}
+                  href={`#.${item.format}`}
                   className="group flex items-center gap-1"
                 >
                   <div

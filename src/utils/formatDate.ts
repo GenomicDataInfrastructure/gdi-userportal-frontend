@@ -9,29 +9,28 @@ function isClient() {
   return typeof window !== "undefined";
 }
 
-export function formatDate(inputDate: string): string {
-  return _formatDate(inputDate, "d MMMM yyyy");
+export function formatDate(inputDate: string, timeZone?: string): string {
+  return _formatDate(inputDate, "d MMMM yyyy", timeZone);
 }
 
-export function formatDateTime(inputDate: string) {
-  return _formatDate(inputDate, "d MMMM yyyy, HH.mm (zzz)");
+export function formatDateTime(inputDate: string, timeZone?: string) {
+  return _formatDate(inputDate, "d MMMM yyyy, HH.mm (zzz)", timeZone);
 }
 
 function getUserTimezone() {
   if (!isClient()) {
     throw new Error("getUserTimezone must be called on the client side");
   }
-
   return Intl.DateTimeFormat().resolvedOptions().timeZone;
 }
 
-function _formatDate(inputDate: string, targetFormat: string) {
+function _formatDate(inputDate: string, targetFormat: string, timeZone?: string) {
   if (!inputDate) {
     return "N/A";
   }
 
   const date = new Date(inputDate);
-  const userTimeZone = getUserTimezone();
+  const userTimeZone = timeZone || (isClient() ? getUserTimezone() : "UTC");
 
   try {
     return formatInTimeZone(date, userTimeZone, targetFormat, { locale: enGB });

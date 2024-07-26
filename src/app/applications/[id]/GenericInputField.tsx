@@ -13,6 +13,7 @@ type GenericInputFieldProps = {
   type: string;
   placeholder: string;
   title: string;
+  editable: boolean;
   onChange?: (value: string) => void;
   children?: React.ReactNode;
 };
@@ -23,6 +24,7 @@ function GenericInputField({
   type,
   placeholder,
   title,
+  editable,
   onChange,
   children,
 }: GenericInputFieldProps) {
@@ -34,7 +36,7 @@ function GenericInputField({
       if (inputValue !== field.value) {
         updateInputFields(formId, field.id, inputValue);
       }
-    }, 2000);
+    }, 500);
 
     return () => clearTimeout(timeoutId);
   }, [inputValue, formId, field, updateInputFields]);
@@ -45,6 +47,8 @@ function GenericInputField({
       onChange(event.target.value);
     }
   };
+
+  const isDisabled = !editable || isLoading;
 
   return (
     <div className="rounded border p-4">
@@ -62,9 +66,9 @@ function GenericInputField({
             name={field.id.toString()}
             value={inputValue}
             onChange={handleInputChange}
-            className="h-12 w-full rounded-lg border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
+            className={`h-12 w-full rounded-lg border-2 border-primary px-4 text-md py-[9px] ${isDisabled ? "border-slate-200 bg-background ring-offset-background placeholder:text-muted-foreground flex file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50" : "bg-white border-primary"}`}
             placeholder={placeholder}
-            disabled={isLoading}
+            disabled={!editable || isLoading}
           />
         </div>
       </div>

@@ -12,9 +12,15 @@ type TextAreaFormFieldProps = {
   field: FormField;
   formId: number;
   title: string;
+  editable: boolean;
 };
 
-function TextAreaFormField({ formId, field, title }: TextAreaFormFieldProps) {
+function TextAreaFormField({
+  formId,
+  field,
+  title,
+  editable,
+}: TextAreaFormFieldProps) {
   const { isLoading, updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
 
@@ -23,7 +29,7 @@ function TextAreaFormField({ formId, field, title }: TextAreaFormFieldProps) {
       if (inputValue !== field.value) {
         updateInputFields(formId, field.id, inputValue);
       }
-    }, 2000);
+    }, 500);
 
     return () => clearTimeout(timeoutId);
   }, [inputValue, formId, field, updateInputFields]);
@@ -31,6 +37,8 @@ function TextAreaFormField({ formId, field, title }: TextAreaFormFieldProps) {
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(event.target.value);
   };
+
+  const isDisabled = !editable || isLoading;
 
   return (
     <div className="rounded border p-4">
@@ -44,9 +52,9 @@ function TextAreaFormField({ formId, field, title }: TextAreaFormFieldProps) {
           placeholder={title}
           rows={5}
           value={inputValue}
-          className="mt-4 w-full rounded-lg border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
+          className={`mt-4 w-full rounded-lg border-2 border-primary px-4 py-[9px] text-md ${isDisabled ? "border-slate-200 bg-background ring-offset-background placeholder:text-muted-foreground flex file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50" : "bg-white focus:outline-none focus:ring-primary"}`}
           onChange={handleInputChange}
-          disabled={isLoading}
+          disabled={isDisabled}
         />
       </div>
     </div>

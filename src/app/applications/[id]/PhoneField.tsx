@@ -13,9 +13,10 @@ type PhoneFieldProps = {
   field: FormField;
   formId: number;
   title: string;
+  editable: boolean;
 };
 
-function PhoneField({ formId, field, title }: PhoneFieldProps) {
+function PhoneField({ formId, field, title, editable }: PhoneFieldProps) {
   const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
 
@@ -24,7 +25,7 @@ function PhoneField({ formId, field, title }: PhoneFieldProps) {
       if (inputValue !== field.value) {
         updateInputFields(formId, field.id, inputValue);
       }
-    }, 2000);
+    }, 500);
 
     return () => clearTimeout(timeoutId);
   }, [inputValue, formId, field, updateInputFields]);
@@ -62,6 +63,7 @@ function PhoneField({ formId, field, title }: PhoneFieldProps) {
             onChange={handlePhoneChange}
             onBlur={handlePhoneBlur}
             className="flex w-full"
+            disabled={!editable}
           />
         </div>
       </div>

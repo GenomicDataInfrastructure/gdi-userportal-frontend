@@ -23,12 +23,12 @@ function FileUploaded({ attachment, formId, fieldId }: FileUploadedProps) {
           icon={faFileCircleCheck}
           className="text-base text-info"
         />
-        <h3 className="text-sm text-info">{attachment.filename}</h3>
+        <h3 className="text-md text-info">{attachment.filename}</h3>
       </div>
       {isApplicationEditable(application!) && (
         <FontAwesomeIcon
           icon={faClose}
-          className={`border-1 cursor-pointer rounded-full p-1.5 text-sm text-info transition-colors duration-200 hover:text-primary ${
+          className={`border-1 cursor-pointer rounded-full p-1.5 text-md text-info transition-colors duration-200 hover:text-primary ${
             isLoading ? "pointer-events-none opacity-10" : ""
           }`}
           onClick={() => deleteAttachment(formId, fieldId, attachment.id)}

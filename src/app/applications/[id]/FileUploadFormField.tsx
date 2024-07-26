@@ -12,9 +12,15 @@ type FileUploadFieldProps = {
   field: FormField;
   formId: number;
   title: string;
+  editable: boolean;
 };
 
-function FileUploadFormField({ field, formId, title }: FileUploadFieldProps) {
+function FileUploadFormField({
+  field,
+  formId,
+  title,
+  editable,
+}: FileUploadFieldProps) {
   const { application, isLoading, addAttachment } = useApplicationDetails();
 
   function onFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -37,18 +43,20 @@ function FileUploadFormField({ field, formId, title }: FileUploadFieldProps) {
           <input
             type="file"
             id={`input-file-${field.id}`}
-            disabled={isLoading}
+            disabled={isLoading || !editable}
             onChange={onFileUpload}
             className="hidden"
           />
           <label
             htmlFor={`input-file-${field.id}`}
-            className={`cursor-pointer rounded-lg bg-info p-2 py-2 text-[9px] font-bold tracking-wide text-white transition-colors duration-200 hover:opacity-80 sm:w-auto sm:px-4 sm:text-xs ${
-              isLoading ? "cursor-not-allowed opacity-10" : ""
+            className={`bg-info text-white rounded-lg px-4 py-2 font-bold transition-colors duration-200 tracking-wide sm:w-auto ${
+              isLoading || !editable
+                ? "cursor-not-allowed opacity-50"
+                : "hover:opacity-80 cursor-pointer"
             }`}
           >
-            <FontAwesomeIcon icon={faPlusCircle} className="mr-2" />
-            <span>Upload File</span>
+            <FontAwesomeIcon icon={faPlusCircle} className="mr-2 text-sm" />
+            <span className="text-sm">Upload File</span>
           </label>
         </>
       </div>

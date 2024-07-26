@@ -80,16 +80,18 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
           className="flex flex-col rounded-2xl p-6 gap-3"
         >
           <h1 className="font-bold">Contact Point</h1>
-          <div className="flex items-center">
-            <div className="h-20 w-20 flex justify-center items-center">
-              {/* Optionally add organization logo here */}
+          <div className="flex items-center text-[14px]">
+            <div className="h-20 w-20 flex justify-left items-center">
+              {dataset.catalogue /* Optionally add organization logo here */}
             </div>
             <div className="flex flex-col gap-1">
-              <div className="flex gap-2 items-start">
-                <FontAwesomeIcon icon={faUser} size="lg" className="pt-1" />
+              <div className="flex gap-2 items-center">
+                <FontAwesomeIcon icon={faUser} className="text-primary" />
+                <p>{dataset.contact?.label || "No contact provided."}</p>
               </div>
-              <div className="flex gap-2">
-                <FontAwesomeIcon icon={faEnvelope} size="lg" />
+              <div className="flex gap-2 items-center">
+                <FontAwesomeIcon icon={faEnvelope} className="text-primary" />
+                <p>{dataset.contact?.value || "No e-mail provided."}</p>
               </div>
             </div>
           </div>

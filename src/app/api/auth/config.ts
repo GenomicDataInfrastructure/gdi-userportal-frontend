@@ -19,18 +19,13 @@ export const authOptions: NextAuthOptions = {
       authorization: { params: { scope: "openid profile email elixir_id" } },
     }),
   ],
-  session: {
-    maxAge: 3 * 60 * 60,
-    updateAge: 60 * 60,
-  },
   callbacks: {
     async jwt({ token, account }: JWTCallbackEntry) {
       const currTimestamp = Math.floor(Date.now() / 1000);
       const isTokenExpired = (token?.expires_at as number) < currTimestamp;
 
       if (account) {
-        const completedToken = completeTokenWithAccountInfo(token, account);
-        return completedToken;
+        return completeTokenWithAccountInfo(token, account);
       } else if (isTokenExpired) {
         try {
           const refreshedToken = await refreshAccessToken(token);

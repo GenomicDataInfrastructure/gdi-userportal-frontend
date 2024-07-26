@@ -49,8 +49,10 @@ function FileUploadFormField({
           />
           <label
             htmlFor={`input-file-${field.id}`}
-            className={`cursor-pointer rounded-lg bg-info p-2 py-2 font-bold tracking-wide text-white transition-colors duration-200 hover:opacity-80 sm:w-auto sm:px-4 sm:text-xs ${
-              isLoading || !editable ? "cursor-not-allowed opacity-50" : ""
+            className={`bg-info text-white hover:opacity-80 rounded-lg px-4 py-2 font-bold transition-colors duration-200 tracking-wide sm:w-auto ${
+              isLoading || !editable
+                ? "cursor-not-allowed opacity-50 hover:opacity-50"
+                : "cursor-pointer"
             }`}
           >
             <FontAwesomeIcon icon={faPlusCircle} className="mr-2 text-sm" />

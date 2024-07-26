@@ -51,7 +51,7 @@ function DateField({ formId, field, title, editable }: DateFieldProps) {
         <DatePicker
           selected={inputValue}
           onChange={handleDateChange}
-          className={`mt-4 h-12 w-full rounded-lg border-2 border-primary px-4 py-[9px] text-md text-base shadow-sm transition-all duration-200 ease-in-out ${isDisabled ? "border-slate-200 bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" : "bg-white hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"}`}
+          className={`mt-4 h-12 w-full rounded-lg border-2 border-primary px-4 py-[9px] text-md text-base shadow-sm ${isDisabled ? "border-slate-200 bg-background ring-offset-background placeholder:text-muted-foreground flex file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50" : "bg-white focus:outline-none focus:ring-primary"}`}
           placeholderText="dd/mm/yyyy"
           dateFormat="dd/MM/yyyy"
           calendarClassName="rounded-lg shadow-lg p-2"

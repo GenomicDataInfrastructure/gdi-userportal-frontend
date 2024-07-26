@@ -17,7 +17,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
 import {
-  Dataset,
+  RetrievedDataset,
   DatasetRelationship,
   DatasetDictionaryEntry,
 } from "@/services/discovery/types/dataset.types";
@@ -34,7 +34,7 @@ const DatasetMetadata = ({
   relationships,
   dictionary,
 }: {
-  dataset: Dataset;
+  dataset: RetrievedDataset;
   relationships: DatasetRelationship[];
   dictionary: DatasetDictionaryEntry[];
 }) => {
@@ -66,7 +66,7 @@ const DatasetMetadata = ({
             </span>
           </span>
         )}
-        {dataset.organization && (
+        {dataset.catalogue && (
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
             <span className="inline sm:flex-row flex flex-col gap-2">
@@ -75,19 +75,18 @@ const DatasetMetadata = ({
                   icon={faBuilding}
                   className="align-middle text-primary"
                 />
-                <span className="align-middle">Catalogue</span>
               </div>
               <div className="pl-5 sm:pl-0 lg:pl-0 flex items-center">
-                <Link href={`/datasets?org=${dataset.organization?.name}`}>
+                <Link href={``}>
                   <h1 className="m-auto md:m-0 underline inline">
-                    {dataset.organization.title || "No title."}
+                    {dataset.catalogue || "No title."}
                   </h1>
                 </Link>
               </div>
             </span>
           </>
         )}
-        {dataset.access_rights && (
+        {dataset.accessRights && (
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
             <span className="inline flex gap-2 items-center">
@@ -96,7 +95,7 @@ const DatasetMetadata = ({
                 className="align-middle text-primary"
               />
               <span className="align-middle">
-                {dataset.access_rights || "No access rights information."}
+                {dataset.accessRights.label || "No access rights information."}
               </span>
             </span>
           </>
@@ -157,7 +156,7 @@ const DatasetMetadata = ({
               {dataset.keywords?.map((keyword) => (
                 <span
                   className="bg-[var(--color-warning)] bg-opacity-50 px-4 py-1 rounded-md text-gray font-[500] text-[14px] inline-block"
-                  key={keyword.id}
+                  key={keyword.value}
                 >
                   {keyword.label}
                 </span>
@@ -175,7 +174,7 @@ const DatasetMetadata = ({
                 className="inline-flex bg-[#EFFAFE] px-4 py-1 rounded-md text-gray font-[500] text-[14px] group"
               >
                 <Link
-                  href={`/@${dataset.organization?.name}/${relationship.related_dataset}`}
+                  href={`/@${dataset.catalogue}/${relationship.related_dataset}`}
                   className="group-hover:text-red hover:font-bold"
                 >
                   <FontAwesomeIcon

@@ -18,22 +18,31 @@ export default async function Page({ params }: { params: { id: string } }) {
   try {
     const dataset = await datasetGet(id);
 
-    const relationships = parseDatasetRelationships(dataset);
-    const dictionary = parseDatasetDictionary(dataset);
+    const relationships = parseDatasetRelationships({
+      ...dataset,
+      dataset_relationships: dataset.dataset_relationships || "[]",
+    });
+    const dictionary = parseDatasetDictionary({
+      ...dataset,
+      dataset_dictionary: dataset.dataset_dictionary || "[]",
+    });
 
     return (
       <PageContainer>
         <div className="flex flex-col items-start justify-start lg:flex-row">
           <div className="flex w-full flex-col gap-5 lg:w-2/3 lg:px-5">
-            <h1 className="text-primary text-[25px] font-semibold">
-              {dataset.title}
-            </h1>
             {dataset.themes && dataset.themes.length > 0 && (
-              <div className="tracking-widest uppercase flex items-center gap-2">
-                <FontAwesomeIcon icon={faThLarge} className="text-primary" />
+              <div className="tracking-widest uppercase flex items-center text-[14px]">
+                <FontAwesomeIcon
+                  icon={faThLarge}
+                  className="text-primary mr-2"
+                />
                 {dataset.themes.map((theme) => theme.label).join("  |  ")}
               </div>
             )}
+            <h1 className="text-primary text-[25px] font-semibold">
+              {dataset.title}
+            </h1>
             <div className="pb-3.5">
               <p className="text-gray">{dataset.description}</p>
             </div>

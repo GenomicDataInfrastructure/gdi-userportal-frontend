@@ -2,7 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { Dataset, DatasetDictionaryEntry } from "@/lib/extendedTypes/dataset";
+import {
+  RetrievedDataset,
+  DatasetDictionaryEntry,
+} from "@/services/discovery/types/dataset.types";
 
 /**
  * Parses dataset dictionary entries from a stringified JSON.
@@ -10,7 +13,7 @@ import { Dataset, DatasetDictionaryEntry } from "@/lib/extendedTypes/dataset";
  * @returns An array of parsed dataset dictionary entries.
  */
 export function parseDatasetDictionary(
-  dataset: Dataset
+  dataset: RetrievedDataset
 ): Array<DatasetDictionaryEntry> {
   return dataset.dataset_dictionary
     ? JSON.parse(dataset.dataset_dictionary)

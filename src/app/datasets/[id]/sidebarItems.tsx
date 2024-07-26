@@ -33,6 +33,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
 
   return [
     {
+      label: "",
       value: (
         <div
           style={{ backgroundColor: "var(--color-surface)" }}
@@ -44,12 +45,13 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
       ),
     },
     {
+      label: "",
       value: (
         <div
           style={{ backgroundColor: "var(--color-surface)" }}
           className="flex flex-col rounded-2xl p-6 gap-3"
         >
-          <h1 className="font-bold  ">Export Metadata in</h1>
+          <h1 className="font-bold">Export Metadata in</h1>
           <div className="flex gap-2 transition py-2 sm:py-0">
             {metaFormats.map((item) => (
               <div key={item.format}>
@@ -71,12 +73,13 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
       ),
     },
     {
+      label: "",
       value: (
         <div
           style={{ backgroundColor: "var(--color-surface)" }}
           className="flex flex-col rounded-2xl p-6 gap-3"
         >
-          <h1 className="font-bold ">Contact Point</h1>
+          <h1 className="font-bold">Contact Point</h1>
           <div className="flex items-center">
             <div className="h-20 w-20 flex justify-center items-center">
               {/* Optionally add organization logo here */}
@@ -84,26 +87,9 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
             <div className="flex flex-col gap-1">
               <div className="flex gap-2 items-start">
                 <FontAwesomeIcon icon={faUser} size="lg" className="pt-1" />
-                <Link
-                  href={`/datasets?org=${dataset.organization?.title}`}
-                  passHref
-                >
-                  <p className="font-normal">
-                    {dataset.author
-                      ? dataset.author
-                      : dataset.organization
-                        ? dataset.organization.title
-                        : ""}
-                  </p>
-                </Link>
               </div>
               <div className="flex gap-2">
                 <FontAwesomeIcon icon={faEnvelope} size="lg" />
-                <p className="font-normal">
-                  {dataset.author_email
-                    ? dataset.author_email
-                    : "No e-mail provided."}
-                </p>
               </div>
             </div>
           </div>
@@ -111,50 +97,13 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
       ),
     },
     {
+      label: "",
       value: (
         <div
           style={{ backgroundColor: "var(--color-surface)" }}
           className="flex flex-col rounded-2xl p-6 gap-6"
         >
-          <h1 className="font-extrabold ">Similar Datasets</h1>
-          <div className="flex flex-col gap-8">
-            {dataset.similarDatasets?.slice(0, 2).map((similarDataset) => (
-              <div className="flex flex-col gap-2" key={similarDataset.id}>
-                <Link
-                  href={`/@${similarDataset.organization.title}/${similarDataset.name}`}
-                  className=""
-                >
-                  <h4 className="text-[14px] font-semibold break-words  text-black line-clamp-2">
-                    {similarDataset.title
-                      ? similarDataset.title
-                      : "Untitled Dataset"}
-                  </h4>
-                </Link>
-                <p className=" text-gray line-clamp-3">
-                  {similarDataset.notes
-                    ? similarDataset.notes
-                    : "No description provided."}
-                </p>
-                <div className="flex flex-wrap gap-1 sm:items-center">
-                  <div className="flex flex-wrap gap-1.5">
-                    <FontAwesomeIcon icon={faUser} className="text-accent" />
-                    Published by
-                  </div>
-                  <Link
-                    href={`/datasets?organization=${similarDataset.organization.title}`}
-                  >
-                    <p className="text-gray pl-4 sm:pl-0 line-clamp-2">
-                      {similarDataset.author
-                        ? similarDataset.author
-                        : similarDataset.organization
-                          ? similarDataset.organization.title
-                          : ""}
-                    </p>
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
+          <h1 className="font-extrabold">Similar Datasets</h1>
         </div>
       ),
     },

@@ -2,11 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { Dataset, DatasetRelationship } from "@/lib/extendedTypes/dataset";
+import {
+  RetrievedDataset,
+  DatasetRelationship,
+} from "@/services/discovery/types/dataset.types";
 
 /**
  * Formats a camelCase string to a more readable format.
- * Splits the string by colon and converts the second part from camel case to space-separated string with capitalized words.
  * @param type - The relationship type string to format.
  * @returns The formatted string.
  */
@@ -25,7 +27,7 @@ export function formatRelationshipType(type: string): string {
  * @returns An array of parsed dataset relationships.
  */
 export function parseDatasetRelationships(
-  dataset: Dataset
+  dataset: RetrievedDataset
 ): Array<DatasetRelationship> {
   return dataset.dataset_relationships
     ? JSON.parse(dataset.dataset_relationships)

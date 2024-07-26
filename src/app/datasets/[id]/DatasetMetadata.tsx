@@ -9,12 +9,10 @@ import {
   faSyncAlt,
   faBuilding,
   faTag,
-  faGlobe,
   faFile,
   faCalendarAlt,
   faKey,
   faLanguage,
-  faBook,
   faIdBadge,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
@@ -25,7 +23,6 @@ import {
 } from "@/services/discovery/types/dataset.types";
 import {
   formatRelationshipType,
-  parseDatasetRelationships,
 } from "@/utils/datasetRelationshipUtils";
 import {
   formatFieldName,

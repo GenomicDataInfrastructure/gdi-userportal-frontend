@@ -8,12 +8,8 @@ import { datasetGet } from "@/services/discovery";
 import { isErrorResponse } from "@/utils/ErrorResponse";
 import ClientSidebar from "./ClientSidebar";
 import DatasetMetadata from "./DatasetMetadata";
-import {
-  parseDatasetRelationships,
-} from "@/utils/datasetRelationshipUtils";
-import {
-  parseDatasetDictionary,
-} from "@/utils/datasetDictionaryUtils";
+import { parseDatasetRelationships } from "@/utils/datasetRelationshipUtils";
+import { parseDatasetDictionary } from "@/utils/datasetDictionaryUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThLarge } from "@fortawesome/free-solid-svg-icons";
 

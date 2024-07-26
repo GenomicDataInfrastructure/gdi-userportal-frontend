@@ -21,9 +21,7 @@ import {
   DatasetRelationship,
   DatasetDictionaryEntry,
 } from "@/services/discovery/types/dataset.types";
-import {
-  formatRelationshipType,
-} from "@/utils/datasetRelationshipUtils";
+import { formatRelationshipType } from "@/utils/datasetRelationshipUtils";
 import {
   formatFieldName,
   formatDescription,

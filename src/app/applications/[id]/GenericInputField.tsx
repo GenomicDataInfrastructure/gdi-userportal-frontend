@@ -66,7 +66,11 @@ function GenericInputField({
             name={field.id.toString()}
             value={inputValue}
             onChange={handleInputChange}
-            className={`h-12 w-full rounded-lg border-2 border-primary px-4 text-md py-[9px] ${isDisabled ? "border-slate-200 bg-background ring-offset-background placeholder:text-muted-foreground flex file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50" : "bg-white border-primary"}`}
+            className={`h-12 w-full rounded-lg border-2 border-primary px-4 text-md py-[9px] ${
+              isDisabled
+                ? "border-slate-200 bg-background ring-offset-background placeholder:text-muted-foreground flex file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                : "bg-white border-primary"
+            }`}
             placeholder={placeholder}
             disabled={!editable || isLoading}
           />

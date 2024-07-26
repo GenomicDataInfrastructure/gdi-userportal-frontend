@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { Dataset, DatasetDictionaryEntry } from "@/lib/extendedTypes/dataset"
+import { Dataset, DatasetDictionaryEntry } from "@/lib/extendedTypes/dataset";
 
 /**
  * Parses dataset dictionary entries from a stringified JSON.
@@ -10,11 +10,11 @@ import { Dataset, DatasetDictionaryEntry } from "@/lib/extendedTypes/dataset"
  * @returns An array of parsed dataset dictionary entries.
  */
 export function parseDatasetDictionary(
-    dataset: Dataset
+  dataset: Dataset
 ): Array<DatasetDictionaryEntry> {
-    return dataset.dataset_dictionary
-        ? JSON.parse(dataset.dataset_dictionary)
-        : []
+  return dataset.dataset_dictionary
+    ? JSON.parse(dataset.dataset_dictionary)
+    : [];
 }
 
 /**
@@ -23,7 +23,7 @@ export function parseDatasetDictionary(
  * @returns The formatted string.
  */
 export function formatFieldName(fieldName: string): string {
-    return fieldName.replace(/([A-Z])/g, " $1").trim()
+  return fieldName.replace(/([A-Z])/g, " $1").trim();
 }
 
 /**
@@ -32,5 +32,5 @@ export function formatFieldName(fieldName: string): string {
  * @returns The formatted string.
  */
 export function formatDescription(description: string): string {
-    return description.charAt(0).toUpperCase() + description.slice(1)
+  return description.charAt(0).toUpperCase() + description.slice(1);
 }

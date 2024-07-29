@@ -23,6 +23,8 @@ export interface RetrievedDataset {
   spatial: ValueLabel;
   distributions: RetrievedDistribution[];
   keywords: ValueLabel[];
+  dataset_relationships?: string;
+  dataset_dictionary?: string;
 }
 
 export type SearchedDataset = {
@@ -50,4 +52,18 @@ export interface RetrievedDistribution {
   format: ValueLabel;
   createdAt: string;
   modifiedAt: string;
+  languages?: ValueLabel[];
+  licenses?: ValueLabel[];
+  uri: string;
+}
+
+export interface DatasetRelationship {
+  relationship_type: string;
+  related_dataset: string;
+}
+
+export interface DatasetDictionaryEntry {
+  field_name: string;
+  data_type: string;
+  description: string;
 }

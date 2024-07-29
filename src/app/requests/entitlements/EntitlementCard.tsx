@@ -28,7 +28,7 @@ function EntitlementCard({
 
   return (
     <>
-      <div className="flex justify-between">
+      <div className="flex justify-between flex-col space-y-2 md:flex-row md:space-y-0 md:items-center">
         <Link href={`/datasets/${dataset.id}`} className="hover:underline">
           <h3 className="text-xl text-primary md:text-2xl">{dataset.title}</h3>
         </Link>
@@ -43,7 +43,9 @@ function EntitlementCard({
           </p>
         </div>
       </div>
-      <p className="mb-4 text-sm text-info md:text-base">{dataset.catalogue}</p>
+      <p className="mt-4 md:mt-0 mb-4 text-sm text-info md:text-base">
+        {dataset.catalogue}
+      </p>
       {truncatedDesc && (
         <p className="mb-4 text-xs md:text-sm">{truncatedDesc}</p>
       )}

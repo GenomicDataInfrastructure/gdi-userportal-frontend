@@ -127,7 +127,9 @@ const DistributionAccordion = ({
                       icon={faFile}
                       className="text-primary align-middle mr-2"
                     />
-                    <strong className="text-sm font-semibold">File Type:</strong>
+                    <strong className="text-sm font-semibold">
+                      File Type:
+                    </strong>
                     <span className="text-sm ml-2">
                       {distribution.format?.label || "NA"}
                     </span>

@@ -19,7 +19,7 @@ export function formatDateTime(inputDate: string) {
 
 function getUserTimezone() {
   if (!isClient()) {
-      return "UTC";
+    return "UTC";
   }
 
   return Intl.DateTimeFormat().resolvedOptions().timeZone;

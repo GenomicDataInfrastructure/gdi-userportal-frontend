@@ -76,7 +76,7 @@ const DistributionAccordion = ({
             className="rounded-b-2xl bg-white"
           >
             <div className="p-4 pb-8">
-              <div>
+              <div className="relative group">
                 <strong className="block text-sm font-semibold">
                   <FontAwesomeIcon
                     icon={faFileAlt}
@@ -85,6 +85,7 @@ const DistributionAccordion = ({
                   Description:
                 </strong>
                 <span className="text-sm">{distribution.description}</span>
+                <Tooltip message="Description of the distribution." />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                 <div className="flex items-center relative">

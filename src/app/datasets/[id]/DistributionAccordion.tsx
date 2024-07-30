@@ -13,6 +13,7 @@ import {
   faLanguage,
   faLock,
   faLink,
+  faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
 import { RetrievedDistribution } from "@/services/discovery/types/dataset.types";
@@ -42,11 +43,14 @@ const DistributionAccordion = ({
   return (
     <div className="accordion flex w-full flex-col items-center justify-center">
       {distributions.map((distribution, index) => (
-        <div className="mb-2 w-full" key={distribution.id}>
+        <div
+          className="mb-4 w-full rounded-2xl bg-surface hover:bg-hover transition"
+          key={distribution.id}
+        >
           <div
             onClick={() => toggleItem(index)}
             onKeyPress={() => toggleItem(index)}
-            className="flex cursor-pointer items-center justify-between rounded border-2 border-b-0 bg-surface p-4"
+            className="flex cursor-pointer items-center justify-between rounded-2xl p-4"
           >
             <span className="flex items-center">
               <FontAwesomeIcon icon={faFile} className="text-primary" />
@@ -69,9 +73,9 @@ const DistributionAccordion = ({
               overflow: "hidden",
               transition: "max-height 0.5s ease",
             }}
-            className="rounded-b border-2 border-t-0 bg-white"
+            className="rounded-b-2xl bg-white"
           >
-            <div className="p-4">
+            <div className="p-4 pb-8">
               <div>
                 <strong className="block text-sm font-semibold">
                   <FontAwesomeIcon
@@ -83,7 +87,7 @@ const DistributionAccordion = ({
                 <span className="text-sm">{distribution.description}</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                <div className="flex items-center">
+                <div className="flex items-center relative group">
                   <FontAwesomeIcon
                     icon={faCalendarAlt}
                     className="text-primary align-middle mr-2"
@@ -94,8 +98,12 @@ const DistributionAccordion = ({
                       ? formatDate(distribution.createdAt)
                       : "NA"}
                   </span>
+                  <div className="absolute left-0 mt-10 hidden group-hover:flex items-center bg-info text-white text-xs rounded-2xl py-1 px-2 z-10">
+                    <FontAwesomeIcon icon={faInfoCircle} className="mr-1" />
+                    Date when the distribution was created.
+                  </div>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center relative group">
                   <FontAwesomeIcon
                     icon={faCalendarAlt}
                     className="text-primary align-middle mr-2"
@@ -108,8 +116,12 @@ const DistributionAccordion = ({
                       ? formatDate(distribution.modifiedAt)
                       : "NA"}
                   </span>
+                  <div className="absolute left-0 mt-10 hidden group-hover:flex items-center bg-info text-white text-xs rounded-2xl py-1 px-2 z-10">
+                    <FontAwesomeIcon icon={faInfoCircle} className="mr-1" />
+                    Date when the distribution was last modified.
+                  </div>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center relative group">
                   <FontAwesomeIcon
                     icon={faFile}
                     className="text-primary align-middle mr-2"
@@ -118,8 +130,12 @@ const DistributionAccordion = ({
                   <span className="text-sm ml-2">
                     {distribution.format?.label || "NA"}
                   </span>
+                  <div className="absolute left-0 mt-10 hidden group-hover:flex items-center bg-info text-white text-xs rounded-2xl py-1 px-2 z-10">
+                    <FontAwesomeIcon icon={faInfoCircle} className="mr-1" />
+                    Format of the distribution file.
+                  </div>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center relative group">
                   <FontAwesomeIcon
                     icon={faLanguage}
                     className="text-primary align-middle mr-2"
@@ -130,8 +146,12 @@ const DistributionAccordion = ({
                       ?.map((lang) => lang.label)
                       .join(", ") || "NA"}
                   </span>
+                  <div className="absolute left-0 mt-10 hidden group-hover:flex items-center bg-info text-white text-xs rounded-2xl py-1 px-2 z-10">
+                    <FontAwesomeIcon icon={faInfoCircle} className="mr-1" />
+                    Languages in which the distribution is available.
+                  </div>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center relative group">
                   <FontAwesomeIcon
                     icon={faLock}
                     className="text-primary align-middle mr-2"
@@ -142,8 +162,12 @@ const DistributionAccordion = ({
                       ?.map((license) => license.label)
                       .join(", ") || "NA"}
                   </span>
+                  <div className="absolute left-0 mt-10 hidden group-hover:flex items-center bg-info text-white text-xs rounded-2xl py-1 px-2 z-10">
+                    <FontAwesomeIcon icon={faInfoCircle} className="mr-1" />
+                    Licenses associated with the distribution.
+                  </div>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center relative group">
                   <FontAwesomeIcon
                     icon={faLink}
                     className="text-primary align-middle mr-2"
@@ -155,6 +179,10 @@ const DistributionAccordion = ({
                   >
                     Download
                   </a>
+                  <div className="absolute left-0 mt-10 hidden group-hover:flex items-center bg-info text-white text-xs rounded-2xl py-1 px-2 z-10">
+                    <FontAwesomeIcon icon={faInfoCircle} className="mr-1" />
+                    Link to download the distribution file.
+                  </div>
                 </div>
               </div>
             </div>

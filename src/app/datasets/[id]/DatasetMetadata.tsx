@@ -165,7 +165,7 @@ const DatasetMetadata = ({
             <div className="flex flex-wrap gap-1">
               {dataset.keywords?.map((keyword) => (
                 <span
-                  className="bg-[var(--color-warning)] bg-opacity-50 px-4 py-1 rounded-2xl-md text-gray font-[500] text-[14px] inline-block"
+                  className="bg-[var(--color-warning)] bg-opacity-50 px-4 py-1 rounded-full text-gray font-[500] text-[14px] inline-block"
                   key={keyword.value}
                 >
                   {keyword.label}
@@ -182,7 +182,7 @@ const DatasetMetadata = ({
             {relationships.map((relationship, index) => (
               <div
                 key={index}
-                className="inline-flex bg-[#EFFAFE] px-4 py-1 rounded-2xl-md text-gray font-[500] text-[14px] group relative"
+                className="inline-flex bg-[#EFFAFE] px-4 py-1 rounded-full text-gray font-[500] text-[14px] group relative"
               >
                 <Link
                   href={`/@${dataset.catalogue}/${relationship.related_dataset}`}

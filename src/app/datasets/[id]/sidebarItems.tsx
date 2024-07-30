@@ -79,7 +79,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
           style={{ backgroundColor: "var(--color-surface)" }}
           className="flex flex-col rounded-2xl p-6 gap-3"
         >
-          <h1 className="font-bold">Contact Point</h1>
+          <h1 className="font-bold">Contact Point(s)</h1>
           <div className="flex items-center text-[14px]">
             <div className="h-20 w-20 flex justify-left items-center">
               {dataset.catalogue /* Optionally add organization logo here */}

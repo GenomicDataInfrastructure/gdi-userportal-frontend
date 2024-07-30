@@ -233,7 +233,9 @@ const DatasetMetadata = ({
           </div>
         </div>
       )}
-      <DistributionAccordion distributions={dataset.distributions || []} />
+      <div className="mt-4">
+        <DistributionAccordion distributions={dataset.distributions || []} />
+      </div>
     </>
   );
 };

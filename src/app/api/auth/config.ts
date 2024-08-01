@@ -21,7 +21,7 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, account }: JWTCallbackEntry) {
-      const currTimestamp = Math.floor(Date.now() / 1000);
+      const currTimestamp = Math.floor(Date.now() / 1000 - 60);
       const isTokenExpired = (token?.expires_at as number) < currTimestamp;
 
       if (account) {

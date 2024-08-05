@@ -59,6 +59,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
                 <Link
                   href={`${serverConfig.discoveryUrl}/api/v1/datasets/${dataset.id}.${item.format}`}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="group flex items-center gap-1"
                 >
                   <div

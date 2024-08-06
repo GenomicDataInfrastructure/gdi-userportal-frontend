@@ -85,21 +85,40 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
           <h1 className="font-bold">Contact Point(s)</h1>
           <div className="flex items-center text-[14px]">
             <div className="flex flex-col gap-1">
-              {dataset.contacts.map((contact, index) => (
+              {dataset.contacts.length === 0 ? (
                 <>
-                  <div key={index} className="flex gap-8 items-center">
+                  <div className="flex gap-8 items-center">
                     <FontAwesomeIcon icon={faUser} className="text-primary" />
-                    <p>{contact.name || "No contact provided."}</p>
+                    <p>No contact provided.</p>
                   </div>
                   <div className="flex gap-8 items-center">
                     <FontAwesomeIcon
                       icon={faEnvelope}
                       className="text-primary"
                     />
-                    <p>{contact.email || "No e-mail provided."}</p>
+                    <p>No e-mail provided.</p>
                   </div>
                 </>
-              ))}
+              ) : (
+                dataset.contacts.map((contact, index) => (
+                  <>
+                    <div key={index} className="flex gap-8 items-center">
+                      <FontAwesomeIcon icon={faUser} className="text-primary" />
+                      <p>{contact.name || "No contact provided."}</p>
+                    </div>
+                    <div
+                      key={`${index}-email`}
+                      className="flex gap-8 items-center"
+                    >
+                      <FontAwesomeIcon
+                        icon={faEnvelope}
+                        className="text-primary"
+                      />
+                      <p>{contact.email || "No e-mail provided."}</p>
+                    </div>
+                  </>
+                ))
+              )}
             </div>
           </div>
         </div>

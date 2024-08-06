@@ -12,7 +12,7 @@ import {
   faLanguage,
   faIdBadge,
 } from "@fortawesome/free-solid-svg-icons";
-import { formatDate, formatDateTime } from "@/utils/formatDate";
+import { formatDate } from "@/utils/formatDate";
 import {
   RetrievedDataset,
   DatasetRelationship,

@@ -8,12 +8,10 @@ export const themeConfig = {
     primary: process.env.NEXT_PUBLIC_COLOR_PRIMARY || "var(--color-primary)",
     secondary:
       process.env.NEXT_PUBLIC_COLOR_SECONDARY || "var(--color-secondary)",
-    tertiary:
-      process.env.NEXT_PUBLIC_COLOR_TERTIARY || "var(--color-primary)",
+    tertiary: process.env.NEXT_PUBLIC_COLOR_TERTIARY || "var(--color-primary)",
     quaternary:
       process.env.NEXT_PUBLIC_COLOR_QUATERNARY || "var(--color-primary)",
-    quinary:
-      process.env.NEXT_PUBLIC_COLOR_QUINARY || "var(--color-primary)",
+    quinary: process.env.NEXT_PUBLIC_COLOR_QUINARY || "var(--color-primary)",
     info: process.env.NEXT_PUBLIC_COLOR_INFO || "var(--color-info)",
     warning: process.env.NEXT_PUBLIC_COLOR_WARNING || "var(--color-warning)",
     "hover-color":

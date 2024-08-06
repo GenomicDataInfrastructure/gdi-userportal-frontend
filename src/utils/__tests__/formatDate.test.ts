@@ -51,16 +51,18 @@ describe("formatDate and formatDateTime", () => {
   });
 
   describe("Server-side behavior", () => {
-    it("returns the formatted date in UTC if formatDate is called server-side", () => {
+    it("throws an error if formatDate is called server-side", () => {
       const input = "2024-02-09T10:27:47.585Z";
-      const formattedDate = formatDate(input);
-      expect(formattedDate).toBe("9 February 2024");
+      expect(() => formatDate(input)).toThrow(
+        "getUserTimezone must be called on the client side"
+      );
     });
 
-    it("returns the formatted date and time in UTC if formatDateTime is called server-side", () => {
+    it("throws an error if formatDateTime is called server-side", () => {
       const input = "2024-02-09T10:27:47.585Z";
-      const formattedDateTime = formatDateTime(input);
-      expect(formattedDateTime).toBe("9 February 2024, 10.27 (UTC)");
+      expect(() => formatDateTime(input)).toThrow(
+        "getUserTimezone must be called on the client side"
+      );
     });
   });
 });

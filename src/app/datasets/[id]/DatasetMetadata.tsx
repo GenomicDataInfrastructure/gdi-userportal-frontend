@@ -4,6 +4,7 @@
 
 "use client";
 
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSyncAlt,
@@ -39,6 +40,21 @@ const DatasetMetadata = ({
   relationships: DatasetRelationship[];
   dictionary: DatasetDictionaryEntry[];
 }) => {
+  const [userTimezone, setUserTimezone] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      setUserTimezone(timezone);
+    } catch (error) {
+      console.error("Error fetching user timezone", error);
+    }
+  }, []);
+
+  if (userTimezone === null) {
+    return null;
+  }
+
   return (
     <>
       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 font-[400] text-gray">

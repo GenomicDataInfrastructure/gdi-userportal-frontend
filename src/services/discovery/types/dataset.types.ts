@@ -15,7 +15,7 @@ export interface RetrievedDataset {
   modifiedAt: string;
   url: string;
   languages: ValueLabel[];
-  contact: ValueLabel;
+  contacts: ContactPoint[];
   hasVersions: ValueLabel[];
   accessRights: ValueLabel;
   conformsTo: ValueLabel[];
@@ -66,4 +66,9 @@ export interface DatasetDictionaryEntry {
   field_name: string;
   data_type: string;
   description: string;
+}
+
+export interface ContactPoint {
+  name: string;
+  email: string;
 }

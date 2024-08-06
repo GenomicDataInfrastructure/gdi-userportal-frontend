@@ -2,9 +2,15 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+_http
+Dockerfile
+.dockerignore
+node_modules
+npm-debug.log
+README.md
+.next
 .git
 .gitignore
-/node_modules
 .vscode
 .github
-_http
+.idea

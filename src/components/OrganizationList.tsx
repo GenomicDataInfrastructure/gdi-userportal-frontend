@@ -4,11 +4,8 @@
 import Link from "next/link";
 import { RetrievedOrganization } from "@/services/discovery/types/dataset.types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowRight,
-  faBuilding,
-  faDatabase,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faDatabase } from "@fortawesome/free-solid-svg-icons";
+import buildingImg from "../public/building.svg";
 
 interface OrganizationListProps {
   organizations: RetrievedOrganization[];
@@ -30,11 +27,12 @@ const OrganizationList: React.FC<OrganizationListProps> = ({
                 {/* {org.imageUrl ? (
                   <img src={org.imageUrl} alt={org.name} className="w-full h-full object-cover rounded-t-lg" />
                 ) : (
-                  <FontAwesomeIcon icon={faBuilding} className="w-24 h-24 text-primary" />
+                  <img src={buildingImg.src} alt={org.name} className="w-24 h-24 object-cover" />
                 )} */}
-                <FontAwesomeIcon
-                  icon={faBuilding}
-                  className="w-24 h-24 text-info"
+                <img
+                  src={buildingImg.src}
+                  alt={org.name}
+                  className="w-24 h-24 text-primary"
                 />
               </div>
               <div className="p-5 h-full flex flex-col">

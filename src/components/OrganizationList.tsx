@@ -34,7 +34,7 @@ const OrganizationList: React.FC<OrganizationListProps> = ({
                 )} */}
                 <FontAwesomeIcon
                   icon={faBuilding}
-                  className="w-24 h-24"
+                  className="w-24 h-24 text-info"
                 />
               </div>
               <div className="p-5 h-full flex flex-col">

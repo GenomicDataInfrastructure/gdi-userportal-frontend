@@ -29,7 +29,7 @@ export const makePortalStatistics = (discoveryUrl: string) => {
       ckanFacetsGroup?.facets.find((x) => x.key === facet)?.values?.length ?? 0;
 
     return {
-      catalogues: countFacet(FacetType.Organization),
+      organization: countFacet(FacetType.Organization),
       keywords: countFacet(FacetType.Tags),
       themes: countFacet(FacetType.Theme),
     };

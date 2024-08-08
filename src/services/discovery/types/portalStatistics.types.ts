@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export interface PortalStatistics {
-  catalogues: number;
+  organization: number;
   keywords: number;
   themes: number;
 }

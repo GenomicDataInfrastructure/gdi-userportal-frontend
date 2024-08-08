@@ -10,7 +10,7 @@ export interface RetrievedDataset {
   description: string;
   themes: ValueLabel[];
   publisherName: string;
-  catalogue: string;
+  organization: RetrievedOrganization;
   createdAt: string;
   modifiedAt: string;
   url: string;
@@ -33,7 +33,7 @@ export type SearchedDataset = {
   title: string;
   description?: string;
   themes?: ValueLabel[];
-  catalogue: string;
+  organization: RetrievedOrganization;
   modifiedAt: string;
   createdAt: string;
   recordsCount?: number;
@@ -71,4 +71,13 @@ export interface DatasetDictionaryEntry {
 export interface ContactPoint {
   name: string;
   email: string;
+}
+
+export interface RetrievedOrganization {
+  id: string;
+  name: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  numberOfDatasets?: number;
 }

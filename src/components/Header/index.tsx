@@ -12,6 +12,7 @@ import { User } from "@/types/user.types";
 import { keycloackSessionLogOut } from "@/utils/logout";
 import {
   faBars,
+  faBook,
   faDatabase,
   faFolderOpen,
   faHome,
@@ -20,6 +21,7 @@ import {
   faRightToBracket,
   faShoppingCart,
   faUser,
+  faWandSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signIn, signOut, useSession } from "next-auth/react";
@@ -127,6 +129,14 @@ function Header() {
                 Themes
               </Link>
               <Link
+                href="/organizations"
+                className={`rounded-lg border-[1.5px] border-surface px-3 py-1 transition-colors duration-300 hover:border-hover-color lg:px-7 ${
+                  activeTab === "/organizations" ? "bg-primary text-white" : ""
+                }`}
+              >
+                Organizations
+              </Link>
+              <Link
                 href="/about"
                 className={`rounded-lg border-[1.5px] border-surface px-3 py-1 transition-colors duration-300 hover:border-hover-color lg:px-7 ${
                   activeTab === "/about" ? "bg-primary text-white" : ""
@@ -188,6 +198,22 @@ function Header() {
                 >
                   <FontAwesomeIcon icon={faDatabase} className="mr-2" />
                   Datasets
+                </Link>
+                <Link
+                  href="/themes"
+                  className="block px-4 py-2 hover:bg-hover-color hover:text-white"
+                  onClick={closeMenu}
+                >
+                  <FontAwesomeIcon icon={faWandSparkles} className="mr-2" />
+                  Themes
+                </Link>
+                <Link
+                  href="/organizations"
+                  className="block px-4 py-2 hover:bg-hover-color hover:text-white"
+                  onClick={closeMenu}
+                >
+                  <FontAwesomeIcon icon={faBook} className="mr-2" />
+                  Organizations
                 </Link>
                 <Link
                   href="/about"

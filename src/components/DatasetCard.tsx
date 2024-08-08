@@ -49,7 +49,9 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
           {formatDate(dataset.createdAt)}
         </p>
       </div>
-      <p className="mb-4 text-sm text-info md:text-base">{dataset.catalogue}</p>
+      <p className="mb-4 text-sm text-info md:text-base">
+        {dataset.organization.title}
+      </p>
       {truncatedDesc && (
         <p className="mb-4 text-xs md:text-sm">{truncatedDesc}</p>
       )}

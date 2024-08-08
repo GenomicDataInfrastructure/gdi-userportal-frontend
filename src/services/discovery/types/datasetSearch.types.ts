@@ -31,7 +31,7 @@ export enum FacetType {
 }
 
 export const facetToLabelMapping: Record<string, string> = {
-  organization: "Catalogues",
+  organization: "Organizations",
   theme: "Themes",
   access_rights: "Access Rights",
   publisher_name: "Publishers",

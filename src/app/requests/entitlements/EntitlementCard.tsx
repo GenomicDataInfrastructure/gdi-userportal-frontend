@@ -44,7 +44,7 @@ function EntitlementCard({
         </div>
       </div>
       <p className="mt-4 md:mt-0 mb-4 text-sm text-info md:text-base">
-        {dataset.catalogue}
+        {dataset.organization.title}
       </p>
       {truncatedDesc && (
         <p className="mb-4 text-xs md:text-sm">{truncatedDesc}</p>

@@ -84,7 +84,7 @@ describe("makePortalStatistics", () => {
     const portalStatistics = await getPortalStatistics();
 
     expect(portalStatistics).toEqual({
-      catalogues: 1,
+      organization: 1,
       themes: 2,
       keywords: 3,
     });

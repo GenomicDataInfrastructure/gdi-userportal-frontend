@@ -85,7 +85,7 @@ const DatasetMetadata = ({
             <Tooltip message="Date when the dataset was last modified." />
           </span>
         )}
-        {dataset.catalogue && (
+        {dataset.organization && (
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
             <span className="inline sm:flex-row flex flex-col gap-2 relative group">
@@ -97,14 +97,14 @@ const DatasetMetadata = ({
               </div>
               <div className="pl-5 sm:pl-0 lg:pl-0 flex items-center">
                 <Link
-                  href={`/datasets?page=1&ckan-organization=${dataset.catalogue.toLowerCase()}`}
+                  href={`/datasets?page=1&ckan-organization=${dataset.organization.name}`}
                 >
                   <h1 className="m-auto md:m-0 underline inline">
-                    {dataset.catalogue || "No title."}
+                    {dataset.organization.title || "No title."}
                   </h1>
                 </Link>
               </div>
-              <Tooltip message="Catalogue to which the dataset belongs." />
+              <Tooltip message="Organization to which the dataset belongs." />
             </span>
           </>
         )}
@@ -201,7 +201,7 @@ const DatasetMetadata = ({
                 className="inline-flex bg-[#EFFAFE] px-4 py-1 rounded-full text-gray font-[500] text-[14px] group relative"
               >
                 <Link
-                  href={`/@${dataset.catalogue}/${relationship.related_dataset}`}
+                  href={`/@${dataset.organization?.title}/${relationship.related_dataset}`}
                   className="group-hover:text-red hover:font-bold"
                 >
                   <FontAwesomeIcon

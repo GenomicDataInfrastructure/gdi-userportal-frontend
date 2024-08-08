@@ -41,7 +41,7 @@ describe("datasetList", () => {
         label: "label",
       },
     ]);
-    expect(dataset.catalogue).toEqual("umcg");
+    expect(dataset.organization).toEqual("umcg");
     expect(dataset.modifiedAt).toEqual("12-01-2023");
     expect(dataset.createdAt).toEqual("02-02-2024");
     expect(dataset.identifier).toEqual("Dataset Identifier");

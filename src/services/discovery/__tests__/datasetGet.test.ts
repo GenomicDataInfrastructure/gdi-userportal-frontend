@@ -43,7 +43,7 @@ describe("datasetGet", () => {
     expect(dataset.themes[0].value).toEqual("value");
 
     expect(dataset.publisherName).toEqual("Publisher");
-    expect(dataset.catalogue).toEqual("Organization");
+    expect(dataset.organization).toEqual("Organization");
     expect(dataset.provenance).toEqual("prov");
     expect(dataset.spatial.label).toEqual("spatial");
     expect(dataset.distributions[0].id).toEqual("dist-id");

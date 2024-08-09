@@ -1,8 +1,12 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-
-import { CheckIcon, ChevronsUpDown } from "lucide-react";
+import {
+  faCheck,
+  faChevronUp,
+  faChevronDown,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { forwardRef, useCallback } from "react";
 import * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
@@ -102,7 +106,7 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
             type="button"
             variant="outline"
             className={cn(
-              "flex h-12 items-center gap-1 rounded-l-md border-2 px-4 transition-colors duration-200",
+              "flex h-12 items-center gap-2 rounded-l-md border-2 px-4 transition-colors duration-200",
               disabled
                 ? "border-slate-200 bg-slate-100 opacity-50"
                 : "border-primary"
@@ -110,12 +114,10 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
             disabled={disabled}
           >
             <FlagComponent country={value} countryName={value} />
-            <ChevronsUpDown
-              className={cn(
-                "-mr-2 h-4 w-4 opacity-50",
-                !disabled && "opacity-100"
-              )}
-            />
+            <span className="flex flex-col items-center justify-center">
+              <FontAwesomeIcon icon={faChevronUp} className="h-3 w-3 " />
+              <FontAwesomeIcon icon={faChevronDown} className="h-3 w-3" />
+            </span>
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[300px] p-0">
@@ -141,7 +143,8 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
                         <span className="text-foreground/50 text-sm">
                           {`+${RPNInput.getCountryCallingCode(option.value)}`}
                         </span>
-                        <CheckIcon
+                        <FontAwesomeIcon
+                          icon={faCheck}
                           className={cn(
                             "ml-auto h-4 w-4",
                             option.value === value ? "opacity-100" : "opacity-0"

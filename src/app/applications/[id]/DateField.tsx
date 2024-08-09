@@ -7,8 +7,7 @@
 import { useEffect, useState } from "react";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FormField } from "@/types/application.types";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { DatePicker } from "../../../components/shadcn/DatePicker";
 
 type DateFieldProps = {
   field: FormField;
@@ -38,8 +37,6 @@ function DateField({ formId, field, title, editable }: DateFieldProps) {
     setInputValue(date);
   };
 
-  const isDisabled = !editable;
-
   return (
     <div className="rounded border p-4">
       <div className="flex flex-col justify-between">
@@ -49,19 +46,10 @@ function DateField({ formId, field, title, editable }: DateFieldProps) {
           }`}</h3>
         </div>
         <DatePicker
-          selected={inputValue}
+          value={inputValue}
           onChange={handleDateChange}
-          className={`mt-4 h-12 w-full rounded-lg border-2 border-primary px-4 py-[9px] text-md text-base shadow-sm ${
-            isDisabled
-              ? "border-slate-200 bg-background ring-offset-background placeholder:text-muted-foreground flex file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-              : "bg-white focus:outline-none focus:ring-primary"
-          }`}
-          placeholderText="dd/mm/yyyy"
-          dateFormat="dd/MM/yyyy"
-          calendarClassName="rounded-lg shadow-lg p-2"
-          dayClassName={() => "p-2 rounded-full hover:bg-blue-200"}
-          popperPlacement="bottom-start"
-          disabled={isDisabled}
+          disabled={!editable}
+          className="mt-4 h-12 w-full"
         />
       </div>
     </div>

@@ -10,6 +10,7 @@ import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import logo from "@/public/header-logo.svg";
 import { User } from "@/types/user.types";
 import { keycloackSessionLogOut } from "@/utils/logout";
+import contentConfig from "@/config/contentConfig";
 import {
   faBars,
   faBook,
@@ -134,7 +135,7 @@ function Header() {
                   activeTab === "/organizations" ? "bg-primary text-white" : ""
                 }`}
               >
-                Organizations
+                {contentConfig.organizationName}
               </Link>
               <Link
                 href="/about"

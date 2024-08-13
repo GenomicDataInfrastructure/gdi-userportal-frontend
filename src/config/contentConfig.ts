@@ -17,6 +17,7 @@ interface ContentConfig {
   bannerLink: string;
   siteTitle: string;
   siteDescription: string;
+  organizationName: string;
 }
 
 const contentConfig: ContentConfig = {
@@ -41,6 +42,7 @@ const contentConfig: ContentConfig = {
   siteDescription:
     env("NEXT_PUBLIC_SITE_DESCRIPTION") ||
     "Genomic Data Infrastructure User Portal",
+  organizationName: env("NEXT_PUBLIC_HEADER_ORGANIZATIONS_NAME") || "Organizations",
 };
 
 export default contentConfig;

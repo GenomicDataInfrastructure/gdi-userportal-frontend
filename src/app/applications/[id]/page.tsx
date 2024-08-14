@@ -21,6 +21,7 @@ import { formatDateTime } from "@/utils/formatDate";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import FormContainer from "./FormContainer";
 import { createApplicationSidebarItems } from "./sidebarItems";
+import TermsAcceptance from "./TermsAcceptance";
 
 export default function ApplicationDetailsPage() {
   const [alert, setAlert] = useState<AlertState | null>(null);
@@ -106,14 +107,15 @@ export default function ApplicationDetailsPage() {
               )}
             </div>
           </div>
-          <p>{`Last Event: ${formatApplicationProp(
-            lastEvent.eventType
-          )} at ${formatDateTime(lastEvent.eventTime.toString())}`}</p>
+
+          <p>{`Last Event: ${formatApplicationProp(lastEvent.eventType)} at ${formatDateTime(lastEvent.eventTime.toString())}`}</p>
+
           <div>
             <div className="h-[2px] bg-secondary opacity-80"></div>
 
             <div className="my-8 w-full lg:hidden">
               <Sidebar items={sidebarItems} />
+              <TermsAcceptance />
             </div>
 
             <div className="mt-5 h-[2px] bg-secondary opacity-80 lg:hidden"></div>
@@ -132,6 +134,7 @@ export default function ApplicationDetailsPage() {
 
         <aside className="hidden w-full lg:block lg:w-1/3">
           <Sidebar items={sidebarItems} />
+          <TermsAcceptance />
         </aside>
       </div>
     </PageContainer>

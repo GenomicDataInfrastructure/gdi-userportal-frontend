@@ -11,6 +11,7 @@ export type ApplicationAction = {
     | { fieldId: number; formId: number; attachmentId: number }
     | { fieldId: number; formId: number; newValue: string }
     | { message: string; statusCode: number }
+    | number[]
     | string;
 };
 
@@ -23,6 +24,7 @@ export enum ApplicationActionType {
   FORM_SAVED = "application/form/saved",
   REJECTED = "rejected",
   CLEAR_ERROR = "clear_error",
+  ACCEPT_TERMS = "application/terms/accepted",
 }
 
 export type ApplicationState = {
@@ -30,6 +32,7 @@ export type ApplicationState = {
   isLoading: boolean;
   error: string | null;
   errorStatusCode: number | null;
+  termsAccepted: boolean;
 };
 
 export type ApplicationContextState = ApplicationState & {
@@ -48,6 +51,7 @@ export type ApplicationContextState = ApplicationState & {
     fieldId: number,
     newValue: string
   ) => Promise<void>;
+  acceptTerms: (acceptedLicenses: number[]) => Promise<void>;
   submitApplication: () => void;
   clearError: () => void;
 };

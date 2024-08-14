@@ -16,6 +16,7 @@ import { makeRetrieveApplication } from "./backend/retrieveApplication";
 import { makeRetrieveEntitlements } from "./backend/retrieveEntitlements";
 import { makeSaveFormsAndDuos } from "./backend/saveFormAndDuos";
 import { makeSubmitApplication } from "./backend/submitApplication";
+import { makeSaveTermsAcceptance } from "./backend/saveTermsAcceptance";
 
 const createApplication = makeCreateApplication(serverConfig.daamUrl);
 const listApplications = makeListApplications(serverConfig.daamUrl);
@@ -26,6 +27,7 @@ const addAttachmentToApplication = makeAddAttachmentToApplication(
 const saveFormAndDuos = makeSaveFormsAndDuos(serverConfig.daamUrl);
 const submitApplication = makeSubmitApplication(serverConfig.daamUrl);
 const retrieveEntitlements = makeRetrieveEntitlements(serverConfig.daamUrl);
+const saveTermsAcceptance = makeSaveTermsAcceptance(serverConfig.daamUrl);
 
 export {
   addAttachmentToApplication,
@@ -35,4 +37,5 @@ export {
   saveFormAndDuos,
   submitApplication,
   retrieveEntitlements,
+  saveTermsAcceptance,
 };

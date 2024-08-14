@@ -1,5 +1,4 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
-//
 // SPDX-License-Identifier: Apache-2.0
 
 "use client";
@@ -107,40 +106,50 @@ function Header() {
             <div className="hidden items-center gap-x-3 text-base font-semibold text-disclaimer lg:flex lg:text-lg">
               <Link
                 href="/"
-                className={`rounded-lg px-3 py-1 transition-opacity duration-300 hover:opacity-75 lg:px-7 ${
-                  activeTab === "/" ? "bg-primary text-white" : ""
+                className={`rounded-lg px-3 py-1 lg:px-7 transition-opacity duration-300 ${
+                  activeTab === "/"
+                    ? "bg-primary text-white"
+                    : "hover:opacity-75"
                 }`}
               >
                 Home
               </Link>
               <Link
                 href="/datasets"
-                className={`rounded-lg px-3 py-1 transition-opacity duration-300 hover:opacity-75 lg:px-7 ${
-                  activeTab.includes("datasets") ? "bg-primary text-white" : ""
+                className={`rounded-lg px-3 py-1 lg:px-7 transition-opacity duration-300 ${
+                  activeTab.includes("datasets")
+                    ? "bg-primary text-white"
+                    : "hover:opacity-75"
                 }`}
               >
                 Datasets
               </Link>
               <Link
                 href="/themes"
-                className={`rounded-lg px-3 py-1 transition-opacity duration-300 hover:opacity-75 lg:px-7 ${
-                  activeTab === "/themes" ? "bg-primary text-white" : ""
+                className={`rounded-lg px-3 py-1 lg:px-7 transition-opacity duration-300 ${
+                  activeTab === "/themes"
+                    ? "bg-primary text-white"
+                    : "hover:opacity-75"
                 }`}
               >
                 Themes
               </Link>
               <Link
                 href="/organizations"
-                className={`rounded-lg px-3 py-1 transition-opacity duration-300 hover:opacity-75 lg:px-7 ${
-                  activeTab === "/organizations" ? "bg-primary text-white" : ""
+                className={`rounded-lg px-3 py-1 lg:px-7 transition-opacity duration-300 ${
+                  activeTab === "/organizations"
+                    ? "bg-primary text-white"
+                    : "hover:opacity-75"
                 }`}
               >
                 {contentConfig.organizationName}
               </Link>
               <Link
                 href="/about"
-                className={`rounded-lg px-3 py-1 transition-opacity duration-300 hover:opacity-75 lg:px-7 ${
-                  activeTab === "/about" ? "bg-primary text-white" : ""
+                className={`rounded-lg px-3 py-1 lg:px-7 transition-opacity duration-300 ${
+                  activeTab === "/about"
+                    ? "bg-primary text-white"
+                    : "hover:opacity-75"
                 }`}
               >
                 About

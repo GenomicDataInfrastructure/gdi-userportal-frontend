@@ -30,13 +30,13 @@ function Footer() {
           rel="noopener noreferrer"
         >
           <FontAwesomeIcon icon={faInfoCircle} className="mr-2 text-warning" />
-          <h2 className="inline text-lg font-bold text-warning">
+          <h2 className="inline text-lg font-bold text-white">
             How to use the data portal
           </h2>
-          <FontAwesomeIcon icon={faArrowRight} className="ml-2 text-warning" />
+          <FontAwesomeIcon icon={faArrowRight} className="ml-2 text-white" />
         </a>
       </div>
-      <footer className="flex flex-col items-center bg-surface justify-center gap-y-4 border-t-primary p-7 md:flex-row md:gap-x-12 md:gap-y-0">
+      <footer className="flex flex-col items-center bg-white justify-center gap-y-4 border-t-primary p-7 md:flex-row md:gap-x-12 md:gap-y-0">
         <div className="container mx-auto flex flex-col gap-16 md:flex-row md:gap-24">
           {/* First column: About the project */}
           <div className="flex flex-col items-start gap-4">

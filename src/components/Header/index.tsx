@@ -104,7 +104,7 @@ function Header() {
                 }`}
               />
             </Link>
-            <div className="hidden items-center gap-x-3 text-base font-semibold text-primary lg:flex lg:text-lg">
+            <div className="hidden items-center gap-x-3 text-base font-semibold text-white lg:flex lg:text-lg">
               <Link
                 href="/"
                 className={`rounded-lg border-[1.5px] border-surface px-3 py-1 transition-colors duration-300 hover:border-hover-color lg:px-7 ${
@@ -151,7 +151,7 @@ function Header() {
             {!isLoading && (
               <Link
                 href="/basket"
-                className={`relative flex items-center text-info hover:text-hover-color ${
+                className={`relative flex items-center text-white hover:text-hover-color ${
                   activeTab.includes("basket") ? "text-primary" : ""
                 }`}
               >

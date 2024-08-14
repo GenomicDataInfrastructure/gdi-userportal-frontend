@@ -51,7 +51,7 @@ function DatasetLink({ title, createdAt, description }: DatasetLinkProps) {
       <span className="text-info flex items-center mb-4">
         {formatDate(createdAt)}
       </span>
-      <h3 className="text-xl text-primary truncate-lines-1">{title}</h3>
+      <h3 className="text-xl truncate-lines-1">{title}</h3>
       <div className="flex items-center gap-1 leading-6 tracking-tight pt-2 pb-2">
         <p className="mb-4 md:text-base truncate-lines-3">{description}</p>
       </div>

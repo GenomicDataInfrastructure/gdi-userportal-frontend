@@ -49,9 +49,7 @@ const HomePage = () => {
   return (
     <PageContainer className="container mx-auto px-4 pt-5 text-center">
       <div className="my-8">
-        <h1 className="font-bold text-4xl text-primary">
-          {contentConfig.homepageTitle}
-        </h1>
+        <h1 className="font-bold text-4xl">{contentConfig.homepageTitle}</h1>
         <h2 className="text-xl mt-4 font-light">
           {contentConfig.homepageSubtitle}
         </h2>
@@ -72,9 +70,7 @@ const HomePage = () => {
           }}
         ></div>
         <div className="relative z-10 w-full md:w-3/4 lg:w-2/3 xl:w-3/5 bg-white bg-opacity-75 rounded-lg min-h-[300px]">
-          <h3 className="mb-4 text-2xl font-bold text-primary">
-            About the data portal
-          </h3>
+          <h3 className="mb-4 text-2xl font-bold">About the data portal</h3>
           <p className="text-lg">
             {contentConfig.aboutContent.split("\n").map((line, index) => (
               <span key={index}>
@@ -101,9 +97,7 @@ const HomePage = () => {
 
       <div className="text-left flex items-center">
         <div className="relative z-10 w-full my-8">
-          <h3 className="mb-4 text-2xl font-bold text-primary">
-            Most Recent Datasets
-          </h3>
+          <h3 className="mb-4 text-2xl font-bold">Most Recent Datasets</h3>
           <RecentDatasets datasets={datasets} />
         </div>
       </div>

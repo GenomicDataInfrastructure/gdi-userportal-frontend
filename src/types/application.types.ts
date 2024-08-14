@@ -22,7 +22,7 @@ interface RetrievedApplication {
   lastActivity: Date;
   permissions: string[];
   roles: string[];
-  worflow: Workflow;
+  workflow: Workflow;
   applicant: Applicant;
   members: Member[];
   datasets: Dataset[];
@@ -30,7 +30,7 @@ interface RetrievedApplication {
   invitedMembers: InvitedMember[];
   events: Event[];
   attachments: Attachment[];
-  licenses: License[];
+  licenses: RetrievedApplicationLicense[];
   state: State;
 }
 
@@ -69,6 +69,7 @@ interface Form {
   externalTitle: Label[];
   fields: FormField[];
 }
+
 interface FormField {
   id: number;
   value: string;
@@ -94,6 +95,22 @@ interface Attachment {
   id: number;
   filename: string;
   type: string;
+}
+
+interface AcceptTermsCommand {
+  acceptedLicenses: number[];
+}
+interface RetrievedApplicationLicense {
+  id: number;
+  title: Label[];
+  type: string;
+  enabled: boolean;
+  archived: boolean;
+  link: Label[];
+  text: Label[];
+  attachmentFilename: Label[];
+  attachmentId: Label[];
+  acceptedByCurrentUser: boolean;
 }
 
 interface License {
@@ -174,6 +191,7 @@ export type {
   RetrievedApplication,
   SaveFormAndDuos,
   Workflow,
+  AcceptTermsCommand,
 };
 
 export { State };

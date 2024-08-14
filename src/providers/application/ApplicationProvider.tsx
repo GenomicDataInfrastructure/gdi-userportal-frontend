@@ -9,6 +9,7 @@ import {
   Form,
   FormField,
   RetrievedApplication,
+  AcceptTermsCommand,
 } from "@/types/application.types";
 import {
   addAttachmentIdToFieldValue,
@@ -133,6 +134,9 @@ function reducer(
         isLoading: false,
       };
 
+    case ApplicationActionType.ACCEPT_TERMS:
+      return { ...state, termsAccepted: true, isLoading: false };
+
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
@@ -148,10 +152,13 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
     isLoading: false,
     error: null,
     errorStatusCode: null,
+    termsAccepted: false,
   };
 
-  const [{ application, isLoading, error, errorStatusCode }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { application, isLoading, error, errorStatusCode, termsAccepted },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   const clearError = () => {
     dispatch({ type: ApplicationActionType.CLEAR_ERROR });
@@ -209,7 +216,13 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       dispatch(action);
 
       const { forms: updatedForms } = reducer(
-        { application, isLoading, error, errorStatusCode },
+        {
+          application,
+          isLoading,
+          error,
+          errorStatusCode,
+          termsAccepted,
+        },
         action
       ).application as RetrievedApplication;
       const response = await saveFormAndDuos(updatedForms);
@@ -239,7 +252,13 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       dispatch(action);
 
       const { forms: updatedForms } = reducer(
-        { application, isLoading, error, errorStatusCode },
+        {
+          application,
+          isLoading,
+          error,
+          errorStatusCode,
+          termsAccepted,
+        },
         action
       ).application as RetrievedApplication;
       const response = await saveFormAndDuos(updatedForms);
@@ -268,7 +287,13 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       dispatch(action);
 
       const { forms: updatedForms } = reducer(
-        { application, isLoading, error, errorStatusCode },
+        {
+          application,
+          isLoading,
+          error,
+          errorStatusCode,
+          termsAccepted,
+        },
         action
       ).application as RetrievedApplication;
 
@@ -330,6 +355,47 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       });
     }
   }
+
+  async function acceptTerms(acceptedLicenses: number[]) {
+    dispatch({ type: ApplicationActionType.LOADING });
+
+    try {
+      const response = await fetch(
+        `/api/applications/${application!.id}/accept-terms`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            acceptedLicenses,
+          } as AcceptTermsCommand),
+        }
+      );
+
+      if (response.ok) {
+        dispatch({ type: ApplicationActionType.ACCEPT_TERMS });
+        dispatch({ type: ApplicationActionType.CLEAR_ERROR });
+        fetchApplication();
+      } else {
+        const errorResponse = await response.json();
+        const errorMessage =
+          errorResponse.error || "An unexpected error occurred.";
+        const errorStatusCode = response.status;
+        const payload = {
+          message: errorMessage,
+          statusCode: errorStatusCode,
+        };
+        dispatch({
+          type: ApplicationActionType.REJECTED,
+          payload,
+        });
+      }
+    } catch (error) {
+      handleErrors(error, "Failed to accept terms", dispatch);
+    }
+  }
+
   return (
     <ApplicationContext.Provider
       value={{
@@ -337,11 +403,13 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
         isLoading,
         error,
         errorStatusCode,
+        termsAccepted,
         addAttachment,
         deleteAttachment,
         submitApplication,
         updateInputFields,
         clearError,
+        acceptTerms,
       }}
     >
       {children}

@@ -28,9 +28,7 @@ export async function POST(
       return NextResponse.json({ error: "Invalid data" }, { status: 400 });
     }
 
-    const saveTermsAcceptance = await makeSaveTermsAcceptance(
-      serverConfig.daamUrl
-    );
+    const saveTermsAcceptance = makeSaveTermsAcceptance(serverConfig.daamUrl);
 
     await saveTermsAcceptance(id, acceptedLicenses, session);
 

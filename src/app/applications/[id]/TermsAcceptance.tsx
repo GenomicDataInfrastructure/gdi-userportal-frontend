@@ -51,6 +51,16 @@ export default function TermsAcceptance() {
     setExpandedLicenseId((prevId) => (prevId === id ? null : id));
   };
 
+  const handleKeyPress = (
+    event: React.KeyboardEvent<HTMLButtonElement>,
+    id: string
+  ) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleTextClick(id);
+    }
+  };
+
   return (
     <div className="border-gray flex flex-col gap-3 rounded-sm border-2 bg-surface p-5 text-black mt-5">
       <h2 className="text-xl font-bold mb-4 text-primary">
@@ -68,12 +78,15 @@ export default function TermsAcceptance() {
         {application?.licenses.map((license) => (
           <div key={license.id} className="space-y-2">
             <h3 className="font-semibold">{formatLabels(license.title)}</h3>
-            <p
-              className={`cursor-pointer transition-all ${expandedLicenseId === license.id.toString() ? "line-clamp-none" : "line-clamp-3"}`}
+            <button
+              className={`text-left w-full cursor-pointer transition-all ${expandedLicenseId === license.id.toString() ? "line-clamp-none" : "line-clamp-3"}`}
               onClick={() => handleTextClick(license.id.toString())}
+              onKeyPress={(event) =>
+                handleKeyPress(event, license.id.toString())
+              }
             >
               {formatLabels(license.text)}
-            </p>
+            </button>
             {license.link.length > 0 && (
               <a
                 href={formatLabels(license.link)}

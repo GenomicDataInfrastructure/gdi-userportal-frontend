@@ -13,7 +13,7 @@ import {
   faArrowUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Label } from "@/types/application.types";
+import { getLabelName } from "@/utils/getLabelName";
 
 export default function TermsAcceptance() {
   const [alert, setAlert] = useState<AlertState | null>(null);
@@ -77,19 +77,23 @@ export default function TermsAcceptance() {
       <div className="space-y-4">
         {application?.licenses.map((license) => (
           <div key={license.id} className="space-y-2">
-            <h3 className="font-semibold">{formatLabels(license.title)}</h3>
+            <h3 className="font-semibold">{getLabelName(license.title)}</h3>
             <button
-              className={`text-left w-full cursor-pointer transition-all ${expandedLicenseId === license.id.toString() ? "line-clamp-none" : "line-clamp-3"}`}
+              className={`text-left w-full cursor-pointer transition-all ${
+                expandedLicenseId === license.id.toString()
+                  ? "line-clamp-none"
+                  : "line-clamp-3"
+              }`}
               onClick={() => handleTextClick(license.id.toString())}
               onKeyPress={(event) =>
                 handleKeyPress(event, license.id.toString())
               }
             >
-              {formatLabels(license.text)}
+              {getLabelName(license.text)}
             </button>
             {license.link.length > 0 && (
               <a
-                href={formatLabels(license.link)}
+                href={getLabelName(license.link)}
                 className="text-blue-500 underline"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -123,8 +127,4 @@ export default function TermsAcceptance() {
       )}
     </div>
   );
-}
-
-function formatLabels(labels: Label[]): string {
-  return labels.map((label) => label.name).join(" ");
 }

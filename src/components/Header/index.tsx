@@ -103,7 +103,7 @@ function Header() {
                 }`}
               />
             </Link>
-            <div className="hidden items-center gap-x-3 text-base font-semibold text-disclaimer lg:flex lg:text-lg">
+            <div className="hidden items-center gap-x-3 text-base font-light font-semibold text-disclaimer lg:flex lg:text-lg">
               <Link
                 href="/"
                 className={`rounded-lg px-3 py-1 lg:px-7 transition-opacity duration-300 ${
@@ -156,7 +156,7 @@ function Header() {
               </Link>
             </div>
           </div>
-          <div className="mr-3 hidden items-center gap-x-5 lg:flex md:gap-x-8">
+          <div className="font-light mr-3 hidden items-center gap-x-5 lg:flex md:gap-x-8">
             {!isLoading && (
               <Link
                 href="/basket"

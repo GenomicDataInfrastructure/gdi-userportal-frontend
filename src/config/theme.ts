@@ -17,8 +17,8 @@ export const themeConfig = {
     surface: process.env.NEXT_PUBLIC_COLOR_SURFACE || "var(--color-surface)",
   },
   fonts: {
-    light: process.env.NEXT_PUBLIC_SELECTED_FONT_LIGHT || "satoshi",
-    medium: process.env.NEXT_PUBLIC_SELECTED_FONT_MEDIUM || "expose",
-    sans: process.env.NEXT_PUBLIC_SELECTED_FONT_SANS || "tabular",
+    light: process.env.NEXT_PUBLIC_SELECTED_FONT_LIGHT || "roboto",
+    medium: process.env.NEXT_PUBLIC_SELECTED_FONT_MEDIUM || "roboto",
+    sans: process.env.NEXT_PUBLIC_SELECTED_FONT_SANS || "roboto",
   },
 };

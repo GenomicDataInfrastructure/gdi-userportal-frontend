@@ -49,7 +49,9 @@ const HomePage = () => {
   return (
     <PageContainer className="container mx-auto px-4 pt-5 text-center">
       <div className="my-8">
-        <h1 className="font-bold text-4xl">{contentConfig.homepageTitle}</h1>
+        <h1 className="font-bold text-4xl font-medium">
+          {contentConfig.homepageTitle}
+        </h1>
         <h2 className="text-xl mt-4 font-light">
           {contentConfig.homepageSubtitle}
         </h2>

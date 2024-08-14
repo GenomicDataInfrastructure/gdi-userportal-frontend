@@ -104,11 +104,11 @@ function Header() {
                 }`}
               />
             </Link>
-            <div className="hidden items-center gap-x-3 text-base font-semibold text-white lg:flex lg:text-lg">
+            <div className="hidden items-center gap-x-3 text-base font-semibold text-disclaimer lg:flex lg:text-lg">
               <Link
                 href="/"
                 className={`rounded-lg px-3 py-1 transition-opacity duration-300 hover:opacity-75 lg:px-7 ${
-                  activeTab === "/" ? "bg-primary text-white opacity-75" : ""
+                  activeTab === "/" ? "bg-primary text-white" : ""
                 }`}
               >
                 Home
@@ -116,9 +116,7 @@ function Header() {
               <Link
                 href="/datasets"
                 className={`rounded-lg px-3 py-1 transition-opacity duration-300 hover:opacity-75 lg:px-7 ${
-                  activeTab.includes("datasets")
-                    ? "bg-primary text-white opacity-75"
-                    : ""
+                  activeTab.includes("datasets") ? "bg-primary text-white" : ""
                 }`}
               >
                 Datasets
@@ -126,9 +124,7 @@ function Header() {
               <Link
                 href="/themes"
                 className={`rounded-lg px-3 py-1 transition-opacity duration-300 hover:opacity-75 lg:px-7 ${
-                  activeTab === "/themes"
-                    ? "bg-primary text-white opacity-75"
-                    : ""
+                  activeTab === "/themes" ? "bg-primary text-white" : ""
                 }`}
               >
                 Themes
@@ -136,9 +132,7 @@ function Header() {
               <Link
                 href="/organizations"
                 className={`rounded-lg px-3 py-1 transition-opacity duration-300 hover:opacity-75 lg:px-7 ${
-                  activeTab === "/organizations"
-                    ? "bg-primary text-white opacity-75"
-                    : ""
+                  activeTab === "/organizations" ? "bg-primary text-white" : ""
                 }`}
               >
                 {contentConfig.organizationName}
@@ -146,9 +140,7 @@ function Header() {
               <Link
                 href="/about"
                 className={`rounded-lg px-3 py-1 transition-opacity duration-300 hover:opacity-75 lg:px-7 ${
-                  activeTab === "/about"
-                    ? "bg-primary text-white opacity-75"
-                    : ""
+                  activeTab === "/about" ? "bg-primary text-white" : ""
                 }`}
               >
                 About
@@ -159,8 +151,8 @@ function Header() {
             {!isLoading && (
               <Link
                 href="/basket"
-                className={`relative flex items-center text-white hover:opacity-75 transition-opacity duration-300 ${
-                  activeTab.includes("basket") ? "text-primary opacity-75" : ""
+                className={`relative flex items-center text-disclaimer hover:text-secondary transition-opacity duration-300 ${
+                  activeTab.includes("basket") ? "text-primary" : ""
                 }`}
               >
                 <FontAwesomeIcon

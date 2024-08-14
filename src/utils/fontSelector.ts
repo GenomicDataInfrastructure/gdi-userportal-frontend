@@ -3,7 +3,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import "dotenv/config";
-import { exposeFont, tabularFont, satoshiFont, robotoFont } from "./fonts";
+import {
+  exposeFont,
+  tabularFont,
+  satoshiFont,
+  robotoFont,
+  nunitoFont,
+  quicksandFont,
+} from "./fonts";
 import { themeConfig } from "@/config/theme";
 
 const fontMap = {
@@ -11,6 +18,8 @@ const fontMap = {
   tabular: tabularFont,
   satoshi: satoshiFont,
   roboto: robotoFont,
+  nunito: nunitoFont,
+  quicksand: quicksandFont,
 };
 
 export function getSelectedFonts(): string {

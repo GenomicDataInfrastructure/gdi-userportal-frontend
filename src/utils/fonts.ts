@@ -71,6 +71,40 @@ export const satoshiFont = localFont({
   display: "swap",
 });
 
+export const nunitoFont = localFont({
+  src: [
+    {
+      path: "./../public/fonts/Nunito-Regular.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./../public/fonts/Nunito-Regular.woff",
+      weight: "500",
+      style: "normal",
+    },
+  ],
+  variable: "--font-light",
+  display: "swap",
+});
+
+export const quicksandFont = localFont({
+  src: [
+    {
+      path: "./../public/fonts/Quicksand-Regular.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./../public/fonts/Quicksand-Regular.woff",
+      weight: "500",
+      style: "normal",
+    },
+  ],
+  variable: "--font-sans",
+  display: "swap",
+});
+
 export const robotoFont = Roboto({
   weight: ["400", "500", "700"],
   subsets: ["latin"],

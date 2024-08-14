@@ -67,7 +67,7 @@ function SearchBar({ queryParams, size }: SearchBarProps) {
       <div className="relative">
         <input
           placeholder="Search datasets"
-          className={`${sizeClass} w-full rounded-lg px-4 py-[9px] shadow-lg transition-all duration-200 ease-in-out hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-gray-400`}
+          className={`${sizeClass} w-full rounded-lg px-4 py-[9px] shadow-xl transition-all duration-200 ease-in-out hover:shadow-2xl focus:outline-none`}
           value={query}
           onChange={handleQueryChange}
           onBlur={handleBlur}

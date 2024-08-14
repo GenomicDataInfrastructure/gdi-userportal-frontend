@@ -23,24 +23,13 @@ export default function TermsAcceptance() {
   );
 
   async function handleAcceptTerms() {
-    try {
-      setAlert(null);
-      clearError();
-      const acceptedLicenses = application!.licenses
-        .filter((license) => !license.acceptedByCurrentUser)
-        .map((license) => license.id);
+    setAlert(null);
+    clearError();
+    const acceptedLicenses = application!.licenses
+      .filter((license) => !license.acceptedByCurrentUser)
+      .map((license) => license.id);
 
-      await acceptTerms(acceptedLicenses);
-      setAlert({
-        message: "All terms accepted successfully.",
-        type: "success",
-      });
-    } catch (error) {
-      setAlert({
-        message: "Failed to accept terms. Please try again.",
-        type: "error",
-      });
-    }
+    await acceptTerms(acceptedLicenses);
   }
 
   const allTermsAccepted = application?.licenses.every(

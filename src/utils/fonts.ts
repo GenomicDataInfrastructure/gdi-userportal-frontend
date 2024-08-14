@@ -126,6 +126,6 @@ export const fontMap = {
   tabular: tabularFont,
   satoshi: satoshiFont,
   nunito: nunitoFont,
-  nunitom: quicksandMFont,
+  quicksandm: quicksandMFont,
   quicksand: quicksandFont,
 };

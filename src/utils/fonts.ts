@@ -87,23 +87,6 @@ export const quicksandFont = localFont({
   display: "swap",
 });
 
-export const quicksandMFont = localFont({
-  src: [
-    {
-      path: "./../public/fonts/Quicksand-Regular.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "./../public/fonts/Quicksand-Regular.woff",
-      weight: "500",
-      style: "normal",
-    },
-  ],
-  variable: "--font-medium",
-  display: "swap",
-});
-
 export const nunitoFont = localFont({
   src: [
     {
@@ -126,6 +109,6 @@ export const fontMap = {
   tabular: tabularFont,
   satoshi: satoshiFont,
   nunito: nunitoFont,
-  quicksandm: quicksandMFont,
+  quicksandm: quicksandFont,
   quicksand: quicksandFont,
-};
+} as const;

@@ -72,7 +72,7 @@ const HomePage = () => {
           }}
         ></div>
         <div className="relative z-10 w-full md:w-3/4 lg:w-2/3 xl:w-3/5 bg-white bg-opacity-75 rounded-lg min-h-[300px]">
-          <h3 className="mb-4 text-2xl font-bold">About the data portal</h3>
+          <h3 className="mb-4 text-2xl">About the data portal</h3>
           <p className="text-lg">
             {contentConfig.aboutContent.split("\n").map((line, index) => (
               <span key={index}>
@@ -85,7 +85,7 @@ const HomePage = () => {
           </p>
           <br />
           <a
-            className="text-primary flex items-center gap-1 transition hover:underline duration-1000"
+            className="text-secondary flex items-center gap-1 transition hover:underline duration-1000"
             href="/about"
           >
             Read more
@@ -99,7 +99,7 @@ const HomePage = () => {
 
       <div className="text-left flex items-center">
         <div className="relative z-10 w-full my-8">
-          <h3 className="mb-4 text-2xl font-bold">Most Recent Datasets</h3>
+          <h3 className="mb-4 text-2xl">Most Recent Datasets</h3>
           <RecentDatasets datasets={datasets} />
         </div>
       </div>

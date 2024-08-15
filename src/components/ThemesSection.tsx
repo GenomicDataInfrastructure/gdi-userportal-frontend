@@ -137,9 +137,7 @@ const ThemesSection = ({
                 width="48"
                 height="48"
               />
-              <h3 className="font-medium font-semibold text-lg sm:mt-1">
-                {theme.name}
-              </h3>
+              <h3 className="font-medium text-lg sm:mt-1">{theme.name}</h3>
               <div className="font-light leading-4 max-w-[8.5rem]">
                 {theme.desc}
               </div>
@@ -150,7 +148,7 @@ const ThemesSection = ({
       {showSeeAll && (
         <div className="pt-4 px-8 sm:px-0 w-full flex">
           <a
-            className="text-primary flex items-center gap-1 transition hover:underline duration-500 ml-auto"
+            className="text-secondary flex items-center gap-1 transition hover:underline duration-500 ml-auto"
             href="/themes"
           >
             See all

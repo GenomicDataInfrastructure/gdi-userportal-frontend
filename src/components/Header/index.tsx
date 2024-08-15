@@ -9,7 +9,6 @@ import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import logo from "@/public/header-logo.svg";
 import { User } from "@/types/user.types";
 import { keycloackSessionLogOut } from "@/utils/logout";
-import contentConfig from "@/config/contentConfig";
 import {
   faBars,
   faBook,
@@ -82,7 +81,7 @@ function Header() {
   }
 
   return (
-    <div className="bg-surface">
+    <div className="bg-gray-50 py-3">
       <div className="container mx-auto ">
         <div className="flex items-center justify-between px-4">
           <div className="flex justify-between gap-x-5 md:gap-x-12 lg:gap-x-24">
@@ -103,56 +102,81 @@ function Header() {
                 }`}
               />
             </Link>
-            <div className="hidden items-center gap-x-3 text-base font-light font-semibold text-disclaimer lg:flex lg:text-lg">
+            <div className="hidden items-center gap-x-3 text-base font-light text-black lg:flex lg:text-lg">
               <Link
                 href="/"
-                className={`rounded-lg px-3 py-1 lg:px-7 transition-opacity duration-300 ${
-                  activeTab === "/"
-                    ? "bg-primary text-white"
-                    : "hover:opacity-75"
-                }`}
+                className={`relative px-3 py-1 lg:px-7 transition-opacity duration-300 text-black`}
               >
-                Home
+                <span className="relative group">
+                  Home
+                  <span
+                    className={`absolute left-0 bottom-[-2px] w-full h-[2px] transition-transform duration-300 transform ${
+                      activeTab === "/"
+                        ? "bg-primary scale-x-100"
+                        : "bg-secondary scale-x-0"
+                    } group-hover:scale-x-100 group-hover:bg-secondary`}
+                  ></span>
+                </span>
               </Link>
               <Link
                 href="/datasets"
-                className={`rounded-lg px-3 py-1 lg:px-7 transition-opacity duration-300 ${
-                  activeTab.includes("datasets")
-                    ? "bg-primary text-white"
-                    : "hover:opacity-75"
-                }`}
+                className={`relative px-3 py-1 lg:px-7 transition-opacity duration-300 text-black`}
               >
-                Datasets
+                <span className="relative group">
+                  Datasets
+                  <span
+                    className={`absolute left-0 bottom-[-2px] w-full h-[2px] transition-transform duration-300 transform ${
+                      activeTab.includes("datasets")
+                        ? "bg-primary scale-x-100"
+                        : "bg-secondary scale-x-0"
+                    } group-hover:scale-x-100 group-hover:bg-secondary`}
+                  ></span>
+                </span>
               </Link>
               <Link
                 href="/themes"
-                className={`rounded-lg px-3 py-1 lg:px-7 transition-opacity duration-300 ${
-                  activeTab === "/themes"
-                    ? "bg-primary text-white"
-                    : "hover:opacity-75"
-                }`}
+                className={`relative px-3 py-1 lg:px-7 transition-opacity duration-300 text-black`}
               >
-                Themes
+                <span className="relative group">
+                  Themes
+                  <span
+                    className={`absolute left-0 bottom-[-2px] w-full h-[2px] transition-transform duration-300 transform ${
+                      activeTab === "/themes"
+                        ? "bg-primary scale-x-100"
+                        : "bg-secondary scale-x-0"
+                    } group-hover:scale-x-100 group-hover:bg-secondary`}
+                  ></span>
+                </span>
               </Link>
               <Link
                 href="/organizations"
-                className={`rounded-lg px-3 py-1 lg:px-7 transition-opacity duration-300 ${
-                  activeTab === "/organizations"
-                    ? "bg-primary text-white"
-                    : "hover:opacity-75"
-                }`}
+                className={`relative px-3 py-1 lg:px-7 transition-opacity duration-300 text-black`}
               >
-                {contentConfig.organizationName}
+                <span className="relative group">
+                  Publishers
+                  <span
+                    className={`absolute left-0 bottom-[-2px] w-full h-[2px] transition-transform duration-300 transform ${
+                      activeTab === "/organizations"
+                        ? "bg-primary scale-x-100"
+                        : "bg-secondary scale-x-0"
+                    } group-hover:scale-x-100 group-hover:bg-secondary`}
+                  ></span>
+                </span>
               </Link>
               <Link
                 href="/about"
-                className={`rounded-lg px-3 py-1 lg:px-7 transition-opacity duration-300 ${
-                  activeTab === "/about"
-                    ? "bg-primary text-white"
-                    : "hover:opacity-75"
-                }`}
+                className={`relative px-3 py-1 lg:px-7 transition-opacity duration-300 text-black`}
               >
-                About
+                <span className="relative group">
+                  About
+                  <span
+                    className={`absolute left-0 bottom-[-2px] w-full h-[2px] transition-transform duration-300 transform ${
+                      activeTab === "/about"
+                        ? "bg-primary scale-x-100"
+                        : "bg-secondary scale-x-0"
+                    } group-hover:scale-x-100 group-hover:bg-secondary`}
+                  ></span>
+                </span>
               </Link>
             </div>
           </div>
@@ -169,7 +193,7 @@ function Header() {
                   className="text-xl lg:text-2xl"
                 />
                 {basket.length > 0 && (
-                  <span className="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-2 py-1 text-xs font-bold leading-none text-red-100">
+                  <span className="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-secondary px-2 py-1 text-xs font-bold leading-none text-white">
                     {basket.length}
                   </span>
                 )}

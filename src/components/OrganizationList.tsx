@@ -15,15 +15,18 @@ const OrganizationList: React.FC<OrganizationListProps> = ({
   organizations,
 }) => {
   return (
-    <div className="bg-white">
+    <div className="bg-white mb-16">
+      {" "}
+      {/* Added bottom margin */}
       <div className="flex flex-col w-full">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 justify-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 justify-center">
           {organizations.map((org) => (
             <div
               key={org.id}
-              className="bg-white py-6 flex flex-col items-start justify-start rounded-lg shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50 text-left"
+              className="bg-white py-4 flex flex-col items-start justify-start rounded-lg shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50 text-left"
+              style={{ maxWidth: "260px" }}
             >
-              <div className="w-full h-32 mb-4 flex justify-center items-center">
+              <div className="w-full h-24 mb-3 flex justify-center items-center">
                 {/* {org.imageUrl ? (
                   <img src={org.imageUrl} alt={org.name} className="w-full h-full object-cover rounded-t-lg" />
                 ) : (
@@ -32,25 +35,25 @@ const OrganizationList: React.FC<OrganizationListProps> = ({
                 <img
                   src={buildingImg.src}
                   alt={org.name}
-                  className="w-24 h-24 text-primary"
+                  className="w-20 h-20 text-primary"
                 />
               </div>
-              <div className="p-5 h-full flex flex-col">
-                <h3 className="text-[26px] truncate-lines-1 font-bold mb-2">
+              <div className="p-4 h-full flex flex-col">
+                <h3 className="text-lg truncate-lines-1 font-medium mb-1">
                   {org.title}
                 </h3>
-                <div className="flex items-center mb-4">
+                <div className="flex items-center mb-3 text-sm">
                   <FontAwesomeIcon icon={faDatabase} className="mr-2" />
                   {org.numberOfDatasets}{" "}
                   {org.numberOfDatasets === 1 ? "dataset" : "datasets"}
                 </div>
-                <div className="mt-auto text-primary flex items-center gap-1 transition hover:underline duration-1000">
+                <div className="mt-auto text-secondary flex items-center gap-1 transition hover:underline duration-1000 text-sm">
                   <Link
                     href={`/datasets?page=1&ckan-organization=${org.name}`}
                     className="flex items-center gap-1"
                   >
                     See datasets
-                    <FontAwesomeIcon icon={faArrowRight} className="w-5 h-5" />
+                    <FontAwesomeIcon icon={faArrowRight} className="w-4 h-4" />
                   </Link>
                 </div>
               </div>

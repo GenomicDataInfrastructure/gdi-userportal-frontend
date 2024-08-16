@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import "dotenv/config";
-import { fontMap } from "./fonts";
+import { fontMap } from "@/config/fonts";
 import { themeConfig } from "@/config/theme";
 
 export function getSelectedFonts(): string {

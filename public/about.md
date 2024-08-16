@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2024 PNED G.I.E.
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 The Genomic Data Infrastructure (GDI) project aims to enable access to
 genomic and related phenotypic and clinical data to improve research,
 policymaking, and healthcare across Europe. The GDI project aims to

@@ -30,16 +30,16 @@ function Footer() {
           rel="noopener noreferrer"
         >
           <FontAwesomeIcon icon={faInfoCircle} className="mr-2 text-warning" />
-          <h2 className="inline text-lg font-bold text-warning">
+          <h2 className="inline text-lg text-white">
             How to use the data portal
           </h2>
-          <FontAwesomeIcon icon={faArrowRight} className="ml-2 text-warning" />
+          <FontAwesomeIcon icon={faArrowRight} className="ml-2 text-white" />
         </a>
       </div>
-      <footer className="flex flex-col items-center bg-surface justify-center gap-y-4 border-t-primary p-7 md:flex-row md:gap-x-12 md:gap-y-0">
+      <footer className="flex flex-col items-center bg-gray-50 justify-center gap-y-4 border-t-primary p-7 md:flex-row md:gap-x-12 md:gap-y-0">
         <div className="container mx-auto flex flex-col gap-16 md:flex-row md:gap-24">
           {/* First column: About the project */}
-          <div className="flex flex-col items-start gap-4">
+          <div className="flex flex-col items-start gap-4 w-full md:w-3/5">
             <Image src={footerLogo} alt="Footer logo" width={80} />
             <p className="text-xs md:text-sm">
               {contentConfig.footerText.split("\n").map((line, index) => (
@@ -52,23 +52,23 @@ function Footer() {
               ))}
             </p>
           </div>
-          {/* Second column: Fixed links */}
-          <div className="flex flex-col gap-2 text-left">
-            <h3 className="text-lg font-bold">Legal</h3>
+          {/* Second column: Legal */}
+          <div className="flex flex-col gap-2 text-left w-full md:w-1/6">
+            <h3 className="text-lg">Legal</h3>
             <a className="hover:text-info">Terms & Conditions</a>
             <a className="hover:text-info">Privacy Notice</a>
             <a className="hover:text-info">Cookie Policy</a>
           </div>
           {/* Third column: Portal links */}
-          <div className="flex flex-col gap-2 text-left">
-            <h3 className="text-lg font-bold">Portal Links</h3>
+          <div className="flex flex-col gap-2 text-left w-full md:w-1/6">
+            <h3 className="text-lg">Portal Links</h3>
             <a className="hover:text-info">Datasets</a>
             <a className="hover:text-info">Themes</a>
             <a className="hover:text-info">Organizations</a>
           </div>
           {/* Fourth column: Contact us */}
-          <div className="flex flex-col gap-2 text-left">
-            <h3 className="text-lg font-bold">Contact Us</h3>
+          <div className="flex flex-col gap-2 text-left w-full md:w-1/3">
+            <h3 className="text-lg">Contact Us</h3>
             <div className="flex gap-4">
               {contentConfig.linkedInUrl && (
                 <a

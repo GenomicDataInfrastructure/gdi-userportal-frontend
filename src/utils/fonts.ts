@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import localFont from "next/font/local";
-import { Roboto } from "next/font/google";
 
 export const exposeFont = localFont({
   src: [
@@ -71,9 +70,45 @@ export const satoshiFont = localFont({
   display: "swap",
 });
 
-export const robotoFont = Roboto({
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
+export const quicksandFont = localFont({
+  src: [
+    {
+      path: "./../public/fonts/Quicksand-Regular.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./../public/fonts/Quicksand-Regular.woff",
+      weight: "500",
+      style: "normal",
+    },
+  ],
+  variable: "--font-light",
+  display: "swap",
+});
+
+export const nunitoFont = localFont({
+  src: [
+    {
+      path: "./../public/fonts/Nunito-Regular.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./../public/fonts/Nunito-Regular.woff",
+      weight: "500",
+      style: "normal",
+    },
+  ],
   variable: "--font-sans",
   display: "swap",
 });
+
+export const fontMap = {
+  expose: exposeFont,
+  tabular: tabularFont,
+  satoshi: satoshiFont,
+  nunito: nunitoFont,
+  quicksandm: quicksandFont,
+  quicksand: quicksandFont,
+} as const;

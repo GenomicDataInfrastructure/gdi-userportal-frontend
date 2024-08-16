@@ -67,14 +67,14 @@ function SearchBar({ queryParams, size }: SearchBarProps) {
       <div className="relative">
         <input
           placeholder="Search datasets"
-          className={`${sizeClass} w-full rounded-lg border-2 border-primary px-4 py-[9px] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary`}
+          className={`${sizeClass} w-full rounded-lg px-4 py-[9px] shadow-xl transition-all duration-200 ease-in-out hover:shadow-2xl focus:outline-none`}
           value={query}
           onChange={handleQueryChange}
           onBlur={handleBlur}
           onKeyDown={handleEnter}
         ></input>
         <div
-          className={`${sizeClass} item-stretch absolute bottom-0 right-0 flex border-primary`}
+          className={`${sizeClass} item-stretch absolute bottom-0 right-0 flex`}
         >
           <button
             type="submit"

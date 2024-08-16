@@ -3,15 +3,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import "dotenv/config";
-import { exposeFont, tabularFont, satoshiFont, robotoFont } from "./fonts";
+import { fontMap } from "./fonts";
 import { themeConfig } from "@/config/theme";
-
-const fontMap = {
-  expose: exposeFont,
-  tabular: tabularFont,
-  satoshi: satoshiFont,
-  roboto: robotoFont,
-};
 
 export function getSelectedFonts(): string {
   return Object.values(themeConfig.fonts)

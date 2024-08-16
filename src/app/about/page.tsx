@@ -31,11 +31,13 @@ const AboutPage: React.FC = () => {
         const response = await fetch("/about.md");
         const text = await response.text();
 
-        marked.use({ renderer }); // Use the renderer directly without type casting
-        const htmlContent = marked.parse(text);
+        // @ts-expect-error" Type assertion is necessary because our custom renderer is a partial
+        // implementation of the Renderer interface, but we know it's compatible for our use case.
+        marked.use({ renderer: renderer as Partial<marked.Renderer> });
+        const htmlContent = await marked.parse(text);
 
         setResponse({
-          content: htmlContent,
+          content: typeof htmlContent === "string" ? htmlContent : "",
           status: "success",
         });
       } catch (error) {

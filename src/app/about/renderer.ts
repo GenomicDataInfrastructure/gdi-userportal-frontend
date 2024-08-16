@@ -10,6 +10,11 @@ interface Content {
   items?: Content[];
 }
 
+interface LinkObject {
+  href: string;
+  text?: string;
+}
+
 const stringifyContent = (
   content: Content | Content[] | string | number | boolean
 ): string => {
@@ -53,9 +58,14 @@ const renderer = {
     return `<li class="mb-2">${marked.parseInline(stringifyContent(text))}</li>`;
   },
 
-  link(href: string | null, title: string | null, text: string): string {
-    const linkHref = href || "";
-    return `<a href="${linkHref}" class="text-info hover:underline" target="_blank" rel="noopener noreferrer">${text}</a>`;
+  link(
+    hrefObj: string | LinkObject,
+    title: string | null,
+    text: string
+  ): string {
+    const href = typeof hrefObj === "object" ? hrefObj.href : hrefObj;
+    const linkText = text || (typeof hrefObj === "object" ? hrefObj.text : "");
+    return `<a href="${href}" class="text-info hover:underline" target="_blank" rel="noopener noreferrer">${linkText}</a>`;
   },
 };
 

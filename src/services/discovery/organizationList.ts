@@ -6,10 +6,10 @@ import axios, { AxiosResponse } from "axios";
 import { RetrievedOrganization } from "./types/dataset.types";
 
 export const makeOrganizationList = (discoveryUrl: string) => {
-  return async (): Promise<RetrievedOrganization[]> => {
+  return async (): Promise<AxiosResponse<RetrievedOrganization[]>> => {
     const response: AxiosResponse<RetrievedOrganization[]> = await axios.get(
       `${discoveryUrl}/api/v1/organizations`
     );
-    return response.data;
+    return response;
   };
 };

@@ -7,7 +7,7 @@
 import { useEffect, useState } from "react";
 import PageContainer from "@/components/PageContainer";
 import OrganizationList from "@/components/OrganizationList";
-import { organizationGet } from "@/services/discovery";
+import { organizationList } from "@/services/discovery";
 import Error from "@/app/error";
 import LoadingContainer from "@/components/LoadingContainer";
 import { AxiosError } from "axios";
@@ -30,9 +30,9 @@ const OrganizationsPage = () => {
     async function fetchOrganizations() {
       try {
         setResponse({ status: "loading" });
-        const data = await organizationGet();
+        const response = await organizationList();
         setResponse({
-          organizations: data,
+          organizations: response.data,
           status: "success",
         });
       } catch (error) {

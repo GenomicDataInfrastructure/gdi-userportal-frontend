@@ -79,5 +79,5 @@ export interface RetrievedOrganization {
   title: string;
   description: string;
   imageUrl: string;
-  numberOfDatasets?: number;
+  numberOfDatasets: number;
 }

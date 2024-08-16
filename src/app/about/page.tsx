@@ -31,7 +31,7 @@ const AboutPage: React.FC = () => {
         const response = await fetch("/about.md");
         const text = await response.text();
 
-        marked.use({ renderer });
+        marked.use({ renderer }); // Use the renderer directly without type casting
         const htmlContent = marked.parse(text);
 
         setResponse({

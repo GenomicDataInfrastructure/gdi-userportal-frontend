@@ -64,7 +64,9 @@ const DistributionAccordion = ({
             />
           </div>
           <div
-            ref={(el) => (contentRefs.current[index] = el)}
+            ref={(el: HTMLDivElement | null) => {
+              contentRefs.current[index] = el;
+            }}
             style={{
               maxHeight:
                 openIndex === index

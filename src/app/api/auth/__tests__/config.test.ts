@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import { decrypt } from "@/utils/encryption";
 import { jwtDecode } from "jwt-decode";
 import { Account, getServerSession } from "next-auth";

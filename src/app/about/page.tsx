@@ -29,9 +29,6 @@ const AboutPage: React.FC = () => {
       try {
         setResponse({ status: "loading" });
         const response = await fetch("/about.md");
-        if (!response.ok) {
-          throw new Error("Failed to fetch the markdown file.");
-        }
         const text = await response.text();
 
         marked.use({ renderer });

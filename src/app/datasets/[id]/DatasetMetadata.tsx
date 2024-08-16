@@ -19,14 +19,9 @@ import {
 import { formatDate } from "@/utils/formatDate";
 import {
   RetrievedDataset,
-  DatasetRelationship,
+  DatasetRelationEntry,
   DatasetDictionaryEntry,
 } from "@/services/discovery/types/dataset.types";
-import { formatRelationshipType } from "@/utils/datasetRelationshipUtils";
-import {
-  formatFieldName,
-  formatDescription,
-} from "@/utils/datasetDictionaryUtils";
 import DistributionAccordion from "./DistributionAccordion";
 import Link from "next/link";
 import Tooltip from "./Tooltip";
@@ -37,7 +32,7 @@ const DatasetMetadata = ({
   dictionary,
 }: {
   dataset: RetrievedDataset;
-  relationships: DatasetRelationship[];
+  relationships: DatasetRelationEntry[];
   dictionary: DatasetDictionaryEntry[];
 }) => {
   const [userTimezone, setUserTimezone] = useState<string | null>(null);
@@ -59,7 +54,7 @@ const DatasetMetadata = ({
     <>
       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 font-[400] text-gray">
         {dataset.createdAt && (
-          <span className="inline flex gap-2 items-center relative group">
+          <span className="flex gap-2 items-center relative group">
             <FontAwesomeIcon
               icon={faCalendarAlt}
               className="align-middle text-primary"
@@ -74,7 +69,7 @@ const DatasetMetadata = ({
           <div className="text-lightaccent hidden sm:inline-block">|</div>
         )}
         {dataset.modifiedAt && (
-          <span className="inline flex gap-2 items-center relative group">
+          <span className="flex gap-2 items-center relative group">
             <FontAwesomeIcon
               icon={faSyncAlt}
               className="align-middle text-primary"
@@ -88,7 +83,7 @@ const DatasetMetadata = ({
         {dataset.organization && (
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
-            <span className="inline sm:flex-row flex flex-col gap-2 relative group">
+            <span className="sm:flex-row flex flex-col gap-2 relative group">
               <div className="flex gap-2 items-center">
                 <FontAwesomeIcon
                   icon={faBuilding}
@@ -111,7 +106,7 @@ const DatasetMetadata = ({
         {dataset.accessRights && (
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
-            <span className="inline flex gap-2 items-center relative group">
+            <span className="flex gap-2 items-center relative group">
               <FontAwesomeIcon
                 icon={faTag}
                 className="align-middle text-primary"
@@ -126,7 +121,7 @@ const DatasetMetadata = ({
         {dataset.identifier && (
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
-            <span className="inline flex gap-2 items-center relative group">
+            <span className="flex gap-2 items-center relative group">
               <FontAwesomeIcon
                 icon={faIdBadge}
                 className="align-middle text-primary"
@@ -141,7 +136,7 @@ const DatasetMetadata = ({
         {dataset.languages?.length > 0 && (
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
-            <span className="inline flex gap-2 items-center relative group">
+            <span className="flex gap-2 items-center relative group">
               <FontAwesomeIcon
                 icon={faLanguage}
                 className="align-middle text-primary"
@@ -157,7 +152,7 @@ const DatasetMetadata = ({
         {dataset.distributions?.length > 0 && (
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
-            <span className="inline flex gap-2 items-center relative group">
+            <span className="flex gap-2 items-center relative group">
               <FontAwesomeIcon
                 icon={faFile}
                 className="align-middle text-primary "
@@ -172,7 +167,7 @@ const DatasetMetadata = ({
       </div>
       {dataset.keywords?.length > 0 && (
         <div className="mt-4">
-          <span className="inline flex gap-2 items-center relative group">
+          <span className="flex gap-2 items-center relative group">
             <FontAwesomeIcon
               icon={faKey}
               className="align-middle text-primary"
@@ -201,7 +196,7 @@ const DatasetMetadata = ({
                 className="inline-flex bg-[#EFFAFE] px-4 py-1 rounded-full text-gray font-[500] text-[14px] group relative"
               >
                 <Link
-                  href={`/@${dataset.organization?.title}/${relationship.related_dataset}`}
+                  href={`/@${dataset.organization?.title}/${relationship.target}`}
                   className="group-hover:text-red hover:font-bold"
                 >
                   <FontAwesomeIcon
@@ -209,8 +204,7 @@ const DatasetMetadata = ({
                     className="align-middle text-primary"
                   />
                   <span className="align-middle">
-                    {formatRelationshipType(relationship.relationship_type)}:{" "}
-                    {relationship.related_dataset}
+                    {relationship.relation}: {relationship.target}
                   </span>
                 </Link>
                 <Tooltip message="Related dataset information." />
@@ -235,13 +229,11 @@ const DatasetMetadata = ({
                     icon={faTag}
                     className="align-middle text-primary"
                   />
-                  {formatFieldName(entry.field_name)}
+                  {entry.name}
                 </span>
-                <span className="text-sm text-gray-800">
-                  ({entry.data_type}):
-                </span>
+                <span className="text-sm text-gray-800">({entry.type}):</span>
                 <p className="text-sm font-normal text-gray text-[15px] m-0">
-                  {formatDescription(entry.description)}
+                  {entry.description}
                 </p>
                 <Tooltip message="Information about the field." />
               </div>

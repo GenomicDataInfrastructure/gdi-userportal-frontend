@@ -8,8 +8,6 @@ import { datasetGet } from "@/services/discovery";
 import { isErrorResponse } from "@/utils/ErrorResponse";
 import ClientSidebar from "./ClientSidebar";
 import DatasetMetadata from "./DatasetMetadata";
-import { parseDatasetRelationships } from "@/utils/datasetRelationshipUtils";
-import { parseDatasetDictionary } from "@/utils/datasetDictionaryUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThLarge } from "@fortawesome/free-solid-svg-icons";
 import Tooltip from "./Tooltip";
@@ -19,14 +17,9 @@ export default async function Page({ params }: { params: { id: string } }) {
   try {
     const dataset = await datasetGet(id);
 
-    const relationships = parseDatasetRelationships({
-      ...dataset,
-      dataset_relationships: dataset.dataset_relationships || "[]",
-    });
-    const dictionary = parseDatasetDictionary({
-      ...dataset,
-      dataset_dictionary: dataset.dataset_dictionary || "[]",
-    });
+    const relationships = dataset.datasetRelationships || [];
+
+    const dictionary = dataset.dataDictionary || [];
 
     return (
       <PageContainer>

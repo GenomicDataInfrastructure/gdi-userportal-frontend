@@ -134,6 +134,7 @@ describe("Renderer Tests", () => {
     }
   });
 });
+
 describe("stringifyContent function", () => {
   it("should return text content when content type is 'text'", () => {
     const content = { type: "text", text: "Sample Text" };
@@ -300,6 +301,48 @@ describe("Renderer Tests - List Handling", () => {
       expect(result).toContain("<li>Item 2</li>");
     } else {
       throw new Error("renderer.list is undefined");
+    }
+  });
+});
+
+describe("Renderer Tests - Heading Handling", () => {
+  type RendererContext = RendererObject;
+
+  it("should render a heading with depth 1 correctly", () => {
+    const token: Tokens.Heading = {
+      type: "heading",
+      depth: 1,
+      text: "Heading 1",
+      raw: "Heading 1",
+      tokens: [],
+    };
+
+    if (renderer.heading) {
+      // @ts-expect-error: Using `call` to bind custom `this` context for renderer method
+      const result = renderer.heading.call(renderer as RendererContext, token);
+      const expected = `<h1 class="text-left font-medium text-2xl sm:text-3xl mb-4">Heading 1</h1>`;
+      expect(result).toBe(expected);
+    } else {
+      throw new Error("renderer.heading is undefined");
+    }
+  });
+
+  it("should render a heading with depth other than 1 correctly", () => {
+    const token: Tokens.Heading = {
+      type: "heading",
+      depth: 2,
+      text: "Heading 2",
+      raw: "Heading 2",
+      tokens: [],
+    };
+
+    if (renderer.heading) {
+      // @ts-expect-error: Using `call` to bind custom `this` context for renderer method
+      const result = renderer.heading.call(renderer as RendererContext, token);
+      const expected = `<h2 class="text-lg font-medium sm:text-xl my-4">Heading 2</h2>`;
+      expect(result).toBe(expected);
+    } else {
+      throw new Error("renderer.heading is undefined");
     }
   });
 });

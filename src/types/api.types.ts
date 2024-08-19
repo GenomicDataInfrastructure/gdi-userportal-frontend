@@ -6,12 +6,11 @@ export interface ErrorResponse {
   title: string;
   status: number;
   detail: string;
-  errorMessages: string[];
+  warnings: ValidationWarning[];
 }
 
-export interface ValidationWarnings {
+export interface ValidationWarning {
   key: string;
   formId: string;
   fieldId: string;
-  fieldValidationKey: string;
 }

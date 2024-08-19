@@ -7,14 +7,23 @@ import path from "path";
 import { marked } from "marked";
 import renderer from "./renderer";
 import PageContainer from "@/components/PageContainer";
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 
 async function getAboutContent() {
   const filePath = path.join(process.cwd(), "public", "about.md");
   const markdown = await fs.readFile(filePath, "utf8");
 
   marked.use({ renderer });
-  return marked.parse(markdown);
+  const rawHtml = await marked.parse(markdown);
+
+  // Ensure rawHtml is a string
+  const htmlString = typeof rawHtml === "string" ? rawHtml : "";
+
+  // Sanitize the HTML
+  return DOMPurify.sanitize(htmlString, {
+    ADD_ATTR: ["target"],
+    ADD_TAGS: ["h1", "h2", "h3", "h4", "h5", "h6"],
+  });
 }
 
 export default async function AboutPage() {

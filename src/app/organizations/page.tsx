@@ -67,11 +67,14 @@ const OrganizationsPage = () => {
   const organizations = response.organizations ?? [];
 
   return (
-    <PageContainer className="container mx-auto px-8 pt-5">
-      <div className="my-8">
-        <h1 className="text-left font-bold text-4xl text-primary">
-          {organizations.length} Organizations
+    <PageContainer className="container mx-auto px-4 pt-5">
+      <div className="my-8 flex items-center gap-2">
+        <h1 className="text-left font-medium text-2xl sm:text-3xl">
+          Organizations
         </h1>
+        <span className="bg-info text-white text-sm px-2 py-1 rounded-full">
+          {organizations.length}
+        </span>
       </div>
       {organizations.length > 0 ? (
         <OrganizationList organizations={organizations} />

@@ -8,11 +8,12 @@ import ThemesSection, { allThemes } from "@/components/ThemesSection";
 
 const ThemesPage = () => {
   return (
-    <PageContainer className="container mx-auto px-8 pt-5">
-      <div className="my-8">
-        <h1 className="text-left font-bold text-4xl text-primary">
-          {allThemes.length} Themes
-        </h1>
+    <PageContainer className="container mx-auto px-4 pt-5">
+      <div className="my-8 flex items-center gap-2">
+        <h1 className="text-left font-medium text-2xl sm:text-3xl">Themes</h1>
+        <span className="bg-info text-white text-sm px-2 py-1 rounded-full">
+          {allThemes.length}
+        </span>
       </div>
       <ThemesSection showSeeAll={false} />
     </PageContainer>

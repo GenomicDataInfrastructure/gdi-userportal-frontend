@@ -16,10 +16,8 @@ async function getAboutContent() {
   marked.use({ renderer });
   const rawHtml = await marked.parse(markdown);
 
-  // Ensure rawHtml is a string
   const htmlString = typeof rawHtml === "string" ? rawHtml : "";
 
-  // Sanitize the HTML
   return DOMPurify.sanitize(htmlString, {
     ADD_ATTR: ["target"],
     ADD_TAGS: ["h1", "h2", "h3", "h4", "h5", "h6"],

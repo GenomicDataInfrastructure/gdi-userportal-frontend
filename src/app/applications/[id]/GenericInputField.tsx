@@ -16,6 +16,7 @@ type GenericInputFieldProps = {
   editable: boolean;
   onChange?: (value: string) => void;
   children?: React.ReactNode;
+  validationWarning?: string;
 };
 
 function GenericInputField({
@@ -27,6 +28,7 @@ function GenericInputField({
   editable,
   onChange,
   children,
+  validationWarning,
 }: GenericInputFieldProps) {
   const { isLoading, updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
@@ -51,7 +53,7 @@ function GenericInputField({
   const isDisabled = !editable || isLoading;
 
   return (
-    <div className="rounded border p-4">
+    <div className="flex flex-col rounded border p-4">
       <div className="flex flex-col justify-between">
         <div>
           <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
@@ -76,6 +78,9 @@ function GenericInputField({
           />
         </div>
       </div>
+      {validationWarning && (
+        <span className="text-red-600 mt-2">{validationWarning}</span>
+      )}
     </div>
   );
 }

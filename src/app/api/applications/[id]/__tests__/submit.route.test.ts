@@ -100,7 +100,12 @@ describe("Submit an application", () => {
     const response = await POST(request, { params: { id: "9" } });
 
     expect(response.status).toBe(500);
-    expect(await response.json()).toEqual({ error: "server error" });
+    expect(await response.json()).toEqual({
+      detail: "Unexpected error occurred, please contact the administrators.",
+      status: 500,
+      title: "Unexpected error occurred",
+      validationWarnings: [],
+    });
   });
 
   test("returns correct validation errors", async () => {
@@ -114,7 +119,7 @@ describe("Submit an application", () => {
         status: 400,
         statusText: "Bad request",
         data: {
-          detail: "Application 93 could not be submitted.",
+          detail: "The application could not be submitted.",
           warnings: [
             {
               key: "t.form.validation/required",
@@ -138,6 +143,6 @@ describe("Submit an application", () => {
 
     expect(response.status).toBe(400);
     const json = await response.json();
-    expect(json.detail).toBe("Application 93 could not be submitted.");
+    expect(json.detail).toBe("The application could not be submitted.");
   });
 });

@@ -12,9 +12,16 @@ type EmailFieldProps = {
   formId: number;
   title: string;
   editable: boolean;
+  validationWarning?: string;
 };
 
-function EmailField({ field, formId, title, editable }: EmailFieldProps) {
+function EmailField({
+  field,
+  formId,
+  title,
+  editable,
+  validationWarning,
+}: EmailFieldProps) {
   return (
     <GenericInputField
       field={field}
@@ -23,6 +30,7 @@ function EmailField({ field, formId, title, editable }: EmailFieldProps) {
       placeholder="Enter your email address"
       title={title}
       editable={editable}
+      validationWarning={validationWarning}
     />
   );
 }

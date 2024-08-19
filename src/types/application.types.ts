@@ -71,7 +71,7 @@ interface Form {
 }
 
 interface FormField {
-  id: number;
+  id: string;
   value: string;
   optional: boolean;
   private: boolean;

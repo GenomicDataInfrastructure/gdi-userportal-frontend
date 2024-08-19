@@ -7,16 +7,23 @@
 import { useEffect, useState } from "react";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FormField } from "@/types/application.types";
-import { DatePicker } from "../../../components/shadcn/DatePicker";
+import { DatePicker } from "@/components/shadcn/DatePicker";
 
 type DateFieldProps = {
   field: FormField;
   formId: number;
   title: string;
   editable: boolean;
+  validationWarning?: string;
 };
 
-function DateField({ formId, field, title, editable }: DateFieldProps) {
+function DateField({
+  formId,
+  field,
+  title,
+  editable,
+  validationWarning,
+}: DateFieldProps) {
   const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState<Date | null>(
     field.value ? new Date(field.value) : null
@@ -38,7 +45,7 @@ function DateField({ formId, field, title, editable }: DateFieldProps) {
   };
 
   return (
-    <div className="rounded border p-4">
+    <div className="flex flex-col rounded border p-4">
       <div className="flex flex-col justify-between">
         <div>
           <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
@@ -52,6 +59,9 @@ function DateField({ formId, field, title, editable }: DateFieldProps) {
           className="mt-4 h-12 w-full"
         />
       </div>
+      {validationWarning && (
+        <span className="text-red-600 mt-2">{validationWarning}</span>
+      )}
     </div>
   );
 }

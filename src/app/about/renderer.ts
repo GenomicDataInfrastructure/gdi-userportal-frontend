@@ -18,14 +18,14 @@ const stringifyContent = (
       return content.map(stringifyContent).join("");
     }
     if (content.type === "text") {
-      return content.text || "";
+      return content.text ?? "";
     }
     if (content.type === "list" && content.items) {
       return content.items
         .map((item) => `<li>${stringifyContent(item)}</li>`)
         .join("");
     }
-    return content.text || JSON.stringify(content);
+    return content.text ?? JSON.stringify(content);
   }
   return String(content);
 };

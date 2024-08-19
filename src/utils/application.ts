@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Form, RetrievedApplication, State } from "@/types/application.types";
+import { ValidationWarning } from "@/types/api.types";
 
 function formatApplicationProp(prop: string) {
   return prop.split("/").pop();
@@ -14,10 +15,20 @@ function isApplicationEditable(application: RetrievedApplication) {
   );
 }
 
+function groupWarningsPerFormId(warnings: ValidationWarning[]) {
+  const map = new Map<number, ValidationWarning[]>();
+  warnings.forEach((it) => {
+    const validations = map.get(it.formId) || [];
+    validations.push(it);
+    map.set(it.formId, validations);
+  });
+  return map;
+}
+
 function updateFormWithNewAttachment(
   forms: Form[],
   formId: number,
-  fieldId: number,
+  fieldId: string,
   newAttachmentId: number,
   action: (fieldValue: string, attachmentId: number) => string
 ) {
@@ -31,7 +42,7 @@ function updateFormWithNewAttachment(
 function updateFormsInputValues(
   forms: Form[],
   formId: number,
-  fieldId: number,
+  fieldId: string,
   newValue: string
 ): Form[] {
   return forms.map((form) =>
@@ -41,7 +52,7 @@ function updateFormsInputValues(
 
 function updateFormInputValues(
   form: Form,
-  fieldId: number,
+  fieldId: string,
   newValue: string
 ): Form {
   return {
@@ -54,7 +65,7 @@ function updateFormInputValues(
 
 function updateFormFieldWithNewAttachment(
   form: Form,
-  fieldId: number,
+  fieldId: string,
   newAttachmentId: number,
   action: (fieldValue: string, attachmentId: number) => string
 ): Form {
@@ -95,4 +106,5 @@ export {
   isApplicationEditable,
   updateFormWithNewAttachment,
   updateFormsInputValues,
+  groupWarningsPerFormId,
 };

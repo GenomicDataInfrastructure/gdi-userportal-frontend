@@ -87,7 +87,10 @@ describe("POST function", () => {
 
     expect(response.status).toBe(500);
     expect(await response.json()).toEqual({
-      error: "Unexpected error occurred",
+      detail: "Unexpected error occurred, please contact the administrators.",
+      status: 500,
+      title: "Unexpected error occurred",
+      validationWarnings: [],
     });
   });
 });

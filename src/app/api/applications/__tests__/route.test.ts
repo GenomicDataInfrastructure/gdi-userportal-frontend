@@ -94,7 +94,12 @@ describe("POST function", () => {
     const response = await POST(request);
 
     expect(response.status).toBe(500);
-    expect(await response.json()).toEqual({ error: "server error" });
+    expect(await response.json()).toEqual({
+      detail: "Unexpected error occurred, please contact the administrators.",
+      status: 500,
+      title: "Unexpected error occurred",
+      validationWarnings: [],
+    });
   });
 });
 
@@ -122,7 +127,12 @@ describe("GET function", () => {
     const response = await GET();
 
     expect(response.status).toBe(500);
-    expect(await response.json()).toEqual({ error: "Server error" });
+    expect(await response.json()).toEqual({
+      detail: "Unexpected error occurred, please contact the administrators.",
+      status: 500,
+      title: "Unexpected error occurred",
+      validationWarnings: [],
+    });
   });
 
   test("successfully gets applications", async () => {

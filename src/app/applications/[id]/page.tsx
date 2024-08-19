@@ -15,6 +15,7 @@ import Chip from "@/components/Chip";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import {
   formatApplicationProp,
+  groupWarningsPerFormId,
   isApplicationEditable,
 } from "@/utils/application";
 import { formatDateTime } from "@/utils/formatDate";
@@ -22,6 +23,8 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import FormContainer from "./FormContainer";
 import { createApplicationSidebarItems } from "./sidebarItems";
 import TermsAcceptance from "./TermsAcceptance";
+import { ValidationWarning } from "@/types/api.types";
+import { getTranslation } from "@/utils/getTranslation";
 
 export default function ApplicationDetailsPage() {
   const [alert, setAlert] = useState<AlertState | null>(null);
@@ -29,7 +32,7 @@ export default function ApplicationDetailsPage() {
     setAlert(null);
   };
 
-  const { application, error, errorStatusCode, submitApplication, clearError } =
+  const { application, errorResponse, submitApplication, clearError } =
     useApplicationDetails();
 
   const handleSubmission = () => {
@@ -39,15 +42,17 @@ export default function ApplicationDetailsPage() {
   };
 
   useEffect(() => {
-    if (error) {
+    if (!!errorResponse) {
       setAlert({
-        message: error,
+        message: errorResponse.detail,
         type: "error",
       });
+    } else {
+      setAlert(null);
     }
-  }, [error]);
+  }, [errorResponse]);
 
-  if (errorStatusCode === 404) {
+  if (errorResponse?.status === 404) {
     return <Error statusCode={404} />;
   }
 
@@ -74,6 +79,16 @@ export default function ApplicationDetailsPage() {
   const sidebarItems = createApplicationSidebarItems(application);
   const editable = isApplicationEditable(application);
 
+  const formWarnings: ValidationWarning[] = [];
+  const applicationWarnings: ValidationWarning[] = [];
+  errorResponse?.validationWarnings.forEach((it) => {
+    if (!it.formId) {
+      applicationWarnings.push(it);
+    } else {
+      formWarnings.push(it);
+    }
+  });
+  const warningsPerForm = groupWarningsPerFormId(formWarnings);
   return (
     <PageContainer>
       {alert && (
@@ -119,12 +134,29 @@ export default function ApplicationDetailsPage() {
             </div>
 
             <div className="mt-5 h-[2px] bg-secondary opacity-80 lg:hidden"></div>
+            <ul className="mt-5">
+              {applicationWarnings.map(
+                (warning, index) =>
+                  warning && (
+                    <li key={index}>
+                      <span className="text-red-600 mt-2">
+                        {" "}
+                        - {getTranslation(warning.key)}
+                      </span>
+                    </li>
+                  )
+              )}
+            </ul>
             <ul>
               {application.forms.map(
                 (form) =>
                   form && (
                     <li key={form.id}>
-                      <FormContainer form={form} editable={editable} />
+                      <FormContainer
+                        form={form}
+                        editable={editable}
+                        validationWarnings={warningsPerForm.get(form.id)}
+                      />
                     </li>
                   )
               )}

@@ -13,6 +13,7 @@ type FileUploadFieldProps = {
   formId: number;
   title: string;
   editable: boolean;
+  validationWarning?: string;
 };
 
 function FileUploadFormField({
@@ -20,6 +21,7 @@ function FileUploadFormField({
   formId,
   title,
   editable,
+  validationWarning,
 }: FileUploadFieldProps) {
   const { application, isLoading, addAttachment } = useApplicationDetails();
 
@@ -32,7 +34,7 @@ function FileUploadFormField({
   }
 
   return (
-    <div className="rounded border p-4">
+    <div className="flex flex-col rounded border p-4">
       <div className="flex justify-between">
         <div>
           <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
@@ -80,6 +82,9 @@ function FileUploadFormField({
             );
           })}
       </ul>
+      {validationWarning && (
+        <span className="text-red-600 mt-1">{validationWarning}</span>
+      )}
     </div>
   );
 }

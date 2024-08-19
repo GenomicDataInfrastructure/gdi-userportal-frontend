@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 type FileUploadedProps = {
   attachment: Attachment;
   formId: number;
-  fieldId: number;
+  fieldId: string;
 };
 
 function FileUploaded({ attachment, formId, fieldId }: FileUploadedProps) {

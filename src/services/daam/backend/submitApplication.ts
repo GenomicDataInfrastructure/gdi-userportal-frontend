@@ -13,6 +13,7 @@ export function makeSubmitApplication(daamUrl: string) {
   ): Promise<AxiosResponse<void>> => {
     return await axios.post(
       `${daamUrl}/api/v1/applications/${applicationId}/submit`,
+      null,
       {
         headers: {
           Authorization: `Bearer ${decrypt(session.access_token)}`,

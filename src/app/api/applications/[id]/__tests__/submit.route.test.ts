@@ -48,6 +48,7 @@ describe("Submit an application", () => {
     expect(response.status).toBe(200);
     expect(mockedAxios.post).toHaveBeenCalledWith(
       `${serverConfig.daamUrl}/api/v1/applications/5/submit`,
+      null,
       {
         headers: {
           Authorization: `Bearer decryptedToken`,

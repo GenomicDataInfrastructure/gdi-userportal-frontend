@@ -6,6 +6,7 @@ import axios from "axios";
 import { NextResponse } from "next/server";
 
 export function handleErrorResponse(error: unknown) {
+  console.log(error);
   if (axios.isAxiosError(error)) {
     return NextResponse.json(error.response?.data, {
       status: error.response?.status,

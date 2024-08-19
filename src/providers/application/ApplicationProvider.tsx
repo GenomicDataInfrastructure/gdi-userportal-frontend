@@ -31,7 +31,6 @@ import {
   ApplicationContextState,
   ApplicationState,
 } from "./ApplicationProvider.types";
-import { AxiosError } from "axios";
 
 const ApplicationContext = createContext<ApplicationContextState | undefined>(
   undefined
@@ -43,7 +42,7 @@ function reducer(
 ): ApplicationState {
   switch (action.type) {
     case ApplicationActionType.LOADING:
-      return { ...state, isLoading: true, error: null };
+      return { ...state, isLoading: true, error: undefined };
 
     case ApplicationActionType.APPLICATION_LOADED:
       return {
@@ -120,7 +119,7 @@ function reducer(
       return { ...state, isLoading: false };
 
     case ApplicationActionType.CLEAR_ERROR:
-      return { ...state, error: null, errorStatusCode: null };
+      return { ...state, error: undefined, errorStatusCode: undefined };
 
     case ApplicationActionType.REJECTED:
       const errorPayload = action.payload as {
@@ -148,10 +147,10 @@ type ApplicationProviderProps = {
 
 function ApplicationProvider({ children }: ApplicationProviderProps) {
   const initialState: ApplicationState = {
-    application: null,
+    application: undefined,
     isLoading: false,
-    error: null,
-    errorStatusCode: null,
+    error: undefined,
+    errorStatusCode: undefined,
     termsAccepted: false,
   };
 
@@ -189,7 +188,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   }, [id]);
 
   useEffect(() => {
-    fetchApplication();
+    fetchApplication().catch((error) => console.log(error));
   }, [fetchApplication]);
 
   async function addAttachment(
@@ -197,39 +196,34 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
     fieldId: number,
     formData: FormData
   ): Promise<void> {
-    try {
-      dispatch({ type: ApplicationActionType.LOADING });
+    dispatch({ type: ApplicationActionType.LOADING });
 
-      const {
-        data: { id: attachmentId },
-      } = await addAttachmentToApplication(application!.id, formData);
+    const {
+      data: { id: attachmentId },
+    } = await addAttachmentToApplication(application!.id, formData);
 
-      const action = {
-        type: ApplicationActionType.ATTACHMENT_ATTACHED,
-        payload: {
-          attachmentId,
-          formId,
-          fieldId,
-        },
-      };
+    const action = {
+      type: ApplicationActionType.ATTACHMENT_ATTACHED,
+      payload: {
+        attachmentId,
+        formId,
+        fieldId,
+      },
+    };
 
-      dispatch(action);
+    dispatch(action);
 
-      const { forms: updatedForms } = reducer(
-        {
-          application,
-          isLoading,
-          error,
-          errorStatusCode,
-          termsAccepted,
-        },
-        action
-      ).application as RetrievedApplication;
-      const response = await saveFormAndDuos(updatedForms);
-      if (response.ok) fetchApplication();
-    } catch (error) {
-      handleErrors(error, "Failed to add attachment", dispatch);
-    }
+    const { forms: updatedForms } = reducer(
+      {
+        application,
+        isLoading,
+        error,
+        errorStatusCode,
+        termsAccepted,
+      },
+      action
+    ).application as RetrievedApplication;
+    await saveFormAndDuos(updatedForms);
   }
 
   async function updateInputFields(
@@ -237,35 +231,30 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
     fieldId: number,
     newValue: string
   ): Promise<void> {
-    try {
-      dispatch({ type: ApplicationActionType.LOADING });
+    dispatch({ type: ApplicationActionType.LOADING });
 
-      const action = {
-        type: ApplicationActionType.INPUT_SAVED,
-        payload: {
-          formId: formId,
-          fieldId: fieldId,
-          newValue: newValue,
-        },
-      };
+    const action = {
+      type: ApplicationActionType.INPUT_SAVED,
+      payload: {
+        formId: formId,
+        fieldId: fieldId,
+        newValue: newValue,
+      },
+    };
 
-      dispatch(action);
+    dispatch(action);
 
-      const { forms: updatedForms } = reducer(
-        {
-          application,
-          isLoading,
-          error,
-          errorStatusCode,
-          termsAccepted,
-        },
-        action
-      ).application as RetrievedApplication;
-      const response = await saveFormAndDuos(updatedForms);
-      if (response.ok) fetchApplication();
-    } catch (error) {
-      handleErrors(error, "Failed to save application", dispatch);
-    }
+    const { forms: updatedForms } = reducer(
+      {
+        application,
+        isLoading,
+        error,
+        errorStatusCode,
+        termsAccepted,
+      },
+      action
+    ).application as RetrievedApplication;
+    await saveFormAndDuos(updatedForms);
   }
 
   async function deleteAttachment(
@@ -273,35 +262,30 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
     fieldId: number,
     attachmentId: number
   ) {
-    try {
-      dispatch({ type: ApplicationActionType.LOADING });
+    dispatch({ type: ApplicationActionType.LOADING });
 
-      const action = {
-        type: ApplicationActionType.ATTACHMENT_DELETED,
-        payload: {
-          attachmentId,
-          formId,
-          fieldId,
-        },
-      };
-      dispatch(action);
+    const action = {
+      type: ApplicationActionType.ATTACHMENT_DELETED,
+      payload: {
+        attachmentId,
+        formId,
+        fieldId,
+      },
+    };
+    dispatch(action);
 
-      const { forms: updatedForms } = reducer(
-        {
-          application,
-          isLoading,
-          error,
-          errorStatusCode,
-          termsAccepted,
-        },
-        action
-      ).application as RetrievedApplication;
+    const { forms: updatedForms } = reducer(
+      {
+        application,
+        isLoading,
+        error,
+        errorStatusCode,
+        termsAccepted,
+      },
+      action
+    ).application as RetrievedApplication;
 
-      const response = await saveFormAndDuos(updatedForms);
-      if (response.ok) fetchApplication();
-    } catch (error) {
-      handleErrors(error, "Failed to delete attachment", dispatch);
-    }
+    await saveFormAndDuos(updatedForms);
   }
 
   async function saveFormAndDuos(forms: Form[]) {
@@ -325,8 +309,10 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
         }),
       }
     );
+
     dispatch({ type: ApplicationActionType.FORM_SAVED });
-    return response;
+
+    await handleErrorResponseAfterAction(response);
   }
 
   async function submitApplication() {
@@ -337,13 +323,37 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       { method: "POST" }
     );
 
+    await handleErrorResponseAfterAction(response);
+  }
+
+  async function acceptTerms(acceptedLicenses: number[]) {
+    dispatch({ type: ApplicationActionType.LOADING });
+
+    const response = await fetch(
+      `/api/applications/${application!.id}/accept-terms`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          acceptedLicenses,
+        } as AcceptTermsCommand),
+      }
+    );
+
+    dispatch({ type: ApplicationActionType.ACCEPT_TERMS });
+    await handleErrorResponseAfterAction(response);
+  }
+
+  async function handleErrorResponseAfterAction(response: Response) {
     if (response.ok) {
       dispatch({ type: ApplicationActionType.CLEAR_ERROR });
-      fetchApplication();
+      await fetchApplication();
     } else {
       const errorResponse = await response.json();
       const errorMessage =
-        errorResponse.error || "An unexpected error occurred.";
+        errorResponse.detail || "An unexpected error occurred.";
       const errorStatusCode = response.status;
       const payload = {
         message: errorMessage,
@@ -353,46 +363,6 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
         type: ApplicationActionType.REJECTED,
         payload,
       });
-    }
-  }
-
-  async function acceptTerms(acceptedLicenses: number[]) {
-    dispatch({ type: ApplicationActionType.LOADING });
-
-    try {
-      const response = await fetch(
-        `/api/applications/${application!.id}/accept-terms`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            acceptedLicenses,
-          } as AcceptTermsCommand),
-        }
-      );
-
-      if (response.ok) {
-        dispatch({ type: ApplicationActionType.ACCEPT_TERMS });
-        dispatch({ type: ApplicationActionType.CLEAR_ERROR });
-        fetchApplication();
-      } else {
-        const errorResponse = await response.json();
-        const errorMessage =
-          errorResponse.error || "An unexpected error occurred.";
-        const errorStatusCode = response.status;
-        const payload = {
-          message: errorMessage,
-          statusCode: errorStatusCode,
-        };
-        dispatch({
-          type: ApplicationActionType.REJECTED,
-          payload,
-        });
-      }
-    } catch (error) {
-      handleErrors(error, "Failed to accept terms", dispatch);
     }
   }
 
@@ -426,30 +396,5 @@ function useApplicationDetails() {
   }
   return context;
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const handleErrors = (error: any, fallbackMessage: string, dispatch: any) => {
-  if (error instanceof AxiosError) {
-    const payload = {
-      message: error.response?.data.title || fallbackMessage,
-      statusCode: error.response?.status,
-    };
-
-    dispatch({
-      type: ApplicationActionType.REJECTED,
-      payload,
-    });
-  } else {
-    const payload = {
-      message: error.message || fallbackMessage,
-      statusCode: 500,
-    };
-
-    dispatch({
-      type: ApplicationActionType.REJECTED,
-      payload,
-    });
-  }
-};
 
 export { ApplicationProvider, useApplicationDetails };

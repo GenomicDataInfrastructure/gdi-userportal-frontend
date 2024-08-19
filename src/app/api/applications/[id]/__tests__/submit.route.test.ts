@@ -48,13 +48,10 @@ describe("Submit an application", () => {
     expect(response.status).toBe(200);
     expect(mockedAxios.post).toHaveBeenCalledWith(
       `${serverConfig.daamUrl}/api/v1/applications/5/submit`,
-      null,
       {
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer decryptedToken`,
         },
-        validateStatus: expect.any(Function),
       }
     );
   });
@@ -110,17 +107,28 @@ describe("Submit an application", () => {
     mockedGetServerSession.mockResolvedValueOnce({
       access_token: encryptedToken,
     });
-    mockedAxios.post.mockResolvedValueOnce({
-      status: 400,
-      data: {
-        detail:
-          "Application 93 could not be submitted due to the following errors:",
-        errorMessages: [
-          "Field fld1 is required.",
-          "Field fld2 has invalid format.",
-        ],
+    mockedAxios.isAxiosError.mockReturnValueOnce(true);
+    mockedAxios.post.mockRejectedValueOnce({
+      response: {
+        status: 400,
+        statusText: "Bad request",
+        data: {
+          detail: "Application 93 could not be submitted.",
+          warnings: [
+            {
+              key: "t.form.validation/required",
+              formId: 1,
+              fieldId: "fld1",
+            },
+            {
+              key: "t.form.validation/required",
+              formId: 1,
+              fieldId: "fld2",
+            },
+          ],
+        },
       },
-    });
+    } as AxiosError);
 
     const request = new Request("http://localhost", {
       method: "POST",
@@ -129,10 +137,6 @@ describe("Submit an application", () => {
 
     expect(response.status).toBe(400);
     const json = await response.json();
-    expect(json.error).toBe(
-      "Application 93 could not be submitted due to the following errors:\n" +
-        "Field fld1 is required.\n" +
-        "Field fld2 has invalid format."
-    );
+    expect(json.detail).toBe("Application 93 could not be submitted.");
   });
 });

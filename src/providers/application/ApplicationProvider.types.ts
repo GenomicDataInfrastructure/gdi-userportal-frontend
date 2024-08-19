@@ -28,10 +28,10 @@ export enum ApplicationActionType {
 }
 
 export type ApplicationState = {
-  application: RetrievedApplication | null;
+  application?: RetrievedApplication;
   isLoading: boolean;
-  error: string | null;
-  errorStatusCode: number | null;
+  error?: string;
+  errorStatusCode?: number;
   termsAccepted: boolean;
 };
 

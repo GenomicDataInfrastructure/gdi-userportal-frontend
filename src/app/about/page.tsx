@@ -2,65 +2,23 @@
 
 /* SPDX-License-Identifier: Apache-2.0 */
 
-"use client";
-
-import React, { useEffect, useState } from "react";
+import { promises as fs } from "fs";
+import path from "path";
 import { marked } from "marked";
 import renderer from "./renderer";
 import PageContainer from "@/components/PageContainer";
-import LoadingContainer from "@/components/LoadingContainer";
-import Error from "@/app/error";
+import DOMPurify from "dompurify";
 
-type Status = "loading" | "error" | "success";
+async function getAboutContent() {
+  const filePath = path.join(process.cwd(), "public", "about.md");
+  const markdown = await fs.readFile(filePath, "utf8");
 
-interface AboutResponse {
-  status: Status;
-  content?: string;
-  errorCode?: number;
+  marked.use({ renderer });
+  return marked.parse(markdown);
 }
 
-const AboutPage: React.FC = () => {
-  const [response, setResponse] = useState<AboutResponse>({
-    status: "loading",
-  });
-
-  useEffect(() => {
-    const fetchMarkdown = async () => {
-      try {
-        setResponse({ status: "loading" });
-        const response = await fetch("/about.md");
-        const text = await response.text();
-
-        // @ts-expect-error" Type assertion is necessary because our custom renderer is a partial
-        // implementation of the Renderer interface, but we know it's compatible for our use case.
-        marked.use({ renderer: renderer as Partial<marked.Renderer> });
-        const htmlContent = await marked.parse(text);
-
-        setResponse({
-          content: typeof htmlContent === "string" ? htmlContent : "",
-          status: "success",
-        });
-      } catch (error) {
-        console.error("Error in fetchMarkdown:", error);
-        setResponse({ status: "error", errorCode: 500 });
-      }
-    };
-
-    fetchMarkdown();
-  }, []);
-
-  if (response.status === "loading") {
-    return (
-      <LoadingContainer
-        text="Loading content. This may take a few moments."
-        className="mt-4 px-4 text-center sm:mt-8 sm:px-8"
-      />
-    );
-  }
-
-  if (response.status === "error") {
-    return <Error statusCode={response.errorCode} />;
-  }
+export default async function AboutPage() {
+  const content = await getAboutContent();
 
   return (
     <PageContainer className="container mx-auto px-4 pt-5">
@@ -69,10 +27,8 @@ const AboutPage: React.FC = () => {
       </div>
       <div
         className="text-base leading-relaxed"
-        dangerouslySetInnerHTML={{ __html: response.content || "" }}
+        dangerouslySetInnerHTML={{ __html: content }}
       />
     </PageContainer>
   );
-};
-
-export default AboutPage;
+}

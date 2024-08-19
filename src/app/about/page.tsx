@@ -17,11 +17,7 @@ async function getAboutContent() {
   const rawHtml = await marked.parse(markdown);
 
   const htmlString = typeof rawHtml === "string" ? rawHtml : "";
-
-  return DOMPurify.sanitize(htmlString, {
-    ADD_ATTR: ["target"],
-    ADD_TAGS: ["h1", "h2", "h3", "h4", "h5", "h6"],
-  });
+  return DOMPurify.sanitize(htmlString);
 }
 
 export default async function AboutPage() {

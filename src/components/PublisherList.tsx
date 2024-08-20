@@ -2,25 +2,23 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Link from "next/link";
-import { RetrievedOrganization } from "@/services/discovery/types/dataset.types";
+import { RetrievedPublisher } from "@/services/discovery/types/dataset.types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faDatabase } from "@fortawesome/free-solid-svg-icons";
 import buildingImg from "../public/building.svg";
 
-interface OrganizationListProps {
-  organizations: RetrievedOrganization[];
+interface PublisherListProps {
+  publishers: RetrievedPublisher[];
 }
 
-const OrganizationList: React.FC<OrganizationListProps> = ({
-  organizations,
-}) => {
+const PublisherList: React.FC<PublisherListProps> = ({ publishers }) => {
   return (
     <div className="bg-white mb-16">
       {" "}
       {/* Added bottom margin */}
       <div className="flex flex-col w-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 justify-center">
-          {organizations.map((org) => (
+          {publishers.map((org) => (
             <div
               key={org.id}
               className="bg-white py-4 flex flex-col items-start justify-start rounded-lg shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50 text-left"
@@ -65,4 +63,4 @@ const OrganizationList: React.FC<OrganizationListProps> = ({
   );
 };
 
-export default OrganizationList;
+export default PublisherList;

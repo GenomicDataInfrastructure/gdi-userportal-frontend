@@ -10,7 +10,7 @@ export interface RetrievedDataset {
   description: string;
   themes: ValueLabel[];
   publisherName: string;
-  organization: RetrievedOrganization;
+  organization: RetrievedPublisher;
   createdAt: string;
   modifiedAt: string;
   url: string;
@@ -33,7 +33,7 @@ export type SearchedDataset = {
   title: string;
   description?: string;
   themes?: ValueLabel[];
-  organization: RetrievedOrganization;
+  organization: RetrievedPublisher;
   modifiedAt: string;
   createdAt: string;
   recordsCount?: number;
@@ -73,7 +73,7 @@ export interface ContactPoint {
   email: string;
 }
 
-export interface RetrievedOrganization {
+export interface RetrievedPublisher {
   id: string;
   name: string;
   title: string;

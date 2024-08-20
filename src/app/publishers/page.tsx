@@ -6,33 +6,33 @@
 
 import { useEffect, useState } from "react";
 import PageContainer from "@/components/PageContainer";
-import OrganizationList from "@/components/OrganizationList";
-import { organizationList } from "@/services/discovery";
+import PublisherList from "@/components/PublisherList";
+import { publisherList } from "@/services/discovery";
 import Error from "@/app/error";
 import LoadingContainer from "@/components/LoadingContainer";
 import { AxiosError } from "axios";
-import { RetrievedOrganization } from "@/services/discovery/types/dataset.types";
+import { RetrievedPublisher } from "@/services/discovery/types/dataset.types";
 
 type Status = "loading" | "error" | "success";
 
-interface OrganizationResponse {
+interface PublisherResponse {
   status: Status;
-  organizations?: RetrievedOrganization[];
+  publishers?: RetrievedPublisher[];
   errorCode?: number;
 }
 
-const OrganizationsPage = () => {
-  const [response, setResponse] = useState<OrganizationResponse>({
+const PublishersPage = () => {
+  const [response, setResponse] = useState<PublisherResponse>({
     status: "loading",
   });
 
   useEffect(() => {
-    async function fetchOrganizations() {
+    async function fetchPublishers() {
       try {
         setResponse({ status: "loading" });
-        const response = await organizationList();
+        const response = await publisherList();
         setResponse({
-          organizations: response.data,
+          publishers: response.data,
           status: "success",
         });
       } catch (error) {
@@ -48,13 +48,13 @@ const OrganizationsPage = () => {
         }
       }
     }
-    fetchOrganizations();
+    fetchPublishers();
   }, []);
 
   if (response.status === "loading") {
     return (
       <LoadingContainer
-        text="Retrieving organizations. This may take a few moments."
+        text="Retrieving publishers. This may take a few moments."
         className="mt-4 px-4 text-center sm:mt-8 sm:px-8"
       />
     );
@@ -64,25 +64,25 @@ const OrganizationsPage = () => {
     return <Error statusCode={response.errorCode} />;
   }
 
-  const organizations = response.organizations ?? [];
+  const publishers = response.publishers ?? [];
 
   return (
     <PageContainer className="container mx-auto px-4 pt-5">
       <div className="my-8 flex items-center gap-2">
         <h1 className="text-left font-medium text-2xl sm:text-3xl">
-          Organizations
+          Publishers
         </h1>
         <span className="bg-info text-white text-sm px-2 py-1 rounded-full">
-          {organizations.length}
+          {publishers.length}
         </span>
       </div>
-      {organizations.length > 0 ? (
-        <OrganizationList organizations={organizations} />
+      {publishers.length > 0 ? (
+        <PublisherList publishers={publishers} />
       ) : (
-        <p className="text-center text-sm text-info">No organizations found.</p>
+        <p className="text-center text-sm text-info">No publishers found.</p>
       )}
     </PageContainer>
   );
 };
 
-export default OrganizationsPage;
+export default PublishersPage;

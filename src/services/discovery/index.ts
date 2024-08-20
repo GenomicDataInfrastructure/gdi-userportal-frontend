@@ -5,12 +5,12 @@
 import serverConfig from "../../config/serverConfig";
 import { makeDatasetGet } from "./datasetGet";
 import { makeDatasetList } from "./datasetList";
-import { makeOrganizationList } from "./organizationList";
+import { makePublisherList } from "./publisherList";
 
 const discoveryUrl = serverConfig.discoveryUrl;
 
 const datasetGet = makeDatasetGet(discoveryUrl);
 const datasetList = makeDatasetList(discoveryUrl);
-const organizationList = makeOrganizationList(discoveryUrl);
+const publisherList = makePublisherList(discoveryUrl);
 
-export { datasetGet, datasetList, organizationList };
+export { datasetGet, datasetList, publisherList };

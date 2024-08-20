@@ -149,14 +149,14 @@ function Header() {
                 </span>
               </Link>
               <Link
-                href="/organizations"
+                href="/publishers"
                 className={`relative px-3 py-1 lg:px-7 transition-opacity duration-300 text-black`}
               >
                 <span className="relative group">
                   Publishers
                   <span
                     className={`absolute left-0 bottom-[-2px] w-full h-[2px] transition-transform duration-300 transform ${
-                      activeTab === "/organizations"
+                      activeTab === "/publishers"
                         ? "bg-primary scale-x-100"
                         : "bg-secondary scale-x-0"
                     } group-hover:scale-x-100 group-hover:bg-secondary`}
@@ -242,12 +242,12 @@ function Header() {
                   Themes
                 </Link>
                 <Link
-                  href="/organizations"
+                  href="/publishers"
                   className="block px-4 py-2 hover:bg-hover-color hover:text-white"
                   onClick={closeMenu}
                 >
                   <FontAwesomeIcon icon={faBook} className="mr-2" />
-                  Organizations
+                  Publishers
                 </Link>
                 <Link
                   href="/about"

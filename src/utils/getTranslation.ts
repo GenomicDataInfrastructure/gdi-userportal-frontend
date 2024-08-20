@@ -13,9 +13,8 @@ const LABELS = {
 
 export function getTranslation(key?: string): string | undefined {
   const translation = key ? LABELS[key] : undefined;
-  if (translation) {
-    return translation;
+  if (key && !translation) {
+    console.error(`translate not found for ${key}.`);
   }
-  console.error(`translate not found for ${key}.`);
-  return key;
+  return translation || key;
 }

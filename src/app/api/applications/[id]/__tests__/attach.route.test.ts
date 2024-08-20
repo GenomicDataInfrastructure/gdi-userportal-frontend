@@ -74,6 +74,11 @@ describe("Attach a file to an application", () => {
     const response = await POST(request, { params: { id: "9" } });
 
     expect(response.status).toBe(500);
-    expect(await response.json()).toEqual({ error: "server error" });
+    expect(await response.json()).toEqual({
+      detail: "Unexpected error occurred, please contact the administrators.",
+      status: 500,
+      title: "Unexpected error occurred",
+      validationWarnings: [],
+    });
   });
 });

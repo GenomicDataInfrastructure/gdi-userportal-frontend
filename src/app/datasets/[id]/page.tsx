@@ -5,12 +5,12 @@
 import Error from "@/app/error";
 import PageContainer from "@/components/PageContainer";
 import { datasetGet } from "@/services/discovery";
-import { isErrorResponse } from "@/utils/ErrorResponse";
 import ClientSidebar from "./ClientSidebar";
 import DatasetMetadata from "./DatasetMetadata";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThLarge } from "@fortawesome/free-solid-svg-icons";
 import Tooltip from "./Tooltip";
+import axios from "axios";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -52,12 +52,13 @@ export default async function Page({ params }: { params: { id: string } }) {
       </PageContainer>
     );
   } catch (error) {
-    if (isErrorResponse(error)) {
+    if (axios.isAxiosError(error)) {
+      const errorResponse = error.response!.data;
       return (
         <Error
-          statusCode={error.response.status}
-          errorTitle={error.response.data.title}
-          errorDetail={error.response.data.detail}
+          statusCode={errorResponse.status}
+          errorTitle={errorResponse.title}
+          errorDetail={errorResponse.detail}
         />
       );
     }

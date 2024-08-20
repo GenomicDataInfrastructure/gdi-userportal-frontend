@@ -3,14 +3,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { RetrievedApplication } from "@/types/application.types";
+import { ErrorResponse } from "@/types/api.types";
 
 export type ApplicationAction = {
   type: ApplicationActionType;
   payload?:
     | RetrievedApplication
-    | { fieldId: number; formId: number; attachmentId: number }
-    | { fieldId: number; formId: number; newValue: string }
-    | { message: string; statusCode: number }
+    | ErrorResponse
+    | { fieldId: string; formId: number; attachmentId: number }
+    | { fieldId: string; formId: number; newValue: string }
     | number[]
     | string;
 };
@@ -28,27 +29,26 @@ export enum ApplicationActionType {
 }
 
 export type ApplicationState = {
-  application?: RetrievedApplication;
   isLoading: boolean;
-  error?: string;
-  errorStatusCode?: number;
   termsAccepted: boolean;
+  application?: RetrievedApplication;
+  errorResponse?: ErrorResponse;
 };
 
 export type ApplicationContextState = ApplicationState & {
   addAttachment: (
     formId: number,
-    fieldId: number,
+    fieldId: string,
     formData: FormData
   ) => Promise<void>;
   deleteAttachment: (
     formId: number,
-    fieldId: number,
+    fieldId: string,
     attachmentId: number
   ) => void;
   updateInputFields: (
     formId: number,
-    fieldId: number,
+    fieldId: string,
     newValue: string
   ) => Promise<void>;
   acceptTerms: (acceptedLicenses: number[]) => Promise<void>;

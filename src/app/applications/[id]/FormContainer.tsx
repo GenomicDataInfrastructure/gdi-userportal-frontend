@@ -4,13 +4,19 @@
 
 import { Form } from "@/types/application.types";
 import FieldContainer from "./FieldContainer";
+import { ValidationWarning } from "@/types/api.types";
 
 type FormContainerProps = {
   form: Form;
   editable: boolean;
+  validationWarnings?: ValidationWarning[];
 };
 
-function FormContainer({ form, editable }: FormContainerProps) {
+function FormContainer({
+  form,
+  editable,
+  validationWarnings,
+}: FormContainerProps) {
   const formTitle =
     form.externalTitle.find((label) => label.language === "en")?.name ||
     form.externalTitle?.[0]?.name;
@@ -27,6 +33,9 @@ function FormContainer({ form, editable }: FormContainerProps) {
                   formId={form.id}
                   field={field}
                   editable={editable}
+                  validationWarning={validationWarnings?.find(
+                    (it) => it.fieldId === field.id
+                  )}
                 />
               </li>
             )

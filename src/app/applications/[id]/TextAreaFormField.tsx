@@ -13,6 +13,7 @@ type TextAreaFormFieldProps = {
   formId: number;
   title: string;
   editable: boolean;
+  validationWarning?: string;
 };
 
 function TextAreaFormField({
@@ -20,6 +21,7 @@ function TextAreaFormField({
   field,
   title,
   editable,
+  validationWarning,
 }: TextAreaFormFieldProps) {
   const { isLoading, updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
@@ -41,7 +43,7 @@ function TextAreaFormField({
   const isDisabled = !editable || isLoading;
 
   return (
-    <div className="rounded border p-4">
+    <div className="flex flex-col rounded border p-4">
       <div className="flex flex-col justify-between">
         <div>
           <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
@@ -61,6 +63,9 @@ function TextAreaFormField({
           disabled={isDisabled}
         />
       </div>
+      {validationWarning && (
+        <span className="text-red-600 mt-2">{validationWarning}</span>
+      )}
     </div>
   );
 }

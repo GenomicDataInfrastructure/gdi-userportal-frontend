@@ -12,6 +12,7 @@ type InputFormFieldProps = {
   formId: number;
   title: string;
   editable: boolean;
+  validationWarning?: string;
 };
 
 function InputFormField({
@@ -19,6 +20,7 @@ function InputFormField({
   field,
   title,
   editable,
+  validationWarning,
 }: InputFormFieldProps) {
   return (
     <GenericInputField
@@ -28,6 +30,7 @@ function InputFormField({
       placeholder={title}
       title={title}
       editable={editable}
+      validationWarning={validationWarning}
     />
   );
 }

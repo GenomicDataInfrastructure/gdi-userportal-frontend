@@ -11,17 +11,27 @@ import TextAreaFormField from "./TextAreaFormField";
 import DateField from "./DateField";
 import EmailField from "./EmailField";
 import PhoneField from "./PhoneField";
+import { ValidationWarning } from "@/types/api.types";
+import { getTranslation } from "@/utils/getTranslation";
 
 type FieldContainerProps = {
   formId: number;
   field: FormField;
   editable: boolean;
+  validationWarning?: ValidationWarning;
 };
 
-function FieldContainer({ formId, field, editable }: FieldContainerProps) {
+function FieldContainer({
+  formId,
+  field,
+  editable,
+  validationWarning,
+}: FieldContainerProps) {
   const fieldTitle =
     field.title.find((label) => label.language === "en")?.name ||
     field.title[0].name;
+
+  const label = getTranslation(validationWarning?.key);
 
   function getFieldComponent() {
     switch (field.type) {
@@ -32,6 +42,7 @@ function FieldContainer({ formId, field, editable }: FieldContainerProps) {
             formId={formId}
             title={fieldTitle}
             editable={editable}
+            validationWarning={label}
           />
         );
       case FieldType.TEXT:
@@ -41,6 +52,7 @@ function FieldContainer({ formId, field, editable }: FieldContainerProps) {
             formId={formId}
             title={fieldTitle}
             editable={editable}
+            validationWarning={label}
           />
         );
       case FieldType.TEXT_AREA:
@@ -50,6 +62,7 @@ function FieldContainer({ formId, field, editable }: FieldContainerProps) {
             formId={formId}
             title={fieldTitle}
             editable={editable}
+            validationWarning={label}
           />
         );
       case FieldType.PHONE:
@@ -59,6 +72,7 @@ function FieldContainer({ formId, field, editable }: FieldContainerProps) {
             formId={formId}
             title={fieldTitle}
             editable={editable}
+            validationWarning={label}
           />
         );
       case FieldType.DATE:
@@ -68,6 +82,7 @@ function FieldContainer({ formId, field, editable }: FieldContainerProps) {
             formId={formId}
             title={fieldTitle}
             editable={editable}
+            validationWarning={label}
           />
         );
       case FieldType.EMAIL:
@@ -77,6 +92,7 @@ function FieldContainer({ formId, field, editable }: FieldContainerProps) {
             formId={formId}
             title={fieldTitle}
             editable={editable}
+            validationWarning={label}
           />
         );
     }

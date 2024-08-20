@@ -15,7 +15,8 @@ import { createDatasetEntitlements } from "@/utils/datasetEntitlements";
 import EntitlementsList from "./EntitlementsList";
 import LoadingContainer from "@/components/LoadingContainer";
 import Error from "@/app/error";
-import { isErrorResponse, ErrorResponse } from "@/utils/ErrorResponse";
+import { ErrorResponse } from "@/types/api.types";
+import axios from "axios";
 
 interface EntitelementsResponse {
   datasetEntitlements?: DatasetEntitlement[];
@@ -31,10 +32,10 @@ function EntitelementsPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const entitlements = await retrieveEntitlements();
+        const response = await retrieveEntitlements();
 
         const datasetEntitlements = await createDatasetEntitlements(
-          entitlements.data.entitlements
+          response.data.entitlements
         );
 
         setResponse({
@@ -42,16 +43,20 @@ function EntitelementsPage() {
           status: "success",
         });
       } catch (error) {
-        if (isErrorResponse(error)) {
-          setResponse({ status: "error", error: error });
-          console.error(error);
-        } else {
-          setResponse({ status: "error" });
-          console.error(error);
+        console.error(error);
+
+        let errorResponse;
+        if (axios.isAxiosError(error)) {
+          errorResponse = error.response!.data;
         }
+
+        setResponse({
+          status: "error",
+          error: errorResponse,
+        });
       }
     }
-    fetchData();
+    fetchData().catch((it) => console.log(it));
   }, []);
 
   if (response.status === "loading") {
@@ -64,9 +69,9 @@ function EntitelementsPage() {
   } else if (response.status === "error" && response.error) {
     return (
       <Error
-        statusCode={response.error.response.status}
-        errorTitle={response.error.response.data.title}
-        errorDetail={response.error.response.data.detail}
+        statusCode={response.error.status}
+        errorTitle={response.error.title}
+        errorDetail={response.error.detail}
       />
     );
   } else if (response.status === "error") {

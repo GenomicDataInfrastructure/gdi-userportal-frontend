@@ -14,9 +14,16 @@ type PhoneFieldProps = {
   formId: number;
   title: string;
   editable: boolean;
+  validationWarning?: string;
 };
 
-function PhoneField({ formId, field, title, editable }: PhoneFieldProps) {
+function PhoneField({
+  formId,
+  field,
+  title,
+  editable,
+  validationWarning,
+}: PhoneFieldProps) {
   const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
 
@@ -50,7 +57,7 @@ function PhoneField({ formId, field, title, editable }: PhoneFieldProps) {
   };
 
   return (
-    <div className="rounded border p-4">
+    <div className="flex flex-col rounded border p-4">
       <div className="flex flex-col">
         <div>
           <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
@@ -67,6 +74,9 @@ function PhoneField({ formId, field, title, editable }: PhoneFieldProps) {
           />
         </div>
       </div>
+      {validationWarning && (
+        <span className="text-red-600 mt-2">{validationWarning}</span>
+      )}
     </div>
   );
 }

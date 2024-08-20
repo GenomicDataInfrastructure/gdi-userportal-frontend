@@ -31,6 +31,7 @@ import {
   ApplicationContextState,
   ApplicationState,
 } from "./ApplicationProvider.types";
+import { ErrorResponse } from "@/types/api.types";
 
 const ApplicationContext = createContext<ApplicationContextState | undefined>(
   undefined
@@ -42,7 +43,7 @@ function reducer(
 ): ApplicationState {
   switch (action.type) {
     case ApplicationActionType.LOADING:
-      return { ...state, isLoading: true, error: undefined };
+      return { ...state, isLoading: true, errorResponse: undefined };
 
     case ApplicationActionType.APPLICATION_LOADED:
       return {
@@ -54,7 +55,7 @@ function reducer(
     case ApplicationActionType.INPUT_SAVED:
       const payload = action.payload as {
         formId: number;
-        fieldId: number;
+        fieldId: string;
         newValue: string;
       };
 
@@ -75,7 +76,7 @@ function reducer(
     case ApplicationActionType.ATTACHMENT_ATTACHED:
       const attachPayload = action.payload as {
         formId: number;
-        fieldId: number;
+        fieldId: string;
         attachmentId: number;
       };
 
@@ -97,7 +98,7 @@ function reducer(
     case ApplicationActionType.ATTACHMENT_DELETED:
       const deletePayload = action.payload as {
         formId: number;
-        fieldId: number;
+        fieldId: string;
         attachmentId: number;
       };
       return {
@@ -119,17 +120,13 @@ function reducer(
       return { ...state, isLoading: false };
 
     case ApplicationActionType.CLEAR_ERROR:
-      return { ...state, error: undefined, errorStatusCode: undefined };
+      return { ...state, errorResponse: undefined };
 
     case ApplicationActionType.REJECTED:
-      const errorPayload = action.payload as {
-        message: string;
-        statusCode: number;
-      };
+      const errorResponse = action.payload as ErrorResponse;
       return {
         ...state,
-        error: errorPayload!.message,
-        errorStatusCode: errorPayload!.statusCode,
+        errorResponse: errorResponse,
         isLoading: false,
       };
 
@@ -147,17 +144,12 @@ type ApplicationProviderProps = {
 
 function ApplicationProvider({ children }: ApplicationProviderProps) {
   const initialState: ApplicationState = {
-    application: undefined,
     isLoading: false,
-    error: undefined,
-    errorStatusCode: undefined,
     termsAccepted: false,
   };
 
-  const [
-    { application, isLoading, error, errorStatusCode, termsAccepted },
-    dispatch,
-  ] = useReducer(reducer, initialState);
+  const [{ application, isLoading, errorResponse, termsAccepted }, dispatch] =
+    useReducer(reducer, initialState);
 
   const clearError = () => {
     dispatch({ type: ApplicationActionType.CLEAR_ERROR });
@@ -176,13 +168,10 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
         payload: retrievedApplication,
       });
     } else {
-      const payload = {
-        message: "Failed to fetch application",
-        statusCode: response.status,
-      };
+      const errorResponse = (await response.json()) as ErrorResponse;
       dispatch({
         type: ApplicationActionType.REJECTED,
-        payload,
+        payload: errorResponse,
       });
     }
   }, [id]);
@@ -193,7 +182,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
 
   async function addAttachment(
     formId: number,
-    fieldId: number,
+    fieldId: string,
     formData: FormData
   ): Promise<void> {
     dispatch({ type: ApplicationActionType.LOADING });
@@ -217,8 +206,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       {
         application,
         isLoading,
-        error,
-        errorStatusCode,
+        errorResponse,
         termsAccepted,
       },
       action
@@ -228,7 +216,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
 
   async function updateInputFields(
     formId: number,
-    fieldId: number,
+    fieldId: string,
     newValue: string
   ): Promise<void> {
     dispatch({ type: ApplicationActionType.LOADING });
@@ -248,8 +236,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       {
         application,
         isLoading,
-        error,
-        errorStatusCode,
+        errorResponse,
         termsAccepted,
       },
       action
@@ -259,7 +246,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
 
   async function deleteAttachment(
     formId: number,
-    fieldId: number,
+    fieldId: string,
     attachmentId: number
   ) {
     dispatch({ type: ApplicationActionType.LOADING });
@@ -278,8 +265,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       {
         application,
         isLoading,
-        error,
-        errorStatusCode,
+        errorResponse,
         termsAccepted,
       },
       action
@@ -352,16 +338,9 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       await fetchApplication();
     } else {
       const errorResponse = await response.json();
-      const errorMessage =
-        errorResponse.detail || "An unexpected error occurred.";
-      const errorStatusCode = response.status;
-      const payload = {
-        message: errorMessage,
-        statusCode: errorStatusCode,
-      };
       dispatch({
         type: ApplicationActionType.REJECTED,
-        payload,
+        payload: errorResponse,
       });
     }
   }
@@ -371,8 +350,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       value={{
         application,
         isLoading,
-        error,
-        errorStatusCode,
+        errorResponse,
         termsAccepted,
         addAttachment,
         deleteAttachment,

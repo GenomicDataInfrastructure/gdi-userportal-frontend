@@ -18,7 +18,8 @@ import React, { useEffect, useState } from "react";
 import ApplicationItem from "./ApplicationItem";
 import { Status } from "@/utils/pageStatus.types";
 import LoadingContainer from "@/components/LoadingContainer";
-import { isErrorResponse, ErrorResponse } from "@/utils/ErrorResponse";
+import { ErrorResponse } from "@/types/api.types";
+import axios from "axios";
 
 interface ApplicationResponse {
   status: Status;
@@ -37,16 +38,20 @@ const ApplicationsPage: React.FC = () => {
         const response = await listApplications();
         setResponse({ applications: response.data, status: "success" });
       } catch (error) {
-        if (isErrorResponse(error)) {
-          setResponse({ status: "error", error: error });
-          console.error(error);
-        } else {
-          setResponse({ status: "error" });
-          console.error(error);
+        console.error(error);
+
+        let errorResponse;
+        if (axios.isAxiosError(error)) {
+          errorResponse = error.response!.data;
         }
+
+        setResponse({
+          status: "error",
+          error: errorResponse,
+        });
       }
     }
-    fetchData();
+    fetchData().catch((it) => console.log(it));
   }, []);
 
   if (response.status === "loading") {
@@ -59,9 +64,9 @@ const ApplicationsPage: React.FC = () => {
   } else if (response.status === "error" && response.error) {
     return (
       <Error
-        statusCode={response.error.response.status}
-        errorTitle={response.error.response.data.title}
-        errorDetail={response.error.response.data.detail}
+        statusCode={response.error.status}
+        errorTitle={response.error.title}
+        errorDetail={response.error.detail}
       />
     );
   } else if (response.status === "error") {

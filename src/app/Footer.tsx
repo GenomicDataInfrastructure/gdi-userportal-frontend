@@ -62,9 +62,15 @@ function Footer() {
           {/* Third column: Portal links */}
           <div className="flex flex-col gap-2 text-left w-full md:w-1/6">
             <h3 className="text-lg">Portal Links</h3>
-            <a className="hover:text-info">Datasets</a>
-            <a className="hover:text-info">Themes</a>
-            <a className="hover:text-info">Organizations</a>
+            <a className="hover:text-info" href="/datasets">
+              Datasets
+            </a>
+            <a className="hover:text-info" href="/themes">
+              Themes
+            </a>
+            <a className="hover:text-info" href="/publishers">
+              Publishers
+            </a>
           </div>
           {/* Fourth column: Contact us */}
           <div className="flex flex-col gap-2 text-left w-full md:w-1/3">

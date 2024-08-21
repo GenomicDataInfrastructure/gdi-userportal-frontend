@@ -99,7 +99,7 @@ const DatasetMetadata = ({
                   </h1>
                 </Link>
               </div>
-              <Tooltip message="Organization to which the dataset belongs." />
+              <Tooltip message="Publisher to which the dataset belongs." />
             </span>
           </>
         )}

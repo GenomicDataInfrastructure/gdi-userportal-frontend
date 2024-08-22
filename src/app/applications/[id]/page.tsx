@@ -19,7 +19,8 @@ import {
   isApplicationEditable,
 } from "@/utils/application";
 import { formatDateTime } from "@/utils/formatDate";
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FormContainer from "./FormContainer";
 import { createApplicationSidebarItems } from "./sidebarItems";
 import TermsAcceptance from "./TermsAcceptance";
@@ -32,8 +33,13 @@ export default function ApplicationDetailsPage() {
     setAlert(null);
   };
 
-  const { application, errorResponse, submitApplication, clearError } =
-    useApplicationDetails();
+  const {
+    application,
+    errorResponse,
+    submitApplication,
+    clearError,
+    isLoading,
+  } = useApplicationDetails();
 
   const handleSubmission = () => {
     onCloseAlert();
@@ -117,13 +123,21 @@ export default function ApplicationDetailsPage() {
                   type="primary"
                   text="Submit"
                   icon={faPaperPlane}
+                  disabled={isLoading}
                   onClick={handleSubmission}
                 />
               )}
             </div>
           </div>
-
-          <p>{`Last Event: ${formatApplicationProp(lastEvent.eventType)} at ${formatDateTime(lastEvent.eventTime.toString())}`}</p>
+          {isLoading ? (
+            <div className="gap-x-1 flex items-center">
+              {" "}
+              <FontAwesomeIcon icon={faSpinner} />{" "}
+              <span>Saving Changes...</span>
+            </div>
+          ) : (
+            <p>{`Last Event: ${formatApplicationProp(lastEvent.eventType)} at ${formatDateTime(lastEvent.eventTime.toString())}`}</p>
+          )}
 
           <div>
             <div className="h-[2px] bg-secondary opacity-80"></div>

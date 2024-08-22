@@ -30,7 +30,7 @@ function GenericInputField({
   children,
   validationWarning,
 }: GenericInputFieldProps) {
-  const { isLoading, updateInputFields } = useApplicationDetails();
+  const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ function GenericInputField({
     }
   };
 
-  const isDisabled = !editable || isLoading;
+  const isDisabled = !editable;
 
   return (
     <div className="flex flex-col rounded border p-4">
@@ -74,7 +74,7 @@ function GenericInputField({
                 : "bg-white border-primary"
             }`}
             placeholder={placeholder}
-            disabled={!editable || isLoading}
+            disabled={isDisabled}
           />
         </div>
       </div>

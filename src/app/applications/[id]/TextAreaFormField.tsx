@@ -23,7 +23,7 @@ function TextAreaFormField({
   editable,
   validationWarning,
 }: TextAreaFormFieldProps) {
-  const { isLoading, updateInputFields } = useApplicationDetails();
+  const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ function TextAreaFormField({
     setInputValue(event.target.value);
   };
 
-  const isDisabled = !editable || isLoading;
+  const isDisabled = !editable;
 
   return (
     <div className="flex flex-col rounded border p-4">

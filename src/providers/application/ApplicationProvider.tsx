@@ -17,6 +17,7 @@ import {
   updateFormWithNewAttachment,
   updateFormsInputValues,
 } from "@/utils/application";
+import debounce from "@/utils/debounce";
 import { useParams } from "next/navigation";
 import {
   createContext,
@@ -24,6 +25,7 @@ import {
   useContext,
   useEffect,
   useReducer,
+  Dispatch,
 } from "react";
 import {
   ApplicationAction,
@@ -137,6 +139,41 @@ function reducer(
       throw new Error(`Unhandled action type: ${action.type}`);
   }
 }
+
+const debouncedSaveFormAndDuos = debounce(
+  async (
+    forms: Form[],
+    dispatch: Dispatch<ApplicationAction>,
+    applicationId: number,
+    handleErrorResponseAfterAction: (response: Response) => Promise<void>
+  ) => {
+    dispatch({ type: ApplicationActionType.LOADING });
+    const response = await fetch(
+      `/api/applications/${applicationId}/save-forms-and-duos`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          forms: forms.map((form: Form) => ({
+            formId: form.id,
+            fields: form.fields.map((field: FormField) => ({
+              fieldId: field.id,
+              value: field.value,
+            })),
+          })),
+          duoCodes: [],
+        }),
+      }
+    );
+
+    dispatch({ type: ApplicationActionType.FORM_SAVED });
+
+    await handleErrorResponseAfterAction(response);
+  },
+  2000
+);
 
 type ApplicationProviderProps = {
   children: React.ReactNode;
@@ -275,30 +312,12 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   }
 
   async function saveFormAndDuos(forms: Form[]) {
-    dispatch({ type: ApplicationActionType.LOADING });
-    const response = await fetch(
-      `/api/applications/${application!.id}/save-forms-and-duos`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          forms: forms.map((form: Form) => ({
-            formId: form.id,
-            fields: form.fields.map((field: FormField) => ({
-              fieldId: field.id,
-              value: field.value,
-            })),
-          })),
-          duoCodes: [],
-        }),
-      }
+    await debouncedSaveFormAndDuos(
+      forms,
+      dispatch,
+      application!.id,
+      handleErrorResponseAfterAction
     );
-
-    dispatch({ type: ApplicationActionType.FORM_SAVED });
-
-    await handleErrorResponseAfterAction(response);
   }
 
   async function submitApplication() {

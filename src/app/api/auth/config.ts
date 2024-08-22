@@ -16,7 +16,13 @@ export const authOptions: NextAuthOptions = {
       clientId: `${process.env.KEYCLOAK_CLIENT_ID}`,
       clientSecret: `${process.env.KEYCLOAK_CLIENT_SECRET}`,
       issuer: process.env.KEYCLOAK_ISSUER_URL,
-      authorization: { params: { scope:  process.env.KEYCLOAK_CLIENT_SCOPE || "openid profile email elixir_id" } },
+      authorization: {
+        params: {
+          scope:
+            process.env.KEYCLOAK_CLIENT_SCOPE ||
+            "openid profile email elixir_id",
+        },
+      },
     }),
   ],
   callbacks: {

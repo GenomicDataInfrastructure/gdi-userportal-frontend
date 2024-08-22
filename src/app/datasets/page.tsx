@@ -9,7 +9,6 @@ import LoadingContainer from "@/components/LoadingContainer";
 import PageContainer from "@/components/PageContainer";
 import PaginationContainer from "@/components/PaginationContainer";
 import SearchBar from "@/components/Searchbar";
-import { useWindowSize } from "@/hooks";
 import { datasetList } from "@/services/discovery/index.public";
 import { SearchedDataset } from "@/services/discovery/types/dataset.types";
 import {
@@ -17,9 +16,6 @@ import {
   DatasetSearchQueryFacet,
   FacetGroup,
 } from "@/services/discovery/types/datasetSearch.types";
-import { SCREEN_SIZE } from "@/utils/windowSize";
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AxiosError } from "axios";
 import { redirect, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -61,8 +57,6 @@ const DATASET_PER_PAGE = 12;
 
 export default function DatasetPage() {
   const queryParams = useSearchParams();
-  const screenSize = useWindowSize();
-  const [isFullScreenFilterOpen, toggleFullScreenFilter] = useState(false);
   const [response, setResponse] = useState<DatasetResponse>({
     status: "loading",
   });
@@ -107,10 +101,6 @@ export default function DatasetPage() {
     fetchData();
   }, [queryParams]);
 
-  useEffect(() => {
-    if (screenSize === SCREEN_SIZE.XL) toggleFullScreenFilter(false);
-  }, [screenSize]);
-
   if (response.status === "loading") {
     return (
       <LoadingContainer
@@ -125,71 +115,56 @@ export default function DatasetPage() {
   return (
     <PageContainer>
       <div className="grid grid-cols-12">
-        {isFullScreenFilterOpen ? (
-          <div className="col-start-0 col-span-12 flex flex-col gap-4">
+        <>
+          <div className="col-start-0 col-span-12 flex items-center justify-between xl:col-span-10 xl:col-start-2">
+            <SearchBar queryParams={queryParams} />
+          </div>
+          <div className="col-start-0 col-span-12 flex flex-col gap-4 sm:block xl:hidden">
             {response.facetGroups?.map((group) => {
               if (group.facets.length > 0) {
                 return (
                   <div
-                    className="col-start-0 col-span-12 rounded-lg border bg-surface"
+                    className="col-start-0 col-span-12 mt-5 h-fit"
                     key={group.key}
                   >
-                    <FilterList
-                      toggleFullScreenFilter={toggleFullScreenFilter}
-                      queryParams={queryParams}
-                      facetGroup={group}
-                    />
+                    <FilterList queryParams={queryParams} facetGroup={group} />
+                  </div>
+                );
+              }
+              return null;
+            })}
+          </div>
+          <p className="col-start-0 col-span-12 mb-12 mt-5 text-center text-sm text-info">
+            {`${response.datasetCount!} ${
+              response.datasetCount! > 1 ? "datasets" : "dataset"
+            } found`}
+          </p>
+          <div className="col-start-0 col-span-4 flex flex-col gap-y-10">
+            {response.facetGroups?.map((group) => {
+              if (group.facets.length > 0) {
+                return (
+                  <div
+                    className=" col-start-0 col-span-4 mr-6 hidden h-fit xl:block px-6"
+                    key={group.key}
+                  >
+                    <FilterList queryParams={queryParams} facetGroup={group} />
                   </div>
                 );
               }
             })}
           </div>
-        ) : (
-          <>
-            <div className="col-start-0 col-span-12 flex items-center justify-between xl:col-span-10 xl:col-start-2">
-              <SearchBar queryParams={queryParams} />
-              <button
-                className="ml-4 h-11 rounded-lg bg-info px-4 text-xs text-white hover:bg-secondary md:text-xs xl:hidden"
-                onClick={() => toggleFullScreenFilter(!isFullScreenFilterOpen)}
-              >
-                <FontAwesomeIcon icon={faFilter} />
-              </button>
-            </div>
-            <p className="col-start-0 col-span-12 mb-12 mt-5 text-center text-sm text-info">
-              {`${response.datasetCount!} ${
-                response.datasetCount! > 1 ? "datasets" : "dataset"
-              } found`}
-            </p>
-            <div className="col-start-0 col-span-4 flex flex-col gap-y-10">
-              {response.facetGroups?.map((group) => {
-                if (group.facets.length > 0) {
-                  return (
-                    <div
-                      className=" col-start-0 col-span-4 mr-6 hidden h-fit xl:block"
-                      key={group.key}
-                    >
-                      <FilterList
-                        queryParams={queryParams}
-                        facetGroup={group}
-                      />
-                    </div>
-                  );
-                }
-              })}
-            </div>
-            <div className="col-start-0 col-span-12 xl:col-span-8 xl:col-start-5">
-              <DatasetList datasets={response.datasets!} />
-            </div>
-            <div className="col-start-0 col-span-12 mt-10 xl:col-span-8 xl:col-start-5">
-              <PaginationContainer
-                datasetCount={response.datasetCount!}
-                datasetPerPage={DATASET_PER_PAGE}
-                pathname="/datasets"
-                queryParams={queryParams}
-              />
-            </div>
-          </>
-        )}
+          <div className="col-start-0 col-span-12 xl:col-span-8 xl:col-start-5">
+            <DatasetList datasets={response.datasets!} />
+          </div>
+          <div className="col-start-0 col-span-12 mt-10 xl:col-span-8 xl:col-start-5">
+            <PaginationContainer
+              datasetCount={response.datasetCount!}
+              datasetPerPage={DATASET_PER_PAGE}
+              pathname="/datasets"
+              queryParams={queryParams}
+            />
+          </div>
+        </>
       </div>
     </PageContainer>
   );

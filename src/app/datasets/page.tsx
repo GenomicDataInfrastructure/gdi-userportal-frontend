@@ -160,12 +160,12 @@ export default function DatasetPage() {
                 response.datasetCount! > 1 ? "datasets" : "dataset"
               } found`}
             </p>
-            <div className="col-start-0 col-span-4 flex flex-col gap-4">
+            <div className="col-start-0 col-span-4 flex flex-col gap-y-10">
               {response.facetGroups?.map((group) => {
                 if (group.facets.length > 0) {
                   return (
                     <div
-                      className="border-1 col-start-0 col-span-4 mr-6 hidden h-fit rounded-lg border bg-surface xl:block"
+                      className=" col-start-0 col-span-4 mr-6 hidden h-fit xl:block"
                       key={group.key}
                     >
                       <FilterList

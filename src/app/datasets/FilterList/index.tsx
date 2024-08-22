@@ -7,8 +7,6 @@ import {
   convertDataToFilterItemProps,
 } from "@/utils/convertDataToFilterItemProps";
 import { FacetGroup } from "@/services/discovery/types/datasetSearch.types";
-import { faFilter, faX } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@/components/Button";
 import FilterItem from "./FilterItem";
 
@@ -43,23 +41,7 @@ function FilterList({
   }
 
   return (
-    <div className="flex flex-col gap-y-10 rounded-lg bg-surface px-6 py-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl text-primary">
-          <span className="mr-2">
-            <FontAwesomeIcon icon={faFilter} />
-          </span>
-          <span className="mr-2">{facetGroup.label.toUpperCase()}</span>
-        </h1>
-        {toggleFullScreenFilter && (
-          <button
-            className="hover:text-secondary"
-            onClick={() => toggleFullScreenFilter(false)}
-          >
-            <FontAwesomeIcon icon={faX} />
-          </button>
-        )}
-      </div>
+    <div className="flex flex-col gap-y-10 px-6">
       {filterItemProps.map((props) => (
         <li key={props.field} className="list-none">
           <FilterItem

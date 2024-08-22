@@ -41,7 +41,7 @@ function FilterList({
   }
 
   return (
-    <div className="flex flex-col gap-y-10 px-6">
+    <div className="flex flex-col gap-y-10">
       {filterItemProps.map((props) => (
         <li key={props.field} className="list-none">
           <FilterItem

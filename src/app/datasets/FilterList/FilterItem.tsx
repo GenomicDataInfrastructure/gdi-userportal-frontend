@@ -44,7 +44,7 @@ function FilterItem({ field, label, data, groupKey }: FilterItemProps) {
 
   return (
     <div className="flex flex-col gap-y-3">
-      <div className="shadow-lg rounded-lg py-4">
+      <div className="shadow-lg rounded-lg py-4 border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50">
         <Disclosure>
           {({ open }) => (
             <>
@@ -64,7 +64,7 @@ function FilterItem({ field, label, data, groupKey }: FilterItemProps) {
                   className={`h-5 w-5 transition-transform ${open ? "rotate-180" : ""}`}
                 />
               </Disclosure.Button>
-              <Disclosure.Panel className="px-4 pb-2 pt-4 font-bryant text-base font-normal flex flex-col gap-y-3 text-base border-t-2 border-t-primary overflow-y-auto">
+              <Disclosure.Panel className="px-4 pb-2 pt-4 font-bryant text-base font-normal flex flex-col gap-y-3 text-base border-t-2 border-t-primary max-h-80 overflow-y-auto">
                 {data.map((item) => (
                   <div
                     key={item.value}

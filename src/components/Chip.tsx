@@ -12,14 +12,7 @@ interface ChipProps {
 }
 
 const Chip: React.FC<ChipProps> = ({ chip, className }) => (
-  <div
-    className={cn(
-      "rounded bg-warning px-2.5 py-0.5 text-sm font-semibold",
-      className
-    )}
-  >
-    {chip}
-  </div>
+  <div className={cn("px-4 py-2 rounded-lg bg-warning", className)}>{chip}</div>
 );
 
 export default Chip;

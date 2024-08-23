@@ -94,9 +94,9 @@ const DatasetMetadata = ({
                 <Link
                   href={`/datasets?page=1&ckan-organization=${dataset.organization.name}`}
                 >
-                  <h1 className="m-auto md:m-0 underline inline">
-                    {dataset.organization.title || "No title."}
-                  </h1>
+                  <span>
+                    Published by {dataset.organization.title || "No title."}
+                  </span>
                 </Link>
               </div>
               <Tooltip message="Publisher to which the dataset belongs." />

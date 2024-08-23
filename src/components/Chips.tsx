@@ -12,7 +12,7 @@ interface ChipsProps {
 }
 
 const Chips: React.FC<ChipsProps> = ({ chips, className }) => (
-  <div className={`flex flex-row flex-wrap gap-3 break-all`}>
+  <div className={`flex flex-wrap gap-2 text-xs sm:text-[14px] font-medium`}>
     {chips.map((chip, index) => (
       <Chip key={index} chip={chip} className={className} />
     ))}

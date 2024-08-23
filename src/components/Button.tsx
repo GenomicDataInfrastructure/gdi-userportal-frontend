@@ -12,7 +12,7 @@ interface ButtonProps {
   type?: "primary" | "secondary" | "info" | "warning";
   icon?: IconDefinition;
   href?: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
   disabled?: boolean;
   className?: string;
   props?: React.ComponentPropsWithoutRef<"a">;
@@ -43,9 +43,14 @@ const Button: React.FC<ButtonProps> = ({
 
   const disabledClasses = disabled ? "opacity-60 cursor-not-allowed" : "";
 
-  const handleClick = () => {
-    if (!disabled && onClick) {
-      onClick();
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (disabled) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    if (onClick) {
+      onClick(e);
     }
   };
 

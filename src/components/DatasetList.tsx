@@ -15,7 +15,10 @@ function DatasetList({ datasets }: Readonly<DatasetListProps>) {
   return (
     <List>
       {datasets.map((dataset: SearchedDataset) => (
-        <ListItem key={dataset.id}>
+        <ListItem
+          key={dataset.id}
+          className="bg-white mb-4 flex items-center justify-center px-2 rounded-lg  shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50"
+        >
           <DatasetCard dataset={dataset} />
         </ListItem>
       ))}

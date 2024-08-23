@@ -39,7 +39,6 @@ function PhoneField({
 
   const handlePhoneChange = (value: string) => {
     setInputValue(value);
-    field.value = value;
   };
 
   const handlePhoneBlur = () => {

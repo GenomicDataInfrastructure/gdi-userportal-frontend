@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import { cn } from "@/utils/tailwindMerge";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

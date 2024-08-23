@@ -32,7 +32,7 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
   const isInBasket = basket.some((ds) => ds.id === dataset.id);
 
   const toggleDatasetInBasket = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent the card click from being triggered
+    e.preventDefault();
     if (isInBasket) {
       removeDatasetFromBasket(dataset);
     } else {

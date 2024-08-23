@@ -41,8 +41,8 @@ const Button: React.FC<ButtonProps> = ({
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (disabled) {
-      e.preventDefault(); // Prevent any action when disabled
-      e.stopPropagation(); // Stop event propagation to parent elements
+      e.preventDefault();
+      e.stopPropagation();
       return;
     }
     if (onClick) {

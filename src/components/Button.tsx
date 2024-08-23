@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2024 PNED G.I.E.
-//
-// SPDX-License-Identifier: Apache-2.0
-
 import { cn } from "@/utils/tailwindMerge";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +8,7 @@ interface ButtonProps {
   type?: "primary" | "secondary" | "info" | "warning";
   icon?: IconDefinition;
   href?: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
   disabled?: boolean;
   className?: string;
   props?: React.ComponentPropsWithoutRef<"a">;
@@ -43,9 +39,14 @@ const Button: React.FC<ButtonProps> = ({
 
   const disabledClasses = disabled ? "opacity-60 cursor-not-allowed" : "";
 
-  const handleClick = () => {
-    if (!disabled && onClick) {
-      onClick();
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (disabled) {
+      e.preventDefault(); // Prevent any action when disabled
+      e.stopPropagation(); // Stop event propagation to parent elements
+      return;
+    }
+    if (onClick) {
+      onClick(e);
     }
   };
 

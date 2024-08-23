@@ -11,16 +11,11 @@ import Button from "@/components/Button";
 import FilterItem from "./FilterItem";
 
 type FilterListProps = {
-  toggleFullScreenFilter?: React.Dispatch<React.SetStateAction<boolean>>;
   queryParams: URLSearchParams;
   facetGroup: FacetGroup;
 };
 
-function FilterList({
-  toggleFullScreenFilter,
-  queryParams,
-  facetGroup,
-}: FilterListProps) {
+function FilterList({ queryParams, facetGroup }: FilterListProps) {
   const filterItemProps: FilterItemProps[] =
     convertDataToFilterItemProps(facetGroup);
 
@@ -41,7 +36,7 @@ function FilterList({
   }
 
   return (
-    <div className="flex flex-col gap-y-10">
+    <div className="flex flex-col gap-y-6">
       {filterItemProps.map((props) => (
         <li key={props.field} className="list-none">
           <FilterItem
@@ -52,24 +47,15 @@ function FilterList({
           />
         </li>
       ))}
-      {isAnyGroupFilterApplied() || toggleFullScreenFilter ? (
-        <div className="mt-4 flex justify-end gap-x-4">
-          {isAnyGroupFilterApplied() && (
-            <Button
-              href={`/datasets?page=1${getQueryStringWithoutGroupFilter()}`}
-              text="Clear Filters"
-              type="warning"
-            />
-          )}
-          {toggleFullScreenFilter && (
-            <Button
-              text="Continue"
-              type="info"
-              onClick={() => toggleFullScreenFilter(false)}
-            ></Button>
-          )}
+      {isAnyGroupFilterApplied() && (
+        <div className="mt-4 flex justify-end">
+          <Button
+            href={`/datasets?page=1${getQueryStringWithoutGroupFilter()}`}
+            text="Clear Filters"
+            type="warning"
+          />
         </div>
-      ) : null}
+      )}
     </div>
   );
 }

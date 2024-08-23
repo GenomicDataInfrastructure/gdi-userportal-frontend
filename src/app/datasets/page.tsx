@@ -139,7 +139,7 @@ export default function DatasetPage() {
               response.datasetCount! > 1 ? "datasets" : "dataset"
             } found`}
           </p>
-          <div className="col-start-0 col-span-4 flex flex-col gap-y-10">
+          <div className="col-start-0 col-span-4 flex flex-col gap-y-6">
             {response.facetGroups?.map((group) => {
               if (group.facets.length > 0) {
                 return (

@@ -1,8 +1,3 @@
-// SPDX-FileCopyrightText: 2024 PNED G.I.E.
-//
-// SPDX-License-Identifier: Apache-2.0
-"use client";
-
 import Button from "@/components/Button";
 import Chips from "@/components/Chips";
 import { useWindowSize } from "@/hooks";
@@ -10,7 +5,15 @@ import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { SearchedDataset } from "@/services/discovery/types/dataset.types";
 import { formatDate } from "@/utils/formatDate";
 import { truncateDescription } from "@/utils/textProcessing";
-import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMinusCircle,
+  faPlusCircle,
+  faCalendarAlt,
+  faUser,
+  faBookBookmark,
+  faThLarge,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
 type DatasetCardProps = {
@@ -28,7 +31,8 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
 
   const isInBasket = basket.some((ds) => ds.id === dataset.id);
 
-  const toggleDatasetInBasket = () => {
+  const toggleDatasetInBasket = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent the card click from being triggered
     if (isInBasket) {
       removeDatasetFromBasket(dataset);
     } else {
@@ -40,45 +44,78 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
   const buttonDisabled = isLoading || !hasIdentifier;
 
   return (
-    <>
-      <div className="mb-4 flex justify-between">
-        <Link href={`/datasets/${dataset.id}`} className="hover:underline">
-          <h3 className="text-xl text-primary md:text-2xl">{dataset.title}</h3>
-        </Link>
-        <p className="font-date text-sm text-info md:text-base">
-          {formatDate(dataset.createdAt)}
-        </p>
+    <Link
+      href={`/datasets/${dataset.id}`}
+      className="flex flex-col w-full mb-1.5 shadow-bb rounded-lg pl-4 pr-4.5 group"
+    >
+      <div className="flex flex-col lg:flex-row gap-x-2 gap-y-4">
+        <div className="flex flex-col gap-y-2 shrink w-full lg:w-[90%] lg:pr-4">
+          {/* Conditionally render the theme icon and labels */}
+          {dataset.themes && dataset.themes.length > 0 && (
+            <div className="flex gap-2 font-normal text-sm sm:text-[12px] leading-[12px] uppercase pb-2">
+              <FontAwesomeIcon icon={faThLarge} className="text-primary" />
+              {dataset.themes?.map((theme, index) => (
+                <span
+                  key={index}
+                  className={`${index ? "border-l-[2px] pl-2" : ""}`}
+                >
+                  {theme.label}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div className="font-bold text-[20px] group-hover:text-info group-hover:underline">
+            {dataset.title}
+          </div>
+
+          <p className="line-clamp-2 font-normal text-base">{truncatedDesc}</p>
+
+          <div className="flex flex-col sm:flex-row sm:flex-wrap text-xs sm:text-[15px] gap-x-2 gap-y-2">
+            <div className="flex gap-x-2.5 pr-2 border-r-[2px] border-r-info">
+              <div className="my-auto">
+                <FontAwesomeIcon
+                  icon={faCalendarAlt}
+                  className="text-primary"
+                />
+              </div>
+              <span>{formatDate(dataset.createdAt)}</span>
+            </div>
+            <div className="flex gap-x-2.5  ">
+              <div className="my-auto">
+                <FontAwesomeIcon icon={faUser} className="text-primary" />
+              </div>
+              <span>Published by {dataset.organization.title}</span>
+            </div>
+            {dataset.recordsCount && dataset.recordsCount > 0 && (
+              <div className="flex gap-x-2.5 pl-2 border-l-[2px] border-l-info">
+                <div className="my-auto">
+                  <FontAwesomeIcon
+                    icon={faBookBookmark}
+                    className="text-primary"
+                  />
+                </div>
+                <span>
+                  {dataset.recordsCount > 1
+                    ? `${dataset.recordsCount} Records`
+                    : `${dataset.recordsCount} Record`}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
-      <p className="mb-4 text-sm text-info md:text-base">
-        {dataset.organization.title}
-      </p>
-      {truncatedDesc && (
-        <p className="mb-4 text-xs md:text-sm">{truncatedDesc}</p>
-      )}
-      <Chips chips={dataset.themes?.map((x) => x.label) || []} />
-      <div
-        className={
-          "mt-4 flex w-full " +
-          (!dataset.recordsCount ? "justify-end" : "justify-between")
-        }
-      >
-        {!!dataset.recordsCount && (
-          <span className="mt-4 flex rounded bg-info px-2 py-1 text-xs font-bold text-white">
-            {dataset.recordsCount} record
-            {dataset.recordsCount > 1 ? "s" : ""} found
-          </span>
-        )}
-        {!isLoading && (
-          <Button
-            text={isInBasket ? "Remove from basket" : "Add to basket"}
-            icon={isInBasket ? faMinusCircle : faPlusCircle}
-            onClick={toggleDatasetInBasket}
-            type={isInBasket ? "warning" : "primary"}
-            disabled={buttonDisabled}
-          />
-        )}
+      <div className="mt-6 flex justify-between items-center pr-2">
+        <Chips chips={dataset.themes?.map((x) => x.label) || []} />
+        <Button
+          text={isInBasket ? "Remove from basket" : "Add to basket"}
+          icon={isInBasket ? faMinusCircle : faPlusCircle}
+          onClick={toggleDatasetInBasket}
+          type={isInBasket ? "warning" : "primary"}
+          disabled={buttonDisabled}
+        />
       </div>
-    </>
+    </Link>
   );
 }
 

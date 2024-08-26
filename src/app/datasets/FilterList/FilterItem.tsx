@@ -65,29 +65,33 @@ function FilterItem({ field, label, data, groupKey }: FilterItemProps) {
                 />
               </Disclosure.Button>
               <Disclosure.Panel className="px-4 pb-2 pt-4 font-bryant text-base font-normal flex flex-col gap-y-3 text-base border-t-2 border-t-primary max-h-80 overflow-y-auto">
-                {data.map((item) => (
-                  <div
-                    key={item.value}
-                    className="flex items-center hover:bg-warning rounded-md p-2 cursor-pointer w-full transition-colors"
-                  >
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 border rounded-md checked:accent-warning flex-none"
-                      id={`${groupKey}-${item.value}`}
-                      value={item.value}
-                      checked={options.includes(item.value)}
-                      onChange={(e) =>
-                        handleCheckboxChange(item.value, e.target.checked)
-                      }
-                    />
-                    <label
-                      htmlFor={`${groupKey}-${item.value}`}
-                      className="ml-2.5 flex-1 cursor-pointer"
+                {data.length > 0 ? (
+                  data.map((item) => (
+                    <div
+                      key={item.value}
+                      className="flex items-center hover:bg-warning rounded-md p-2 cursor-pointer w-full transition-colors"
                     >
-                      {item.label}
-                    </label>
-                  </div>
-                ))}
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4 border rounded-md checked:accent-warning flex-none"
+                        id={`${groupKey}-${item.value}`}
+                        value={item.value}
+                        checked={options.includes(item.value)}
+                        onChange={(e) =>
+                          handleCheckboxChange(item.value, e.target.checked)
+                        }
+                      />
+                      <label
+                        htmlFor={`${groupKey}-${item.value}`}
+                        className="ml-2.5 flex-1 cursor-pointer"
+                      >
+                        {item.label}
+                      </label>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center">No results found.</div>
+                )}
               </Disclosure.Panel>
             </>
           )}

@@ -38,11 +38,20 @@ function PaginationContainer({
 
   const showLeftEllipsis = currentPage > 3;
   const showRightEllipsis = currentPage < lastPageNb - 2;
-  const pageNumbers = [
-    currentPage > 2 ? currentPage - 1 : currentPage,
-    currentPage,
-    currentPage < lastPageNb - 1 ? currentPage + 1 : currentPage,
-  ];
+
+  const pageNumbers = [];
+
+  if (lastPageNb <= 5) {
+    for (let i = 1; i <= lastPageNb; i++) {
+      pageNumbers.push(i);
+    }
+  } else if (currentPage <= 3) {
+    pageNumbers.push(2, 3);
+  } else if (currentPage >= lastPageNb - 2) {
+    pageNumbers.push(lastPageNb - 2, lastPageNb - 1);
+  } else {
+    pageNumbers.push(currentPage - 1, currentPage, currentPage + 1);
+  }
 
   return (
     <Pagination>
@@ -86,13 +95,15 @@ function PaginationContainer({
             <PaginationEllipsis />
           </PaginationItem>
         )}
-        <PaginationLink
-          href={createHref(lastPageNb)}
-          isActive={currentPage === lastPageNb}
-          className="text-info hover:text-hover-color"
-        >
-          {lastPageNb}
-        </PaginationLink>
+        {lastPageNb > 1 && (
+          <PaginationLink
+            href={createHref(lastPageNb)}
+            isActive={currentPage === lastPageNb}
+            className="text-info hover:text-hover-color"
+          >
+            {lastPageNb}
+          </PaginationLink>
+        )}
         {currentPage < lastPageNb && (
           <>
             <PaginationNext

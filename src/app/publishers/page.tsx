@@ -2,69 +2,32 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-"use client";
-
-import { useEffect, useState } from "react";
+import { Suspense } from "react";
 import PageContainer from "@/components/PageContainer";
 import PublisherList from "@/components/PublisherList";
 import { publisherList } from "@/services/discovery";
 import Error from "@/app/error";
 import LoadingContainer from "@/components/LoadingContainer";
-import { AxiosError } from "axios";
 import { RetrievedPublisher } from "@/services/discovery/types/dataset.types";
 
-type Status = "loading" | "error" | "success";
-
-interface PublisherResponse {
-  status: Status;
-  publishers?: RetrievedPublisher[];
-  errorCode?: number;
+async function getPublishers(): Promise<RetrievedPublisher[]> {
+  try {
+    const response = await publisherList();
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
-const PublishersPage = () => {
-  const [response, setResponse] = useState<PublisherResponse>({
-    status: "loading",
-  });
+export default async function PublishersPage() {
+  let publishers: RetrievedPublisher[];
 
-  useEffect(() => {
-    async function fetchPublishers() {
-      try {
-        setResponse({ status: "loading" });
-        const response = await publisherList();
-        setResponse({
-          publishers: response.data,
-          status: "success",
-        });
-      } catch (error) {
-        if (error instanceof AxiosError) {
-          setResponse({
-            status: "error",
-            errorCode: error.response?.status,
-          });
-          console.error(error);
-        } else {
-          setResponse({ status: "error", errorCode: 500 });
-          console.error(error);
-        }
-      }
-    }
-    fetchPublishers();
-  }, []);
-
-  if (response.status === "loading") {
-    return (
-      <LoadingContainer
-        text="Retrieving publishers. This may take a few moments."
-        className="mt-4 px-4 text-center sm:mt-8 sm:px-8"
-      />
-    );
+  try {
+    publishers = await getPublishers();
+  } catch (error) {
+    return <Error statusCode={500} />;
   }
-
-  if (response.status === "error") {
-    return <Error statusCode={response.errorCode} />;
-  }
-
-  const publishers = response.publishers ?? [];
 
   return (
     <PageContainer className="container mx-auto px-4 pt-5">
@@ -76,13 +39,20 @@ const PublishersPage = () => {
           {publishers.length}
         </span>
       </div>
-      {publishers.length > 0 ? (
-        <PublisherList publishers={publishers} />
-      ) : (
-        <p className="text-center text-sm text-info">No publishers found.</p>
-      )}
+      <Suspense
+        fallback={
+          <LoadingContainer
+            text="Retrieving publishers. This may take a few moments."
+            className="mt-4 px-4 text-center sm:mt-8 sm:px-8"
+          />
+        }
+      >
+        {publishers.length > 0 ? (
+          <PublisherList publishers={publishers} />
+        ) : (
+          <p className="text-center text-sm text-info">No publishers found.</p>
+        )}
+      </Suspense>
     </PageContainer>
   );
-};
-
-export default PublishersPage;
+}

@@ -18,7 +18,7 @@ async function getAboutContent() {
   const markdown = await fs.readFile(filePath, "utf8");
 
   marked.use({ renderer });
-  const rawHtml = marked.parse(markdown);
+  const rawHtml = await marked.parse(markdown);
 
   const htmlString = typeof rawHtml === "string" ? rawHtml : "";
   return DOMPurify.sanitize(htmlString);

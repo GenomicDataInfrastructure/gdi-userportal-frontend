@@ -36,6 +36,14 @@ function PaginationContainer({
     return `${pathname}?${params}`;
   }
 
+  const showLeftEllipsis = currentPage > 3;
+  const showRightEllipsis = currentPage < lastPageNb - 2;
+  const pageNumbers = [
+    currentPage > 2 ? currentPage - 1 : currentPage,
+    currentPage,
+    currentPage < lastPageNb - 1 ? currentPage + 1 : currentPage,
+  ];
+
   return (
     <Pagination>
       <PaginationContent>
@@ -58,65 +66,35 @@ function PaginationContainer({
         >
           1
         </PaginationLink>
-        {currentPage > 4 && (
+        {showLeftEllipsis && (
           <PaginationItem className="text-info hover:text-hover-color">
             <PaginationEllipsis />
           </PaginationItem>
         )}
-        {currentPage > 3 && (
+        {pageNumbers.map((page) => (
           <PaginationLink
-            href={createHref(currentPage - 2)}
+            key={page}
+            href={createHref(page)}
+            isActive={currentPage === page}
             className="text-info hover:text-hover-color"
           >
-            {currentPage - 2}
+            {page}
           </PaginationLink>
-        )}
-        {currentPage > 2 && (
-          <PaginationLink
-            href={createHref(currentPage - 1)}
-            className="text-info hover:text-hover-color"
-          >
-            {currentPage - 1}
-          </PaginationLink>
-        )}
-        {currentPage !== 1 && (
-          <PaginationLink
-            href={createHref(currentPage)}
-            isActive
-            className="text-info hover:text-hover-color"
-          >
-            {currentPage}
-          </PaginationLink>
-        )}
-        {currentPage < lastPageNb - 1 && (
-          <PaginationLink
-            href={createHref(currentPage + 1)}
-            className="text-info hover:text-hover-color"
-          >
-            {currentPage + 1}
-          </PaginationLink>
-        )}
-        {currentPage < lastPageNb - 2 && (
-          <PaginationLink
-            href={createHref(currentPage + 2)}
-            className="text-info hover:text-hover-color"
-          >
-            {currentPage + 2}
-          </PaginationLink>
-        )}
-        {currentPage < lastPageNb - 3 && (
+        ))}
+        {showRightEllipsis && (
           <PaginationItem className="text-info hover:text-hover-color">
             <PaginationEllipsis />
           </PaginationItem>
         )}
-        {currentPage !== lastPageNb && (
+        <PaginationLink
+          href={createHref(lastPageNb)}
+          isActive={currentPage === lastPageNb}
+          className="text-info hover:text-hover-color"
+        >
+          {lastPageNb}
+        </PaginationLink>
+        {currentPage < lastPageNb && (
           <>
-            <PaginationLink
-              href={createHref(lastPageNb)}
-              className="text-info hover:text-hover-color"
-            >
-              {lastPageNb}
-            </PaginationLink>
             <PaginationNext
               href={createHref(currentPage + 1)}
               className="text-info hover:text-hover-color"

@@ -9,12 +9,16 @@ import renderer from "./renderer";
 import PageContainer from "@/components/PageContainer";
 import DOMPurify from "isomorphic-dompurify";
 
+function getAboutFilePath(): string {
+  return path.resolve("src/public/about.md");
+}
+
 async function getAboutContent() {
-  const filePath = path.join(process.cwd(), "public", "about.md");
+  const filePath = getAboutFilePath();
   const markdown = await fs.readFile(filePath, "utf8");
 
   marked.use({ renderer });
-  const rawHtml = await marked.parse(markdown);
+  const rawHtml = marked.parse(markdown);
 
   const htmlString = typeof rawHtml === "string" ? rawHtml : "";
   return DOMPurify.sanitize(htmlString);

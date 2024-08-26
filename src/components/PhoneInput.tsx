@@ -40,9 +40,7 @@ const PhoneInput = forwardRef<
     ref={ref}
     className={cn("flex w-full")}
     flagComponent={FlagComponent}
-    countrySelectComponent={(props) => (
-      <CountrySelect {...props} onChange={onChange} ref={ref} />
-    )}
+    countrySelectComponent={CountrySelect}
     inputComponent={InputComponent}
     onChange={(value) => onChange?.(value ?? "")}
     {...props}
@@ -75,28 +73,17 @@ type CountrySelectOption = { label: string; value: RPNInput.Country };
 type CountrySelectProps = {
   disabled?: boolean;
   value: RPNInput.Country;
-  onChange: (value: string) => void;
+  onChange: (value: RPNInput.Country) => void;
   options: CountrySelectOption[];
 };
 
 const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
-  ({ disabled, value, onChange, options }, ref) => {
+  ({ disabled, value, onChange, options }) => {
     const handleSelect = useCallback(
       (country: RPNInput.Country) => {
-        const callingCode = RPNInput.getCountryCallingCode(country);
-        onChange(`+${callingCode}`);
-        setTimeout(() => {
-          if (
-            ref &&
-            typeof ref === "object" &&
-            "current" in ref &&
-            ref.current
-          ) {
-            (ref.current as HTMLElement).focus();
-          }
-        }, 100);
+        onChange(country);
       },
-      [onChange, ref]
+      [onChange]
     );
 
     return (

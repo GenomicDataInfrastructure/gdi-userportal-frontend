@@ -60,7 +60,7 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
               {dataset.themes?.map((theme, index) => (
                 <span
                   key={index}
-                  className={`${index ? "border-l-[2px] pl-2" : ""}`}
+                  className={`${index ? "sm:border-l-[2px] sm:pl-2 sm:border-l-info" : ""}`}
                 >
                   {theme.label}
                 </span>
@@ -75,7 +75,7 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
           <p className="line-clamp-2 font-normal text-base">{truncatedDesc}</p>
 
           <div className="flex flex-col sm:flex-row sm:flex-wrap text-xs sm:text-[15px] gap-x-2 gap-y-2">
-            <div className="flex gap-x-2.5 pr-2 border-r-[2px] border-r-info">
+            <div className="flex gap-x-2.5 pr-2 sm:pr-2 sm:border-r-[2px] sm:border-r-info">
               <div className="my-auto">
                 <FontAwesomeIcon
                   icon={faCalendarAlt}
@@ -84,14 +84,14 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
               </div>
               <span>{formatDate(dataset.createdAt)}</span>
             </div>
-            <div className="flex gap-x-2.5  ">
+            <div className="flex gap-x-2.5">
               <div className="my-auto">
                 <FontAwesomeIcon icon={faUser} className="text-primary" />
               </div>
               <span>Published by {dataset.organization.title}</span>
             </div>
             {dataset.recordsCount && dataset.recordsCount > 0 && (
-              <div className="flex gap-x-2.5 pl-2 border-l-[2px] border-l-info">
+              <div className="flex gap-x-2.5 pl-2 sm:pl-2 sm:border-l-[2px] sm:border-l-info">
                 <div className="my-auto">
                   <FontAwesomeIcon
                     icon={faBookBookmark}

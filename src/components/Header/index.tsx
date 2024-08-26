@@ -184,7 +184,7 @@ function Header() {
             {!isLoading && (
               <Link
                 href="/basket"
-                className={`relative flex items-center text-disclaimer hover:text-secondary transition-opacity duration-300 ${
+                className={`relative flex items-center text-info hover:text-secondary transition-opacity duration-300 ${
                   activeTab.includes("basket") ? "text-primary" : ""
                 }`}
               >

@@ -2,8 +2,19 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { type Option } from '@/components/shadcn/multipleSelector';
-import { Facet, FacetGroup, ValueLabel } from '@/services/discovery/types/datasetSearch.types';
+import {
+  Facet,
+  FacetGroup,
+  ValueLabel,
+} from "@/services/discovery/types/datasetSearch.types";
+
+export interface Option {
+  value: string;
+  label?: string;
+  disable?: boolean;
+  fixed?: boolean;
+  [key: string]: string | boolean | undefined;
+}
 
 export type FilterItemProps = {
   field: string;
@@ -12,7 +23,9 @@ export type FilterItemProps = {
   data: Option[];
 };
 
-function convertDataToFilterItemProps(facetGroup: FacetGroup): FilterItemProps[] {
+function convertDataToFilterItemProps(
+  facetGroup: FacetGroup
+): FilterItemProps[] {
   return facetGroup.facets.map((facet: Facet) => {
     return {
       field: facet.key,

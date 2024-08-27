@@ -14,7 +14,7 @@ import {
   useSearchParams,
 } from "next/navigation";
 import ApplicationsPage from "./applications";
-import GrantedDatasetsPage from "./grantedDatasets";
+import EntitelementsPage from "./entitlements";
 
 function createTabItems(): ITabItem[] {
   return [
@@ -23,7 +23,7 @@ function createTabItems(): ITabItem[] {
       icon: faFileText,
     },
     {
-      name: "granted datasets",
+      name: "entitlements",
       icon: faDatabase,
     },
   ];
@@ -38,7 +38,7 @@ function RequestPage() {
 
   const tabItems = createTabItems();
   const tabNames = tabItems.map(
-    (tabItem: ITabItem) => tabItem.name,
+    (tabItem: ITabItem) => tabItem.name
   ) as ReadonlyArray<string>;
 
   if (!activeTab || !tabNames.includes(activeTab)) {
@@ -62,7 +62,7 @@ function RequestPage() {
       {activeTab === "applications" ? (
         <ApplicationsPage />
       ) : (
-        <GrantedDatasetsPage />
+        <EntitelementsPage />
       )}
     </PageContainer>
   );

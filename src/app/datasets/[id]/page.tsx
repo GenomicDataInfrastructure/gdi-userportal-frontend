@@ -1,50 +1,68 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+
 import Error from "@/app/error";
-import Chips from "@/components/Chips";
 import PageContainer from "@/components/PageContainer";
-import PageHeading from "@/components/PageHeading";
-import PageSubHeading from "@/components/PageSubHeading";
 import { datasetGet } from "@/services/discovery";
-import AddToBasketBtn from "./AddToBasketBtn";
 import ClientSidebar from "./ClientSidebar";
-import DistributionAccordion from "./DistributionAccordion";
+import DatasetMetadata from "./DatasetMetadata";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThLarge } from "@fortawesome/free-solid-svg-icons";
+import Tooltip from "./Tooltip";
+import axios from "axios";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
   try {
     const dataset = await datasetGet(id);
 
+    const relationships = dataset.datasetRelationships || [];
+
+    const dictionary = dataset.dataDictionary || [];
+
     return (
-      <PageContainer className="flex flex-col items-start justify-start lg:flex-row">
-        <div className="flex w-full flex-col gap-5 lg:w-2/3 lg:px-5">
-          <div className="flex w-full flex-col items-start justify-between lg:flex-row lg:items-center">
-            <PageHeading className="mb-4 w-2/3 lg:mb-0">
+      <PageContainer>
+        <div className="flex flex-col items-start justify-start lg:flex-row">
+          <div className="flex w-full flex-col gap-5 lg:w-2/3 lg:px-5">
+            {dataset.themes && dataset.themes.length > 0 && (
+              <div className="tracking-widest uppercase flex items-center text-[14px] relative group">
+                <FontAwesomeIcon
+                  icon={faThLarge}
+                  className="text-primary mr-2"
+                />
+                {dataset.themes.map((theme) => theme.label).join("  |  ")}
+                <Tooltip message="Themes associated with the dataset." />
+              </div>
+            )}
+            <h1 className="text-primary text-[25px] font-semibold">
               {dataset.title}
-            </PageHeading>
-            <AddToBasketBtn dataset={dataset} />
+            </h1>
+            <div className="pb-3.5">
+              <p className="text-gray">{dataset.description}</p>
+            </div>
+            <DatasetMetadata
+              dataset={dataset}
+              relationships={relationships}
+              dictionary={dictionary}
+            />
           </div>
-          <p>{dataset.description}</p>
-          {dataset.themes?.length > 0 && (
-            <PageSubHeading>Themes</PageSubHeading>
-          )}
-          <Chips chips={dataset.themes.map((x) => x.label) || []} />
-          {dataset.keywords?.length > 0 && (
-            <PageSubHeading>Keywords</PageSubHeading>
-          )}
-          <Chips
-            chips={dataset.keywords?.map((keyword) => keyword.label) || []}
-          />
-          {dataset.distributions.length > 0 && (
-            <PageSubHeading>Distributions</PageSubHeading>
-          )}
-          <DistributionAccordion distributions={dataset.distributions || []} />
+          <ClientSidebar dataset={dataset} />
         </div>
-        <ClientSidebar dataset={dataset} />
       </PageContainer>
     );
   } catch (error) {
-    return <Error statusCode={404} />;
+    if (axios.isAxiosError(error)) {
+      const errorResponse = error.response!.data;
+      return (
+        <Error
+          statusCode={errorResponse.status}
+          errorTitle={errorResponse.title}
+          errorDetail={errorResponse.detail}
+        />
+      );
+    }
+
+    return <Error statusCode={500} />;
   }
 }

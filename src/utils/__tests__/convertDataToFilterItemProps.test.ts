@@ -2,29 +2,35 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { convertDataToFilterItemProps } from '../convertDataToFilterItemProps';
-import { Facet, FacetGroup } from '@/services/discovery/types/datasetSearch.types';
+import { convertDataToFilterItemProps } from "../convertDataToFilterItemProps";
+import {
+  Facet,
+  FacetGroup,
+} from "@/services/discovery/types/datasetSearch.types";
 
-describe('Map field details objects to filter item props', () => {
-  it('should map field details to filter item props', () => {
-    const groupKey = 'ckan';
+describe("Map field details objects to filter item props", () => {
+  it("should map field details to filter item props", () => {
+    const groupKey = "ckan";
     const facets = [
       {
-        key: 'publisher_name',
-        label: 'Publishers',
+        key: "publisher_name",
+        label: "Publishers",
         values: [
-          { label: 'publisherName', value: 'adeling NKR-analyse' },
-          { label: 'publisherName', value: 'Centro Nacional de Epidemiología' },
-          { label: 'publisherName', value: 'sciensano Network of General Practitioners team' },
+          { label: "publisherName", value: "adeling NKR-analyse" },
+          { label: "publisherName", value: "Centro Nacional de Epidemiología" },
+          {
+            label: "publisherName",
+            value: "sciensano Network of General Practitioners team",
+          },
         ],
       },
       {
-        key: 'organization',
-        label: 'Catalogues',
+        key: "organization",
+        label: "Catalogues",
         values: [
-          { label: 'organization', value: 'EU' },
-          { label: 'organization', value: 'lumc' },
-          { label: 'organization', value: 'Umcg' },
+          { label: "organization", value: "EU" },
+          { label: "organization", value: "lumc" },
+          { label: "organization", value: "Umcg" },
         ],
       },
     ] as Facet[];
@@ -36,40 +42,40 @@ describe('Map field details objects to filter item props', () => {
 
     const expected = [
       {
-        field: 'publisher_name',
-        label: 'Publishers',
+        field: "publisher_name",
+        label: "Publishers",
         groupKey: groupKey,
         data: [
           {
-            label: 'publisherName',
-            value: 'adeling NKR-analyse',
+            label: "publisherName",
+            value: "adeling NKR-analyse",
           },
           {
-            label: 'publisherName',
-            value: 'Centro Nacional de Epidemiología',
+            label: "publisherName",
+            value: "Centro Nacional de Epidemiología",
           },
           {
-            label: 'publisherName',
-            value: 'sciensano Network of General Practitioners team',
+            label: "publisherName",
+            value: "sciensano Network of General Practitioners team",
           },
         ],
       },
       {
-        field: 'organization',
-        label: 'Catalogues',
+        field: "organization",
+        label: "Catalogues",
         groupKey: groupKey,
         data: [
           {
-            label: 'organization',
-            value: 'EU',
+            label: "organization",
+            value: "EU",
           },
           {
-            label: 'organization',
-            value: 'lumc',
+            label: "organization",
+            value: "lumc",
           },
           {
-            label: 'organization',
-            value: 'Umcg',
+            label: "organization",
+            value: "Umcg",
           },
         ],
       },
@@ -79,12 +85,12 @@ describe('Map field details objects to filter item props', () => {
 
     expect(result).toEqual(expected);
   });
-  it('should return object with empty data for facet with empty values', () => {
-    const groupKey = 'ckan';
+  it("should return object with empty data for facet with empty values", () => {
+    const groupKey = "ckan";
     const facets = [
       {
-        key: 'publisher_name',
-        label: 'Publishers',
+        key: "publisher_name",
+        label: "Publishers",
         values: [],
       },
     ];
@@ -92,13 +98,13 @@ describe('Map field details objects to filter item props', () => {
     const facetGroup = {
       key: groupKey,
       facets: facets,
-      label: '',
+      label: "",
     } as FacetGroup;
 
     const expected = [
       {
-        field: 'publisher_name',
-        label: 'Publishers',
+        field: "publisher_name",
+        label: "Publishers",
         groupKey: groupKey,
         data: [],
       },
@@ -109,26 +115,26 @@ describe('Map field details objects to filter item props', () => {
     expect(result).toEqual(expected);
   });
 
-  it('should return object with undefined icon if field of facet object is not in keys of fieldToIconMap object', () => {
+  it("should return object with undefined icon if field of facet object is not in keys of fieldToIconMap object", () => {
     const facets = [
       {
-        key: 'publisher_name',
-        label: 'Publishers',
+        key: "publisher_name",
+        label: "Publishers",
         values: [],
       },
     ];
 
     const facetGroup = {
-      key: '',
+      key: "",
       facets: facets,
-      label: '',
+      label: "",
     } as FacetGroup;
 
     const expected = [
       {
-        field: 'publisher_name',
-        label: 'Publishers',
-        groupKey: '',
+        field: "publisher_name",
+        label: "Publishers",
+        groupKey: "",
         data: [],
       },
     ];

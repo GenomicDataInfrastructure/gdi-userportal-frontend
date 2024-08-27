@@ -66,12 +66,44 @@ const PaginationLink = ({
           size,
         }),
         className,
-        isActive ? "bg-info text-white hover:text-white" : "",
+        isActive ? "bg-info text-white hover:text-white" : ""
       )}
     />
   </PaginationItem>
 );
 PaginationLink.displayName = "PaginationLink";
+
+const PaginationFirst = ({
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationLink>) => (
+  <PaginationLink
+    aria-label="Go to first page"
+    size="default"
+    className={cn("pr-2.5", className)}
+    {...props}
+  >
+    <FontAwesomeIcon icon={faChevronLeft} className="h-4 w-4" />
+    <FontAwesomeIcon icon={faChevronLeft} className="h-4 w-4" />
+  </PaginationLink>
+);
+PaginationFirst.displayName = "PaginationFirst";
+
+const PaginationLast = ({
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationLink>) => (
+  <PaginationLink
+    aria-label="Go to last page"
+    size="default"
+    className={cn("pl-2.5", className)}
+    {...props}
+  >
+    <FontAwesomeIcon icon={faChevronRight} className="h-4 w-4" />
+    <FontAwesomeIcon icon={faChevronRight} className="h-4 w-4" />
+  </PaginationLink>
+);
+PaginationLast.displayName = "PaginationLast";
 
 const PaginationPrevious = ({
   className,
@@ -84,7 +116,6 @@ const PaginationPrevious = ({
     {...props}
   >
     <FontAwesomeIcon icon={faChevronLeft} className="h-4 w-4" />
-    <span>Previous</span>
   </PaginationLink>
 );
 PaginationPrevious.displayName = "PaginationPrevious";
@@ -99,7 +130,6 @@ const PaginationNext = ({
     className={cn("gap-1 pr-2.5", className)}
     {...props}
   >
-    <span>Next</span>
     <FontAwesomeIcon icon={faChevronRight} className="h-4 w-4" />
   </PaginationLink>
 );
@@ -125,7 +155,9 @@ export {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
+  PaginationFirst,
   PaginationItem,
+  PaginationLast,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,

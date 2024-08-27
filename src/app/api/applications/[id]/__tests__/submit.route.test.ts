@@ -1,65 +1,73 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-import serverConfig from '@/config/serverConfig';
-import { encrypt } from '@/utils/encryption';
-import { jest } from '@jest/globals';
-import axios, { AxiosError, AxiosHeaders } from 'axios';
-import { getServerSession } from 'next-auth';
-import { POST } from '../submit/route';
+import serverConfig from "@/config/serverConfig";
+import { encrypt } from "@/utils/encryption";
+import { jest } from "@jest/globals";
+import axios, { AxiosError, AxiosHeaders } from "axios";
+import { getServerSession } from "next-auth";
+import { POST } from "../submit/route";
 
-jest.mock('axios');
-jest.mock('next-auth/next');
+jest.mock("axios");
+jest.mock("next-auth/next");
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
-const mockedGetServerSession = getServerSession as jest.MockedFunction<typeof getServerSession>;
+const mockedGetServerSession = getServerSession as jest.MockedFunction<
+  typeof getServerSession
+>;
 
-describe('Submit an application', () => {
+describe("Submit an application", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
 
-  test('returns unauthorized if session is not available', async () => {
+  test("returns unauthorized if session is not available", async () => {
     mockedGetServerSession.mockResolvedValueOnce(null);
-    const request = new Request('http://localhost', {
-      method: 'POST',
+    const request = new Request("http://localhost", {
+      method: "POST",
     });
 
-    const response = await POST(request, { params: { id: '5' } });
+    const response = await POST(request, { params: { id: "5" } });
 
     expect(response.status).toBe(401);
-    expect(await response.json()).toEqual({ error: 'Unauthorized' });
+    expect(await response.json()).toEqual({ error: "Unauthorized" });
   });
 
-  test('successfully submit application', async () => {
-    const encryptedToken = encrypt('decryptedToken');
-    mockedGetServerSession.mockResolvedValueOnce({ access_token: encryptedToken });
+  test("successfully submit application", async () => {
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
     mockedAxios.post.mockResolvedValueOnce({ status: 200 });
-    const request = new Request('http://localhost', {
-      method: 'POST',
+    const request = new Request("http://localhost", {
+      method: "POST",
     });
 
-    const response = await POST(request, { params: { id: '5' } });
+    const response = await POST(request, { params: { id: "5" } });
 
     expect(response.status).toBe(200);
-    expect(mockedAxios.post).toHaveBeenCalledWith(`${serverConfig.daamUrl}/api/v1/applications/5/submit`, null, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer decryptedToken`,
-      },
-      validateStatus: expect.any(Function),
-    });
+    expect(mockedAxios.post).toHaveBeenCalledWith(
+      `${serverConfig.daamUrl}/api/v1/applications/5/submit`,
+      null,
+      {
+        headers: {
+          Authorization: `Bearer decryptedToken`,
+        },
+      }
+    );
   });
 
-  test('returns the proper message and status when an Axios error is thrown', async () => {
-    const encryptedToken = encrypt('decryptedToken');
-    mockedGetServerSession.mockResolvedValueOnce({ access_token: encryptedToken });
+  test("returns the proper message and status when an Axios error is thrown", async () => {
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
     const error = new Error() as AxiosError;
     error.isAxiosError = true;
     error.response = {
-      data: 'application not in submittable state',
+      data: "application not in submittable state",
       status: 428,
-      statusText: 'Bad Request',
+      statusText: "Bad Request",
       headers: {},
       config: {
         headers: {} as AxiosHeaders, // If you have specific headers, you can add them here
@@ -67,52 +75,74 @@ describe('Submit an application', () => {
     };
     mockedAxios.isAxiosError.mockReturnValueOnce(true);
     mockedAxios.post.mockRejectedValueOnce(error);
-    const request = new Request('http://localhost', {
-      method: 'POST',
+    const request = new Request("http://localhost", {
+      method: "POST",
     });
 
-    const response = await POST(request, { params: { id: '9' } });
+    const response = await POST(request, { params: { id: "9" } });
 
     expect(response.status).toBe(428);
-    expect(await response.json()).toEqual({ error: 'application not in submittable state' });
+    expect(await response.json()).toEqual(
+      "application not in submittable state"
+    );
   });
 
-  test('returns the proper message and status if an error occurs', async () => {
-    const encryptedToken = encrypt('decryptedToken');
-    mockedGetServerSession.mockResolvedValueOnce({ access_token: encryptedToken });
-    mockedAxios.post.mockRejectedValueOnce(new Error('server error'));
-    const request = new Request('http://localhost', {
-      method: 'POST',
+  test("returns the proper message and status if an error occurs", async () => {
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
+    mockedAxios.post.mockRejectedValueOnce(new Error("server error"));
+    const request = new Request("http://localhost", {
+      method: "POST",
     });
 
-    const response = await POST(request, { params: { id: '9' } });
+    const response = await POST(request, { params: { id: "9" } });
 
     expect(response.status).toBe(500);
-    expect(await response.json()).toEqual({ error: 'server error' });
+    expect(await response.json()).toEqual({
+      detail: "Unexpected error occurred, please contact the administrators.",
+      status: 500,
+      title: "Unexpected error occurred",
+      validationWarnings: [],
+    });
   });
 
-  test('returns correct validation errors', async () => {
-    const encryptedToken = encrypt('decryptedToken');
-    mockedGetServerSession.mockResolvedValueOnce({ access_token: encryptedToken });
-    mockedAxios.post.mockResolvedValueOnce({
-      status: 400,
-      data: {
-        detail: 'Application 93 could not be submitted due to the following errors:',
-        errorMessages: ['Field fld1 is required.', 'Field fld2 has invalid format.'],
+  test("returns correct validation errors", async () => {
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
+    mockedAxios.isAxiosError.mockReturnValueOnce(true);
+    mockedAxios.post.mockRejectedValueOnce({
+      response: {
+        status: 400,
+        statusText: "Bad request",
+        data: {
+          detail: "The application could not be submitted.",
+          warnings: [
+            {
+              key: "t.form.validation/required",
+              formId: 1,
+              fieldId: "fld1",
+            },
+            {
+              key: "t.form.validation/required",
+              formId: 1,
+              fieldId: "fld2",
+            },
+          ],
+        },
       },
-    });
+    } as AxiosError);
 
-    const request = new Request('http://localhost', {
-      method: 'POST',
+    const request = new Request("http://localhost", {
+      method: "POST",
     });
-    const response = await POST(request, { params: { id: '10' } });
+    const response = await POST(request, { params: { id: "10" } });
 
     expect(response.status).toBe(400);
     const json = await response.json();
-    expect(json.error).toBe(
-      'Application 93 could not be submitted due to the following errors:\n' +
-        'Field fld1 is required.\n' +
-        'Field fld2 has invalid format.',
-    );
+    expect(json.detail).toBe("The application could not be submitted.");
   });
 });

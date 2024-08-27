@@ -2,38 +2,79 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { Form, RetrievedApplication, State } from '@/types/application.types';
+import { Form, RetrievedApplication, State } from "@/types/application.types";
+import { ValidationWarning } from "@/types/api.types";
 
 function formatApplicationProp(prop: string) {
-  return prop.split('/').pop();
+  return prop.split("/").pop();
 }
 
 function isApplicationEditable(application: RetrievedApplication) {
-  return application.state === State.DRAFT || application.state === State.RETURNED;
+  return (
+    application.state === State.DRAFT || application.state === State.RETURNED
+  );
+}
+
+function groupWarningsPerFormId(warnings: ValidationWarning[]) {
+  const map = new Map<number, ValidationWarning[]>();
+  warnings.forEach((it) => {
+    const validations = map.get(it.formId) || [];
+    validations.push(it);
+    map.set(it.formId, validations);
+  });
+  return map;
 }
 
 function updateFormWithNewAttachment(
   forms: Form[],
   formId: number,
-  fieldId: number,
+  fieldId: string,
   newAttachmentId: number,
-  action: (fieldValue: string, attachmentId: number) => string,
+  action: (fieldValue: string, attachmentId: number) => string
 ) {
   return forms.map((form) =>
-    form.id === formId ? updateFormFieldWithNewAttachment(form, fieldId, newAttachmentId, action) : form,
+    form.id === formId
+      ? updateFormFieldWithNewAttachment(form, fieldId, newAttachmentId, action)
+      : form
   );
 }
 
-function updateFormFieldWithNewAttachment(
+function updateFormsInputValues(
+  forms: Form[],
+  formId: number,
+  fieldId: string,
+  newValue: string
+): Form[] {
+  return forms.map((form) =>
+    form.id === formId ? updateFormInputValues(form, fieldId, newValue) : form
+  );
+}
+
+function updateFormInputValues(
   form: Form,
-  fieldId: number,
-  newAttachmentId: number,
-  action: (fieldValue: string, attachmentId: number) => string,
+  fieldId: string,
+  newValue: string
 ): Form {
   return {
     ...form,
     fields: form.fields.map((field) =>
-      field.id === fieldId ? { ...field, value: action(field.value, newAttachmentId)! } : field,
+      field.id === fieldId ? { ...field, value: newValue ?? "" } : field
+    ),
+  };
+}
+
+function updateFormFieldWithNewAttachment(
+  form: Form,
+  fieldId: string,
+  newAttachmentId: number,
+  action: (fieldValue: string, attachmentId: number) => string
+): Form {
+  return {
+    ...form,
+    fields: form.fields.map((field) =>
+      field.id === fieldId
+        ? { ...field, value: action(field.value, newAttachmentId)! }
+        : field
     ),
   };
 }
@@ -47,15 +88,15 @@ function deleteAttachmentIdFromFieldValue(value: string, attachmentId: number) {
   if (!isPresent(attachmentId, value)) return value;
 
   return value === attachmentId.toString()
-    ? ''
+    ? ""
     : value
-        .split(',')
+        .split(",")
         .filter((id) => id !== attachmentId.toString())
-        .join(',');
+        .join(",");
 }
 
 function isPresent(id: number, set: string) {
-  return set.split(',').includes(id.toString());
+  return set.split(",").includes(id.toString());
 }
 
 export {
@@ -64,4 +105,6 @@ export {
   formatApplicationProp,
   isApplicationEditable,
   updateFormWithNewAttachment,
+  updateFormsInputValues,
+  groupWarningsPerFormId,
 };

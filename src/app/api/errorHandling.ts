@@ -2,14 +2,28 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import axios from 'axios';
-import { NextResponse } from 'next/server';
+import axios from "axios";
+import { NextResponse } from "next/server";
+import { ErrorResponse } from "@/types/api.types";
 
-export function handleErrorResponse(error: unknown) {
+export function handleErrorResponse(
+  error: unknown
+): NextResponse<ErrorResponse> {
+  console.log(error);
+
   if (axios.isAxiosError(error)) {
-    return NextResponse.json({ error: error.response?.data }, { status: error.response?.status });
-  } else if (error instanceof Error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(error.response?.data, {
+      status: error.response?.status,
+    });
   }
-  return NextResponse.json({ error: 'Unexpected error occurred' }, { status: 500 });
+
+  return NextResponse.json(
+    {
+      status: 500,
+      title: "Unexpected error occurred",
+      detail: "Unexpected error occurred, please contact the administrators.",
+      validationWarnings: [],
+    },
+    { status: 500 }
+  );
 }

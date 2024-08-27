@@ -1,17 +1,23 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-import { ExtendedSession } from '@/app/api/auth/auth.types';
-import { decrypt } from '@/utils/encryption';
-import { DatasetSearchQuery, FacetGroup, facetToLabelMapping } from './types/datasetSearch.types';
+import { ExtendedSession } from "@/app/api/auth/auth.types";
+import { decrypt } from "@/utils/encryption";
+import {
+  DatasetSearchQuery,
+  FacetGroup,
+  facetToLabelMapping,
+} from "./types/datasetSearch.types";
 
-export const createHeaders = async (session?: ExtendedSession): Promise<Record<string, string>> => {
+export const createHeaders = async (
+  session?: ExtendedSession
+): Promise<Record<string, string>> => {
   const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   };
 
   if (session) {
-    headers['Authorization'] = `Bearer ${decrypt(session.access_token)}`;
+    headers["Authorization"] = `Bearer ${decrypt(session.access_token)}`;
   }
 
   return headers;

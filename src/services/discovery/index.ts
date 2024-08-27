@@ -2,13 +2,15 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import serverConfig from '../../config/serverConfig';
-import { makeDatasetGet } from './datasetGet';
-import { makeDatasetList } from './datasetList';
+import serverConfig from "../../config/serverConfig";
+import { makeDatasetGet } from "./datasetGet";
+import { makeDatasetList } from "./datasetList";
+import { makePublisherList } from "./publisherList";
 
 const discoveryUrl = serverConfig.discoveryUrl;
 
 const datasetGet = makeDatasetGet(discoveryUrl);
 const datasetList = makeDatasetList(discoveryUrl);
+const publisherList = makePublisherList(discoveryUrl);
 
-export { datasetGet, datasetList };
+export { datasetGet, datasetList, publisherList };

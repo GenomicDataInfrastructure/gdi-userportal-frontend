@@ -24,6 +24,11 @@ jobs:
       - name: Test
         run: |
           npm run test
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v3
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
       - name: Lint
         run: |
           npm run lint
@@ -34,4 +39,4 @@ jobs:
         run: |
           npm run type-check
       - name: REUSE Compliance Check
-        uses: fsfe/reuse-action@v2
+        uses: fsfe/reuse-action@v4

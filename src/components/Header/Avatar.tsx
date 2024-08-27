@@ -38,7 +38,7 @@ function Avatar({ user }: AvatarProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-info p-[8px] text-xs text-white shadow-sm transition-all duration-300 hover:bg-hover-color md:p-[10px] md:text-[13px] lg:h-9 lg:w-9">
+        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-disclaimer p-[8px] text-xs text-white shadow-sm transition-all duration-300 hover:bg-hover-color md:p-[10px] md:text-[13px] lg:h-9 lg:w-9">
           {user?.image ? (
             <Image src={user.image} alt="avatar" className="rounded-full" />
           ) : (

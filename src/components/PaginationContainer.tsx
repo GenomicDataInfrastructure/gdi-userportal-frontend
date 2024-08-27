@@ -6,7 +6,9 @@ import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
+  PaginationFirst,
   PaginationItem,
+  PaginationLast,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
@@ -37,11 +39,17 @@ function PaginationContainer({
   return (
     <Pagination>
       <PaginationContent>
-        {currentPage !== 1 && (
-          <PaginationPrevious
-            href={createHref(currentPage - 1)}
-            className="text-info hover:text-hover-color"
-          />
+        {currentPage > 1 && (
+          <>
+            <PaginationFirst
+              href={createHref(1)}
+              className="text-info hover:text-hover-color"
+            />
+            <PaginationPrevious
+              href={createHref(currentPage - 1)}
+              className="text-info hover:text-hover-color"
+            />
+          </>
         )}
         <PaginationLink
           href={createHref(1)}
@@ -63,7 +71,7 @@ function PaginationContainer({
             {currentPage - 2}
           </PaginationLink>
         )}
-        {Number(currentPage) > 2 && (
+        {currentPage > 2 && (
           <PaginationLink
             href={createHref(currentPage - 1)}
             className="text-info hover:text-hover-color"
@@ -102,18 +110,22 @@ function PaginationContainer({
           </PaginationItem>
         )}
         {currentPage !== lastPageNb && (
-          <PaginationLink
-            href={createHref(lastPageNb)}
-            className="text-info hover:text-hover-color"
-          >
-            {lastPageNb}
-          </PaginationLink>
-        )}
-        {currentPage !== lastPageNb && (
-          <PaginationNext
-            href={createHref(currentPage + 1)}
-            className="text-info hover:text-hover-color"
-          />
+          <>
+            <PaginationLink
+              href={createHref(lastPageNb)}
+              className="text-info hover:text-hover-color"
+            >
+              {lastPageNb}
+            </PaginationLink>
+            <PaginationNext
+              href={createHref(currentPage + 1)}
+              className="text-info hover:text-hover-color"
+            />
+            <PaginationLast
+              href={createHref(lastPageNb)}
+              className="text-info hover:text-hover-color"
+            />
+          </>
         )}
       </PaginationContent>
     </Pagination>

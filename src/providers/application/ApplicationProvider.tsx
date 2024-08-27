@@ -9,12 +9,15 @@ import {
   Form,
   FormField,
   RetrievedApplication,
+  AcceptTermsCommand,
 } from "@/types/application.types";
 import {
   addAttachmentIdToFieldValue,
   deleteAttachmentIdFromFieldValue,
   updateFormWithNewAttachment,
+  updateFormsInputValues,
 } from "@/utils/application";
+import debounce from "@/utils/debounce";
 import { useParams } from "next/navigation";
 import {
   createContext,
@@ -22,6 +25,7 @@ import {
   useContext,
   useEffect,
   useReducer,
+  Dispatch,
 } from "react";
 import {
   ApplicationAction,
@@ -29,18 +33,19 @@ import {
   ApplicationContextState,
   ApplicationState,
 } from "./ApplicationProvider.types";
+import { ErrorResponse } from "@/types/api.types";
 
 const ApplicationContext = createContext<ApplicationContextState | undefined>(
-  undefined,
+  undefined
 );
 
 function reducer(
   state: ApplicationState,
-  action: ApplicationAction,
+  action: ApplicationAction
 ): ApplicationState {
   switch (action.type) {
     case ApplicationActionType.LOADING:
-      return { ...state, isLoading: true, error: null };
+      return { ...state, isLoading: true, errorResponse: undefined };
 
     case ApplicationActionType.APPLICATION_LOADED:
       return {
@@ -49,10 +54,31 @@ function reducer(
         isLoading: false,
       };
 
+    case ApplicationActionType.INPUT_SAVED:
+      const payload = action.payload as {
+        formId: number;
+        fieldId: string;
+        newValue: string;
+      };
+
+      return {
+        ...state,
+        application: {
+          ...state.application,
+          forms: updateFormsInputValues(
+            state.application!.forms,
+            payload.formId,
+            payload.fieldId,
+            payload.newValue
+          ),
+        } as RetrievedApplication,
+        isLoading: false,
+      };
+
     case ApplicationActionType.ATTACHMENT_ATTACHED:
       const attachPayload = action.payload as {
         formId: number;
-        fieldId: number;
+        fieldId: string;
         attachmentId: number;
       };
 
@@ -65,7 +91,7 @@ function reducer(
             attachPayload.formId,
             attachPayload.fieldId,
             attachPayload.attachmentId,
-            addAttachmentIdToFieldValue,
+            addAttachmentIdToFieldValue
           ) as Form[],
         } as RetrievedApplication,
         isLoading: false,
@@ -74,7 +100,7 @@ function reducer(
     case ApplicationActionType.ATTACHMENT_DELETED:
       const deletePayload = action.payload as {
         formId: number;
-        fieldId: number;
+        fieldId: string;
         attachmentId: number;
       };
       return {
@@ -86,7 +112,7 @@ function reducer(
             deletePayload.formId,
             deletePayload.fieldId,
             deletePayload.attachmentId,
-            deleteAttachmentIdFromFieldValue,
+            deleteAttachmentIdFromFieldValue
           ) as Form[],
         } as RetrievedApplication,
         isLoading: false,
@@ -96,133 +122,34 @@ function reducer(
       return { ...state, isLoading: false };
 
     case ApplicationActionType.CLEAR_ERROR:
-      return { ...state, error: null };
+      return { ...state, errorResponse: undefined };
 
     case ApplicationActionType.REJECTED:
-      return { ...state, error: action.payload as string, isLoading: false };
+      const errorResponse = action.payload as ErrorResponse;
+      return {
+        ...state,
+        errorResponse: errorResponse,
+        isLoading: false,
+      };
+
+    case ApplicationActionType.ACCEPT_TERMS:
+      return { ...state, termsAccepted: true, isLoading: false };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
 }
 
-type ApplicationProviderProps = {
-  children: React.ReactNode;
-};
-
-function ApplicationProvider({ children }: ApplicationProviderProps) {
-  const initialState: ApplicationState = {
-    application: null,
-    isLoading: false,
-    error: null,
-  };
-
-  const [{ application, isLoading, error }, dispatch] = useReducer(
-    reducer,
-    initialState,
-  );
-
-  const clearError = () => {
-    dispatch({ type: ApplicationActionType.CLEAR_ERROR });
-  };
-
-  const { id } = useParams<{ id: string }>();
-
-  const fetchApplication = useCallback(async () => {
-    dispatch({ type: ApplicationActionType.LOADING });
-    try {
-      const response = await fetch(`/api/applications/${id}`);
-      const retrievedApplication = await response.json();
-      dispatch({
-        type: ApplicationActionType.APPLICATION_LOADED,
-        payload: retrievedApplication,
-      });
-    } catch {
-      dispatch({
-        type: ApplicationActionType.REJECTED,
-        payload: "Failed to fetch application",
-      });
-    }
-  }, [id]);
-
-  useEffect(() => {
-    fetchApplication();
-  }, [fetchApplication]);
-
-  async function addAttachment(
-    formId: number,
-    fieldId: number,
-    formData: FormData,
-  ): Promise<void> {
-    try {
-      dispatch({ type: ApplicationActionType.LOADING });
-
-      const {
-        data: { id: attachmentId },
-      } = await addAttachmentToApplication(application!.id, formData);
-
-      const action = {
-        type: ApplicationActionType.ATTACHMENT_ATTACHED,
-        payload: {
-          attachmentId,
-          formId,
-          fieldId,
-        },
-      };
-
-      dispatch(action);
-
-      const { forms: updatedForms } = reducer(
-        { application, isLoading, error },
-        action,
-      ).application as RetrievedApplication;
-      const response = await saveFormAndDuos(updatedForms);
-      if (response.ok) fetchApplication();
-    } catch (error) {
-      dispatch({
-        type: ApplicationActionType.REJECTED,
-        payload: "Failed to add attachment",
-      });
-    }
-  }
-
-  async function deleteAttachment(
-    formId: number,
-    fieldId: number,
-    attachmentId: number,
-  ) {
-    try {
-      dispatch({ type: ApplicationActionType.LOADING });
-
-      const action = {
-        type: ApplicationActionType.ATTACHMENT_DELETED,
-        payload: {
-          attachmentId,
-          formId,
-          fieldId,
-        },
-      };
-      dispatch(action);
-
-      const { forms: updatedForms } = reducer(
-        { application, isLoading, error },
-        action,
-      ).application as RetrievedApplication;
-
-      const response = await saveFormAndDuos(updatedForms);
-      if (response.ok) fetchApplication();
-    } catch (error) {
-      dispatch({
-        type: ApplicationActionType.REJECTED,
-        payload: "Failed to delete attachment",
-      });
-    }
-  }
-
-  async function saveFormAndDuos(forms: Form[]) {
+const debouncedSaveFormAndDuos = debounce(
+  async (
+    forms: Form[],
+    dispatch: Dispatch<ApplicationAction>,
+    applicationId: number,
+    handleErrorResponseAfterAction: (response: Response) => Promise<void>
+  ) => {
     dispatch({ type: ApplicationActionType.LOADING });
     const response = await fetch(
-      `/api/applications/${application!.id}/save-forms-and-duos`,
+      `/api/applications/${applicationId}/save-forms-and-duos`,
       {
         method: "POST",
         headers: {
@@ -238,10 +165,159 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
           })),
           duoCodes: [],
         }),
-      },
+      }
     );
+
     dispatch({ type: ApplicationActionType.FORM_SAVED });
-    return response;
+
+    await handleErrorResponseAfterAction(response);
+  },
+  2000
+);
+
+type ApplicationProviderProps = {
+  children: React.ReactNode;
+};
+
+function ApplicationProvider({ children }: ApplicationProviderProps) {
+  const initialState: ApplicationState = {
+    isLoading: false,
+    termsAccepted: false,
+  };
+
+  const [{ application, isLoading, errorResponse, termsAccepted }, dispatch] =
+    useReducer(reducer, initialState);
+
+  const clearError = () => {
+    dispatch({ type: ApplicationActionType.CLEAR_ERROR });
+  };
+
+  const { id } = useParams<{ id: string }>();
+
+  const fetchApplication = useCallback(async () => {
+    dispatch({ type: ApplicationActionType.LOADING });
+    const response = await fetch(`/api/applications/${id}`);
+
+    if (response.ok) {
+      const retrievedApplication = await response.json();
+      dispatch({
+        type: ApplicationActionType.APPLICATION_LOADED,
+        payload: retrievedApplication,
+      });
+    } else {
+      const errorResponse = (await response.json()) as ErrorResponse;
+      dispatch({
+        type: ApplicationActionType.REJECTED,
+        payload: errorResponse,
+      });
+    }
+  }, [id]);
+
+  useEffect(() => {
+    fetchApplication().catch((error) => console.log(error));
+  }, [fetchApplication]);
+
+  async function addAttachment(
+    formId: number,
+    fieldId: string,
+    formData: FormData
+  ): Promise<void> {
+    dispatch({ type: ApplicationActionType.LOADING });
+
+    const {
+      data: { id: attachmentId },
+    } = await addAttachmentToApplication(application!.id, formData);
+
+    const action = {
+      type: ApplicationActionType.ATTACHMENT_ATTACHED,
+      payload: {
+        attachmentId,
+        formId,
+        fieldId,
+      },
+    };
+
+    dispatch(action);
+
+    const { forms: updatedForms } = reducer(
+      {
+        application,
+        isLoading,
+        errorResponse,
+        termsAccepted,
+      },
+      action
+    ).application as RetrievedApplication;
+    await saveFormAndDuos(updatedForms);
+  }
+
+  async function updateInputFields(
+    formId: number,
+    fieldId: string,
+    newValue: string
+  ): Promise<void> {
+    dispatch({ type: ApplicationActionType.LOADING });
+
+    const action = {
+      type: ApplicationActionType.INPUT_SAVED,
+      payload: {
+        formId: formId,
+        fieldId: fieldId,
+        newValue: newValue,
+      },
+    };
+
+    dispatch(action);
+
+    const { forms: updatedForms } = reducer(
+      {
+        application,
+        isLoading,
+        errorResponse,
+        termsAccepted,
+      },
+      action
+    ).application as RetrievedApplication;
+    await saveFormAndDuos(updatedForms);
+  }
+
+  async function deleteAttachment(
+    formId: number,
+    fieldId: string,
+    attachmentId: number
+  ) {
+    dispatch({ type: ApplicationActionType.LOADING });
+
+    const action = {
+      type: ApplicationActionType.ATTACHMENT_DELETED,
+      payload: {
+        attachmentId,
+        formId,
+        fieldId,
+      },
+    };
+    dispatch(action);
+
+    const { forms: updatedForms } = reducer(
+      {
+        application,
+        isLoading,
+        errorResponse,
+        termsAccepted,
+      },
+      action
+    ).application as RetrievedApplication;
+
+    await saveFormAndDuos(updatedForms);
+  }
+
+  async function saveFormAndDuos(forms: Form[]) {
+    await debouncedSaveFormAndDuos(
+      forms,
+      dispatch,
+      application!.id,
+      handleErrorResponseAfterAction
+    );
   }
 
   async function submitApplication() {
@@ -249,32 +325,58 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
 
     const response = await fetch(
       `/api/applications/${application!.id}/submit`,
-      { method: "POST" },
+      { method: "POST" }
     );
 
+    await handleErrorResponseAfterAction(response);
+  }
+
+  async function acceptTerms(acceptedLicenses: number[]) {
+    dispatch({ type: ApplicationActionType.LOADING });
+
+    const response = await fetch(
+      `/api/applications/${application!.id}/accept-terms`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          acceptedLicenses,
+        } as AcceptTermsCommand),
+      }
+    );
+
+    dispatch({ type: ApplicationActionType.ACCEPT_TERMS });
+    await handleErrorResponseAfterAction(response);
+  }
+
+  async function handleErrorResponseAfterAction(response: Response) {
     if (response.ok) {
       dispatch({ type: ApplicationActionType.CLEAR_ERROR });
-      fetchApplication();
+      await fetchApplication();
     } else {
       const errorResponse = await response.json();
-      const errorMessage =
-        errorResponse.error || "An unexpected error occurred.";
       dispatch({
         type: ApplicationActionType.REJECTED,
-        payload: errorMessage,
+        payload: errorResponse,
       });
     }
   }
+
   return (
     <ApplicationContext.Provider
       value={{
         application,
         isLoading,
-        error,
+        errorResponse,
+        termsAccepted,
         addAttachment,
         deleteAttachment,
         submitApplication,
+        updateInputFields,
         clearError,
+        acceptTerms,
       }}
     >
       {children}
@@ -286,7 +388,7 @@ function useApplicationDetails() {
   const context = useContext(ApplicationContext);
   if (context === undefined) {
     throw new Error(
-      "useAttachmentUpload must be used within a AttachmentUploadProvider",
+      "useAttachmentUpload must be used within a AttachmentUploadProvider"
     );
   }
   return context;

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-import { ValueLabel } from './datasetSearch.types';
+import { ValueLabel } from "./datasetSearch.types";
 
 export interface RetrievedDataset {
   id: string;
@@ -10,12 +10,12 @@ export interface RetrievedDataset {
   description: string;
   themes: ValueLabel[];
   publisherName: string;
-  catalogue: string;
+  organization: RetrievedPublisher;
   createdAt: string;
   modifiedAt: string;
   url: string;
   languages: ValueLabel[];
-  contact: ValueLabel;
+  contacts: ContactPoint[];
   hasVersions: ValueLabel[];
   accessRights: ValueLabel;
   conformsTo: ValueLabel[];
@@ -23,6 +23,8 @@ export interface RetrievedDataset {
   spatial: ValueLabel;
   distributions: RetrievedDistribution[];
   keywords: ValueLabel[];
+  datasetRelationships: DatasetRelationEntry[];
+  dataDictionary: DatasetDictionaryEntry[];
 }
 
 export type SearchedDataset = {
@@ -31,10 +33,16 @@ export type SearchedDataset = {
   title: string;
   description?: string;
   themes?: ValueLabel[];
-  catalogue: string;
+  organization: RetrievedPublisher;
   modifiedAt: string;
   createdAt: string;
   recordsCount?: number;
+};
+
+export type DatasetEntitlement = {
+  dataset?: SearchedDataset;
+  start: string;
+  end: string;
 };
 
 export interface RetrievedDistribution {
@@ -44,4 +52,32 @@ export interface RetrievedDistribution {
   format: ValueLabel;
   createdAt: string;
   modifiedAt: string;
+  languages?: ValueLabel[];
+  licenses?: ValueLabel[];
+  uri: string;
+}
+
+export interface DatasetRelationEntry {
+  relation: string;
+  target: string;
+}
+
+export interface DatasetDictionaryEntry {
+  name: string;
+  type: string;
+  description: string;
+}
+
+export interface ContactPoint {
+  name: string;
+  email: string;
+}
+
+export interface RetrievedPublisher {
+  id: string;
+  name: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  numberOfDatasets: number;
 }

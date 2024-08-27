@@ -14,16 +14,17 @@ import PageHeading from "@/components/PageHeading";
 import { listApplications } from "@/services/daam/index.client";
 import { ListedApplication } from "@/types/application.types";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import ApplicationItem from "./ApplicationItem";
-
-type Status = "loading" | "error" | "success";
+import { Status } from "@/utils/pageStatus.types";
+import LoadingContainer from "@/components/LoadingContainer";
+import { ErrorResponse } from "@/types/api.types";
+import axios from "axios";
 
 interface ApplicationResponse {
   status: Status;
   applications?: ListedApplication[];
-  errorCode?: number;
+  error?: ErrorResponse;
 }
 
 const ApplicationsPage: React.FC = () => {
@@ -37,20 +38,39 @@ const ApplicationsPage: React.FC = () => {
         const response = await listApplications();
         setResponse({ applications: response.data, status: "success" });
       } catch (error) {
-        if (error instanceof AxiosError) {
-          setResponse({ status: "error", errorCode: error.response?.status });
-          console.error(error);
-        } else {
-          setResponse({ status: "error", errorCode: 500 });
-          console.error(error);
+        console.error(error);
+
+        let errorResponse;
+        if (axios.isAxiosError(error)) {
+          errorResponse = error.response!.data;
         }
+
+        setResponse({
+          status: "error",
+          error: errorResponse,
+        });
       }
     }
-    fetchData();
+    fetchData().catch((it) => console.log(it));
   }, []);
 
-  if (response.status === "error") {
-    return <Error statusCode={response.errorCode} />;
+  if (response.status === "loading") {
+    return (
+      <LoadingContainer
+        text="Retrieving applications..."
+        className="text-center"
+      />
+    );
+  } else if (response.status === "error" && response.error) {
+    return (
+      <Error
+        statusCode={response.error.status}
+        errorTitle={response.error.title}
+        errorDetail={response.error.detail}
+      />
+    );
+  } else if (response.status === "error") {
+    return <Error statusCode={500} />;
   }
 
   return (

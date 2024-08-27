@@ -11,7 +11,7 @@ import { faHistory } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function createApplicationSidebarItems(
-  application: RetrievedApplication,
+  application: RetrievedApplication
 ): SidebarItem[] {
   const { datasets, applicant, events } = application;
 
@@ -28,7 +28,7 @@ function createApplicationSidebarItems(
       label: "Events",
       value: (
         <ul>
-          {events.map((event, index) => (
+          {events.slice(0, 5).map((event, index) => (
             <li key={index} className="mb-2">
               <div className="flex items-center">
                 <FontAwesomeIcon icon={faHistory} className="mr-2 text-sm" />

@@ -22,7 +22,7 @@ interface RetrievedApplication {
   lastActivity: Date;
   permissions: string[];
   roles: string[];
-  worflow: Workflow;
+  workflow: Workflow;
   applicant: Applicant;
   members: Member[];
   datasets: Dataset[];
@@ -30,7 +30,7 @@ interface RetrievedApplication {
   invitedMembers: InvitedMember[];
   events: Event[];
   attachments: Attachment[];
-  licenses: License[];
+  licenses: RetrievedApplicationLicense[];
   state: State;
 }
 
@@ -69,14 +69,15 @@ interface Form {
   externalTitle: Label[];
   fields: FormField[];
 }
+
 interface FormField {
-  id: number;
+  id: string;
   value: string;
   optional: boolean;
   private: boolean;
   visible: boolean;
   title: Label[];
-  type: string;
+  type: FieldType;
 }
 
 interface InvitedMember {
@@ -96,6 +97,22 @@ interface Attachment {
   type: string;
 }
 
+interface AcceptTermsCommand {
+  acceptedLicenses: number[];
+}
+interface RetrievedApplicationLicense {
+  id: number;
+  title: Label[];
+  type: string;
+  enabled: boolean;
+  archived: boolean;
+  link: Label[];
+  text: Label[];
+  attachmentFilename: Label[];
+  attachmentId: Label[];
+  acceptedByCurrentUser: boolean;
+}
+
 interface License {
   type: string;
   title: string;
@@ -104,13 +121,13 @@ interface License {
 }
 
 enum State {
-  DRAFT = 'application.state/draft',
-  CLOSED = 'application.state/closed',
-  APPROVED = 'application.state/approved',
-  RETURNED = 'application.state/returned',
-  REJECTED = 'application.state/rejected',
-  REVOKED = 'application.state/revoked',
-  SUBMITTED = 'application.state/submitted',
+  DRAFT = "application.state/draft",
+  CLOSED = "application.state/closed",
+  APPROVED = "application.state/approved",
+  RETURNED = "application.state/returned",
+  REJECTED = "application.state/rejected",
+  REVOKED = "application.state/revoked",
+  SUBMITTED = "application.state/submitted",
 }
 
 interface Label {
@@ -131,6 +148,15 @@ export interface SaveFormField {
 export interface SaveDUOCode {
   duoId: number;
   restrictions: SaveDUOCodeRestriction[];
+}
+
+export enum FieldType {
+  TEXT = "text",
+  TEXT_AREA = "texta",
+  ATTACHMENT = "attachment",
+  PHONE = "phone-number",
+  DATE = "date",
+  EMAIL = "email",
 }
 
 interface SaveDUOCodeRestriction {
@@ -165,6 +191,7 @@ export type {
   RetrievedApplication,
   SaveFormAndDuos,
   Workflow,
+  AcceptTermsCommand,
 };
 
 export { State };

@@ -2,17 +2,22 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import axios, { AxiosResponse } from 'axios';
-import { DatasetSearchOptions, DatasetsSearchResult } from '../types/datasetSearch.types';
+import axios, { AxiosResponse } from "axios";
+import {
+  DatasetSearchOptions,
+  DatasetsSearchResult,
+} from "../types/datasetSearch.types";
 
-export const datasetList = async (options: DatasetSearchOptions): Promise<AxiosResponse<DatasetsSearchResult>> => {
+export const datasetList = async (
+  options: DatasetSearchOptions
+): Promise<AxiosResponse<DatasetsSearchResult>> => {
   return await axios.post(
-    '/api/datasets',
+    "/api/datasets",
     { options },
     {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-    },
+    }
   );
 };

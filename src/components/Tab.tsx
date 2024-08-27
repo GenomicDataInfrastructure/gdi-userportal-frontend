@@ -22,7 +22,9 @@ function TabItem({ tabItem, activeTab, setActiveTab }: TabItemProps) {
   return (
     <button
       onClick={() => setActiveTab(tabItem.name)}
-      className={`flex w-full items-center justify-center gap-x-3 py-4 hover:bg-white-smoke focus:text-primary lg:px-20 xl:px-32 ${tabItem.name.toLowerCase() === activeTab ? "text-primary" : "text-black"} transition-all duration-300 ease-linear`}
+      className={`flex w-full items-center justify-center gap-x-3 py-4 hover:bg-surface focus:text-primary lg:px-20 xl:px-32 ${
+        tabItem.name.toLowerCase() === activeTab ? "text-primary" : "text-black"
+      } transition-all duration-300 ease-linear`}
     >
       <FontAwesomeIcon icon={tabItem.icon} />
       <span>{tabItem.name.toUpperCase()}</span>
@@ -64,7 +66,11 @@ function TabComponent({
             key={tabItem.name}
           >
             <div
-              className={`relative -top-0.5 w-full flex-1 border transition-all duration-300 ease-linear ${tabItem.name.toLowerCase() === activeTab ? "border-primary" : "borders-white-smoke"}`}
+              className={`relative -top-0.5 w-full flex-1 border transition-all duration-300 ease-linear ${
+                tabItem.name.toLowerCase() === activeTab
+                  ? "border-primary"
+                  : "borders-surface"
+              }`}
             ></div>
           </ListItem>
         ))}

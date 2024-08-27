@@ -43,7 +43,7 @@ function Footer() {
             <Image
               src={footerLogo}
               alt="Footer logo"
-              style={{ maxWidth: "300px", width: "100%" }}
+              style={{ maxWidth: "300px" }}
             />
             <p className="text-xs md:text-sm">
               {contentConfig.footerText.split("\n").map((line, index) => (

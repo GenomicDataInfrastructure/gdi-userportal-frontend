@@ -40,7 +40,11 @@ function Footer() {
         <div className="container mx-auto flex flex-col gap-16 md:flex-row md:gap-24">
           {/* First column: About the project */}
           <div className="flex flex-col items-start gap-4 w-full md:w-3/5">
-            <Image src={footerLogo} alt="Footer logo" width={80} />
+            <Image
+              src={footerLogo}
+              alt="Footer logo"
+              style={{ maxWidth: "300px", width: "100%" }}
+            />
             <p className="text-xs md:text-sm">
               {contentConfig.footerText.split("\n").map((line, index) => (
                 <span key={index}>

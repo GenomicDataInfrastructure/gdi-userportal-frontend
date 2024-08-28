@@ -6,6 +6,7 @@
 
 import Error from "@/app/error";
 import PageContainer from "@/components/PageContainer";
+import PaginationContainer from "@/components/PaginationContainer";
 import SearchBar from "@/components/Searchbar";
 import { datasetList } from "@/services/discovery/index.public";
 import { SearchedDataset } from "@/services/discovery/types/dataset.types";
@@ -19,7 +20,6 @@ import { redirect, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import DatasetList from "../../components/DatasetList";
 import FilterList from "./FilterList";
-import PaginationContainer from "@/components/PaginationContainer";
 
 function parseFacets(queryParams: URLSearchParams): DatasetSearchQueryFacet[] {
   const facetsQuery: DatasetSearchQueryFacet[] = [];
@@ -67,7 +67,9 @@ export default function DatasetPage() {
   useEffect(() => {
     const options: DatasetSearchOptions = {
       facets: parseFacets(queryParams),
-      offset: queryParams.get("page") ? Number(queryParams.get("page")) - 1 : 0,
+      offset: queryParams.get("page")
+        ? (Number(queryParams.get("page")) - 1) * DATASET_PER_PAGE
+        : 0,
       limit: DATASET_PER_PAGE,
       query: queryParams.get("q") as string | undefined,
       sort: queryParams.get("sort") as string | "relevance",

@@ -33,7 +33,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           onChange={handleDateChange}
           className={cn(
             "w-full p-2 border-2 border-primary rounded-md focus:outline-none focus:ring-primary",
-            disabled && "border-slate-200 cursor-not-allowed opacity-50",
+            disabled &&
+              "border-slate-200 cursor-not-allowed opacity-50 bg-slate-50",
             className
           )}
           disabled={disabled}

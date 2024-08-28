@@ -71,6 +71,7 @@ interface Form {
 }
 
 interface FormField {
+  options: Option[];
   id: string;
   value: string;
   optional: boolean;
@@ -135,6 +136,11 @@ interface Label {
   name: string;
 }
 
+interface Option {
+  key: string;
+  label: Label[];
+}
+
 export interface SaveForm {
   formId: number;
   fields: SaveFormField[];
@@ -157,6 +163,10 @@ export enum FieldType {
   PHONE = "phone-number",
   DATE = "date",
   EMAIL = "email",
+  HEADER = "header",
+  OPTION = "option",
+  MULTI_SELECT = "multiselect",
+  LABEL = "label",
 }
 
 interface SaveDUOCodeRestriction {
@@ -194,4 +204,4 @@ export type {
   AcceptTermsCommand,
 };
 
-export { State };
+export { State, type Option };

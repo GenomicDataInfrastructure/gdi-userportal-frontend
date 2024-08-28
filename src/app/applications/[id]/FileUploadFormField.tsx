@@ -8,7 +8,7 @@ import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FileUploaded from "./FileUploaded";
 
-type FileUploadFieldProps = {
+type FileUploadFormFieldProps = {
   field: FormField;
   formId: number;
   title: string;
@@ -22,7 +22,7 @@ function FileUploadFormField({
   title,
   editable,
   validationWarning,
-}: FileUploadFieldProps) {
+}: FileUploadFormFieldProps) {
   const { application, isLoading, addAttachment } = useApplicationDetails();
 
   function onFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -51,7 +51,7 @@ function FileUploadFormField({
           />
           <label
             htmlFor={`input-file-${field.id}`}
-            className={`bg-info text-white rounded-lg px-4 py-2 font-bold transition-colors duration-200 tracking-wide sm:w-auto ${
+            className={`bg-info text-white rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide sm:w-auto ${
               isLoading || !editable
                 ? "cursor-not-allowed opacity-50"
                 : "hover:opacity-80 cursor-pointer"

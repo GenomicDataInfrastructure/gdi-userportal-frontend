@@ -5,7 +5,7 @@
 "use client";
 
 import { FormField } from "@/types/application.types";
-import GenericInputField from "./GenericInputField";
+import GenericInputFormField from "./GenericInputFormField";
 
 type InputFormFieldProps = {
   field: FormField;
@@ -23,7 +23,7 @@ function InputFormField({
   validationWarning,
 }: InputFormFieldProps) {
   return (
-    <GenericInputField
+    <GenericInputFormField
       field={field}
       formId={formId}
       type="text"

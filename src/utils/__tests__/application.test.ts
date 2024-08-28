@@ -273,6 +273,7 @@ function createField(id: string, value: string, type: FieldType) {
     private: false,
     visible: false,
     title: [],
+    options: [],
     type,
   };
 }

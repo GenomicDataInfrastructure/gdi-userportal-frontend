@@ -9,7 +9,7 @@ import PhoneInput from "@/components/PhoneInput";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FormField } from "@/types/application.types";
 
-type PhoneFieldProps = {
+type PhoneFormFieldProps = {
   field: FormField;
   formId: number;
   title: string;
@@ -17,13 +17,13 @@ type PhoneFieldProps = {
   validationWarning?: string;
 };
 
-function PhoneField({
+function PhoneFormField({
   formId,
   field,
   title,
   editable,
   validationWarning,
-}: PhoneFieldProps) {
+}: PhoneFormFieldProps) {
   const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
 
@@ -80,4 +80,4 @@ function PhoneField({
   );
 }
 
-export default PhoneField;
+export default PhoneFormField;

@@ -5,9 +5,9 @@
 "use client";
 
 import { FormField } from "@/types/application.types";
-import GenericInputField from "./GenericInputField";
+import GenericInputFormField from "./GenericInputFormField";
 
-type EmailFieldProps = {
+type EmailFormFieldProps = {
   field: FormField;
   formId: number;
   title: string;
@@ -15,15 +15,15 @@ type EmailFieldProps = {
   validationWarning?: string;
 };
 
-function EmailField({
+function EmailFormField({
   field,
   formId,
   title,
   editable,
   validationWarning,
-}: EmailFieldProps) {
+}: EmailFormFieldProps) {
   return (
-    <GenericInputField
+    <GenericInputFormField
       field={field}
       formId={formId}
       type="email"
@@ -35,4 +35,4 @@ function EmailField({
   );
 }
 
-export default EmailField;
+export default EmailFormField;

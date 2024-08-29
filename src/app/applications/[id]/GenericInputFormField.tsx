@@ -7,7 +7,7 @@ import { Input } from "@/components/shadcn/input";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FormField } from "@/types/application.types";
 
-type GenericInputFieldProps = {
+type GenericInputFormFieldProps = {
   field: FormField;
   formId: number;
   type: string;
@@ -19,7 +19,7 @@ type GenericInputFieldProps = {
   validationWarning?: string;
 };
 
-function GenericInputField({
+function GenericInputFormField({
   field,
   formId,
   type,
@@ -29,7 +29,7 @@ function GenericInputField({
   onChange,
   children,
   validationWarning,
-}: GenericInputFieldProps) {
+}: GenericInputFormFieldProps) {
   const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
 
@@ -68,10 +68,10 @@ function GenericInputField({
             name={field.id.toString()}
             value={inputValue}
             onChange={handleInputChange}
-            className={`h-12 w-full rounded-lg border-2 border-primary px-4 text-md py-[9px] ${
+            className={`h-12 w-full rounded-md border-2 border-primary px-4 text-md py-[9px] ${
               isDisabled
-                ? "border-slate-200 bg-background ring-offset-background placeholder:text-muted-foreground flex file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                : "bg-white border-primary"
+                ? "border-slate-200 cursor-not-allowed opacity-50 bg-slate-50"
+                : "border-primary focus:outline-none focus:ring-primary"
             }`}
             placeholder={placeholder}
             disabled={isDisabled}
@@ -85,4 +85,4 @@ function GenericInputField({
   );
 }
 
-export default GenericInputField;
+export default GenericInputFormField;

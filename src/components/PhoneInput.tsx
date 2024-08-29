@@ -56,8 +56,8 @@ const InputComponent = forwardRef<
     className={cn(
       "h-12 w-full rounded-md border-2 px-4 py-[9px] text-md",
       disabled
-        ? "border-slate-200 bg-background text-muted-foreground cursor-not-allowed opacity-50"
-        : "border-primary bg-white focus:ring-primary",
+        ? "border-slate-200 cursor-not-allowed opacity-50 bg-slate-50"
+        : "border-primary focus:outline-none focus:ring-primary",
       className,
       "ml-2"
     )}
@@ -93,10 +93,10 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
             type="button"
             variant="outline"
             className={cn(
-              "flex h-12 items-center gap-2 rounded-l-md border-2 px-4 transition-colors duration-200",
+              "flex h-12 items-center gap-2 rounded-md border-2 px-4 transition-colors duration-200",
               disabled
-                ? "border-slate-200 bg-slate-100 opacity-50"
-                : "border-primary"
+                ? "border-slate-200 cursor-not-allowed opacity-50 bg-slate-50"
+                : "border-primary focus:outline-none focus:ring-primary"
             )}
             disabled={disabled}
           >
@@ -118,7 +118,7 @@ const CountrySelect = forwardRef<HTMLDivElement, CountrySelectProps>(
                     .filter((x) => x.value)
                     .map((option) => (
                       <CommandItem
-                        className="gap-2"
+                        className="gap-2 cursor-pointer"
                         key={option.value}
                         onSelect={() => handleSelect(option.value)}
                       >

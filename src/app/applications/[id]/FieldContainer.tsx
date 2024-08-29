@@ -50,7 +50,7 @@ function FieldContainer({
         );
       case FieldType.LABEL:
       case FieldType.HEADER:
-        return <TextBoxFormField field={field} title={fieldTitle} />;
+        return <TextBoxFormField field={field} />;
       case FieldType.TEXT:
         return (
           <InputFormField

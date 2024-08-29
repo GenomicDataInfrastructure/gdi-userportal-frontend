@@ -69,7 +69,7 @@ function MultiSelectFormField({
             >
               <input
                 type="checkbox"
-                className="h-4 w-4 border rounded-md checked:accent-warning flex-none cursor-pointer disabled:cursor-not-allowed"
+                className="h-4 w-4 border rounded-md checked:accent-secondary flex-none cursor-pointer disabled:cursor-not-allowed"
                 id={option.key}
                 value={option.key}
                 checked={selectedOptions.includes(option.key)}
@@ -83,7 +83,7 @@ function MultiSelectFormField({
                 className={`ml-2 text-md px-1 rounded-md ${
                   isDisabled
                     ? "opacity-50 cursor-not-allowed"
-                    : "hover:bg-info hover:text-white cursor-pointer"
+                    : "hover:bg-warning hover:text-black cursor-pointer"
                 }`}
               >
                 {option.label.find((label: Label) => label.language === "en")

@@ -16,6 +16,7 @@ import { getTranslation } from "@/utils/getTranslation";
 import OptionFormField from "./OptionFormField";
 import TextBoxFormField from "./TextBoxFormField";
 import MultiSelectFormField from "./MultiSelectFormField";
+import TableFormField from "./TableFormField";
 
 type FieldContainerProps = {
   formId: number;
@@ -114,6 +115,16 @@ function FieldContainer({
       case FieldType.MULTI_SELECT:
         return (
           <MultiSelectFormField
+            formId={formId}
+            field={field}
+            title={fieldTitle}
+            editable={editable}
+            validationWarning={label}
+          />
+        );
+      case FieldType.TABLE:
+        return (
+          <TableFormField
             formId={formId}
             field={field}
             title={fieldTitle}

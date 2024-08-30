@@ -79,6 +79,8 @@ interface FormField {
   visible: boolean;
   title: Label[];
   type: FieldType;
+  tableColumns: Option[];
+  tableValues: TableValue[][];
 }
 
 interface InvitedMember {
@@ -141,6 +143,11 @@ interface Option {
   label: Label[];
 }
 
+interface TableValue {
+  column: string;
+  value: string;
+}
+
 export interface SaveForm {
   formId: number;
   fields: SaveFormField[];
@@ -167,6 +174,7 @@ export enum FieldType {
   OPTION = "option",
   MULTI_SELECT = "multiselect",
   LABEL = "label",
+  TABLE = "table",
 }
 
 interface SaveDUOCodeRestriction {
@@ -202,6 +210,8 @@ export type {
   SaveFormAndDuos,
   Workflow,
   AcceptTermsCommand,
+  Option,
+  TableValue,
 };
 
-export { State, type Option };
+export { State };

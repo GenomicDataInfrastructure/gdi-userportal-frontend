@@ -2,7 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { Form, RetrievedApplication, State } from "@/types/application.types";
+import {
+  FieldType,
+  Form,
+  RetrievedApplication,
+  State,
+  TableValue,
+} from "@/types/application.types";
 import { ValidationWarning } from "@/types/api.types";
 
 function formatApplicationProp(prop: string) {
@@ -57,9 +63,19 @@ function updateFormInputValues(
 ): Form {
   return {
     ...form,
-    fields: form.fields.map((field) =>
-      field.id === fieldId ? { ...field, value: newValue ?? "" } : field
-    ),
+    fields: form.fields.map((field) => {
+      if (field.id === fieldId) {
+        if (field.type === FieldType.TABLE) {
+          return {
+            ...field,
+            value: newValue,
+            tableValues: JSON.parse(newValue) as TableValue[][],
+          };
+        }
+        return { ...field, value: newValue ?? "" };
+      }
+      return field;
+    }),
   };
 }
 

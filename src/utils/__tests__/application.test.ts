@@ -274,6 +274,8 @@ function createField(id: string, value: string, type: FieldType) {
     visible: false,
     title: [],
     options: [],
+    tableColumns: [],
+    tableValues: [],
     type,
   };
 }

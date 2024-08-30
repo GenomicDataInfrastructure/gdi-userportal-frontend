@@ -10,6 +10,7 @@ import {
   FormField,
   RetrievedApplication,
   AcceptTermsCommand,
+  FieldType,
 } from "@/types/application.types";
 import {
   addAttachmentIdToFieldValue,
@@ -161,6 +162,9 @@ const debouncedSaveFormAndDuos = debounce(
             fields: form.fields.map((field: FormField) => ({
               fieldId: field.id,
               value: field.value,
+              ...(field.type === FieldType.TABLE
+                ? { tableValues: field.tableValues }
+                : {}),
             })),
           })),
           duoCodes: [],

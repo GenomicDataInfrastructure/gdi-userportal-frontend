@@ -69,71 +69,71 @@ function TableFormField({
 
   return (
     <div className="flex flex-col rounded border p-4">
-      <div className="flex flex-col justify-between">
+      <div className="flex justify-between items-center">
         <h3 className="text-lg text-primary sm:text-xl">
           {title} {field.optional ? "(Optional)" : ""}
         </h3>
-        <table className="mt-4 border-collapse">
-          <thead>
-            <tr>
-              {field.tableColumns.map((column) => (
-                <th key={column.key} className="px-4 py-2">
-                  {column.label.find((label) => label.language === "en")
-                    ?.name || column.label[0].name}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {tableValues.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {field.tableColumns.map((column) => (
-                  <td key={column.key} className=" px-2 py-2">
-                    <input
-                      type="text"
-                      value={
-                        row.find((item) => item.column === column.key)?.value ||
-                        ""
-                      }
-                      onChange={(e) =>
-                        handleInputChange(rowIndex, column.key, e.target.value)
-                      }
-                      disabled={isDisabled}
-                      className={`w-full p-2 border-2 rounded-md ${
-                        isDisabled
-                          ? "border-slate-200 cursor-not-allowed bg-slate-50 opacity-50"
-                          : "border-primary focus:outline-none focus:ring-primary"
-                      }`}
-                    />
-                  </td>
-                ))}
-                <td>
-                  <button
-                    onClick={() => deleteRow(rowIndex)}
-                    disabled={isDisabled}
-                  >
-                    <FontAwesomeIcon
-                      icon={faXmark}
-                      className={`w-full h-5 w-5 pl-2 ${
-                        isDisabled
-                          ? "text-slate-200 cursor-not-allowed"
-                          : "text-secondary hover:text-warning"
-                      }`}
-                    />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
         <button
           onClick={addRow}
           disabled={isDisabled}
-          className="mt-4 p-2 bg-primary text-white rounded disabled:cursor-not-allowed disabled:opacity-50"
+          className="ml-4 mt-2 py-2 px-4 bg-primary text-white rounded-md disabled:cursor-not-allowed disabled:opacity-50"
         >
           Add Row
         </button>
       </div>
+      <table className="mt-4 border-collapse">
+        <thead>
+          <tr>
+            {field.tableColumns.map((column) => (
+              <th key={column.key} className="px-4 py-2">
+                {column.label.find((label) => label.language === "en")?.name ||
+                  column.label[0].name}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {tableValues.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {field.tableColumns.map((column) => (
+                <td key={column.key} className="px-2 py-2">
+                  <input
+                    type="text"
+                    value={
+                      row.find((item) => item.column === column.key)?.value ||
+                      ""
+                    }
+                    onChange={(e) =>
+                      handleInputChange(rowIndex, column.key, e.target.value)
+                    }
+                    disabled={isDisabled}
+                    className={`w-full p-2 border-2 rounded-md ${
+                      isDisabled
+                        ? "border-slate-200 cursor-not-allowed bg-slate-50 opacity-50"
+                        : "border-primary focus:outline-none focus:ring-primary"
+                    }`}
+                  />
+                </td>
+              ))}
+              <td>
+                <button
+                  onClick={() => deleteRow(rowIndex)}
+                  disabled={isDisabled}
+                >
+                  <FontAwesomeIcon
+                    icon={faXmark}
+                    className={`w-full h-5 w-5 pl-2 ${
+                      isDisabled
+                        ? "text-slate-200 cursor-not-allowed"
+                        : "text-secondary hover:text-warning"
+                    }`}
+                  />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       {validationWarning && (
         <span className="text-red-600 mt-2">{validationWarning}</span>
       )}

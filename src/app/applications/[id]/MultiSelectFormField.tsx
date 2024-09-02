@@ -49,7 +49,7 @@ function MultiSelectFormField({
 
   return (
     <div
-      className={`flex flex-col rounded border p-4 ${
+      className={`flex flex-col py-2 ${
         isDisabled ? "disabled:opacity-50 border-slate-200" : "bg-white"
       }`}
     >

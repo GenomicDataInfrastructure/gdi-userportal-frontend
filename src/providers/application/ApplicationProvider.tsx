@@ -176,7 +176,7 @@ const debouncedSaveFormAndDuos = debounce(
 
     await handleErrorResponseAfterAction(response);
   },
-  2000
+  200
 );
 
 type ApplicationProviderProps = {

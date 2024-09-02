@@ -45,7 +45,7 @@ function DateFormField({
   };
 
   return (
-    <div className="flex flex-col rounded border p-4">
+    <div className="flex flex-col py-2">
       <div className="flex flex-col justify-between">
         <div>
           <h3 className="text-lg text-primary sm:text-xl">{`${title} ${

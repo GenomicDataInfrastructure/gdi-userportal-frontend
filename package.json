@@ -38,7 +38,7 @@
     "isomorphic-dompurify": "^2.14.0",
     "jwt-decode": "^4.0.0",
     "marked": "^14.0.0",
-    "next": "14.2.6",
+    "next": "14.2.7",
     "next-auth": "^4.24.5",
     "next-runtime-env": "^3.2.0",
     "react": "^18",

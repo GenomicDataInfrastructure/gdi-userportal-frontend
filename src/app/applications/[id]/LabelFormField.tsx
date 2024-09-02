@@ -6,13 +6,13 @@
 
 import { FormField, Label } from "@/types/application.types";
 
-type TextBoxFormFieldProps = {
+type LabelFormFieldProps = {
   field: FormField;
 };
 
-function TextBoxFormField({ field }: TextBoxFormFieldProps) {
+function LabelFormField({ field }: LabelFormFieldProps) {
   return (
-    <div className="flex flex-col rounded border p-4 ">
+    <div className="flex flex-col py-2 ">
       <div className="flex flex-col justify-between">
         <h3 className="text-lg text-primary sm:text-xl">
           {field.title.find((label: Label) => label.language === "en")?.name ||
@@ -23,4 +23,4 @@ function TextBoxFormField({ field }: TextBoxFormFieldProps) {
   );
 }
 
-export default TextBoxFormField;
+export default LabelFormField;

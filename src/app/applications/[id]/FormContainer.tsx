@@ -23,8 +23,8 @@ function FormContainer({
 
   return (
     <div className="mt-8">
-      <h3 className="mb-4 text-2xl text-primary">{formTitle}</h3>
-      <ul className="space-y-4">
+      <ul className="space-y-4 border rounded p-4">
+        <h3 className="mb-4 text-2xl text-primary">{formTitle}</h3>
         {form.fields.map(
           (field) =>
             field && (

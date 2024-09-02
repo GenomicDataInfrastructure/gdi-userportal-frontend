@@ -14,7 +14,8 @@ import PhoneFormField from "./PhoneFormField";
 import { ValidationWarning } from "@/types/api.types";
 import { getTranslation } from "@/utils/getTranslation";
 import OptionFormField from "./OptionFormField";
-import TextBoxFormField from "./TextBoxFormField";
+import LabelFormField from "./LabelFormField";
+import HeaderFormField from "./HeaderFormField";
 import MultiSelectFormField from "./MultiSelectFormField";
 import TableFormField from "./TableFormField";
 
@@ -50,8 +51,9 @@ function FieldContainer({
           />
         );
       case FieldType.LABEL:
+        return <LabelFormField field={field} />;
       case FieldType.HEADER:
-        return <TextBoxFormField field={field} />;
+        return <HeaderFormField field={field} />;
       case FieldType.TEXT:
         return (
           <InputFormField

@@ -138,7 +138,7 @@ function Header() {
                 className={`relative px-3 py-1 lg:px-7 transition-opacity duration-300 text-black`}
               >
                 <span className="relative group">
-                  Themes{" "}
+                  Themes
                   <span
                     className={`absolute left-0 bottom-[-2px] w-full h-[2px] transition-transform duration-300 transform ${
                       activeTab === "/themes"
@@ -153,7 +153,7 @@ function Header() {
                 className={`relative px-3 py-1 lg:px-7 transition-opacity duration-300 text-black`}
               >
                 <span className="relative group">
-                  Publishers{" "}
+                  Publishers
                   <span
                     className={`absolute left-0 bottom-[-2px] w-full h-[2px] transition-transform duration-300 transform ${
                       activeTab === "/publishers"
@@ -168,7 +168,7 @@ function Header() {
                 className={`relative px-3 py-1 lg:px-7 transition-opacity duration-300 text-black`}
               >
                 <span className="relative group">
-                  About{" "}
+                  About
                   <span
                     className={`absolute left-0 bottom-[-2px] w-full h-[2px] transition-transform duration-300 transform ${
                       activeTab === "/about"

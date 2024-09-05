@@ -9,7 +9,7 @@ interface ListProps {
   children: React.ReactNode;
 }
 
-function List({ children, className }: ListProps) {
+function List({ children, className }: Readonly<ListProps>) {
   return (
     <ul className={cn("flex w-full flex-col gap-y-4", className)}>
       {children}

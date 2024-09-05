@@ -26,7 +26,7 @@ function PaginationContainer({
   datasetPerPage,
   pathname,
   queryParams,
-}: PaginationProps) {
+}: Readonly<PaginationProps>) {
   const currentPage = Number(queryParams.get("page")) || 1;
   const lastPageNb = Math.ceil(datasetCount / datasetPerPage) || 1;
 

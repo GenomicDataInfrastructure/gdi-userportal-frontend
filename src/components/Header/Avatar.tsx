@@ -34,7 +34,7 @@ function handleSignOut() {
   keycloackSessionLogOut().then(() => signOut({ callbackUrl: "/" }));
 }
 
-function Avatar({ user }: AvatarProps) {
+function Avatar({ user }: Readonly<AvatarProps>) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

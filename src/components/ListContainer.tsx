@@ -11,7 +11,10 @@ interface CenteredListContainerProps {
   className?: string;
 }
 
-function ListContainer({ children, className }: CenteredListContainerProps) {
+function ListContainer({
+  children,
+  className,
+}: Readonly<CenteredListContainerProps>) {
   return (
     <div className={`mt-8 flex w-full flex-col gap-4 ${className}`}>
       {children}

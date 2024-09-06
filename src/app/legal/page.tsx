@@ -2,23 +2,22 @@
 
 /* SPDX-License-Identifier: Apache-2.0 */
 
+// src/pages/legal.tsx
 import { promises as fs } from "fs";
 import path from "path";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import PageContainer from "@/components/PageContainer";
 
-function getAboutFilePath(): string {
-  return path.resolve("src/public/about.md");
-}
+const getLegalFilePath = () => path.resolve("src/public/legal.md");
 
-async function getAboutContent(): Promise<string> {
-  const filePath = getAboutFilePath();
+const getLegalContent = async () => {
+  const filePath = getLegalFilePath();
   const markdown = await fs.readFile(filePath, "utf8");
   return markdown;
-}
+};
 
-export default async function AboutPage() {
-  const content = await getAboutContent();
+export default async function LegalPage() {
+  const content = await getLegalContent();
 
   return (
     <PageContainer className="container mx-auto px-4 pt-5">

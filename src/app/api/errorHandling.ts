@@ -9,8 +9,6 @@ import { ErrorResponse } from "@/types/api.types";
 export function handleErrorResponse(
   error: unknown
 ): NextResponse<ErrorResponse> {
-  console.log(error);
-
   if (axios.isAxiosError(error)) {
     return NextResponse.json(error.response?.data, {
       status: error.response?.status,

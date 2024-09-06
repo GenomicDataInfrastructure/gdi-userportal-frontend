@@ -17,6 +17,7 @@ import populationImg from "../public/themes/population.svg";
 import regionsImg from "../public/themes/regions.svg";
 import techImg from "../public/themes/tech.svg";
 import transportImg from "../public/themes/transport.svg";
+import Image from "next/image";
 
 export const allThemes = [
   {
@@ -131,12 +132,13 @@ const ThemesSection = ({
             )}`}
           >
             <div className="flex flex-col justify-center items-center text-center">
-              <img
+              <Image
                 alt={`${theme.name}-collection`}
                 src={theme.img.src}
                 width="48"
                 height="48"
               />
+
               <h3 className="font-medium text-lg sm:mt-1">{theme.name}</h3>
               <div className="font-light leading-4 max-w-[8.5rem]">
                 {theme.desc}

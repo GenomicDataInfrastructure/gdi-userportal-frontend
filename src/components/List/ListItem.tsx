@@ -9,7 +9,7 @@ interface ListItemProps {
   className?: string;
 }
 
-function ListItem({ children, className }: ListItemProps) {
+function ListItem({ children, className }: Readonly<ListItemProps>) {
   return (
     <li className={cn("break-words rounded-lg bg-surface p-8", className)}>
       {children}

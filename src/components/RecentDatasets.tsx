@@ -45,7 +45,11 @@ const RecentDatasets = ({ datasets }: { datasets: SearchedDataset[] }) => {
   );
 };
 
-function DatasetLink({ title, createdAt, description }: DatasetLinkProps) {
+function DatasetLink({
+  title,
+  createdAt,
+  description,
+}: Readonly<DatasetLinkProps>) {
   return (
     <div className="p-5 h-full flex flex-col">
       <span className="text-info flex items-center mb-4">

@@ -18,7 +18,7 @@ type TabItemProps = {
   setActiveTab: (activeTab: string) => void;
 };
 
-function TabItem({ tabItem, activeTab, setActiveTab }: TabItemProps) {
+function TabItem({ tabItem, activeTab, setActiveTab }: Readonly<TabItemProps>) {
   return (
     <button
       onClick={() => setActiveTab(tabItem.name)}
@@ -42,7 +42,7 @@ function TabComponent({
   tabItems,
   activeTab,
   setActiveTab,
-}: TabComponentProps) {
+}: Readonly<TabComponentProps>) {
   return (
     <>
       <List className="flex-row">

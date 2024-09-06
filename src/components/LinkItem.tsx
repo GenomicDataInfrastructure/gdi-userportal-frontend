@@ -7,7 +7,7 @@ type LinkItemProps = {
   link: SidebarLink;
 };
 
-function LinkItem({ link }: LinkItemProps) {
+function LinkItem({ link }: Readonly<LinkItemProps>) {
   return (
     <a
       href={link.url}

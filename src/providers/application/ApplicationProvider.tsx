@@ -33,6 +33,8 @@ import {
   ApplicationActionType,
   ApplicationContextState,
   ApplicationState,
+  FormAttachmentUpdate,
+  FormValueUpdate,
 } from "./ApplicationProvider.types";
 import { ErrorResponse } from "@/types/api.types";
 
@@ -56,11 +58,7 @@ function reducer(
       };
 
     case ApplicationActionType.INPUT_SAVED:
-      const payload = action.payload as {
-        formId: number;
-        fieldId: string;
-        newValue: string;
-      };
+      const payload = action.payload as FormValueUpdate;
 
       return {
         ...state,
@@ -77,11 +75,7 @@ function reducer(
       };
 
     case ApplicationActionType.ATTACHMENT_ATTACHED:
-      const attachPayload = action.payload as {
-        formId: number;
-        fieldId: string;
-        attachmentId: number;
-      };
+      const attachPayload = action.payload as FormAttachmentUpdate;
 
       return {
         ...state,
@@ -93,17 +87,14 @@ function reducer(
             attachPayload.fieldId,
             attachPayload.attachmentId,
             addAttachmentIdToFieldValue
-          ) as Form[],
+          ),
         } as RetrievedApplication,
         isLoading: false,
       };
 
     case ApplicationActionType.ATTACHMENT_DELETED:
-      const deletePayload = action.payload as {
-        formId: number;
-        fieldId: string;
-        attachmentId: number;
-      };
+      const deletePayload = action.payload as FormAttachmentUpdate;
+
       return {
         ...state,
         application: {
@@ -114,7 +105,7 @@ function reducer(
             deletePayload.fieldId,
             deletePayload.attachmentId,
             deleteAttachmentIdFromFieldValue
-          ) as Form[],
+          ),
         } as RetrievedApplication,
         isLoading: false,
       };
@@ -316,7 +307,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   }
 
   async function saveFormAndDuos(forms: Form[]) {
-    await debouncedSaveFormAndDuos(
+    debouncedSaveFormAndDuos(
       forms,
       dispatch,
       application!.id,

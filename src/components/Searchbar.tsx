@@ -13,7 +13,7 @@ type SearchBarProps = {
   size?: "regular" | "large";
 };
 
-function SearchBar({ queryParams, size }: SearchBarProps) {
+function SearchBar({ queryParams, size }: Readonly<SearchBarProps>) {
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const router = useRouter();

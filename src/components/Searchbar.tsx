@@ -1,5 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
 // SPDX-License-Identifier: Apache-2.0
+
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -11,8 +13,9 @@ type SearchBarProps = {
   size?: "regular" | "large";
 };
 
-function SearchBar({ queryParams, size }: SearchBarProps) {
+function SearchBar({ queryParams, size }: Readonly<SearchBarProps>) {
   const [query, setQuery] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
   const router = useRouter();
 
   let sizeClass = "h-11";
@@ -31,14 +34,6 @@ function SearchBar({ queryParams, size }: SearchBarProps) {
 
   function handleQueryChange(e: React.ChangeEvent<HTMLInputElement>): void {
     setQuery(e.target.value);
-  }
-
-  function handleBlur(e: React.FocusEvent<HTMLInputElement>): void {
-    if (!e.target.value) {
-      const params = new URLSearchParams(queryParams.toString());
-      params.delete("q");
-      router.push(`/datasets?${params}`);
-    }
   }
 
   function redirectToSearchResults(query: string): void {
@@ -67,12 +62,15 @@ function SearchBar({ queryParams, size }: SearchBarProps) {
       <div className="relative">
         <input
           placeholder="Search datasets"
-          className={`${sizeClass} w-full rounded-lg px-4 py-[9px] shadow-xl transition-all duration-200 ease-in-out hover:shadow-2xl focus:outline-none`}
+          className={`${sizeClass} w-full rounded-lg px-4 py-[9px] shadow-xl ease-in-out hover:shadow-2xl ${
+            isFocused ? "ring-2 focus:outline ring-primary" : ""
+          }`}
           value={query}
           onChange={handleQueryChange}
-          onBlur={handleBlur}
           onKeyDown={handleEnter}
-        ></input>
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+        />
         <div
           className={`${sizeClass} item-stretch absolute bottom-0 right-0 flex`}
         >

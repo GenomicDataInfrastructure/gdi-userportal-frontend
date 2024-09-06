@@ -5,6 +5,7 @@ const LABELS = {
   "t.form.validation/required": "Required",
   "t.form.validation/invalid-email": "Invalid email",
   "t.form.validation/invalid-phone-number": "Invalid phone number",
+  "t.form.validation/invalid-value": "Invalid value",
   "t.actions.errors/licenses-not-accepted":
     "Terms and conditions were not accepted.",
 } as {

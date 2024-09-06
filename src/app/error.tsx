@@ -19,7 +19,7 @@ export default function ErrorBoundary({
   errorDetail,
   stack,
   statusCode,
-}: ErrorBoundaryProps) {
+}: Readonly<ErrorBoundaryProps>) {
   let heading = "Something Went Wrong";
   let message =
     "Our apologies, but our server has encountered an internal error that prevents it from fulfilling your request. This is a temporary issue, and we're on the case to get it fixed. Please try again in a little while.";

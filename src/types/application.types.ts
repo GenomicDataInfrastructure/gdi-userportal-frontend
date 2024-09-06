@@ -71,6 +71,7 @@ interface Form {
 }
 
 interface FormField {
+  options: Option[];
   id: string;
   value: string;
   optional: boolean;
@@ -78,6 +79,8 @@ interface FormField {
   visible: boolean;
   title: Label[];
   type: FieldType;
+  tableColumns: Option[];
+  tableValues: TableValue[][];
 }
 
 interface InvitedMember {
@@ -135,6 +138,16 @@ interface Label {
   name: string;
 }
 
+interface Option {
+  key: string;
+  label: Label[];
+}
+
+interface TableValue {
+  column: string;
+  value: string;
+}
+
 export interface SaveForm {
   formId: number;
   fields: SaveFormField[];
@@ -157,6 +170,11 @@ export enum FieldType {
   PHONE = "phone-number",
   DATE = "date",
   EMAIL = "email",
+  HEADER = "header",
+  OPTION = "option",
+  MULTI_SELECT = "multiselect",
+  LABEL = "label",
+  TABLE = "table",
 }
 
 interface SaveDUOCodeRestriction {
@@ -192,6 +210,8 @@ export type {
   SaveFormAndDuos,
   Workflow,
   AcceptTermsCommand,
+  Option,
+  TableValue,
 };
 
 export { State };

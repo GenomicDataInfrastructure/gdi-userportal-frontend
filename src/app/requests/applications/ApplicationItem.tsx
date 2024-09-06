@@ -12,10 +12,10 @@ import DatasetList from "./DatasetList";
 export default function ApplicationItem({
   application,
   isExpanded,
-}: {
+}: Readonly<{
   application: ListedApplication;
   isExpanded: boolean;
-}) {
+}>) {
   const [collapsed, setCollapsed] = useState(!isExpanded);
   const toggleCollapsed = () => setCollapsed(!collapsed);
   const contentRef = useRef<HTMLDivElement | null>(null);

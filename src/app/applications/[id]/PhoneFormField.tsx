@@ -9,7 +9,7 @@ import PhoneInput from "@/components/PhoneInput";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { FormField } from "@/types/application.types";
 
-type PhoneFieldProps = {
+type PhoneFormFieldProps = {
   field: FormField;
   formId: number;
   title: string;
@@ -17,13 +17,13 @@ type PhoneFieldProps = {
   validationWarning?: string;
 };
 
-function PhoneField({
+function PhoneFormField({
   formId,
   field,
   title,
   editable,
   validationWarning,
-}: PhoneFieldProps) {
+}: PhoneFormFieldProps) {
   const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value);
 
@@ -56,7 +56,7 @@ function PhoneField({
   };
 
   return (
-    <div className="flex flex-col rounded border p-4">
+    <div className="flex flex-col py-2">
       <div className="flex flex-col">
         <div>
           <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
@@ -80,4 +80,4 @@ function PhoneField({
   );
 }
 
-export default PhoneField;
+export default PhoneFormField;

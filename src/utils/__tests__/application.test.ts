@@ -124,6 +124,48 @@ describe("Update application correctly when removing an attachment", () => {
   });
 });
 
+describe("Update application with TABLE field", () => {
+  it("should correctly update the value of a TABLE field", () => {
+    const forms: Form[] = getFormsWithTableField();
+    const formId = 3;
+    const fieldId = "3";
+    const newValue = JSON.stringify([
+      [{ column: "A", value: "New Value A1" }],
+      [{ column: "B", value: "New Value B1" }],
+    ]);
+
+    const updatedForms = updateFormsInputValues(
+      forms,
+      formId,
+      fieldId,
+      newValue
+    );
+
+    expect(updatedForms[0].fields[2].value).toEqual(newValue);
+    expect(updatedForms[0].fields[2].tableValues).toEqual(JSON.parse(newValue));
+  });
+});
+
+describe("isPresent function behavior", () => {
+  it("should not remove attachment ID when it is not present", () => {
+    const value = "1,2,3";
+    const attachmentId = 4;
+
+    const result = deleteAttachmentIdFromFieldValue(value, attachmentId);
+
+    expect(result).toEqual(value);
+  });
+
+  it("should remove attachment ID when it is present", () => {
+    const value = "1,2,3";
+    const attachmentId = 2;
+
+    const result = deleteAttachmentIdFromFieldValue(value, attachmentId);
+
+    expect(result).toEqual("1,3");
+  });
+});
+
 describe("Check if application state is correctly formatted", () => {
   it("should format state correctly", () => {
     const state = State.APPROVED;
@@ -256,6 +298,22 @@ function getForms() {
   return [form1, form2];
 }
 
+function getFormsWithTableField() {
+  const form3 = createForm(3, [
+    createField("1", "22", FieldType.ATTACHMENT),
+    createField("2", "8,2", FieldType.ATTACHMENT),
+    createField(
+      "3",
+      JSON.stringify([
+        [{ column: "A", value: "Value A1" }],
+        [{ column: "B", value: "Value B1" }],
+      ]),
+      FieldType.TABLE
+    ),
+  ]);
+  return [form3];
+}
+
 function createForm(id: number, fields: FormField[]) {
   return {
     id,
@@ -273,6 +331,9 @@ function createField(id: string, value: string, type: FieldType) {
     private: false,
     visible: false,
     title: [],
+    options: [],
+    tableColumns: [],
+    tableValues: [],
     type,
   };
 }

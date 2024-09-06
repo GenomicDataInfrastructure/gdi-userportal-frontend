@@ -14,7 +14,7 @@ interface PageContainerProps {
   className?: string;
 }
 
-function PageContainer({ children, className }: PageContainerProps) {
+function PageContainer({ children, className }: Readonly<PageContainerProps>) {
   const { alert, onCloseAlert, setAlert } = useAlert();
   const pathname = usePathname();
   const searchParams = useSearchParams();

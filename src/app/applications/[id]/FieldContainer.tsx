@@ -5,14 +5,19 @@
 "use client";
 
 import { FieldType, FormField } from "@/types/application.types";
-import FileUploadField from "./FileUploadFormField";
+import FileUploadFormField from "./FileUploadFormField";
 import InputFormField from "./InputFormField";
 import TextAreaFormField from "./TextAreaFormField";
-import DateField from "./DateField";
-import EmailField from "./EmailField";
-import PhoneField from "./PhoneField";
+import DateFormField from "./DateFormField";
+import EmailFormField from "./EmailFormField";
+import PhoneFormField from "./PhoneFormField";
 import { ValidationWarning } from "@/types/api.types";
 import { getTranslation } from "@/utils/getTranslation";
+import OptionFormField from "./OptionFormField";
+import LabelFormField from "./LabelFormField";
+import HeaderFormField from "./HeaderFormField";
+import MultiSelectFormField from "./MultiSelectFormField";
+import TableFormField from "./TableFormField";
 
 type FieldContainerProps = {
   formId: number;
@@ -37,7 +42,7 @@ function FieldContainer({
     switch (field.type) {
       case FieldType.ATTACHMENT:
         return (
-          <FileUploadField
+          <FileUploadFormField
             field={field}
             formId={formId}
             title={fieldTitle}
@@ -45,6 +50,10 @@ function FieldContainer({
             validationWarning={label}
           />
         );
+      case FieldType.LABEL:
+        return <LabelFormField field={field} />;
+      case FieldType.HEADER:
+        return <HeaderFormField field={field} />;
       case FieldType.TEXT:
         return (
           <InputFormField
@@ -65,9 +74,19 @@ function FieldContainer({
             validationWarning={label}
           />
         );
+      case FieldType.OPTION:
+        return (
+          <OptionFormField
+            field={field}
+            formId={formId}
+            title={fieldTitle}
+            editable={editable}
+            validationWarning={label}
+          />
+        );
       case FieldType.PHONE:
         return (
-          <PhoneField
+          <PhoneFormField
             field={field}
             formId={formId}
             title={fieldTitle}
@@ -77,7 +96,7 @@ function FieldContainer({
         );
       case FieldType.DATE:
         return (
-          <DateField
+          <DateFormField
             field={field}
             formId={formId}
             title={fieldTitle}
@@ -87,9 +106,29 @@ function FieldContainer({
         );
       case FieldType.EMAIL:
         return (
-          <EmailField
+          <EmailFormField
             field={field}
             formId={formId}
+            title={fieldTitle}
+            editable={editable}
+            validationWarning={label}
+          />
+        );
+      case FieldType.MULTI_SELECT:
+        return (
+          <MultiSelectFormField
+            formId={formId}
+            field={field}
+            title={fieldTitle}
+            editable={editable}
+            validationWarning={label}
+          />
+        );
+      case FieldType.TABLE:
+        return (
+          <TableFormField
+            formId={formId}
+            field={field}
             title={fieldTitle}
             editable={editable}
             validationWarning={label}

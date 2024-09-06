@@ -53,7 +53,7 @@ interface SidebarProps {
   items: SidebarItem[];
 }
 
-function Sidebar({ items }: SidebarProps) {
+function Sidebar({ items }: Readonly<SidebarProps>) {
   return (
     <div className="border-gray flex flex-col gap-3 rounded-sm border-2 bg-surface p-5 text-black">
       {items.map((item) => (

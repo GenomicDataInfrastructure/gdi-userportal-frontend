@@ -43,7 +43,7 @@ function TextAreaFormField({
   const isDisabled = !editable;
 
   return (
-    <div className="flex flex-col rounded border p-4">
+    <div className="flex flex-col py-2">
       <div className="flex flex-col justify-between">
         <div>
           <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
@@ -54,10 +54,10 @@ function TextAreaFormField({
           placeholder={title}
           rows={5}
           value={inputValue}
-          className={`mt-4 w-full rounded-lg border-2 border-primary px-4 py-[9px] text-md ${
+          className={`mt-4 w-full rounded-md border-2 border-primary px-4 py-[9px] text-md ${
             isDisabled
-              ? "border-slate-200 bg-background ring-offset-background placeholder:text-muted-foreground flex file:border-0 file:bg-transparent file:font-medium file:text-sm focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-              : "bg-white focus:outline-none focus:ring-primary"
+              ? "border-slate-200 cursor-not-allowed opacity-50 bg-slate-50"
+              : "border-primary focus:outline-none focus:ring-primary"
           }`}
           onChange={handleInputChange}
           disabled={isDisabled}

@@ -9,7 +9,7 @@ import { useApplicationDetails } from "@/providers/application/ApplicationProvid
 import { FormField } from "@/types/application.types";
 import { DatePicker } from "@/components/shadcn/DatePicker";
 
-type DateFieldProps = {
+type DateFormFieldProps = {
   field: FormField;
   formId: number;
   title: string;
@@ -17,13 +17,13 @@ type DateFieldProps = {
   validationWarning?: string;
 };
 
-function DateField({
+function DateFormField({
   formId,
   field,
   title,
   editable,
   validationWarning,
-}: DateFieldProps) {
+}: DateFormFieldProps) {
   const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState<Date | null>(
     field.value ? new Date(field.value) : null
@@ -45,7 +45,7 @@ function DateField({
   };
 
   return (
-    <div className="flex flex-col rounded border p-4">
+    <div className="flex flex-col py-2">
       <div className="flex flex-col justify-between">
         <div>
           <h3 className="text-lg text-primary sm:text-xl">{`${title} ${
@@ -66,4 +66,4 @@ function DateField({
   );
 }
 
-export default DateField;
+export default DateFormField;

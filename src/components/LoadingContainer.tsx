@@ -11,7 +11,10 @@ interface LoadingContainerProps {
   className?: string;
 }
 
-function LoadingContainer({ text, className }: LoadingContainerProps) {
+function LoadingContainer({
+  text,
+  className,
+}: Readonly<LoadingContainerProps>) {
   return (
     <div
       className={`w-full ${className}`}

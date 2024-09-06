@@ -10,11 +10,24 @@ export type ApplicationAction = {
   payload?:
     | RetrievedApplication
     | ErrorResponse
-    | { fieldId: string; formId: number; attachmentId: number }
-    | { fieldId: string; formId: number; newValue: string }
+    | FormAttachmentUpdate
+    | FormValueUpdate
     | number[]
     | string;
 };
+
+export interface FormUpdate {
+  fieldId: string;
+  formId: number;
+}
+
+export interface FormAttachmentUpdate extends FormUpdate {
+  attachmentId: number;
+}
+
+export interface FormValueUpdate extends FormUpdate {
+  newValue: string;
+}
 
 export enum ApplicationActionType {
   LOADING = "loading",

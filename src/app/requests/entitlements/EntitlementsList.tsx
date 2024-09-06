@@ -15,7 +15,7 @@ function EntitlementsList({ entitlements }: Readonly<EntitlementsListProps>) {
   return (
     <List>
       {entitlements.map(
-        (entitlement: DatasetEntitlement) =>
+        (entitlement) =>
           entitlement.dataset && (
             <ListItem
               key={`${entitlement.dataset.id}${entitlement.start}${entitlement.end}`}

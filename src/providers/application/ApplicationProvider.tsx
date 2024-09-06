@@ -10,6 +10,7 @@ import {
   FormField,
   RetrievedApplication,
   AcceptTermsCommand,
+  FieldType,
 } from "@/types/application.types";
 import {
   addAttachmentIdToFieldValue,
@@ -32,6 +33,8 @@ import {
   ApplicationActionType,
   ApplicationContextState,
   ApplicationState,
+  FormAttachmentUpdate,
+  FormValueUpdate,
 } from "./ApplicationProvider.types";
 import { ErrorResponse } from "@/types/api.types";
 
@@ -55,11 +58,7 @@ function reducer(
       };
 
     case ApplicationActionType.INPUT_SAVED:
-      const payload = action.payload as {
-        formId: number;
-        fieldId: string;
-        newValue: string;
-      };
+      const payload = action.payload as FormValueUpdate;
 
       return {
         ...state,
@@ -76,11 +75,7 @@ function reducer(
       };
 
     case ApplicationActionType.ATTACHMENT_ATTACHED:
-      const attachPayload = action.payload as {
-        formId: number;
-        fieldId: string;
-        attachmentId: number;
-      };
+      const attachPayload = action.payload as FormAttachmentUpdate;
 
       return {
         ...state,
@@ -92,17 +87,14 @@ function reducer(
             attachPayload.fieldId,
             attachPayload.attachmentId,
             addAttachmentIdToFieldValue
-          ) as Form[],
+          ),
         } as RetrievedApplication,
         isLoading: false,
       };
 
     case ApplicationActionType.ATTACHMENT_DELETED:
-      const deletePayload = action.payload as {
-        formId: number;
-        fieldId: string;
-        attachmentId: number;
-      };
+      const deletePayload = action.payload as FormAttachmentUpdate;
+
       return {
         ...state,
         application: {
@@ -113,7 +105,7 @@ function reducer(
             deletePayload.fieldId,
             deletePayload.attachmentId,
             deleteAttachmentIdFromFieldValue
-          ) as Form[],
+          ),
         } as RetrievedApplication,
         isLoading: false,
       };
@@ -161,6 +153,9 @@ const debouncedSaveFormAndDuos = debounce(
             fields: form.fields.map((field: FormField) => ({
               fieldId: field.id,
               value: field.value,
+              ...(field.type === FieldType.TABLE
+                ? { tableValues: field.tableValues }
+                : {}),
             })),
           })),
           duoCodes: [],
@@ -172,7 +167,7 @@ const debouncedSaveFormAndDuos = debounce(
 
     await handleErrorResponseAfterAction(response);
   },
-  2000
+  200
 );
 
 type ApplicationProviderProps = {
@@ -312,7 +307,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   }
 
   async function saveFormAndDuos(forms: Form[]) {
-    await debouncedSaveFormAndDuos(
+    debouncedSaveFormAndDuos(
       forms,
       dispatch,
       application!.id,

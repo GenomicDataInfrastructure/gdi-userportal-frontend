@@ -26,4 +26,3 @@ SPDX-License-Identifier: Apache-2.0
 | NEXT*PUBLIC_SELECTED_FONT*\* | Font family selections                                   | Defines the typography for the site                              |
 | NEXT_PUBLIC_FOOTER_TEXT      | Text displayed in the footer                             | Typically contains copyright or funding information              |
 | NEXT*PUBLIC*\*\_URL          | Various social media and contact URLs                    | Used in the footer for external links                            |
-

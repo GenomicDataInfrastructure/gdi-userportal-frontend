@@ -5,15 +5,15 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type SearchBarProps = {
-  queryParams: URLSearchParams;
   size?: "regular" | "large";
 };
 
-function SearchBar({ queryParams, size }: Readonly<SearchBarProps>) {
+function SearchBar({ size }: Readonly<SearchBarProps>) {
+  const queryParams = useSearchParams();
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const router = useRouter();

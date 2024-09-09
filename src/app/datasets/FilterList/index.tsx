@@ -6,30 +6,39 @@ import {
   FilterItemProps,
   convertDataToFilterItemProps,
 } from "@/utils/convertDataToFilterItemProps";
-import { FacetGroup } from "@/services/discovery/types/datasetSearch.types";
 import Button from "@/components/Button";
 import FilterItem from "./FilterItem";
+import { Facet } from "@/services/discovery/types/facets.type";
 
-type FilterListProps = {
-  queryParams: URLSearchParams;
-  facetGroup: FacetGroup;
-};
+export default async function FilterList({
+  searchParams,
+}: {
+  searchParams: Record<string, string>;
+}) {
+  const searchFacets = (await (
+    await fetch("http://localhost:3000/api/facets")
+  ).json()) as Facet[];
 
-function FilterList({ queryParams, facetGroup }: FilterListProps) {
+  const facetGroups = new Set(searchFacets.map((facet) => facet.facetGroup));
+
   const filterItemProps: FilterItemProps[] =
-    convertDataToFilterItemProps(facetGroup);
+    convertDataToFilterItemProps(searchFacets);
 
   function isAnyGroupFilterApplied() {
-    if (!queryParams) return false;
-    return Array.from(queryParams.keys()).some(
-      (key) => key !== "page" && key !== "q" && key.includes(facetGroup.key)
+    if (!searchParams) return false;
+    return Array.from(Object.keys(searchParams)).some(
+      (key) => key !== "page" && key !== "q" && facetGroups.has(key)
     );
   }
 
   function getQueryStringWithoutGroupFilter() {
-    const filteredParamsQuery = Array.from(queryParams.keys())
-      .filter((x) => !x.includes(facetGroup.key) && x !== "page")
-      .map((x) => `&${x}=${queryParams.get(x)}`)
+    const params = Array.from(Object.keys(searchParams));
+
+    if (!params.length) return "";
+
+    const filteredParamsQuery = params
+      .filter((x) => facetGroups.has(x) && x !== "page")
+      .map((x) => `&${x}=${searchParams?.x})}`)
       .join("");
 
     return filteredParamsQuery;
@@ -59,5 +68,3 @@ function FilterList({ queryParams, facetGroup }: FilterListProps) {
     </div>
   );
 }
-
-export default FilterList;

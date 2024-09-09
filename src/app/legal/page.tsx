@@ -12,8 +12,7 @@ const getLegalFilePath = () => path.resolve("src/public/legal.md");
 
 const getLegalContent = async () => {
   const filePath = getLegalFilePath();
-  const markdown = await fs.readFile(filePath, "utf8");
-  return markdown;
+  return await fs.readFile(filePath, "utf8");
 };
 
 export default async function LegalPage() {

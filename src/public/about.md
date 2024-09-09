@@ -16,7 +16,7 @@ personalised medicine for cancer, common, rare, and infectious diseases
 as well as access to a reference genome collection representing the
 European population (Genome of Europe).
 
-### User Portal
+## User Portal
 
 The User Portal, developed by the Genomic Data Infrastructure (GDI)
 project, is the central entry point for accessing genomic data. As
@@ -26,7 +26,7 @@ currently under development and will serve as the main European-level
 hub for data access, providing a user-friendly interface for
 researchers and healthcare professionals.
 
-### Key Objectives
+## Key Objectives
 
 - To link and to provide cross-border access to genomic and related phenotypic datasets across Europe
 - To advance understanding of genomics for more precise and faster clinical decision-making, diagnostics, treatments systems, and to benefit the overall economy

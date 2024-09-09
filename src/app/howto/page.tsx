@@ -13,8 +13,7 @@ function getAboutFilePath(): string {
 
 async function getAboutContent(): Promise<string> {
   const filePath = getAboutFilePath();
-  const markdown = await fs.readFile(filePath, "utf8");
-  return markdown;
+  return await fs.readFile(filePath, "utf8");
 }
 
 export default async function HowtoPage() {

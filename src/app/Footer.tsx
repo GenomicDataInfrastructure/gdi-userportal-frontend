@@ -29,7 +29,6 @@ function Footer() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          {" "}
           <FontAwesomeIcon icon={faInfoCircle} className="mr-2 text-warning" />
           <h2 className="inline text-lg text-white">
             How to use the data portal

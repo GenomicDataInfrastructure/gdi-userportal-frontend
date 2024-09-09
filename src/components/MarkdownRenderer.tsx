@@ -6,7 +6,6 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
-import rehypeSanitize from "rehype-sanitize";
 
 interface MarkdownRendererProps {
   content: string;
@@ -20,7 +19,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
-      rehypePlugins={[rehypeSlug, rehypeSanitize]}
+      rehypePlugins={[rehypeSlug]}
       components={{
         h1: ({ ...props }) => (
           <h1

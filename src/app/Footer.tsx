@@ -24,7 +24,12 @@ function Footer() {
   return (
     <>
       <div className="bg-primary p-4 text-center mt-4">
-        <a href="/howto">
+        <a
+          href={contentConfig.bannerLink}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {" "}
           <FontAwesomeIcon icon={faInfoCircle} className="mr-2 text-warning" />
           <h2 className="inline text-lg text-white">
             How to use the data portal

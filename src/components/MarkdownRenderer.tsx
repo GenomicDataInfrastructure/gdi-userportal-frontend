@@ -23,7 +23,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
       components={{
         h1: ({ ...props }) => (
           <h1
-            className="text-left font-medium text-2xl sm:text-3xl mb-6 underline decoration-primary underline-offset-8"
+            className="text-left font-medium text-2xl sm:text-3xl mb-6 decoration-primary"
             {...props}
           />
         ),

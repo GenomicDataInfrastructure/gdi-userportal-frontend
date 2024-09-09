@@ -27,26 +27,3 @@ SPDX-License-Identifier: Apache-2.0
 | NEXT_PUBLIC_FOOTER_TEXT      | Text displayed in the footer                             | Typically contains copyright or funding information              |
 | NEXT*PUBLIC*\*\_URL          | Various social media and contact URLs                    | Used in the footer for external links                            |
 
-## Additional Customization Ideas
-
-1. **Theme Switching**: Implement a theme switcher that allows users to toggle between light and dark modes. This could involve creating additional color variables for a dark theme.
-
-2. **Localization**: Add support for multiple languages by implementing i18n. This would involve creating language files and a language selector component.
-
-3. **Custom Error Pages**: Create custom 404 and 500 error pages that match the site's design and provide helpful navigation options.
-
-4. **Accessibility Features**: Implement high-contrast mode and font size adjustments to improve accessibility.
-
-5. **Header Customization**: Allow for easy customization of the header, including the ability to add or remove navigation items.
-
-6. **Footer Customization**: Provide options to easily add or remove social media links and customize the footer layout.
-
-7. **Landing Page Layout**: Create variables to control the layout of the landing page, such as the number of featured items or the presence of a hero section.
-
-8. **Custom CSS Injection**: Allow for the injection of custom CSS through an environment variable to make quick style adjustments without changing the codebase.
-
-9. **Feature Flags**: Implement feature flags to easily enable or disable certain features of the portal.
-
-10. **Analytics Integration**: Add variables for easily integrating analytics tools like Google Analytics or Matomo.
-
-To implement these additional features, you would need to extend your environment variable list and create the necessary components and logic in your Next.js application.

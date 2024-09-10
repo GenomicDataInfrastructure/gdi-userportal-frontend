@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+"use client";
 
 import {
   FilterItemProps,
@@ -9,36 +10,46 @@ import {
 import Button from "@/components/Button";
 import FilterItem from "./FilterItem";
 import { Facet } from "@/services/discovery/types/facets.type";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
-export default async function FilterList({
-  searchParams,
-}: {
-  searchParams: Record<string, string>;
-}) {
-  const searchFacets = (await (
-    await fetch("http://localhost:3000/api/facets")
-  ).json()) as Facet[];
+export default function FilterList() {
+  const queryParams = useSearchParams();
+  const [searchFacets, setSearchFacets] = useState<Facet[]>([]);
 
-  const facetGroups = new Set(searchFacets.map((facet) => facet.facetGroup));
+  useEffect(() => {
+    async function fetchSearchFacets() {
+      const response = await fetch("/api/facets");
+      const searchFacets = (await response.json()) as Facet[];
+      setSearchFacets(searchFacets);
+    }
+    fetchSearchFacets();
+  }, []);
 
-  const filterItemProps: FilterItemProps[] =
-    convertDataToFilterItemProps(searchFacets);
+  const facetGroups = Array.from(
+    new Set(searchFacets.map((facet) => facet.facetGroup))
+  );
+
+  const filterItemProps: FilterItemProps[] = convertDataToFilterItemProps(
+    searchFacets
+  ).sort((f1, f2) => f2.groupKey.localeCompare(f1.groupKey));
 
   function isAnyGroupFilterApplied() {
-    if (!searchParams) return false;
-    return Array.from(Object.keys(searchParams)).some(
-      (key) => key !== "page" && key !== "q" && facetGroups.has(key)
+    if (!queryParams) return false;
+    return Array.from(queryParams.keys()).some(
+      (key) =>
+        key !== "page" &&
+        key !== "q" &&
+        facetGroups.some((group) => key.includes(group))
     );
   }
 
   function getQueryStringWithoutGroupFilter() {
-    const params = Array.from(Object.keys(searchParams));
-
-    if (!params.length) return "";
-
-    const filteredParamsQuery = params
-      .filter((x) => facetGroups.has(x) && x !== "page")
-      .map((x) => `&${x}=${searchParams?.x})}`)
+    const filteredParamsQuery = Array.from(queryParams.keys())
+      .filter(
+        (x) => facetGroups.every((group) => !x.includes(group)) && x !== "page"
+      )
+      .map((x) => `&${x}=${queryParams.get(x)}`)
       .join("");
 
     return filteredParamsQuery;

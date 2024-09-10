@@ -14,7 +14,6 @@ export async function GET() {
 
   try {
     const response = await facetList(session!);
-    console.log(response);
 
     return NextResponse.json(response.data);
   } catch (error) {

@@ -1,6 +1,10 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 "use client";
+
 import { datasetList } from "@/services/discovery/index.public";
-import { SearchedDataset } from "@/services/discovery/types/dataset.types";
 import {
   DatasetSearchOptions,
   DatasetSearchQueryFacet,
@@ -14,30 +18,11 @@ import {
   useEffect,
   useReducer,
 } from "react";
-
-enum DatasetsActionType {
-  LOADING,
-  DATASETS_LOADED,
-  REJECTED,
-}
-
-type DatasetsState = {
-  isLoading: boolean;
-  datasetCount?: number;
-  datasets?: SearchedDataset[];
-  errorCode?: number;
-};
-
-type DatasetsAction = {
-  type: DatasetsActionType;
-  payload?: {
-    datasets?: SearchedDataset[];
-    datasetCount?: number;
-    errorCode?: number;
-  };
-};
-
-const DatasetsContext = createContext<DatasetsState | undefined>(undefined);
+import {
+  DatasetsAction,
+  DatasetsActionType,
+  DatasetsState,
+} from "./DatasetProvider.types";
 
 function parseFacets(queryParams: URLSearchParams): DatasetSearchQueryFacet[] {
   const facetsQuery: DatasetSearchQueryFacet[] = [];
@@ -59,6 +44,8 @@ function parseFacets(queryParams: URLSearchParams): DatasetSearchQueryFacet[] {
   });
   return facetsQuery;
 }
+
+const DatasetsContext = createContext<DatasetsState | undefined>(undefined);
 
 function reducer(state: DatasetsState, action: DatasetsAction): DatasetsState {
   switch (action.type) {
@@ -98,6 +85,7 @@ export default function DatasetsProvider({
     useReducer(reducer, initialState);
 
   const fetchDatasets = useCallback(async () => {
+    dispatch({ type: DatasetsActionType.LOADING });
     const options: DatasetSearchOptions = {
       facets: parseFacets(queryParams),
       offset: queryParams.get("page")
@@ -110,7 +98,6 @@ export default function DatasetsProvider({
     };
 
     try {
-      dispatch({ type: DatasetsActionType.LOADING });
       const response = await datasetList(options);
       dispatch({
         type: DatasetsActionType.DATASETS_LOADED,
@@ -156,4 +143,4 @@ function useDatasets() {
   return context;
 }
 
-export { DatasetsProvider, useDatasets };
+export { DatasetsProvider, useDatasets, DATASET_PER_PAGE };

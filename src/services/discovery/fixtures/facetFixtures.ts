@@ -17,7 +17,7 @@ export const facetFixtures = {
         },
         {
           value:
-            "http://publications.europa.eu/resource/authority/access-right/RESTRICTED",
+            "https://publications.europa.eu/resource/authority/access-right/RESTRICTED",
           label: "Restricted",
         },
       ],
@@ -42,7 +42,7 @@ export const facetFixtures = {
         },
         {
           value:
-            "http://publications.europa.eu/resource/authority/data-theme/HEAL",
+            "https://publications.europa.eu/resource/authority/data-theme/HEAL",
           label: "Health",
         },
       ],

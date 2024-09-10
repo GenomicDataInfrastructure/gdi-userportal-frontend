@@ -59,9 +59,15 @@ function Footer() {
           {/* Second column: Legal */}
           <div className="flex flex-col gap-2 text-left w-full md:w-1/6">
             <h3 className="text-lg">Legal</h3>
-            <a className="hover:text-info">Terms & Conditions</a>
-            <a className="hover:text-info">Privacy Notice</a>
-            <a className="hover:text-info">Cookie Policy</a>
+            <a href="/legal#website-terms" className="hover:text-info">
+              Terms & Conditions
+            </a>
+            <a href="/legal#privacy-notice" className="hover:text-info">
+              Privacy Notice
+            </a>
+            <a href="/legal#cookies" className="hover:text-info">
+              Cookie Policy
+            </a>
           </div>
           {/* Third column: Portal links */}
           <div className="flex flex-col gap-2 text-left w-full md:w-1/6">

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 export default function Loading() {
   return (
     <div className="col-start-0 col-span-12 flex flex-col gap-4 sm:block xl:hidden">

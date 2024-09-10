@@ -6,7 +6,6 @@
 import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
 import ThemesSection from "@/components/ThemesSection";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { datasetList } from "@/services/discovery/index.public";
 import { SearchedDataset } from "@/services/discovery/types/dataset.types";
@@ -19,7 +18,6 @@ import { AxiosError } from "axios";
 import contentConfig from "@/config/contentConfig";
 
 const HomePage = () => {
-  const queryParams = useSearchParams();
   const [datasets, setDatasets] = useState<SearchedDataset[]>([]);
   const { setAlert } = useAlert();
 
@@ -58,7 +56,7 @@ const HomePage = () => {
       </div>
       <div className="flex justify-center mb-24">
         <div className="w-full lg:w-4/5 xl:w-3/4">
-          <SearchBar queryParams={queryParams} size="large" />
+          <SearchBar size="large" />
         </div>
       </div>
 

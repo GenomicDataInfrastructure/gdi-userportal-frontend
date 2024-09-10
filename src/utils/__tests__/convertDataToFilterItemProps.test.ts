@@ -4,7 +4,6 @@
 
 import { Facet } from "@/services/discovery/types/facets.type";
 import { convertDataToFilterItemProps } from "../convertDataToFilterItemProps";
-import { FacetGroup } from "@/services/discovery/types/datasetSearch.types";
 
 describe("Map field details objects to filter item props", () => {
   it("should map field details to filter item props", () => {

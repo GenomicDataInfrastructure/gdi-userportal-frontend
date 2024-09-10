@@ -6,12 +6,12 @@
 
 import Error from "@/app/error";
 import PaginationContainer from "@/components/PaginationContainer";
-import { useSearchParams } from "next/navigation";
 import DatasetList from "../../components/DatasetList";
 import {
   DATASET_PER_PAGE,
   useDatasets,
 } from "@/providers/datasets/DatasetsProvider";
+import { useSearchParams } from "next/navigation";
 
 export default function DatasetListContainer() {
   const queryParams = useSearchParams();

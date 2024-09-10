@@ -28,12 +28,12 @@ export default function DatasetsPage({
           <DatasetCount />
           <div className="col-start-0 col-span-12 flex flex-col gap-4 sm:block xl:hidden">
             <div className="my-4 h-fit">
-              <FilterList searchParams={searchParams} />
+              <FilterList />
             </div>
           </div>
           <div className="col-start-0 col-span-4 flex flex-col gap-y-6">
             <div className="col-start-0 col-span-4 mr-6 hidden h-fit xl:block px-6">
-              <FilterList searchParams={searchParams} />
+              <FilterList />
             </div>
           </div>
           <DatasetListContainer />

@@ -17,7 +17,7 @@ export default function DatasetCount() {
     text = `${datasetCount} ${datasetCount > 1 ? "datasets" : "dataset"} found`;
   }
   return (
-    <p className="col-start-0 col-span-12 mt-5 mb-12 text-center text-sm text-info h-9">
+    <p className="col-start-0 col-span-12 mt-5 xl:mb-12 mb-4 text-center text-sm text-info h-9">
       {text}
     </p>
   );

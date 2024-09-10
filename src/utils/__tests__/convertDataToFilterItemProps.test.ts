@@ -2,17 +2,16 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import { Facet } from "@/services/discovery/types/facets.type";
 import { convertDataToFilterItemProps } from "../convertDataToFilterItemProps";
-import {
-  Facet,
-  FacetGroup,
-} from "@/services/discovery/types/datasetSearch.types";
+import { FacetGroup } from "@/services/discovery/types/datasetSearch.types";
 
 describe("Map field details objects to filter item props", () => {
   it("should map field details to filter item props", () => {
     const groupKey = "ckan";
     const facets = [
       {
+        facetGroup: "ckan",
         key: "publisher_name",
         label: "Publishers",
         values: [
@@ -25,6 +24,7 @@ describe("Map field details objects to filter item props", () => {
         ],
       },
       {
+        facetGroup: "ckan",
         key: "organization",
         label: "Catalogues",
         values: [
@@ -34,11 +34,6 @@ describe("Map field details objects to filter item props", () => {
         ],
       },
     ] as Facet[];
-
-    const facetGroup = {
-      key: groupKey,
-      facets: facets,
-    } as FacetGroup;
 
     const expected = [
       {
@@ -81,7 +76,7 @@ describe("Map field details objects to filter item props", () => {
       },
     ];
 
-    const result = convertDataToFilterItemProps(facetGroup);
+    const result = convertDataToFilterItemProps(facets);
 
     expect(result).toEqual(expected);
   });
@@ -89,17 +84,12 @@ describe("Map field details objects to filter item props", () => {
     const groupKey = "ckan";
     const facets = [
       {
+        facetGroup: "ckan",
         key: "publisher_name",
         label: "Publishers",
         values: [],
       },
-    ];
-
-    const facetGroup = {
-      key: groupKey,
-      facets: facets,
-      label: "",
-    } as FacetGroup;
+    ] as Facet[];
 
     const expected = [
       {
@@ -110,7 +100,7 @@ describe("Map field details objects to filter item props", () => {
       },
     ];
 
-    const result = convertDataToFilterItemProps(facetGroup);
+    const result = convertDataToFilterItemProps(facets);
 
     expect(result).toEqual(expected);
   });
@@ -118,17 +108,12 @@ describe("Map field details objects to filter item props", () => {
   it("should return object with undefined icon if field of facet object is not in keys of fieldToIconMap object", () => {
     const facets = [
       {
+        facetGroup: "",
         key: "publisher_name",
         label: "Publishers",
         values: [],
       },
     ];
-
-    const facetGroup = {
-      key: "",
-      facets: facets,
-      label: "",
-    } as FacetGroup;
 
     const expected = [
       {
@@ -139,7 +124,7 @@ describe("Map field details objects to filter item props", () => {
       },
     ];
 
-    const result = convertDataToFilterItemProps(facetGroup);
+    const result = convertDataToFilterItemProps(facets);
 
     expect(result).toEqual(expected);
   });

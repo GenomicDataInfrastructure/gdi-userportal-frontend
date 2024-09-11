@@ -109,7 +109,7 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
         </div>
       </div>
       <div className="mt-6 flex justify-between items-center pr-2">
-        <Chips chips={dataset.themes?.map((x) => x.label) || []} />
+        <Chips chips={dataset.keywords?.map((x) => x.label) || []} />
         <Button
           text={isInBasket ? "Remove from basket" : "Add to basket"}
           icon={isInBasket ? faMinusCircle : faPlusCircle}

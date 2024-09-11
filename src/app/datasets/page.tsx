@@ -9,8 +9,11 @@ import DatasetsProvider from "@/providers/datasets/DatasetsProvider";
 import DatasetCount from "./DatasetCount";
 import DatasetListContainer from "./DatasetListContainer";
 import { redirect } from "next/navigation";
+import { GET } from "../api/facets/route";
+import { Facet } from "@/services/discovery/types/facets.type";
+import Error from "@/app/error";
 
-export default function DatasetsPage({
+export default async function DatasetsPage({
   searchParams,
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
@@ -18,6 +21,14 @@ export default function DatasetsPage({
   if (!searchParams?.page) {
     redirect("/datasets?page=1");
   }
+
+  const searchFacetsResponse = await GET();
+  if (searchFacetsResponse.status !== 200) {
+    return <Error statusCode={searchFacetsResponse.status} />;
+  }
+
+  const searchFacets = (await searchFacetsResponse.json()) as Facet[];
+
   return (
     <PageContainer>
       <div className="grid grid-cols-12">
@@ -28,12 +39,12 @@ export default function DatasetsPage({
           <DatasetCount />
           <div className="col-start-0 col-span-12 flex flex-col gap-4 sm:block xl:hidden">
             <div className="my-4 h-fit">
-              <FilterList />
+              <FilterList searchFacets={searchFacets} />
             </div>
           </div>
           <div className="col-start-0 col-span-4 flex flex-col gap-y-6">
             <div className="col-start-0 col-span-4 mr-6 hidden h-fit xl:block px-6">
-              <FilterList />
+              <FilterList searchFacets={searchFacets} />
             </div>
           </div>
           <DatasetListContainer />

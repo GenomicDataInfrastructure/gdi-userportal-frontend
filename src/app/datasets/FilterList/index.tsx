@@ -9,12 +9,12 @@ import {
 import FilterItem from "./FilterItem";
 import { Facet } from "@/services/discovery/types/facets.type";
 import ClearFilterButton from "./ClearFilterButton";
-import { GET } from "@/app/api/facets/route";
 
-export default async function FilterList() {
-  const response = await GET();
-  const searchFacets = (await response.json()) as Facet[];
+type FilterListProps = {
+  searchFacets: Facet[];
+};
 
+export default async function FilterList({ searchFacets }: FilterListProps) {
   const facetGroups = Array.from(
     new Set(searchFacets.map((facet) => facet.facetGroup))
   );

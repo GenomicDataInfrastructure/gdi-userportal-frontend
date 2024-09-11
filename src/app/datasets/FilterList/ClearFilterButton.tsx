@@ -29,14 +29,12 @@ export default function ClearFilterButton({
     );
   }
   function getQueryStringWithoutGroupFilter() {
-    const filteredParamsQuery = Array.from(queryParams.keys())
+    return Array.from(queryParams.keys())
       .filter(
         (x) => facetGroups.every((group) => !x.includes(group)) && x !== "page"
       )
       .map((x) => `&${x}=${queryParams.get(x)}`)
       .join("");
-
-    return filteredParamsQuery;
   }
 
   return (

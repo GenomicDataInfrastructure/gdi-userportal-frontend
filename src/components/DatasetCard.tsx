@@ -16,6 +16,7 @@ import {
   faUser,
   faBookBookmark,
   faThLarge,
+  faFile,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
@@ -90,6 +91,18 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
               </div>
               <span>Published by {dataset.organization.title}</span>
             </div>
+            {dataset.distributions?.length > 0 && (
+              <div className="flex gap-x-2.5 pl-2 sm:pl-2 sm:border-l-[2px] sm:border-l-info">
+                <div className="my-auto">
+                  <FontAwesomeIcon icon={faFile} className="text-primary" />
+                </div>
+                <span>
+                  {dataset.distributions.length > 1
+                    ? `${dataset.distributions.length} Distributions`
+                    : `${dataset.distributions.length} Distribution`}
+                </span>
+              </div>
+            )}
             {dataset.recordsCount && dataset.recordsCount > 0 && (
               <div className="flex gap-x-2.5 pl-2 sm:pl-2 sm:border-l-[2px] sm:border-l-info">
                 <div className="my-auto">

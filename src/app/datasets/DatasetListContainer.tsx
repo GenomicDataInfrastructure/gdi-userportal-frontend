@@ -28,7 +28,11 @@ export default function DatasetListContainer() {
       </div>
     );
   } else if (errorCode) {
-    return <Error statusCode={errorCode} />;
+    return (
+      <div className="col-start-0 col-span-12 xl:col-span-8 xl:col-start-5">
+        <Error statusCode={errorCode} />
+      </div>
+    );
   }
 
   return (

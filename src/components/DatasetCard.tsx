@@ -121,7 +121,7 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
           </div>
         </div>
       </div>
-      <div className="mt-6 flex justify-between items-center pr-2">
+      <div className="mt-6 flex justify-between items-start pr-2">
         <Chips chips={dataset.keywords?.map((x) => x.label) || []} />
         <Button
           text={isInBasket ? "Remove from basket" : "Add to basket"}
@@ -129,6 +129,7 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
           onClick={toggleDatasetInBasket}
           type={isInBasket ? "warning" : "primary"}
           disabled={buttonDisabled}
+          flex={true}
         />
       </div>
     </Link>

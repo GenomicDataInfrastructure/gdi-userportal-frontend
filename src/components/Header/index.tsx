@@ -4,7 +4,6 @@
 "use client";
 
 import { useWindowSize } from "@/hooks";
-import { SCREEN_SIZE } from "@/hooks/useWindowSize";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import logo from "@/public/header-logo.svg";
 import { User } from "@/types/user.types";
@@ -37,7 +36,6 @@ function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const activeTab = usePathname();
   const { basket, isLoading } = useDatasetBasket();
-  const screenSize = useWindowSize();
 
   function handleSignOut() {
     keycloackSessionLogOut().then(() => signOut({ callbackUrl: "/" }));

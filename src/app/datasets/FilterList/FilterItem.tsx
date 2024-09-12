@@ -13,7 +13,7 @@ function FilterItem({ field, label, data, groupKey }: FilterItemProps) {
   const [options, setOptions] = useState<string[]>([]);
 
   const updateUrl = (newOptions: string[]) => {
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams("page=1");
 
     if (newOptions.length > 0) {
       params.set(`${groupKey}-${field}`, newOptions.join(","));
@@ -26,7 +26,7 @@ function FilterItem({ field, label, data, groupKey }: FilterItemProps) {
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams("page=1");
     const paramValue = params.get(`${groupKey}-${field}`);
 
     if (paramValue) {

@@ -34,6 +34,7 @@ export type SearchedDataset = {
   description?: string;
   themes?: ValueLabel[];
   keywords: ValueLabel[];
+  distributions: RetrievedDistribution[];
   organization: RetrievedPublisher;
   modifiedAt: string;
   createdAt: string;

@@ -3,11 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { ExtendedSession } from "@/app/api/auth/auth.types";
 import { decrypt } from "@/utils/encryption";
-import {
-  DatasetSearchQuery,
-  FacetGroup,
-  facetToLabelMapping,
-} from "./types/datasetSearch.types";
+import { DatasetSearchQuery } from "./types/datasetSearch.types";
 
 export const createHeaders = async (
   session?: ExtendedSession

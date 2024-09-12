@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { datasetList } from "@/services/discovery";
-import { mapFacetGroups } from "@/services/discovery/utils";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { ExtendedSession } from "../auth/auth.types";
@@ -20,7 +19,6 @@ export async function POST(request: Request) {
     const result = {
       datasets: response.data.results,
       count: response.data.count,
-      facetGroups: mapFacetGroups(response.data.facetGroups),
     };
 
     return NextResponse.json(result);

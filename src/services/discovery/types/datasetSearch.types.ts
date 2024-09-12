@@ -17,7 +17,6 @@ export interface DatasetSearchOptions {
 export interface DatasetsSearchResult {
   datasets: SearchedDataset[];
   count: number;
-  facetGroups: FacetGroup[];
 }
 
 export enum FacetType {
@@ -63,7 +62,6 @@ export type ValueLabel = {
 export type DatasetsSearchResponse = {
   count: number;
   results: SearchedDataset[];
-  facetGroups: FacetGroup[];
 };
 
 export type FacetGroup = {

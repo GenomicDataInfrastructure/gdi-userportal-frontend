@@ -8,7 +8,7 @@ import MarkdownRenderer from "@/components/MarkdownRenderer";
 import PageContainer from "@/components/PageContainer";
 
 function getAboutFilePath(): string {
-  return path.resolve("src/public/about.md");
+  return path.resolve("src/public/howto.md");
 }
 
 async function getAboutContent(): Promise<string> {
@@ -16,7 +16,7 @@ async function getAboutContent(): Promise<string> {
   return await fs.readFile(filePath, "utf8");
 }
 
-export default async function AboutPage() {
+export default async function HowtoPage() {
   const content = await getAboutContent();
 
   return (

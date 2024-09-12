@@ -33,6 +33,7 @@ export type SearchedDataset = {
   title: string;
   description?: string;
   themes?: ValueLabel[];
+  keywords: ValueLabel[];
   organization: RetrievedPublisher;
   modifiedAt: string;
   createdAt: string;

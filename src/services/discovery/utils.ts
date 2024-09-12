@@ -26,20 +26,3 @@ export const createHeaders = async (
 export const DEFAULT_DATASET_SEARCH_QUERY: DatasetSearchQuery = {
   rows: 0,
 };
-
-export const mapFacetGroups = (facetGroups: FacetGroup[]): FacetGroup[] => {
-  const mappedGroups: FacetGroup[] = [];
-
-  for (const group of facetGroups) {
-    mappedGroups.push({
-      ...group,
-      facets: group.facets.map((facet) => ({
-        label: facetToLabelMapping[facet.label] ?? facet.label,
-        key: facet.key,
-        values: facet.values,
-      })),
-    });
-  }
-
-  return mappedGroups;
-};

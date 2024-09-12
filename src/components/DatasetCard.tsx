@@ -96,7 +96,11 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
                 <div className="my-auto">
                   <FontAwesomeIcon icon={faFile} className="text-primary" />
                 </div>
-                <span> {dataset.distributions.length} Distribution(s)</span>
+                <span>
+                  {dataset.distributions.length > 1
+                    ? `${dataset.distributions.length} Distributions`
+                    : `${dataset.distributions.length} Distribution`}
+                </span>
               </div>
             )}
             {dataset.recordsCount && dataset.recordsCount > 0 && (

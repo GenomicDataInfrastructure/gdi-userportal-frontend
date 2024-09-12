@@ -3,7 +3,6 @@
 
 "use client";
 
-import { useWindowSize } from "@/hooks";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import logo from "@/public/header-logo.svg";
 import { User } from "@/types/user.types";

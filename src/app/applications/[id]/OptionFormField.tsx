@@ -48,7 +48,7 @@ function OptionFormField({
   return (
     <div className="flex flex-col py-2">
       <div className="flex flex-col justify-between">
-        <h3 className="text-lg text-primary sm:text-xl">
+        <h3 className="text-lg sm:text-xl">
           {title} {field.optional ? "(Optional)" : ""}
         </h3>
         <div className="relative">

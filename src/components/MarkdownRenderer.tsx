@@ -12,7 +12,7 @@ interface MarkdownRendererProps {
 }
 
 const preprocessMarkdown = (markdown: string): string => {
-  return markdown.replace(/<!--.*?-->/gs, "");
+  return markdown.replace(/<!--.*?-->/g, "");
 };
 
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {

@@ -1,9 +1,3 @@
-<!--
-SPDX-FileCopyrightText: 2024 PNED G.I.E.
-
-SPDX-License-Identifier: Apache-2.0
--->
-
 # How to Use the Genomic Data Infrastructure Portal
 
 ## What is it?

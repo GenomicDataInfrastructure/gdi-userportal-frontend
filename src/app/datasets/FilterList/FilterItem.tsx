@@ -5,15 +5,18 @@
 
 import { Disclosure } from "@headlessui/react";
 import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FilterItemProps } from "@/utils/convertDataToFilterItemProps";
 
 function FilterItem({ field, label, data, groupKey }: FilterItemProps) {
   const [options, setOptions] = useState<string[]>([]);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const updateUrl = (newOptions: string[]) => {
-    const params = new URLSearchParams("page=1");
+    const params = new URLSearchParams(searchParams.toString());
 
     if (newOptions.length > 0) {
       params.set(`${groupKey}-${field}`, newOptions.join(","));
@@ -21,18 +24,20 @@ function FilterItem({ field, label, data, groupKey }: FilterItemProps) {
       params.delete(`${groupKey}-${field}`);
     }
 
+    params.set("page", "1");
+
     const newUrl = `${window.location.pathname}?${params.toString()}`;
-    window.history.replaceState(null, "", newUrl);
+    router.push(newUrl);
   };
 
   useEffect(() => {
-    const params = new URLSearchParams("page=1");
-    const paramValue = params.get(`${groupKey}-${field}`);
-
+    const paramValue = searchParams.get(`${groupKey}-${field}`);
     if (paramValue) {
       setOptions(paramValue.split(","));
+    } else {
+      setOptions([]);
     }
-  }, [field, groupKey]);
+  }, [searchParams, field, groupKey]);
 
   const handleCheckboxChange = (value: string, checked: boolean) => {
     const newOptions = checked
@@ -49,14 +54,13 @@ function FilterItem({ field, label, data, groupKey }: FilterItemProps) {
         <Disclosure>
           {({ open }) => (
             <>
-              <Disclosure.Button
-                className={`flex w-full justify-between px-4 py-2 text-left`}
-              >
+              <Disclosure.Button className="flex w-full justify-between px-4 py-2 text-left">
                 <span className="text-base px-1.5">
                   {label}
                   {options.length > 0 && (
                     <span className="text-info">
-                      {` (${options.length} filter${options.length > 1 ? "s" : ""} applied)`}
+                      ({options.length} filter{options.length > 1 ? "s" : ""}{" "}
+                      applied)
                     </span>
                   )}
                 </span>

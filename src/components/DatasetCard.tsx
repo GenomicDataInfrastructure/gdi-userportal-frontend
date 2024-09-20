@@ -15,7 +15,6 @@ import {
   faCalendarAlt,
   faUser,
   faBookBookmark,
-  faThLarge,
   faFile,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -56,8 +55,7 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
       <div className="flex flex-col lg:flex-row gap-x-2 gap-y-4">
         <div className="flex flex-col gap-y-2 shrink w-full lg:w-[90%] lg:pr-4">
           {dataset.themes && dataset.themes.length > 0 && (
-            <div className="flex gap-2 font-normal text-sm sm:text-[12px] leading-[12px] uppercase pb-2">
-              <FontAwesomeIcon icon={faThLarge} className="text-primary" />
+            <div className="flex flex-wrap gap-2 font-normal text-sm sm:text-[12px] leading-[12px] uppercase pb-2">
               {dataset.themes?.map((theme, index) => (
                 <span
                   key={index}

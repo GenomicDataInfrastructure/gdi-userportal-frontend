@@ -15,17 +15,12 @@ describe("/api/sitemap", () => {
   it("returns a valid sitemap", async () => {
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       method: "GET",
-      headers: {
-        host: "example.com",
-      },
+      headers: { host: "example.com" },
     });
 
     const mockSitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-      <url>
-        <loc>{{ BASE_URL }}/</loc>
-        <priority>1.00</priority>
-      </url>
+      <url><loc>{{ BASE_URL }}/</loc></url>
     </urlset>`;
 
     (fs.readFileSync as jest.Mock).mockReturnValue(mockSitemapContent);
@@ -53,5 +48,26 @@ describe("/api/sitemap", () => {
     expect(JSON.parse(res._getData())).toEqual({
       error: "Unable to generate sitemap",
     });
+  });
+
+  it("replaces all BASE_URL placeholders", async () => {
+    const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
+      method: "GET",
+      headers: { host: "example.com" },
+    });
+
+    const mockSitemapContent = `
+    <url><loc>{{ BASE_URL }}/page1</loc></url>
+    <url><loc>{{ BASE_URL }}/page2</loc></url>
+    `;
+
+    (fs.readFileSync as jest.Mock).mockReturnValue(mockSitemapContent);
+
+    await sitemapHandler(req, res);
+
+    const responseData = res._getData();
+    expect(responseData).toContain("<loc>https://example.com/page1</loc>");
+    expect(responseData).toContain("<loc>https://example.com/page2</loc>");
+    expect(responseData).not.toContain("{{ BASE_URL }}");
   });
 });

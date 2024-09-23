@@ -45,4 +45,19 @@ describe("/api/robots", () => {
       error: "Unable to serve robots.txt",
     });
   });
+
+  it("uses correct file path", async () => {
+    const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
+      method: "GET",
+    });
+
+    await robotsHandler(req, res);
+
+    expect(path.join).toHaveBeenCalledWith(
+      expect.any(String),
+      "src",
+      "public",
+      "robots.txt"
+    );
+  });
 });

@@ -31,6 +31,28 @@ const nextConfig = {
       },
     ];
   },
+
+  async rewrites() {
+    return [
+      {
+        source: '/sitemap.xml',
+        destination: '/api/sitemap',
+      },
+      {
+        source: '/robots.txt',
+        destination: '/api/robots',
+      },
+    ];
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      };
+    }
+    return config;
+  },
 };
 
 export default nextConfig;

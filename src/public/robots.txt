@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://portal.dev.gdi.lu/sitemap.xml
+Sitemap: /sitemap.xml

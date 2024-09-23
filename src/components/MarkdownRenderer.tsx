@@ -6,25 +6,20 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
-import rehypeSanitize from "rehype-sanitize";
 
 interface MarkdownRendererProps {
   content: string;
 }
 
-const preprocessMarkdown = (markdown: string): string => {
-  return markdown.replace(/<!--.*?-->/gs, "");
-};
-
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
-      rehypePlugins={[rehypeSlug, rehypeSanitize]}
+      rehypePlugins={[rehypeSlug]}
       components={{
         h1: ({ ...props }) => (
           <h1
-            className="text-left font-medium text-2xl sm:text-3xl mb-6 underline decoration-primary underline-offset-8"
+            className="text-left font-medium text-2xl sm:text-3xl mb-6 decoration-primary"
             {...props}
           />
         ),
@@ -81,7 +76,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
         ),
       }}
     >
-      {preprocessMarkdown(content)}
+      {content}
     </ReactMarkdown>
   );
 };

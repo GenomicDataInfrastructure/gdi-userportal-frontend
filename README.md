@@ -67,6 +67,10 @@ TODO
 
 To get more help on Next JS, go check out the [Next JS API Reference](https://nextjs.org/docs/pages/api-reference) page.
 
+## Frontend Customization
+
+For detailed information on how to customize the GDI User Portal Front-end, including environment variables and additional customization options, please refer to the [Frontend Customization Documentation](Frontend_customization.md).
+
 ## License
 
 - All original source code is licensed under [Apache-2.0](./LICENSES/Apache-2.0.txt).

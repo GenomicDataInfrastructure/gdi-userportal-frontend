@@ -55,7 +55,7 @@ function MultiSelectFormField({
     >
       <div className="flex flex-col justify-between">
         <div>
-          <h3 className="text-lg text-primary sm:text-xl">
+          <h3 className="text-lg sm:text-xl">
             {title} {field.optional ? "(Optional)" : ""}
           </h3>
         </div>

@@ -7,8 +7,6 @@ import PageContainer from "@/components/PageContainer";
 import { datasetGet } from "@/services/discovery";
 import ClientSidebar from "./ClientSidebar";
 import DatasetMetadata from "./DatasetMetadata";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThLarge } from "@fortawesome/free-solid-svg-icons";
 import Tooltip from "./Tooltip";
 import axios from "axios";
 
@@ -27,10 +25,6 @@ export default async function Page({ params }: { params: { id: string } }) {
           <div className="flex w-full flex-col gap-5 lg:w-2/3 lg:px-5">
             {dataset.themes && dataset.themes.length > 0 && (
               <div className="tracking-widest uppercase flex items-center text-[14px] relative group">
-                <FontAwesomeIcon
-                  icon={faThLarge}
-                  className="text-primary mr-2"
-                />
                 {dataset.themes.map((theme) => theme.label).join("  |  ")}
                 <Tooltip message="Themes associated with the dataset." />
               </div>

@@ -3,8 +3,6 @@
 
 "use client";
 
-import { useWindowSize } from "@/hooks";
-import { SCREEN_SIZE } from "@/hooks/useWindowSize";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import logo from "@/public/header-logo.svg";
 import { User } from "@/types/user.types";
@@ -37,7 +35,6 @@ function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const activeTab = usePathname();
   const { basket, isLoading } = useDatasetBasket();
-  const screenSize = useWindowSize();
 
   function handleSignOut() {
     keycloackSessionLogOut().then(() => signOut({ callbackUrl: "/" }));
@@ -76,6 +73,7 @@ function Header() {
         text="Login"
         type="primary"
         onClick={() => signIn("keycloak")}
+        flex={true}
       />
     );
   }
@@ -89,17 +87,7 @@ function Header() {
               <Image
                 src={logo}
                 alt="Logo"
-                className="mb-4 mt-4"
-                width={`${
-                  screenSize === SCREEN_SIZE.SM || screenSize === SCREEN_SIZE.MD
-                    ? "158"
-                    : "190"
-                }`}
-                height={`${
-                  screenSize === SCREEN_SIZE.SM || screenSize === SCREEN_SIZE.MD
-                    ? "57"
-                    : "69"
-                }`}
+                className="mb-4 mt-4 w-[190px] h-[69px]"
               />
             </Link>
             <div className="hidden items-center gap-x-3 text-base font-light text-black lg:flex lg:text-lg">

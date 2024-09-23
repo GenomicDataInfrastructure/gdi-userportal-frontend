@@ -6,34 +6,22 @@ import {
   FilterItemProps,
   convertDataToFilterItemProps,
 } from "@/utils/convertDataToFilterItemProps";
-import { FacetGroup } from "@/services/discovery/types/datasetSearch.types";
-import Button from "@/components/Button";
 import FilterItem from "./FilterItem";
+import { Facet } from "@/services/discovery/types/facets.type";
+import ClearFilterButton from "./ClearFilterButton";
 
 type FilterListProps = {
-  queryParams: URLSearchParams;
-  facetGroup: FacetGroup;
+  searchFacets: Facet[];
 };
 
-function FilterList({ queryParams, facetGroup }: FilterListProps) {
-  const filterItemProps: FilterItemProps[] =
-    convertDataToFilterItemProps(facetGroup);
+export default async function FilterList({ searchFacets }: FilterListProps) {
+  const facetGroups = Array.from(
+    new Set(searchFacets.map((facet) => facet.facetGroup))
+  );
 
-  function isAnyGroupFilterApplied() {
-    if (!queryParams) return false;
-    return Array.from(queryParams.keys()).some(
-      (key) => key !== "page" && key !== "q" && key.includes(facetGroup.key)
-    );
-  }
-
-  function getQueryStringWithoutGroupFilter() {
-    const filteredParamsQuery = Array.from(queryParams.keys())
-      .filter((x) => !x.includes(facetGroup.key) && x !== "page")
-      .map((x) => `&${x}=${queryParams.get(x)}`)
-      .join("");
-
-    return filteredParamsQuery;
-  }
+  const filterItemProps: FilterItemProps[] = convertDataToFilterItemProps(
+    searchFacets
+  ).sort((f1, f2) => f2.groupKey.localeCompare(f1.groupKey));
 
   return (
     <div className="flex flex-col gap-y-6">
@@ -47,17 +35,7 @@ function FilterList({ queryParams, facetGroup }: FilterListProps) {
           />
         </li>
       ))}
-      {isAnyGroupFilterApplied() && (
-        <div className="mt-4 flex justify-end">
-          <Button
-            href={`/datasets?page=1${getQueryStringWithoutGroupFilter()}`}
-            text="Clear Filters"
-            type="warning"
-          />
-        </div>
-      )}
+      <ClearFilterButton facetGroups={facetGroups} />
     </div>
   );
 }
-
-export default FilterList;

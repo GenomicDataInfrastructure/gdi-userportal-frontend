@@ -158,7 +158,9 @@ const DatasetMetadata = ({
                 className="align-middle text-primary "
               />
               <span className="align-middle">
-                {dataset.distributions.length} Distribution(s)
+                {dataset.distributions.length > 1
+                  ? `${dataset.distributions.length} Distributions`
+                  : `${dataset.distributions.length} Distribution`}
               </span>
               <Tooltip message="Number of distributions available for the dataset." />
             </span>

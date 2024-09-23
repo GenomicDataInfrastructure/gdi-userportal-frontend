@@ -1,9 +1,3 @@
-<!--
-SPDX-FileCopyrightText: 2024 PNED G.I.E.
-
-SPDX-License-Identifier: Apache-2.0
--->
-
 # Website Terms
 
 ## Website owner
@@ -107,25 +101,3 @@ Cookies are small text files that are placed on your equipment by our website, a
 The table below provides information on the cookies we use and their purpose.
 
 GDI Coordination does not use intrusive cookies in the sense that they are not used to collect personal data about you. We do not use targeting or advertising cookies which would allow profiling you. The cookies we use are to support the functionality of the website.
-
-## Essential (also known as Functional) Cookies:
-
-| COOKIES             | DESCRIPTION                            | DURATION |
-| ------------------- | -------------------------------------- | -------- |
-| cmplz_functional    | Cookies consent management (Complianz) | 1 year   |
-| cmplz_preferences   | Cookies consent management (Complianz) | 1 year   |
-| cmplz_statistics    | Cookies consent management (Complianz) | 1 year   |
-| cmplz_policy_id     | Cookies consent management (Complianz) | 1 year   |
-| cmplz_banner-status | Cookies consent management (Complianz) | 1 year   |
-
-The listed cookies are essential for the functionality of the website.
-
-## Non-essential Cookies:
-
-| COOKIES            | DESCRIPTION                                                  | DURATION   |
-| ------------------ | ------------------------------------------------------------ | ---------- |
-| pk_id              | User identification, audience metrics and analytics (MATOMO) | 13 months  |
-| pk_ses             | Session management (MATOMO)                                  | 30 minutes |
-| mtm_cookie_consent | Cookie consent management (MATOMO)                           | 394 days   |
-
-Non-essential cookies are only placed if you approve of them. You can change your cookies preferences at any time by managing your consent settings.

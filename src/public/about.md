@@ -1,9 +1,3 @@
-<!--
-SPDX-FileCopyrightText: 2024 PNED G.I.E.
-
-SPDX-License-Identifier: Apache-2.0
--->
-
 # About
 
 The Genomic Data Infrastructure (GDI) project aims to enable access to

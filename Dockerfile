@@ -34,7 +34,7 @@ ENV NODE_ENV production
 # Optional: Disable telemetry at runtime
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-COPY --from=builder /app/src/public ./public
+COPY --from=builder /app/public ./public
 
 # Ensure no write permissions for executable directories
 COPY --from=builder --chown=1001:1001 /app/.next/standalone ./

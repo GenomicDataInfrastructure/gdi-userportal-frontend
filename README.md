@@ -14,11 +14,11 @@ SPDX-License-Identifier: CC-BY-4.0
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
 
 <div style="display: flex; justify-content: center; padding: 20px;">
-  <img src="src/assets/egdi-logo-horizontal-full-color-rgb.svg" alt="European Genomic Data Infrastructure Logo" width="300">
+  <img src="egdi-logo-horizontal-full-color-rgb.svg" alt="European Genomic Data Infrastructure Logo" width="300">
 </div>
 
 <div style="display: flex; justify-content: center; padding: 20px;">
-  <img src="src/assets/demo_gdi_front_end.gif" alt="Genomic Data Infrastructure GIF" width="1000">
+  <img src="demo_gdi_front_end.gif" alt="Genomic Data Infrastructure GIF" width="1000">
 </div>
 
 # GDI User Portal Front-end
@@ -77,5 +77,4 @@ For detailed information on how to customize the GDI User Portal Front-end, incl
 - All documentation is licensed under [CC-BY-4.0](./LICENSES/CC-BY-4.0.txt).
 - All the fonts are licensed under [OFL-1.1](./LICENSES/OFL-1.1.txt).
 - Some configuration and data files are licensed under [CC-BY-4.0](./LICENSES/CC-BY-4.0.txt).
-- Some of the images are licensed under [CC0-1.0] (LICENSES/CC0-1.0.txt)
 - For more accurate information, check the individual files.

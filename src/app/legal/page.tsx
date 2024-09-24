@@ -8,7 +8,7 @@ import path from "path";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import PageContainer from "@/components/PageContainer";
 
-const getLegalFilePath = () => path.resolve("src/public/legal.md");
+const getLegalFilePath = () => path.resolve("public/legal.md");
 
 const getLegalContent = async () => {
   const filePath = getLegalFilePath();

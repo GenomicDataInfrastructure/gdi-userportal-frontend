@@ -4,93 +4,80 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
-import agricultureImg from "../public/themes/agriculture.svg";
-import economyImg from "../public/themes/economy.svg";
-import educationImg from "../public/themes/education.svg";
-import energyImg from "../public/themes/energy.svg";
-import envImg from "../public/themes/env.svg";
-import governmentImg from "../public/themes/government.svg";
-import healthImg from "../public/themes/health.svg";
-import internationalIssuesImg from "../public/themes/international_issues.svg";
-import justiceImg from "../public/themes/justice.svg";
-import populationImg from "../public/themes/population.svg";
-import regionsImg from "../public/themes/regions.svg";
-import techImg from "../public/themes/tech.svg";
-import transportImg from "../public/themes/transport.svg";
 import Image from "next/image";
 
 export const allThemes = [
   {
     name: "Agriculture",
-    img: agricultureImg,
+    img: "/themes/agriculture.svg",
     desc: "Agriculture, fisheries, forestry and food",
     url: "https://publications.europa.eu/resource/authority/data-theme/AGRI",
   },
   {
     name: "Economy",
-    img: economyImg,
+    img: "/themes/economy.svg",
     desc: "Economy and finance",
     url: "https://publications.europa.eu/resource/authority/data-theme/ECON",
   },
   {
     name: "Education",
-    img: educationImg,
+    img: "/themes/education.svg",
     desc: "Education, culture and sport",
     url: "https://publications.europa.eu/resource/authority/data-theme/EDUC",
   },
   {
     name: "Energy",
-    img: energyImg,
+    img: "/themes/energy.svg",
     url: "https://publications.europa.eu/resource/authority/data-theme/ENER",
   },
   {
     name: "Environment",
-    img: envImg,
+    img: "/themes/env.svg",
     url: "https://publications.europa.eu/resource/authority/data-theme/ENVI",
   },
   {
     name: "Government",
-    img: governmentImg,
+    img: "/themes/government.svg",
     desc: "Government and public sector",
     url: "https://publications.europa.eu/resource/authority/data-theme/GOVE",
   },
   {
     name: "Health",
-    img: healthImg,
+    img: "/themes/health.svg",
     url: "https://publications.europa.eu/resource/authority/data-theme/HEAL",
   },
   {
     name: "International Issues",
-    img: internationalIssuesImg,
+    img: "/themes/international_issues.svg",
     url: "https://publications.europa.eu/resource/authority/data-theme/INTR",
   },
   {
     name: "Justice",
-    img: justiceImg,
+    img: "/themes/justice.svg",
     desc: "Justice, legal system and public safety",
     url: "https://publications.europa.eu/resource/authority/data-theme/JUST",
   },
   {
     name: "Population",
-    img: populationImg,
+    img: "/themes/population.svg",
     desc: "Population and society",
     url: "https://publications.europa.eu/resource/authority/data-theme/OP_DATPRO",
   },
   {
     name: "Regions",
-    img: regionsImg,
+    img: "/themes/regions.svg",
     desc: "Regions and cities",
     url: "https://publications.europa.eu/resource/authority/data-theme/REGI",
   },
   {
     name: "Tech",
-    img: techImg,
+    img: "/themes/tech.svg",
     desc: "Science and technology",
     url: "https://publications.europa.eu/resource/authority/data-theme/TECH",
   },
   {
     name: "Transport",
-    img: transportImg,
+    img: "/themes/transport.svg",
     url: "https://publications.europa.eu/resource/authority/data-theme/TRAN",
   },
 ];
@@ -134,7 +121,7 @@ const ThemesSection = ({
             <div className="flex flex-col justify-center items-center text-center">
               <Image
                 alt={`${theme.name}-collection`}
-                src={theme.img.src}
+                src={theme.img}
                 width="48"
                 height="48"
               />

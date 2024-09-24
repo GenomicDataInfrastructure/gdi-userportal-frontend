@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2024 PNED G.I.E.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+services:
+  frontend:
+    ports:
+      - 3000:3000
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env.local

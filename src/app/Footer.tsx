@@ -17,7 +17,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import footerLogo from "../public/footer-logo.png";
 import contentConfig from "@/config/contentConfig";
 
 function Footer() {
@@ -41,9 +40,10 @@ function Footer() {
           {/* First column: About the project */}
           <div className="flex flex-col items-start gap-4 w-full md:w-3/5">
             <Image
-              src={footerLogo}
+              src={"/footer-logo.png"}
               alt="Footer logo"
-              style={{ maxWidth: "300px" }}
+              width={150}
+              height={100}
             />
             <p className="text-xs md:text-sm">
               {contentConfig.footerText.split("\n").map((line, index) => (

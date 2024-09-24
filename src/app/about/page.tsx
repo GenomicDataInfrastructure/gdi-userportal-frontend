@@ -8,7 +8,7 @@ import MarkdownRenderer from "@/components/MarkdownRenderer";
 import PageContainer from "@/components/PageContainer";
 
 function getAboutFilePath(): string {
-  return path.resolve("src/public/about.md");
+  return path.resolve("public/about.md");
 }
 
 async function getAboutContent(): Promise<string> {

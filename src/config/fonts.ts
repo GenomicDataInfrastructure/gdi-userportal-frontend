@@ -7,17 +7,17 @@ import localFont from "next/font/local";
 export const exposeFont = localFont({
   src: [
     {
-      path: "./../public/fonts/Expose-Regular.woff2",
+      path: "./../fonts/Expose-Regular.woff2",
       weight: "500",
       style: "normal",
     },
     {
-      path: "./../public/fonts/Expose-Regular.woff",
+      path: "./../fonts/Expose-Regular.woff",
       weight: "500",
       style: "normal",
     },
     {
-      path: "./../public/fonts/Expose-Regular.ttf",
+      path: "./../fonts/Expose-Regular.ttf",
       weight: "500",
       style: "normal",
     },
@@ -29,17 +29,17 @@ export const exposeFont = localFont({
 export const tabularFont = localFont({
   src: [
     {
-      path: "./../public/fonts/Tabular-Regular.woff2",
+      path: "./../fonts/Tabular-Regular.woff2",
       weight: "500",
       style: "normal",
     },
     {
-      path: "./../public/fonts/Tabular-Regular.woff",
+      path: "./../fonts/Tabular-Regular.woff",
       weight: "500",
       style: "normal",
     },
     {
-      path: "./../public/fonts/Tabular-Regular.ttf",
+      path: "./../fonts/Tabular-Regular.ttf",
       weight: "500",
       style: "normal",
     },
@@ -51,17 +51,17 @@ export const tabularFont = localFont({
 export const satoshiFont = localFont({
   src: [
     {
-      path: "./../public/fonts/Satoshi-Regular.woff2",
+      path: "./../fonts/Satoshi-Regular.woff2",
       weight: "500",
       style: "normal",
     },
     {
-      path: "./../public/fonts/Satoshi-Regular.woff",
+      path: "./../fonts/Satoshi-Regular.woff",
       weight: "500",
       style: "normal",
     },
     {
-      path: "./../public/fonts/Satoshi-Regular.ttf",
+      path: "./../fonts/Satoshi-Regular.ttf",
       weight: "500",
       style: "normal",
     },
@@ -73,12 +73,12 @@ export const satoshiFont = localFont({
 export const quicksandFont = localFont({
   src: [
     {
-      path: "./../public/fonts/Quicksand-Regular.woff2",
+      path: "./../fonts/Quicksand-Regular.woff2",
       weight: "500",
       style: "normal",
     },
     {
-      path: "./../public/fonts/Quicksand-Regular.woff",
+      path: "./../fonts/Quicksand-Regular.woff",
       weight: "500",
       style: "normal",
     },
@@ -90,12 +90,12 @@ export const quicksandFont = localFont({
 export const nunitoFont = localFont({
   src: [
     {
-      path: "./../public/fonts/Nunito-Regular.woff2",
+      path: "./../fonts/Nunito-Regular.woff2",
       weight: "500",
       style: "normal",
     },
     {
-      path: "./../public/fonts/Nunito-Regular.woff",
+      path: "./../fonts/Nunito-Regular.woff",
       weight: "500",
       style: "normal",
     },

@@ -4,7 +4,6 @@
 "use client";
 
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
-import logo from "@/public/header-logo.svg";
 import { User } from "@/types/user.types";
 import { keycloackSessionLogOut } from "@/utils/logout";
 import {
@@ -85,9 +84,11 @@ function Header() {
           <div className="flex justify-between gap-x-5 md:gap-x-12 lg:gap-x-24">
             <Link href="/">
               <Image
-                src={logo}
-                alt="Logo"
-                className="mb-4 mt-4 w-[190px] h-[69px]"
+                src={"/header-logo.svg"}
+                alt={"Logo"}
+                width="190"
+                height="69"
+                className={"mb-4 mt-4"}
               />
             </Link>
             <div className="hidden items-center gap-x-3 text-base font-light text-black lg:flex lg:text-lg">

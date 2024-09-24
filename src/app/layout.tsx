@@ -27,12 +27,10 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content={contentConfig.siteDescription} />
         <PublicEnvScript />
-        {process.env.NEXT_PUBLIC_CUSTOM_STYLE_URL && (
-          <link
-            rel="stylesheet"
-            href={process.env.NEXT_PUBLIC_CUSTOM_STYLE_URL}
-          />
-        )}
+        <link
+          rel="stylesheet"
+          href={"/palette.css"}
+        />
       </head>
       <body>
         <AlertProvider>

@@ -64,7 +64,7 @@ function Header() {
   if (status !== "loading") {
     loginBtn = session ? (
       <>
-        <RequestIcon isActive={activeTab.includes("requests")} />
+        <RequestIcon isActive={!!activeTab?.includes("requests")} />
         <Avatar user={session.user as User} />
       </>
     ) : (
@@ -114,7 +114,7 @@ function Header() {
                   Datasets
                   <span
                     className={`absolute left-0 bottom-[-2px] w-full h-[2px] transition-transform duration-300 transform ${
-                      activeTab.includes("datasets")
+                      activeTab?.includes("datasets")
                         ? "bg-primary scale-x-100"
                         : "bg-secondary scale-x-0"
                     } group-hover:scale-x-100 group-hover:bg-secondary`}
@@ -173,7 +173,7 @@ function Header() {
               <Link
                 href="/basket"
                 className={`relative flex items-center text-info hover:text-secondary transition-opacity duration-300 ${
-                  activeTab.includes("basket") ? "text-primary" : ""
+                  activeTab?.includes("basket") ? "text-primary" : ""
                 }`}
               >
                 <FontAwesomeIcon

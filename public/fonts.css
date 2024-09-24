@@ -1,38 +1,44 @@
+/*
+SPDX-FileCopyrightText: 2024 PNED G.I.E.
+
+SPDX-License-Identifier: Apache-2.0
+*/
+
 @font-face {
-    font-family: expose;
-    font-display: swap;
-    font-weight: 500;
-    font-style: normal;
-    src:
-        url("./fonts/Tabular-Regular.ttf") format("truetype"),
-        url("./fonts/Tabular-Regular.woff") format("woff"),
-        url("./fonts/Tabular-Regular.woff2") format("woff2");
+  font-family: expose;
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+  src:
+    url("./fonts/Tabular-Regular.ttf") format("truetype"),
+    url("./fonts/Tabular-Regular.woff") format("woff"),
+    url("./fonts/Tabular-Regular.woff2") format("woff2");
 }
 
 @font-face {
-    font-family: expose;
-    font-display: swap;
-    font-weight: 500;
-    font-style: normal;
-    src:
-        url("./fonts/Expose-Regular.ttf") format("truetype"),
-        url("./fonts/Expose-Regular.woff") format("woff"),
-        url("./fonts/Expose-Regular.woff2") format("woff2");
+  font-family: expose;
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+  src:
+    url("./fonts/Expose-Regular.ttf") format("truetype"),
+    url("./fonts/Expose-Regular.woff") format("woff"),
+    url("./fonts/Expose-Regular.woff2") format("woff2");
 }
 
 @font-face {
-    font-family: satoshi;
-    font-display: swap;
-    font-weight: 500;
-    font-style: normal;
-    src:
-        url("./fonts/Satoshi-Regular.ttf") format("truetype"),
-        url("./fonts/Satoshi-Regular.woff") format("woff"),
-        url("./fonts/Satoshi-Regular.woff2") format("woff2");
+  font-family: satoshi;
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+  src:
+    url("./fonts/Satoshi-Regular.ttf") format("truetype"),
+    url("./fonts/Satoshi-Regular.woff") format("woff"),
+    url("./fonts/Satoshi-Regular.woff2") format("woff2");
 }
 
 :root {
-    --font-sans: "tabular";
-    --font-medium: "expose";
-    --font-light: "satoshi";
+  --font-sans: "tabular";
+  --font-medium: "expose";
+  --font-light: "satoshi";
 }

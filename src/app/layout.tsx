@@ -26,14 +26,8 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content={contentConfig.siteDescription} />
         <PublicEnvScript />
-        <link
-          rel="stylesheet"
-          href={"/palette.css"}
-        />
-        <link
-          rel="stylesheet"
-          href={"/fonts.css"}
-        />
+        <link rel="stylesheet" href={"/palette.css"} />
+        <link rel="stylesheet" href={"/fonts.css"} />
       </head>
       <body>
         <AlertProvider>

@@ -32,6 +32,7 @@ export interface FormValueUpdate extends FormUpdate {
 export enum ApplicationActionType {
   LOADING = "loading",
   APPLICATION_LOADED = "application/loaded",
+  APPLICATION_DELETED = "application/deleted",
   ATTACHMENT_ATTACHED = "application/attachment/attached",
   ATTACHMENT_DELETED = "application/attachment/deleted",
   INPUT_SAVED = "application/form/input_saved",
@@ -58,13 +59,14 @@ export type ApplicationContextState = ApplicationState & {
     formId: number,
     fieldId: string,
     attachmentId: number
-  ) => void;
+  ) => Promise<void>;
   updateInputFields: (
     formId: number,
     fieldId: string,
     newValue: string
   ) => Promise<void>;
   acceptTerms: (acceptedLicenses: number[]) => Promise<void>;
-  submitApplication: () => void;
+  deleteApplication: () => Promise<void>;
+  submitApplication: () => Promise<void>;
   clearError: () => void;
 };

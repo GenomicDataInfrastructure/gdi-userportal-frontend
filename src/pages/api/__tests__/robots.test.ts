@@ -34,4 +34,26 @@ describe("Robots API Route", () => {
     const content = res._getData();
     expect(content).toContain("Sitemap: http://localhost:3000/sitemap.xml");
   });
+
+  it("handles malformed baseUrl correctly", async () => {
+    process.env.NEXT_PUBLIC_BASE_URL = "not-a-valid-url";
+    const { req, res } = createMocks<NextApiRequest, NextApiResponse>();
+
+    await Robots(req, res);
+
+    const content = res._getData();
+    expect(res._getStatusCode()).toBe(200);
+    expect(content).toContain("Sitemap: not-a-valid-url/sitemap.xml");
+  });
+
+  it("handles empty baseUrl correctly", async () => {
+    process.env.NEXT_PUBLIC_BASE_URL = "";
+    const { req, res } = createMocks<NextApiRequest, NextApiResponse>();
+
+    await Robots(req, res);
+
+    const content = res._getData();
+    expect(res._getStatusCode()).toBe(200);
+    expect(content).toContain("Sitemap: http://localhost:3000/sitemap.xml");
+  });
 });

@@ -38,4 +38,26 @@ describe("Sitemap API Route", () => {
     const content = res._getData();
     expect(content).toContain("<loc>http://localhost:3000/</loc>");
   });
+
+  it("handles malformed baseUrl correctly", async () => {
+    process.env.NEXT_PUBLIC_BASE_URL = "not-a-valid-url";
+    const { req, res } = createMocks<NextApiRequest, NextApiResponse>();
+
+    await Sitemap(req, res);
+
+    const content = res._getData();
+    expect(res._getStatusCode()).toBe(200);
+    expect(content).toContain("<loc>not-a-valid-url/</loc>");
+  });
+
+  it("handles empty baseUrl correctly", async () => {
+    process.env.NEXT_PUBLIC_BASE_URL = "";
+    const { req, res } = createMocks<NextApiRequest, NextApiResponse>();
+
+    await Sitemap(req, res);
+
+    const content = res._getData();
+    expect(res._getStatusCode()).toBe(200);
+    expect(content).toContain("<loc>http://localhost:3000/</loc>");
+  });
 });

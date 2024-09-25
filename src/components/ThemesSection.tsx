@@ -126,8 +126,8 @@ const ThemesSection = ({
                 height="48"
               />
 
-              <h3 className="font-medium text-lg sm:mt-1">{theme.name}</h3>
-              <div className="font-light leading-4 max-w-[8.5rem]">
+              <h3 className="font-title text-lg sm:mt-1">{theme.name}</h3>
+              <div className="font-body leading-4 max-w-[8.5rem]">
                 {theme.desc}
               </div>
             </div>

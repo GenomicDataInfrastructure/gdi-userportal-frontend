@@ -19,25 +19,23 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
       components={{
         h1: ({ ...props }) => (
           <h1
-            className="text-left font-medium text-2xl sm:text-3xl mb-6 decoration-primary"
+            className="text-left font-title text-2xl sm:text-3xl mb-6 decoration-primary"
             {...props}
           />
         ),
         h2: ({ ...props }) => (
           <h2
-            className="text-left font-medium text-xl sm:text-2xl mb-4 mt-6"
+            className="text-left font-title text-xl sm:text-2xl mb-4 mt-6"
             {...props}
           />
         ),
         h3: ({ ...props }) => (
           <h3
-            className="text-left font-medium text-lg sm:text-xl mb-4 mt-4"
+            className="text-left font-title text-lg sm:text-xl mb-4 mt-4"
             {...props}
           />
         ),
-        p: ({ ...props }) => (
-          <p className="mb-6 font-sans leading-relaxed" {...props} />
-        ),
+        p: ({ ...props }) => <p className="mb-6 leading-relaxed" {...props} />,
         ul: ({ ...props }) => (
           <ul className="list-inside list-disc mb-6" {...props} />
         ),

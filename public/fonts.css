@@ -38,7 +38,7 @@ SPDX-License-Identifier: Apache-2.0
 }
 
 :root {
-  --font-light: "satoshi";
-  --font-sans: "tabular";
-  --font-medium: "expose";
+  --font-body: "satoshi";
+  --font-subheading: "tabular";
+  --font-title: "expose";
 }

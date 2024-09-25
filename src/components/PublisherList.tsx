@@ -21,7 +21,7 @@ const PublisherList: React.FC<PublisherListProps> = ({ publishers }) => {
               className="bg-white py-4 flex flex-col items-start justify-start rounded-lg shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50 text-left w-full sm:max-w-[260px]"
             >
               <div className="p-4 h-full flex flex-col">
-                <h3 className="text-lg truncate-lines-1 font-medium mb-1">
+                <h3 className="text-lg truncate-lines-1 font-title mb-1">
                   {org.title}
                 </h3>
                 <div className="flex items-center mb-3 text-sm">

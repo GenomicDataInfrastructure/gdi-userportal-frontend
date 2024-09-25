@@ -25,9 +25,9 @@ export default {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "sans-serif"],
-        medium: ["var(--font-medium)", "sans-serif"],
-        light: ["var(--font-light)", "sans-serif"],
+        subheading: ["var(--font-subheading)", "sans-serif"],
+        title: ["var(--font-title)", "sans-serif"],
+        body: ["var(--font-body)", "sans-serif"],
       },
     },
   },

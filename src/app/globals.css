@@ -28,7 +28,7 @@
 }
 
 body {
-  font-family: var(--font-light);
+  font-family: var(--font-body);
 }
 
 h1,
@@ -37,7 +37,7 @@ h3,
 h4,
 h5,
 h6 {
-  @apply font-medium;
+  @apply font-title;
 }
 
 @layer utilities {
@@ -47,5 +47,5 @@ h6 {
 }
 
 .font-date {
-  @apply font-medium;
+  @apply font-title;
 }

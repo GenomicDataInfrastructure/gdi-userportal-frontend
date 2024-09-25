@@ -92,7 +92,7 @@ function Header() {
                 className={"mb-4 mt-4"}
               />
             </Link>
-            <div className="hidden items-center gap-x-3 text-base font-light text-black lg:flex lg:text-lg">
+            <div className="hidden items-center gap-x-3 text-base font-body text-black lg:flex lg:text-lg">
               <Link
                 href="/"
                 className={`relative px-3 py-1 lg:px-7 transition-opacity duration-300 text-black`}
@@ -170,7 +170,7 @@ function Header() {
               </Link>
             </div>
           </div>
-          <div className="font-light mr-3 hidden items-center gap-x-5 lg:flex md:gap-x-8">
+          <div className="font-body mr-3 hidden items-center gap-x-5 lg:flex md:gap-x-8">
             {contentConfig.showBasketAndLogin && !isLoading && (
               <Link
                 href="/basket"

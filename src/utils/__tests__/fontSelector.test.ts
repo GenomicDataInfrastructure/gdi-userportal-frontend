@@ -1,6 +1,4 @@
 import { getSelectedFonts, fontVariables } from "../fontSelector";
-import { fontMap } from "@/config/fonts";
-import { themeConfig } from "@/config/theme";
 
 jest.mock("@/config/theme", () => ({
   themeConfig: {
@@ -30,7 +28,7 @@ describe("fontSelector", () => {
     expect(result).toBe("--font-light --font-medium --font-sans");
   });
 
-  it("returns empty string when no valid fonts are selected in themeConfig", () => {
+  it("returns empty string when no valid fonts are selected in themeConfig", async () => {
     jest.mock("@/config/theme", () => ({
       themeConfig: {
         fonts: {
@@ -41,12 +39,12 @@ describe("fontSelector", () => {
       },
     }));
 
-    const { getSelectedFonts } = require("../fontSelector");
+    const { getSelectedFonts } = await import("../fontSelector");
     const result = getSelectedFonts();
     expect(result).toBe("");
   });
 
-  it("returns partial font variables when some fonts are valid and others are invalid", () => {
+  it("returns partial font variables when some fonts are valid and others are invalid", async () => {
     jest.mock("@/config/theme", () => ({
       themeConfig: {
         fonts: {
@@ -57,7 +55,7 @@ describe("fontSelector", () => {
       },
     }));
 
-    const { getSelectedFonts } = require("../fontSelector");
+    const { getSelectedFonts } = await import("../fontSelector");
     const result = getSelectedFonts();
     expect(result).toBe("--font-light --font-sans");
   });

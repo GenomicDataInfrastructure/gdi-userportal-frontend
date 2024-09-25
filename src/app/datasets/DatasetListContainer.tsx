@@ -45,7 +45,7 @@ export default function DatasetListContainer() {
           datasetCount={datasetCount || 0}
           datasetPerPage={DATASET_PER_PAGE}
           pathname="/datasets"
-          queryParams={queryParams}
+          queryParams={queryParams || new URLSearchParams()}
         />
       </div>
     </>

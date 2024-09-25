@@ -16,7 +16,7 @@ function FilterItem({ field, label, data, groupKey }: FilterItemProps) {
   const searchParams = useSearchParams();
 
   const updateUrl = (newOptions: string[]) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString() || "");
 
     if (newOptions.length > 0) {
       params.set(`${groupKey}-${field}`, newOptions.join(","));
@@ -31,7 +31,7 @@ function FilterItem({ field, label, data, groupKey }: FilterItemProps) {
   };
 
   useEffect(() => {
-    const paramValue = searchParams.get(`${groupKey}-${field}`);
+    const paramValue = searchParams?.get(`${groupKey}-${field}`) || "";
     if (paramValue) {
       setOptions(paramValue.split(","));
     } else {

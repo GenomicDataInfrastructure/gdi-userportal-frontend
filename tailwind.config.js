@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { themeConfig } from "./src/config/theme.ts";
-
 export default {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -12,7 +10,15 @@ export default {
   ],
   theme: {
     extend: {
-      colors: themeConfig.colors,
+      colors: {
+        primary: "var(--color-primary)",
+        secondary: "var(--color-secondary)",
+        info: "var(--color-info)",
+        warning: "var(--color-warning)",
+        "hover-color": "var(--color-hover)",
+        disclaimer: "var(--color-disclaimer)",
+        surface: "var(--color-surface)",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

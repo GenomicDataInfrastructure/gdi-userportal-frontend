@@ -4,6 +4,7 @@
 
 import Button from "@/components/Button";
 import Chips from "@/components/Chips";
+import contentConfig from "@/config/contentConfig";
 import { useWindowSize } from "@/hooks";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { SearchedDataset } from "@/services/discovery/types/dataset.types";
@@ -15,7 +16,6 @@ import {
   faCalendarAlt,
   faUser,
   faBookBookmark,
-  faThLarge,
   faFile,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -56,8 +56,7 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
       <div className="flex flex-col lg:flex-row gap-x-2 gap-y-4">
         <div className="flex flex-col gap-y-2 shrink w-full lg:w-[90%] lg:pr-4">
           {dataset.themes && dataset.themes.length > 0 && (
-            <div className="flex gap-2 font-normal text-sm sm:text-[12px] leading-[12px] uppercase pb-2">
-              <FontAwesomeIcon icon={faThLarge} className="text-primary" />
+            <div className="flex flex-wrap gap-2 font-normal text-sm sm:text-[12px] leading-[12px] uppercase pb-2">
               {dataset.themes?.map((theme, index) => (
                 <span
                   key={index}
@@ -121,15 +120,18 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
           </div>
         </div>
       </div>
-      <div className="mt-6 flex justify-between items-center pr-2">
+      <div className="mt-6 flex justify-between items-start pr-2">
         <Chips chips={dataset.keywords?.map((x) => x.label) || []} />
-        <Button
-          text={isInBasket ? "Remove from basket" : "Add to basket"}
-          icon={isInBasket ? faMinusCircle : faPlusCircle}
-          onClick={toggleDatasetInBasket}
-          type={isInBasket ? "warning" : "primary"}
-          disabled={buttonDisabled}
-        />
+        {contentConfig.showBasketAndLogin && (
+          <Button
+            text={isInBasket ? "Remove from basket" : "Add to basket"}
+            icon={isInBasket ? faMinusCircle : faPlusCircle}
+            onClick={toggleDatasetInBasket}
+            type={isInBasket ? "warning" : "primary"}
+            disabled={buttonDisabled}
+            flex={true}
+          />
+        )}
       </div>
     </Link>
   );

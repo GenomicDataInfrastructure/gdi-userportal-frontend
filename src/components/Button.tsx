@@ -17,6 +17,7 @@ interface ButtonProps {
   className?: string;
   props?: React.ComponentPropsWithoutRef<"a">;
   children?: React.ReactNode;
+  flex?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -29,9 +30,10 @@ const Button: React.FC<ButtonProps> = ({
   className,
   props,
   children,
+  flex = false,
 }) => {
   const common =
-    "rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide sm:w-auto cursor-pointer";
+    "rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide cursor-pointer";
 
   const classes = {
     primary: "bg-primary text-white hover:bg-secondary",
@@ -42,6 +44,7 @@ const Button: React.FC<ButtonProps> = ({
   };
 
   const disabledClasses = disabled ? "opacity-60 cursor-not-allowed" : "";
+  const flexClasses = flex ? "flex-shrink-0" : "sm:w-auto";
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (disabled) {
@@ -57,7 +60,13 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <a
       href={href}
-      className={cn(classes[type!] || "", common, className, disabledClasses)}
+      className={cn(
+        classes[type!] || "",
+        common,
+        flexClasses,
+        className,
+        disabledClasses
+      )}
       onClick={handleClick}
       aria-disabled={disabled}
       {...props}

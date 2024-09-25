@@ -17,6 +17,7 @@ interface ContentConfig {
   bannerLink: string;
   siteTitle: string;
   siteDescription: string;
+  showBasketAndLogin: boolean;
 }
 
 const contentConfig: ContentConfig = {
@@ -41,6 +42,7 @@ const contentConfig: ContentConfig = {
   siteDescription:
     env("NEXT_PUBLIC_SITE_DESCRIPTION") ||
     "Genomic Data Infrastructure User Portal",
+  showBasketAndLogin: env("NEXT_PUBLIC_SHOW_BASKET_AND_LOGIN") !== "false",
 };
 
 export default contentConfig;

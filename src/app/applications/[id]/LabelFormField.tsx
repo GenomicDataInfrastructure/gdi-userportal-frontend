@@ -14,7 +14,7 @@ function LabelFormField({ field }: LabelFormFieldProps) {
   return (
     <div className="flex flex-col py-2 ">
       <div className="flex flex-col justify-between">
-        <h3 className="text-lg text-primary sm:text-xl">
+        <h3 className="text-lg sm:text-xl">
           {field.title.find((label: Label) => label.language === "en")?.name ||
             field.title[0].name}
         </h3>

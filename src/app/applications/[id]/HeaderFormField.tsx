@@ -14,7 +14,7 @@ function HeaderFormField({ field }: HeaderFormFieldProps) {
   return (
     <div className="flex flex-col py-2 ">
       <div className="flex flex-col justify-between">
-        <h3 className="text-[27px] text-primary">
+        <h3 className="text-[27px]">
           {field.title.find((label: Label) => label.language === "en")?.name ||
             field.title[0].name}
         </h3>

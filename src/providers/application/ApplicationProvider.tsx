@@ -187,9 +187,11 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
     dispatch({ type: ApplicationActionType.CLEAR_ERROR });
   };
 
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
+  const id = params?.id;
 
   const fetchApplication = useCallback(async () => {
+    if (!id) return;
     dispatch({ type: ApplicationActionType.LOADING });
     const response = await fetch(`/api/applications/${id}`);
 

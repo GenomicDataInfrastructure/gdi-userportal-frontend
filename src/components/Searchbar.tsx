@@ -23,7 +23,7 @@ function SearchBar({ size }: Readonly<SearchBarProps>) {
     sizeClass = "h-14";
   }
 
-  const q = queryParams.get("q");
+  const q = queryParams?.get("q");
 
   useEffect(() => {
     const initialQuery = Array.isArray(q) ? q[0] : q;
@@ -37,7 +37,7 @@ function SearchBar({ size }: Readonly<SearchBarProps>) {
   }
 
   function redirectToSearchResults(query: string): void {
-    const params = new URLSearchParams(queryParams.toString());
+    const params = new URLSearchParams(queryParams?.toString() || "");
     params.set("page", "1");
     if (!query) params.delete("q");
     else params.set("q", query);

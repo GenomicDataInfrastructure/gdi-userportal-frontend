@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import { datasetList } from "@/services/discovery/index.public";
 import { SearchedDataset } from "@/services/discovery/types/dataset.types";
 import RecentDatasets from "@/components/RecentDatasets";
-import aboutBackground from "../public/homepage-about-background.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { useAlert } from "@/providers/AlertProvider";
@@ -66,7 +65,7 @@ const HomePage = () => {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url(${aboutBackground.src})`,
+            backgroundImage: `url("/homepage-about-background.png")`,
           }}
         ></div>
         <div className="relative z-10 w-full md:w-3/4 lg:w-2/3 xl:w-3/5 bg-white bg-opacity-75 rounded-lg min-h-[300px]">

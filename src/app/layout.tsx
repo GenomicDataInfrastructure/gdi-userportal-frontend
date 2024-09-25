@@ -12,7 +12,6 @@ import Footer from "./Footer";
 import SessionProviderWrapper from "./SessionProviderWrapper";
 import "./globals.css";
 config.autoAddCss = false;
-import { fontVariables } from "@/utils/fontSelector";
 import contentConfig from "@/config/contentConfig";
 
 export default function RootLayout({
@@ -21,18 +20,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={fontVariables}>
+    <html lang="en">
       <head>
         <title>{contentConfig.siteTitle}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content={contentConfig.siteDescription} />
         <PublicEnvScript />
-        {process.env.NEXT_PUBLIC_CUSTOM_STYLE_URL && (
-          <link
-            rel="stylesheet"
-            href={process.env.NEXT_PUBLIC_CUSTOM_STYLE_URL}
-          />
-        )}
+        <link rel="stylesheet" href={"/palette.css"} />
+        <link rel="stylesheet" href={"/fonts.css"} />
       </head>
       <body>
         <AlertProvider>

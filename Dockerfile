@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2024 PNED G.I.E.
 #
 # SPDX-License-Identifier: Apache-2.0
-FROM registry.access.redhat.com/ubi9/nodejs-20-minimal:1-57.1724037293 AS base
+FROM registry.access.redhat.com/ubi9/nodejs-20-minimal:1-63.1725851021 AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -34,7 +34,7 @@ ENV NODE_ENV production
 # Optional: Disable telemetry at runtime
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-COPY --from=builder /app/src/public ./public
+COPY --from=builder /app/public ./public
 
 # Ensure no write permissions for executable directories
 COPY --from=builder --chown=1001:1001 /app/.next/standalone ./

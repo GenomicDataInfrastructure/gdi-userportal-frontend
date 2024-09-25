@@ -70,7 +70,7 @@ function TableFormField({
   return (
     <div className="flex flex-col py-2">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg text-primary sm:text-xl">
+        <h3 className="text-lg sm:text-xl">
           {title} {field.optional ? "(Optional)" : ""}
         </h3>
         <button

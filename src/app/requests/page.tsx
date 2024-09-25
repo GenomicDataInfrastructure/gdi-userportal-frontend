@@ -34,7 +34,7 @@ function RequestPage() {
   const searchParams = useSearchParams();
   const path = usePathname();
 
-  const activeTab: string = searchParams.get("tab") as string;
+  const activeTab: string = searchParams?.get("tab") || "";
 
   const tabItems = createTabItems();
   const tabNames = tabItems.map(

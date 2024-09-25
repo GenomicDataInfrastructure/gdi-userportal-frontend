@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
 import AddToBasketButton from "@/components/AddToBasketButton";
 import serverConfig from "@/config/serverConfig";
+import contentConfig from "@/config/contentConfig";
 
 function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
   const metaFormats = [
@@ -35,7 +36,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
   return [
     {
       label: "",
-      value: (
+      value: contentConfig.showBasketAndLogin && (
         <div
           style={{ backgroundColor: "var(--color-surface)" }}
           className="flex flex-col rounded-2xl p-6 gap-3"
@@ -121,17 +122,6 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
               )}
             </div>
           </div>
-        </div>
-      ),
-    },
-    {
-      label: "",
-      value: (
-        <div
-          style={{ backgroundColor: "var(--color-surface)" }}
-          className="flex flex-col rounded-2xl p-6 gap-6"
-        >
-          <h1 className="font-extrabold">Similar Datasets</h1>
         </div>
       ),
     },

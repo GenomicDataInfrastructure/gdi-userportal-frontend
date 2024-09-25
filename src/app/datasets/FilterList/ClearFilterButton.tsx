@@ -21,6 +21,7 @@ export default function ClearFilterButton({
 
   function isAnyGroupFilterApplied() {
     if (!queryParams) return false;
+
     return Array.from(queryParams.keys()).some(
       (key) =>
         key !== "page" &&
@@ -29,6 +30,7 @@ export default function ClearFilterButton({
     );
   }
   function getQueryStringWithoutGroupFilter() {
+    if (!queryParams) return "";
     return Array.from(queryParams.keys())
       .filter(
         (x) => facetGroups.every((group) => !x.includes(group)) && x !== "page"

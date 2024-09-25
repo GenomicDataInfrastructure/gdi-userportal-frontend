@@ -86,14 +86,16 @@ export default function DatasetsProvider({
 
   const fetchDatasets = useCallback(async () => {
     dispatch({ type: DatasetsActionType.LOADING });
+
+    const query = queryParams || new URLSearchParams();
     const options: DatasetSearchOptions = {
-      facets: parseFacets(queryParams),
-      offset: queryParams.get("page")
-        ? (Number(queryParams.get("page")) - 1) * DATASET_PER_PAGE
+      facets: parseFacets(query),
+      offset: query.get("page")
+        ? (Number(query.get("page")) - 1) * DATASET_PER_PAGE
         : 0,
       limit: DATASET_PER_PAGE,
-      query: queryParams.get("q") as string | undefined,
-      sort: queryParams.get("sort") as string | "relevance",
+      query: query.get("q") as string | undefined,
+      sort: query.get("sort") as string | "relevance",
       include_private: false,
     };
 

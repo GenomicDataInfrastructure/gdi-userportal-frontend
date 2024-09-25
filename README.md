@@ -13,14 +13,6 @@ SPDX-License-Identifier: CC-BY-4.0
 [![GitHub contributors](https://img.shields.io/github/contributors/GenomicDataInfrastructure/gdi-userportal-frontend)](https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/graphs/contributors)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
 
-<div style="display: flex; justify-content: center; padding: 20px;">
-  <img src="egdi-logo-horizontal-full-color-rgb.svg" alt="European Genomic Data Infrastructure Logo" width="300">
-</div>
-
-<div style="display: flex; justify-content: center; padding: 20px;">
-  <img src="demo_gdi_front_end.gif" alt="Genomic Data Infrastructure GIF" width="1000">
-</div>
-
 # GDI User Portal Front-end
 
 The GDI User Portal Front-end is a crucial component of the Genomic Data Infrastructure (GDI) project, which aims to facilitate access to genomic, phenotypic, and clinical data across Europe. The GDI project is committed to establishing a federated, sustainable, and secure infrastructure to enable seamless data access. Leveraging the outcomes of the Beyond 1 Million Genomes (B1MG) project, the GDI project is actively realizing the ambitious goals set forth by the 1+Million Genomes (1+MG) initiative.

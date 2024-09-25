@@ -4,6 +4,7 @@
 
 import Button from "@/components/Button";
 import Chips from "@/components/Chips";
+import contentConfig from "@/config/contentConfig";
 import { useWindowSize } from "@/hooks";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { SearchedDataset } from "@/services/discovery/types/dataset.types";
@@ -121,14 +122,16 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
       </div>
       <div className="mt-6 flex justify-between items-start pr-2">
         <Chips chips={dataset.keywords?.map((x) => x.label) || []} />
-        <Button
-          text={isInBasket ? "Remove from basket" : "Add to basket"}
-          icon={isInBasket ? faMinusCircle : faPlusCircle}
-          onClick={toggleDatasetInBasket}
-          type={isInBasket ? "warning" : "primary"}
-          disabled={buttonDisabled}
-          flex={true}
-        />
+        {contentConfig.showBasketAndLogin && (
+          <Button
+            text={isInBasket ? "Remove from basket" : "Add to basket"}
+            icon={isInBasket ? faMinusCircle : faPlusCircle}
+            onClick={toggleDatasetInBasket}
+            type={isInBasket ? "warning" : "primary"}
+            disabled={buttonDisabled}
+            flex={true}
+          />
+        )}
       </div>
     </Link>
   );

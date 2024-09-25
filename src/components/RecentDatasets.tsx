@@ -51,16 +51,14 @@ function DatasetLink({
   description,
 }: Readonly<DatasetLinkProps>) {
   return (
-    <div className="p-5 h-full flex flex-col">
-      <span className="text-info flex items-center mb-4">
+    <div className="p-5 h-full flex flex-col w-full">
+      <span className="text-info text-sm font-sans mb-2">
         {formatDate(createdAt)}
       </span>
-      <h3 className="text-xl truncate-lines-1">{title}</h3>
-      <div className="flex items-center gap-1 leading-6 tracking-tight pt-2 pb-2">
-        <p className="mb-4 md:text-base truncate-lines-3">{description}</p>
-      </div>
-      <div className="mt-auto text-secondary flex items-center gap-1 transition hover:underline duration-1000">
-        Read More <FontAwesomeIcon icon={faArrowRight} className="w-5 h-5" />
+      <h3 className="text-lg font-medium mb-2 line-clamp-2">{title}</h3>
+      <p className=" mb-4 line-clamp-3">{description}</p>
+      <div className="mt-auto text-secondary text-sm font-medium flex items-center gap-1 transition hover:underline duration-300">
+        Read More <FontAwesomeIcon icon={faArrowRight} className="w-3 h-3" />
       </div>
     </div>
   );

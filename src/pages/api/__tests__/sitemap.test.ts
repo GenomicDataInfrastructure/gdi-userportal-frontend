@@ -21,7 +21,9 @@ describe("Sitemap API Route", () => {
 
     const content = res._getData();
     expect(content).toContain('<?xml version="1.0" encoding="UTF-8"?>');
-    expect(content).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
+    expect(content).toContain(
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+    );
     expect(content).toContain("<loc>https://example.com/</loc>");
     expect(content).toContain("<loc>https://example.com/datasets</loc>");
     expect(content).toContain("<loc>https://example.com/themes</loc>");

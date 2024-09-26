@@ -8,7 +8,6 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
 import AddToBasketButton from "@/components/AddToBasketButton";
-import serverConfig from "@/config/serverConfig";
 import contentConfig from "@/config/contentConfig";
 
 function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
@@ -58,7 +57,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
             {metaFormats.map((item) => (
               <div key={item.format}>
                 <Link
-                  href={`${serverConfig.discoveryUrl}/api/v1/datasets/${dataset.id}.${item.format}`}
+                  href={`/api/datasets/${dataset.id}/as-file/${item.format}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex items-center gap-1"

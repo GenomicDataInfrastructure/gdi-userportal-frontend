@@ -5,14 +5,16 @@
 import { ExtendedSession } from "@/app/api/auth/auth.types";
 import axios, { AxiosResponse } from "axios";
 import { createHeaders } from "./utils";
-import { Facet } from "./types/facets.type";
 
-export const makeFacetList = (discoveryUrl: string) => {
+export const makeRetrieveDatasetAsFile = (discoveryUrl: string) => {
   return async (
+    id: string,
+    format: string,
     session: ExtendedSession | null
-  ): Promise<AxiosResponse<Facet[]>> => {
-    return await axios.get<Facet[]>(`${discoveryUrl}/api/v1/search-facets`, {
+  ): Promise<AxiosResponse<Blob>> => {
+    return await axios.get(`${discoveryUrl}/api/v1/datasets/${id}.${format}`, {
       headers: await createHeaders(session),
+      responseType: "text",
     });
   };
 };

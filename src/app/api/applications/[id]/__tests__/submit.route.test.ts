@@ -65,8 +65,10 @@ describe("Submit an application", () => {
     const error = new Error() as AxiosError;
     error.isAxiosError = true;
     error.response = {
-      data: "application not in submittable state",
-      status: 428,
+      data: {
+        detail: "application not in submittable state",
+      },
+      status: 409,
       statusText: "Bad Request",
       headers: {},
       config: {
@@ -81,10 +83,10 @@ describe("Submit an application", () => {
 
     const response = await POST(request, { params: { id: "9" } });
 
-    expect(response.status).toBe(428);
-    expect(await response.json()).toEqual(
-      "application not in submittable state"
-    );
+    expect(response.status).toBe(409);
+
+    const json = await response.json();
+    expect(json.detail).toBe("application not in submittable state");
   });
 
   test("returns the proper message and status if an error occurs", async () => {

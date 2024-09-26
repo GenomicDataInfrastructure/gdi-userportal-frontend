@@ -14,7 +14,7 @@ export async function POST(request: Request) {
 
   try {
     const { options } = await request.json();
-    const response = await datasetList(options, session!);
+    const response = await datasetList(options, session);
 
     const result = {
       datasets: response.data.results,

@@ -14,7 +14,7 @@ import { createHeaders } from "./utils";
 export const makeDatasetList = (discoveryUrl: string) => {
   return async (
     options: DatasetSearchOptions,
-    session?: ExtendedSession
+    session: ExtendedSession | null
   ): Promise<AxiosResponse<DatasetsSearchResponse>> => {
     const datasetSearchQuery = {
       start: options?.offset ?? 0,

@@ -28,7 +28,7 @@ describe("datasetList", () => {
   });
 
   test("maps and asserts the full server response", async () => {
-    const response = await datasetList({});
+    const response = await datasetList({}, null);
 
     expect(response.data.count).toEqual(1);
     const dataset = response.data.results[0];
@@ -69,7 +69,7 @@ describe("datasetList", () => {
       rows: 1,
       facets: facets,
     };
-    await datasetList(searchOptions);
+    await datasetList(searchOptions, null);
 
     expect(mockedAxios.post).toHaveBeenCalled();
     expect(mockedAxios.post).toHaveBeenCalledWith(
@@ -113,7 +113,7 @@ describe("datasetList", () => {
         },
       ],
     };
-    await datasetList(searchOptions);
+    await datasetList(searchOptions, null);
 
     expect(mockedAxios.post).toHaveBeenCalled();
     expect(mockedAxios.post).toHaveBeenCalledWith(
@@ -169,7 +169,7 @@ describe("datasetList", () => {
       facets: facets,
     };
 
-    await datasetList(searchOptions);
+    await datasetList(searchOptions, null);
 
     expect(mockedAxios.post).toHaveBeenCalled();
     expect(mockedAxios.post).toHaveBeenCalledWith(

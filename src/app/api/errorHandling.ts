@@ -10,8 +10,17 @@ export function handleErrorResponse(
   error: unknown
 ): NextResponse<ErrorResponse> {
   if (axios.isAxiosError(error)) {
-    return NextResponse.json(error.response?.data, {
+    let content = error.response?.data;
+
+    if (typeof content === "object" && content !== null) {
+      content = JSON.stringify(content);
+    }
+
+    return new NextResponse(content, {
       status: error.response?.status,
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
   }
 

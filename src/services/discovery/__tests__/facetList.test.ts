@@ -21,7 +21,7 @@ describe("facetList", () => {
   });
 
   test("maps and asserts the full server response", async () => {
-    const response = await facetList();
+    const response = await facetList(null);
 
     expect(response.data.length).toEqual(3);
 

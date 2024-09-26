@@ -13,7 +13,7 @@ import axios from "axios";
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
   try {
-    const dataset = await datasetGet(id);
+    const dataset = await datasetGet(id, null);
 
     const relationships = dataset.datasetRelationships || [];
 

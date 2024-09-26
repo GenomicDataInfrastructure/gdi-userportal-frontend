@@ -10,7 +10,7 @@ import { createHeaders } from "./utils";
 export const makeDatasetGet = (discoveryUrl: string) => {
   return async (
     id: string,
-    session?: ExtendedSession
+    session: ExtendedSession | null
   ): Promise<RetrievedDataset> => {
     const response = await axios.get<RetrievedDataset>(
       `${discoveryUrl}/api/v1/datasets/${id}`,

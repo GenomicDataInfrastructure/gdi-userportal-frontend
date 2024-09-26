@@ -6,13 +6,13 @@ import { decrypt } from "@/utils/encryption";
 import { DatasetSearchQuery } from "./types/datasetSearch.types";
 
 export const createHeaders = async (
-  session?: ExtendedSession
+  session: ExtendedSession | null
 ): Promise<Record<string, string>> => {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
 
-  if (session) {
+  if (!!session) {
     headers["Authorization"] = `Bearer ${decrypt(session.access_token)}`;
   }
 

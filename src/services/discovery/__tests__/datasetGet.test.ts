@@ -24,8 +24,11 @@ describe("datasetGet", () => {
     mockedAxios.get.mockClear();
   });
 
-  test("fetches and maps a dataset correctly by ID when unauthenitacted", async () => {
-    const dataset = await datasetGet("a9dc55a2-a6d8-4553-ad6a-afe9c52f89cd");
+  test("fetches and maps a dataset correctly by ID when unauthenticated", async () => {
+    const dataset = await datasetGet(
+      "a9dc55a2-a6d8-4553-ad6a-afe9c52f89cd",
+      null
+    );
     expect(mockedAxios.get).toHaveBeenCalledWith(
       "http://localhost:5500/api/v1/datasets/a9dc55a2-a6d8-4553-ad6a-afe9c52f89cd",
       {
@@ -65,7 +68,7 @@ describe("datasetGet", () => {
     expect(distribution.modifiedAt).toEqual("02-02-2024");
   });
 
-  test("fetches and maps a dataset correctly by ID when unauthenitacted", async () => {
+  test("fetches and maps a dataset correctly by ID when unauthenticated", async () => {
     const mockedSession = {
       access_token: encrypt("decryptedToken"),
     } as ExtendedSession;

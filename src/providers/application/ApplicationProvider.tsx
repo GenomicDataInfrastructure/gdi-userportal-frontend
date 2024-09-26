@@ -57,6 +57,15 @@ function reducer(
         isLoading: false,
       };
 
+    case ApplicationActionType.APPLICATION_DELETED:
+      return {
+        ...state,
+        isLoading: false,
+        application: undefined,
+        termsAccepted: false,
+        errorResponse: undefined,
+      };
+
     case ApplicationActionType.INPUT_SAVED:
       const payload = action.payload as FormValueUpdate;
 
@@ -317,6 +326,30 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
     );
   }
 
+  async function deleteApplication() {
+    dispatch({ type: ApplicationActionType.LOADING });
+
+    const response = await fetch(
+      `/api/applications/${application!.id}/delete`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      dispatch({
+        type: ApplicationActionType.REJECTED,
+        payload: errorResponse,
+      });
+    } else {
+      dispatch({ type: ApplicationActionType.APPLICATION_DELETED });
+    }
+  }
+
   async function submitApplication() {
     dispatch({ type: ApplicationActionType.LOADING });
 
@@ -370,6 +403,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
         termsAccepted,
         addAttachment,
         deleteAttachment,
+        deleteApplication,
         submitApplication,
         updateInputFields,
         clearError,

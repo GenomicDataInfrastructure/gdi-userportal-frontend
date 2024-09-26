@@ -19,15 +19,22 @@ import {
   isApplicationEditable,
 } from "@/utils/application";
 import { formatDateTime } from "@/utils/formatDate";
-import { faPaperPlane, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPaperPlane,
+  faSpinner,
+  faXmarkCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FormContainer from "./FormContainer";
 import { createApplicationSidebarItems } from "./sidebarItems";
 import TermsAcceptance from "./TermsAcceptance";
 import { ValidationWarning } from "@/types/api.types";
 import { getTranslation } from "@/utils/getTranslation";
+import { useRouter } from "next/navigation";
+import { State } from "@/types/application.types";
 
 export default function ApplicationDetailsPage() {
+  const router = useRouter();
   const [alert, setAlert] = useState<AlertState | null>(null);
   const onCloseAlert = () => {
     setAlert(null);
@@ -36,16 +43,11 @@ export default function ApplicationDetailsPage() {
   const {
     application,
     errorResponse,
+    deleteApplication,
     submitApplication,
     clearError,
     isLoading,
   } = useApplicationDetails();
-
-  const handleSubmission = () => {
-    onCloseAlert();
-    clearError();
-    submitApplication();
-  };
 
   useEffect(() => {
     if (!!errorResponse) {
@@ -57,6 +59,17 @@ export default function ApplicationDetailsPage() {
       setAlert(null);
     }
   }, [errorResponse]);
+
+  const handleSubmission = () => {
+    onCloseAlert();
+    clearError();
+    submitApplication();
+  };
+
+  const handleDelete = async () => {
+    await deleteApplication();
+    router.push("/requests?tab=applications");
+  };
 
   if (errorResponse?.status === 404) {
     return <Error statusCode={404} />;
@@ -84,6 +97,7 @@ export default function ApplicationDetailsPage() {
   const lastEvent = events[0];
   const sidebarItems = createApplicationSidebarItems(application);
   const editable = isApplicationEditable(application);
+  const isDraft = application.state === State.DRAFT;
 
   const formWarnings: ValidationWarning[] = [];
   const applicationWarnings: ValidationWarning[] = [];
@@ -118,6 +132,15 @@ export default function ApplicationDetailsPage() {
               )}
             </div>
             <div className="mt-4 flex gap-x-3 sm:mt-0">
+              {isDraft && (
+                <Button
+                  type="warning"
+                  text="Delete"
+                  icon={faXmarkCircle}
+                  disabled={isLoading}
+                  onClick={handleDelete}
+                />
+              )}
               {editable && (
                 <Button
                   type="primary"

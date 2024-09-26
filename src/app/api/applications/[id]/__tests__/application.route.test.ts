@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 import serverConfig from "@/config/serverConfig";
 import { encrypt } from "@/utils/encryption";
-import { jest } from "@jest/globals";
 import axios from "axios";
 import { getServerSession } from "next-auth";
 import { GET } from "../route";

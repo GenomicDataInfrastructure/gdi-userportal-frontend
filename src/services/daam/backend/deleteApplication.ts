@@ -11,8 +11,8 @@ export const makeDeleteApplication = (daamUrl: string) => {
     applicationId: string,
     session: ExtendedSession
   ): Promise<AxiosResponse<void>> => {
-    return await axios.delete(
-      `${daamUrl}/api/v1/applications/${applicationId}`,
+    return await axios.post(
+      `${daamUrl}/api/v1/applications/${applicationId}/delete`,
       {
         headers: {
           "Content-Type": "application/json",

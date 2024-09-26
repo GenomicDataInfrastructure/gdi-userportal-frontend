@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { retrieveApplication } from "@/services/daam/index.server";
+import { ExtendedSession } from "@/app/api/auth/auth.types";
+import { authOptions } from "@/app/api/auth/config";
+import { handleErrorResponse } from "@/app/api/errorHandling";
+import { deleteApplication } from "@/services/daam/index.server";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { ExtendedSession } from "../../auth/auth.types";
-import { authOptions } from "../../auth/config";
-import { handleErrorResponse } from "../../errorHandling";
 
-export async function GET(
+export async function POST(
   request: Request,
   params: { params: { id: string } }
 ) {
@@ -21,8 +21,9 @@ export async function GET(
   }
 
   try {
-    const { data: application } = await retrieveApplication(id, session);
-    return NextResponse.json(application, { status: 200 });
+    await deleteApplication(id, session);
+
+    return NextResponse.json({ status: 200 });
   } catch (error) {
     return handleErrorResponse(error);
   }

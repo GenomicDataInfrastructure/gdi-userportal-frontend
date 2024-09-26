@@ -5,7 +5,7 @@ import serverConfig from "@/config/serverConfig";
 import { encrypt } from "@/utils/encryption";
 import axios from "axios";
 import { getServerSession } from "next-auth";
-import { DELETE, GET } from "../route";
+import { GET } from "../route";
 
 jest.mock("axios");
 jest.mock("next-auth/next");
@@ -76,35 +76,5 @@ describe("Retrieve an application", () => {
       title: "Unexpected error occurred",
       validationWarnings: [],
     });
-  });
-});
-
-describe("Delete an application", () => {
-  beforeEach(() => {
-    jest.resetAllMocks();
-  });
-
-  test("deletes an application", async () => {
-    const encryptedToken = encrypt("decryptedToken");
-    mockedGetServerSession.mockResolvedValueOnce({
-      access_token: encryptedToken,
-    });
-    mockedAxios.delete.mockResolvedValueOnce({
-      status: 200,
-    });
-
-    const request = new Request("http://localhost", { method: "DELETE" });
-    const response = await DELETE(request, { params: { id: "9" } });
-
-    expect(response.status).toBe(200);
-    expect(mockedAxios.delete).toHaveBeenCalledWith(
-      `${serverConfig.daamUrl}/api/v1/applications/9`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer decryptedToken`,
-        },
-      }
-    );
   });
 });

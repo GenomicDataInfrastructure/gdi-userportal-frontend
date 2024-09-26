@@ -11,7 +11,7 @@ export const makeRetrieveDatasetAsFile = (discoveryUrl: string) => {
     id: string,
     format: string,
     session: ExtendedSession | null
-  ): Promise<AxiosResponse> => {
+  ): Promise<AxiosResponse<Blob>> => {
     return await axios.get(`${discoveryUrl}/api/v1/datasets/${id}.${format}`, {
       headers: await createHeaders(session),
       responseType: "text",

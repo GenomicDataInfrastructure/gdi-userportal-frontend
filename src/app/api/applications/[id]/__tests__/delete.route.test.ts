@@ -29,12 +29,13 @@ describe("Delete an application", () => {
       status: 200,
     });
 
-    const request = new Request("http://localhost", { method: "DELETE" });
+    const request = new Request("http://localhost", { method: "POST" });
     const response = await POST(request, { params: { id: "9" } });
 
     expect(response.status).toBe(200);
     expect(mockedAxios.post).toHaveBeenCalledWith(
       `${serverConfig.daamUrl}/api/v1/applications/9/delete`,
+      null,
       {
         headers: {
           "Content-Type": "application/json",

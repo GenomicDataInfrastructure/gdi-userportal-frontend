@@ -13,6 +13,7 @@ export const makeDeleteApplication = (daamUrl: string) => {
   ): Promise<AxiosResponse<void>> => {
     return await axios.post(
       `${daamUrl}/api/v1/applications/${applicationId}/delete`,
+      null,
       {
         headers: {
           "Content-Type": "application/json",

@@ -5,7 +5,7 @@ import serverConfig from "@/config/serverConfig";
 import { encrypt } from "@/utils/encryption";
 import axios from "axios";
 import { getServerSession } from "next-auth";
-import { POST } from "../delete/route";
+import { DELETE } from "../route";
 
 jest.mock("axios");
 jest.mock("next-auth/next");
@@ -29,19 +29,48 @@ describe("Delete an application", () => {
       status: 200,
     });
 
-    const request = new Request("http://localhost", { method: "POST" });
-    const response = await POST(request, { params: { id: "9" } });
+    const request = new Request("http://localhost", { method: "DELETE" });
+    const response = await DELETE(request, { params: { id: "9" } });
 
     expect(response.status).toBe(200);
-    expect(mockedAxios.post).toHaveBeenCalledWith(
-      `${serverConfig.daamUrl}/api/v1/applications/9/delete`,
-      null,
+    expect(mockedAxios.delete).toHaveBeenCalledWith(
+      `${serverConfig.daamUrl}/api/v1/applications/9`,
       {
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer decryptedToken`,
         },
       }
     );
+  });
+
+  test("returns unauthorized if session is not available", async () => {
+    mockedGetServerSession.mockResolvedValueOnce(null);
+    const request = new Request("http://localhost", {
+      method: "DELETE",
+    });
+
+    const response = await DELETE(request, { params: { id: "5" } });
+
+    expect(response.status).toBe(401);
+    expect(await response.json()).toEqual({ error: "Unauthorized" });
+  });
+
+  test("returns error if Axios request fails", async () => {
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
+    mockedAxios.delete.mockRejectedValueOnce(new Error("server error"));
+
+    const request = new Request("http://localhost", { method: "DELETE" });
+    const response = await DELETE(request, { params: { id: "9" } });
+
+    expect(response.status).toBe(500);
+    expect(await response.json()).toEqual({
+      detail: "Unexpected error occurred, please contact the administrators.",
+      status: 500,
+      title: "Unexpected error occurred",
+      validationWarnings: [],
+    });
   });
 });

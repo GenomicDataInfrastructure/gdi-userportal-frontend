@@ -329,15 +329,9 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   async function deleteApplication() {
     dispatch({ type: ApplicationActionType.LOADING });
 
-    const response = await fetch(
-      `/api/applications/${application!.id}/delete`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`/api/applications/${application!.id}`, {
+      method: "DELETE",
+    });
 
     if (!response.ok) {
       const errorResponse = await response.json();

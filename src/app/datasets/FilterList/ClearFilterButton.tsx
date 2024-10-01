@@ -40,7 +40,7 @@ export default function ClearFilterButton({
   }
 
   return (
-    <div className="mt-4 flex justify-end">
+    <div className="flex justify-end">
       {isAnyGroupFilterApplied() && (
         <Button
           href={`/datasets?page=1${getQueryStringWithoutGroupFilter()}`}

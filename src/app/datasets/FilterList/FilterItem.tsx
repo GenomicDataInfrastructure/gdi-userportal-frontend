@@ -58,7 +58,7 @@ function FilterItem({ field, label, data, groupKey }: FilterItemProps) {
                 <span className="text-base px-1.5">
                   {label}
                   {options.length > 0 && (
-                    <span className="text-info">
+                    <span className="text-info mx-1">
                       ({options.length} filter{options.length > 1 ? "s" : ""}{" "}
                       applied)
                     </span>

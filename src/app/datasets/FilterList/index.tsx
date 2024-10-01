@@ -8,17 +8,12 @@ import {
 } from "@/utils/convertDataToFilterItemProps";
 import FilterItem from "./FilterItem";
 import { Facet } from "@/services/discovery/types/facets.type";
-import ClearFilterButton from "./ClearFilterButton";
 
 type FilterListProps = {
   searchFacets: Facet[];
 };
 
 export default async function FilterList({ searchFacets }: FilterListProps) {
-  const facetGroups = Array.from(
-    new Set(searchFacets.map((facet) => facet.facetGroup))
-  );
-
   const filterItemProps: FilterItemProps[] = convertDataToFilterItemProps(
     searchFacets
   ).sort((f1, f2) => f2.groupKey.localeCompare(f1.groupKey));
@@ -35,7 +30,6 @@ export default async function FilterList({ searchFacets }: FilterListProps) {
           />
         </li>
       ))}
-      <ClearFilterButton facetGroups={facetGroups} />
     </div>
   );
 }

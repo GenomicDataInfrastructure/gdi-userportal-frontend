@@ -36,6 +36,10 @@ function PaginationContainer({
     return `${pathname}?${params}`;
   }
 
+  if (datasetCount === 0) {
+    return <div className="h-10 mb-4" aria-hidden="true"></div>;
+  }
+
   return (
     <Pagination>
       <PaginationContent>

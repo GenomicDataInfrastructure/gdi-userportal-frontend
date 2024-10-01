@@ -12,6 +12,8 @@ import { redirect } from "next/navigation";
 import { GET } from "../api/facets/route";
 import { Facet } from "@/services/discovery/types/facets.type";
 import Error from "@/app/error";
+import AppliedFilters from "@/components/AppliedFilters";
+import NoDatasetMessage from "./NoDatasetMessage";
 
 export default async function DatasetsPage({
   searchParams,
@@ -47,7 +49,11 @@ export default async function DatasetsPage({
               <FilterList searchFacets={searchFacets} />
             </div>
           </div>
-          <DatasetListContainer />
+          <div className="col-span-12 xl:col-span-8">
+            <AppliedFilters searchFacets={searchFacets} />
+            <NoDatasetMessage />
+            <DatasetListContainer />
+          </div>
         </DatasetsProvider>
       </div>
     </PageContainer>

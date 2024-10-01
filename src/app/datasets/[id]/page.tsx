@@ -4,11 +4,12 @@
 
 import Error from "@/app/error";
 import PageContainer from "@/components/PageContainer";
+import Sidebar from "@/components/Sidebar";
 import { datasetGet } from "@/services/discovery";
-import ClientSidebar from "./ClientSidebar";
+import axios from "axios";
 import DatasetMetadata from "./DatasetMetadata";
 import Tooltip from "./Tooltip";
-import axios from "axios";
+import { createDatasetSidebarItems } from "./sidebarItems";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -39,7 +40,9 @@ export default async function Page({ params }: { params: { id: string } }) {
               dictionary={dictionary}
             />
           </div>
-          <ClientSidebar dataset={dataset} />
+          <div className="lg:w-1/3 w-full my-8">
+            <Sidebar items={createDatasetSidebarItems(dataset)} />
+          </div>
         </div>
       </PageContainer>
     );

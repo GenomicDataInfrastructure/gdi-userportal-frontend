@@ -3,11 +3,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 "use client";
-import React from "react";
 import { Dataset } from "@/types/application.types";
 import { getLabelName } from "@/utils/getLabelName";
 import { faDatabase } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
 
 interface DatasetListProps {
   datasets: Dataset[];
@@ -16,13 +16,11 @@ interface DatasetListProps {
 const DatasetList: React.FC<DatasetListProps> = ({ datasets }) =>
   datasets.map((dataset, index) => (
     <span
-      className="mb-2 flex items-center gap-2"
+      className="mb-4 flex items-center gap-x-6"
       key={`${dataset.id}-${index}`}
     >
-      <FontAwesomeIcon icon={faDatabase} className="text-md text-info" />
-      <h3 className="sm:text-md break-all text-base font-bold text-info lg:text-lg">
-        {getLabelName(dataset.title)}
-      </h3>
+      <FontAwesomeIcon icon={faDatabase} className="text-primary" />
+      <p className="break-words">{getLabelName(dataset.title)}</p>
     </span>
   ));
 

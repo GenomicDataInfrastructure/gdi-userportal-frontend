@@ -5,33 +5,32 @@
 "use client";
 
 import Error from "@/app/error";
-import { useState, useEffect } from "react";
 import Alert, { AlertState } from "@/components/Alert";
 import Button from "@/components/Button";
+import Chip from "@/components/Chip";
 import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
 import Sidebar from "@/components/Sidebar";
-import Chip from "@/components/Chip";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
+import { ValidationWarning } from "@/types/api.types";
+import { State } from "@/types/application.types";
 import {
   formatApplicationProp,
   groupWarningsPerFormId,
   isApplicationEditable,
 } from "@/utils/application";
 import { formatDateTime } from "@/utils/formatDate";
+import { getTranslation } from "@/utils/getTranslation";
 import {
   faPaperPlane,
   faSpinner,
   faXmarkCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import FormContainer from "./FormContainer";
 import { createApplicationSidebarItems } from "./sidebarItems";
-import TermsAcceptance from "./TermsAcceptance";
-import { ValidationWarning } from "@/types/api.types";
-import { getTranslation } from "@/utils/getTranslation";
-import { useRouter } from "next/navigation";
-import { State } from "@/types/application.types";
 
 export default function ApplicationDetailsPage() {
   const router = useRouter();
@@ -95,7 +94,6 @@ export default function ApplicationDetailsPage() {
 
   const events = application.events;
   const lastEvent = events[0];
-  const sidebarItems = createApplicationSidebarItems(application);
   const editable = isApplicationEditable(application);
   const isDraft = application.state === State.DRAFT;
 
@@ -165,9 +163,8 @@ export default function ApplicationDetailsPage() {
           <div>
             <div className="h-[2px] bg-secondary opacity-80"></div>
 
-            <div className="my-8 w-full lg:hidden">
-              <Sidebar items={sidebarItems} />
-              <TermsAcceptance />
+            <div className="lg:hidden w-full my-8">
+              <Sidebar items={createApplicationSidebarItems(application)} />
             </div>
 
             <div className="mt-5 h-[2px] bg-secondary opacity-80 lg:hidden"></div>
@@ -202,8 +199,7 @@ export default function ApplicationDetailsPage() {
         </div>
 
         <aside className="hidden w-full lg:block lg:w-1/3">
-          <Sidebar items={sidebarItems} />
-          <TermsAcceptance />
+          <Sidebar items={createApplicationSidebarItems(application)} />
         </aside>
       </div>
     </PageContainer>

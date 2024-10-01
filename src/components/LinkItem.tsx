@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 // SPDX-License-Identifier: Apache-2.0
 
-import { SidebarLink } from "./Sidebar";
+import { SidebarLink } from "./Sidebar/Sidebar";
 
 type LinkItemProps = {
   link: SidebarLink;

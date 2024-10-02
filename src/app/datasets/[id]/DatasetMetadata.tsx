@@ -80,25 +80,37 @@ const DatasetMetadata = ({
             <Tooltip message="Date when the dataset was last modified." />
           </span>
         )}
+        {dataset.languages && dataset.languages.length > 0 && (
+          <>
+            <div className="text-lightaccent hidden sm:inline-block">|</div>
+            <span className="flex gap-2 items-center relative group">
+              <FontAwesomeIcon
+                icon={faLanguage}
+                className="align-middle text-primary"
+              />
+              <span className="align-middle">
+                Languages:{" "}
+                {dataset.languages.map((lang) => lang.label).join(", ")}
+              </span>
+              <Tooltip message="Languages in which the dataset is available." />
+            </span>
+          </>
+        )}
         {dataset.organization && (
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
-            <span className="sm:flex-row flex flex-col gap-2 relative group">
-              <div className="flex gap-2 items-center">
-                <FontAwesomeIcon
-                  icon={faBuilding}
-                  className="align-middle text-primary"
-                />
-              </div>
-              <div className="pl-5 sm:pl-0 lg:pl-0 flex items-center">
-                <Link
-                  href={`/datasets?page=1&ckan-organization=${dataset.organization.name}`}
-                >
-                  <span>
-                    Published by {dataset.organization.title || "No title."}
-                  </span>
-                </Link>
-              </div>
+            <span className="flex gap-2 items-center relative group">
+              <FontAwesomeIcon
+                icon={faBuilding}
+                className="align-middle text-primary"
+              />
+              <Link
+                href={`/datasets?page=1&ckan-organization=${dataset.organization.name}`}
+              >
+                <span className="align-middle">
+                  Published by {dataset.organization.title || "No title."}
+                </span>
+              </Link>
               <Tooltip message="Publisher to which the dataset belongs." />
             </span>
           </>
@@ -112,6 +124,7 @@ const DatasetMetadata = ({
                 className="align-middle text-primary"
               />
               <span className="align-middle">
+                Access rights:{" "}
                 {dataset.accessRights.label || "No access rights information."}
               </span>
               <Tooltip message="Information about access rights to the dataset." />
@@ -133,41 +146,25 @@ const DatasetMetadata = ({
             </span>
           </>
         )}
-        {dataset.languages?.length > 0 && (
-          <>
-            <div className="text-lightaccent hidden sm:inline-block">|</div>
-            <span className="flex gap-2 items-center relative group">
-              <FontAwesomeIcon
-                icon={faLanguage}
-                className="align-middle text-primary"
-              />
-              <span className="align-middle">
-                Languages:{" "}
-                {dataset.languages?.map((lang) => lang.label).join(", ")}
-              </span>
-              <Tooltip message="Languages in which the dataset is available." />
-            </span>
-          </>
-        )}
-        {dataset.distributions?.length > 0 && (
+        {dataset.distributions && dataset.distributions.length > 0 && (
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
             <span className="flex gap-2 items-center relative group">
               <FontAwesomeIcon
                 icon={faFile}
-                className="align-middle text-primary "
+                className="align-middle text-primary"
               />
               <span className="align-middle">
-                {dataset.distributions.length > 1
-                  ? `${dataset.distributions.length} Distributions`
-                  : `${dataset.distributions.length} Distribution`}
+                {dataset.distributions.length === 1
+                  ? "1 Distribution"
+                  : `${dataset.distributions.length} Distributions`}
               </span>
               <Tooltip message="Number of distributions available for the dataset." />
             </span>
           </>
         )}
       </div>
-      {dataset.keywords?.length > 0 && (
+      {dataset.keywords && dataset.keywords.length > 0 && (
         <div className="mt-4">
           <span className="flex gap-2 items-center relative group">
             <FontAwesomeIcon
@@ -176,7 +173,7 @@ const DatasetMetadata = ({
             />
             <span className="align-middle">Keywords:</span>
             <div className="flex flex-wrap gap-1">
-              {dataset.keywords?.map((keyword) => (
+              {dataset.keywords.map((keyword) => (
                 <span
                   className="bg-[var(--color-warning)] bg-opacity-50 px-4 py-1 rounded-full text-gray font-[500] text-[14px] inline-block"
                   key={keyword.value}
@@ -189,7 +186,7 @@ const DatasetMetadata = ({
           </span>
         </div>
       )}
-      {relationships.length > 0 && (
+      {relationships && relationships.length > 0 && (
         <div className="flex flex-col mt-4 space-y-2">
           <div className="flex flex-col gap-1">
             {relationships.map((relationship, index) => (
@@ -215,7 +212,7 @@ const DatasetMetadata = ({
           </div>
         </div>
       )}
-      {dictionary.length > 0 && (
+      {dictionary && dictionary.length > 0 && (
         <div className="mt-4">
           <h2 className="text-[18px] font-semibold py-2.5">
             Dataset Dictionary
@@ -243,9 +240,11 @@ const DatasetMetadata = ({
           </div>
         </div>
       )}
-      <div className="mt-4">
-        <DistributionAccordion distributions={dataset.distributions || []} />
-      </div>
+      {dataset.distributions && dataset.distributions.length > 0 && (
+        <div className="mt-4">
+          <DistributionAccordion distributions={dataset.distributions} />
+        </div>
+      )}
     </>
   );
 };

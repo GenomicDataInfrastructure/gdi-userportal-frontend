@@ -126,7 +126,10 @@ export default function ApplicationDetailsPage() {
             <div className="flex items-center gap-x-4">
               <PageHeading>Application {application.externalId}</PageHeading>
               {application.id && (
-                <Chip chip={formatApplicationProp(application.state)!} />
+                <Chip
+                  className="uppercase text-[14px] tracking-widest"
+                  chip={formatApplicationProp(application.state)!}
+                />
               )}
             </div>
             <div className="mt-4 flex gap-x-3 sm:mt-0">
@@ -160,15 +163,16 @@ export default function ApplicationDetailsPage() {
             <p>{`Last Event: ${formatApplicationProp(lastEvent.eventType)} at ${formatDateTime(lastEvent.eventTime.toString())}`}</p>
           )}
 
-          <div>
-            <div className="h-[2px] bg-secondary opacity-80"></div>
+          <div className="h-[2px] bg-secondary opacity-80"></div>
 
-            <div className="lg:hidden w-full my-8">
-              <Sidebar items={createApplicationSidebarItems(application)} />
-            </div>
+          <div className="lg:hidden w-full my-8">
+            <Sidebar items={createApplicationSidebarItems(application)} />
+          </div>
 
-            <div className="mt-5 h-[2px] bg-secondary opacity-80 lg:hidden"></div>
-            <ul className="mt-5">
+          <div className="mt-5 h-[2px] bg-secondary opacity-80 lg:hidden"></div>
+
+          {applicationWarnings.length > 0 && (
+            <ul>
               {applicationWarnings.map(
                 (warning, index) =>
                   warning && (
@@ -181,21 +185,22 @@ export default function ApplicationDetailsPage() {
                   )
               )}
             </ul>
-            <ul>
-              {application.forms.map(
-                (form) =>
-                  form && (
-                    <li key={form.id}>
-                      <FormContainer
-                        form={form}
-                        editable={editable}
-                        validationWarnings={warningsPerForm.get(form.id)}
-                      />
-                    </li>
-                  )
-              )}
-            </ul>
-          </div>
+          )}
+
+          <ul className="my-5">
+            {application.forms.map(
+              (form) =>
+                form && (
+                  <li key={form.id}>
+                    <FormContainer
+                      form={form}
+                      editable={editable}
+                      validationWarnings={warningsPerForm.get(form.id)}
+                    />
+                  </li>
+                )
+            )}
+          </ul>
         </div>
 
         <aside className="hidden w-full lg:block lg:w-1/3">

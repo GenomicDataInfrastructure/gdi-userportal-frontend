@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import { ValidationWarning } from "@/types/api.types";
 import { Form } from "@/types/application.types";
 import FieldContainer from "./FieldContainer";
-import { ValidationWarning } from "@/types/api.types";
 
 type FormContainerProps = {
   form: Form;
@@ -22,26 +22,24 @@ function FormContainer({
     form.externalTitle?.[0]?.name;
 
   return (
-    <div className="mt-8">
-      <ul className="space-y-4 border rounded p-4">
-        <h3 className="mb-4 text-2xl">{formTitle}</h3>
-        {form.fields.map(
-          (field) =>
-            field && (
-              <li key={field.id}>
-                <FieldContainer
-                  formId={form.id}
-                  field={field}
-                  editable={editable}
-                  validationWarning={validationWarnings?.find(
-                    (it) => it.fieldId === field.id
-                  )}
-                />
-              </li>
-            )
-        )}
-      </ul>
-    </div>
+    <ul className="space-y-4 border rounded-2xl p-5">
+      <h3 className="mb-4 text-2xl">{formTitle}</h3>
+      {form.fields.map(
+        (field) =>
+          field && (
+            <li key={field.id}>
+              <FieldContainer
+                formId={form.id}
+                field={field}
+                editable={editable}
+                validationWarning={validationWarnings?.find(
+                  (it) => it.fieldId === field.id
+                )}
+              />
+            </li>
+          )
+      )}
+    </ul>
   );
 }
 

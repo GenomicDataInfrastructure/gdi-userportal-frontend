@@ -10,8 +10,6 @@ import {
   faFile,
   faCalendarAlt,
   faFileAlt,
-  faLanguage,
-  faLock,
   faLink,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
@@ -137,38 +135,6 @@ const DistributionAccordion = ({
                       {distribution.format?.label || "NA"}
                     </span>
                     <Tooltip message="File type of the distribution." />
-                  </span>
-                </div>
-                <div className="flex items-center relative">
-                  <span className="group flex items-center">
-                    <FontAwesomeIcon
-                      icon={faLanguage}
-                      className="text-primary align-middle mr-2"
-                    />
-                    <strong className="text-sm font-semibold">
-                      Languages:
-                    </strong>
-                    <span className="text-sm ml-2">
-                      {distribution.languages
-                        ?.map((lang) => lang.label)
-                        .join(", ") || "NA"}
-                    </span>
-                    <Tooltip message="Languages in which the distribution is available." />
-                  </span>
-                </div>
-                <div className="flex items-center relative">
-                  <span className="group flex items-center">
-                    <FontAwesomeIcon
-                      icon={faLock}
-                      className="text-primary align-middle mr-2"
-                    />
-                    <strong className="text-sm font-semibold">Licenses:</strong>
-                    <span className="text-sm ml-2">
-                      {distribution.licenses
-                        ?.map((license) => license.label)
-                        .join(", ") || "NA"}
-                    </span>
-                    <Tooltip message="Licenses associated with the distribution." />
                   </span>
                 </div>
                 <div className="flex items-center relative">

@@ -17,6 +17,7 @@ import {
   faUser,
   faBookBookmark,
   faFile,
+  faSyncAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
@@ -75,15 +76,26 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
           <p className="line-clamp-2 font-normal text-base">{truncatedDesc}</p>
 
           <div className="flex flex-col sm:flex-row sm:flex-wrap text-xs sm:text-[15px] gap-x-2 gap-y-2">
-            <div className="flex gap-x-2.5 pr-2 sm:pr-2 sm:border-r-[2px] sm:border-r-info">
-              <div className="my-auto">
-                <FontAwesomeIcon
-                  icon={faCalendarAlt}
-                  className="text-primary"
-                />
+            {dataset.createdAt && (
+              <div className="flex gap-x-2.5 pr-2 sm:pr-2 sm:border-r-[2px] sm:border-r-info">
+                <div className="my-auto">
+                  <FontAwesomeIcon
+                    icon={faCalendarAlt}
+                    className="text-primary"
+                  />
+                </div>
+                <span>Created on {formatDate(dataset.createdAt)}</span>
               </div>
-              <span>{formatDate(dataset.createdAt)}</span>
-            </div>
+            )}
+            {dataset.modifiedAt && (
+              <div className="flex gap-x-2.5 pr-2 sm:pr-2 sm:border-r-[2px] sm:border-r-info">
+                <div className="my-auto">
+                  <FontAwesomeIcon icon={faSyncAlt} className="text-primary" />
+                </div>
+                <span>Modified on {formatDate(dataset.modifiedAt)}</span>
+              </div>
+            )}
+
             <div className="flex gap-x-2.5">
               <div className="my-auto">
                 <FontAwesomeIcon icon={faUser} className="text-primary" />
@@ -96,9 +108,9 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
                   <FontAwesomeIcon icon={faFile} className="text-primary" />
                 </div>
                 <span>
-                  {dataset.distributions.length > 1
-                    ? `${dataset.distributions.length} Distributions`
-                    : `${dataset.distributions.length} Distribution`}
+                  {dataset.distributions.length === 1
+                    ? "1 Distribution"
+                    : `${dataset.distributions.length} Distributions`}
                 </span>
               </div>
             )}
@@ -111,9 +123,9 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
                   />
                 </div>
                 <span>
-                  {dataset.recordsCount > 1
-                    ? `${dataset.recordsCount} Records`
-                    : `${dataset.recordsCount} Record`}
+                  {dataset.recordsCount === 1
+                    ? "1 Record"
+                    : `${dataset.recordsCount} Records`}
                 </span>
               </div>
             )}

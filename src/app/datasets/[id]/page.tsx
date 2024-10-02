@@ -29,9 +29,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <Tooltip message="Themes associated with the dataset." />
               </div>
             )}
-            <h1 className="text-primary text-[25px] font-semibold">
-              {dataset.title}
-            </h1>
+            <h1 className="text-[25px] font-semibold">{dataset.title}</h1>
             <div className="pb-3.5">
               <p className="text-gray">{dataset.description}</p>
             </div>

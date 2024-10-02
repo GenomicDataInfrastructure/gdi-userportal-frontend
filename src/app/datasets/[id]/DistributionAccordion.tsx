@@ -10,8 +10,6 @@ import {
   faFile,
   faCalendarAlt,
   faFileAlt,
-  faLanguage,
-  faLock,
   faLink,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";

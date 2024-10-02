@@ -17,6 +17,7 @@ import {
   faUser,
   faBookBookmark,
   faFile,
+  faSyncAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
@@ -89,10 +90,7 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
             {dataset.modifiedAt && (
               <div className="flex gap-x-2.5 pr-2 sm:pr-2 sm:border-r-[2px] sm:border-r-info">
                 <div className="my-auto">
-                  <FontAwesomeIcon
-                    icon={faCalendarAlt}
-                    className="text-primary"
-                  />
+                  <FontAwesomeIcon icon={faSyncAlt} className="text-primary" />
                 </div>
                 <span>Modified on {formatDate(dataset.modifiedAt)}</span>
               </div>

@@ -19,7 +19,7 @@ export function createApplicationSidebarItems(
   return [
     {
       label: "Datasets",
-      value: <DatasetList datasets={datasets} />,
+      value: <DatasetList datasets={datasets} className="gap-x-6" />,
     },
     {
       label: "Participants",

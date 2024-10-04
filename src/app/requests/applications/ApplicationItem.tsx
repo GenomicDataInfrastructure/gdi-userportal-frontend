@@ -4,106 +4,64 @@
 
 import { ListedApplication } from "@/types/application.types";
 import { formatDateTime } from "@/utils/formatDate";
-import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import DatasetList from "./DatasetList";
 
 export default function ApplicationItem({
   application,
-  isExpanded,
 }: Readonly<{
   application: ListedApplication;
-  isExpanded: boolean;
 }>) {
-  const [collapsed, setCollapsed] = useState(!isExpanded);
-  const toggleCollapsed = () => setCollapsed(!collapsed);
-  const contentRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (contentRef.current) {
-      contentRef.current.style.maxHeight = collapsed
-        ? "0px"
-        : `${contentRef.current.scrollHeight}px`;
-    }
-  }, [collapsed]);
-
   return (
-    <div className="flex w-full flex-col">
-      <div className="w-full">
-        <div
-          className="flex w-full cursor-pointer items-center justify-between"
-          onClick={toggleCollapsed}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              toggleCollapsed();
-            }
-          }}
-        >
-          <div className="flex items-center gap-4">
-            <a
-              href={`/applications/${application.id}`}
-              className="text-primary hover:underline"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                window.location.href = `/applications/${application.id}`;
-              }}
-            >
-              <h3 className="text-xl text-primary md:text-2xl">
-                {application.title}
-              </h3>
-            </a>
-            <div className="rounded bg-warning px-2.5 py-0.5 text-sm font-semibold">
-              {application.currentState.split("/").pop()}
-            </div>
+    <Link
+      href={`/applications/${application.id}`}
+      className="flex flex-col w-full mb-1.5 shadow-bb rounded-lg pl-4 pr-4.5 group"
+    >
+      <div className="flex flex-col lg:flex-row gap-x-2 gap-y-4">
+        <div className="flex flex-col gap-y-2 shrink w-full lg:w-[90%] lg:pr-4">
+          <div className="flex flex-wrap gap-2 font-normal text-xs leading-[12px] uppercase pb-2">
+            <span>{application.currentState.split("/").pop()}</span>
           </div>
-          <FontAwesomeIcon
-            icon={collapsed ? faChevronDown : faChevronUp}
-            className="text-sm"
-          />
-        </div>
-      </div>
 
-      <div
-        ref={contentRef}
-        className="transition-max-height overflow-hidden duration-500 ease-in-out"
-      >
-        <div className="mt-4 flex flex-col space-y-4 md:flex-row md:space-x-6 md:space-y-0">
-          <div className="md:flex-1">
-            <div className="mb-4">
-              <h3 className="mb-1 text-lg font-semibold text-primary">
-                Description
-              </h3>
-              <p className="text-md">
-                {application.description || "No description available"}
-              </p>
-            </div>
-            <div className="mb-4">
-              <h3 className="mb-1 text-lg font-semibold text-primary">
-                Created At
-              </h3>
-              <p className="text-md font-date">
-                {formatDateTime(application.createdAt)}
-              </p>
-            </div>
-            <div>
-              <h3 className="mb-1 text-lg font-semibold text-primary">
-                State Modified At
-              </h3>
-              <p className="text-md font-date">
-                {formatDateTime(application.stateChangedAt)}
-              </p>
-            </div>
+          <div className="font-bold text-[20px] group-hover:text-info group-hover:underline">
+            {application.title}
           </div>
-          <div className="md:flex-1">
-            <h3 className="mb-4 text-lg font-bold text-primary">Datasets</h3>
+
+          <p className="line-clamp-2 font-normal text-base">
+            {application.description || "No description available"}
+          </p>
+
+          <div className="mt-3 flex flex-col sm:flex-row sm:flex-wrap text-xs sm:text-[15px] gap-x-6 gap-y-2">
+            {application.createdAt && (
+              <div className="flex gap-x-2.5">
+                <div className="my-auto">
+                  <FontAwesomeIcon
+                    icon={faCalendarAlt}
+                    className="text-primary"
+                  />
+                </div>
+                <span>{formatDateTime(application.createdAt)}</span>
+              </div>
+            )}
+            {application.stateChangedAt && (
+              <div className="flex gap-x-2.5">
+                <div className="my-auto">
+                  <FontAwesomeIcon
+                    icon={faCalendarAlt}
+                    className="text-primary"
+                  />
+                </div>
+                <span>{formatDateTime(application.stateChangedAt)}</span>
+              </div>
+            )}
+          </div>
+          <div className="mt-3 flex flex-col sm:flex-row sm:flex-wrap sm:gap-x-6 text-xs sm:text-[15px]">
             <DatasetList datasets={application.datasets} />
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

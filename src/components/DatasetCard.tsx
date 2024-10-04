@@ -24,9 +24,15 @@ import Link from "next/link";
 
 type DatasetCardProps = {
   dataset: SearchedDataset;
+  showAddToBasketButton?: boolean;
+  children?: React.ReactNode;
 };
 
-function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
+function DatasetCard({
+  dataset,
+  showAddToBasketButton = true,
+  children,
+}: Readonly<DatasetCardProps>) {
   const screenSize = useWindowSize();
   const truncatedDesc = dataset.description
     ? truncateDescription(dataset.description, screenSize)
@@ -52,12 +58,12 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
   return (
     <Link
       href={`/datasets/${dataset.id}`}
-      className="flex flex-col w-full mb-1.5 shadow-bb rounded-lg pl-4 pr-4.5 group"
+      className="flex flex-col w-full mb-1.5 shadow-bb rounded-lg pl-4 pr-4.5 group relative"
     >
       <div className="flex flex-col lg:flex-row gap-x-2 gap-y-4">
         <div className="flex flex-col gap-y-2 shrink w-full lg:w-[90%] lg:pr-4">
           {dataset.themes && dataset.themes.length > 0 && (
-            <div className="flex flex-wrap gap-2 font-normal text-sm sm:text-[12px] leading-[12px] uppercase pb-2">
+            <div className="flex flex-wrap gap-2 font-normal text-xs sm:text-sm leading-[12px] uppercase pb-2">
               {dataset.themes?.map((theme, index) => (
                 <span
                   key={index}
@@ -73,7 +79,9 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
             {dataset.title}
           </div>
 
-          <p className="line-clamp-2 font-normal text-base">{truncatedDesc}</p>
+          <p className="mt-3 line-clamp-2 font-normal text-base">
+            {truncatedDesc}
+          </p>
 
           <div className="flex flex-col sm:flex-row sm:flex-wrap text-xs sm:text-[15px] gap-x-2 gap-y-2">
             {dataset.createdAt && (
@@ -103,7 +111,7 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
               <span>Published by {dataset.organization.title}</span>
             </div>
             {dataset.distributions?.length > 0 && (
-              <div className="flex gap-x-2.5 pl-2 sm:pl-2 sm:border-l-[2px] sm:border-l-info">
+              <div className="flex gap-x-2.5">
                 <div className="my-auto">
                   <FontAwesomeIcon icon={faFile} className="text-primary" />
                 </div>
@@ -115,7 +123,7 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
               </div>
             )}
             {dataset.recordsCount && dataset.recordsCount > 0 && (
-              <div className="flex gap-x-2.5 pl-2 sm:pl-2 sm:border-l-[2px] sm:border-l-info">
+              <div className="flex gap-x-2.5">
                 <div className="my-auto">
                   <FontAwesomeIcon
                     icon={faBookBookmark}
@@ -134,7 +142,7 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
       </div>
       <div className="mt-6 flex justify-between items-start pr-2">
         <Chips chips={dataset.keywords?.map((x) => x.label) || []} />
-        {contentConfig.showBasketAndLogin && (
+        {contentConfig.showBasketAndLogin && showAddToBasketButton && (
           <Button
             text={isInBasket ? "Remove from basket" : "Add to basket"}
             icon={isInBasket ? faMinusCircle : faPlusCircle}
@@ -142,9 +150,11 @@ function DatasetCard({ dataset }: Readonly<DatasetCardProps>) {
             type={isInBasket ? "warning" : "primary"}
             disabled={buttonDisabled}
             flex={true}
+            className="text-xs sm:text-base"
           />
         )}
       </div>
+      {children}
     </Link>
   );
 }

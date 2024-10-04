@@ -19,6 +19,7 @@ function EntitlementsList({ entitlements }: Readonly<EntitlementsListProps>) {
           entitlement.dataset && (
             <ListItem
               key={`${entitlement.dataset.id}${entitlement.start}${entitlement.end}`}
+              className="bg-white mb-4 flex items-center justify-center px-2 rounded-lg shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50"
             >
               <EntitlementCard
                 dataset={entitlement.dataset}

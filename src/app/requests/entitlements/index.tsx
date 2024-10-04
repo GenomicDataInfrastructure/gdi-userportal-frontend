@@ -16,8 +16,7 @@ import LoadingContainer from "@/components/LoadingContainer";
 import Error from "@/app/error";
 import { ErrorResponse } from "@/types/api.types";
 import axios from "axios";
-import Button from "@/components/Button";
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { EmptyEntitlements } from "./EmptyEntitlements";
 
 interface EntitelementsResponse {
   datasetEntitlements?: DatasetEntitlement[];
@@ -60,6 +59,10 @@ function EntitlementsPage() {
     fetchData().catch((it) => console.log(it));
   }, []);
 
+  const hasEntitlements =
+    response.datasetEntitlements?.length &&
+    response.datasetEntitlements.length > 0;
+
   if (response.status === "loading") {
     return (
       <LoadingContainer
@@ -84,27 +87,10 @@ function EntitlementsPage() {
       <PageHeading className="mb-4">Entitlements</PageHeading>
       <span>View your entitlements</span>
       <ListContainer>
-        {response.datasetEntitlements?.length &&
-        response.datasetEntitlements.length > 0 ? (
+        {hasEntitlements ? (
           <EntitlementsList entitlements={response.datasetEntitlements ?? []} />
         ) : (
-          <div className="flex w-full flex-col items-center justify-center gap-4">
-            <p className="text-md text-center text-primary">
-              <span>You don&apos;t have any entitlement yet.</span>
-              <br />
-              <span>
-                Wait for your application(s) to be approved, or submit a new
-                application.
-              </span>
-            </p>
-            <Button
-              icon={faPlusCircle}
-              text="Add datasets"
-              href="/datasets"
-              type="primary"
-              className="text-xs"
-            />
-          </div>
+          <EmptyEntitlements />
         )}
       </ListContainer>
     </PageContainer>

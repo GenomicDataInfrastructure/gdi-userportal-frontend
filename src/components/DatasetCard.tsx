@@ -80,12 +80,12 @@ function DatasetCard({
           </div>
 
           <p className="mt-3 line-clamp-2 font-normal text-base">
-            {truncatedDesc}
+            {truncatedDesc || "No description available"}
           </p>
 
-          <div className="flex flex-col sm:flex-row sm:flex-wrap text-xs sm:text-[15px] gap-x-2 gap-y-2">
+          <div className="mt-3 flex flex-col sm:flex-row sm:flex-wrap text-xs sm:text-[15px] gap-x-6 gap-y-2">
             {dataset.createdAt && (
-              <div className="flex gap-x-2.5 pr-2 sm:pr-2 sm:border-r-[2px] sm:border-r-info">
+              <div className="flex gap-x-2.5">
                 <div className="my-auto">
                   <FontAwesomeIcon
                     icon={faCalendarAlt}
@@ -96,7 +96,7 @@ function DatasetCard({
               </div>
             )}
             {dataset.modifiedAt && (
-              <div className="flex gap-x-2.5 pr-2 sm:pr-2 sm:border-r-[2px] sm:border-r-info">
+              <div className="flex gap-x-2.5">
                 <div className="my-auto">
                   <FontAwesomeIcon icon={faSyncAlt} className="text-primary" />
                 </div>

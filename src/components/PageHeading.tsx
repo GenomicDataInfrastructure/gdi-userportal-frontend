@@ -4,6 +4,7 @@
 
 "use client";
 
+import { cn } from "@/utils/tailwindMerge";
 import React from "react";
 
 interface PageHeadingProps {
@@ -13,7 +14,10 @@ interface PageHeadingProps {
 
 const PageHeading: React.FC<PageHeadingProps> = ({ children, className }) => (
   <h1
-    className={`text-2xl font-bold text-primary sm:text-3xl lg:text-4xl ${className}`}
+    className={cn(
+      "text-2xl font-bold text-primary sm:text-3xl lg:text-4xl",
+      className
+    )}
   >
     {children}
   </h1>

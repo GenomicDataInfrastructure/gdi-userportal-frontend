@@ -28,36 +28,34 @@ export default async function Page({ params }: { params: { id: string } }) {
           <div className="flex w-full flex-col gap-5 lg:w-2/3 lg:px-5">
             <div className="sm:flex sm:justify-between">
               <div className="flex items-center gap-x-4">
-                <PageHeading>{dataset.title}</PageHeading>
+                <PageHeading className="text-black">
+                  {dataset.title}
+                </PageHeading>
 
                 {dataset.themes.map((theme) => (
                   <div
                     key={theme.label}
-                    className="tracking-widest uppercase flex items-center text-[14px] relative group"
+                    className="tracking-widest uppercase flex items-center text-xs lg:text-sm relative group"
                   >
                     <Chip className="text-center" chip={theme.label} />
                     <Tooltip message="Themes associated with the dataset." />
                   </div>
                 ))}
               </div>
-            )}
-            <h1 className="text-[25px] font-semibold">{dataset.title}</h1>
-            <div className="pb-3.5">
             </div>
-
-            <div className="flex items-center gap-x-3">
+            <div className="flex items-center">
               <p className="text-gray">{dataset.description}</p>
             </div>
 
             <div className="h-[2px] bg-secondary opacity-80"></div>
 
-            <div className="w-full my-8 lg:hidden">
+            <div className="w-full lg:hidden">
               <Sidebar items={createDatasetSidebarItems(dataset)} />
             </div>
 
-            <div className="mt-5 h-[2px] bg-secondary opacity-80 lg:hidden"></div>
+            <div className="h-[2px] bg-secondary opacity-80 lg:hidden"></div>
 
-            <div className="mt-5">
+            <div className="">
               <DatasetMetadata
                 dataset={dataset}
                 relationships={relationships}

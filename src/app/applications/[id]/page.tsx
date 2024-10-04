@@ -124,10 +124,12 @@ export default function ApplicationDetailsPage() {
         <div className="flex w-full flex-col gap-5 lg:w-2/3 lg:px-5">
           <div className="sm:flex sm:justify-between">
             <div className="flex items-center gap-x-4">
-              <PageHeading>Application {application.externalId}</PageHeading>
+              <PageHeading className="text-black">
+                Application {application.externalId}
+              </PageHeading>
               {application.id && (
                 <Chip
-                  className="uppercase text-[14px] tracking-widest"
+                  className="uppercase text-xs lg:text-sm tracking-widest"
                   chip={formatApplicationProp(application.state)!}
                 />
               )}
@@ -165,11 +167,11 @@ export default function ApplicationDetailsPage() {
 
           <div className="h-[2px] bg-secondary opacity-80"></div>
 
-          <div className="lg:hidden w-full my-8">
+          <div className="lg:hidden w-full">
             <Sidebar items={createApplicationSidebarItems(application)} />
           </div>
 
-          <div className="mt-5 h-[2px] bg-secondary opacity-80 lg:hidden"></div>
+          <div className="h-[2px] bg-secondary opacity-80 lg:hidden"></div>
 
           {applicationWarnings.length > 0 && (
             <ul>
@@ -187,7 +189,7 @@ export default function ApplicationDetailsPage() {
             </ul>
           )}
 
-          <ul className="my-5">
+          <ul>
             {application.forms.map(
               (form) =>
                 form && (

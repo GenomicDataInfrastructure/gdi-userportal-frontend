@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { ListedApplication } from "@/types/application.types";
-import { formatDateTime } from "@/utils/formatDate";
-import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import { formatDate } from "@/utils/formatDate";
+import { faCalendarAlt, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import DatasetList from "./DatasetList";
@@ -29,7 +29,7 @@ export default function ApplicationItem({
             {application.title}
           </div>
 
-          <p className="line-clamp-2 font-normal text-base">
+          <p className="mt-3 line-clamp-2 font-normal text-base">
             {application.description || "No description available"}
           </p>
 
@@ -42,18 +42,17 @@ export default function ApplicationItem({
                     className="text-primary"
                   />
                 </div>
-                <span>{formatDateTime(application.createdAt)}</span>
+                <span>Created on {formatDate(application.createdAt)}</span>
               </div>
             )}
             {application.stateChangedAt && (
               <div className="flex gap-x-2.5">
                 <div className="my-auto">
-                  <FontAwesomeIcon
-                    icon={faCalendarAlt}
-                    className="text-primary"
-                  />
+                  <FontAwesomeIcon icon={faSyncAlt} className="text-primary" />
                 </div>
-                <span>{formatDateTime(application.stateChangedAt)}</span>
+                <span>
+                  Modified on {formatDate(application.stateChangedAt)}
+                </span>
               </div>
             )}
           </div>

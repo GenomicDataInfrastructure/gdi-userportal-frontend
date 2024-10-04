@@ -76,16 +76,16 @@ const ApplicationsPage: React.FC = () => {
   return (
     <PageContainer className="pt-5 md:pt-10">
       <PageHeading className="mb-4">Manage your Applications</PageHeading>
-      <span>View and update your submited applications</span>
+      <span>View and update your submitted applications</span>
       <ListContainer>
         {response.applications?.length && response.applications.length > 0 ? (
           <List>
-            {response.applications?.map((item, index) => (
+            {response.applications?.map((item) => (
               <ListItem
                 key={item.id}
-                className="flex items-center justify-between"
+                className="bg-white mb-4 flex items-center justify-center px-2 rounded-lg  shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50"
               >
-                <ApplicationItem application={item} isExpanded={index === 0} />
+                <ApplicationItem application={item} />
               </ListItem>
             ))}
           </List>

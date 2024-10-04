@@ -14,7 +14,7 @@ import {
   useSearchParams,
 } from "next/navigation";
 import ApplicationsPage from "./applications";
-import EntitelementsPage from "./entitlements";
+import EntitlementsPage from "./entitlements";
 
 function createTabItems(): ITabItem[] {
   return [
@@ -62,7 +62,7 @@ function RequestPage() {
       {activeTab === "applications" ? (
         <ApplicationsPage />
       ) : (
-        <EntitelementsPage />
+        <EntitlementsPage />
       )}
     </PageContainer>
   );

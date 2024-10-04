@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { ReactNode } from "react";
-import LinkItem from "./LinkItem";
 
 export function createTextItem(item: string) {
   return <span className="break-all">{item}</span>;
@@ -14,7 +13,7 @@ export function createTextItems(items: string[]) {
     <ul>
       {items.map((value, index) => {
         return (
-          <li key={index} className="break-all">
+          <li key={index} className="break-words">
             <span>{value}</span>
           </li>
         );
@@ -23,30 +22,10 @@ export function createTextItems(items: string[]) {
   );
 }
 
-export function createLinkItem(link: SidebarLink) {
-  return <LinkItem link={link}></LinkItem>;
-}
-
-export function createLinkItems(links: SidebarLink[]) {
-  return (
-    <ul>
-      {links.map((link, index) => (
-        <li key={index} className="list-none">
-          {createLinkItem(link)}
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-type SidebarLink = {
-  label: string;
-  url: string;
-};
-
 type SidebarItem = {
   label: string;
   value: ReactNode;
+  hideItem?: boolean;
 };
 
 interface SidebarProps {
@@ -55,18 +34,25 @@ interface SidebarProps {
 
 function Sidebar({ items }: Readonly<SidebarProps>) {
   return (
-    <div className="border-gray flex flex-col gap-3 rounded-sm border-2 bg-surface p-5 text-black">
-      {items.map((item) => (
-        <div className="mb-3" key={item.label}>
-          <h3 className="text-base text-primary sm:text-lg lg:text-xl">
-            {item.label}
-          </h3>
-          <span className="text-sm sm:text-base lg:text-lg">{item.value}</span>
-        </div>
-      ))}
-    </div>
+    <aside className="flex flex-col gap-5">
+      {items.map(
+        (item) =>
+          !item.hideItem && (
+            <div
+              className="flex flex-col rounded-2xl px-7 py-5 gap-y-4"
+              style={{ backgroundColor: "var(--color-surface)" }}
+              key={item.label}
+            >
+              <h3 className="sm:text-md lg:text-lg font-bold">{item.label}</h3>
+              <span className="text-sm sm:text-base lg:text-lg">
+                {item.value}
+              </span>
+            </div>
+          )
+      )}
+    </aside>
   );
 }
 
-export type { SidebarItem, SidebarLink };
+export type { SidebarItem };
 export default Sidebar;

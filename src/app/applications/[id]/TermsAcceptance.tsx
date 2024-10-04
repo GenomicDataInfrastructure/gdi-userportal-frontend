@@ -4,16 +4,16 @@
 
 "use client";
 
-import { useState } from "react";
-import Button from "@/components/Button";
 import Alert, { AlertState } from "@/components/Alert";
+import Button from "@/components/Button";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
+import { getLabelName } from "@/utils/getLabelName";
 import {
-  faCheckCircle,
   faArrowUpRightFromSquare,
+  faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getLabelName } from "@/utils/getLabelName";
+import { useState } from "react";
 
 export default function TermsAcceptance() {
   const [alert, setAlert] = useState<AlertState | null>(null);
@@ -51,10 +51,7 @@ export default function TermsAcceptance() {
   };
 
   return (
-    <div className="border-gray flex flex-col gap-3 rounded-sm border-2 bg-surface p-5 text-black mt-5">
-      <h2 className="text-xl font-bold mb-4 text-primary">
-        Terms and Conditions
-      </h2>
+    <div className="text-base">
       {alert && (
         <Alert
           type={alert.type}
@@ -66,7 +63,7 @@ export default function TermsAcceptance() {
       <div className="space-y-4">
         {application?.licenses.map((license) => (
           <div key={license.id} className="space-y-2">
-            <h3 className="font-semibold">{getLabelName(license.title)}</h3>
+            <h3 className="">{getLabelName(license.title)}</h3>
             <button
               className={`text-left w-full cursor-pointer transition-all ${
                 expandedLicenseId === license.id.toString()

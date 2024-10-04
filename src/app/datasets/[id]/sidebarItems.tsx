@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { SidebarItem } from "@/components/Sidebar";
-import { RetrievedDataset } from "@/services/discovery/types/dataset.types";
-import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
 import AddToBasketButton from "@/components/AddToBasketButton";
+import { SidebarItem } from "@/components/Sidebar";
 import contentConfig from "@/config/contentConfig";
+import { RetrievedDataset } from "@/services/discovery/types/dataset.types";
+import { faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 
 function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
   const metaFormats = [
@@ -34,92 +34,70 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
 
   return [
     {
-      label: "",
-      value: contentConfig.showBasketAndLogin && (
-        <div
-          style={{ backgroundColor: "var(--color-surface)" }}
-          className="flex flex-col rounded-2xl p-6 gap-3"
-        >
-          <h1 className="font-bold">Request data access</h1>
-          <AddToBasketButton dataset={dataset} />
-        </div>
-      ),
+      label: "Request data access",
+      value: <AddToBasketButton dataset={dataset} />,
+      hideItem: !contentConfig.showBasketAndLogin,
     },
     {
-      label: "",
+      label: "Export Metadata in",
       value: (
-        <div
-          style={{ backgroundColor: "var(--color-surface)" }}
-          className="flex flex-col rounded-2xl p-6 gap-3"
-        >
-          <h1 className="font-bold">Export Metadata in</h1>
-          <div className="flex gap-2 transition py-2 sm:py-0">
-            {metaFormats.map((item) => (
-              <div key={item.format}>
-                <Link
-                  href={`/api/datasets/${dataset.id}/as-file/${item.format}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-1"
+        <div className="flex gap-2 transition py-2 sm:py-0">
+          {metaFormats.map((item) => (
+            <div key={item.format}>
+              <Link
+                href={`/api/datasets/${dataset.id}/as-file/${item.format}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-1"
+              >
+                <div
+                  className="uppercase text-[14px] font-normal rounded-md px-4 py-1.5 transition"
+                  style={item.style}
                 >
-                  <div
-                    className="uppercase text-[14px] font-normal rounded-md px-4 py-1.5 transition"
-                    style={item.style}
-                  >
-                    {item.label}
-                  </div>
-                </Link>
-              </div>
-            ))}
-          </div>
+                  {item.label}
+                </div>
+              </Link>
+            </div>
+          ))}
         </div>
       ),
     },
     {
-      label: "",
+      label: "Contact Point(s)",
       value: (
-        <div
-          style={{ backgroundColor: "var(--color-surface)" }}
-          className="flex flex-col rounded-2xl p-6 gap-3"
-        >
-          <h1 className="font-bold">Contact Point(s)</h1>
-          <div className="flex items-center text-[14px]">
-            <div className="flex flex-col gap-1">
-              {dataset.contacts.length === 0 ? (
+        <div className="flex items-center text-[14px]">
+          <div className="flex flex-col gap-1">
+            {dataset.contacts.length === 0 ? (
+              <>
+                <div className="flex gap-8 items-center">
+                  <FontAwesomeIcon icon={faUser} className="text-primary" />
+                  <p>No contact provided.</p>
+                </div>
+                <div className="flex gap-8 items-center">
+                  <FontAwesomeIcon icon={faEnvelope} className="text-primary" />
+                  <p>No e-mail provided.</p>
+                </div>
+              </>
+            ) : (
+              dataset.contacts.map((contact, index) => (
                 <>
-                  <div className="flex gap-8 items-center">
+                  <div key={index} className="flex gap-8 items-center">
                     <FontAwesomeIcon icon={faUser} className="text-primary" />
-                    <p>No contact provided.</p>
+                    <p>{contact.name || "No contact provided."}</p>
                   </div>
-                  <div className="flex gap-8 items-center">
+                  <div
+                    key={`${index}-email`}
+                    className="flex gap-8 items-center"
+                  >
                     <FontAwesomeIcon
                       icon={faEnvelope}
                       className="text-primary"
                     />
-                    <p>No e-mail provided.</p>
+                    <p>{contact.email || "No e-mail provided."}</p>
                   </div>
                 </>
-              ) : (
-                dataset.contacts.map((contact, index) => (
-                  <>
-                    <div key={index} className="flex gap-8 items-center">
-                      <FontAwesomeIcon icon={faUser} className="text-primary" />
-                      <p>{contact.name || "No contact provided."}</p>
-                    </div>
-                    <div
-                      key={`${index}-email`}
-                      className="flex gap-8 items-center"
-                    >
-                      <FontAwesomeIcon
-                        icon={faEnvelope}
-                        className="text-primary"
-                      />
-                      <p>{contact.email || "No e-mail provided."}</p>
-                    </div>
-                  </>
-                ))
-              )}
-            </div>
+              ))
+            )}
           </div>
         </div>
       ),

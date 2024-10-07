@@ -2,10 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import DatasetCard from "@/app/datasets/DatasetCard";
+import { createDatasetCardItems } from "@/app/datasets/datasetCardItems";
 import List from "@/components/List";
 import ListItem from "@/components/List/ListItem";
 import { SearchedDataset } from "@/services/discovery/types/dataset.types";
-import DatasetCard from "@/components/DatasetCard";
 
 type DatasetListProps = {
   datasets: SearchedDataset[];
@@ -19,7 +20,10 @@ function DatasetList({ datasets }: Readonly<DatasetListProps>) {
           key={dataset.id}
           className="bg-white mb-4 flex items-center justify-center px-2 rounded-lg  shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50"
         >
-          <DatasetCard dataset={dataset} />
+          <DatasetCard
+            dataset={dataset}
+            cardItems={createDatasetCardItems(dataset)}
+          />
         </ListItem>
       ))}
     </List>

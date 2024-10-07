@@ -7,7 +7,7 @@ import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
 export function EmptyEntitlements() {
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-4">
+    <div className="mb-7 flex w-full flex-col items-center justify-center gap-4">
       <p className="text-md text-center text-primary">
         <span>You don&apos;t have any entitlement yet.</span>
         <br />

@@ -50,6 +50,10 @@ export default function TermsAcceptance() {
     }
   };
 
+  if (!application?.licenses || application?.licenses.length === 0) {
+    return <p>No terms and conditions have been defined.</p>;
+  }
+
   return (
     <div className="text-base">
       {alert && (

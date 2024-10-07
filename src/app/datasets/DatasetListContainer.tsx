@@ -6,7 +6,7 @@
 
 import Error from "@/app/error";
 import PaginationContainer from "@/components/PaginationContainer";
-import DatasetList from "../../components/DatasetList";
+import DatasetList from "./DatasetList";
 import {
   DATASET_PER_PAGE,
   useDatasets,

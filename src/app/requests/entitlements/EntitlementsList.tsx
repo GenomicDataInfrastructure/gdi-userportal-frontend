@@ -6,6 +6,7 @@ import List from "@/components/List";
 import ListItem from "@/components/List/ListItem";
 import { DatasetEntitlement } from "@/services/discovery/types/dataset.types";
 import EntitlementCard from "./EntitlementCard";
+import { createEntitlementCardItems } from "./entitlementCardItems";
 
 type EntitlementsListProps = {
   entitlements: DatasetEntitlement[];
@@ -23,8 +24,11 @@ function EntitlementsList({ entitlements }: Readonly<EntitlementsListProps>) {
             >
               <EntitlementCard
                 dataset={entitlement.dataset}
-                start={entitlement.start}
-                end={entitlement.end}
+                cardItems={createEntitlementCardItems(
+                  entitlement.dataset,
+                  entitlement.start,
+                  entitlement.end
+                )}
               />
             </ListItem>
           )

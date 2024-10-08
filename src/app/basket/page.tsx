@@ -13,7 +13,7 @@ import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { createApplication } from "@/services/daam/index.client";
 import { faPaperPlane, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { signIn, useSession } from "next-auth/react";
-import DatasetList from "../../components/DatasetList";
+import DatasetList from "../datasets/DatasetList";
 import { AxiosError } from "axios";
 
 export default function Page() {

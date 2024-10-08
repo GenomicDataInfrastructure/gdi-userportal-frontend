@@ -15,11 +15,11 @@ import { listApplications } from "@/services/daam/index.client";
 import { ListedApplication } from "@/types/application.types";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
-import ApplicationItem from "./ApplicationItem";
 import { Status } from "@/utils/pageStatus.types";
 import LoadingContainer from "@/components/LoadingContainer";
 import { ErrorResponse } from "@/types/api.types";
 import axios from "axios";
+import ApplicationCard from "./ApplicationCard";
 
 interface ApplicationResponse {
   status: Status;
@@ -85,7 +85,7 @@ const ApplicationsPage: React.FC = () => {
                 key={item.id}
                 className="bg-white mb-4 flex items-center justify-center px-2 rounded-lg  shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50"
               >
-                <ApplicationItem application={item} />
+                <ApplicationCard application={item} />
               </ListItem>
             ))}
           </List>

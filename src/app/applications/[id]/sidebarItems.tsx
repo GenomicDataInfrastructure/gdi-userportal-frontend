@@ -2,14 +2,18 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import DatasetList from "@/app/requests/applications/DatasetList";
 import { createTextItem, SidebarItem } from "@/components/Sidebar";
 import { RetrievedApplication } from "@/types/application.types";
 import { formatApplicationProp } from "@/utils/application";
 import { formatDateTime } from "@/utils/formatDate";
-import { faHistory, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faDatabase,
+  faHistory,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TermsAcceptance from "./TermsAcceptance";
+import { getLabelName } from "@/utils/getLabelName";
 
 export function createApplicationSidebarItems(
   application: RetrievedApplication
@@ -19,7 +23,15 @@ export function createApplicationSidebarItems(
   return [
     {
       label: "Datasets",
-      value: <DatasetList datasets={datasets} className="gap-x-6" />,
+      value: datasets.map((dataset, index) => (
+        <span
+          className="mb-3 flex items-center gap-x-6"
+          key={`${dataset.id}-${index}`}
+        >
+          <FontAwesomeIcon icon={faDatabase} className="text-primary" />
+          <p className="break-words">{getLabelName(dataset.title)}</p>
+        </span>
+      )),
     },
     {
       label: "Participants",

@@ -4,7 +4,6 @@
 "use client";
 
 import ListContainer from "@/components/ListContainer";
-import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
 import { useEffect, useState } from "react";
 import { Status } from "@/utils/pageStatus.types";
@@ -83,7 +82,7 @@ function EntitlementsPage() {
   }
 
   return (
-    <PageContainer className="pt-5 md:pt-10">
+    <div className="pt-5 md:pt-10">
       <PageHeading className="mb-4">Entitlements</PageHeading>
       <span>View your entitlements</span>
       <ListContainer>
@@ -93,7 +92,7 @@ function EntitlementsPage() {
           <EmptyEntitlements />
         )}
       </ListContainer>
-    </PageContainer>
+    </div>
   );
 }
 

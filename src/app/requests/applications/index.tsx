@@ -9,7 +9,6 @@ import Button from "@/components/Button";
 import List from "@/components/List";
 import ListItem from "@/components/List/ListItem";
 import ListContainer from "@/components/ListContainer";
-import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
 import { listApplications } from "@/services/daam/index.client";
 import { ListedApplication } from "@/types/application.types";
@@ -74,7 +73,7 @@ const ApplicationsPage: React.FC = () => {
   }
 
   return (
-    <PageContainer className="pt-5 md:pt-10">
+    <div className="pt-5 md:pt-10">
       <PageHeading className="mb-4">Manage your Applications</PageHeading>
       <span>View and update your submitted applications</span>
       <ListContainer>
@@ -104,7 +103,7 @@ const ApplicationsPage: React.FC = () => {
           </div>
         )}
       </ListContainer>
-    </PageContainer>
+    </div>
   );
 };
 

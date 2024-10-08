@@ -17,7 +17,13 @@ function EntitlementCard({
   dataset,
   cardItems,
 }: Readonly<EntitlementCardProps>) {
-  return <DatasetCard dataset={dataset} cardItems={cardItems} />;
+  return (
+    <DatasetCard
+      dataset={dataset}
+      cardItems={cardItems}
+      displayBasketButton={false}
+    />
+  );
 }
 
 export default EntitlementCard;

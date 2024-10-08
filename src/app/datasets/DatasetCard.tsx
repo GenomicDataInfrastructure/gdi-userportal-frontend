@@ -13,9 +13,14 @@ import Card, { CardItem } from "../../components/Card";
 type DatasetCardProps = {
   dataset: SearchedDataset;
   cardItems: CardItem[];
+  displayBasketButton?: boolean;
 };
 
-function DatasetCard({ dataset, cardItems }: Readonly<DatasetCardProps>) {
+function DatasetCard({
+  dataset,
+  cardItems,
+  displayBasketButton = true,
+}: Readonly<DatasetCardProps>) {
   const screenSize = useWindowSize();
   const truncatedDesc = dataset.description
     ? truncateDescription(dataset.description, screenSize)
@@ -47,15 +52,17 @@ function DatasetCard({ dataset, cardItems }: Readonly<DatasetCardProps>) {
       cardItems={cardItems}
       keywords={dataset.keywords?.map((keyword) => keyword.label)}
       button={
-        <Button
-          text={isInBasket ? "Remove from basket" : "Add to basket"}
-          icon={isInBasket ? faMinusCircle : faPlusCircle}
-          onClick={toggleDatasetInBasket}
-          type={isInBasket ? "warning" : "primary"}
-          disabled={buttonDisabled}
-          flex={true}
-          className="text-xs sm:text-base"
-        />
+        displayBasketButton && (
+          <Button
+            text={isInBasket ? "Remove from basket" : "Add to basket"}
+            icon={isInBasket ? faMinusCircle : faPlusCircle}
+            onClick={toggleDatasetInBasket}
+            type={isInBasket ? "warning" : "primary"}
+            disabled={buttonDisabled}
+            flex={true}
+            className="text-xs sm:text-base"
+          />
+        )
       }
     />
   );

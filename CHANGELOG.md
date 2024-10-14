@@ -25,7 +25,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-## [v1.3.0] - 2024-10
+## [v1.3.2] - 2024-10-09
+
+### Changed
+* chore(deps): update aquasecurity/trivy-action action to v0.26.0 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/479
+* fix(deps): update dependency next to v14.2.15 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/478
+* chore(deps): update dependency eslint-config-next to v14.2.15 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/477
+
+### Fixed
+* fix: remove padding on applications and entitlements page + remove bu… by @admy7 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/476
+
+## [v1.3.1] - 2024-10-07
+
+### Changed
+* feat: extract card component for consistency + minor ui fixes by @admy7 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/474
+
+## [v1.3.0] - 2024-10-07
 
 ### Added
 * 253 gdi frontend support text typed fields by @sulejmank in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/260

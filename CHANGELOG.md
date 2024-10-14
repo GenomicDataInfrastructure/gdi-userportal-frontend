@@ -25,6 +25,151 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [v1.3.0] - 2024-10
+
+### Added
+* 253 gdi frontend support text typed fields by @sulejmank in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/260
+* feat: Implement configurable fonts and colors by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/267
+* feat: remove specific color names + default values for fonts and colors by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/268
+* ART-6884: dark mode similar to light mode by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/270
+* Add email, date and phone number fields  by @EmiPali in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/266
+* feat: Unified Error handling by @inderps in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/279
+* 264 gdi frontend design and develop entitlement card by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/284
+* feat: Renovate bot config file by @sehaartuc in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/286
+* chore: export dataset into different formats by @brunopacheco1 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/371
+* feat: #363 display contact points by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/375
+* feat: #360 Organization Page/details by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/380
+* feat: themes component to homepage by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/342
+* feat: Themes Page and filter by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/350
+* feat: #281 accept terms and conditions by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/387
+
+### Changed
+* chore(deps): update docker/build-push-action action to v6 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/297
+* chore(deps): update fsfe/reuse-action action to v4 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/298
+* chore(deps): update docker/metadata-action digest to a64d048 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/291
+* chore(deps): update oss-review-toolkit/ort-ci-github-action digest to 81698a9 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/292
+* chore(deps): update docker/login-action digest to 0d4c9c5 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/290
+* chore(deps): update devdependencies by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/293
+* fix(deps): update dependency utils to ^0.3.0 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/295
+* chore(deps): update azure/webapps-deploy digest to 5c1d76e by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/289
+* fix(deps): update dependency next to v14.2.5 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/294
+* fix(deps): update dependency cmdk to v1 - autoclosed by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/300
+* feat: footer content is configurable by env vars by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/306
+* feat: restructure footer by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/308
+* feat: header configurable by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/309
+* feat: Prettier config fixed by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/311
+* feat: howto banner should be permanent by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/312
+* feat: homepage about page should be dynamic by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/323
+* feat: fix layout of homepage about by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/336
+* fix: change heroicon to fontawesome by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/337
+* Improve phone field by @EmiPali in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/285
+* feat: #273 display Recents Datasets on homepage by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/341
+* chore: centralize env vars in server config by @brunopacheco1 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/343
+* fix(deps): update dependency lucide-react to ^0.408.0 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/338
+* fix(deps): update dependency lucide-react to ^0.411.0 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/345
+* fix(deps): update dependency lucide-react to ^0.412.0 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/348
+* LNDC design for themes by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/347
+* fix(deps): update dependency lucide-react to ^0.414.0 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/349
+* chore: separate content from service configurations by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/351
+* fix(deps): update dependency lucide-react to ^0.416.0 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/352
+* feat: #261 made support fields uneditable by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/353
+* fix(deps): update dependency lucide-react to ^0.417.0 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/359
+* feat: dataset detail page by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/358
+* fix(deps): update dependency lucide-react to ^0.418.0 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/365
+* fix(deps): update dependency lucide-react to ^0.419.0 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/367
+* fix(deps): update dependency lucide-react to ^0.424.0 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/368
+* chore: migrate base docker image to UBI9 by @brunopacheco1 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/374
+* fix(deps): update dependency lucide-react to ^0.426.0 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/381
+* fix(deps): update dependency lucide-react to ^0.427.0 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/382
+* feat: #278 replace date-picker by shadcn date-picker by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/383
+* chore: add test coverage to sonar cloud by @brunopacheco1 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/390
+* chore: remove unnecessary functions and fix API mapping by @brunopacheco1 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/393
+* feat: revise themes, publishers and about pages by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/391
+* fix: add tests for about renderer by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/394
+* feat: homepage ui  by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/388
+* chore: #ART-8080 reduce duplicated error handling code by @brunopacheco1 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/395
+* chore: handle ErrorResponse in form by @brunopacheco1 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/397
+* chore: rename organization to publisher by @brunopacheco1 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/398
+* chore(deps): update registry.access.redhat.com/ubi9/nodejs-20-minimal docker tag to v1-57.1724037293 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/401
+* chore(deps): update dependency eslint-config-next to v14.2.6 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/404
+* fix(deps): update dependency next to v14.2.6 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/405
+* feat: #378 change the filters component by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/407
+* feat: remove image from organization page by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/410
+* feat: #378 add Skeleton for datasetpage and pagination overhaul by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/413
+* fix filter dropdown if empty by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/414
+* fix border in small screen between info by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/415
+* feat: for publisher, client side rendering changed to server side rendering by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/416
+* fix basket color by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/417
+* fix: about content in the same folder as other public resources. by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/418
+* fix: footer logo and about content by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/421
+* Get correct offset with pagination by @admy7 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/422
+* feat: #370 support REMS option list, multi-select list, label and header field types by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/423
+* feat: #389 support REMS Table field type by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/424
+* fix: the border and invalid value in the form by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/426
+* chore(deps): update dependency eslint-config-next to v14.2.7 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/419
+* fix(deps): update dependency next to v14.2.7 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/420
+* chore(deps): bump micromatch from 4.0.5 to 4.0.8 by @dependabot in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/425
+* Revert "chore(deps): bump micromatch from 4.0.5 to 4.0.8" by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/427
+* chor(deps): upgrade tailwind for micromatch vulnerability by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/431
+* fix: add correct font files by @inderps in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/433
+* chore: clean up of unused components and minor refactor by @sulejmank in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/436
+* feat: #399 use react-markdown for loading markdown file content as st… by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/437
+* feat: #403 add documentation about frontend customization by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/439
+* fix not needed underline in md files by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/440
+* 430/get facets from new endpoint by @admy7 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/441
+* fix: keywords showing Dataset Card by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/442
+* move the favicon to public folder by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/443
+* Decommision facet groups by @admy7 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/444
+* feat: add distributions to dataset card and fix error layout by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/445
+* Fix: responsiveness for portal by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/446
+* chore(deps): update registry.access.redhat.com/ubi9/nodejs-20-minimal docker tag to v1-63.1725851021 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/432
+* chore(deps): update devdependencies (patch) by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/434
+* fix(deps): update dependency date-fns to v4 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/447
+* feat: change the color of the form text from primary to black by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/448
+* fix(deps): update dependency next to v14.2.10 [security] by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/452
+* chore(deps): update devdependencies (patch) by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/450
+* fix(deps): update dependency next to v14.2.13 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/435
+* chore(deps): update dependency eslint-config-next to v14.2.13 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/453
+* fix: ART-9683/Filter not working by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/454
+* fix: the overflow of themes in dataset card and removing the icon by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/455
+* chore(deps): update dependency tailwindcss to v3.4.13 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/456
+* Move, images fonts and palette to public by @brunopacheco1 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/459
+* chore(deps): update sonarsource/sonarqube-scan-action action to v3 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/460
+* feat: add sitemap.xml and robots.txt by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/458
+* feat: ART-9568/add feature flag for access request by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/461
+* chore: change font names by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/462
+* chore: fix RDF file export by @brunopacheco1 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/464
+* Feat/delete draft action by @admy7 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/463
+* fix: add missing body to makeDeleteApplication by @admy7 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/465
+* fix: revert changes on DELETE verb by @brunopacheco1 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/466
+* ART-9681/Display selected filters on top of the dataset cards by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/468
+* ART-9680/Small enhancements by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/471
+* chore(deps): update dependency eslint-config-next to v14.2.14 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/469
+* fix(deps): update dependency next to v14.2.14 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/470
+* Align layout for applications and entitlements by @admy7 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/472
+* chore: minor refactoring by @admy7 in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/473
+* chore(deps): update aquasecurity/trivy-action action to v0.25.0 by @LNDS-Sysadmins in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/475
+
+### Fixed
+* fix: Throw full page error for 404 on application page by @inderps in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/280
+* fix: layout by @inderps in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/282
+* fix: Close alert when navigating to other page by @inderps in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/283
+* feat: #272 review homepage layout by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/318
+* fix search bar placeholder by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/321
+* fix: border and colour highlight by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/354
+* fix: hover and colour consistency on application form fields by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/356
+* fix: hover upload button opacity by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/357
+* fix: alignment of tile and dates on small screens by @inderps in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/361
+* fix: fix organization link fix distribution box and add info box by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/362
+* fix: #355 session always expires after 5 min by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/366
+* fix: #364 error of missing timezone in console by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/372
+* fix: add more tests for make sonar happy by @zalborzi in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/396
+* feat: #378 remove fitler icon for small screen by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/408
+* feat: debounce save form to prevent race condition by @inderps in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/406
+* feat: #378 dataset card revamp by @nolliia in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/411
+* fix: Phone number onChange event by @inderps in https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend/pull/409
+
+
 ## [v1.2.0] - 2024-06-12
 
 ### Added

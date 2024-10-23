@@ -26,22 +26,25 @@ export default async function Page({ params }: { params: { id: string } }) {
       <PageContainer>
         <div className="flex flex-col items-start justify-start lg:flex-row">
           <div className="flex w-full flex-col gap-5 lg:w-2/3 lg:px-5">
-            <div className="sm:flex sm:justify-between">
-              <div className="flex items-center gap-x-4">
-                <PageHeading className="text-black">
-                  {dataset.title}
-                </PageHeading>
+            <div
+              className={`flex flex-col ${dataset.themes.length < 2 && "md:flex-row md:gap-y-0 items-start"} gap-y-5 gap-x-3 justify-between`}
+            >
+              <PageHeading className="text-black">{dataset.title}</PageHeading>
 
+              <ul className="flex gap-x-3 gap-y-2 flex-wrap">
                 {dataset.themes.map((theme) => (
-                  <div
+                  <li
                     key={theme.label}
-                    className="tracking-widest uppercase flex items-center text-xs lg:text-sm relative group"
+                    className="tracking-widest uppercase flex items-center relative group"
                   >
-                    <Chip className="text-center" chip={theme.label} />
-                    <Tooltip message="Themes associated with the dataset." />
-                  </div>
+                    <Chip
+                      className="flex justify-center items-center w-24 md:w-32 h-12 text-[10px] md:text-xs text-center px-1 md:px-2"
+                      chip={theme.label}
+                    />
+                    <Tooltip message="Theme associated with the dataset." />
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
             <div className="flex items-center">
               <p className="text-gray">{dataset.description}</p>
@@ -55,7 +58,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
             <div className="h-[2px] bg-secondary opacity-80 lg:hidden"></div>
 
-            <div className="">
+            <div>
               <DatasetMetadata
                 dataset={dataset}
                 relationships={relationships}

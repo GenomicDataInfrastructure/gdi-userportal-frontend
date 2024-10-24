@@ -37,10 +37,10 @@ export function createDatasetCardItems(dataset: SearchedDataset): CardItem[] {
     },
     {
       text:
-        (dataset.distributions?.length &&
-          (dataset.distributions.length === 1
+        (dataset.distributionsCount &&
+          (dataset.distributionsCount === 1
             ? "1 Distribution"
-            : `${dataset.distributions.length} Distributions`)) ||
+            : `${dataset.distributionsCount} Distributions`)) ||
         "",
       icon: faFile,
     },

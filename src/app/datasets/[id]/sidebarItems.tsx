@@ -35,7 +35,14 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
   return [
     {
       label: "Request data access",
-      value: <AddToBasketButton dataset={dataset} />,
+      value: (
+        <AddToBasketButton
+          dataset={{
+            ...dataset,
+            distributionsCount: dataset.distributions.length,
+          }}
+        />
+      ),
       hideItem: !contentConfig.showBasketAndLogin,
     },
     {

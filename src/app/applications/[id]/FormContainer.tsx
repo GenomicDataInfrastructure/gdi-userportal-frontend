@@ -16,7 +16,7 @@ function FormContainer({
   form,
   editable,
   validationWarnings,
-}: FormContainerProps) {
+}: Readonly<FormContainerProps>) {
   const formTitle =
     form.externalTitle.find((label) => label.language === "en")?.name ||
     form.externalTitle?.[0]?.name;
@@ -26,7 +26,7 @@ function FormContainer({
       <h3 className="mb-4 text-2xl">{formTitle}</h3>
       {form.fields.map(
         (field) =>
-          field && (
+          !!field?.visible && (
             <li key={field.id}>
               <FieldContainer
                 formId={form.id}

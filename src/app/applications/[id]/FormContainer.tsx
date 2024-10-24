@@ -24,23 +24,21 @@ function FormContainer({
   return (
     <ul className="space-y-4 border rounded-2xl p-5">
       <h3 className="mb-4 text-2xl">{formTitle}</h3>
-      {form.fields
-        .filter((x) => x.visible)
-        .map(
-          (field) =>
-            field && (
-              <li key={field.id}>
-                <FieldContainer
-                  formId={form.id}
-                  field={field}
-                  editable={editable}
-                  validationWarning={validationWarnings?.find(
-                    (it) => it.fieldId === field.id
-                  )}
-                />
-              </li>
-            )
-        )}
+      {form.fields.map(
+        (field) =>
+          !!field?.visible && (
+            <li key={field.id}>
+              <FieldContainer
+                formId={form.id}
+                field={field}
+                editable={editable}
+                validationWarning={validationWarnings?.find(
+                  (it) => it.fieldId === field.id
+                )}
+              />
+            </li>
+          )
+      )}
     </ul>
   );
 }

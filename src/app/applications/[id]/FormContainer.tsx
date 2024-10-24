@@ -16,7 +16,7 @@ function FormContainer({
   form,
   editable,
   validationWarnings,
-}: FormContainerProps) {
+}: Readonly<FormContainerProps>) {
   const formTitle =
     form.externalTitle.find((label) => label.language === "en")?.name ||
     form.externalTitle?.[0]?.name;
@@ -24,21 +24,23 @@ function FormContainer({
   return (
     <ul className="space-y-4 border rounded-2xl p-5">
       <h3 className="mb-4 text-2xl">{formTitle}</h3>
-      {form.fields.map(
-        (field) =>
-          field && (
-            <li key={field.id}>
-              <FieldContainer
-                formId={form.id}
-                field={field}
-                editable={editable}
-                validationWarning={validationWarnings?.find(
-                  (it) => it.fieldId === field.id
-                )}
-              />
-            </li>
-          )
-      )}
+      {form.fields
+        .filter((x) => x.visible)
+        .map(
+          (field) =>
+            field && (
+              <li key={field.id}>
+                <FieldContainer
+                  formId={form.id}
+                  field={field}
+                  editable={editable}
+                  validationWarning={validationWarnings?.find(
+                    (it) => it.fieldId === field.id
+                  )}
+                />
+              </li>
+            )
+        )}
     </ul>
   );
 }

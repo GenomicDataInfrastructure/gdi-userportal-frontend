@@ -30,21 +30,7 @@ describe("datasetCardItems", () => {
           value: "keyword2",
         },
       ],
-      distributions: [
-        {
-          id: "r",
-          title: "distribution1",
-          description: "distribution1 description",
-          format: {
-            label: "format1",
-            value: "format1",
-          },
-          licenses: [],
-          createdAt: "2022-01-01T00:00:00.000Z",
-          modifiedAt: "2022-01-01T00:00:00.000Z",
-          uri: "distribution1",
-        },
-      ],
+      distributionsCount: 1,
       organization: {
         id: "1",
         title: "organization1",

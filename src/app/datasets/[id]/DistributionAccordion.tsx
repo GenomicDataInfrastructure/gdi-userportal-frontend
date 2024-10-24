@@ -137,22 +137,28 @@ const DistributionAccordion = ({
                     <Tooltip message="File type of the distribution." />
                   </span>
                 </div>
-                <div className="flex items-center relative">
-                  <span className="group flex items-center">
-                    <FontAwesomeIcon
-                      icon={faLink}
-                      className="text-primary align-middle mr-2"
-                    />
-                    <strong className="text-sm font-semibold">Link:</strong>
-                    <a
-                      href={distribution.uri}
-                      className="text-sm text-primary ml-2 break-all"
-                    >
-                      Download
-                    </a>
-                    <Tooltip message="Link to download the distribution." />
-                  </span>
-                </div>
+                {distribution.downloadUrl && (
+                  <div className="flex items-center relative">
+                    <span className="group flex items-center">
+                      <FontAwesomeIcon
+                        icon={faLink}
+                        className="text-primary align-middle mr-2"
+                      />
+                      <strong className="text-sm font-semibold">
+                        Download URL:
+                      </strong>
+                      <a
+                        href={distribution.downloadUrl}
+                        className="text-sm text-primary ml-2 break-all"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        here
+                      </a>
+                      <Tooltip message="Link to download the distribution." />
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </div>

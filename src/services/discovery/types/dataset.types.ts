@@ -34,11 +34,11 @@ export type SearchedDataset = {
   description?: string;
   themes?: ValueLabel[];
   keywords: ValueLabel[];
-  distributions: RetrievedDistribution[];
   organization: RetrievedPublisher;
   modifiedAt: string;
   createdAt: string;
   recordsCount?: number;
+  distributionsCount: number;
 };
 
 export type DatasetEntitlement = {
@@ -56,7 +56,7 @@ export interface RetrievedDistribution {
   modifiedAt: string;
   languages?: ValueLabel[];
   licenses?: ValueLabel[];
-  uri: string;
+  downloadUrl?: string;
 }
 
 export interface DatasetRelationEntry {

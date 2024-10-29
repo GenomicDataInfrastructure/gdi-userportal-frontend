@@ -22,7 +22,7 @@ function FilterItem({ filter }: FilterItemProps) {
       case FilterType.FREE_TEXT:
         return <FreeTextFilterContent filter={filter} />;
       case FilterType.ENTRIES:
-        return <div>Entries</div>;
+        return <div></div>;
       default:
         throw new Error(`Unknown filter type: ${type}`);
     }

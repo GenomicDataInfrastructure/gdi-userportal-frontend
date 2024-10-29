@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import Button from "@/components/Button";
 import { FilterType } from "@/services/discovery/types/filter.type";
 import { faCheck, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
@@ -36,7 +40,6 @@ export default function FreeTextFilterContent({
     event: React.MouseEvent<HTMLDivElement>,
     index: number
   ) => {
-    console.log("Done");
     event.stopPropagation();
     const operator = (event.target as HTMLElement).innerText;
     const operatorInput = document.getElementById(
@@ -142,7 +145,7 @@ export default function FreeTextFilterContent({
         ))}
         <div className="flex w-full justify-between">
           <Button
-            text="Add another filter"
+            text="Add  filter"
             icon={faPlusCircle}
             type="primary"
             flex={true}

@@ -30,8 +30,9 @@ export const createDatasetEntitlements = async (
   const options: DatasetSearchOptions = {
     limit: 1000,
     facets: entitlements.map((e) => ({
-      facetGroup: "ckan",
-      facet: "identifier",
+      source: "ckan",
+      type: "DROPDOWN",
+      key: "identifier",
       value: e.datasetId,
     })),
     operator: QueryOperator.Or,

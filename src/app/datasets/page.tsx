@@ -2,18 +2,17 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import Error from "@/app/error";
 import PageContainer from "@/components/PageContainer";
-import FilterList from "./FilterList";
 import SearchBar from "@/components/Searchbar";
 import DatasetsProvider from "@/providers/datasets/DatasetsProvider";
-import DatasetCount from "./DatasetCount";
-import DatasetListContainer from "./DatasetListContainer";
+import { Filter } from "@/services/discovery/types/filter.type";
 import { redirect } from "next/navigation";
 import { GET } from "../api/filters/route";
-import Error from "@/app/error";
-import AppliedFilters from "@/components/AppliedFilters";
+import DatasetCount from "./DatasetCount";
+import DatasetListContainer from "./DatasetListContainer";
+import FilterList from "./FilterList";
 import NoDatasetMessage from "./NoDatasetMessage";
-import { Filter } from "@/services/discovery/types/filter.type";
 
 export default async function DatasetsPage({
   searchParams,

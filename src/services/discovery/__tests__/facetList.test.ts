@@ -4,16 +4,16 @@
 
 import { jest } from "@jest/globals";
 import axios from "axios";
-import { makeFacetList } from "../filterList";
-import { facetFixtures } from "../fixtures/facetFixtures";
+import { makeFilterList } from "../filterList";
+import { filterFixtures } from "../fixtures/facetFixtures";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
-const facetList = makeFacetList("https://mock-discovery-service.com");
+const filterList = makeFilterList("https://mock-discovery-service.com");
 
-describe("facetList", () => {
+describe("filterList", () => {
   beforeEach(() => {
-    mockedAxios.get.mockResolvedValue(facetFixtures);
+    mockedAxios.get.mockResolvedValue(filterFixtures);
   });
 
   afterEach(() => {
@@ -21,28 +21,30 @@ describe("facetList", () => {
   });
 
   test("maps and asserts the full server response", async () => {
-    const response = await facetList(null);
+    const response = await filterList(null);
 
     expect(response.data.length).toEqual(3);
 
-    const ckanFacet = response.data[0];
-    expect(ckanFacet.facetGroup).toEqual("ckan");
-    expect(ckanFacet.key).toEqual("access_rights");
-    expect(ckanFacet.label).toEqual("Access Rights");
-    expect(ckanFacet.values.length).toEqual(2);
-    expect(ckanFacet.values[0].value).toEqual(
+    const ckanFilter = response.data[0];
+    expect(ckanFilter.source).toEqual("ckan");
+    expect(ckanFilter.type).toEqual("DROPDOWN");
+    expect(ckanFilter.key).toEqual("access_rights");
+    expect(ckanFilter.label).toEqual("Access Rights");
+    expect(ckanFilter.values!.length).toEqual(2);
+    expect(ckanFilter.values![0].value).toEqual(
       "https://staging-fdp.gdi.nbis.se/dataset/87495812-3201-4099-9478-1c60c9ef8c85#accessRights"
     );
-    expect(ckanFacet.values[0].label).toEqual(
+    expect(ckanFilter.values![0].label).toEqual(
       "https://staging-fdp.gdi.nbis.se/dataset/87495812-3201-4099-9478-1c60c9ef8c85#accessRights"
     );
 
-    const beaconFacet = response.data[2];
-    expect(beaconFacet.facetGroup).toEqual("beacon");
-    expect(beaconFacet.key).toEqual("Human Phenotype Ontology");
-    expect(beaconFacet.label).toEqual("Human Phenotype Ontology");
-    expect(beaconFacet.values.length).toEqual(1);
-    expect(beaconFacet.values[0].value).toEqual("Motor delay");
-    expect(beaconFacet.values[0].label).toEqual("Delay");
+    const beaconFilter = response.data[2];
+    expect(beaconFilter.source).toEqual("beacon");
+    expect(beaconFilter.type).toEqual("DROPDOWN");
+    expect(beaconFilter.key).toEqual("Human Phenotype Ontology");
+    expect(beaconFilter.label).toEqual("Human Phenotype Ontology");
+    expect(beaconFilter.values!.length).toEqual(1);
+    expect(beaconFilter.values![0].value).toEqual("Motor delay");
+    expect(beaconFilter.values![0].label).toEqual("Delay");
   });
 });

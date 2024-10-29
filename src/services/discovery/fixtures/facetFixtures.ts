@@ -2,10 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-export const facetFixtures = {
+export const filterFixtures = {
   data: [
     {
-      facetGroup: "ckan",
+      source: "ckan",
+      type: "DROPDOWN",
       key: "access_rights",
       label: "Access Rights",
       values: [
@@ -23,7 +24,8 @@ export const facetFixtures = {
       ],
     },
     {
-      facetGroup: "ckan",
+      source: "ckan",
+      type: "DROPDOWN",
       key: "theme",
       label: "Themes",
       values: [
@@ -48,7 +50,8 @@ export const facetFixtures = {
       ],
     },
     {
-      facetGroup: "beacon",
+      source: "beacon",
+      type: "DROPDOWN",
       key: "Human Phenotype Ontology",
       label: "Human Phenotype Ontology",
       values: [

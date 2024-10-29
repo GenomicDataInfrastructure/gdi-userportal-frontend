@@ -8,11 +8,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import ClearFilterButton from "@/app/datasets/FilterList/ClearFilterButton";
-import {
-  FilterItemProps,
-  convertDataToFilterItemProps,
-} from "@/utils/convertDataToFilterItemProps";
-import { Facet } from "@/services/discovery/types/facets.type";
 
 const AppliedFilters = ({ searchFacets }: { searchFacets: Facet[] }) => {
   const searchParams = useSearchParams();

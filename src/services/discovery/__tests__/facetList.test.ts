@@ -4,7 +4,7 @@
 
 import { jest } from "@jest/globals";
 import axios from "axios";
-import { makeFacetList } from "../facetList";
+import { makeFacetList } from "../filterList";
 import { facetFixtures } from "../fixtures/facetFixtures";
 
 jest.mock("axios");

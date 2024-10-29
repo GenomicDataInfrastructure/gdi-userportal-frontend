@@ -5,7 +5,13 @@
 
 const nextConfig = {
   output: "standalone",
-
+  experimental: {
+    instrumentationHook: process.env.OTEL_ENABLED === "true",
+    serverComponentsExternalPackages: [
+      "@opentelemetry/auto-instrumentations-node",
+      "@opentelemetry/sdk-node",
+    ],
+  },
   images: {
     remotePatterns: [
       {

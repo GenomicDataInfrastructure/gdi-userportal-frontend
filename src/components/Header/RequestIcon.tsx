@@ -18,7 +18,7 @@ const RequestIcon: React.FC<RequestIconProps> = ({ isActive }) => (
       isActive ? "text-primary" : ""
     }`}
   >
-    <FontAwesomeIcon icon={faFolderOpen} className="text-xl lg:text-2xl" />
+    <FontAwesomeIcon icon={faFolderOpen} className="text-2xl lg:text-3xl" />
   </Link>
 );
 

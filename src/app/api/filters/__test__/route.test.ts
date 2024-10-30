@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import serverConfig from "@/config/serverConfig";
+import { encrypt } from "@/utils/encryption";
 import { jest } from "@jest/globals";
 import axios from "axios";
 import { getServerSession } from "next-auth";
-import { encrypt } from "@/utils/encryption";
-import serverConfig from "@/config/serverConfig";
 import { GET } from "../route";
 
 jest.mock("axios");
@@ -47,7 +47,7 @@ describe("GET function", () => {
     expect(responseJson.length).toEqual(1);
 
     expect(mockedAxios.get).toHaveBeenCalledWith(
-      `${serverConfig.discoveryUrl}/api/v1/search-facets`,
+      `${serverConfig.discoveryUrl}/api/v1/filters`,
       {
         headers: {
           Authorization: "Bearer decryptedToken",
@@ -77,7 +77,7 @@ describe("GET function", () => {
     expect(responseJson.length).toEqual(1);
 
     expect(mockedAxios.get).toHaveBeenCalledWith(
-      `${serverConfig.discoveryUrl}/api/v1/search-facets`,
+      `${serverConfig.discoveryUrl}/api/v1/filters`,
       {
         headers: {
           "Content-Type": "application/json",

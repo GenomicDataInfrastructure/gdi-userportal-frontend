@@ -2,17 +2,16 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import Error from "@/app/error";
 import PageContainer from "@/components/PageContainer";
-import FilterList from "./FilterList";
 import SearchBar from "@/components/Searchbar";
 import DatasetsProvider from "@/providers/datasets/DatasetsProvider";
+import { Filter } from "@/services/discovery/types/filter.type";
+import { redirect } from "next/navigation";
+import { GET } from "../api/filters/route";
 import DatasetCount from "./DatasetCount";
 import DatasetListContainer from "./DatasetListContainer";
-import { redirect } from "next/navigation";
-import { GET } from "../api/facets/route";
-import { Facet } from "@/services/discovery/types/facets.type";
-import Error from "@/app/error";
-import AppliedFilters from "@/components/AppliedFilters";
+import FilterList from "./FilterList";
 import NoDatasetMessage from "./NoDatasetMessage";
 
 export default async function DatasetsPage({
@@ -24,12 +23,12 @@ export default async function DatasetsPage({
     redirect("/datasets?page=1");
   }
 
-  const searchFacetsResponse = await GET();
-  if (searchFacetsResponse.status !== 200) {
-    return <Error statusCode={searchFacetsResponse.status} />;
+  const getFiltersResponse = await GET();
+  if (getFiltersResponse.status !== 200) {
+    return <Error statusCode={getFiltersResponse.status} />;
   }
 
-  const searchFacets = (await searchFacetsResponse.json()) as Facet[];
+  const filters = (await getFiltersResponse.json()) as Filter[];
 
   return (
     <PageContainer>
@@ -41,16 +40,16 @@ export default async function DatasetsPage({
           <DatasetCount />
           <div className="col-start-0 col-span-12 flex flex-col gap-4 sm:block xl:hidden">
             <div className="my-4 h-fit">
-              <FilterList searchFacets={searchFacets} />
+              <FilterList filters={filters} />
             </div>
           </div>
           <div className="col-start-0 col-span-4 flex flex-col gap-y-6">
             <div className="col-start-0 col-span-4 mr-6 hidden h-fit xl:block px-6">
-              <FilterList searchFacets={searchFacets} />
+              <FilterList filters={filters} />
             </div>
           </div>
           <div className="col-span-12 xl:col-span-8">
-            <AppliedFilters searchFacets={searchFacets} />
+            {/* <AppliedFilters searchFacets={filters} /> */}
             <NoDatasetMessage />
             <DatasetListContainer />
           </div>

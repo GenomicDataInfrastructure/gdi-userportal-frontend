@@ -50,13 +50,15 @@ describe("datasetList", () => {
   test("applies tag filters correctly", async () => {
     const facets = [
       {
-        facetGroup: "ckan",
-        facet: "tags",
+        source: "ckan",
+        type: "DROPDOWN",
+        key: "tags",
         value: "education",
       },
       {
-        facetGroup: "ckan",
-        facet: "tags",
+        source: "ckan",
+        type: "DROPDOWN",
+        key: "tags",
         value: "science",
       },
     ];
@@ -85,13 +87,15 @@ describe("datasetList", () => {
     const searchOptions = {
       facets: [
         {
-          facetGroup: "ckan",
-          facet: "organization",
+          source: "ckan",
+          type: "DROPDOWN",
+          key: "organization",
           value: "org1",
         },
         {
-          facetGroup: "beacon",
-          facet: "organization",
+          source: "beacon",
+          type: "DROPDOWN",
+          key: "organization",
           value: "org-2",
         },
       ],
@@ -102,13 +106,15 @@ describe("datasetList", () => {
       rows: 1,
       facets: [
         {
-          facetGroup: "ckan",
-          facet: "organization",
+          source: "ckan",
+          type: "DROPDOWN",
+          key: "organization",
           value: "org1",
         },
         {
-          facetGroup: "beacon",
-          facet: "organization",
+          source: "beacon",
+          type: "DROPDOWN",
+          key: "organization",
           value: "org-2",
         },
       ],
@@ -128,33 +134,39 @@ describe("datasetList", () => {
   test("combines multiple filters correctly", async () => {
     const facets = [
       {
-        facetGroup: "ckan",
-        facet: "tags",
+        source: "ckan",
+        type: "DROPDOWN",
+        key: "tags",
         value: "technology",
       },
       {
-        facetGroup: "ckan",
-        facet: "tags",
+        source: "ckan",
+        type: "DROPDOWN",
+        key: "tags",
         value: "http://example.com/other-tag",
       },
       {
-        facetGroup: "beacon",
-        facet: "organization",
+        source: "beacon",
+        type: "DROPDOWN",
+        key: "organization",
         value: "org-2",
       },
       {
-        facetGroup: "ckan",
-        facet: "publisher_name",
+        source: "ckan",
+        type: "DROPDOWN",
+        key: "publisher_name",
         value: "A random publisher",
       },
       {
-        facetGroup: "ckan",
-        facet: "organization",
+        source: "ckan",
+        type: "DROPDOWN",
+        key: "organization",
         value: "org-1",
       },
       {
-        facetGroup: "beacon",
-        facet: "theme",
+        source: "beacon",
+        type: "DROPDOWN",
+        key: "theme",
         value: "group-1",
       },
     ];

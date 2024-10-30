@@ -29,14 +29,15 @@ function parseFacets(queryParams: URLSearchParams): DatasetSearchQueryFacet[] {
 
   queryParams.forEach((value, key) => {
     if (!["page", "q", "sort"].includes(key)) {
-      const group = key.split("-")[0];
-      const facet = key.split("-")[1];
+      const source = key.split("-")[0];
+      const facetKey = key.split("-")[1];
       const values = value.split(",");
 
       values.map((v) =>
         facetsQuery.push({
-          facetGroup: group,
-          facet: facet,
+          source,
+          type: "DROPDOWN",
+          key: facetKey,
           value: v,
         })
       );
@@ -145,4 +146,4 @@ function useDatasets() {
   return context;
 }
 
-export { DatasetsProvider, useDatasets, DATASET_PER_PAGE };
+export { DATASET_PER_PAGE, DatasetsProvider, useDatasets };

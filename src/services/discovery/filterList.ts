@@ -5,13 +5,13 @@
 import { ExtendedSession } from "@/app/api/auth/auth.types";
 import axios, { AxiosResponse } from "axios";
 import { createHeaders } from "./utils";
-import { Facet } from "./types/facets.type";
+import { Filter } from "./types/filter.type";
 
-export const makeFacetList = (discoveryUrl: string) => {
+export const makeFilterList = (discoveryUrl: string) => {
   return async (
     session: ExtendedSession | null
-  ): Promise<AxiosResponse<Facet[]>> => {
-    return await axios.get<Facet[]>(`${discoveryUrl}/api/v1/search-facets`, {
+  ): Promise<AxiosResponse<Filter[]>> => {
+    return await axios.get<Filter[]>(`${discoveryUrl}/api/v1/filters`, {
       headers: await createHeaders(session),
     });
   };

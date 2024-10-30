@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { SearchedDataset } from "./dataset.types";
+import { Operator } from "./filter.type";
 
 export interface DatasetSearchOptions {
   facets?: DatasetSearchQueryFacet[];
@@ -40,8 +41,16 @@ export const facetToLabelMapping: Record<string, string> = {
 };
 
 export type DatasetSearchQueryFacet = {
-  facetGroup: string;
-  facet: string;
+  source: string;
+  type: string;
+  key: string;
+  value?: string;
+  operator?: Operator;
+  entries?: QueryEntry[];
+};
+
+export type QueryEntry = {
+  key: string;
   value: string;
 };
 

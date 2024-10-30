@@ -11,7 +11,7 @@ import {
 } from "@/components/shadcn/dropdown-menu";
 import { User } from "@/types/user.types";
 import { keycloackSessionLogOut } from "@/utils/logout";
-import { faSignOut } from "@fortawesome/free-solid-svg-icons";
+import { faSignOut, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
@@ -38,7 +38,7 @@ function Avatar({ user }: Readonly<AvatarProps>) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-disclaimer p-[8px] text-xs text-white shadow-sm transition-all duration-300 hover:bg-hover-color md:p-[10px] md:text-[13px] lg:h-9 lg:w-9">
+        <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-disclaimer p-[10px] text-sm text-white shadow-sm transition-all duration-300 hover:bg-hover-color md:p-[12px] md:text-base lg:h-11 lg:w-11">
           {user?.image ? (
             <Image src={user.image} alt="avatar" className="rounded-full" />
           ) : (
@@ -50,11 +50,15 @@ function Avatar({ user }: Readonly<AvatarProps>) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-white">
         <DropdownMenuGroup>
+          <div className="border-b-[1.5px] border-surface px-4 py-3 text-base">
+            <FontAwesomeIcon icon={faUser} className="mr-2 text-lg" />
+            {user?.name}
+          </div>
           <DropdownMenuItem
-            className="cursor-pointer gap-x-3 transition-all duration-300 hover:bg-hover-color hover:text-white"
+            className="cursor-pointer gap-x-3 px-4 py-3 text-base transition-all duration-300 hover:bg-hover-color hover:text-white"
             onClick={handleSignOut}
           >
-            <FontAwesomeIcon icon={faSignOut} className="text-sm" />
+            <FontAwesomeIcon icon={faSignOut} className="text-lg" />
             <span>Log out</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>

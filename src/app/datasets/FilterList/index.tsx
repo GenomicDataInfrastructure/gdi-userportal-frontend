@@ -2,14 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { Filter } from "@/services/discovery/types/filter.type";
+"use client";
+
 import FilterItem from "./FilterItem";
+import {useFilters} from "@/providers/FilterProvider";
 
-type FilterListProps = {
-  filters: Filter[];
-};
-
-export default async function FilterList({ filters }: FilterListProps) {
+export default function FilterList() {
+  const { filters } = useFilters();
   const filtersSortedBySource = filters.sort((f1, f2) =>
     f2.source.localeCompare(f1.source)
   );

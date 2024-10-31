@@ -7,7 +7,6 @@
 import { datasetList } from "@/services/discovery/index.public";
 import {
   DatasetSearchOptions,
-  DatasetSearchQueryFacet,
 } from "@/services/discovery/types/datasetSearch.types";
 import { AxiosError } from "axios";
 import { useSearchParams } from "next/navigation";

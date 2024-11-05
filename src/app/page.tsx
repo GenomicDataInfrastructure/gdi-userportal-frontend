@@ -25,7 +25,7 @@ const HomePage = () => {
       try {
         const response = await datasetList({
           limit: 4,
-          sort: "createdAt desc",
+          sort: "issued desc",
         });
         setDatasets(response.data.datasets);
       } catch (error) {

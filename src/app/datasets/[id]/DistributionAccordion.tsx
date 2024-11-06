@@ -11,6 +11,7 @@ import {
   faCalendarAlt,
   faFileAlt,
   faLink,
+  faLanguage,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
 import { RetrievedDistribution } from "@/services/discovery/types/dataset.types";
@@ -159,6 +160,24 @@ const DistributionAccordion = ({
                     </span>
                   </div>
                 )}
+                {distribution.languages &&
+                  distribution.languages.length > 0 && (
+                    <div className="flex items-center relative">
+                      <span className="group flex items-center">
+                        <FontAwesomeIcon
+                          icon={faLanguage}
+                          className="text-primary align-middle mr-2"
+                        />
+                        <span className="align-middle">
+                          Languages:{" "}
+                          {distribution.languages
+                            .map((lang) => lang.label)
+                            .join(", ")}
+                        </span>
+                        <Tooltip message="Languages in which the distribution is available." />
+                      </span>
+                    </div>
+                  )}
               </div>
             </div>
           </div>

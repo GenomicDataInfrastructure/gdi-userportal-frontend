@@ -7,7 +7,7 @@ import Error from "@/app/error";
 import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
 import DatasetsProvider from "@/providers/datasets/DatasetsProvider";
-import {redirect, useSearchParams} from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import DatasetCount from "./DatasetCount";
 import DatasetListContainer from "./DatasetListContainer";
 import FilterList from "./FilterList";
@@ -34,24 +34,24 @@ export default function DatasetsPage() {
         <div className="col-start-0 col-span-12 flex items-center justify-between xl:col-span-10 xl:col-start-2">
           <SearchBar />
         </div>
-          <DatasetsProvider>
-            <DatasetCount />
-            <div className="col-start-0 col-span-12 flex flex-col gap-4 sm:block xl:hidden">
-              <div className="my-4 h-fit">
-                <FilterList />
-              </div>
+        <DatasetsProvider>
+          <DatasetCount />
+          <div className="col-start-0 col-span-12 flex flex-col gap-4 sm:block xl:hidden">
+            <div className="my-4 h-fit">
+              <FilterList />
             </div>
-            <div className="col-start-0 col-span-4 flex flex-col gap-y-6">
-              <div className="col-start-0 col-span-4 mr-6 hidden h-fit xl:block px-6">
-                <FilterList />
-              </div>
+          </div>
+          <div className="col-start-0 col-span-4 flex flex-col gap-y-6">
+            <div className="col-start-0 col-span-4 mr-6 hidden h-fit xl:block px-6">
+              <FilterList />
             </div>
-            <div className="col-span-12 xl:col-span-8">
-               <ActiveFilters />
-              <NoDatasetMessage />
-              <DatasetListContainer />
-            </div>
-          </DatasetsProvider>
+          </div>
+          <div className="col-span-12 xl:col-span-8">
+            <ActiveFilters />
+            <NoDatasetMessage />
+            <DatasetListContainer />
+          </div>
+        </DatasetsProvider>
       </div>
     </PageContainer>
   );

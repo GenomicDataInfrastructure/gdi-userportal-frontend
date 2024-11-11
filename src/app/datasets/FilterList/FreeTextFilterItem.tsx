@@ -3,13 +3,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Button from "@/components/Button";
-import {ActiveFilter, Operator} from "@/services/discovery/types/filter.type";
+import { ActiveFilter, Operator } from "@/services/discovery/types/filter.type";
 import { faCheck, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Disclosure } from "@headlessui/react";
 import { useState } from "react";
 import { FilterItemProps } from "./FilterItem";
-import {useFilters} from "@/providers/FilterProvider";
+import { useFilters } from "@/providers/FilterProvider";
 
 type FreeTextFilterContentProps = FilterItemProps;
 
@@ -59,16 +59,16 @@ export default function FreeTextFilterContent({
       ) as Operator;
 
       if (value && operator) {
-        values.push({value, operator});
+        values.push({ value, operator });
       }
-    };
+    }
 
     const newActiveFilter = {
       source: filter.source,
       type: filter.type,
       key: filter.key,
       label: filter.label,
-      values
+      values,
     } as ActiveFilter;
 
     addActiveFilter(newActiveFilter);

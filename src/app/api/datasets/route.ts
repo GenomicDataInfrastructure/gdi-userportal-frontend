@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const response = await datasetList(options, session);
 
     const result = {
-      datasets: response.data.results,
+      results: response.data.results,
       count: response.data.count,
     };
 

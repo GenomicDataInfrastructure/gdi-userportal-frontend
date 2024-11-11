@@ -50,28 +50,19 @@ function reducer(
     }
     case FilterActionType.ACTIVE_FILTER_ADDED: {
       const newActiveFilter = action.payload as ActiveFilter;
-      const isFilterAlreadyActive =
-        state.activeFilters.find(
-          (f) =>
-            f.key === newActiveFilter.key && f.source === newActiveFilter.source
-        ) !== undefined;
+      const existingIndex = state.activeFilters.findIndex(
+        (f) =>
+          f.key === newActiveFilter.key && f.source === newActiveFilter.source
+      );
 
-      if (isFilterAlreadyActive) {
-        return {
-          ...state,
-          activeFilters: state.activeFilters.map((f) =>
-            f.key === newActiveFilter.key && f.source === newActiveFilter.source
-              ? newActiveFilter
-              : f
-          ),
-          isLoading: false,
-          error: null,
-        };
-      }
       return {
         ...state,
-        activeFilters: [...state.activeFilters, action.payload as ActiveFilter],
-        isLoading: false,
+        activeFilters:
+          existingIndex >= 0
+            ? state.activeFilters.map((f, i) =>
+                i === existingIndex ? newActiveFilter : f
+              )
+            : [...state.activeFilters, newActiveFilter],
         error: null,
       };
     }
@@ -145,12 +136,10 @@ function FilterProvider({ children }: { children: React.ReactNode }) {
   };
 
   const addActiveFilter = (filter: ActiveFilter) => {
-    dispatch({ type: FilterActionType.LOADING });
     dispatch({ type: FilterActionType.ACTIVE_FILTER_ADDED, payload: filter });
   };
 
   const removeActiveFilter = (key: string, source: string) => {
-    dispatch({ type: FilterActionType.LOADING });
     dispatch({
       type: FilterActionType.ACTIVE_FILTER_REMOVED,
       payload: { key, source },
@@ -158,7 +147,6 @@ function FilterProvider({ children }: { children: React.ReactNode }) {
   };
 
   const clearActiveFilters = () => {
-    dispatch({ type: FilterActionType.LOADING });
     dispatch({ type: FilterActionType.ACTIVE_FILTERS_CLEARED });
   };
 

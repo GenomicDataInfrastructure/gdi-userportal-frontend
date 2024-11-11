@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Disclosure } from "@headlessui/react";
 import { default as DropdownFilterContent } from "./DropdownFilterItem";
 import FreeTextFilterContent from "./FreeTextFilterItem";
-import {useFilters} from "@/providers/FilterProvider";
+import { useFilters } from "@/providers/FilterProvider";
 
 export type FilterItemProps = {
   filter: Filter;
@@ -18,7 +18,10 @@ export type FilterItemProps = {
 function FilterItem({ filter }: FilterItemProps) {
   const { activeFilters } = useFilters();
 
-  const correspondingActiveFilter = activeFilters.find((activeFilter) => activeFilter.key === filter.key && activeFilter.source === filter.source);
+  const correspondingActiveFilter = activeFilters.find(
+    (activeFilter) =>
+      activeFilter.key === filter.key && activeFilter.source === filter.source
+  );
   const isFilterActive = correspondingActiveFilter !== undefined;
   const nbActiveValues = correspondingActiveFilter?.values?.length || 0;
 
@@ -43,10 +46,11 @@ function FilterItem({ filter }: FilterItemProps) {
             <>
               <Disclosure.Button className="flex w-full justify-between px-4 py-2 text-left">
                 <div>
-                <span className="text-base px-1.5">{filter.label}</span>
-                <span className="text-base text-info">
-                  { isFilterActive && `(${nbActiveValues} ${nbActiveValues > 1 ? "filters": "filter"} active)` }
-                </span>
+                  <span className="text-base px-1.5">{filter.label}</span>
+                  <span className="text-base text-info">
+                    {isFilterActive &&
+                      `(${nbActiveValues} ${nbActiveValues > 1 ? "filters" : "filter"} active)`}
+                  </span>
                 </div>
                 <FontAwesomeIcon
                   icon={faChevronDown}

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import {FacetEntry, ValueLabel} from "./datasetSearch.types";
+import { ValueLabel } from "./datasetSearch.types";
 
 export type Filter = {
   source: string;
@@ -39,6 +39,11 @@ export type ActiveFilter = {
   type: string;
   key: string;
   label: string;
-  values?: { value: string, label?: string, operator?: Operator }[]
-  entries?: FacetEntry[];
+  values?: { value: string; label?: string; operator?: Operator }[];
+  entries?: ActiveFilterEntry[];
+};
+
+export type ActiveFilterEntry = {
+  key: string;
+  value: string;
 };

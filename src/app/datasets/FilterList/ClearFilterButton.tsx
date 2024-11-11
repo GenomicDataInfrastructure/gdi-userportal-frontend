@@ -12,11 +12,11 @@ export default function ClearFilterButton() {
 
   return (
     <div className="flex justify-end">
-        <Button
-          text="Clear Filters"
-          type="warning"
-          onClick={clearActiveFilters}
-        />
+      <Button
+        text="Clear Filters"
+        type="warning"
+        onClick={clearActiveFilters}
+      />
     </div>
   );
 }

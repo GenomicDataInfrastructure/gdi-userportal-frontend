@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import ClearFilterButton from "@/app/datasets/FilterList/ClearFilterButton";
 import { useFilters } from "@/providers/FilterProvider";
-import {ActiveFilter} from "@/services/discovery/types/filter.type";
+import { ActiveFilter } from "@/services/discovery/types/filter.type";
 
 export default function ActiveFilters() {
   const { activeFilters, addActiveFilter, removeActiveFilter } = useFilters();
@@ -18,18 +18,24 @@ export default function ActiveFilters() {
     return null;
   }
 
-  const removeActiveValue = (activeFilter: ActiveFilter, valueToRemove: string, operator?: string): void => {
+  const removeActiveValue = (
+    activeFilter: ActiveFilter,
+    valueToRemove: string,
+    operator?: string
+  ): void => {
     const newActiveFilter = {
       ...activeFilter,
-      values: activeFilter.values!.filter(v => v.value !== valueToRemove || v.operator !== operator)
-    }
+      values: activeFilter.values!.filter(
+        (v) => v.value !== valueToRemove || v.operator !== operator
+      ),
+    };
 
     if (!newActiveFilter.values.length) {
       removeActiveFilter(activeFilter.key, activeFilter.source);
     } else {
       addActiveFilter(newActiveFilter);
     }
-  }
+  };
 
   return (
     <div className="mb-4">
@@ -38,8 +44,8 @@ export default function ActiveFilters() {
         <ClearFilterButton />
       </div>
       <div className="flex flex-wrap gap-2">
-        {activeFilters.map(f=> (
-          f.values!.map(v =>
+        {activeFilters.map((f) =>
+          f.values!.map((v) => (
             <div
               key={`${f.source}-${f.key}-${v.value}-${v.operator}`}
               className="flex items-center gap-2 bg-surface rounded-lg px-3 py-1"
@@ -51,7 +57,7 @@ export default function ActiveFilters() {
                 onClick={() => removeActiveValue(f, v.value, v.operator)}
                 className="text-info hover:text-secondary"
               >
-                <FontAwesomeIcon icon={faTimes} className="h-4 w-4"/>
+                <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
               </button>
             </div>
           ))
@@ -59,4 +65,4 @@ export default function ActiveFilters() {
       </div>
     </div>
   );
-};
+}

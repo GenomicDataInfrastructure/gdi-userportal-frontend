@@ -4,7 +4,7 @@
 
 import { Disclosure } from "@headlessui/react";
 import { FilterItemProps } from "./FilterItem";
-import { useFilters} from "@/providers/FilterProvider";
+import { useFilters } from "@/providers/FilterProvider";
 
 type DropdownFilterContentProps = FilterItemProps;
 
@@ -13,31 +13,54 @@ export default function DropdownFilterContent({
 }: DropdownFilterContentProps) {
   const { activeFilters, addActiveFilter, removeActiveFilter } = useFilters();
 
-  const correspondingActiveFilter = activeFilters.find(f => f.key === filter.key)
+  const correspondingActiveFilter = activeFilters.find(
+    (f) => f.key === filter.key
+  );
 
-  const handleCheckboxChange = (value: string, label: string, checked: boolean) => {
+  const handleCheckboxChange = (
+    value: string,
+    label: string,
+    checked: boolean
+  ) => {
     const isFilterAlreadyActive = correspondingActiveFilter !== undefined;
 
     if (isFilterAlreadyActive) {
-      const currentValues = correspondingActiveFilter.values as { value: string }[];
-      const newValues = checked ? [...currentValues, {value}] : currentValues.filter(v => v.value !== value);
+      const currentValues = correspondingActiveFilter.values as {
+        value: string;
+      }[];
+      const newValues = checked
+        ? [...currentValues, { value }]
+        : currentValues.filter((v) => v.value !== value);
 
       if (!newValues.length) {
         removeActiveFilter(filter.key, filter.source);
         return;
       }
 
-      const newActiveFilter = {...correspondingActiveFilter, values: newValues};
+      const newActiveFilter = {
+        ...correspondingActiveFilter,
+        values: newValues,
+      };
       addActiveFilter(newActiveFilter);
     } else {
-      const newActiveFilter = {source: filter.source, type: filter.type, key: filter.key, label: filter.label, values: [{value, label}]};
+      const newActiveFilter = {
+        source: filter.source,
+        type: filter.type,
+        key: filter.key,
+        label: filter.label,
+        values: [{ value, label }],
+      };
       addActiveFilter(newActiveFilter);
     }
   };
 
   const isChecked = (item: { value: string }) => {
-    return correspondingActiveFilter ? correspondingActiveFilter?.values!.map(v => v.value).includes(item.value): false;
-  }
+    return correspondingActiveFilter
+      ? correspondingActiveFilter
+          ?.values!.map((v) => v.value)
+          .includes(item.value)
+      : false;
+  };
 
   return (
     <Disclosure.Panel className="px-4 pb-2 pt-4 font-bryant font-normal flex flex-col gap-y-3 text-base border-t-2 border-t-primary max-h-80 overflow-y-auto">

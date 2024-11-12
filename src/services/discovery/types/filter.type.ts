@@ -33,3 +33,17 @@ export type FilterEntry = {
   key: string;
   label: string;
 };
+
+export type ActiveFilter = {
+  source: string;
+  type: string;
+  key: string;
+  label: string;
+  values?: { value: string; label?: string; operator?: Operator }[];
+  entries?: ActiveFilterEntry[];
+};
+
+export type ActiveFilterEntry = {
+  key: string;
+  value: string;
+};

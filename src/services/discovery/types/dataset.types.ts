@@ -42,7 +42,7 @@ export type SearchedDataset = {
 };
 
 export type DatasetEntitlement = {
-  dataset?: SearchedDataset;
+  dataset: SearchedDataset;
   start: string;
   end: string;
 };

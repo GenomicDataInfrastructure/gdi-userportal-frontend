@@ -3,51 +3,63 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Disclosure } from "@headlessui/react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import { FilterItemProps } from "./FilterItem";
+import { useFilters } from "@/providers/FilterProvider";
 
 type DropdownFilterContentProps = FilterItemProps;
 
 export default function DropdownFilterContent({
   filter,
 }: DropdownFilterContentProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [options, setOptions] = useState<string[]>([]);
+  const { activeFilters, addActiveFilter, removeActiveFilter } = useFilters();
 
-  useEffect(() => {
-    const paramValue =
-      searchParams?.get(`${filter.source}-${filter.key}`) || "";
-    if (paramValue) {
-      setOptions(paramValue.split(","));
+  const correspondingActiveFilter = activeFilters.find(
+    (f) => f.key === filter.key
+  );
+
+  const handleCheckboxChange = (
+    value: string,
+    label: string,
+    checked: boolean
+  ) => {
+    const isFilterAlreadyActive = correspondingActiveFilter !== undefined;
+
+    if (isFilterAlreadyActive) {
+      const currentValues = correspondingActiveFilter.values as {
+        value: string;
+      }[];
+      const newValues = checked
+        ? [...currentValues, { value }]
+        : currentValues.filter((v) => v.value !== value);
+
+      if (!newValues.length) {
+        removeActiveFilter(filter.key, filter.source);
+        return;
+      }
+
+      const newActiveFilter = {
+        ...correspondingActiveFilter,
+        values: newValues,
+      };
+      addActiveFilter(newActiveFilter);
     } else {
-      setOptions([]);
+      const newActiveFilter = {
+        source: filter.source,
+        type: filter.type,
+        key: filter.key,
+        label: filter.label,
+        values: [{ value, label }],
+      };
+      addActiveFilter(newActiveFilter);
     }
-  }, [searchParams, filter.key, filter.source]);
-
-  const handleCheckboxChange = (value: string, checked: boolean) => {
-    const newOptions = checked
-      ? [...options, value]
-      : options.filter((v) => v !== value);
-
-    setOptions(newOptions);
-    updateUrl(newOptions);
   };
 
-  const updateUrl = (newOptions: string[]) => {
-    const params = new URLSearchParams(searchParams?.toString() || "");
-
-    if (newOptions.length > 0) {
-      params.set(`${filter.source}-${filter.key}`, newOptions.join(","));
-    } else {
-      params.delete(`${filter.source}-${filter.key}`);
-    }
-
-    params.set("page", "1");
-
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
-    router.push(newUrl);
+  const isChecked = (item: { value: string }) => {
+    return correspondingActiveFilter
+      ? correspondingActiveFilter
+          ?.values!.map((v) => v.value)
+          .includes(item.value)
+      : false;
   };
 
   return (
@@ -63,9 +75,9 @@ export default function DropdownFilterContent({
               className="h-4 w-4 border rounded-md checked:accent-warning flex-none"
               id={`${filter.source}-${item.value}`}
               value={item.value}
-              checked={options.includes(item.value)}
+              checked={isChecked(item)}
               onChange={(e) =>
-                handleCheckboxChange(item.value, e.target.checked)
+                handleCheckboxChange(item.value, item.label, e.target.checked)
               }
             />
             <label

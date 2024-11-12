@@ -7,7 +7,7 @@
 import { datasetList } from "@/services/discovery/index.public";
 import {
   DatasetSearchOptions,
-  DatasetSearchQueryFacet,
+  Facet,
 } from "@/services/discovery/types/datasetSearch.types";
 import { AxiosError } from "axios";
 import { useSearchParams } from "next/navigation";
@@ -23,27 +23,38 @@ import {
   DatasetsActionType,
   DatasetsState,
 } from "./DatasetProvider.types";
+import {
+  ActiveFilter,
+  FilterType,
+  Operator,
+} from "@/services/discovery/types/filter.type";
+import { useFilters } from "@/providers/FilterProvider";
 
-function parseFacets(queryParams: URLSearchParams): DatasetSearchQueryFacet[] {
-  const facetsQuery: DatasetSearchQueryFacet[] = [];
+function convertActiveFiltersToFacets(activeFilters: ActiveFilter[]): Facet[] {
+  return activeFilters
+    .map((filter) => {
+      const baseFacet = {
+        source: filter.source,
+        type: filter.type,
+        key: filter.key,
+      };
 
-  queryParams.forEach((value, key) => {
-    if (!["page", "q", "sort"].includes(key)) {
-      const source = key.split("-")[0];
-      const facetKey = key.split("-")[1];
-      const values = value.split(",");
+      if (filter.type === FilterType.ENTRIES) {
+        return {
+          ...baseFacet,
+          entries: filter.entries,
+        };
+      }
 
-      values.map((v) =>
-        facetsQuery.push({
-          source,
-          type: "DROPDOWN",
-          key: facetKey,
-          value: v,
+      return filter!.values!.map(
+        (value: { value: string; label?: string; operator?: Operator }) => ({
+          ...baseFacet,
+          value: value.value,
+          operator: value.operator,
         })
       );
-    }
-  });
-  return facetsQuery;
+    })
+    .flat();
 }
 
 const DatasetsContext = createContext<DatasetsState | undefined>(undefined);
@@ -82,6 +93,7 @@ export default function DatasetsProvider({
   children: React.ReactNode;
 }) {
   const queryParams = useSearchParams();
+  const { activeFilters } = useFilters();
   const [{ datasets, datasetCount, isLoading, errorCode }, dispatch] =
     useReducer(reducer, initialState);
 
@@ -90,14 +102,13 @@ export default function DatasetsProvider({
 
     const query = queryParams || new URLSearchParams();
     const options: DatasetSearchOptions = {
-      facets: parseFacets(query),
-      offset: query.get("page")
+      query: query.get("q") as string | undefined,
+      facets: convertActiveFiltersToFacets(activeFilters),
+      sort: query.get("sort") as string | "relevance",
+      start: query.get("page")
         ? (Number(query.get("page")) - 1) * DATASET_PER_PAGE
         : 0,
-      limit: DATASET_PER_PAGE,
-      query: query.get("q") as string | undefined,
-      sort: query.get("sort") as string | "relevance",
-      include_private: false,
+      rows: DATASET_PER_PAGE,
     };
 
     try {
@@ -105,7 +116,7 @@ export default function DatasetsProvider({
       dispatch({
         type: DatasetsActionType.DATASETS_LOADED,
         payload: {
-          datasets: response.data?.datasets,
+          datasets: response.data?.results,
           datasetCount: response.data?.count,
         },
       });
@@ -118,11 +129,11 @@ export default function DatasetsProvider({
       });
       console.error(error);
     }
-  }, [queryParams]);
+  }, [queryParams, activeFilters]);
 
   useEffect(() => {
     fetchDatasets();
-  }, [queryParams, fetchDatasets]);
+  }, [queryParams, fetchDatasets, activeFilters]);
 
   return (
     <DatasetsContext.Provider

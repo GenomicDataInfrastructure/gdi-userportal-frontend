@@ -24,10 +24,10 @@ const HomePage = () => {
     async function fetchData() {
       try {
         const response = await datasetList({
-          limit: 4,
+          rows: 4,
           sort: "issued desc",
         });
-        setDatasets(response.data.datasets);
+        setDatasets(response.data.results);
       } catch (error) {
         if (error instanceof AxiosError) {
           setAlert({

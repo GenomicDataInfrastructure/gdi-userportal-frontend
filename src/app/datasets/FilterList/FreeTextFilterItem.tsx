@@ -3,28 +3,20 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Button from "@/components/Button";
-import { FilterType } from "@/services/discovery/types/filter.type";
+import { ActiveFilter, Operator } from "@/services/discovery/types/filter.type";
 import { faCheck, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Disclosure } from "@headlessui/react";
 import { useState } from "react";
 import { FilterItemProps } from "./FilterItem";
+import { useFilters } from "@/providers/FilterProvider";
 
 type FreeTextFilterContentProps = FilterItemProps;
-
-type FreeTextFilterValue = {
-  value: string;
-  operator: FilterType;
-};
-
-type FreeTextFilterOutput = {
-  filterKey: string;
-  values: FreeTextFilterValue[];
-};
 
 export default function FreeTextFilterContent({
   filter,
 }: FreeTextFilterContentProps) {
+  const { addActiveFilter } = useFilters();
   const [nbFilters, setNbFilters] = useState(1);
   const [openedDropdown, setOpenedDropdown] = useState<number | null>(null);
 
@@ -56,28 +48,30 @@ export default function FreeTextFilterContent({
 
   const handleSubmitValue = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     const formData = new FormData(event.target as HTMLFormElement);
-    const filterValues: FreeTextFilterValue[] = Array.from({
-      length: nbFilters,
-    }).reduce((acc: FreeTextFilterValue[], _, index) => {
+    const values = [] as { value: string; operator: Operator }[];
+
+    for (let index = 0; index < nbFilters; index++) {
       const value = formData.get(`${filter.key}-${index}-value`) as string;
       const operator = formData.get(
         `${filter.key}-${index}-operator`
-      ) as FilterType;
+      ) as Operator;
 
       if (value && operator) {
-        acc.push({ value, operator });
+        values.push({ value, operator });
       }
+    }
 
-      return acc;
-    }, []);
+    const newActiveFilter = {
+      source: filter.source,
+      type: filter.type,
+      key: filter.key,
+      label: filter.label,
+      values,
+    } as ActiveFilter;
 
-    const filterOutput: FreeTextFilterOutput = {
-      filterKey: filter.key,
-      values: filterValues,
-    };
-
-    return filterOutput;
+    addActiveFilter(newActiveFilter);
   };
 
   return (

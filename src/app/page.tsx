@@ -18,12 +18,10 @@ import { filterValuesList } from "@/services/discovery";
 import { ValueLabel } from "@/services/discovery/types/datasetSearch.types";
 import { FilterValueType } from "@/services/discovery/types/dataset.types";
 import ValueList from "@/components/ValueList";
-import LoadingContainer from "@/components/LoadingContainer";
 
 const HomePage = () => {
   const [datasets, setDatasets] = useState<SearchedDataset[]>([]);
   const [themes, setThemes] = useState<ValueLabel[]>([]);
-  const [isLoadingThemes, setIsLoadingThemes] = useState(true);
   const { setAlert } = useAlert();
 
   useEffect(() => {
@@ -39,8 +37,6 @@ const HomePage = () => {
             details: error.response?.data?.detail,
           });
         }
-      } finally {
-        setIsLoadingThemes(false);
       }
     }
     fetchThemes();
@@ -84,22 +80,13 @@ const HomePage = () => {
           <SearchBar size="large" />
         </div>
       </div>
-
-      {isLoadingThemes ? (
-        <LoadingContainer
-          text="Retrieving themes. This may take a few moments."
-          className="mt-4 px-4 text-center sm:mt-8 sm:px-8"
-        />
-      ) : themes.length > 0 ? (
+      {themes.length > 0 && (
         <ValueList
           items={themes}
           filterKey={FilterValueType.THEME}
           title="Themes"
         />
-      ) : (
-        <p className="text-center text-sm text-info">No themes found.</p>
       )}
-
       <div className="mb-20 relative text-left flex items-center">
         <div
           className="absolute inset-0 bg-cover bg-center"

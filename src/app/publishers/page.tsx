@@ -32,7 +32,7 @@ export default async function PublishersPage() {
 
   return (
     <PageContainer className="container mx-auto px-4 pt-5">
-      <div className="my-8 flex items-center gap-2">
+      <div className="my-8 flex items-center gap-2 px-4 sm:px-6 lg:px-8">
         <h1 className="text-left font-title text-2xl sm:text-3xl">
           Publishers
         </h1>

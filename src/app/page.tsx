@@ -5,7 +5,6 @@
 
 import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
-import ThemesSection from "@/components/ThemesSection";
 import { useEffect, useState } from "react";
 import { datasetList } from "@/services/discovery/index.public";
 import { SearchedDataset } from "@/services/discovery/types/dataset.types";
@@ -15,10 +14,37 @@ import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { useAlert } from "@/providers/AlertProvider";
 import { AxiosError } from "axios";
 import contentConfig from "@/config/contentConfig";
+import { filterValuesList } from "@/services/discovery";
+import { ValueLabel } from "@/services/discovery/types/datasetSearch.types";
+import { FilterValueType } from "@/services/discovery/types/dataset.types";
+import ValueList from "@/components/ValueList";
+import LoadingContainer from "@/components/LoadingContainer";
 
 const HomePage = () => {
   const [datasets, setDatasets] = useState<SearchedDataset[]>([]);
+  const [themes, setThemes] = useState<ValueLabel[]>([]);
+  const [isLoadingThemes, setIsLoadingThemes] = useState(true);
   const { setAlert } = useAlert();
+
+  useEffect(() => {
+    async function fetchThemes() {
+      try {
+        const response = await filterValuesList(FilterValueType.THEME);
+        setThemes(response.data);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          setAlert({
+            type: "error",
+            message: "Failed to fetch themes",
+            details: error.response?.data?.detail,
+          });
+        }
+      } finally {
+        setIsLoadingThemes(false);
+      }
+    }
+    fetchThemes();
+  }, [setAlert]);
 
   useEffect(() => {
     async function fetchData() {
@@ -59,7 +85,20 @@ const HomePage = () => {
         </div>
       </div>
 
-      <ThemesSection maxThemes={12} />
+      {isLoadingThemes ? (
+        <LoadingContainer
+          text="Retrieving themes. This may take a few moments."
+          className="mt-4 px-4 text-center sm:mt-8 sm:px-8"
+        />
+      ) : themes.length > 0 ? (
+        <ValueList
+          items={themes}
+          filterKey={FilterValueType.THEME}
+          title="Themes"
+        />
+      ) : (
+        <p className="text-center text-sm text-info">No themes found.</p>
+      )}
 
       <div className="mb-20 relative text-left flex items-center">
         <div

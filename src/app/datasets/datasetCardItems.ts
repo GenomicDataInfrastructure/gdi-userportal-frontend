@@ -31,7 +31,7 @@ export function createDatasetCardItems(dataset: SearchedDataset): CardItem[] {
     {
       text:
         (dataset.publishers?.length > 0 &&
-          `Published by ${dataset.publishers[0].name}`) ||
+          `Published by ${dataset.publishers.map((p) => p.name).join(", ")}`) ||
         "",
       icon: faUser,
     },

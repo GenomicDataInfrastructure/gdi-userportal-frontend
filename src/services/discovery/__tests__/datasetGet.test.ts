@@ -46,13 +46,13 @@ describe("datasetGet", () => {
     expect(dataset.themes[0].value).toEqual("value");
 
     expect(dataset.publisherName).toEqual("Publisher");
-    expect(dataset.organization).toEqual("Organization");
+    expect(dataset.publishers[0].name).toEqual("Publisher");
     expect(dataset.provenance).toEqual("prov");
     expect(dataset.spatial.label).toEqual("spatial");
     expect(dataset.distributions[0].id).toEqual("dist-id");
     expect(dataset.languages[0].label).toEqual("en");
     expect(dataset.languages[0].value).toEqual("English");
-    expect(dataset.keywords[0].label).toEqual("organization");
+    expect(dataset.keywords[0].label).toEqual("publishers");
     expect(dataset.keywords[0].value).toEqual("umcg");
 
     expect(dataset.hasVersions.length).toEqual(1);

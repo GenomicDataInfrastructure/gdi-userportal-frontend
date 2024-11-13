@@ -3,64 +3,77 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Button from "@/components/Button";
-import { ActiveFilter, Operator } from "@/services/discovery/types/filter.type";
-import { faCheck, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Disclosure } from "@headlessui/react";
-import { useState } from "react";
-import { FilterItemProps } from "./FilterItem";
-import { useFilters } from "@/providers/FilterProvider";
+import {ActiveFilter, Operator} from "@/services/discovery/types/filter.type";
+import {faCheck, faPlusCircle} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {Disclosure} from "@headlessui/react";
+import {useEffect, useState} from "react";
+import {FilterItemProps} from "./FilterItem";
+import {useFilters} from "@/providers/FilterProvider";
 
 type FreeTextFilterContentProps = FilterItemProps;
 
+type FreeTextFormItem = {
+  value: string
+  operator?: Operator
+}
+
+const initialFreeTextFormItem = {
+  value: "",
+}
+
 export default function FreeTextFilterContent({
-  filter,
-}: FreeTextFilterContentProps) {
-  const { addActiveFilter } = useFilters();
-  const [nbFilters, setNbFilters] = useState(1);
+                                                filter,
+                                              }: FreeTextFilterContentProps) {
+  const {activeFilters, addActiveFilter} = useFilters();
   const [openedDropdown, setOpenedDropdown] = useState<number | null>(null);
+  const [items, setItems] = useState<FreeTextFormItem[]>([initialFreeTextFormItem]);
+
+  const correspondingActiveFilter = activeFilters
+    .find((activeFilter) => activeFilter.key === filter.key
+      && activeFilter.source === filter.source);
+
+  useEffect(() => {
+    if (!correspondingActiveFilter) {
+      setItems([initialFreeTextFormItem]);
+    } else {
+      const existingItems = correspondingActiveFilter.values!.map((value => ({
+        value: value.value,
+        operator: value.operator
+      })));
+      setItems(existingItems)
+    }
+  }, [activeFilters]);
 
   const toggleDropdown = (index: number) => {
     setOpenedDropdown(openedDropdown === index ? null : index);
-  };
-
-  const handleAddNewFilter = () => {
-    setNbFilters((nbFilters) => nbFilters + 1);
   };
 
   const handleSelectOperator = (
     event: React.MouseEvent<HTMLDivElement>,
     index: number
   ) => {
-    event.stopPropagation();
-    const operator = (event.target as HTMLElement).innerText;
-    const operatorInput = document.getElementById(
-      `${filter.key}-${index}-operator`
-    ) as HTMLInputElement;
-    const operatorDisplay = document.getElementById(
-      `${filter.key}-${index}-operator-display`
-    ) as HTMLSpanElement;
-    operatorInput.value = operator;
-    operatorDisplay.innerText = operator;
-    operatorDisplay.classList.remove("text-[#a0a0a0]");
+    const operator = event.currentTarget.textContent as Operator;
+
+    setItems(items => items.map((item, i) => i === index ? {...item, operator} : item));
     setOpenedDropdown(null);
   };
+
+  function handleAddNewFilter() {
+    setItems([...items, {value: ""}]);
+  }
 
   const handleSubmitValue = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const formData = new FormData(event.target as HTMLFormElement);
-    const values = [] as { value: string; operator: Operator }[];
+    const values = items.reduce((acc: FreeTextFormItem[], item: FreeTextFormItem) => {
+      const isItemComplete = item.value && item.operator;
+      const isItemUnique = acc.every((accItem) => accItem.value !== item.value || accItem.operator !== item.operator);
+      return isItemComplete && isItemUnique ? [...acc, item] : acc
+    }, []);
 
-    for (let index = 0; index < nbFilters; index++) {
-      const value = formData.get(`${filter.key}-${index}-value`) as string;
-      const operator = formData.get(
-        `${filter.key}-${index}-operator`
-      ) as Operator;
-
-      if (value && operator) {
-        values.push({ value, operator });
-      }
+    if (!values.length) {
+      return;
     }
 
     const newActiveFilter = {
@@ -72,15 +85,15 @@ export default function FreeTextFilterContent({
     } as ActiveFilter;
 
     addActiveFilter(newActiveFilter);
-  };
+  }
 
   return (
     <Disclosure.Panel className="px-4 pb-2 pt-4 font-bryant font-normal text-base border-t-2 border-t-primary h-fit">
-      <form onSubmit={handleSubmitValue} className="flex flex-col gap-y-9">
-        {Array.from({ length: nbFilters }, (_, index) => (
-          <div key={index} className="flex flex-col gap-y-3">
+      <form onSubmit={handleSubmitValue} className="flex flex-col gap-y-8 mt-4">
+        {items.map((item, index) => (
+          <div key={filter.source + filter.key + index} className="flex flex-col gap-y-3">
             <div className="flex gap-x-8 justify-between items-center w-full">
-              <label htmlFor={`${filter.key}-${index}-value`} className="w-24">
+              <label className="w-24">
                 Value
               </label>
               <input
@@ -88,10 +101,14 @@ export default function FreeTextFilterContent({
                 name={`${filter.key}-${index}-value`}
                 className="border rounded-md p-2 w-full"
                 placeholder="Enter a value"
+                value={item.value}
+                onChange={(event) => {
+                  setItems(items => items.map((item, i) => i === index ? {...item, value: event.target.value} : item));
+                }}
               />
             </div>
             <div className="flex items-center w-full gap-x-8 justify-between">
-              <label htmlFor={`operator`} className="w-24">
+              <label className="w-24">
                 Operator
               </label>
               <div className="relative w-full">
@@ -103,11 +120,10 @@ export default function FreeTextFilterContent({
                 >
                   <span
                     id={`${filter.key}-${index}-operator-display`}
-                    className="text-[#a0a0a0]"
+                    className={item.operator ? "" : "text-[#a0a0a0]"}
                   >
-                    Select an operator
+                    {item.operator || "Select an operator"}
                   </span>
-                  <span className="ml-2">&#9662;</span>
                 </div>
                 {index === openedDropdown && (
                   <div
@@ -129,17 +145,12 @@ export default function FreeTextFilterContent({
                   </div>
                 )}
               </div>
-              <input
-                type="hidden"
-                id={`${filter.key}-${index}-operator`}
-                name={`${filter.key}-${index}-operator`}
-              />
             </div>
           </div>
         ))}
         <div className="flex w-full justify-between">
           <Button
-            text="Add  filter"
+            text="Add filter"
             icon={faPlusCircle}
             type="primary"
             flex={true}
@@ -151,7 +162,7 @@ export default function FreeTextFilterContent({
             type="submit"
             className="bg-primary text-white hover:bg-secondary rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide cursor-pointer flex items-center justify-between text-[14px]"
           >
-            <FontAwesomeIcon icon={faCheck} className="mr-2" />
+            <FontAwesomeIcon icon={faCheck} className="mr-2"/>
             <span>Apply</span>
           </button>
         </div>

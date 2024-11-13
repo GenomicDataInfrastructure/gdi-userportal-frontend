@@ -26,7 +26,7 @@ const ValueList: React.FC<ValueListProps> = ({ items, filterKey, title }) => {
     });
   };
   return (
-    <div className="bg-white mb-16">
+    <div className="bg-white mb-16 px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col w-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 justify-center">
           {items.map((item) => (

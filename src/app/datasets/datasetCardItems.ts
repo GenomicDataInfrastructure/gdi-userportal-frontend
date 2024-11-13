@@ -30,8 +30,8 @@ export function createDatasetCardItems(dataset: SearchedDataset): CardItem[] {
     },
     {
       text:
-        (dataset.organization?.title &&
-          `Published by ${dataset.organization.title}`) ||
+        (dataset.publishers?.length > 0 &&
+          `Published by ${dataset.publishers[0].name}`) ||
         "",
       icon: faUser,
     },

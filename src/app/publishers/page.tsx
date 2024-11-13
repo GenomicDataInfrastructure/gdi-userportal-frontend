@@ -4,15 +4,16 @@
 
 import { Suspense } from "react";
 import PageContainer from "@/components/PageContainer";
-import PublisherList from "@/components/PublisherList";
-import { publisherList } from "@/services/discovery";
+import ValueList from "@/components/ValueList";
+import { filterValuesList } from "@/services/discovery";
 import Error from "@/app/error";
 import LoadingContainer from "@/components/LoadingContainer";
-import { RetrievedPublisher } from "@/services/discovery/types/dataset.types";
+import { ValueLabel } from "@/services/discovery/types/datasetSearch.types";
+import { FilterValueType } from "@/services/discovery/types/dataset.types";
 
-async function getPublishers(): Promise<RetrievedPublisher[]> {
+async function getPublishers(): Promise<ValueLabel[]> {
   try {
-    const response = await publisherList();
+    const response = await filterValuesList(FilterValueType.PUBLISHER);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -21,7 +22,7 @@ async function getPublishers(): Promise<RetrievedPublisher[]> {
 }
 
 export default async function PublishersPage() {
-  let publishers: RetrievedPublisher[];
+  let publishers: ValueLabel[];
 
   try {
     publishers = await getPublishers();
@@ -48,7 +49,11 @@ export default async function PublishersPage() {
         }
       >
         {publishers.length > 0 ? (
-          <PublisherList publishers={publishers} />
+          <ValueList
+            items={publishers}
+            filterKey={FilterValueType.PUBLISHER}
+            title="Publishers"
+          />
         ) : (
           <p className="text-center text-sm text-info">No publishers found.</p>
         )}

@@ -31,6 +31,7 @@ export type FacetEntry = {
 export type ValueLabel = {
   label: string;
   value: string;
+  count?: number;
 };
 
 export type DatasetsSearchResponse = {

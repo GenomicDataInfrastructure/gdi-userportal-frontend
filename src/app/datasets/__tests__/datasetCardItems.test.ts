@@ -31,14 +31,15 @@ describe("datasetCardItems", () => {
         },
       ],
       distributionsCount: 1,
-      organization: {
-        id: "1",
-        title: "organization1",
-        imageUrl: "",
-        numberOfDatasets: 0,
-        name: "organization1",
-        description: "organization1 description",
-      },
+      publishers: [
+        {
+          name: "publisher1",
+          email: "publisher1@example.com",
+          url: "https://publisher1.com",
+          type: "publisher",
+          identifier: "publisher1",
+        },
+      ],
       createdAt: "2024-03-01T00:00:00.000Z",
       modifiedAt: "",
       recordsCount: 21,
@@ -48,7 +49,7 @@ describe("datasetCardItems", () => {
     expect(items.length).toBe(5);
     expect(items[0].text).toBe("Created on 1 March 2024");
     expect(items[1].text).toBe("");
-    expect(items[2].text).toBe("Published by organization1");
+    expect(items[2].text).toBe("Published by publisher1");
     expect(items[3].text).toBe("1 Distribution");
     expect(items[4].text).toBe("21 Records");
   });

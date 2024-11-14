@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import axios from "axios";
 import { filterValuesList } from "../public/filterValueList";
 import { FilterValueType } from "../types/dataset.types";

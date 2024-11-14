@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import { GET } from "../route";
 import { NextResponse } from "next/server";
 import { filterValuesList } from "@/services/discovery";

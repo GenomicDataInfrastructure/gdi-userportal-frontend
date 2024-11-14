@@ -14,7 +14,7 @@ import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { useAlert } from "@/providers/AlertProvider";
 import { AxiosError } from "axios";
 import contentConfig from "@/config/contentConfig";
-import { filterValuesList } from "@/services/discovery";
+import { filterValuesList } from "@/services/discovery/index.public";
 import { ValueLabel } from "@/services/discovery/types/datasetSearch.types";
 import { FilterValueType } from "@/services/discovery/types/dataset.types";
 import ValueList from "@/components/ValueList";

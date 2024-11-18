@@ -55,14 +55,34 @@ function reducer(
           f.key === newActiveFilter.key && f.source === newActiveFilter.source
       );
 
+      const originalFilter = state.filters.find(
+        (f) =>
+          f.key === newActiveFilter.key && f.source === newActiveFilter.source
+      );
+
+      const valuesWithLabels = newActiveFilter.values?.map((v) => {
+        const originalValue = originalFilter?.values?.find(
+          (ov) => ov.value === v.value
+        );
+        return {
+          ...v,
+          label: originalValue?.label || v.label || v.value,
+        };
+      });
+
+      const updatedFilter = {
+        ...newActiveFilter,
+        values: valuesWithLabels,
+      };
+
       return {
         ...state,
         activeFilters:
           existingIndex >= 0
             ? state.activeFilters.map((f, i) =>
-                i === existingIndex ? newActiveFilter : f
+                i === existingIndex ? updatedFilter : f
               )
-            : [...state.activeFilters, newActiveFilter],
+            : [...state.activeFilters, updatedFilter],
         error: null,
       };
     }

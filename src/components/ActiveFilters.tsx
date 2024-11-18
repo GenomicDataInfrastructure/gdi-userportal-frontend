@@ -51,7 +51,7 @@ export default function ActiveFilters() {
               className="flex items-center gap-2 bg-surface rounded-lg px-3 py-1"
             >
               <span className="font-body text-md">
-                {`${f.label} ${v.operator || ":"} ${v.label ?? v.value}`}
+                {`${f.label} ${v.operator || ":"} ${v.label}`}
               </span>
               <button
                 onClick={() => removeActiveValue(f, v.value, v.operator)}

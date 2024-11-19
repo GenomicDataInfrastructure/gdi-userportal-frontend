@@ -7,9 +7,10 @@ import { Filter, FilterType } from "@/services/discovery/types/filter.type";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Disclosure } from "@headlessui/react";
-import { default as DropdownFilterContent } from "./DropdownFilterItem";
-import FreeTextFilterContent from "./FreeTextFilterItem";
+import { default as DropdownFilterContent } from "./DropdownFilterContent";
+import FreeTextFilterContent from "./FreeTextFilterContent";
 import { useFilters } from "@/providers/FilterProvider";
+import EntriesFilterContent from "./EntriesFilterContent";
 
 export type FilterItemProps = {
   filter: Filter;
@@ -23,7 +24,10 @@ function FilterItem({ filter }: FilterItemProps) {
       activeFilter.key === filter.key && activeFilter.source === filter.source
   );
   const isFilterActive = correspondingActiveFilter !== undefined;
-  const nbActiveValues = correspondingActiveFilter?.values?.length || 0;
+  const nbActiveValues =
+    correspondingActiveFilter?.values?.length ||
+    (correspondingActiveFilter?.entries && 1) ||
+    0;
 
   const getFilterContent = (type: FilterType) => {
     switch (type) {
@@ -32,7 +36,7 @@ function FilterItem({ filter }: FilterItemProps) {
       case FilterType.FREE_TEXT:
         return <FreeTextFilterContent filter={filter} />;
       case FilterType.ENTRIES:
-        return <div></div>;
+        return <EntriesFilterContent filter={filter} />;
       default:
         throw new Error(`Unknown filter type: ${type}`);
     }

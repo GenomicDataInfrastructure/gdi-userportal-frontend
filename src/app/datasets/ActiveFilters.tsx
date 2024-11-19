@@ -5,11 +5,14 @@
 "use client";
 
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import ClearFilterButton from "@/app/datasets/FilterList/ClearFilterButton";
 import { useFilters } from "@/providers/FilterProvider";
-import { ActiveFilter } from "@/services/discovery/types/filter.type";
+import {
+  ActiveFilter,
+  ActiveFilterEntry,
+  FilterType,
+} from "@/services/discovery/types/filter.type";
+import ActiveFilterPill from "@/app/datasets/ActiveFilterPill";
 
 export default function ActiveFilters() {
   const { activeFilters, addActiveFilter, removeActiveFilter } = useFilters();
@@ -37,6 +40,10 @@ export default function ActiveFilters() {
     }
   };
 
+  const formatEntries = (entries: ActiveFilterEntry[]): string => {
+    return `{ ${entries.map((e) => `${e.label}: ${e.value}`).join(", ")} }`;
+  };
+
   return (
     <div className="mb-4">
       <div className="flex justify-between items-center mb-4">
@@ -44,24 +51,27 @@ export default function ActiveFilters() {
         <ClearFilterButton />
       </div>
       <div className="flex flex-wrap gap-2">
-        {activeFilters.map((f) =>
-          f.values!.map((v) => (
-            <div
-              key={`${f.source}-${f.key}-${v.value}-${v.operator}`}
-              className="flex items-center gap-2 bg-surface rounded-lg px-3 py-1"
-            >
-              <span className="font-body text-md">
-                {`${f.label} ${v.operator || ":"} ${v.label}`}
-              </span>
-              <button
-                onClick={() => removeActiveValue(f, v.value, v.operator)}
-                className="text-info hover:text-secondary"
+        {activeFilters.map((f) => {
+          if (f.type === FilterType.ENTRIES) {
+            return (
+              <ActiveFilterPill
+                key={`${f.source}-${f.key}`}
+                onRemove={() => removeActiveFilter(f.key, f.source)}
               >
-                <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
-              </button>
-            </div>
-          ))
-        )}
+                {`${f.label}: ${formatEntries(f.entries!)}`}
+              </ActiveFilterPill>
+            );
+          } else {
+            return f.values!.map((v) => (
+              <ActiveFilterPill
+                key={`${f.source}-${f.key}-${v.value}-${v.operator}`}
+                onRemove={() => removeActiveValue(f, v.value, v.operator)}
+              >
+                {`${f.label} ${v.operator || ":"} ${v.label}`}
+              </ActiveFilterPill>
+            ));
+          }
+        })}
       </div>
     </div>
   );

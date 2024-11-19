@@ -13,7 +13,7 @@ import DatasetListContainer from "./DatasetListContainer";
 import FilterList from "./FilterList";
 import NoDatasetMessage from "./NoDatasetMessage";
 import { useFilters } from "@/providers/FilterProvider";
-import ActiveFilters from "@/components/ActiveFilters";
+import ActiveFilters from "@/app/datasets/ActiveFilters";
 
 export default function DatasetsPage() {
   const searchParams = useSearchParams() as URLSearchParams;

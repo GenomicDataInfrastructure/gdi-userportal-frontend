@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2024 PNED G.I.E.
 #
 # SPDX-License-Identifier: Apache-2.0
-FROM registry.access.redhat.com/ubi9/nodejs-20-minimal:9.5-1731656856 AS base
+FROM registry.access.redhat.com/ubi9/nodejs-20-minimal:9.5-1732617235 AS base
 
 # Install dependencies only when needed
 FROM base AS deps

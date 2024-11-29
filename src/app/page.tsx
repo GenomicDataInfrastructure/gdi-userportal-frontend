@@ -5,7 +5,6 @@
 
 import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
-import ThemesSection from "@/components/ThemesSection";
 import { useEffect, useState } from "react";
 import { datasetList } from "@/services/discovery/index.public";
 import { SearchedDataset } from "@/services/discovery/types/dataset.types";
@@ -15,19 +14,42 @@ import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { useAlert } from "@/providers/AlertProvider";
 import { AxiosError } from "axios";
 import contentConfig from "@/config/contentConfig";
+import { filterValuesList } from "@/services/discovery/index.public";
+import { ValueLabel } from "@/services/discovery/types/datasetSearch.types";
+import { FilterValueType } from "@/services/discovery/types/dataset.types";
+import ValueList from "@/components/ValueList";
 
 const HomePage = () => {
   const [datasets, setDatasets] = useState<SearchedDataset[]>([]);
+  const [themes, setThemes] = useState<ValueLabel[]>([]);
   const { setAlert } = useAlert();
+
+  useEffect(() => {
+    async function fetchThemes() {
+      try {
+        const response = await filterValuesList(FilterValueType.THEME);
+        setThemes(response.data);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          setAlert({
+            type: "error",
+            message: "Failed to fetch themes",
+            details: error.response?.data?.detail,
+          });
+        }
+      }
+    }
+    fetchThemes();
+  }, [setAlert]);
 
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await datasetList({
-          limit: 4,
+          rows: 4,
           sort: "issued desc",
         });
-        setDatasets(response.data.datasets);
+        setDatasets(response.data.results);
       } catch (error) {
         if (error instanceof AxiosError) {
           setAlert({
@@ -58,9 +80,13 @@ const HomePage = () => {
           <SearchBar size="large" />
         </div>
       </div>
-
-      <ThemesSection maxThemes={12} />
-
+      {themes.length > 0 && (
+        <ValueList
+          items={themes}
+          filterKey={FilterValueType.THEME}
+          title="Themes"
+        />
+      )}
       <div className="mb-20 relative text-left flex items-center">
         <div
           className="absolute inset-0 bg-cover bg-center"

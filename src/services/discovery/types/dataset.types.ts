@@ -10,7 +10,7 @@ export interface RetrievedDataset {
   description: string;
   themes: ValueLabel[];
   publisherName: string;
-  organization: RetrievedPublisher;
+  publishers: Agent[];
   createdAt: string;
   modifiedAt: string;
   url: string;
@@ -34,7 +34,7 @@ export type SearchedDataset = {
   description?: string;
   themes?: ValueLabel[];
   keywords: ValueLabel[];
-  organization: RetrievedPublisher;
+  publishers: Agent[];
   modifiedAt: string;
   createdAt: string;
   recordsCount?: number;
@@ -42,7 +42,7 @@ export type SearchedDataset = {
 };
 
 export type DatasetEntitlement = {
-  dataset?: SearchedDataset;
+  dataset: SearchedDataset;
   start: string;
   end: string;
 };
@@ -75,11 +75,15 @@ export interface ContactPoint {
   email: string;
 }
 
-export interface RetrievedPublisher {
-  id: string;
+export interface Agent {
   name: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  numberOfDatasets: number;
+  email: string;
+  url: string;
+  type: string;
+  identifier: string;
+}
+
+export enum FilterValueType {
+  THEME = "theme",
+  PUBLISHER = "publisher_name",
 }

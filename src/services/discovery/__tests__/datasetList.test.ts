@@ -6,6 +6,7 @@ import { jest } from "@jest/globals";
 import axios from "axios";
 import { makeDatasetList } from "../datasetList";
 import { searchedDatasetFixture } from "../fixtures/datasetFixtures";
+import { DatasetSearchOptions } from "@/services/discovery/types/datasetSearch.types";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -41,7 +42,6 @@ describe("datasetList", () => {
         label: "label",
       },
     ]);
-    expect(dataset.organization).toEqual("umcg");
     expect(dataset.modifiedAt).toEqual("12-01-2023");
     expect(dataset.createdAt).toEqual("02-02-2024");
     expect(dataset.identifier).toEqual("Dataset Identifier");
@@ -63,14 +63,15 @@ describe("datasetList", () => {
       },
     ];
     const searchOptions = {
-      facets: facets,
-      limit: 1,
-    };
+      facets,
+      rows: 1,
+    } as DatasetSearchOptions;
+
     const expectedBody = {
-      start: 0,
       rows: 1,
       facets: facets,
     };
+
     await datasetList(searchOptions, null);
 
     expect(mockedAxios.post).toHaveBeenCalled();
@@ -99,10 +100,9 @@ describe("datasetList", () => {
           value: "org-2",
         },
       ],
-      limit: 1,
-    };
+      rows: 1,
+    } as DatasetSearchOptions;
     const expectedBody = {
-      start: 0,
       rows: 1,
       facets: [
         {
@@ -173,10 +173,9 @@ describe("datasetList", () => {
 
     const searchOptions = {
       facets: facets,
-      limit: 2,
+      rows: 2,
     };
     const expectedBody = {
-      start: 0,
       rows: 2,
       facets: facets,
     };

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { ExtendedSession } from "@/app/api/auth/auth.types";
 import { decrypt } from "@/utils/encryption";
-import { DatasetSearchQuery } from "./types/datasetSearch.types";
+import { DatasetSearchOptions } from "./types/datasetSearch.types";
 
 export const createHeaders = async (
   session: ExtendedSession | null
@@ -19,6 +19,6 @@ export const createHeaders = async (
   return headers;
 };
 
-export const DEFAULT_DATASET_SEARCH_QUERY: DatasetSearchQuery = {
+export const DEFAULT_DATASET_SEARCH_QUERY: DatasetSearchOptions = {
   rows: 0,
 };

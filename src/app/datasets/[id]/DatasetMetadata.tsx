@@ -96,7 +96,7 @@ const DatasetMetadata = ({
             </span>
           </>
         )}
-        {dataset.organization && (
+        {dataset.publishers && dataset.publishers.length > 0 && (
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
             <span className="flex gap-2 items-center relative group">
@@ -104,14 +104,20 @@ const DatasetMetadata = ({
                 icon={faBuilding}
                 className="align-middle text-primary"
               />
-              <Link
-                href={`/datasets?page=1&ckan-organization=${dataset.organization.name}`}
-              >
-                <span className="align-middle">
-                  Published by {dataset.organization.title || "No title."}
-                </span>
-              </Link>
-              <Tooltip message="Publisher to which the dataset belongs." />
+              <span className="flex flex-wrap gap-1 items-center">
+                <span className="align-middle">Published by</span>
+                {dataset.publishers.map((publisher, index) => (
+                  <span key={publisher.name}>
+                    <Link
+                      href={`/datasets?page=1&ckan-publisher_name=${publisher.name}`}
+                    >
+                      {publisher.name || "No title"}
+                    </Link>
+                    {index < dataset.publishers.length - 1 && ", "}
+                  </span>
+                ))}
+              </span>
+              <Tooltip message="Publishers to which the dataset belongs." />
             </span>
           </>
         )}
@@ -195,7 +201,7 @@ const DatasetMetadata = ({
                 className="inline-flex bg-[#EFFAFE] px-4 py-1 rounded-full text-gray font-[500] text-[14px] group relative"
               >
                 <Link
-                  href={`/@${dataset.organization?.title}/${relationship.target}`}
+                  href={`/@${dataset.publishers.map((p) => p.name).join(",")}/${relationship.target}`}
                   className="group-hover:text-red hover:font-bold"
                 >
                   <FontAwesomeIcon

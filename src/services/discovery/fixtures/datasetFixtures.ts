@@ -14,7 +14,11 @@ export const retrivedDatasetFixture = {
     },
   ],
   publisherName: "Publisher",
-  organization: "Organization",
+  publishers: [
+    {
+      name: "Publisher",
+    },
+  ],
   createdAt: "12-1-2023",
   modifiedAt: "02-02-2024",
   url: "url",
@@ -51,7 +55,7 @@ export const retrivedDatasetFixture = {
   ],
   keywords: [
     {
-      label: "organization",
+      label: "publishers",
       value: "umcg",
     },
   ],
@@ -68,7 +72,11 @@ export const searchedDatasetFixture = {
       label: "label",
     },
   ],
-  organization: "umcg",
+  publishers: [
+    {
+      name: "umcg",
+    },
+  ],
   modifiedAt: "12-01-2023",
   createdAt: "02-02-2024",
 };

@@ -5,12 +5,12 @@
 import axios, { AxiosResponse } from "axios";
 import {
   DatasetSearchOptions,
-  DatasetsSearchResult,
+  DatasetsSearchResponse,
 } from "../types/datasetSearch.types";
 
 export const datasetList = async (
   options: DatasetSearchOptions
-): Promise<AxiosResponse<DatasetsSearchResult>> => {
+): Promise<AxiosResponse<DatasetsSearchResponse>> => {
   return await axios.post(
     "/api/datasets",
     { options },

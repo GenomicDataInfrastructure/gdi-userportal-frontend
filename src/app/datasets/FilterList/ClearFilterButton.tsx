@@ -5,49 +5,18 @@
 "use client";
 
 import Button from "@/components/Button";
-import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useFilters } from "@/providers/FilterProvider";
 
-type ClearFilterButtonProps = {
-  facetGroups: string[];
-};
-
-export default function ClearFilterButton({
-  facetGroups,
-}: ClearFilterButtonProps) {
-  const queryParams = useSearchParams();
-
-  useEffect(() => {}, [queryParams]);
-
-  function isAnyGroupFilterApplied() {
-    if (!queryParams) return false;
-
-    return Array.from(queryParams.keys()).some(
-      (key) =>
-        key !== "page" &&
-        key !== "q" &&
-        facetGroups.some((group) => key.includes(group))
-    );
-  }
-  function getQueryStringWithoutGroupFilter() {
-    if (!queryParams) return "";
-    return Array.from(queryParams.keys())
-      .filter(
-        (x) => facetGroups.every((group) => !x.includes(group)) && x !== "page"
-      )
-      .map((x) => `&${x}=${queryParams.get(x)}`)
-      .join("");
-  }
+export default function ClearFilterButton() {
+  const { clearActiveFilters } = useFilters();
 
   return (
     <div className="flex justify-end">
-      {isAnyGroupFilterApplied() && (
-        <Button
-          href={`/datasets?page=1${getQueryStringWithoutGroupFilter()}`}
-          text="Clear Filters"
-          type="warning"
-        />
-      )}
+      <Button
+        text="Clear Filters"
+        type="warning"
+        onClick={clearActiveFilters}
+      />
     </div>
   );
 }

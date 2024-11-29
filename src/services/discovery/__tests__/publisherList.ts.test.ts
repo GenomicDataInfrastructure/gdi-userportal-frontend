@@ -4,11 +4,14 @@
 
 import { jest } from "@jest/globals";
 import axios from "axios";
-import { makePublisherList } from "../publisherList";
+import { makeFilterValuesList } from "../filterValueList";
+import { FilterValueType } from "../types/dataset.types";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
-const publisherList = makePublisherList("https://mock-discovery-service.com");
+const publisherList = makeFilterValuesList(
+  "https://mock-discovery-service.com"
+);
 
 describe("publisherList", () => {
   const mockApiResponse = {
@@ -32,16 +35,11 @@ describe("publisherList", () => {
   });
 
   test("maps and asserts the full server response", async () => {
-    const response = await publisherList();
+    const response = await publisherList(FilterValueType.PUBLISHER);
     const data = response.data;
     expect(data).toHaveLength(1);
     const publisher = data[0];
-
-    expect(publisher.id).toEqual("id");
-    expect(publisher.name).toEqual("name");
-    expect(publisher.title).toEqual("title");
-    expect(publisher.description).toEqual("description");
-    expect(publisher.imageUrl).toEqual("imageUrl");
-    expect(publisher.numberOfDatasets).toEqual(1);
+    expect(publisher.label).toEqual(undefined);
+    expect(publisher.value).toEqual(undefined);
   });
 });

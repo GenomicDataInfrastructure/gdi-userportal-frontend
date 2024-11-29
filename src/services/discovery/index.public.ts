@@ -3,5 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { datasetList } from "./public/datasetList";
+import { filterValuesList } from "./public/filterValueList";
 
-export { datasetList };
+export { datasetList, filterValuesList };

@@ -17,18 +17,24 @@ export const mapToDatasetEntitlement = (
   datasets: SearchedDataset[],
   entitlements: Entitlement[]
 ): DatasetEntitlement[] => {
-  return entitlements.map((e) => ({
-    dataset: datasets.find((x) => x.identifier === e.datasetId),
-    start: e.start,
-    end: e.end,
-  }));
+  return entitlements
+    .filter(
+      (e) => datasets.find((x) => x.identifier === e.datasetId) !== undefined
+    )
+    .map((e) => ({
+      dataset: datasets.find(
+        (x) => x.identifier === e.datasetId
+      ) as SearchedDataset,
+      start: e.start,
+      end: e.end,
+    }));
 };
 
 export const createDatasetEntitlements = async (
   entitlements: Entitlement[]
 ): Promise<DatasetEntitlement[]> => {
   const options: DatasetSearchOptions = {
-    limit: 1000,
+    rows: 1000,
     facets: entitlements.map((e) => ({
       source: "ckan",
       type: "DROPDOWN",
@@ -40,5 +46,5 @@ export const createDatasetEntitlements = async (
 
   const datasetsResponse = await datasetList(options);
 
-  return mapToDatasetEntitlement(datasetsResponse.data.datasets, entitlements);
+  return mapToDatasetEntitlement(datasetsResponse.data.results, entitlements);
 };

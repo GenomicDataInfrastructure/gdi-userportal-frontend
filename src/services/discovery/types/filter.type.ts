@@ -12,7 +12,7 @@ export type Filter = {
   label: string;
   values?: ValueLabel[];
   operators?: Operator[];
-  entries?: FilterEntry;
+  entries?: FilterEntry[];
 };
 
 export enum FilterType {
@@ -32,4 +32,19 @@ export enum Operator {
 export type FilterEntry = {
   key: string;
   label: string;
+};
+
+export type ActiveFilter = {
+  source: string;
+  type: string;
+  key: string;
+  label: string;
+  values?: { value: string; label?: string; operator?: Operator }[];
+  entries?: ActiveFilterEntry[];
+};
+
+export type ActiveFilterEntry = {
+  key: string;
+  label: string;
+  value: string;
 };

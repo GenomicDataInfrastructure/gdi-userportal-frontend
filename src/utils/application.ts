@@ -3,13 +3,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-  FieldType,
-  Form,
+  FormFieldTableValue,
+  FormFieldType,
   RetrievedApplication,
-  State,
-  TableValue,
-} from "@/types/application.types";
-import { ValidationWarning } from "@/types/api.types";
+  RetrievedApplicationForm,
+  RetrievedApplicationState,
+  ValidationWarning,
+} from "@/app/api/access-management/open-api/schemas";
 
 function formatApplicationProp(prop: string) {
   return prop.split("/").pop();
@@ -17,22 +17,25 @@ function formatApplicationProp(prop: string) {
 
 function isApplicationEditable(application: RetrievedApplication) {
   return (
-    application.state === State.DRAFT || application.state === State.RETURNED
+    application.state ===
+      RetrievedApplicationState.parse("application.state/draft") ||
+    application.state ===
+      RetrievedApplicationState.parse("application.state/returned")
   );
 }
 
 function groupWarningsPerFormId(warnings: ValidationWarning[]) {
   const map = new Map<number, ValidationWarning[]>();
   warnings.forEach((it) => {
-    const validations = map.get(it.formId) || [];
+    const validations = map.get(it.formId!) || [];
     validations.push(it);
-    map.set(it.formId, validations);
+    map.set(it.formId!, validations);
   });
   return map;
 }
 
 function updateFormWithNewAttachment(
-  forms: Form[],
+  forms: RetrievedApplicationForm[],
   formId: number,
   fieldId: string,
   newAttachmentId: number,
@@ -46,30 +49,30 @@ function updateFormWithNewAttachment(
 }
 
 function updateFormsInputValues(
-  forms: Form[],
+  forms: RetrievedApplicationForm[],
   formId: number,
   fieldId: string,
   newValue: string
-): Form[] {
+): RetrievedApplicationForm[] {
   return forms.map((form) =>
     form.id === formId ? updateFormInputValues(form, fieldId, newValue) : form
   );
 }
 
 function updateFormInputValues(
-  form: Form,
+  form: RetrievedApplicationForm,
   fieldId: string,
   newValue: string
-): Form {
+): RetrievedApplicationForm {
   return {
     ...form,
-    fields: form.fields.map((field) => {
+    fields: form.fields!.map((field) => {
       if (field.id === fieldId) {
-        if (field.type === FieldType.TABLE) {
+        if (field.type === FormFieldType.parse("table")) {
           return {
             ...field,
             value: newValue,
-            tableValues: JSON.parse(newValue) as TableValue[][],
+            tableValues: JSON.parse(newValue) as FormFieldTableValue[][],
           };
         }
         return { ...field, value: newValue ?? "" };
@@ -80,16 +83,16 @@ function updateFormInputValues(
 }
 
 function updateFormFieldWithNewAttachment(
-  form: Form,
+  form: RetrievedApplicationForm,
   fieldId: string,
   newAttachmentId: number,
   action: (fieldValue: string, attachmentId: number) => string
-): Form {
+): RetrievedApplicationForm {
   return {
     ...form,
-    fields: form.fields.map((field) =>
+    fields: form.fields!.map((field) =>
       field.id === fieldId
-        ? { ...field, value: action(field.value, newAttachmentId)! }
+        ? { ...field, value: action(field.value!, newAttachmentId)! }
         : field
     ),
   };

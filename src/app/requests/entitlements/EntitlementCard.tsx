@@ -4,7 +4,7 @@
 
 import DatasetCard from "@/app/datasets/DatasetCard";
 import { CardItem } from "@/components/Card";
-import { SearchedDataset } from "@/services/discovery/types/dataset.types";
+import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 
 type EntitlementCardProps = {
   dataset: SearchedDataset;

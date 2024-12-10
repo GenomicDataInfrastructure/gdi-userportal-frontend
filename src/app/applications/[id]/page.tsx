@@ -12,8 +12,6 @@ import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
 import Sidebar from "@/components/Sidebar";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
-import { ValidationWarning } from "@/types/api.types";
-import { State } from "@/types/application.types";
 import {
   formatApplicationProp,
   groupWarningsPerFormId,
@@ -31,6 +29,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import FormContainer from "./FormContainer";
 import { createApplicationSidebarItems } from "./sidebarItems";
+import {
+  RetrievedApplicationState,
+  ValidationWarning,
+} from "@/app/api/access-management/open-api/schemas";
 
 export default function ApplicationDetailsPage() {
   const router = useRouter();
@@ -51,7 +53,7 @@ export default function ApplicationDetailsPage() {
   useEffect(() => {
     if (!!errorResponse) {
       setAlert({
-        message: errorResponse.detail,
+        message: errorResponse.detail || "",
         type: "error",
       });
     } else {
@@ -59,10 +61,10 @@ export default function ApplicationDetailsPage() {
     }
   }, [errorResponse]);
 
-  const handleSubmission = () => {
+  const handleSubmission = async () => {
     onCloseAlert();
     clearError();
-    submitApplication();
+    await submitApplication();
   };
 
   const handleDelete = async () => {
@@ -93,13 +95,15 @@ export default function ApplicationDetailsPage() {
   }
 
   const events = application.events;
-  const lastEvent = events[0];
+  const lastEvent = events![0];
   const editable = isApplicationEditable(application);
-  const isDraft = application.state === State.DRAFT;
+  const isDraft =
+    application.state ===
+    RetrievedApplicationState.parse("application.state/draft");
 
   const formWarnings: ValidationWarning[] = [];
   const applicationWarnings: ValidationWarning[] = [];
-  errorResponse?.validationWarnings.forEach((it) => {
+  errorResponse?.validationWarnings?.forEach((it) => {
     if (!it.formId) {
       applicationWarnings.push(it);
     } else {
@@ -130,7 +134,7 @@ export default function ApplicationDetailsPage() {
               {application.id && (
                 <Chip
                   className="uppercase text-xs lg:text-sm tracking-widest"
-                  chip={formatApplicationProp(application.state)!}
+                  chip={formatApplicationProp(application.state!)!}
                 />
               )}
             </div>
@@ -162,7 +166,7 @@ export default function ApplicationDetailsPage() {
               <span>Saving Changes...</span>
             </div>
           ) : (
-            <p>{`Last Event: ${formatApplicationProp(lastEvent.eventType)} at ${formatDateTime(lastEvent.eventTime.toString())}`}</p>
+            <p>{`Last Event: ${formatApplicationProp(lastEvent.eventType!)} at ${formatDateTime(lastEvent.eventTime!.toString())}`}</p>
           )}
 
           <div className="h-[2px] bg-secondary opacity-80"></div>
@@ -190,14 +194,14 @@ export default function ApplicationDetailsPage() {
           )}
 
           <ul>
-            {application.forms.map(
+            {application.forms!.map(
               (form) =>
                 form && (
                   <li key={form.id}>
                     <FormContainer
                       form={form}
                       editable={editable}
-                      validationWarnings={warningsPerForm.get(form.id)}
+                      validationWarnings={warningsPerForm.get(form.id!)}
                     />
                   </li>
                 )

@@ -1,0 +1,1214 @@
+# SPDX-FileCopFieldTypeyrightText: 2024 PNED G.I.E.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+openapi: 3.0.3
+info:
+  title: Access Request Management Service - OpenAPI 3.0
+  description: |-
+    This is the OpenAPI 3.0 specification for the Access Request Management Service.
+    This service is responsible for managing access requests to the Genomic Data Infrastructure (GDI).
+    The service provides endpoints for creating, updating, and retrieving access requests, as well as managing the datasets and members associated with each request.
+    The service also provides endpoints for managing baskets of access requests.
+
+  #termsOfService: http://TODO/terms/
+  contact:
+    email: gdi-WP4@elixir-europe.org
+  license:
+    name: Apache 2.0
+    url: https://spdx.org/licenses/Apache-2.0.html
+  version: 1.2.0
+externalDocs:
+  description: Find out more about GDI
+  url: https://genomicdatainfrastructure.github.io/gdi-userportal-docs/
+servers:
+  - url: https://localhost:8080
+    description: Development server
+tags:
+  - name: application-query
+    description: All queries related to applications
+  - name: application-command
+    description: All commands related to applications
+  - name: basket-query
+    description: All queries related to baskets
+  - name: basket-command
+    description: All commands related to baskets
+  - name: entitlement-query
+    description: All queries related to entitlements
+paths:
+  /api/v1/applications:
+    get:
+      summary: List applications
+      operationId: list_applications_v1
+      tags:
+        - "application-query"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                title: collection of applications
+                items:
+                  $ref: "#/components/schemas/ListedApplication"
+      security:
+        - daam_auth:
+            - read:applications
+  /api/v1/applications/{id}:
+    get:
+      summary: Retrieve application
+      operationId: retrieve_application_v1
+      tags:
+        - "application-query"
+      parameters:
+        - name: id
+          in: path
+          description: ID of application to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RetrievedApplication"
+        "404":
+          description: No application found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - daam_auth:
+            - read:applications
+    delete:
+      summary: Delete application
+      operationId: delete_application_v1
+      tags:
+        - "application-command"
+      parameters:
+        - name: id
+          in: path
+          description: ID of application to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Successful Response (no content)
+        "403":
+          description: Application does not belong to applicant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Application not in draft state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - daam_auth:
+            - write:applications
+  /api/v1/applications/{id}/save-forms-and-duos:
+    post:
+      summary: save application forms and duos
+      operationId: save_application_forms_and_duos_v1
+      tags:
+        - "application-command"
+      parameters:
+        - name: id
+          in: path
+          description: ID of application to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveFormsAndDuos"
+      responses:
+        "204":
+          description: Successful Response (no content)
+        "404":
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Application does not belong to applicant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Application not in submittable state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - daam_auth:
+            - write:applications
+  /api/v1/applications/{id}/submit:
+    post:
+      summary: Submit application
+      operationId: submit_application_v1
+      tags:
+        - "application-command"
+      parameters:
+        - name: id
+          in: path
+          description: ID of application to submit
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Successful Response (no content)
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Application does not belong to applicant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Application not in submittable state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+      security:
+        - daam_auth:
+            - write:applications
+  /api/v1/applications/create:
+    post:
+      summary: Create application
+      operationId: create_application_v1
+      tags:
+        - "application-command"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateApplication"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateApplicationResponse"
+        "404":
+          description: Catalogue Item not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Create application retrieves errors
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - daam_auth:
+            - write:applications
+  /api/v1/applications/{id}/cancel:
+    post:
+      summary: Cancel application
+      operationId: cancel_application_v1
+      tags:
+        - "application-command"
+      parameters:
+        - name: id
+          in: path
+          description: ID of application to submit
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Successful Response (no content)
+      security:
+        - daam_auth:
+            - write:applications
+  /api/v1/applications/{id}/copy-as-new:
+    post:
+      summary: Copy application as new
+      operationId: copy_application_as_new_v1
+      tags:
+        - "application-command"
+      parameters:
+        - name: id
+          in: path
+          description: ID of application to resubmit
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Successful Response (no content)
+      security:
+        - daam_auth:
+            - write:applications
+  /api/v1/applications/{id}/accept-terms:
+    post:
+      summary: Accept terms of use
+      operationId: accept_application_terms_v1
+      tags:
+        - "application-command"
+      parameters:
+        - name: id
+          in: path
+          description: ID of application to accept terms of use for
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Accept terms data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AcceptTermsCommand"
+      responses:
+        "204":
+          description: Successful Response (no content)
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Application does not belong to applicant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Application not in submittable state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+      security:
+        - daam_auth:
+            - write:applications
+  /api/v1/applications/{id}/attachments:
+    post:
+      summary: Add attachment to application
+      operationId: add_attachment_to_application_v1
+      tags:
+        - "application-command"
+      parameters:
+        - name: id
+          in: path
+          description: ID of application to attach file to
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddedAttachment"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Application does not belong to applicant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Application not in submittable state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - daam_auth:
+            - write:applications
+  /api/v1/applications/{id}/attachments/{attachmentId}:
+    get:
+      summary: Retrieve attachment from application
+      operationId: retrieve_attachment_from_application_v1
+      tags:
+        - "application-query"
+      parameters:
+        - name: id
+          in: path
+          description: ID of application to retrieve attachment from
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: attachmentId
+          in: path
+          description: ID of attachment to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+              example: attachment; filename="name.pdf"
+  /api/v1/applications/{id}/invite-member:
+    post:
+      summary: Invite member to application
+      operationId: invite_member_to_application_v1
+      tags:
+        - "application-command"
+      parameters:
+        - name: id
+          in: path
+          description: ID of application to add member to
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Successful Response (no content)
+      security:
+        - daam_auth:
+            - write:applications
+  /api/v1/applications/{id}/remove-member:
+    post:
+      summary: Remove
+      operationId: remove_member_from_application_v1
+      tags:
+        - "application-command"
+      parameters:
+        - name: id
+          in: path
+          description: ID of application to remove member from
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RemoveMember"
+      responses:
+        "204":
+          description: Successful Response (no content)
+      security:
+        - daam_auth:
+            - write:applications
+  /api/v1/applications/{id}/update-datasets:
+    post:
+      summary: update datasets of application
+      operationId: update_datasets_of_application_v1
+      tags:
+        - "application-command"
+      parameters:
+        - name: id
+          in: path
+          description: ID of application to update datasets of
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/UpdateDatasets"
+      responses:
+        "204":
+          description: Successful Response (no content)
+      security:
+        - daam_auth:
+            - write:applications
+  /api/v1/applications/{id}/events:
+    post:
+      summary: add event to application
+      operationId: add_event_to_application_v1
+      tags:
+        - "application-command"
+      parameters:
+        - name: id
+          in: path
+          description: ID of application to post event to
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddApplicationEvent"
+      responses:
+        "204":
+          description: Successful Response (no content)
+      security:
+        - daam_auth:
+            - write:applications
+  /api/v1/baskets:
+    get:
+      summary: List baskets
+      operationId: list_baskets_v1
+      tags:
+        - "basket-query"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ListedBasket"
+                type: array
+                title: collection of baskets
+      security:
+        - daam_auth:
+            - read:baskets
+  /api/v1/baskets/add-dataset:
+    post:
+      summary: Add dataset to baskets
+      operationId: add_dataset_to_baskets_v1
+      tags:
+        - "basket-command"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddDatasetToBasket"
+      responses:
+        "204":
+          description: Successful Response (no content)
+      security:
+        - daam_auth:
+            - write:baskets
+  /api/v1/baskets/{id}/create-application:
+    post:
+      summary: Create application from basket
+      operationId: create_application_from_basket_v1
+      tags:
+        - "basket-command"
+      parameters:
+        - name: id
+          in: path
+          description: ID of basket to create application from
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Successful Response (no content)
+      security:
+        - daam_auth:
+            - write:applications
+  /api/v1/entitlements:
+    get:
+      summary: Retrieve granted dataset identifiers
+      operationId: retrieve_granted_dataset_identifiers
+      tags:
+        - "entitlement-query"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RetrieveGrantedDatasetIdentifiers"
+      security:
+        - daam_auth:
+            - read:entitlements
+  /api/v1/test/{test}:
+    post:
+      summary: Test
+      operationId: test_v1
+      tags:
+        - "test-command"
+      parameters:
+        - name: test
+          in: path
+          description: test
+          required: true
+          schema:
+            type: string
+      responses:
+        "404":
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - daam_auth:
+            - write:applications
+components:
+  securitySchemes:
+    daam_auth:
+      type: oauth2
+      description: This API uses OAuth 2 with the implicit grant flow.
+      flows:
+        authorizationCode:
+          tokenUrl: https://api.example.com/oauth2/token
+          authorizationUrl: https://api.example.com/oauth2/authorize
+          scopes:
+            read:applications: read applications in your account
+            write:applications: create applications in your account
+            read:baskets: read baskets in your account
+            write:baskets: create baskets in your account
+            read:entitlements: read entitlements
+  schemas:
+    ListedApplication:
+      properties:
+        id:
+          title: Application id
+          type: integer
+          format: int64
+        title:
+          type: string
+          title: Application title
+        description:
+          type: string
+          title: Application description
+        currentState:
+          type: string
+          title: Application state
+        stateChangedAt:
+          type: string
+          format: date-time
+          title: Status changed at
+        createdAt:
+          type: string
+          format: date-time
+          title: Created at
+        datasets:
+          type: array
+          title: Datasets
+          items:
+            $ref: "#/components/schemas/ApplicationDataset"
+    SaveFormsAndDuos:
+      properties:
+        forms:
+          type: array
+          title: Forms
+          items:
+            $ref: "#/components/schemas/SaveForm"
+        duoCodes:
+          type: array
+          title: DUO codes
+          items:
+            $ref: "#/components/schemas/SaveDUOCode"
+    SaveForm:
+      properties:
+        formId:
+          title: Form id
+          type: integer
+          format: int64
+        fields:
+          type: array
+          title: Fields
+          items:
+            $ref: "#/components/schemas/SaveFormField"
+    SaveFormField:
+      properties:
+        fieldId:
+          title: Field id
+          type: string
+        value:
+          type: string
+          title: Field value
+        tableValues:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: "#/components/schemas/FormFieldTableValue"
+    SaveDUOCode:
+      properties:
+        duoId:
+          title: DUO id
+          type: integer
+          format: int64
+        restrictions:
+          type: array
+          title: Restrictions
+          items:
+            $ref: "#/components/schemas/SaveDUOCodeRestriction"
+    SaveDUOCodeRestriction:
+      properties:
+        type:
+          type: string
+          title: Restriction type
+        values:
+          type: array
+          title: Restriction values
+          items:
+            type: string
+    RetrievedApplication:
+      properties:
+        workflow:
+          $ref: "#/components/schemas/RetrievedApplicationWorkflow"
+        externalId:
+          title: Application external id
+          type: string
+        id:
+          title: application id
+          type: integer
+          format: int64
+        applicant:
+          $ref: "#/components/schemas/RetrievedApplicationApplicant"
+        members:
+          type: array
+          title: Members
+          items:
+            $ref: "#/components/schemas/RetrievedApplicationMember"
+        datasets:
+          type: array
+          title: Datasets
+          items:
+            $ref: "#/components/schemas/ApplicationDataset"
+        forms:
+          type: array
+          title: Forms
+          items:
+            $ref: "#/components/schemas/RetrievedApplicationForm"
+        invitedMembers:
+          type: array
+          title: Invited members
+          items:
+            $ref: "#/components/schemas/RetrievedApplicationInvitedMember"
+        description:
+          type: string
+          title: Application description
+        generatedExternalId:
+          title: Application generated external id
+          type: string
+        permissions:
+          type: array
+          title: Permissions
+          items:
+            type: string
+        lastActivity:
+          type: string
+          format: date-time
+          title: Last activity
+        events:
+          type: array
+          title: Events
+          items:
+            $ref: "#/components/schemas/RetrievedApplicationEvent"
+        roles:
+          title: Roles
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        attachments:
+          type: array
+          title: Attachments
+          items:
+            $ref: "#/components/schemas/RetrievedApplicationAttachment"
+        licenses:
+          type: array
+          title: Licenses
+          items:
+            $ref: "#/components/schemas/RetrievedApplicationLicense"
+        createdAt:
+          type: string
+          format: date-time
+          title: Created at
+        state:
+          title: Application state
+          $ref: "#/components/schemas/RetrievedApplicationState"
+        modifiedAt:
+          type: string
+          format: date-time
+          title: Modified at
+    RetrievedApplicationWorkflow:
+      properties:
+        id:
+          title: Workflow id
+          type: integer
+          format: int64
+        type:
+          type: string
+          title: Workflow type
+    RetrievedApplicationApplicant:
+      properties:
+        userId:
+          type: string
+          title: Applicant user id
+        name:
+          type: string
+          title: Applicant name
+        email:
+          type: string
+          title: Applicant email
+    RetrievedApplicationMember:
+      properties:
+        memberId:
+          type: string
+          title: Member id
+        name:
+          type: string
+          title: Member name
+        email:
+          type: string
+          title: Member email
+    RetrievedApplicationInvitedMember:
+      properties:
+        name:
+          type: string
+          title: Member name
+        email:
+          type: string
+          title: Member email
+    ApplicationDataset:
+      properties:
+        id:
+          title: Dataset id
+          type: integer
+          format: int64
+        externalId:
+          type: string
+          title: Dataset external id
+        title:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
+          title: Dataset title
+        url:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
+          title: Dataset URL
+    RetrievedApplicationForm:
+      properties:
+        id:
+          title: Form id
+          type: integer
+          format: int64
+        internalName:
+          type: string
+          title: Form internal name
+        externalTitle:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
+        fields:
+          type: array
+          title: Fields
+          items:
+            $ref: "#/components/schemas/RetrievedApplicationFormField"
+    RetrievedApplicationFormField:
+      properties:
+        id:
+          title: Field id
+          type: string
+        value:
+          title: Field value
+          type: string
+        optional:
+          type: boolean
+          title: Field optional
+        private:
+          type: boolean
+          title: Field private
+        visible:
+          type: boolean
+          title: Field visible
+        title:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
+          title: Field title in different languages
+        type:
+          type: string
+          title: Field type
+          $ref: "#/components/schemas/FormFieldType"
+        tableValues:
+          title: Table Values
+          type: array
+          items:
+            type: array
+            items:
+              $ref: "#/components/schemas/FormFieldTableValue"
+        tableColumns:
+          title: Table Columns
+          type: array
+          items:
+            $ref: "#/components/schemas/FormFieldTableColumn"
+        infoText:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
+        placeholder:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
+        maxLength:
+          type: integer
+          format: int64
+        privacy:
+          type: string
+          $ref: "#/components/schemas/FormFieldPrivacy"
+        options:
+          type: array
+          items:
+            $ref: "#/components/schemas/FormFieldOption"
+    FormFieldType:
+      type: string
+      enum:
+        - text
+        - texta
+        - attachment
+        - phone-number
+        - date
+        - email
+        - header
+        - option
+        - multiselect
+        - label
+        - table
+    FormFieldTableValue:
+      properties:
+        column:
+          type: string
+        value:
+          type: string
+    FormFieldOption:
+      properties:
+        key:
+          type: string
+        label:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
+      required:
+        - key
+        - label
+    FormFieldTableColumn:
+      properties:
+        key:
+          type: string
+        label:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
+    FormFieldPrivacy:
+      type: string
+      enum:
+        - private
+        - public
+    Label:
+      properties:
+        language:
+          type: string
+          title: Label language
+        name:
+          type: string
+          title: Label name
+      required:
+        - language
+        - name
+    RetrievedApplicationEvent:
+      properties:
+        actorId:
+          title: actor id
+          type: string
+        eventTime:
+          type: string
+          format: date-time
+          title: Event time
+        eventType:
+          type: string
+          title: Event type
+    RetrievedApplicationAttachment:
+      properties:
+        id:
+          title: Attachment id
+          type: integer
+          format: int64
+        filename:
+          type: string
+          title: Attachment filename
+        type:
+          type: string
+          title: Attachment type
+    RetrievedApplicationLicense:
+      properties:
+        id:
+          type: integer
+          format: int64
+          title: License ID
+        title:
+          type: array
+          title: License title
+          items:
+            $ref: "#/components/schemas/Label"
+        type:
+          type: string
+          title: License type
+          $ref: "#/components/schemas/LicenseType"
+        enabled:
+          type: boolean
+          title: License enabled
+        archived:
+          type: boolean
+          title: License archived
+        link:
+          type: array
+          title: License link
+          items:
+            $ref: "#/components/schemas/Label"
+        text:
+          type: array
+          title: License text
+          items:
+            $ref: "#/components/schemas/Label"
+        attachmentFilename:
+          type: array
+          title: License attachment filename
+          items:
+            $ref: "#/components/schemas/Label"
+        attachmentId:
+          type: array
+          title: Attachment ID
+          items:
+            $ref: "#/components/schemas/Label"
+        acceptedByCurrentUser:
+          type: boolean
+          title: Accepted by current user
+    LicenseType:
+      type: string
+      enum:
+        - link
+        - attachment
+        - text
+    RetrievedApplicationState:
+      type: string
+      enum:
+        - application.state/draft
+        - application.state/closed
+        - application.state/approved
+        - application.state/returned
+        - application.state/rejected
+        - application.state/revoked
+        - application.state/submitted
+    ListedBasket:
+      properties:
+        id:
+          title: basket id
+          type: integer
+          format: int64
+        daamUri:
+          type: string
+          title: DAAM URI
+        datasets:
+          type: array
+          title: Selected datasets
+          items:
+            $ref: "#/components/schemas/ListedBasketDataset"
+    ListedBasketDataset:
+      properties:
+        id:
+          type: string
+          title: dataset id
+        title:
+          type: string
+          title: dataset title
+    ValidationWarning:
+      properties:
+        key:
+          type: string
+          title: validation key
+        formId:
+          type: integer
+          format: int64
+          title: form id
+        fieldId:
+          title: field id
+          type: string
+      required:
+        - key
+    AddedAttachment:
+      properties:
+        id:
+          title: attachment id
+          type: integer
+          format: int64
+    AddApplicationEvent:
+      properties:
+        key:
+          type: string
+          title: Event key
+        description:
+          type: string
+          title: Event description
+    UpdateDatasets:
+      properties:
+        datasetIds:
+          type: array
+          title: dataset ids
+          required: true
+          items:
+            type: string
+        comment:
+          title: the reason the datasets are changing
+          type: string
+    RemoveMember:
+      properties:
+        memberId:
+          type: string
+          title: member id
+          required: true
+    CreateApplication:
+      properties:
+        datasetIds:
+          type: array
+          title: dataset ids
+          items:
+            type: string
+          required: true
+    CreateApplicationResponse:
+      properties:
+        applicationId:
+          type: integer
+          format: int64
+          required: true
+    AddDatasetToBasket:
+      properties:
+        datasetIds:
+          type: array
+          title: dataset ids
+          items:
+            type: string
+          required: true
+    ErrorResponse:
+      properties:
+        title:
+          type: string
+          title: Error title
+        status:
+          type: integer
+          title: Error status
+        detail:
+          type: string
+          title: Error detail
+        validationWarnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationWarning"
+          description: List of validation warnings, to be send to the frontend, where the translation will happen.
+        required:
+          - title
+          - status
+    RetrieveGrantedDatasetIdentifiers:
+      type: object
+      properties:
+        entitlements:
+          type: array
+          items:
+            $ref: "#/components/schemas/Entitlement"
+      required:
+        - entitlements
+    Entitlement:
+      type: object
+      properties:
+        datasetId:
+          type: string
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+      required:
+        - datasetId
+        - start
+    AcceptTermsCommand:
+      type: object
+      required:
+        - acceptedLicenses
+      properties:
+        acceptedLicenses:
+          type: array
+          items:
+            type: integer
+            format: int64

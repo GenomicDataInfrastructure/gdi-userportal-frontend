@@ -5,16 +5,15 @@
 import { Suspense } from "react";
 import PageContainer from "@/components/PageContainer";
 import ValueList from "@/components/ValueList";
-import { filterValuesList } from "@/services/discovery";
 import Error from "@/app/error";
 import LoadingContainer from "@/components/LoadingContainer";
-import { ValueLabel } from "@/services/discovery/types/datasetSearch.types";
-import { FilterValueType } from "@/services/discovery/types/dataset.types";
+import { retrieveFilterValuesApi } from "../api/discovery";
+import { ValueLabel } from "@/app/api/discovery/open-api/schemas";
+import { FilterValueType } from "@/app/api/discovery/additional-types";
 
 async function getPublishers(): Promise<ValueLabel[]> {
   try {
-    const response = await filterValuesList(FilterValueType.PUBLISHER);
-    return response.data;
+    return await retrieveFilterValuesApi(FilterValueType.PUBLISHER);
   } catch (error) {
     console.error(error);
     throw error;

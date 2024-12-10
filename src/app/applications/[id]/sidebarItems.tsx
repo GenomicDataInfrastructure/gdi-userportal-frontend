@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { createTextItem, SidebarItem } from "@/components/Sidebar";
-import { RetrievedApplication } from "@/types/application.types";
 import { formatApplicationProp } from "@/utils/application";
 import { formatDateTime } from "@/utils/formatDate";
 import {
@@ -14,6 +13,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TermsAcceptance from "./TermsAcceptance";
 import { getLabelName } from "@/utils/getLabelName";
+import { RetrievedApplication } from "@/app/api/access-management/open-api/schemas";
 
 export function createApplicationSidebarItems(
   application: RetrievedApplication
@@ -23,13 +23,13 @@ export function createApplicationSidebarItems(
   return [
     {
       label: "Datasets",
-      value: datasets.map((dataset, index) => (
+      value: datasets!.map((dataset, index) => (
         <span
           className="mb-3 flex items-center gap-x-6"
           key={`${dataset.id}-${index}`}
         >
           <FontAwesomeIcon icon={faDatabase} className="text-primary" />
-          <p className="break-words">{getLabelName(dataset.title)}</p>
+          <p className="break-words">{getLabelName(dataset.title!)}</p>
         </span>
       )),
     },
@@ -38,7 +38,7 @@ export function createApplicationSidebarItems(
       value: (
         <div className="flex gap-6 items-center">
           <FontAwesomeIcon icon={faUser} className="text-primary" />
-          <p>{createTextItem(applicant.name)}</p>
+          <p>{createTextItem(applicant!.name!)}</p>
         </div>
       ),
     },
@@ -46,16 +46,16 @@ export function createApplicationSidebarItems(
       label: "Events",
       value: (
         <ul>
-          {events.slice(0, 5).map((event, index) => (
+          {events!.slice(0, 5).map((event, index) => (
             <li key={index} className="mb-2">
               <div className="flex items-center">
                 <FontAwesomeIcon icon={faHistory} className="mr-6 text-sm" />
                 <div>
-                  {formatApplicationProp(event?.eventType)}
+                  {formatApplicationProp(event!.eventType!)}
                   <div className="text-xs md:text-sm">
                     at{" "}
                     <span className="font-date text-info">
-                      {formatDateTime(event.eventTime.toString())}
+                      {formatDateTime(event.eventTime!.toString())}
                     </span>
                   </div>
                 </div>

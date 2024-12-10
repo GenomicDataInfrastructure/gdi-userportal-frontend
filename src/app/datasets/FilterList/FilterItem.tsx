@@ -3,14 +3,15 @@
 /* SPDX-License-Identifier: Apache-2.0 */
 "use client";
 
-import { Filter, FilterType } from "@/services/discovery/types/filter.type";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Disclosure } from "@headlessui/react";
 import { default as DropdownFilterContent } from "./DropdownFilterContent";
 import FreeTextFilterContent from "./FreeTextFilterContent";
-import { useFilters } from "@/providers/FilterProvider";
+import { useFilters } from "@/providers/filters/FilterProvider";
 import EntriesFilterContent from "./EntriesFilterContent";
+import { Filter } from "@/app/api/discovery/open-api/schemas";
+import { FilterType } from "@/app/api/discovery/additional-types";
 
 export type FilterItemProps = {
   filter: Filter;
@@ -61,7 +62,7 @@ function FilterItem({ filter }: FilterItemProps) {
                   className={`h-5 w-5 transition-transform ${open ? "rotate-180" : ""}`}
                 />
               </Disclosure.Button>
-              {getFilterContent(filter.type)}
+              {getFilterContent(filter.type as FilterType)}
             </>
           )}
         </Disclosure>

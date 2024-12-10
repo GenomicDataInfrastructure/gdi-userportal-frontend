@@ -4,7 +4,7 @@
 
 import { Disclosure } from "@headlessui/react";
 import { FilterItemProps } from "./FilterItem";
-import { useFilters } from "@/providers/FilterProvider";
+import { useFilters } from "@/providers/filters/FilterProvider";
 
 type DropdownFilterContentProps = FilterItemProps;
 

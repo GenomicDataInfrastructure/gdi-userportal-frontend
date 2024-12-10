@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
-import { User } from "@/types/user.types";
+import { User } from "@/app/api/auth/types/user.types";
 import { keycloackSessionLogOut } from "@/utils/logout";
 import { faSignOut, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

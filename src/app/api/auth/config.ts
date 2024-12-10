@@ -8,7 +8,7 @@ import type { NextAuthOptions } from "next-auth";
 import Keycloack from "next-auth/providers/keycloak";
 import { signOut } from "next-auth/react";
 import { completeTokenWithAccountInfo, refreshAccessToken } from "./auth";
-import { JWTCallbackEntry, SessionCallbackEntry } from "./auth.types";
+import { JWTCallbackEntry, SessionCallbackEntry } from "./types/auth.types";
 
 export const authOptions: NextAuthOptions = {
   providers: [

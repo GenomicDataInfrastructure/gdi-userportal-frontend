@@ -5,10 +5,10 @@
 import Button from "@/components/Button";
 import { useWindowSize } from "@/hooks";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
-import { SearchedDataset } from "@/services/discovery/types/dataset.types";
 import { truncateDescription } from "@/utils/textProcessing";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import Card, { CardItem } from "../../components/Card";
+import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 
 type DatasetCardProps = {
   dataset: SearchedDataset;

@@ -3,13 +3,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
-import { Attachment } from "@/types/application.types";
 import { isApplicationEditable } from "@/utils/application";
 import { faClose, faFileCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { RetrievedApplicationAttachment } from "@/app/api/access-management/open-api/schemas";
 
 type FileUploadedProps = {
-  attachment: Attachment;
+  attachment: RetrievedApplicationAttachment;
   formId: number;
   fieldId: string;
 };
@@ -31,7 +31,7 @@ function FileUploaded({ attachment, formId, fieldId }: FileUploadedProps) {
           className={`border-1 cursor-pointer rounded-full p-1.5 text-md text-info transition-colors duration-200 hover:text-primary ${
             isLoading ? "pointer-events-none opacity-10" : ""
           }`}
-          onClick={() => deleteAttachment(formId, fieldId, attachment.id)}
+          onClick={() => deleteAttachment(formId, fieldId, attachment.id!)}
         />
       )}
     </div>

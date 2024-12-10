@@ -7,35 +7,34 @@ import ListContainer from "@/components/ListContainer";
 import PageHeading from "@/components/PageHeading";
 import { useEffect, useState } from "react";
 import { Status } from "@/utils/pageStatus.types";
-import { retrieveEntitlements } from "@/services/daam/index.client";
-import { DatasetEntitlement } from "@/services/discovery/types/dataset.types";
 import { createDatasetEntitlements } from "@/utils/datasetEntitlements";
 import EntitlementsList from "./EntitlementsList";
 import LoadingContainer from "@/components/LoadingContainer";
 import Error from "@/app/error";
-import { ErrorResponse } from "@/types/api.types";
 import axios from "axios";
 import { EmptyEntitlements } from "./EmptyEntitlements";
+import { retrieveEntitlementsApi } from "../../api/access-management";
+import { ErrorResponse } from "@/app/api/access-management/open-api/schemas";
+import { DatasetEntitlement } from "@/app/api/access-management/additional-types";
 
-interface EntitelementsResponse {
+interface EntitlementsResponse {
   datasetEntitlements?: DatasetEntitlement[];
   error?: ErrorResponse;
   status: Status;
 }
 
 function EntitlementsPage() {
-  const [response, setResponse] = useState<EntitelementsResponse>({
+  const [response, setResponse] = useState<EntitlementsResponse>({
     status: "loading",
   });
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await retrieveEntitlements();
+        const { entitlements } = await retrieveEntitlementsApi();
 
-        const datasetEntitlements = await createDatasetEntitlements(
-          response.data.entitlements
-        );
+        const datasetEntitlements =
+          await createDatasetEntitlements(entitlements);
 
         setResponse({
           datasetEntitlements: datasetEntitlements,
@@ -55,6 +54,7 @@ function EntitlementsPage() {
         });
       }
     }
+
     fetchData().catch((it) => console.log(it));
   }, []);
 

@@ -4,7 +4,7 @@
 "use client";
 
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
-import { User } from "@/types/user.types";
+import { User } from "@/app/api/auth/types/user.types";
 import {
   faBars,
   faBook,

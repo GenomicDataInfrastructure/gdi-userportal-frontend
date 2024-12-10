@@ -5,10 +5,10 @@
 import AddToBasketButton from "@/components/AddToBasketButton";
 import { SidebarItem } from "@/components/Sidebar";
 import contentConfig from "@/config/contentConfig";
-import { RetrievedDataset } from "@/services/discovery/types/dataset.types";
 import { faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
+import ExportDatasetButton from "@/app/datasets/[id]/ExportDatasetButton";
+import { RetrievedDataset } from "@/app/api/discovery/open-api/schemas";
 
 function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
   const metaFormats = [
@@ -39,7 +39,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
         <AddToBasketButton
           dataset={{
             ...dataset,
-            distributionsCount: dataset.distributions.length,
+            distributionsCount: dataset.distributions?.length,
           }}
         />
       ),
@@ -50,21 +50,11 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
       value: (
         <div className="flex gap-2 transition py-2 sm:py-0">
           {metaFormats.map((item) => (
-            <div key={item.format}>
-              <Link
-                href={`/api/datasets/${dataset.id}/as-file/${item.format}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-1"
-              >
-                <div
-                  className="uppercase text-[14px] font-normal rounded-md px-4 py-1.5 transition"
-                  style={item.style}
-                >
-                  {item.label}
-                </div>
-              </Link>
-            </div>
+            <ExportDatasetButton
+              key={item.format}
+              datasetId={dataset.id}
+              item={item}
+            />
           ))}
         </div>
       ),
@@ -74,7 +64,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
       value: (
         <div className="flex items-center text-[14px]">
           <div className="flex flex-col gap-1">
-            {dataset.contacts.length === 0 ? (
+            {dataset.contacts?.length === 0 ? (
               <>
                 <div className="flex gap-8 items-center">
                   <FontAwesomeIcon icon={faUser} className="text-primary" />
@@ -86,7 +76,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
                 </div>
               </>
             ) : (
-              dataset.contacts.map((contact, index) => (
+              dataset.contacts?.map((contact, index) => (
                 <>
                   <div key={index} className="flex gap-8 items-center">
                     <FontAwesomeIcon icon={faUser} className="text-primary" />

@@ -6,20 +6,16 @@ import {
   createDatasetEntitlements,
   mapToDatasetEntitlement,
 } from "@/utils/datasetEntitlements";
-import {
-  DatasetEntitlement,
-  SearchedDataset,
-} from "@/services/discovery/types/dataset.types";
-import { Entitlement } from "@/types/entitlements.types";
-import { datasetList } from "@/services/discovery/index.public";
-import { AxiosResponse } from "axios";
-import { DatasetsSearchResponse } from "@/services/discovery/types/datasetSearch.types";
+import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
+import { Entitlement } from "@/app/api/access-management/open-api/schemas";
+import { DatasetEntitlement } from "@/app/api/access-management/additional-types";
+import { searchDatasetsApi } from "@/app/api/discovery";
 
-jest.mock("@/services/discovery/index.public");
+jest.mock("@/app/api/discovery/index");
 
 describe("datasetEntitlements", () => {
-  const mockedDatasetList = datasetList as jest.MockedFunction<
-    typeof datasetList
+  const mockedSearchDatasets = searchDatasetsApi as jest.MockedFunction<
+    typeof searchDatasetsApi
   >;
 
   it("should correctly map to dataset entitlements", () => {
@@ -69,16 +65,14 @@ describe("datasetEntitlements", () => {
 
   it("should create dataset entitlements", async () => {
     const mockApiResponse = {
-      data: {
-        results: [
-          { identifier: "1", title: "Dataset 1" } as SearchedDataset,
-          { identifier: "2", title: "Dataset 2" } as SearchedDataset,
-        ],
-        count: 2,
-      },
-    } as AxiosResponse<DatasetsSearchResponse>;
+      results: [
+        { identifier: "1", title: "Dataset 1" } as SearchedDataset,
+        { identifier: "2", title: "Dataset 2" } as SearchedDataset,
+      ],
+      count: 2,
+    };
 
-    mockedDatasetList.mockResolvedValue(mockApiResponse);
+    mockedSearchDatasets.mockResolvedValue(mockApiResponse);
 
     const datasetEntitlements = await createDatasetEntitlements([
       { datasetId: "2", start: "2022-01-01", end: "2022-12-31" },

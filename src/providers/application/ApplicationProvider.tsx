@@ -4,14 +4,6 @@
 
 "use client";
 
-import { addAttachmentToApplication } from "@/services/daam/index.client";
-import {
-  Form,
-  FormField,
-  RetrievedApplication,
-  AcceptTermsCommand,
-  FieldType,
-} from "@/types/application.types";
 import {
   addAttachmentIdToFieldValue,
   deleteAttachmentIdFromFieldValue,
@@ -36,7 +28,22 @@ import {
   FormAttachmentUpdate,
   FormValueUpdate,
 } from "./ApplicationProvider.types";
-import { ErrorResponse } from "@/types/api.types";
+import {
+  acceptApplicationTermsApi,
+  addAttachmentToApplicationApi,
+  deleteApplicationApi,
+  retrieveApplicationApi,
+  saveFormsAndDuosApi,
+  submitApplicationApi,
+} from "../../app/api/access-management";
+import { AxiosError } from "axios";
+import {
+  ErrorResponse,
+  FormFieldType,
+  RetrievedApplication,
+  RetrievedApplicationForm,
+  RetrievedApplicationFormField,
+} from "@/app/api/access-management/open-api/schemas";
 
 const ApplicationContext = createContext<ApplicationContextState | undefined>(
   undefined
@@ -74,7 +81,7 @@ function reducer(
         application: {
           ...state.application,
           forms: updateFormsInputValues(
-            state.application!.forms,
+            state.application!.forms!,
             payload.formId,
             payload.fieldId,
             payload.newValue
@@ -91,7 +98,7 @@ function reducer(
         application: {
           ...state.application,
           forms: updateFormWithNewAttachment(
-            state.application!.forms,
+            state.application!.forms!,
             attachPayload.formId,
             attachPayload.fieldId,
             attachPayload.attachmentId,
@@ -109,7 +116,7 @@ function reducer(
         application: {
           ...state.application,
           forms: updateFormWithNewAttachment(
-            state.application!.forms,
+            state.application!.forms!,
             deletePayload.formId,
             deletePayload.fieldId,
             deletePayload.attachmentId,
@@ -141,44 +148,6 @@ function reducer(
   }
 }
 
-const debouncedSaveFormAndDuos = debounce(
-  async (
-    forms: Form[],
-    dispatch: Dispatch<ApplicationAction>,
-    applicationId: number,
-    handleErrorResponseAfterAction: (response: Response) => Promise<void>
-  ) => {
-    dispatch({ type: ApplicationActionType.LOADING });
-    const response = await fetch(
-      `/api/applications/${applicationId}/save-forms-and-duos`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          forms: forms.map((form: Form) => ({
-            formId: form.id,
-            fields: form.fields.map((field: FormField) => ({
-              fieldId: field.id,
-              value: field.value,
-              ...(field.type === FieldType.TABLE
-                ? { tableValues: field.tableValues }
-                : {}),
-            })),
-          })),
-          duoCodes: [],
-        }),
-      }
-    );
-
-    dispatch({ type: ApplicationActionType.FORM_SAVED });
-
-    await handleErrorResponseAfterAction(response);
-  },
-  200
-);
-
 type ApplicationProviderProps = {
   children: React.ReactNode;
 };
@@ -202,20 +171,18 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   const fetchApplication = useCallback(async () => {
     if (!id) return;
     dispatch({ type: ApplicationActionType.LOADING });
-    const response = await fetch(`/api/applications/${id}`);
 
-    if (response.ok) {
-      const retrievedApplication = await response.json();
+    try {
+      const retrievedApplication = (await retrieveApplicationApi(
+        +id
+      )) as RetrievedApplication;
+
       dispatch({
         type: ApplicationActionType.APPLICATION_LOADED,
         payload: retrievedApplication,
       });
-    } else {
-      const errorResponse = (await response.json()) as ErrorResponse;
-      dispatch({
-        type: ApplicationActionType.REJECTED,
-        payload: errorResponse,
-      });
+    } catch (error) {
+      handleErrorResponseAfterAction(error as Error);
     }
   }, [id]);
 
@@ -226,35 +193,40 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   async function addAttachment(
     formId: number,
     fieldId: string,
-    formData: FormData
+    attachment: FormData
   ): Promise<void> {
     dispatch({ type: ApplicationActionType.LOADING });
 
-    const {
-      data: { id: attachmentId },
-    } = await addAttachmentToApplication(application!.id, formData);
+    try {
+      const attachmentId = (await addAttachmentToApplicationApi(
+        application!.id!,
+        attachment
+      )) as number;
 
-    const action = {
-      type: ApplicationActionType.ATTACHMENT_ATTACHED,
-      payload: {
-        attachmentId,
-        formId,
-        fieldId,
-      },
-    };
+      const action = {
+        type: ApplicationActionType.ATTACHMENT_ATTACHED,
+        payload: {
+          attachmentId,
+          formId,
+          fieldId,
+        },
+      };
 
-    dispatch(action);
+      dispatch(action);
 
-    const { forms: updatedForms } = reducer(
-      {
-        application,
-        isLoading,
-        errorResponse,
-        termsAccepted,
-      },
-      action
-    ).application as RetrievedApplication;
-    await saveFormAndDuos(updatedForms);
+      const { forms: updatedForms } = reducer(
+        {
+          application,
+          isLoading,
+          errorResponse,
+          termsAccepted,
+        },
+        action
+      ).application as RetrievedApplication;
+      await saveFormAndDuos(updatedForms!);
+    } catch (error) {
+      handleErrorResponseAfterAction(error as Error);
+    }
   }
 
   async function updateInputFields(
@@ -264,27 +236,32 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   ): Promise<void> {
     dispatch({ type: ApplicationActionType.LOADING });
 
-    const action = {
-      type: ApplicationActionType.INPUT_SAVED,
-      payload: {
-        formId: formId,
-        fieldId: fieldId,
-        newValue: newValue,
-      },
-    };
+    try {
+      const action = {
+        type: ApplicationActionType.INPUT_SAVED,
+        payload: {
+          formId: formId,
+          fieldId: fieldId,
+          newValue: newValue,
+        },
+      };
 
-    dispatch(action);
+      dispatch(action);
 
-    const { forms: updatedForms } = reducer(
-      {
-        application,
-        isLoading,
-        errorResponse,
-        termsAccepted,
-      },
-      action
-    ).application as RetrievedApplication;
-    await saveFormAndDuos(updatedForms);
+      const { forms: updatedForms } = reducer(
+        {
+          application,
+          isLoading,
+          errorResponse,
+          termsAccepted,
+        },
+        action
+      ).application as RetrievedApplication;
+
+      await saveFormAndDuos(updatedForms!);
+    } catch (error) {
+      handleErrorResponseAfterAction(error as Error);
+    }
   }
 
   async function deleteAttachment(
@@ -294,96 +271,119 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   ) {
     dispatch({ type: ApplicationActionType.LOADING });
 
-    const action = {
-      type: ApplicationActionType.ATTACHMENT_DELETED,
-      payload: {
-        attachmentId,
-        formId,
-        fieldId,
-      },
-    };
-    dispatch(action);
+    try {
+      const action = {
+        type: ApplicationActionType.ATTACHMENT_DELETED,
+        payload: {
+          attachmentId,
+          formId,
+          fieldId,
+        },
+      };
+      dispatch(action);
 
-    const { forms: updatedForms } = reducer(
-      {
-        application,
-        isLoading,
-        errorResponse,
-        termsAccepted,
-      },
-      action
-    ).application as RetrievedApplication;
+      const { forms: updatedForms } = reducer(
+        {
+          application,
+          isLoading,
+          errorResponse,
+          termsAccepted,
+        },
+        action
+      ).application as RetrievedApplication;
 
-    await saveFormAndDuos(updatedForms);
+      await saveFormAndDuos(updatedForms!);
+    } catch (error) {
+      handleErrorResponseAfterAction(error as Error);
+    }
   }
 
-  async function saveFormAndDuos(forms: Form[]) {
-    debouncedSaveFormAndDuos(
-      forms,
-      dispatch,
-      application!.id,
-      handleErrorResponseAfterAction
-    );
+  async function acceptTerms(acceptedLicenses: number[]) {
+    dispatch({ type: ApplicationActionType.LOADING });
+
+    try {
+      await acceptApplicationTermsApi(application!.id!, { acceptedLicenses });
+      dispatch({ type: ApplicationActionType.ACCEPT_TERMS });
+      await fetchApplication();
+    } catch (error) {
+      handleErrorResponseAfterAction(error as Error);
+    }
+  }
+
+  async function saveFormAndDuos(forms: RetrievedApplicationForm[]) {
+    debouncedSaveFormAndDuos(forms, dispatch, application!.id!);
   }
 
   async function deleteApplication() {
     dispatch({ type: ApplicationActionType.LOADING });
 
-    const response = await fetch(`/api/applications/${application!.id}`, {
-      method: "DELETE",
-    });
-
-    if (!response.ok) {
-      const errorResponse = await response.json();
-      dispatch({
-        type: ApplicationActionType.REJECTED,
-        payload: errorResponse,
-      });
-    } else {
+    try {
+      await deleteApplicationApi(application!.id!);
       dispatch({ type: ApplicationActionType.APPLICATION_DELETED });
+    } catch (error) {
+      handleErrorResponseAfterAction(error as Error);
     }
   }
 
   async function submitApplication() {
     dispatch({ type: ApplicationActionType.LOADING });
 
-    const response = await fetch(
-      `/api/applications/${application!.id}/submit`,
-      { method: "POST" }
-    );
-
-    await handleErrorResponseAfterAction(response);
+    try {
+      await submitApplicationApi(application!.id!);
+    } catch (error) {
+      handleErrorResponseAfterAction(error as Error);
+    }
   }
 
-  async function acceptTerms(acceptedLicenses: number[]) {
-    dispatch({ type: ApplicationActionType.LOADING });
+  const debouncedSaveFormAndDuos = debounce(
+    async (
+      forms: RetrievedApplicationForm[],
+      dispatch: Dispatch<ApplicationAction>,
+      applicationId: number
+    ) => {
+      dispatch({ type: ApplicationActionType.LOADING });
 
-    const response = await fetch(
-      `/api/applications/${application!.id}/accept-terms`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          acceptedLicenses,
-        } as AcceptTermsCommand),
+      try {
+        await saveFormsAndDuosApi(
+          applicationId,
+          forms.map((form: RetrievedApplicationForm) => ({
+            formId: form.id,
+            fields: form.fields!.map(
+              (field: RetrievedApplicationFormField) => ({
+                fieldId: field.id,
+                value: field.value,
+                ...(field.type === FormFieldType.parse("table")
+                  ? { tableValues: field.tableValues }
+                  : {}),
+              })
+            ),
+          })),
+          []
+        );
+
+        dispatch({ type: ApplicationActionType.FORM_SAVED });
+      } catch (error) {
+        handleErrorResponseAfterAction(error as Error);
       }
-    );
-
-    dispatch({ type: ApplicationActionType.ACCEPT_TERMS });
-    await handleErrorResponseAfterAction(response);
-  }
-
-  async function handleErrorResponseAfterAction(response: Response) {
-    if (response.ok) {
-      dispatch({ type: ApplicationActionType.CLEAR_ERROR });
       await fetchApplication();
-    } else {
-      const errorResponse = await response.json();
+    },
+    200
+  );
+
+  function handleErrorResponseAfterAction(error: Error) {
+    if (error instanceof AxiosError) {
       dispatch({
         type: ApplicationActionType.REJECTED,
-        payload: errorResponse,
+        payload: error.response?.data,
+      });
+    } else {
+      dispatch({
+        type: ApplicationActionType.REJECTED,
+        payload: {
+          title: "Internal server error",
+          detail: "An error occurred while processing your request",
+          status: 500,
+        },
       });
     }
   }

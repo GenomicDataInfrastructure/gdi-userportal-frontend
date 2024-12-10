@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { CardItem } from "@/components/Card";
-import { SearchedDataset } from "@/services/discovery/types/dataset.types";
 import { formatDate } from "@/utils/formatDate";
 import {
   faBookBookmark,
@@ -12,6 +11,7 @@ import {
   faSyncAlt,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 
 export function createDatasetCardItems(dataset: SearchedDataset): CardItem[] {
   return [
@@ -30,8 +30,8 @@ export function createDatasetCardItems(dataset: SearchedDataset): CardItem[] {
     },
     {
       text:
-        (dataset.publishers?.length > 0 &&
-          `Published by ${dataset.publishers.map((p) => p.name).join(", ")}`) ||
+        (dataset.publishers!.length > 0 &&
+          `Published by ${dataset.publishers!.map((p) => p.name).join(", ")}`) ||
         "",
       icon: faUser,
     },

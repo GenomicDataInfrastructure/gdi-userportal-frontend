@@ -5,7 +5,7 @@
 "use client";
 
 import Button from "@/components/Button";
-import { useFilters } from "@/providers/FilterProvider";
+import { useFilters } from "@/providers/filters/FilterProvider";
 
 export default function ClearFilterButton() {
   const { clearActiveFilters } = useFilters();

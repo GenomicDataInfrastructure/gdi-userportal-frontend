@@ -9,12 +9,12 @@ function isClient() {
   return typeof window !== "undefined";
 }
 
-export function formatDate(inputDate: string): string {
-  return _formatDate(inputDate, "d MMMM yyyy");
+export function formatDate(inputDate?: string): string {
+  return _formatDate("d MMMM yyyy", inputDate);
 }
 
 export function formatDateTime(inputDate: string) {
-  return _formatDate(inputDate, "d MMMM yyyy, HH.mm (zzz)");
+  return _formatDate("d MMMM yyyy, HH.mm (zzz)", inputDate);
 }
 
 function getUserTimezone() {
@@ -25,7 +25,7 @@ function getUserTimezone() {
   return Intl.DateTimeFormat().resolvedOptions().timeZone;
 }
 
-function _formatDate(inputDate: string, targetFormat: string) {
+function _formatDate(targetFormat: string, inputDate?: string) {
   if (!inputDate) {
     return "N/A";
   }

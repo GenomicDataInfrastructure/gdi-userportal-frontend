@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 "use client";
-import { SearchedDataset } from "@/services/discovery/types/dataset.types";
 import React, {
   createContext,
   useContext,
@@ -10,6 +9,7 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
+import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 
 interface DatasetBasketContextType {
   basket: SearchedDataset[];

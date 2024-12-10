@@ -6,7 +6,7 @@ import { decrypt } from "@/utils/encryption";
 import { jwtDecode } from "jwt-decode";
 import { Account, getServerSession } from "next-auth";
 import type { JWT } from "next-auth/jwt";
-import { ExtendedSession } from "./auth.types";
+import { ExtendedSession } from "./types/auth.types";
 import { authOptions } from "./config";
 
 export async function getToken(tokenType: "access_token" | "id_token") {

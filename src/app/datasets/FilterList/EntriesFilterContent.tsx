@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { FilterItemProps } from "./FilterItem";
-import { useFilters } from "@/providers/FilterProvider";
+import { useFilters } from "@/providers/filters/FilterProvider";
 import { Disclosure } from "@headlessui/react";
 import Button from "@/components/Button";
 import { faCheck, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";

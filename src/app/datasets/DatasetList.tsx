@@ -6,7 +6,7 @@ import DatasetCard from "@/app/datasets/DatasetCard";
 import { createDatasetCardItems } from "@/app/datasets/datasetCardItems";
 import List from "@/components/List";
 import ListItem from "@/components/List/ListItem";
-import { SearchedDataset } from "@/services/discovery/types/dataset.types";
+import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 
 type DatasetListProps = {
   datasets: SearchedDataset[];

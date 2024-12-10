@@ -1,25 +1,10 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-
 import { ReactNode } from "react";
 
 export function createTextItem(item: string) {
   return <span className="break-all">{item}</span>;
-}
-
-export function createTextItems(items: string[]) {
-  return (
-    <ul>
-      {items.map((value, index) => {
-        return (
-          <li key={index} className="break-words">
-            <span>{value}</span>
-          </li>
-        );
-      })}
-    </ul>
-  );
 }
 
 type SidebarItem = {

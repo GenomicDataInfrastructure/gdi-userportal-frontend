@@ -24,19 +24,17 @@ export const createApplicationApi = async (createApplicationCommand: {
 
 export const listApplicationsApi = async () => {
   const headers = await createHeaders();
-  const applications = await accessManagementClient.list_applications_v1({
+  return await accessManagementClient.list_applications_v1({
     headers,
   });
-  return applications;
 };
 
 export const retrieveApplicationApi = async (applicationId: number) => {
   const headers = await createHeaders();
-  const application = await accessManagementClient.retrieve_application_v1({
+  return await accessManagementClient.retrieve_application_v1({
     params: { id: applicationId },
     headers,
   });
-  return application;
 };
 
 export const deleteApplicationApi = async (applicationId: number) => {
@@ -90,11 +88,10 @@ export const saveFormsAndDuosApi = async (
 
 export const submitApplicationApi = async (applicationId: number) => {
   const headers = await createHeaders();
-  const response = await accessManagementClient.submit_application_v1(
-    undefined,
-    { params: { id: applicationId }, headers }
-  );
-  return response;
+  return await accessManagementClient.submit_application_v1(undefined, {
+    params: { id: applicationId },
+    headers,
+  });
 };
 
 export const retrieveEntitlementsApi = async () => {

@@ -4,6 +4,13 @@
 
 "use client";
 
+import { FormFieldType } from "@/app/api/access-management/additional-types";
+import {
+  ErrorResponse,
+  RetrievedApplication,
+  RetrievedApplicationForm,
+  RetrievedApplicationFormField,
+} from "@/app/api/access-management/open-api/schemas";
 import {
   addAttachmentIdToFieldValue,
   deleteAttachmentIdFromFieldValue,
@@ -11,23 +18,16 @@ import {
   updateFormsInputValues,
 } from "@/utils/application";
 import debounce from "@/utils/debounce";
+import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 import {
+  Dispatch,
   createContext,
   useCallback,
   useContext,
   useEffect,
   useReducer,
-  Dispatch,
 } from "react";
-import {
-  ApplicationAction,
-  ApplicationActionType,
-  ApplicationContextState,
-  ApplicationState,
-  FormAttachmentUpdate,
-  FormValueUpdate,
-} from "./ApplicationProvider.types";
 import {
   acceptApplicationTermsApi,
   addAttachmentToApplicationApi,
@@ -36,14 +36,14 @@ import {
   saveFormsAndDuosApi,
   submitApplicationApi,
 } from "../../app/api/access-management";
-import { AxiosError } from "axios";
 import {
-  ErrorResponse,
-  FormFieldType,
-  RetrievedApplication,
-  RetrievedApplicationForm,
-  RetrievedApplicationFormField,
-} from "@/app/api/access-management/open-api/schemas";
+  ApplicationAction,
+  ApplicationActionType,
+  ApplicationContextState,
+  ApplicationState,
+  FormAttachmentUpdate,
+  FormValueUpdate,
+} from "./ApplicationProvider.types";
 
 const ApplicationContext = createContext<ApplicationContextState | undefined>(
   undefined
@@ -352,7 +352,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
               (field: RetrievedApplicationFormField) => ({
                 fieldId: field.id,
                 value: field.value,
-                ...(field.type === FormFieldType.parse("table")
+                ...(field.type === FormFieldType.TABLE
                   ? { tableValues: field.tableValues }
                   : {}),
               })

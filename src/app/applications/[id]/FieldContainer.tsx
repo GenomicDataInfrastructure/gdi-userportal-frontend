@@ -4,23 +4,23 @@
 
 "use client";
 
-import FileUploadFormField from "./FileUploadFormField";
-import InputFormField from "./InputFormField";
-import TextAreaFormField from "./TextAreaFormField";
-import DateFormField from "./DateFormField";
-import EmailFormField from "./EmailFormField";
-import PhoneFormField from "./PhoneFormField";
-import { getTranslation } from "@/utils/getTranslation";
-import OptionFormField from "./OptionFormField";
-import LabelFormField from "./LabelFormField";
-import HeaderFormField from "./HeaderFormField";
-import MultiSelectFormField from "./MultiSelectFormField";
-import TableFormField from "./TableFormField";
+import { FormFieldType } from "@/app/api/access-management/additional-types";
 import {
-  FormFieldType,
   RetrievedApplicationFormField,
   ValidationWarning,
 } from "@/app/api/access-management/open-api/schemas";
+import { getTranslation } from "@/utils/getTranslation";
+import DateFormField from "./DateFormField";
+import EmailFormField from "./EmailFormField";
+import FileUploadFormField from "./FileUploadFormField";
+import HeaderFormField from "./HeaderFormField";
+import InputFormField from "./InputFormField";
+import LabelFormField from "./LabelFormField";
+import MultiSelectFormField from "./MultiSelectFormField";
+import OptionFormField from "./OptionFormField";
+import PhoneFormField from "./PhoneFormField";
+import TableFormField from "./TableFormField";
+import TextAreaFormField from "./TextAreaFormField";
 
 type FieldContainerProps = {
   formId: number;
@@ -43,7 +43,7 @@ function FieldContainer({
 
   function getFieldComponent() {
     switch (field.type) {
-      case FormFieldType.parse("attachment"):
+      case FormFieldType.ATTACHMENT:
         return (
           <FileUploadFormField
             field={field}
@@ -53,11 +53,11 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FormFieldType.parse("label"):
+      case FormFieldType.LABEL:
         return <LabelFormField field={field} />;
-      case FormFieldType.parse("header"):
+      case FormFieldType.HEADER:
         return <HeaderFormField field={field} />;
-      case FormFieldType.parse("text"):
+      case FormFieldType.TEXT:
         return (
           <InputFormField
             field={field}
@@ -67,7 +67,7 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FormFieldType.parse("texta"):
+      case FormFieldType.TEXT_AREA:
         return (
           <TextAreaFormField
             field={field}
@@ -77,7 +77,7 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FormFieldType.parse("option"):
+      case FormFieldType.OPTION:
         return (
           <OptionFormField
             field={field}
@@ -87,7 +87,7 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FormFieldType.parse("phone-number"):
+      case FormFieldType.PHONE:
         return (
           <PhoneFormField
             field={field}
@@ -97,7 +97,7 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FormFieldType.parse("date"):
+      case FormFieldType.DATE:
         return (
           <DateFormField
             field={field}
@@ -107,7 +107,7 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FormFieldType.parse("email"):
+      case FormFieldType.EMAIL:
         return (
           <EmailFormField
             field={field}
@@ -117,7 +117,7 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FormFieldType.parse("multiselect"):
+      case FormFieldType.MULTISELECT:
         return (
           <MultiSelectFormField
             formId={formId}
@@ -127,7 +127,7 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FormFieldType.parse("table"):
+      case FormFieldType.TABLE:
         return (
           <TableFormField
             formId={formId}

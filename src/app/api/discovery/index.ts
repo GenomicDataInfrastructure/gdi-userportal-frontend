@@ -10,28 +10,24 @@ import { createHeaders } from "@/app/api/shared/headers";
 
 export const retrieveFiltersApi = async () => {
   const headers = await createHeaders();
-  const filters = await discoveryClient.retrieve_filters({ headers });
-  return filters;
+  return await discoveryClient.retrieve_filters({ headers });
 };
 
 export const retrieveFilterValuesApi = async (key: string) => {
   const headers = await createHeaders();
-  const dataset = await discoveryClient.retrieve_filter_values({
+  return await discoveryClient.retrieve_filter_values({
     params: { key },
     headers,
   });
-  return dataset;
 };
 
 export const searchDatasetsApi = async (options: DatasetSearchQuery) => {
   const headers = await createHeaders();
-  const results = await discoveryClient.dataset_search(options, { headers });
-  return results;
+  return await discoveryClient.dataset_search(options, { headers });
 };
 
 export const retrieveDatasetApi = async (id: string) => {
-  const dataset = await discoveryClient.retrieve_dataset({ params: { id } });
-  return dataset;
+  return await discoveryClient.retrieve_dataset({ params: { id } });
 };
 
 export const retrieveDatasetInSpecifiedFormat = async (
@@ -40,7 +36,7 @@ export const retrieveDatasetInSpecifiedFormat = async (
 ) => {
   const headers = await createHeaders();
 
-  const response = await discoveryClient.retrieve_dataset_in_format({
+  return await discoveryClient.retrieve_dataset_in_format({
     params: {
       "id.": id,
       id,
@@ -49,6 +45,4 @@ export const retrieveDatasetInSpecifiedFormat = async (
     headers,
     responseType: "blob",
   });
-
-  return response;
 };

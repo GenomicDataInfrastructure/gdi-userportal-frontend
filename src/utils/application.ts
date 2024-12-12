@@ -3,11 +3,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-  FormFieldTableValue,
+  ApplicationState,
   FormFieldType,
+} from "@/app/api/access-management/additional-types";
+import {
+  FormFieldTableValue,
   RetrievedApplication,
   RetrievedApplicationForm,
-  RetrievedApplicationState,
   ValidationWarning,
 } from "@/app/api/access-management/open-api/schemas";
 
@@ -17,10 +19,8 @@ function formatApplicationProp(prop: string) {
 
 function isApplicationEditable(application: RetrievedApplication) {
   return (
-    application.state ===
-      RetrievedApplicationState.parse("application.state/draft") ||
-    application.state ===
-      RetrievedApplicationState.parse("application.state/returned")
+    application.state === ApplicationState.DRAFT ||
+    application.state === ApplicationState.RETURNED
   );
 }
 
@@ -68,7 +68,7 @@ function updateFormInputValues(
     ...form,
     fields: form.fields!.map((field) => {
       if (field.id === fieldId) {
-        if (field.type === FormFieldType.parse("table")) {
+        if (field.type === FormFieldType.TABLE) {
           return {
             ...field,
             value: newValue,
@@ -122,8 +122,8 @@ export {
   addAttachmentIdToFieldValue,
   deleteAttachmentIdFromFieldValue,
   formatApplicationProp,
-  isApplicationEditable,
-  updateFormWithNewAttachment,
-  updateFormsInputValues,
   groupWarningsPerFormId,
+  isApplicationEditable,
+  updateFormsInputValues,
+  updateFormWithNewAttachment,
 };

@@ -4,6 +4,8 @@
 
 "use client";
 
+import { ApplicationState } from "@/app/api/access-management/additional-types";
+import { ValidationWarning } from "@/app/api/access-management/open-api/schemas";
 import Error from "@/app/error";
 import Alert, { AlertState } from "@/components/Alert";
 import Button from "@/components/Button";
@@ -29,10 +31,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import FormContainer from "./FormContainer";
 import { createApplicationSidebarItems } from "./sidebarItems";
-import {
-  RetrievedApplicationState,
-  ValidationWarning,
-} from "@/app/api/access-management/open-api/schemas";
 
 export default function ApplicationDetailsPage() {
   const router = useRouter();
@@ -97,9 +95,7 @@ export default function ApplicationDetailsPage() {
   const events = application.events;
   const lastEvent = events![0];
   const editable = isApplicationEditable(application);
-  const isDraft =
-    application.state ===
-    RetrievedApplicationState.parse("application.state/draft");
+  const isDraft = application.state === ApplicationState.DRAFT;
 
   const formWarnings: ValidationWarning[] = [];
   const applicationWarnings: ValidationWarning[] = [];

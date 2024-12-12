@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "openapi-zod-client src/app/api/discovery/open-api/discovery.yml -o src/api/openapi/schemas.ts --export-schemas==true --export-types=true --strict-objects",
+    "prebuild:discovery": "openapi-zod-client src/app/api/discovery/open-api/discovery.yml -o src/app/api/discovery/open-api/schemas.ts --export-schemas==true --export-types=true --strict-objects",
+    "prebuild:access-management": "openapi-zod-client src/app/api/access-management/open-api/access-management.yml -o src/app/api/access-management/open-api/schemas.ts --export-schemas==true --export-types=true --strict-objects",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

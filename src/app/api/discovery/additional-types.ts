@@ -2,15 +2,20 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-export enum FilterValueType {
-  PUBLISHER = "publisher_name",
-  THEME = "theme",
+export enum QueryOperator {
+  OR = "OR",
+  AND = "AND",
 }
 
 export enum FilterType {
   DROPDOWN = "DROPDOWN",
   FREE_TEXT = "FREE_TEXT",
   ENTRIES = "ENTRIES",
+}
+
+export enum FilterValueType {
+  PUBLISHER = "publisher_name",
+  THEME = "theme",
 }
 
 export enum Operator {

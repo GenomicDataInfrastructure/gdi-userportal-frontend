@@ -44,7 +44,7 @@ export default function EntriesFilterContent({
       const existingEntries = correspondingActiveFilter.entries!;
       setEntries(existingEntries);
     }
-  }, [correspondingActiveFilter]);
+  }, [correspondingActiveFilter, initialEntryFormItems]);
 
   const handleRemoveFilter = () => {
     removeActiveFilter(filter.key, filter.source);

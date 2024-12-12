@@ -27,6 +27,16 @@ export enum FormFieldType {
   LABEL = "label",
   TABLE = "table",
 }
+export enum FormFieldPrivacy {
+  PUBLIC = "public",
+  PRIVATE = "private",
+}
+
+export enum LicenseType {
+  LINK = "open",
+  ATTACHMENT = "restricted",
+  TEXT = "custom",
+}
 
 export type DatasetEntitlement = {
   dataset: SearchedDataset;

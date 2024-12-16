@@ -333,6 +333,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
     } catch (error) {
       handleErrorResponseAfterAction(error as Error);
     }
+    await fetchApplication();
   }
 
   const debouncedSaveFormAndDuos = debounce(

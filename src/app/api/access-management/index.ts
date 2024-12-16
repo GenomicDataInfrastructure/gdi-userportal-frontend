@@ -4,11 +4,11 @@
 
 "use server";
 
-import { accessManagementClient } from "@/app/api/shared/client";
 import {
   SaveDUOCode,
   SaveForm,
 } from "@/app/api/access-management/open-api/schemas";
+import { accessManagementClient } from "@/app/api/shared/client";
 import { createHeaders } from "@/app/api/shared/headers";
 
 export const createApplicationApi = async (createApplicationCommand: {
@@ -88,7 +88,7 @@ export const saveFormsAndDuosApi = async (
 
 export const submitApplicationApi = async (applicationId: number) => {
   const headers = await createHeaders();
-  return await accessManagementClient.submit_application_v1(undefined, {
+  await accessManagementClient.submit_application_v1(undefined, {
     params: { id: applicationId },
     headers,
   });

@@ -5,7 +5,7 @@
 "use client";
 
 import FilterItem from "./FilterItem";
-import { useFilters } from "@/providers/FilterProvider";
+import { useFilters } from "@/providers/filters/FilterProvider";
 
 export default function FilterList() {
   const { filters } = useFilters();

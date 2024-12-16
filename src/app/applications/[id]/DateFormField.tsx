@@ -6,11 +6,11 @@
 
 import { useEffect, useState } from "react";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
-import { FormField } from "@/types/application.types";
 import { DatePicker } from "@/components/shadcn/DatePicker";
+import { RetrievedApplicationFormField } from "@/app/api/access-management/open-api/schemas";
 
 type DateFormFieldProps = {
-  field: FormField;
+  field: RetrievedApplicationFormField;
   formId: number;
   title: string;
   editable: boolean;
@@ -33,7 +33,7 @@ function DateFormField({
     const timeoutId = setTimeout(() => {
       const newValue = inputValue?.toISOString() || "";
       if (newValue !== field.value) {
-        updateInputFields(formId, field.id, newValue);
+        updateInputFields(formId, field.id!, newValue);
       }
     }, 500);
 

@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { RetrievedDataset } from "@/services/discovery/types/dataset.types";
 import { createDatasetSidebarItems } from "./sidebarItems";
+import { RetrievedDataset } from "@/app/api/discovery/open-api/schemas";
 
 type ClientSidebarProps = {
   dataset: RetrievedDataset;

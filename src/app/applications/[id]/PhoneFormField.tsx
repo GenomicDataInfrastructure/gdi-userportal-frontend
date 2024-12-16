@@ -7,10 +7,10 @@
 import { useState, useEffect } from "react";
 import PhoneInput from "@/components/PhoneInput";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
-import { FormField } from "@/types/application.types";
+import { RetrievedApplicationFormField } from "@/app/api/access-management/open-api/schemas";
 
 type PhoneFormFieldProps = {
-  field: FormField;
+  field: RetrievedApplicationFormField;
   formId: number;
   title: string;
   editable: boolean;
@@ -25,12 +25,12 @@ function PhoneFormField({
   validationWarning,
 }: PhoneFormFieldProps) {
   const { updateInputFields } = useApplicationDetails();
-  const [inputValue, setInputValue] = useState(field.value);
+  const [inputValue, setInputValue] = useState(field.value!);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (inputValue !== field.value) {
-        updateInputFields(formId, field.id, inputValue);
+        updateInputFields(formId, field.id!, inputValue);
       }
     }, 500);
 
@@ -44,7 +44,7 @@ function PhoneFormField({
   const handlePhoneBlur = () => {
     if (inputValue) {
       const formattedValue = formatPhoneNumber(inputValue);
-      updateInputFields(formId, field.id, formattedValue);
+      updateInputFields(formId, field.id!, formattedValue);
     }
   };
 

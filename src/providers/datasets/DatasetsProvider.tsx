@@ -4,11 +4,6 @@
 
 "use client";
 
-import { datasetList } from "@/services/discovery/index.public";
-import {
-  DatasetSearchOptions,
-  Facet,
-} from "@/services/discovery/types/datasetSearch.types";
 import { AxiosError } from "axios";
 import { useSearchParams } from "next/navigation";
 import {
@@ -23,14 +18,19 @@ import {
   DatasetsActionType,
   DatasetsState,
 } from "./DatasetProvider.types";
+import { useFilters } from "@/providers/filters/FilterProvider";
+import { searchDatasetsApi } from "../../app/api/discovery";
 import {
-  ActiveFilter,
-  FilterType,
+  DatasetSearchQuery,
+  DatasetSearchQueryFacet,
   Operator,
-} from "@/services/discovery/types/filter.type";
-import { useFilters } from "@/providers/FilterProvider";
+} from "@/app/api/discovery/open-api/schemas";
+import { ActiveFilter } from "@/providers/filters/FilterProvider.types";
+import { FilterType } from "@/app/api/discovery/additional-types";
 
-function convertActiveFiltersToFacets(activeFilters: ActiveFilter[]): Facet[] {
+function convertActiveFiltersToFacets(
+  activeFilters: ActiveFilter[]
+): DatasetSearchQueryFacet[] {
   return activeFilters
     .map((filter) => {
       const baseFacet = {
@@ -46,7 +46,7 @@ function convertActiveFiltersToFacets(activeFilters: ActiveFilter[]): Facet[] {
         };
       }
 
-      return filter!.values!.map(
+      return filter.values!.map(
         (value: { value: string; label?: string; operator?: Operator }) => ({
           ...baseFacet,
           value: value.value,
@@ -101,10 +101,10 @@ export default function DatasetsProvider({
     dispatch({ type: DatasetsActionType.LOADING });
 
     const query = queryParams || new URLSearchParams();
-    const options: DatasetSearchOptions = {
-      query: query.get("q") as string | undefined,
+    const options: DatasetSearchQuery = {
+      query: query.get("q") || undefined,
       facets: convertActiveFiltersToFacets(activeFilters),
-      sort: query.get("sort") as string | "relevance",
+      sort: query.get("sort") || "score desc, metadata_modified desc",
       start: query.get("page")
         ? (Number(query.get("page")) - 1) * DATASET_PER_PAGE
         : 0,
@@ -112,12 +112,12 @@ export default function DatasetsProvider({
     };
 
     try {
-      const response = await datasetList(options);
+      const data = await searchDatasetsApi(options);
       dispatch({
         type: DatasetsActionType.DATASETS_LOADED,
         payload: {
-          datasets: response.data?.results,
-          datasetCount: response.data?.count,
+          datasets: data.results,
+          datasetCount: data.count,
         },
       });
     } catch (error) {

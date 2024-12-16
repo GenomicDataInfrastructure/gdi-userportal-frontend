@@ -4,11 +4,11 @@
 
 "use client";
 
-import { FormField } from "@/types/application.types";
 import GenericInputFormField from "./GenericInputFormField";
+import { RetrievedApplicationFormField } from "@/app/api/access-management/open-api/schemas";
 
 type InputFormFieldProps = {
-  field: FormField;
+  field: RetrievedApplicationFormField;
   formId: number;
   title: string;
   editable: boolean;

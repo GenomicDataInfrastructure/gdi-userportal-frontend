@@ -2,8 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { RetrievedApplication } from "@/types/application.types";
-import { ErrorResponse } from "@/types/api.types";
+import {
+  ErrorResponse,
+  RetrievedApplication,
+} from "@/app/api/access-management/open-api/schemas";
 
 export type ApplicationAction = {
   type: ApplicationActionType;
@@ -53,7 +55,7 @@ export type ApplicationContextState = ApplicationState & {
   addAttachment: (
     formId: number,
     fieldId: string,
-    formData: FormData
+    attachment: FormData
   ) => Promise<void>;
   deleteAttachment: (
     formId: number,

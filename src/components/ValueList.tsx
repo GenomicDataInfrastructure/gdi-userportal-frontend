@@ -3,10 +3,10 @@
 
 "use client";
 import Link from "next/link";
-import { ValueLabel } from "@/services/discovery/types/datasetSearch.types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faDatabase } from "@fortawesome/free-solid-svg-icons";
-import { useFilters } from "@/providers/FilterProvider";
+import { useFilters } from "@/providers/filters/FilterProvider";
+import { ValueLabel } from "@/app/api/discovery/open-api/schemas";
 
 interface ValueListProps {
   items: ValueLabel[];

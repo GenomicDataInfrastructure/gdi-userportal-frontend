@@ -5,8 +5,8 @@
 
 import Button from "@/components/Button";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
-import { SearchedDataset } from "@/services/discovery/types/dataset.types";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 
 type AddToBasketButtonProps = {
   dataset: SearchedDataset;

@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Link from "next/link";
-import { SearchedDataset } from "@/services/discovery/types/dataset.types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
+import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 
 type DatasetLinkProps = Pick<
   SearchedDataset,
@@ -53,7 +53,7 @@ function DatasetLink({
   return (
     <div className="p-5 h-full flex flex-col w-full">
       <span className="text-info text-sm font-subheading mb-2">
-        {formatDate(createdAt)}
+        {formatDate(createdAt!)}
       </span>
       <h3 className="text-lg font-title mb-2 line-clamp-2">{title}</h3>
       <p className=" mb-4 line-clamp-3">{description}</p>

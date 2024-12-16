@@ -6,18 +6,22 @@
 import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
 import { useEffect, useState } from "react";
-import { datasetList } from "@/services/discovery/index.public";
-import { SearchedDataset } from "@/services/discovery/types/dataset.types";
 import RecentDatasets from "@/components/RecentDatasets";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { useAlert } from "@/providers/AlertProvider";
 import { AxiosError } from "axios";
 import contentConfig from "@/config/contentConfig";
-import { filterValuesList } from "@/services/discovery/index.public";
-import { ValueLabel } from "@/services/discovery/types/datasetSearch.types";
-import { FilterValueType } from "@/services/discovery/types/dataset.types";
 import ValueList from "@/components/ValueList";
+import {
+  retrieveFilterValuesApi,
+  searchDatasetsApi,
+} from "@/app/api/discovery";
+import {
+  SearchedDataset,
+  ValueLabel,
+} from "@/app/api/discovery/open-api/schemas";
+import { FilterValueType } from "@/app/api/discovery/additional-types";
 
 const HomePage = () => {
   const [datasets, setDatasets] = useState<SearchedDataset[]>([]);
@@ -27,8 +31,10 @@ const HomePage = () => {
   useEffect(() => {
     async function fetchThemes() {
       try {
-        const response = await filterValuesList(FilterValueType.THEME);
-        setThemes(response.data);
+        const filterValues = await retrieveFilterValuesApi(
+          FilterValueType.THEME
+        );
+        setThemes(filterValues);
       } catch (error) {
         if (error instanceof AxiosError) {
           setAlert({
@@ -45,11 +51,11 @@ const HomePage = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await datasetList({
+        const data = await searchDatasetsApi({
           rows: 4,
           sort: "issued desc",
         });
-        setDatasets(response.data.results);
+        setDatasets(data.results!);
       } catch (error) {
         if (error instanceof AxiosError) {
           setAlert({

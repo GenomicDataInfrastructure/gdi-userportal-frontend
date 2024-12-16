@@ -2,16 +2,14 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { datasetList } from "@/services/discovery/index.public";
 import {
-  DatasetEntitlement,
+  DatasetSearchQuery,
   SearchedDataset,
-} from "@/services/discovery/types/dataset.types";
-import {
-  DatasetSearchOptions,
-  QueryOperator,
-} from "@/services/discovery/types/datasetSearch.types";
-import { Entitlement } from "@/types/entitlements.types";
+} from "@/app/api/discovery/open-api/schemas";
+import { Entitlement } from "@/app/api/access-management/open-api/schemas";
+import { searchDatasetsApi } from "@/app/api/discovery";
+import { DatasetEntitlement } from "@/app/api/access-management/additional-types";
+import { QueryOperator } from "@/app/api/discovery/additional-types";
 
 export const mapToDatasetEntitlement = (
   datasets: SearchedDataset[],
@@ -33,7 +31,7 @@ export const mapToDatasetEntitlement = (
 export const createDatasetEntitlements = async (
   entitlements: Entitlement[]
 ): Promise<DatasetEntitlement[]> => {
-  const options: DatasetSearchOptions = {
+  const options: DatasetSearchQuery = {
     rows: 1000,
     facets: entitlements.map((e) => ({
       source: "ckan",
@@ -41,10 +39,10 @@ export const createDatasetEntitlements = async (
       key: "identifier",
       value: e.datasetId,
     })),
-    operator: QueryOperator.Or,
+    operator: QueryOperator.OR,
   };
 
-  const datasetsResponse = await datasetList(options);
+  const { results: datasets } = await searchDatasetsApi(options);
 
-  return mapToDatasetEntitlement(datasetsResponse.data.results, entitlements);
+  return mapToDatasetEntitlement(datasets!, entitlements);
 };

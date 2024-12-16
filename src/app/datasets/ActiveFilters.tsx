@@ -6,13 +6,13 @@
 
 import React from "react";
 import ClearFilterButton from "@/app/datasets/FilterList/ClearFilterButton";
-import { useFilters } from "@/providers/FilterProvider";
+import { useFilters } from "@/providers/filters/FilterProvider";
+import ActiveFilterPill from "@/app/datasets/ActiveFilterPill";
+import { FilterType } from "@/app/api/discovery/additional-types";
 import {
   ActiveFilter,
   ActiveFilterEntry,
-  FilterType,
-} from "@/services/discovery/types/filter.type";
-import ActiveFilterPill from "@/app/datasets/ActiveFilterPill";
+} from "@/providers/filters/FilterProvider.types";
 
 export default function ActiveFilters() {
   const { activeFilters, addActiveFilter, removeActiveFilter } = useFilters();

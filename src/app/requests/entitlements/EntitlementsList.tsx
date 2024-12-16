@@ -4,9 +4,9 @@
 
 import List from "@/components/List";
 import ListItem from "@/components/List/ListItem";
-import { DatasetEntitlement } from "@/services/discovery/types/dataset.types";
 import EntitlementCard from "./EntitlementCard";
 import { createEntitlementCardItems } from "./entitlementCardItems";
+import { DatasetEntitlement } from "@/app/api/access-management/additional-types";
 
 type EntitlementsListProps = {
   entitlements: DatasetEntitlement[];

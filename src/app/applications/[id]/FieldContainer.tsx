@@ -4,24 +4,27 @@
 
 "use client";
 
-import { FieldType, FormField } from "@/types/application.types";
-import FileUploadFormField from "./FileUploadFormField";
-import InputFormField from "./InputFormField";
-import TextAreaFormField from "./TextAreaFormField";
+import { FormFieldType } from "@/app/api/access-management/additional-types";
+import {
+  RetrievedApplicationFormField,
+  ValidationWarning,
+} from "@/app/api/access-management/open-api/schemas";
+import { getTranslation } from "@/utils/getTranslation";
 import DateFormField from "./DateFormField";
 import EmailFormField from "./EmailFormField";
-import PhoneFormField from "./PhoneFormField";
-import { ValidationWarning } from "@/types/api.types";
-import { getTranslation } from "@/utils/getTranslation";
-import OptionFormField from "./OptionFormField";
-import LabelFormField from "./LabelFormField";
+import FileUploadFormField from "./FileUploadFormField";
 import HeaderFormField from "./HeaderFormField";
+import InputFormField from "./InputFormField";
+import LabelFormField from "./LabelFormField";
 import MultiSelectFormField from "./MultiSelectFormField";
+import OptionFormField from "./OptionFormField";
+import PhoneFormField from "./PhoneFormField";
 import TableFormField from "./TableFormField";
+import TextAreaFormField from "./TextAreaFormField";
 
 type FieldContainerProps = {
   formId: number;
-  field: FormField;
+  field: RetrievedApplicationFormField;
   editable: boolean;
   validationWarning?: ValidationWarning;
 };
@@ -33,14 +36,14 @@ function FieldContainer({
   validationWarning,
 }: FieldContainerProps) {
   const fieldTitle =
-    field.title.find((label) => label.language === "en")?.name ||
-    field.title[0].name;
+    field.title!.find((label) => label.language === "en")?.name ||
+    field.title![0].name;
 
   const label = getTranslation(validationWarning?.key);
 
   function getFieldComponent() {
     switch (field.type) {
-      case FieldType.ATTACHMENT:
+      case FormFieldType.ATTACHMENT:
         return (
           <FileUploadFormField
             field={field}
@@ -50,11 +53,11 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FieldType.LABEL:
+      case FormFieldType.LABEL:
         return <LabelFormField field={field} />;
-      case FieldType.HEADER:
+      case FormFieldType.HEADER:
         return <HeaderFormField field={field} />;
-      case FieldType.TEXT:
+      case FormFieldType.TEXT:
         return (
           <InputFormField
             field={field}
@@ -64,7 +67,7 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FieldType.TEXT_AREA:
+      case FormFieldType.TEXT_AREA:
         return (
           <TextAreaFormField
             field={field}
@@ -74,7 +77,7 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FieldType.OPTION:
+      case FormFieldType.OPTION:
         return (
           <OptionFormField
             field={field}
@@ -84,7 +87,7 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FieldType.PHONE:
+      case FormFieldType.PHONE:
         return (
           <PhoneFormField
             field={field}
@@ -94,7 +97,7 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FieldType.DATE:
+      case FormFieldType.DATE:
         return (
           <DateFormField
             field={field}
@@ -104,7 +107,7 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FieldType.EMAIL:
+      case FormFieldType.EMAIL:
         return (
           <EmailFormField
             field={field}
@@ -114,7 +117,7 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FieldType.MULTI_SELECT:
+      case FormFieldType.MULTISELECT:
         return (
           <MultiSelectFormField
             formId={formId}
@@ -124,7 +127,7 @@ function FieldContainer({
             validationWarning={label}
           />
         );
-      case FieldType.TABLE:
+      case FormFieldType.TABLE:
         return (
           <TableFormField
             formId={formId}

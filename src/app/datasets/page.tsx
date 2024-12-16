@@ -12,7 +12,7 @@ import DatasetCount from "./DatasetCount";
 import DatasetListContainer from "./DatasetListContainer";
 import FilterList from "./FilterList";
 import NoDatasetMessage from "./NoDatasetMessage";
-import { useFilters } from "@/providers/FilterProvider";
+import { useFilters } from "@/providers/filters/FilterProvider";
 import ActiveFilters from "@/app/datasets/ActiveFilters";
 
 export default function DatasetsPage() {

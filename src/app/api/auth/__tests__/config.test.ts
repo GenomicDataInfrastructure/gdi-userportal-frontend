@@ -10,7 +10,7 @@ import {
   completeTokenWithAccountInfo,
   refreshAccessToken,
 } from "../auth"; // replace with the correct path
-import { ExtendedSession } from "../auth.types";
+import { ExtendedSession } from "../types/auth.types";
 
 // Mock the imported modules
 jest.mock("@/utils/encryption");

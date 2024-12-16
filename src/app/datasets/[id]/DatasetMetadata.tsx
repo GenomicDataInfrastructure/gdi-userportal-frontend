@@ -17,14 +17,14 @@ import {
   faIdBadge,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
-import {
-  RetrievedDataset,
-  DatasetRelationEntry,
-  DatasetDictionaryEntry,
-} from "@/services/discovery/types/dataset.types";
 import DistributionAccordion from "./DistributionAccordion";
 import Link from "next/link";
 import Tooltip from "./Tooltip";
+import {
+  DatasetDictionaryEntry,
+  DatasetRelationEntry,
+  RetrievedDataset,
+} from "@/app/api/discovery/open-api/schemas";
 
 const DatasetMetadata = ({
   dataset,
@@ -113,7 +113,7 @@ const DatasetMetadata = ({
                     >
                       {publisher.name || "No title"}
                     </Link>
-                    {index < dataset.publishers.length - 1 && ", "}
+                    {index < dataset.publishers!.length - 1 && ", "}
                   </span>
                 ))}
               </span>
@@ -201,7 +201,7 @@ const DatasetMetadata = ({
                 className="inline-flex bg-[#EFFAFE] px-4 py-1 rounded-full text-gray font-[500] text-[14px] group relative"
               >
                 <Link
-                  href={`/@${dataset.publishers.map((p) => p.name).join(",")}/${relationship.target}`}
+                  href={`/@${dataset.publishers?.map((p) => p.name).join(",")}/${relationship.target}`}
                   className="group-hover:text-red hover:font-bold"
                 >
                   <FontAwesomeIcon

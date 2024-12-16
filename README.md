@@ -43,6 +43,12 @@ Alternatively, you can run the docker-compose file that provides a running insta
 
 Run `npm run dev` for a dev server. Navigate to `http://localhost:3000/`. The application will automatically reload if you change any of the source files.
 
+## Modifying Open API Specifications
+
+In case of changes in the OpenAPI specifications, you must upgrade the client and schemas by running `npm run prebuild:service` where service is either `discovery` or `access-management`. The schemas will be automatically generated in `src/app/api/{service}/open-api/schemas.ts`.
+
+Additionally, you must export all the types defined in `schemas.ts` (can not be done automatically).
+
 ## Build
 
 Run `npm run build` to build the project. The build artifacts will be stored in the `.next/` directory.

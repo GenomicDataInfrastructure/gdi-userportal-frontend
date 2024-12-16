@@ -5,14 +5,18 @@
 "use client";
 
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
-import { FormField, Label, Option } from "@/types/application.types";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Listbox } from "@headlessui/react";
+import {
+  FormFieldOption,
+  Label,
+  RetrievedApplicationFormField,
+} from "@/app/api/access-management/open-api/schemas";
 
 type OptionFormFieldProps = {
-  field: FormField;
+  field: RetrievedApplicationFormField;
   formId: number;
   title: string;
   editable: boolean;
@@ -32,7 +36,7 @@ function OptionFormField({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (selectedOption !== field.value) {
-        updateInputFields(formId, field.id, selectedOption);
+        updateInputFields(formId, field.id!, selectedOption);
       }
     }, 500);
 
@@ -65,8 +69,10 @@ function OptionFormField({
               }`}
             >
               {selectedOption
-                ? field.options
-                    .find((option) => option.key === selectedOption)
+                ? field!
+                    .options!.find(
+                      (option: FormFieldOption) => option.key === selectedOption
+                    )
                     ?.label.find((label: Label) => label.language === "en")
                     ?.name || "Select an option"
                 : "Select an option"}
@@ -78,8 +84,8 @@ function OptionFormField({
               />
             </Listbox.Button>
             <Listbox.Options className="absolute mt-2 w-full rounded-md bg-white shadow-lg max-h-60 ring-1 ring-black ring-opacity-5">
-              {field.options.length > 0 ? (
-                field.options.map((option: Option) => (
+              {field.options!.length > 0 ? (
+                field.options!.map((option: FormFieldOption) => (
                   <Listbox.Option
                     key={option.key}
                     value={option.key}

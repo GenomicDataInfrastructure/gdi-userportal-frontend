@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { ListedApplication } from "@/types/application.types";
 import Card from "@/components/Card";
 import { createApplicationCardItems } from "./applicationCardItems";
+import { ListedApplication } from "@/app/api/access-management/open-api/schemas";
 
 export default function ApplicationCard({
   application,
@@ -14,9 +14,9 @@ export default function ApplicationCard({
   return (
     <Card
       url={`/applications/${application.id}`}
-      title={application.title}
-      subTitles={[application.currentState.split("/").pop() || ""]}
-      description={application.description}
+      title={application.title!}
+      subTitles={[application.currentState!.split("/").pop() || ""]}
+      description={application.description!}
       cardItems={createApplicationCardItems(application)}
     />
   );

@@ -3,13 +3,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
-import { FormField } from "@/types/application.types";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FileUploaded from "./FileUploaded";
+import { RetrievedApplicationFormField } from "@/app/api/access-management/open-api/schemas";
 
 type FileUploadFormFieldProps = {
-  field: FormField;
+  field: RetrievedApplicationFormField;
   formId: number;
   title: string;
   editable: boolean;
@@ -25,11 +25,11 @@ function FileUploadFormField({
 }: FileUploadFormFieldProps) {
   const { application, isLoading, addAttachment } = useApplicationDetails();
 
-  function onFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  async function onFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files![0];
     const formData = new FormData();
     formData.set("file", file);
-    addAttachment(formId, field.id, formData);
+    await addAttachment(formId, field.id!, formData);
     e.target.value = "";
   }
 
@@ -66,7 +66,7 @@ function FileUploadFormField({
       <ul className="mt-5 grid grid-cols-2 gap-x-6">
         {field.value &&
           field.value.split(",").map((attachmentId: string) => {
-            const attachment = application?.attachments.find(
+            const attachment = application?.attachments?.find(
               (a) => a.id === parseInt(attachmentId)
             );
             return (
@@ -75,7 +75,7 @@ function FileUploadFormField({
                   <FileUploaded
                     attachment={attachment}
                     formId={formId}
-                    fieldId={field.id}
+                    fieldId={field.id!}
                   />
                 </li>
               )

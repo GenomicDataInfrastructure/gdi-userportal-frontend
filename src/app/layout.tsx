@@ -13,7 +13,7 @@ import SessionProviderWrapper from "./SessionProviderWrapper";
 import "./globals.css";
 config.autoAddCss = false;
 import contentConfig from "@/config/contentConfig";
-import { FilterProvider } from "@/providers/FilterProvider";
+import { FilterProvider } from "@/providers/filters/FilterProvider";
 
 export default function RootLayout({
   children,

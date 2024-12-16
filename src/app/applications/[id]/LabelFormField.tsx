@@ -4,10 +4,13 @@
 
 "use client";
 
-import { FormField, Label } from "@/types/application.types";
+import {
+  Label,
+  RetrievedApplicationFormField,
+} from "@/app/api/access-management/open-api/schemas";
 
 type LabelFormFieldProps = {
-  field: FormField;
+  field: RetrievedApplicationFormField;
 };
 
 function LabelFormField({ field }: LabelFormFieldProps) {
@@ -15,8 +18,8 @@ function LabelFormField({ field }: LabelFormFieldProps) {
     <div className="flex flex-col py-2 ">
       <div className="flex flex-col justify-between">
         <h3 className="text-lg sm:text-xl">
-          {field.title.find((label: Label) => label.language === "en")?.name ||
-            field.title[0].name}
+          {field.title!.find((label: Label) => label.language === "en")?.name ||
+            field.title![0].name}
         </h3>
       </div>
     </div>

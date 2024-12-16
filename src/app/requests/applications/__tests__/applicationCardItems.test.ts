@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { createApplicationCardItems } from "../applicationCardItems";
-import { ListedApplication } from "@/types/application.types";
+import { ListedApplication } from "@/app/api/access-management/open-api/schemas";
 
 describe("applicationCardItems", () => {
   beforeEach(() => {

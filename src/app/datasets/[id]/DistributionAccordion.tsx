@@ -14,8 +14,8 @@ import {
   faLanguage,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
-import { RetrievedDistribution } from "@/services/discovery/types/dataset.types";
 import Tooltip from "./Tooltip";
+import { RetrievedDistribution } from "@/app/api/discovery/open-api/schemas";
 
 interface DistributionAccordionProps {
   distributions: RetrievedDistribution[];

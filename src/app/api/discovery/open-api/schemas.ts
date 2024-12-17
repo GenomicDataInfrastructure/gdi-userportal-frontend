@@ -1,7 +1,7 @@
 import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
 import { z } from "zod";
 
-export type DatasetSearchQuery = Partial<{
+type DatasetSearchQuery = Partial<{
   query: string;
   facets: Array<DatasetSearchQueryFacet>;
   sort: string;
@@ -9,7 +9,7 @@ export type DatasetSearchQuery = Partial<{
   start: number;
   operator: QueryOperator;
 }>;
-export type DatasetSearchQueryFacet = {
+type DatasetSearchQueryFacet = {
   source: string;
   type: FilterType;
   key?: string | undefined;
@@ -17,14 +17,14 @@ export type DatasetSearchQueryFacet = {
   operator?: Operator | undefined;
   entries?: Array<QueryEntry> | undefined;
 };
-export type FilterType = "DROPDOWN" | "FREE_TEXT" | "ENTRIES";
-export type Operator = "=" | ">" | "<" | "!=" | "%";
-export type QueryEntry = {
+type FilterType = "DROPDOWN" | "FREE_TEXT" | "ENTRIES";
+type Operator = "=" | "<" | ">" | "!" | ">=" | "<=";
+type QueryEntry = {
   key: string;
   value: string;
 };
-export type QueryOperator = "OR" | "AND";
-export type SearchedDataset = {
+type QueryOperator = "OR" | "AND";
+type SearchedDataset = {
   id: string;
   identifier?: string | undefined;
   title: string;
@@ -38,23 +38,23 @@ export type SearchedDataset = {
   recordsCount?: number | undefined;
   distributionsCount?: number | undefined;
 };
-export type Agent = {
+type Agent = {
   name: string;
   email?: string | undefined;
   url?: string | undefined;
   type?: string | undefined;
   identifier?: string | undefined;
 };
-export type ValueLabel = {
+type ValueLabel = {
   value: string;
   label: string;
   count?: number | undefined;
 };
-export type DatasetsSearchResponse = Partial<{
+type DatasetsSearchResponse = Partial<{
   count: number;
   results: Array<SearchedDataset>;
 }>;
-export type RetrievedDataset = {
+type RetrievedDataset = {
   id: string;
   identifier?: string | undefined;
   title: string;
@@ -78,21 +78,21 @@ export type RetrievedDataset = {
   spatial?: ValueLabel | undefined;
   distributions?: Array<RetrievedDistribution> | undefined;
 };
-export type ContactPoint = {
+type ContactPoint = {
   name: string;
   email: string;
   uri?: string | undefined;
 };
-export type DatasetRelationEntry = {
+type DatasetRelationEntry = {
   relation: string;
   target: string;
 };
-export type DatasetDictionaryEntry = {
+type DatasetDictionaryEntry = {
   name: string;
   type: string;
   description: string;
 };
-export type RetrievedDistribution = {
+type RetrievedDistribution = {
   id: string;
   title: string;
   description: string;
@@ -103,7 +103,7 @@ export type RetrievedDistribution = {
   modifiedAt?: string | undefined;
   languages?: Array<ValueLabel> | undefined;
 };
-export type Filter = {
+type Filter = {
   source: string;
   group?: string | undefined;
   type: FilterType;
@@ -113,16 +113,15 @@ export type Filter = {
   operators?: Array<Operator> | undefined;
   entries?: Array<FilterEntry> | undefined;
 };
-export type FilterEntry = {
+type FilterEntry = {
   key: string;
   label: string;
 };
 
 const FilterType = z.enum(["DROPDOWN", "FREE_TEXT", "ENTRIES"]);
-const Operator = z.enum(["=", ">", "<", "!=", "%"]);
+const Operator = z.enum(["=", "<", ">", "!", ">=", "<="]);
 const QueryEntry = z
   .object({ key: z.string(), value: z.string() })
-  .strict()
   .passthrough();
 const DatasetSearchQueryFacet: z.ZodType<DatasetSearchQueryFacet> = z
   .object({
@@ -130,10 +129,9 @@ const DatasetSearchQueryFacet: z.ZodType<DatasetSearchQueryFacet> = z
     type: FilterType,
     key: z.string().optional(),
     value: z.string().optional(),
-    operator: Operator.optional(),
+    operator: Operator.optional().default("="),
     entries: z.array(QueryEntry).optional(),
   })
-  .strict()
   .passthrough();
 const QueryOperator = z.enum(["OR", "AND"]);
 const DatasetSearchQuery: z.ZodType<DatasetSearchQuery> = z
@@ -146,7 +144,6 @@ const DatasetSearchQuery: z.ZodType<DatasetSearchQuery> = z
     operator: QueryOperator,
   })
   .partial()
-  .strict()
   .passthrough();
 const Agent = z
   .object({
@@ -156,7 +153,6 @@ const Agent = z
     type: z.string().optional(),
     identifier: z.string().optional(),
   })
-  .strict()
   .passthrough();
 const ValueLabel = z
   .object({
@@ -164,7 +160,6 @@ const ValueLabel = z
     label: z.string(),
     count: z.number().int().optional(),
   })
-  .strict()
   .passthrough();
 const SearchedDataset: z.ZodType<SearchedDataset> = z
   .object({
@@ -181,24 +176,19 @@ const SearchedDataset: z.ZodType<SearchedDataset> = z
     recordsCount: z.number().int().optional(),
     distributionsCount: z.number().int().optional(),
   })
-  .strict()
   .passthrough();
 const DatasetsSearchResponse: z.ZodType<DatasetsSearchResponse> = z
   .object({ count: z.number().int(), results: z.array(SearchedDataset) })
   .partial()
-  .strict()
   .passthrough();
 const ContactPoint = z
   .object({ name: z.string(), email: z.string(), uri: z.string().optional() })
-  .strict()
   .passthrough();
 const DatasetRelationEntry = z
   .object({ relation: z.string(), target: z.string() })
-  .strict()
   .passthrough();
 const DatasetDictionaryEntry = z
   .object({ name: z.string(), type: z.string(), description: z.string() })
-  .strict()
   .passthrough();
 const RetrievedDistribution: z.ZodType<RetrievedDistribution> = z
   .object({
@@ -212,7 +202,6 @@ const RetrievedDistribution: z.ZodType<RetrievedDistribution> = z
     modifiedAt: z.string().datetime({ offset: true }).optional(),
     languages: z.array(ValueLabel).optional(),
   })
-  .strict()
   .passthrough();
 const RetrievedDataset: z.ZodType<RetrievedDataset> = z
   .object({
@@ -239,7 +228,6 @@ const RetrievedDataset: z.ZodType<RetrievedDataset> = z
     spatial: ValueLabel.optional(),
     distributions: z.array(RetrievedDistribution).optional(),
   })
-  .strict()
   .passthrough();
 const ErrorResponse = z
   .object({
@@ -247,11 +235,9 @@ const ErrorResponse = z
     status: z.number().int(),
     detail: z.string().optional(),
   })
-  .strict()
   .passthrough();
 const FilterEntry = z
   .object({ key: z.string(), label: z.string() })
-  .strict()
   .passthrough();
 const Filter: z.ZodType<Filter> = z
   .object({
@@ -264,8 +250,27 @@ const Filter: z.ZodType<Filter> = z
     operators: z.array(Operator).optional(),
     entries: z.array(FilterEntry).optional(),
   })
-  .strict()
   .passthrough();
+
+export {
+  Agent,
+  ContactPoint,
+  DatasetDictionaryEntry,
+  DatasetRelationEntry,
+  DatasetSearchQuery,
+  DatasetSearchQueryFacet,
+  DatasetsSearchResponse,
+  Filter,
+  FilterEntry,
+  FilterType,
+  Operator,
+  QueryEntry,
+  QueryOperator,
+  RetrievedDataset,
+  RetrievedDistribution,
+  SearchedDataset,
+  ValueLabel,
+};
 
 export const schemas = {
   FilterType,
@@ -312,7 +317,6 @@ const endpoints = makeApi([
             status: z.number().int(),
             detail: z.string().optional(),
           })
-          .strict()
           .passthrough(),
       },
     ],
@@ -345,7 +349,6 @@ const endpoints = makeApi([
             status: z.number().int(),
             detail: z.string().optional(),
           })
-          .strict()
           .passthrough(),
       },
     ],

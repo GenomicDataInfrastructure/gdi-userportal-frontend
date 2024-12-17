@@ -1,7 +1,7 @@
 import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
 import { z } from "zod";
 
-export type ListedApplication = Partial<{
+type ListedApplication = Partial<{
   id: number;
   title: string;
   description: string;
@@ -10,42 +10,42 @@ export type ListedApplication = Partial<{
   createdAt: string;
   datasets: Array<ApplicationDataset>;
 }>;
-export type ApplicationDataset = Partial<{
+type ApplicationDataset = Partial<{
   id: number;
   externalId: string;
   title: Array<Label>;
   url: Array<Label>;
 }>;
-export type Label = {
+type Label = {
   language: string;
   name: string;
 };
-export type SaveFormsAndDuos = Partial<{
+type SaveFormsAndDuos = Partial<{
   forms: Array<SaveForm>;
   duoCodes: Array<SaveDUOCode>;
 }>;
-export type SaveForm = Partial<{
+type SaveForm = Partial<{
   formId: number;
   fields: Array<SaveFormField>;
 }>;
-export type SaveFormField = Partial<{
+type SaveFormField = Partial<{
   fieldId: string;
   value: string;
   tableValues: Array<Array<FormFieldTableValue>>;
 }>;
-export type FormFieldTableValue = Partial<{
+type FormFieldTableValue = Partial<{
   column: string;
   value: string;
 }>;
-export type SaveDUOCode = Partial<{
+type SaveDUOCode = Partial<{
   duoId: number;
   restrictions: Array<SaveDUOCodeRestriction>;
 }>;
-export type SaveDUOCodeRestriction = Partial<{
+type SaveDUOCodeRestriction = Partial<{
   type: string;
   values: Array<string>;
 }>;
-export type RetrievedApplication = Partial<{
+type RetrievedApplication = Partial<{
   workflow: RetrievedApplicationWorkflow;
   externalId: string;
   id: number;
@@ -66,27 +66,27 @@ export type RetrievedApplication = Partial<{
   state: RetrievedApplicationState;
   modifiedAt: string;
 }>;
-export type RetrievedApplicationWorkflow = Partial<{
+type RetrievedApplicationWorkflow = Partial<{
   id: number;
   type: string;
 }>;
-export type RetrievedApplicationApplicant = Partial<{
+type RetrievedApplicationApplicant = Partial<{
   userId: string;
   name: string;
   email: string;
 }>;
-export type RetrievedApplicationMember = Partial<{
+type RetrievedApplicationMember = Partial<{
   memberId: string;
   name: string;
   email: string;
 }>;
-export type RetrievedApplicationForm = Partial<{
+type RetrievedApplicationForm = Partial<{
   id: number;
   internalName: string;
   externalTitle: Array<Label>;
   fields: Array<RetrievedApplicationFormField>;
 }>;
-export type RetrievedApplicationFormField = Partial<{
+type RetrievedApplicationFormField = Partial<{
   id: string;
   value: string;
   optional: boolean;
@@ -102,7 +102,7 @@ export type RetrievedApplicationFormField = Partial<{
   privacy: FormFieldPrivacy;
   options: Array<FormFieldOption>;
 }>;
-export type FormFieldType =
+type FormFieldType =
   | "text"
   | "texta"
   | "attachment"
@@ -114,30 +114,30 @@ export type FormFieldType =
   | "multiselect"
   | "label"
   | "table";
-export type FormFieldTableColumn = Partial<{
+type FormFieldTableColumn = Partial<{
   key: string;
   label: Array<Label>;
 }>;
-export type FormFieldPrivacy = "private" | "public";
-export type FormFieldOption = {
+type FormFieldPrivacy = "private" | "public";
+type FormFieldOption = {
   key: string;
   label: Array<Label>;
 };
-export type RetrievedApplicationInvitedMember = Partial<{
+type RetrievedApplicationInvitedMember = Partial<{
   name: string;
   email: string;
 }>;
-export type RetrievedApplicationEvent = Partial<{
+type RetrievedApplicationEvent = Partial<{
   actorId: string;
   eventTime: string;
   eventType: string;
 }>;
-export type RetrievedApplicationAttachment = Partial<{
+type RetrievedApplicationAttachment = Partial<{
   id: number;
   filename: string;
   type: string;
 }>;
-export type RetrievedApplicationLicense = Partial<{
+type RetrievedApplicationLicense = Partial<{
   id: number;
   title: Array<Label>;
   type: LicenseType;
@@ -149,8 +149,8 @@ export type RetrievedApplicationLicense = Partial<{
   attachmentId: Array<Label>;
   acceptedByCurrentUser: boolean;
 }>;
-export type LicenseType = "link" | "attachment" | "text";
-export type RetrievedApplicationState =
+type LicenseType = "link" | "attachment" | "text";
+type RetrievedApplicationState =
   | "application.state/draft"
   | "application.state/closed"
   | "application.state/approved"
@@ -158,31 +158,30 @@ export type RetrievedApplicationState =
   | "application.state/rejected"
   | "application.state/revoked"
   | "application.state/submitted";
-export type ListedBasket = Partial<{
+type ListedBasket = Partial<{
   id: number;
   daamUri: string;
   datasets: Array<ListedBasketDataset>;
 }>;
-export type ListedBasketDataset = Partial<{
+type ListedBasketDataset = Partial<{
   id: string;
   title: string;
 }>;
-export type ErrorResponse = Partial<{
+type ErrorResponse = {
   title: string;
   status: number;
-  detail: string;
-  validationWarnings: Array<ValidationWarning>;
-  required: unknown;
-}>;
-export type ValidationWarning = {
+  detail?: string | undefined;
+  validationWarnings?: Array<ValidationWarning> | undefined;
+};
+type ValidationWarning = {
   key: string;
   formId?: number | undefined;
   fieldId?: string | undefined;
 };
-export type RetrieveGrantedDatasetIdentifiers = {
+type RetrieveGrantedDatasetIdentifiers = {
   entitlements: Array<Entitlement>;
 };
-export type Entitlement = {
+type Entitlement = {
   datasetId: string;
   start: string;
   end?: string | undefined;
@@ -190,7 +189,6 @@ export type Entitlement = {
 
 const Label = z
   .object({ language: z.string(), name: z.string() })
-  .strict()
   .passthrough();
 const ApplicationDataset = z
   .object({
@@ -200,7 +198,6 @@ const ApplicationDataset = z
     url: z.array(Label),
   })
   .partial()
-  .strict()
   .passthrough();
 const ListedApplication: z.ZodType<ListedApplication> = z
   .object({
@@ -213,22 +210,18 @@ const ListedApplication: z.ZodType<ListedApplication> = z
     datasets: z.array(ApplicationDataset),
   })
   .partial()
-  .strict()
   .passthrough();
 const RetrievedApplicationWorkflow = z
   .object({ id: z.number().int(), type: z.string() })
   .partial()
-  .strict()
   .passthrough();
 const RetrievedApplicationApplicant = z
   .object({ userId: z.string(), name: z.string(), email: z.string() })
   .partial()
-  .strict()
   .passthrough();
 const RetrievedApplicationMember = z
   .object({ memberId: z.string(), name: z.string(), email: z.string() })
   .partial()
-  .strict()
   .passthrough();
 const FormFieldType = z.enum([
   "text",
@@ -246,17 +239,14 @@ const FormFieldType = z.enum([
 const FormFieldTableValue = z
   .object({ column: z.string(), value: z.string() })
   .partial()
-  .strict()
   .passthrough();
 const FormFieldTableColumn = z
   .object({ key: z.string(), label: z.array(Label) })
   .partial()
-  .strict()
   .passthrough();
 const FormFieldPrivacy = z.enum(["private", "public"]);
 const FormFieldOption = z
   .object({ key: z.string(), label: z.array(Label) })
-  .strict()
   .passthrough();
 const RetrievedApplicationFormField = z
   .object({
@@ -276,7 +266,6 @@ const RetrievedApplicationFormField = z
     options: z.array(FormFieldOption),
   })
   .partial()
-  .strict()
   .passthrough();
 const RetrievedApplicationForm = z
   .object({
@@ -286,12 +275,10 @@ const RetrievedApplicationForm = z
     fields: z.array(RetrievedApplicationFormField),
   })
   .partial()
-  .strict()
   .passthrough();
 const RetrievedApplicationInvitedMember = z
   .object({ name: z.string(), email: z.string() })
   .partial()
-  .strict()
   .passthrough();
 const RetrievedApplicationEvent = z
   .object({
@@ -300,12 +287,10 @@ const RetrievedApplicationEvent = z
     eventType: z.string(),
   })
   .partial()
-  .strict()
   .passthrough();
 const RetrievedApplicationAttachment = z
   .object({ id: z.number().int(), filename: z.string(), type: z.string() })
   .partial()
-  .strict()
   .passthrough();
 const LicenseType = z.enum(["link", "attachment", "text"]);
 const RetrievedApplicationLicense = z
@@ -322,7 +307,6 @@ const RetrievedApplicationLicense = z
     acceptedByCurrentUser: z.boolean(),
   })
   .partial()
-  .strict()
   .passthrough();
 const RetrievedApplicationState = z.enum([
   "application.state/draft",
@@ -356,7 +340,6 @@ const RetrievedApplication: z.ZodType<RetrievedApplication> = z
     modifiedAt: z.string().datetime({ offset: true }),
   })
   .partial()
-  .strict()
   .passthrough();
 const ValidationWarning = z
   .object({
@@ -364,18 +347,14 @@ const ValidationWarning = z
     formId: z.number().int().optional(),
     fieldId: z.string().optional(),
   })
-  .strict()
   .passthrough();
 const ErrorResponse: z.ZodType<ErrorResponse> = z
   .object({
     title: z.string(),
     status: z.number().int(),
-    detail: z.string(),
-    validationWarnings: z.array(ValidationWarning),
-    required: z.unknown(),
+    detail: z.string().optional(),
+    validationWarnings: z.array(ValidationWarning).optional(),
   })
-  .partial()
-  .strict()
   .passthrough();
 const SaveFormField = z
   .object({
@@ -384,17 +363,14 @@ const SaveFormField = z
     tableValues: z.array(z.array(FormFieldTableValue)),
   })
   .partial()
-  .strict()
   .passthrough();
 const SaveForm = z
   .object({ formId: z.number().int(), fields: z.array(SaveFormField) })
   .partial()
-  .strict()
   .passthrough();
 const SaveDUOCodeRestriction = z
   .object({ type: z.string(), values: z.array(z.string()) })
   .partial()
-  .strict()
   .passthrough();
 const SaveDUOCode = z
   .object({
@@ -402,51 +378,35 @@ const SaveDUOCode = z
     restrictions: z.array(SaveDUOCodeRestriction),
   })
   .partial()
-  .strict()
   .passthrough();
 const SaveFormsAndDuos: z.ZodType<SaveFormsAndDuos> = z
   .object({ forms: z.array(SaveForm), duoCodes: z.array(SaveDUOCode) })
   .partial()
-  .strict()
   .passthrough();
 const CreateApplication = z
   .object({ datasetIds: z.array(z.string()) })
-  .partial()
-  .strict()
   .passthrough();
 const CreateApplicationResponse = z
   .object({ applicationId: z.number().int() })
-  .partial()
-  .strict()
   .passthrough();
 const AcceptTermsCommand = z
   .object({ acceptedLicenses: z.array(z.number().int()) })
-  .strict()
   .passthrough();
 const AddedAttachment = z
   .object({ id: z.number().int() })
   .partial()
-  .strict()
   .passthrough();
-const RemoveMember = z
-  .object({ memberId: z.string() })
-  .partial()
-  .strict()
-  .passthrough();
+const RemoveMember = z.object({ memberId: z.string() }).passthrough();
 const UpdateDatasets = z
-  .object({ datasetIds: z.array(z.string()), comment: z.string() })
-  .partial()
-  .strict()
+  .object({ datasetIds: z.array(z.string()), comment: z.string().optional() })
   .passthrough();
 const AddApplicationEvent = z
   .object({ key: z.string(), description: z.string() })
   .partial()
-  .strict()
   .passthrough();
 const ListedBasketDataset = z
   .object({ id: z.string(), title: z.string() })
   .partial()
-  .strict()
   .passthrough();
 const ListedBasket: z.ZodType<ListedBasket> = z
   .object({
@@ -455,26 +415,53 @@ const ListedBasket: z.ZodType<ListedBasket> = z
     datasets: z.array(ListedBasketDataset),
   })
   .partial()
-  .strict()
   .passthrough();
 const AddDatasetToBasket = z
   .object({ datasetIds: z.array(z.string()) })
-  .partial()
-  .strict()
   .passthrough();
-const Entitlement: z.ZodType<Entitlement> = z
+const Entitlement = z
   .object({
     datasetId: z.string(),
     start: z.string().datetime({ offset: true }),
     end: z.string().datetime({ offset: true }).optional(),
   })
-  .strict()
   .passthrough();
 const RetrieveGrantedDatasetIdentifiers: z.ZodType<RetrieveGrantedDatasetIdentifiers> =
-  z
-    .object({ entitlements: z.array(Entitlement) })
-    .strict()
-    .passthrough();
+  z.object({ entitlements: z.array(Entitlement) }).passthrough();
+
+export {
+  ApplicationDataset,
+  Entitlement,
+  ErrorResponse,
+  FormFieldOption,
+  FormFieldPrivacy,
+  FormFieldTableColumn,
+  FormFieldTableValue,
+  FormFieldType,
+  Label,
+  LicenseType,
+  ListedApplication,
+  ListedBasket,
+  ListedBasketDataset,
+  RetrievedApplication,
+  RetrievedApplicationApplicant,
+  RetrievedApplicationAttachment,
+  RetrievedApplicationEvent,
+  RetrievedApplicationForm,
+  RetrievedApplicationFormField,
+  RetrievedApplicationInvitedMember,
+  RetrievedApplicationLicense,
+  RetrievedApplicationMember,
+  RetrievedApplicationState,
+  RetrievedApplicationWorkflow,
+  RetrieveGrantedDatasetIdentifiers,
+  SaveDUOCode,
+  SaveDUOCodeRestriction,
+  SaveForm,
+  SaveFormField,
+  SaveFormsAndDuos,
+  ValidationWarning,
+};
 
 export const schemas = {
   Label,
@@ -561,7 +548,6 @@ const endpoints = makeApi([
         modifiedAt: z.string().datetime({ offset: true }),
       })
       .partial()
-      .strict()
       .passthrough(),
     errors: [
       {
@@ -571,12 +557,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
     ],
@@ -602,12 +585,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -617,12 +597,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -632,12 +609,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
     ],
@@ -652,7 +626,9 @@ const endpoints = makeApi([
         name: "body",
         description: `Accept terms data`,
         type: "Body",
-        schema: AcceptTermsCommand,
+        schema: z
+          .object({ acceptedLicenses: z.array(z.number().int()) })
+          .passthrough(),
       },
       {
         name: "id",
@@ -669,12 +645,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -684,12 +657,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -699,12 +669,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -714,12 +681,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
     ],
@@ -736,7 +700,6 @@ const endpoints = makeApi([
         schema: z
           .object({ file: z.instanceof(File) })
           .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -745,11 +708,7 @@ const endpoints = makeApi([
         schema: z.number().int(),
       },
     ],
-    response: z
-      .object({ id: z.number().int() })
-      .partial()
-      .strict()
-      .passthrough(),
+    response: z.object({ id: z.number().int() }).partial().passthrough(),
     errors: [
       {
         status: 400,
@@ -758,12 +717,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -773,12 +729,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -788,12 +741,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -803,12 +753,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
     ],
@@ -872,7 +819,6 @@ const endpoints = makeApi([
         schema: z
           .object({ key: z.string(), description: z.string() })
           .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -906,11 +852,7 @@ const endpoints = makeApi([
       {
         name: "body",
         type: "Body",
-        schema: z
-          .object({ memberId: z.string() })
-          .partial()
-          .strict()
-          .passthrough(),
+        schema: z.object({ memberId: z.string() }).passthrough(),
       },
       {
         name: "id",
@@ -932,7 +874,6 @@ const endpoints = makeApi([
         schema: z
           .object({ forms: z.array(SaveForm), duoCodes: z.array(SaveDUOCode) })
           .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -950,12 +891,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -965,12 +903,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -980,12 +915,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
     ],
@@ -1011,12 +943,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -1026,12 +955,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -1041,12 +967,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -1056,12 +979,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
     ],
@@ -1094,18 +1014,10 @@ const endpoints = makeApi([
       {
         name: "body",
         type: "Body",
-        schema: z
-          .object({ datasetIds: z.array(z.string()) })
-          .partial()
-          .strict()
-          .passthrough(),
+        schema: z.object({ datasetIds: z.array(z.string()) }).passthrough(),
       },
     ],
-    response: z
-      .object({ applicationId: z.number().int() })
-      .partial()
-      .strict()
-      .passthrough(),
+    response: z.object({ applicationId: z.number().int() }).passthrough(),
     errors: [
       {
         status: 400,
@@ -1114,12 +1026,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
       {
@@ -1129,12 +1038,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
     ],
@@ -1169,11 +1075,7 @@ const endpoints = makeApi([
       {
         name: "body",
         type: "Body",
-        schema: z
-          .object({ datasetIds: z.array(z.string()) })
-          .partial()
-          .strict()
-          .passthrough(),
+        schema: z.object({ datasetIds: z.array(z.string()) }).passthrough(),
       },
     ],
     response: z.void(),
@@ -1183,7 +1085,7 @@ const endpoints = makeApi([
     path: "/api/v1/entitlements",
     alias: "retrieve_granted_dataset_identifiers",
     requestFormat: "json",
-    response: RetrieveGrantedDatasetIdentifiers,
+    response: z.object({ entitlements: z.array(Entitlement) }).passthrough(),
   },
   {
     method: "post",
@@ -1206,12 +1108,9 @@ const endpoints = makeApi([
           .object({
             title: z.string(),
             status: z.number().int(),
-            detail: z.string(),
-            validationWarnings: z.array(ValidationWarning),
-            required: z.unknown(),
+            detail: z.string().optional(),
+            validationWarnings: z.array(ValidationWarning).optional(),
           })
-          .partial()
-          .strict()
           .passthrough(),
       },
     ],

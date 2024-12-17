@@ -1,4 +1,4 @@
-# SPDX-FileCopFieldTypeyrightText: 2024 PNED G.I.E.
+# SPDX-FileCopyrightText: 2024 PNED G.I.E.
 #
 # SPDX-License-Identifier: Apache-2.0
 
@@ -1126,18 +1126,20 @@ components:
         datasetIds:
           type: array
           title: dataset ids
-          required: true
           items:
             type: string
         comment:
           title: the reason the datasets are changing
           type: string
+      required:
+        - datasetIds
     RemoveMember:
       properties:
         memberId:
           type: string
           title: member id
-          required: true
+      required:
+        - memberId
     CreateApplication:
       properties:
         datasetIds:
@@ -1145,13 +1147,15 @@ components:
           title: dataset ids
           items:
             type: string
-          required: true
+      required:
+        - datasetIds
     CreateApplicationResponse:
       properties:
         applicationId:
           type: integer
           format: int64
-          required: true
+      required:
+        - applicationId
     AddDatasetToBasket:
       properties:
         datasetIds:
@@ -1159,7 +1163,8 @@ components:
           title: dataset ids
           items:
             type: string
-          required: true
+      required:
+        - datasetIds
     ErrorResponse:
       properties:
         title:
@@ -1176,11 +1181,10 @@ components:
           items:
             $ref: "#/components/schemas/ValidationWarning"
           description: List of validation warnings, to be send to the frontend, where the translation will happen.
-        required:
-          - title
-          - status
+      required:
+        - title
+        - status
     RetrieveGrantedDatasetIdentifiers:
-      type: object
       properties:
         entitlements:
           type: array
@@ -1189,7 +1193,6 @@ components:
       required:
         - entitlements
     Entitlement:
-      type: object
       properties:
         datasetId:
           type: string
@@ -1203,12 +1206,11 @@ components:
         - datasetId
         - start
     AcceptTermsCommand:
-      type: object
-      required:
-        - acceptedLicenses
       properties:
         acceptedLicenses:
           type: array
           items:
             type: integer
             format: int64
+      required:
+        - acceptedLicenses

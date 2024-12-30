@@ -10,7 +10,7 @@
       "description": "Trigger fix release for patch updates",
       "automerge": true,
       "matchUpdateTypes": ["patch"],
-      "automergeType": "pr"
+      "automergeType": "branch"
     }
   ],
   "extends": [

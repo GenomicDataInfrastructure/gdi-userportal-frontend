@@ -12,7 +12,7 @@ import { authOptions } from "./config";
 export async function getToken(tokenType: "access_token" | "id_token") {
   const session = (await getServerSession(authOptions)) as ExtendedSession;
   if (session) {
-    const tokenDecrypted = decrypt(session[tokenType]!);
+    const tokenDecrypted = decrypt(session[tokenType]);
     return tokenDecrypted;
   }
   return null;
@@ -24,7 +24,7 @@ export function completeTokenWithAccountInfo(
 ): JWT {
   return {
     ...token,
-    decoded: jwtDecode(account.access_token!) as string,
+    decoded: jwtDecode(account.access_token!),
     access_token: account.access_token as string,
     id_token: account.id_token as string,
     refresh_token: account.refresh_token as string,

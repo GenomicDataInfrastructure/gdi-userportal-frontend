@@ -17,5 +17,5 @@ export function getTranslation(key?: string): string | undefined {
   if (key && !translation) {
     console.error(`translate not found for ${key}.`);
   }
-  return translation || key;
+  return translation ?? key;
 }

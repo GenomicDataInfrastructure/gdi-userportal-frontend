@@ -84,7 +84,10 @@ function reducer(state: DatasetsState, action: DatasetsAction): DatasetsState {
 const DATASET_PER_PAGE = 12;
 
 const initialState = {
+  datasets: undefined,
+  datasetCount: undefined,
   isLoading: false,
+  errorCode: undefined,
 };
 
 export default function DatasetsProvider({

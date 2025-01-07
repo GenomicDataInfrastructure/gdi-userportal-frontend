@@ -19,7 +19,7 @@ export const authOptions: NextAuthOptions = {
       authorization: {
         params: {
           scope:
-            process.env.KEYCLOAK_CLIENT_SCOPE ||
+            process.env.KEYCLOAK_CLIENT_SCOPE ??
             "openid profile email elixir_id",
         },
       },
@@ -37,6 +37,7 @@ export const authOptions: NextAuthOptions = {
           const refreshedToken = await refreshAccessToken(token);
           return refreshedToken;
         } catch (error) {
+          console.error(error);
           keycloackSessionLogOut().then(() => signOut({ callbackUrl: "/" }));
           throw new Error("Could not refresh the token. Logging out...");
         }

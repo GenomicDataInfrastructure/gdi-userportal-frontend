@@ -19,7 +19,7 @@ import {
   CommandList,
 } from "./shadcn/command";
 import { Button } from "./shadcn/button";
-import { Input, InputProps } from "./shadcn/input";
+import { Input } from "./shadcn/input";
 import { Popover, PopoverContent, PopoverTrigger } from "./shadcn/popover";
 import { cn } from "@/utils/tailwindMerge";
 import { ScrollArea } from "./shadcn/scroll-area";
@@ -50,7 +50,7 @@ PhoneInput.displayName = "PhoneInput";
 
 const InputComponent = forwardRef<
   HTMLInputElement,
-  InputProps & { disabled?: boolean }
+  React.InputHTMLAttributes<HTMLInputElement> & { disabled?: boolean }
 >(({ className, disabled, ...props }, ref) => (
   <Input
     className={cn(

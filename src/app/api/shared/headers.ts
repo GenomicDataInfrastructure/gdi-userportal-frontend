@@ -15,7 +15,7 @@ export const createHeaders = async (): Promise<Record<string, string>> => {
     "Content-Type": "application/json",
   };
 
-  if (!!session) {
+  if (session) {
     headers["Authorization"] = `Bearer ${decrypt(session.access_token)}`;
   }
   return headers;

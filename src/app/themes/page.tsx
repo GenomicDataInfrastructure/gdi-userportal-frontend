@@ -26,6 +26,7 @@ export default async function ThemesPage() {
   try {
     themes = await getThemes();
   } catch (error) {
+    console.error(error);
     return <Error statusCode={500} />;
   }
 

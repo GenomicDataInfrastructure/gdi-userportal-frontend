@@ -18,7 +18,7 @@ describe("Robots API Route", () => {
   it("returns a valid robots.txt content", async () => {
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>();
 
-    await Robots(req, res);
+    Robots(req, res);
 
     expect(res._getStatusCode()).toBe(200);
     expect(res._getHeaders()["content-type"]).toBe("text/plain");

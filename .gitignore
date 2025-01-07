@@ -53,3 +53,5 @@ tsconfig.tsbuildinfo
 .env
 .env.local
 .scannerwork
+/src/app/api/discovery/open-api/schemas.ts
+/src/app/api/access-management/open-api/schemas.ts

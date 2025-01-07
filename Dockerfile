@@ -36,7 +36,6 @@ ENV NODE_ENV production
 
 COPY --from=builder /app/public ./public
 
-COPY customizations ./
 
 # Ensure no write permissions for executable directories
 COPY --from=builder --chown=1001:1001 /app/.next/standalone ./

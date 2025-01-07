@@ -26,6 +26,7 @@ export default async function PublishersPage() {
   try {
     publishers = await getPublishers();
   } catch (error) {
+    console.error(error);
     return <Error statusCode={500} />;
   }
 

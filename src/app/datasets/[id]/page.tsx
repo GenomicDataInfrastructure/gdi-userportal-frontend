@@ -14,7 +14,7 @@ import { createDatasetSidebarItems } from "./sidebarItems";
 import { retrieveDatasetApi } from "../../api/discovery";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const { id } = params;
+  const { id } = await params;
   try {
     const dataset = await retrieveDatasetApi(id);
 

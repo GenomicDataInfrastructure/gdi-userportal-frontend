@@ -5,7 +5,7 @@
 import Button from "@/components/Button";
 import { faCheck, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Disclosure } from "@headlessui/react";
+import { DisclosurePanel } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import { FilterItemProps } from "./FilterItem";
 import { useFilters } from "@/providers/filters/FilterProvider";
@@ -104,7 +104,10 @@ export default function FreeTextFilterContent({
   };
 
   return (
-    <Disclosure.Panel className="px-4 pb-2 pt-4 font-bryant font-normal text-base border-t-2 border-t-primary h-fit">
+    <DisclosurePanel
+      as="div"
+      className="px-4 pb-2 pt-4 font-bryant font-normal text-base border-t-2 border-t-primary h-fit"
+    >
       <form onSubmit={handleSubmitValue} className="flex flex-col gap-y-8 mt-4">
         {items.map((item, index) => (
           <div
@@ -193,6 +196,6 @@ export default function FreeTextFilterContent({
           </button>
         </div>
       </form>
-    </Disclosure.Panel>
+    </DisclosurePanel>
   );
 }

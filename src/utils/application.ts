@@ -92,7 +92,7 @@ function updateFormFieldWithNewAttachment(
     ...form,
     fields: form.fields!.map((field) =>
       field.id === fieldId
-        ? { ...field, value: action(field.value!, newAttachmentId)! }
+        ? { ...field, value: action(field.value!, newAttachmentId) }
         : field
     ),
   };

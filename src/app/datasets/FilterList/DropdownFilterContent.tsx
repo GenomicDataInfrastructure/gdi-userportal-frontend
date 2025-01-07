@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { Disclosure } from "@headlessui/react";
+import { DisclosurePanel } from "@headlessui/react";
 import { FilterItemProps } from "./FilterItem";
 import { useFilters } from "@/providers/filters/FilterProvider";
 
@@ -63,7 +63,10 @@ export default function DropdownFilterContent({
   };
 
   return (
-    <Disclosure.Panel className="px-4 pb-2 pt-4 font-bryant font-normal flex flex-col gap-y-3 text-base border-t-2 border-t-primary max-h-80 overflow-y-auto">
+    <DisclosurePanel
+      as="div"
+      className="px-4 pb-2 pt-4 font-bryant font-normal flex flex-col gap-y-3 text-base border-t-2 border-t-primary max-h-80 overflow-y-auto"
+    >
       {filter.values!.length > 0 ? (
         filter.values!.map((item) => (
           <div
@@ -91,6 +94,6 @@ export default function DropdownFilterContent({
       ) : (
         <div className="text-center">No results found.</div>
       )}
-    </Disclosure.Panel>
+    </DisclosurePanel>
   );
 }

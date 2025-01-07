@@ -9,7 +9,7 @@
     {
       "description": "Trigger fix release for patch updates",
       "automerge": true,
-      "matchUpdateTypes": ["patch"],
+      "matchUpdateTypes": ["patch", "pin", "digest"],
       "automergeType": "branch"
     }
   ],

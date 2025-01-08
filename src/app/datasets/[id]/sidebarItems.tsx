@@ -77,8 +77,8 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
               </>
             ) : (
               dataset.contacts?.map((contact, index) => (
-                <>
-                  <div key={index} className="flex gap-8 items-center">
+                <div key={index}>
+                  <div className="flex gap-8 items-center">
                     <FontAwesomeIcon icon={faUser} className="text-primary" />
                     <p>{contact.name || "No contact provided."}</p>
                   </div>
@@ -92,7 +92,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
                     />
                     <p>{contact.email || "No e-mail provided."}</p>
                   </div>
-                </>
+                </div>
               ))
             )}
           </div>

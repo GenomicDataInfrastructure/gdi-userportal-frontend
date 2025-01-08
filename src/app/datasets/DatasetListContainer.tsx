@@ -11,10 +11,14 @@ import {
   DATASET_PER_PAGE,
   useDatasets,
 } from "@/providers/datasets/DatasetsProvider";
-import { useSearchParams } from "next/navigation";
 
-export default function DatasetListContainer() {
-  const queryParams = useSearchParams();
+type DatasetListContainerProps = {
+  currentPage: number;
+};
+
+export default function DatasetListContainer({
+  currentPage,
+}: DatasetListContainerProps) {
   const { datasets, datasetCount, isLoading, errorCode } = useDatasets();
 
   if (isLoading) {
@@ -45,7 +49,7 @@ export default function DatasetListContainer() {
           datasetCount={datasetCount || 0}
           datasetPerPage={DATASET_PER_PAGE}
           pathname="/datasets"
-          queryParams={queryParams || new URLSearchParams()}
+          currentPage={currentPage}
         />
       </div>
     </>

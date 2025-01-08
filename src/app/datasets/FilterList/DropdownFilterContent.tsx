@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import { useFilters } from "@/providers/filters/FilterProvider";
 import { DisclosurePanel } from "@headlessui/react";
 import { FilterItemProps } from "./FilterItem";
-import { useFilters } from "@/providers/filters/FilterProvider";
 
 type DropdownFilterContentProps = FilterItemProps;
 

@@ -28,11 +28,19 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import FormContainer from "./FormContainer";
 import { createApplicationSidebarItems } from "./sidebarItems";
+import { UrlSearchParams } from "@/app/params";
 
-export default function ApplicationDetailsPage() {
+type ApplicationDetailsPageProps = {
+  searchParams: Promise<UrlSearchParams>;
+};
+
+export default function ApplicationDetailsPage({
+  searchParams,
+}: ApplicationDetailsPageProps) {
+  const _searchParams = use(searchParams);
   const router = useRouter();
   const [alert, setAlert] = useState<AlertState | null>(null);
   const onCloseAlert = () => {
@@ -76,7 +84,7 @@ export default function ApplicationDetailsPage() {
 
   if (!application) {
     return (
-      <PageContainer>
+      <PageContainer searchParams={_searchParams}>
         {alert && (
           <Alert
             type={alert.type}
@@ -108,7 +116,7 @@ export default function ApplicationDetailsPage() {
   });
   const warningsPerForm = groupWarningsPerFormId(formWarnings);
   return (
-    <PageContainer>
+    <PageContainer searchParams={_searchParams}>
       {alert && (
         <Alert
           type={alert.type}

@@ -6,38 +6,38 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { UrlSearchParams } from "@/app/params";
 
 type SearchBarProps = {
   size?: "regular" | "large";
+  searchParams: UrlSearchParams;
 };
 
-function SearchBar({ size }: Readonly<SearchBarProps>) {
-  const queryParams = useSearchParams();
+function SearchBar({ size, searchParams }: Readonly<SearchBarProps>) {
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const router = useRouter();
+  const { q: currentQuery } = searchParams;
 
   let sizeClass = "h-11";
   if (size === "large") {
     sizeClass = "h-14";
   }
 
-  const q = queryParams?.get("q");
-
   useEffect(() => {
-    const initialQuery = Array.isArray(q) ? q[0] : q;
-    if (initialQuery) {
-      setQuery(initialQuery);
+    if (currentQuery) {
+      setQuery(currentQuery);
     }
-  }, [q]);
+  }, [currentQuery]);
 
   function handleQueryChange(e: React.ChangeEvent<HTMLInputElement>): void {
     setQuery(e.target.value);
   }
+  useSearchParams();
 
   function redirectToSearchResults(query: string): void {
-    const params = new URLSearchParams(queryParams?.toString() || "");
+    const params = new URLSearchParams();
     params.set("page", "1");
     if (!query) params.delete("q");
     else params.set("q", query);

@@ -10,6 +10,7 @@ import LoadingContainer from "@/components/LoadingContainer";
 import { retrieveFilterValuesApi } from "../api/discovery";
 import { ValueLabel } from "@/app/api/discovery/open-api/schemas";
 import { FilterValueType } from "@/app/api/discovery/additional-types";
+import { UrlSearchParams } from "@/app/params";
 
 async function getThemes(): Promise<ValueLabel[]> {
   try {
@@ -20,7 +21,13 @@ async function getThemes(): Promise<ValueLabel[]> {
   }
 }
 
-export default async function ThemesPage() {
+type ThemesPageProps = {
+  searchParams: Promise<UrlSearchParams>;
+};
+
+export default async function ThemesPage({ searchParams }: ThemesPageProps) {
+  const _searchParams = await searchParams;
+
   let themes: ValueLabel[];
 
   try {
@@ -31,7 +38,10 @@ export default async function ThemesPage() {
   }
 
   return (
-    <PageContainer className="container mx-auto px-4 pt-5">
+    <PageContainer
+      searchParams={_searchParams}
+      className="container mx-auto px-4 pt-5"
+    >
       <div className="my-8 flex items-center gap-2 px-4 sm:px-6 lg:px-8">
         <h1 className="text-left font-title text-2xl sm:text-3xl">Themes</h1>
         <span className="bg-info text-white text-sm px-2 py-1 rounded-full">

@@ -31,7 +31,7 @@ Before using the GDI User Portal Front-end, make sure you have the required depe
 
 `npm install`
 
-You also have to create a new `env.local` file in the root directory, and copy the content of `.env.local.example` into the new file. Feel free to modify the environment variables as you wish.
+You also have to create a new `.env.local` file in the root directory, and copy the content of `.env.local.example` into the new file. Feel free to modify the environment variables as you wish.
 
 ### Using Docker
 

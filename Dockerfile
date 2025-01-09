@@ -48,4 +48,20 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
+ENV MAINTAINER "PNED G.I.E."
+ENV APP_TITLE "userportal-frontend"
+ENV APP_DESCRIPTION "Frontend of user portal."
+
+LABEL maintainer ${MAINTAINER}
+LABEL summary ${APP_TITLE}
+LABEL description ${APP_DESCRIPTION}
+
+LABEL org.opencontainers.image.vendor ${MAINTAINER}
+LABEL org.opencontainers.image.licenses Apache-2.0
+LABEL org.opencontainers.image.title ${APP_TITLE}
+LABEL org.opencontainers.image.description ${APP_DESCRIPTION}
+
+LABEL io.k8s.display-name ${APP_TITLE}
+LABEL io.k8s.description ${APP_DESCRIPTION}
+
 CMD ["node", "server.js"]

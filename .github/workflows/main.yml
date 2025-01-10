@@ -16,7 +16,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ghcr.io/genomicdatainfrastructure/gdi-userportal-frontend
   AZURE_WEBAPP_NAME: catalogue-test
-  REPOSITORY_URL: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}
+  REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}
   BUILD_DATE: ""
 
 jobs:

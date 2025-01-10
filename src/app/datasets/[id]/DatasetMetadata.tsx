@@ -170,7 +170,7 @@ const DatasetMetadata = ({
             </span>
           </>
         )}
-        {dataset.type && (
+        {dataset.dcatType && (
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
             <span className="flex gap-2 items-center relative group">
@@ -179,7 +179,7 @@ const DatasetMetadata = ({
                 className="align-middle text-primary"
               />
               <span className="align-middle">
-                Type: {formatDate(dataset.type)}
+                Type: {formatDate(dataset.dcatType.label)}
               </span>
               <Tooltip message="Date when the dataset was created." />
             </span>

@@ -5,7 +5,7 @@
 
 import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import RecentDatasets from "@/components/RecentDatasets";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
@@ -22,11 +22,17 @@ import {
   ValueLabel,
 } from "@/app/api/discovery/open-api/schemas";
 import { FilterValueType } from "@/app/api/discovery/additional-types";
+import { UrlSearchParams } from "@/app/params";
 
-const HomePage = () => {
+type HomePageProps = {
+  searchParams: Promise<UrlSearchParams>;
+};
+
+const HomePage = ({ searchParams }: HomePageProps) => {
   const [datasets, setDatasets] = useState<SearchedDataset[]>([]);
   const [themes, setThemes] = useState<ValueLabel[]>([]);
   const { setAlert } = useAlert();
+  const _searchParams = use(searchParams);
 
   useEffect(() => {
     async function fetchThemes() {
@@ -45,6 +51,7 @@ const HomePage = () => {
         }
       }
     }
+
     fetchThemes();
   }, [setAlert]);
 
@@ -68,11 +75,15 @@ const HomePage = () => {
         }
       }
     }
+
     fetchData();
   }, [setAlert]);
 
   return (
-    <PageContainer className="container mx-auto px-4 pt-5 text-center">
+    <PageContainer
+      searchParams={_searchParams}
+      className="container mx-auto px-4 pt-5 text-center"
+    >
       <div className="my-8">
         <h1 className="font-bold text-4xl font-title">
           {contentConfig.homepageTitle}
@@ -83,7 +94,7 @@ const HomePage = () => {
       </div>
       <div className="flex justify-center mb-24">
         <div className="w-full lg:w-4/5 xl:w-3/4">
-          <SearchBar size="large" />
+          <SearchBar searchParams={_searchParams} size="large" />
         </div>
       </div>
       {themes.length > 0 && (

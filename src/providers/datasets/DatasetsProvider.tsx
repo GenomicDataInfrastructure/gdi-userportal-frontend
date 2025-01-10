@@ -5,8 +5,7 @@
 "use client";
 
 import { AxiosError } from "axios";
-import { useSearchParams } from "next/navigation";
-import {
+import React, {
   createContext,
   useCallback,
   useContext,
@@ -27,6 +26,7 @@ import {
 } from "@/app/api/discovery/open-api/schemas";
 import { ActiveFilter } from "@/providers/filters/FilterProvider.types";
 import { FilterType } from "@/app/api/discovery/additional-types";
+import { UrlSearchParams } from "@/app/params";
 
 function convertActiveFiltersToFacets(
   activeFilters: ActiveFilter[]
@@ -90,27 +90,28 @@ const initialState = {
   errorCode: undefined,
 };
 
+type DatasetsProviderProps = {
+  children: React.ReactNode;
+  searchParams: UrlSearchParams;
+};
+
 export default function DatasetsProvider({
   children,
-}: {
-  children: React.ReactNode;
-}) {
-  const queryParams = useSearchParams();
+  searchParams,
+}: DatasetsProviderProps) {
   const { activeFilters } = useFilters();
   const [{ datasets, datasetCount, isLoading, errorCode }, dispatch] =
     useReducer(reducer, initialState);
+  const { page, q, sort } = searchParams;
 
   const fetchDatasets = useCallback(async () => {
     dispatch({ type: DatasetsActionType.LOADING });
 
-    const query = queryParams || new URLSearchParams();
     const options: DatasetSearchQuery = {
-      query: query.get("q") || undefined,
+      query: q,
       facets: convertActiveFiltersToFacets(activeFilters),
-      sort: query.get("sort") || "score desc, metadata_modified desc",
-      start: query.get("page")
-        ? (Number(query.get("page")) - 1) * DATASET_PER_PAGE
-        : 0,
+      sort: sort || "score desc, metadata_modified desc",
+      start: page ? (Number(page) - 1) * DATASET_PER_PAGE : 0,
       rows: DATASET_PER_PAGE,
     };
 
@@ -132,11 +133,11 @@ export default function DatasetsProvider({
       });
       console.error(error);
     }
-  }, [queryParams, activeFilters]);
+  }, [activeFilters, page, q, sort]);
 
   useEffect(() => {
     fetchDatasets();
-  }, [queryParams, fetchDatasets, activeFilters]);
+  }, [fetchDatasets, activeFilters, page, q, sort]);
 
   return (
     <DatasetsContext.Provider

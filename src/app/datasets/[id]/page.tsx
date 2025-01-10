@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import Error from "@/app/error";
+import ErrorComponent from "@/app/error";
 import Chip from "@/components/Chip";
 import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
@@ -12,18 +12,33 @@ import DatasetMetadata from "./DatasetMetadata";
 import Tooltip from "./Tooltip";
 import { createDatasetSidebarItems } from "./sidebarItems";
 import { retrieveDatasetApi } from "../../api/discovery";
+import { UrlParams, UrlSearchParams } from "@/app/params";
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const { id } = await params;
+type DatasetDetailsPageProps = {
+  params: Promise<UrlParams>;
+  searchParams: Promise<UrlSearchParams>;
+};
+
+export default async function Page({
+  params,
+  searchParams,
+}: DatasetDetailsPageProps) {
+  const _params = await params;
+  const _searchParams = await searchParams;
+
+  if (!_params.id) {
+    throw new Error("Missing dataset id");
+  }
+
   try {
-    const dataset = await retrieveDatasetApi(id);
+    const dataset = await retrieveDatasetApi(_params.id);
 
     const relationships = dataset.datasetRelationships || [];
 
     const dictionary = dataset.dataDictionary || [];
 
     return (
-      <PageContainer>
+      <PageContainer searchParams={_searchParams}>
         <div className="flex flex-col items-start justify-start lg:flex-row">
           <div className="flex w-full flex-col gap-5 lg:w-2/3 lg:px-5">
             <div
@@ -77,7 +92,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     if (axios.isAxiosError(error)) {
       const errorResponse = error.response!.data;
       return (
-        <Error
+        <ErrorComponent
           statusCode={errorResponse.status}
           errorTitle={errorResponse.title}
           errorDetail={errorResponse.detail}
@@ -85,6 +100,6 @@ export default async function Page({ params }: { params: { id: string } }) {
       );
     }
 
-    return <Error statusCode={500} />;
+    return <ErrorComponent statusCode={500} />;
   }
 }

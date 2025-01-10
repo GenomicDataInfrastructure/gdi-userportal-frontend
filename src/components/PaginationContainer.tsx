@@ -18,20 +18,19 @@ type PaginationProps = {
   datasetCount: number;
   datasetPerPage: number;
   pathname: string;
-  queryParams: URLSearchParams;
+  currentPage: number;
 };
 
 function PaginationContainer({
   datasetCount,
   datasetPerPage,
   pathname,
-  queryParams,
+  currentPage,
 }: Readonly<PaginationProps>) {
-  const currentPage = Number(queryParams.get("page")) || 1;
   const lastPageNb = Math.ceil(datasetCount / datasetPerPage) || 1;
 
   function createHref(page: number) {
-    const params = new URLSearchParams(queryParams.toString());
+    const params = new URLSearchParams({ page: currentPage.toString() });
     params.set("page", page.toString());
     return `${pathname}?${params}`;
   }

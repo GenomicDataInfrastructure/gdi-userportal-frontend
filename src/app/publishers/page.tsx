@@ -10,6 +10,7 @@ import LoadingContainer from "@/components/LoadingContainer";
 import { retrieveFilterValuesApi } from "../api/discovery";
 import { ValueLabel } from "@/app/api/discovery/open-api/schemas";
 import { FilterValueType } from "@/app/api/discovery/additional-types";
+import { UrlSearchParams } from "@/app/params";
 
 async function getPublishers(): Promise<ValueLabel[]> {
   try {
@@ -20,7 +21,14 @@ async function getPublishers(): Promise<ValueLabel[]> {
   }
 }
 
-export default async function PublishersPage() {
+type PublishersPageProps = {
+  searchParams: Promise<UrlSearchParams>;
+};
+
+export default async function PublishersPage({
+  searchParams,
+}: PublishersPageProps) {
+  const _searchParams = await searchParams;
   let publishers: ValueLabel[];
 
   try {
@@ -31,7 +39,10 @@ export default async function PublishersPage() {
   }
 
   return (
-    <PageContainer className="container mx-auto px-4 pt-5">
+    <PageContainer
+      searchParams={_searchParams}
+      className="container mx-auto px-4 pt-5"
+    >
       <div className="my-8 flex items-center gap-2 px-4 sm:px-6 lg:px-8">
         <h1 className="text-left font-title text-2xl sm:text-3xl">
           Publishers

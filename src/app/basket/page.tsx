@@ -16,8 +16,15 @@ import DatasetList from "../datasets/DatasetList";
 import { AxiosError } from "axios";
 import { createApplicationApi } from "../api/access-management";
 import { useRouter } from "next/navigation";
+import { UrlSearchParams } from "@/app/params";
+import { use } from "react";
 
-export default function Page() {
+type BasketPageProps = {
+  searchParams: Promise<UrlSearchParams>;
+};
+
+export default function Page({ searchParams }: BasketPageProps) {
+  const _searchParams = use(searchParams);
   const { basket, isLoading, emptyBasket } = useDatasetBasket();
   const { setAlert } = useAlert();
   const { data: session, status } = useSession();
@@ -81,7 +88,7 @@ export default function Page() {
   }
 
   return (
-    <PageContainer>
+    <PageContainer searchParams={_searchParams}>
       <PageHeading>{heading}</PageHeading>
       <ListContainer>
         <div className="flex w-full justify-between">

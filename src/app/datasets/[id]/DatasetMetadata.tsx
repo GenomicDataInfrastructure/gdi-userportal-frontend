@@ -181,7 +181,7 @@ const DatasetMetadata = ({
               <span className="align-middle">
                 Type: {formatDate(dataset.dcatType.label)}
               </span>
-              <Tooltip message="Date when the dataset was created." />
+              <Tooltip message="The type of the dataset" />
             </span>
           </>
           )}

@@ -184,7 +184,7 @@ const DatasetMetadata = ({
               <Tooltip message="The type of the dataset" />
             </span>
           </>
-          )}
+        )}
       </div>
       {dataset.keywords && dataset.keywords.length > 0 && (
         <div className="mt-4">

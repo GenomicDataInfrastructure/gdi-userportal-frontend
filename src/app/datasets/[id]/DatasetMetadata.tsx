@@ -179,7 +179,7 @@ const DatasetMetadata = ({
                 className="align-middle text-primary"
               />
               <span className="align-middle">
-                Type: {formatDate(dataset.dcatType.label)}
+                Type: {dataset.dcatType.label}
               </span>
               <Tooltip message="The type of the dataset" />
             </span>

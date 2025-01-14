@@ -15,6 +15,7 @@ import {
   faKey,
   faLanguage,
   faIdBadge,
+  faDatabase,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
 import DistributionAccordion from "./DistributionAccordion";
@@ -166,6 +167,21 @@ const DatasetMetadata = ({
                   : `${dataset.distributions.length} Distributions`}
               </span>
               <Tooltip message="Number of distributions available for the dataset." />
+            </span>
+          </>
+        )}
+        {dataset.dcatType && (
+          <>
+            <div className="text-lightaccent hidden sm:inline-block">|</div>
+            <span className="flex gap-2 items-center relative group">
+              <FontAwesomeIcon
+                icon={faDatabase}
+                className="align-middle text-primary"
+              />
+              <span className="align-middle">
+                Type: {dataset.dcatType.label}
+              </span>
+              <Tooltip message="The type of the dataset" />
             </span>
           </>
         )}

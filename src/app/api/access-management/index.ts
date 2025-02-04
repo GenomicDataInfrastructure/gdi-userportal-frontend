@@ -7,9 +7,11 @@
 import {
   SaveDUOCode,
   SaveForm,
+  ValidationWarning,
 } from "@/app/api/access-management/open-api/schemas";
 import { accessManagementClient } from "@/app/api/shared/client";
 import { createHeaders } from "@/app/api/shared/headers";
+import { AxiosError } from "axios";
 
 export const createApplicationApi = async (createApplicationCommand: {
   datasetIds: string[];
@@ -94,12 +96,12 @@ export const submitApplicationApi = async (applicationId: number) => {
       headers,
     });
     return { ok: true, response: null };
-  } catch (error: any) {
-    if (error.response?.data) {
+  } catch (error) {
+    if (error instanceof AxiosError && error.response?.data) {
       const errorData = error.response.data;
       if (errorData.validationWarnings) {
         errorData.validationWarnings = errorData.validationWarnings.map(
-          (warning: any) => ({
+          (warning: ValidationWarning) => ({
             ...warning,
             key: warning.key.split("/").pop(),
           })
@@ -123,7 +125,10 @@ export const submitApplicationApi = async (applicationId: number) => {
         headers: { "Content-Type": "application/json" },
         data: {
           title: "Error",
-          detail: error.message || "Failed to submit application",
+          detail:
+            error instanceof Error
+              ? error.message
+              : "Failed to submit application",
           status: 500,
         },
       },

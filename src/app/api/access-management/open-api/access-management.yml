@@ -1098,13 +1098,30 @@ components:
         key:
           type: string
           title: validation key
+          description: The validation error key that will be translated by the frontend
+          enum:
+            - required
+            - invalid-email
+            - invalid-phone-number
+            - invalid-value
+            - licenses-not-accepted
+            - form-incomplete
+            - invalid-format
+            - invalid-length
+            - invalid-input
+            - duplicate-value
+            - missing-attachment
+            - file-too-large
+            - unsupported-file-type
         formId:
           type: integer
           format: int64
           title: form id
+          description: The ID of the form containing the field with the validation error
         fieldId:
           title: field id
           type: string
+          description: The ID of the field that failed validation
       required:
         - key
     AddedAttachment:
@@ -1170,17 +1187,33 @@ components:
         title:
           type: string
           title: Error title
+          description: A short, human-readable title for the error
         status:
           type: integer
           title: Error status
+          description: The HTTP status code for the error
+          enum:
+            - 400
+            - 401
+            - 403
+            - 404
+            - 409
+            - 500
         detail:
           type: string
           title: Error detail
+          description: A detailed description of what went wrong
         validationWarnings:
           type: array
           items:
             $ref: "#/components/schemas/ValidationWarning"
-          description: List of validation warnings, to be send to the frontend, where the translation will happen.
+          description: |
+            List of validation warnings. Each warning contains:
+            - key: The validation error key (e.g., 'required', 'invalid-email')
+            - formId: (optional) The ID of the form containing the invalid field
+            - fieldId: (optional) The ID of the field that failed validation
+
+            The frontend will translate these keys into user-friendly messages.
       required:
         - title
         - status

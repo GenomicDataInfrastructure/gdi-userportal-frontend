@@ -329,11 +329,25 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
     dispatch({ type: ApplicationActionType.LOADING });
 
     try {
-      await submitApplicationApi(application!.id!);
+      const result = await submitApplicationApi(application!.id!);
+
+      if (result.ok) {
+        dispatch({ type: ApplicationActionType.CLEAR_ERROR });
+        await fetchApplication();
+        return;
+      }
+
+      dispatch({
+        type: ApplicationActionType.REJECTED,
+        payload: result.response?.data ?? {
+          title: "Error",
+          detail: "Failed to submit application",
+          status: 500,
+        },
+      });
     } catch (error) {
       handleErrorResponseAfterAction(error as Error);
     }
-    await fetchApplication();
   }
 
   const debouncedSaveFormAndDuos = debounce(

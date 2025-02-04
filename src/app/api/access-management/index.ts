@@ -87,11 +87,48 @@ export const saveFormsAndDuosApi = async (
 };
 
 export const submitApplicationApi = async (applicationId: number) => {
-  const headers = await createHeaders();
-  await accessManagementClient.submit_application_v1(undefined, {
-    params: { id: applicationId },
-    headers,
-  });
+  try {
+    const headers = await createHeaders();
+    await accessManagementClient.submit_application_v1(undefined, {
+      params: { id: applicationId },
+      headers,
+    });
+    return { ok: true, response: null };
+  } catch (error: any) {
+    if (error.response?.data) {
+      const errorData = error.response.data;
+      if (errorData.validationWarnings) {
+        errorData.validationWarnings = errorData.validationWarnings.map(
+          (warning: any) => ({
+            ...warning,
+            key: warning.key.split("/").pop(),
+          })
+        );
+      }
+
+      return {
+        ok: false,
+        response: {
+          status: error.response.status,
+          headers: { "Content-Type": "application/json" },
+          data: errorData,
+        },
+      };
+    }
+
+    return {
+      ok: false,
+      response: {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+        data: {
+          title: "Error",
+          detail: error.message || "Failed to submit application",
+          status: 500,
+        },
+      },
+    };
+  }
 };
 
 export const retrieveEntitlementsApi = async () => {

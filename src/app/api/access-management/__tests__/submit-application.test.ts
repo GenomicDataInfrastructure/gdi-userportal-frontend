@@ -8,7 +8,6 @@ import { jest } from "@jest/globals";
 import { getServerSession } from "next-auth";
 import { encrypt } from "@/utils/encryption";
 import { submitApplicationApi } from "@/app/api/access-management";
-import { ValidationWarning } from "../open-api/schemas";
 
 jest.mock("next-auth/next");
 const mockedGetServerSession = getServerSession as jest.MockedFunction<

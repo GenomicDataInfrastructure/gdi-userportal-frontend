@@ -2,12 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 const LABELS = {
-  "t.form.validation/required": "Required",
-  "t.form.validation/invalid-email": "Invalid email",
-  "t.form.validation/invalid-phone-number": "Invalid phone number",
-  "t.form.validation/invalid-value": "Invalid value",
-  "t.actions.errors/licenses-not-accepted":
-    "Terms and conditions were not accepted.",
+  required: "This field is required",
+  "invalid-email": "Please enter a valid email address",
+  "invalid-phone-number":
+    "Please enter a valid phone number (e.g. +1234567890)",
+  "invalid-value": "Please enter a valid value",
+  "licenses-not-accepted":
+    "You must accept all terms and conditions to proceed",
 } as {
   [p in string]: string;
 };

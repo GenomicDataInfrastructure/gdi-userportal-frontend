@@ -189,66 +189,66 @@ describe("groupWarningsPerFormId", () => {
 
   it("should group warnings by formId", () => {
     const warnings: ValidationWarning[] = [
-      { formId: 1, key: "Warning 1", fieldId: "1" },
-      { formId: 2, key: "Warning 2", fieldId: "1" },
-      { formId: 1, key: "Warning 3", fieldId: "1" },
+      { formId: 1, key: "required", fieldId: "1" },
+      { formId: 2, key: "invalid-email", fieldId: "1" },
+      { formId: 1, key: "invalid-phone-number", fieldId: "1" },
     ];
 
     const result = groupWarningsPerFormId(warnings);
 
     expect(result.size).toBe(2);
     expect(result.get(1)).toEqual([
-      { formId: 1, key: "Warning 1", fieldId: "1" },
-      { formId: 1, key: "Warning 3", fieldId: "1" },
+      { formId: 1, key: "required", fieldId: "1" },
+      { formId: 1, key: "invalid-phone-number", fieldId: "1" },
     ]);
     expect(result.get(2)).toEqual([
-      { formId: 2, key: "Warning 2", fieldId: "1" },
+      { formId: 2, key: "invalid-email", fieldId: "1" },
     ]);
   });
 
   it("should handle warnings with the same formId correctly", () => {
     const warnings: ValidationWarning[] = [
-      { formId: 3, key: "Warning 1", fieldId: "1" },
-      { formId: 3, key: "Warning 2", fieldId: "1" },
-      { formId: 3, key: "Warning 3", fieldId: "1" },
+      { formId: 3, key: "required", fieldId: "1" },
+      { formId: 3, key: "invalid-value", fieldId: "1" },
+      { formId: 3, key: "invalid-format", fieldId: "1" },
     ];
 
     const result = groupWarningsPerFormId(warnings);
 
     expect(result.size).toBe(1);
     expect(result.get(3)).toEqual([
-      { formId: 3, key: "Warning 1", fieldId: "1" },
-      { formId: 3, key: "Warning 2", fieldId: "1" },
-      { formId: 3, key: "Warning 3", fieldId: "1" },
+      { formId: 3, key: "required", fieldId: "1" },
+      { formId: 3, key: "invalid-value", fieldId: "1" },
+      { formId: 3, key: "invalid-format", fieldId: "1" },
     ]);
   });
 
   it("should handle mixed formIds and empty arrays correctly", () => {
     const warnings: ValidationWarning[] = [
-      { formId: 1, key: "Warning 1", fieldId: "1" },
-      { formId: 2, key: "Warning 2", fieldId: "1" },
-      { formId: 2, key: "Warning 3", fieldId: "1" },
-      { formId: 3, key: "Warning 4", fieldId: "1" },
-      { formId: 1, key: "Warning 5", fieldId: "1" },
-      { formId: 4, key: "Warning 6", fieldId: "1" },
+      { formId: 1, key: "required", fieldId: "1" },
+      { formId: 2, key: "invalid-email", fieldId: "1" },
+      { formId: 2, key: "invalid-phone-number", fieldId: "1" },
+      { formId: 3, key: "invalid-value", fieldId: "1" },
+      { formId: 1, key: "invalid-format", fieldId: "1" },
+      { formId: 4, key: "licenses-not-accepted", fieldId: "1" },
     ];
 
     const result = groupWarningsPerFormId(warnings);
 
     expect(result.size).toBe(4);
     expect(result.get(1)).toEqual([
-      { formId: 1, key: "Warning 1", fieldId: "1" },
-      { formId: 1, key: "Warning 5", fieldId: "1" },
+      { formId: 1, key: "required", fieldId: "1" },
+      { formId: 1, key: "invalid-format", fieldId: "1" },
     ]);
     expect(result.get(2)).toEqual([
-      { formId: 2, key: "Warning 2", fieldId: "1" },
-      { formId: 2, key: "Warning 3", fieldId: "1" },
+      { formId: 2, key: "invalid-email", fieldId: "1" },
+      { formId: 2, key: "invalid-phone-number", fieldId: "1" },
     ]);
     expect(result.get(3)).toEqual([
-      { formId: 3, key: "Warning 4", fieldId: "1" },
+      { formId: 3, key: "invalid-value", fieldId: "1" },
     ]);
     expect(result.get(4)).toEqual([
-      { formId: 4, key: "Warning 6", fieldId: "1" },
+      { formId: 4, key: "licenses-not-accepted", fieldId: "1" },
     ]);
   });
 });

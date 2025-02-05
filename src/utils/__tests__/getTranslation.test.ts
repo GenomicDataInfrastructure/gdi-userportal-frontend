@@ -6,7 +6,7 @@ import { getTranslation } from "../getTranslation";
 
 describe("getTranslation", () => {
   it("should return the correct translation for a known key", () => {
-    expect(getTranslation("t.form.validation/required")).toBe("Required");
+    expect(getTranslation("required")).toBe("This field is required");
   });
 
   it("should return the key itself if the key is not in LABELS", () => {

@@ -7,9 +7,11 @@
 import {
   SaveDUOCode,
   SaveForm,
+  ValidationWarning,
 } from "@/app/api/access-management/open-api/schemas";
 import { accessManagementClient } from "@/app/api/shared/client";
 import { createHeaders } from "@/app/api/shared/headers";
+import { AxiosError } from "axios";
 
 export const createApplicationApi = async (createApplicationCommand: {
   datasetIds: string[];
@@ -87,11 +89,51 @@ export const saveFormsAndDuosApi = async (
 };
 
 export const submitApplicationApi = async (applicationId: number) => {
-  const headers = await createHeaders();
-  await accessManagementClient.submit_application_v1(undefined, {
-    params: { id: applicationId },
-    headers,
-  });
+  try {
+    const headers = await createHeaders();
+    await accessManagementClient.submit_application_v1(undefined, {
+      params: { id: applicationId },
+      headers,
+    });
+    return { ok: true, response: null };
+  } catch (error) {
+    if (error instanceof AxiosError && error.response?.data) {
+      const errorData = error.response.data;
+      if (errorData.validationWarnings) {
+        errorData.validationWarnings = errorData.validationWarnings.map(
+          (warning: ValidationWarning) => ({
+            ...warning,
+            key: warning.key.split("/").pop(),
+          })
+        );
+      }
+
+      return {
+        ok: false,
+        response: {
+          status: error.response.status,
+          headers: { "Content-Type": "application/json" },
+          data: errorData,
+        },
+      };
+    }
+
+    return {
+      ok: false,
+      response: {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+        data: {
+          title: "Error",
+          detail:
+            error instanceof Error
+              ? error.message
+              : "Failed to submit application",
+          status: 500,
+        },
+      },
+    };
+  }
 };
 
 export const retrieveEntitlementsApi = async () => {

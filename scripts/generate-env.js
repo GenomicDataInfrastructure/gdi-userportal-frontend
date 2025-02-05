@@ -4,16 +4,26 @@
 const fs = require("fs");
 const path = require("path");
 
-const propertiesPath = path.join(process.cwd(), "public", "properties.json");
-const properties = JSON.parse(fs.readFileSync(propertiesPath, "utf8"));
+function loadProperties() {
+  const propertiesPath = path.join(process.cwd(), "public", "properties.json");
+  try {
+    const properties = JSON.parse(fs.readFileSync(propertiesPath, "utf8"));
 
-const envContent = Object.entries(properties)
-  .map(([key, value]) => `${key}=${value}`)
-  .join("\n");
+    Object.entries(properties).forEach(([key, value]) => {
+      process.env[key] = value;
+    });
 
-const envPath = path.join(process.cwd(), ".env");
-fs.writeFileSync(envPath, envContent);
+    console.log(
+      "Environment variables loaded successfully from properties.json"
+    );
+  } catch (error) {
+    console.error("Error loading properties:", error);
+    process.exit(1);
+  }
+}
 
-console.log(
-  "Environment variables generated successfully from properties.json"
-);
+module.exports = loadProperties;
+
+if (require.main === module) {
+  loadProperties();
+}

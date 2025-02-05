@@ -20,6 +20,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Generate env file from properties.json during build
+RUN node scripts/generate-env.js
+
 # Optional: Disable telemetry
 # ENV NEXT_TELEMETRY_DISABLED 1
 
@@ -35,8 +38,13 @@ ENV NODE_ENV="production"
 # ENV NEXT_TELEMETRY_DISABLED="1"
 
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/scripts ./scripts
 
+COPY --from=builder /app/.env ./.env
 
+RUN echo '#!/bin/sh' > /app/start.sh && \
+    echo 'exec node server.js' >> /app/start.sh && \
+    chmod +x /app/start.sh
 # Ensure no write permissions for executable directories
 COPY --from=builder --chown=1001:1001 /app/.next/standalone ./
 COPY --from=builder --chown=1001:1001 /app/.next/static ./.next/static
@@ -64,4 +72,4 @@ LABEL org.opencontainers.image.description="${APP_DESCRIPTION}"
 LABEL io.k8s.display-name="${APP_TITLE}"
 LABEL io.k8s.description="${APP_DESCRIPTION}"
 
-CMD ["node", "server.js"]
+CMD ["node", "server.js", "/app/start.sh"]

@@ -104,11 +104,11 @@ function Header() {
   }
 
   return (
-    <div className="bg-gray-50 py-4 md:py-5">
+    <div className="relative bg-gray-50 py-4">
       <div className="container mx-auto">
-        <div className="flex items-center justify-between px-4 md:px-6">
+        <div className="flex items-center justify-between px-6">
           <div className="flex items-center gap-x-4 md:gap-x-6">
-            <div className="menu-container relative lg:hidden">
+            <div className="menu-container hidden md:block lg:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="text-primary hover:text-secondary focus:outline-none p-2"
@@ -119,14 +119,14 @@ function Header() {
                 />
               </button>
               {isMenuOpen && (
-                <div className="absolute left-0 z-10 mt-2 w-56 origin-top-left rounded-md bg-white shadow-lg">
+                <div className="absolute left-0 right-0 top-[100%] z-10 rounded-md bg-white shadow-lg">
                   <ul>
                     {navItems.map((item) => {
                       return (
                         <li key={item.href}>
                           <Link
                             href={item.href}
-                            className="block px-6 py-3 hover:bg-hover-color hover:text-white text-lg"
+                            className="block px-8 py-3 hover:bg-hover-color hover:text-white text-lg"
                             onClick={closeMenu}
                           >
                             <FontAwesomeIcon
@@ -149,7 +149,7 @@ function Header() {
                 alt={"Logo"}
                 width="200"
                 height="73"
-                className={"mb-4 mt-4"}
+                className={"mb-4 mt-4 w-[140px] md:w-[200px]"}
               />
             </Link>
 

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Header from "@/components/Header";
+import Navbar from "@/components/Navbar";
 import { DatasetBasketProvider } from "@/providers/DatasetBasketProvider";
 import { AlertProvider } from "@/providers/AlertProvider";
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -41,6 +42,7 @@ export default function RootLayout({
                 <FilterProvider>
                   <div>{children}</div>
                 </FilterProvider>
+                <Navbar />
                 <Footer />
               </SessionProviderWrapper>
             </div>

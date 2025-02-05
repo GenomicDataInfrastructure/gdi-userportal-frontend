@@ -33,12 +33,37 @@ function Header() {
   const { basket, isLoading } = useDatasetBasket();
 
   const navItems = [
-    { icon: faHome, label: "Home", href: "/", isActive: (activePath: string) => activePath === "/" },
-    { icon: faDatabase, label: "datasets", href: "/datasets", isActive: (activePath: string) => activePath.includes("/datasets") },
-    { icon: faWandSparkles, label: "Themes", href: "/themes", isActive: (activePath: string) => activePath === "/themes" },
-    { icon: faBook, label: "Publishers", href: "/publishers", isActive: (activePath: string) => activePath === "/publishers" },
-    { icon: faInfoCircle, label: "About", href: "/about", isActive: (activePath: string) => activePath === "/about" },
-  ]
+    {
+      icon: faHome,
+      label: "Home",
+      href: "/",
+      isActive: (activePath: string) => activePath === "/",
+    },
+    {
+      icon: faDatabase,
+      label: "datasets",
+      href: "/datasets",
+      isActive: (activePath: string) => activePath.includes("/datasets"),
+    },
+    {
+      icon: faWandSparkles,
+      label: "Themes",
+      href: "/themes",
+      isActive: (activePath: string) => activePath === "/themes",
+    },
+    {
+      icon: faBook,
+      label: "Publishers",
+      href: "/publishers",
+      isActive: (activePath: string) => activePath === "/publishers",
+    },
+    {
+      icon: faInfoCircle,
+      label: "About",
+      href: "/about",
+      isActive: (activePath: string) => activePath === "/about",
+    },
+  ];
 
   const closeMenu = () => {
     setIsMenuOpen(false);
@@ -99,17 +124,19 @@ function Header() {
                     {navItems.map((item) => {
                       return (
                         <li key={item.href}>
-
                           <Link
                             href={item.href}
                             className="block px-6 py-3 hover:bg-hover-color hover:text-white text-lg"
                             onClick={closeMenu}
                           >
-                            <FontAwesomeIcon icon={item.icon} className="mr-3 text-xl" />
+                            <FontAwesomeIcon
+                              icon={item.icon}
+                              className="mr-3 text-xl"
+                            />
                             {item.label}
                           </Link>
                         </li>
-                      )
+                      );
                     })}
                   </ul>
                 </div>
@@ -127,27 +154,26 @@ function Header() {
             </Link>
 
             <div className="hidden items-center gap-x-4 text-base font-body text-black lg:flex lg:text-lg xl:gap-x-6">
-
-                {navItems.map((item) => {
-                  return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className={`relative px-3 py-1 lg:px-7 transition-opacity duration-300 text-black`}
-                      >
-                        <span className="relative group">
-                        {item.label}
-                          <span
-                            className={`absolute left-0 bottom-[-2px] w-full h-[2px] transition-transform duration-300 transform ${
-                              item.isActive(activeTab)
-                                ? "bg-primary scale-x-100"
-                                : "bg-secondary scale-x-0"
-                            } group-hover:scale-x-100 group-hover:bg-secondary`}
-                          ></span>
-                        </span>
-                      </Link>
-                  )
-                })}
+              {navItems.map((item) => {
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`relative px-3 py-1 lg:px-7 transition-opacity duration-300 text-black`}
+                  >
+                    <span className="relative group">
+                      {item.label}
+                      <span
+                        className={`absolute left-0 bottom-[-2px] w-full h-[2px] transition-transform duration-300 transform ${
+                          item.isActive(activeTab)
+                            ? "bg-primary scale-x-100"
+                            : "bg-secondary scale-x-0"
+                        } group-hover:scale-x-100 group-hover:bg-secondary`}
+                      ></span>
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
           </div>
 

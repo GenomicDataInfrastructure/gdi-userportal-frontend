@@ -25,6 +25,7 @@ function getInitials(name?: string) {
 
   return name
     .split(" ")
+    .filter((n) => n[0] === n[0].toUpperCase())
     .map((n) => n[0])
     .join("")
     .toUpperCase();

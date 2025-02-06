@@ -64,7 +64,7 @@
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.0",
     "sharp": "^0.33.2",
-    "tailwind-merge": "^2.6.0",
+    "tailwind-merge": "^3.0.0",
     "tailwindcss-animate": "^1.0.7",
     "utils": "^0.2.2"
   },

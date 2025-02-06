@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
-import { getInitials } from "./avatar";
+import { getInitials } from "@/utils/avatarInitials";
 import { User } from "@/app/api/auth/types/user.types";
 import { keycloackSessionLogOut } from "@/utils/logout";
 import { faSignOut, faUser } from "@fortawesome/free-solid-svg-icons";

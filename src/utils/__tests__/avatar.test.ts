@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { getInitials } from "../avatar";
+import { getInitials } from "../avatarInitials";
 
 describe("getInitials", () => {
   it("should return null if name is not provided", () => {

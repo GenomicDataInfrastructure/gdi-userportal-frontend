@@ -35,7 +35,7 @@ ENV NODE_ENV="production"
 # ENV NEXT_TELEMETRY_DISABLED="1"
 
 COPY --from=builder /app/public ./public
-
+COPY --from=builder /app/scripts ./scripts
 
 # Ensure no write permissions for executable directories
 COPY --from=builder --chown=1001:1001 /app/.next/standalone ./
@@ -64,4 +64,4 @@ LABEL org.opencontainers.image.description="${APP_DESCRIPTION}"
 LABEL io.k8s.display-name="${APP_TITLE}"
 LABEL io.k8s.description="${APP_DESCRIPTION}"
 
-CMD ["node", "server.js"]
+CMD ["node", "scripts/start.js"]

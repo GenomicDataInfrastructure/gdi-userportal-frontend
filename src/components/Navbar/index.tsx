@@ -7,7 +7,6 @@ import {
   faBook,
   faDatabase,
   faHome,
-  faInfoCircle,
   faWandSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

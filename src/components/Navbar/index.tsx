@@ -47,12 +47,6 @@ function Navbar() {
       href: "/publishers",
       isActive: (activePath: string) => activePath === "/publishers",
     },
-    {
-      icon: faInfoCircle,
-      label: "About",
-      href: "/about",
-      isActive: (activePath: string) => activePath === "/about",
-    },
   ];
 
   useEffect(() => {

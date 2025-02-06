@@ -30,7 +30,7 @@ function Navbar() {
     },
     {
       icon: faDatabase,
-      label: "datasets",
+      label: "Datasets",
       href: "/datasets",
       isActive: (activePath: string) => activePath.includes("/datasets"),
     },

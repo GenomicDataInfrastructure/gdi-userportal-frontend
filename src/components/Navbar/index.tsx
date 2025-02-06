@@ -10,6 +10,7 @@ import {
   faWandSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import debounce from "@/utils/debounce";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
@@ -49,17 +50,17 @@ function Navbar() {
   ];
 
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScroll = debounce(() => {
       const currentScrollPos = window.scrollY;
       if (currentScrollPos < 150) {
         setShowNavbar(true);
-      } else if (prevScrollPos.current > currentScrollPos) {
+      } else if (prevScrollPos.current - 20 > currentScrollPos) {
         setShowNavbar(true);
-      } else {
+      } else if (prevScrollPos.current + 20 < currentScrollPos) {
         setShowNavbar(false);
       }
       prevScrollPos.current = currentScrollPos;
-    };
+    }, 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);

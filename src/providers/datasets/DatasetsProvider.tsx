@@ -4,14 +4,8 @@
 
 "use client";
 
-import { datasetList } from "@/services/discovery/index.public";
-import {
-  DatasetSearchOptions,
-  Facet,
-} from "@/services/discovery/types/datasetSearch.types";
 import { AxiosError } from "axios";
-import { useSearchParams } from "next/navigation";
-import {
+import React, {
   createContext,
   useCallback,
   useContext,
@@ -23,14 +17,20 @@ import {
   DatasetsActionType,
   DatasetsState,
 } from "./DatasetProvider.types";
+import { useFilters } from "@/providers/filters/FilterProvider";
+import { searchDatasetsApi } from "../../app/api/discovery";
 import {
-  ActiveFilter,
-  FilterType,
+  DatasetSearchQuery,
+  DatasetSearchQueryFacet,
   Operator,
-} from "@/services/discovery/types/filter.type";
-import { useFilters } from "@/providers/FilterProvider";
+} from "@/app/api/discovery/open-api/schemas";
+import { ActiveFilter } from "@/providers/filters/FilterProvider.types";
+import { FilterType } from "@/app/api/discovery/additional-types";
+import { UrlSearchParams } from "@/app/params";
 
-function convertActiveFiltersToFacets(activeFilters: ActiveFilter[]): Facet[] {
+function convertActiveFiltersToFacets(
+  activeFilters: ActiveFilter[]
+): DatasetSearchQueryFacet[] {
   return activeFilters
     .map((filter) => {
       const baseFacet = {
@@ -46,7 +46,7 @@ function convertActiveFiltersToFacets(activeFilters: ActiveFilter[]): Facet[] {
         };
       }
 
-      return filter!.values!.map(
+      return filter.values!.map(
         (value: { value: string; label?: string; operator?: Operator }) => ({
           ...baseFacet,
           value: value.value,
@@ -84,40 +84,44 @@ function reducer(state: DatasetsState, action: DatasetsAction): DatasetsState {
 const DATASET_PER_PAGE = 12;
 
 const initialState = {
+  datasets: undefined,
+  datasetCount: undefined,
   isLoading: false,
+  errorCode: undefined,
+};
+
+type DatasetsProviderProps = {
+  children: React.ReactNode;
+  searchParams: UrlSearchParams;
 };
 
 export default function DatasetsProvider({
   children,
-}: {
-  children: React.ReactNode;
-}) {
-  const queryParams = useSearchParams();
+  searchParams,
+}: DatasetsProviderProps) {
   const { activeFilters } = useFilters();
   const [{ datasets, datasetCount, isLoading, errorCode }, dispatch] =
     useReducer(reducer, initialState);
+  const { page, q, sort } = searchParams;
 
   const fetchDatasets = useCallback(async () => {
     dispatch({ type: DatasetsActionType.LOADING });
 
-    const query = queryParams || new URLSearchParams();
-    const options: DatasetSearchOptions = {
-      query: query.get("q") as string | undefined,
+    const options: DatasetSearchQuery = {
+      query: q,
       facets: convertActiveFiltersToFacets(activeFilters),
-      sort: query.get("sort") as string | "relevance",
-      start: query.get("page")
-        ? (Number(query.get("page")) - 1) * DATASET_PER_PAGE
-        : 0,
+      sort: sort || "score desc, metadata_modified desc",
+      start: page ? (Number(page) - 1) * DATASET_PER_PAGE : 0,
       rows: DATASET_PER_PAGE,
     };
 
     try {
-      const response = await datasetList(options);
+      const data = await searchDatasetsApi(options);
       dispatch({
         type: DatasetsActionType.DATASETS_LOADED,
         payload: {
-          datasets: response.data?.results,
-          datasetCount: response.data?.count,
+          datasets: data.results,
+          datasetCount: data.count,
         },
       });
     } catch (error) {
@@ -129,11 +133,11 @@ export default function DatasetsProvider({
       });
       console.error(error);
     }
-  }, [queryParams, activeFilters]);
+  }, [activeFilters, page, q, sort]);
 
   useEffect(() => {
     fetchDatasets();
-  }, [queryParams, fetchDatasets, activeFilters]);
+  }, [fetchDatasets, activeFilters, page, q, sort]);
 
   return (
     <DatasetsContext.Provider

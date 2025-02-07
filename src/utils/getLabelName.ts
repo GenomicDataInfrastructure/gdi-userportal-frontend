@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-import { Label } from "@/types/application.types";
+import { Label } from "@/app/api/access-management/open-api/schemas";
 
 const CURRENT_SUPPORTED_LANGUAGE = "en";
 

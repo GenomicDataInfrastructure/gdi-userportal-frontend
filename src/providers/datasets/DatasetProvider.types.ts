@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { SearchedDataset } from "@/services/discovery/types/dataset.types";
+import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 
 export enum DatasetsActionType {
   LOADING,

@@ -6,18 +6,13 @@
 
 import React from "react";
 import { useDatasets } from "@/providers/datasets/DatasetsProvider";
-import { useSearchParams } from "next/navigation";
+import { useFilters } from "@/providers/filters/FilterProvider";
 
 export default function NoDatasetMessage() {
   const { datasetCount, isLoading } = useDatasets();
-  const searchParams = useSearchParams();
+  const { activeFilters } = useFilters();
 
-  const hasAppliedFilters = React.useMemo(() => {
-    if (!searchParams) return false;
-    return Array.from(searchParams.entries()).some(
-      ([key]) => key !== "page" && key.includes("-")
-    );
-  }, [searchParams]);
+  const hasAppliedFilters = activeFilters.length > 0;
 
   if (isLoading || datasetCount !== 0 || !hasAppliedFilters) {
     return null;

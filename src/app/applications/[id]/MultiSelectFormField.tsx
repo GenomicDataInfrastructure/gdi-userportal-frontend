@@ -5,11 +5,15 @@
 "use client";
 
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
-import { FormField, Label, Option } from "@/types/application.types";
 import { useState, useEffect } from "react";
+import {
+  FormFieldOption,
+  Label,
+  RetrievedApplicationFormField,
+} from "@/app/api/access-management/open-api/schemas";
 
 type MultiSelectFormFieldProps = {
-  field: FormField;
+  field: RetrievedApplicationFormField;
   formId: number;
   title: string;
   editable: boolean;
@@ -31,7 +35,7 @@ function MultiSelectFormField({
   useEffect(() => {
     const newValue = selectedOptions.join(" ");
     if (newValue !== field.value) {
-      updateInputFields(formId, field.id, newValue);
+      updateInputFields(formId, field.id!, newValue);
     }
   }, [selectedOptions, formId, field, updateInputFields]);
 
@@ -60,7 +64,7 @@ function MultiSelectFormField({
           </h3>
         </div>
         <div className="flex flex-col mt-4">
-          {field.options.map((option: Option) => (
+          {field.options!.map((option: FormFieldOption) => (
             <div
               key={option.key}
               className={`flex items-center mb-2 ${

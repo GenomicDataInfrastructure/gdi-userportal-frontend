@@ -5,11 +5,11 @@
 "use client";
 
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
-import { FormField } from "@/types/application.types";
 import { useEffect, useState } from "react";
+import { RetrievedApplicationFormField } from "@/app/api/access-management/open-api/schemas";
 
 type TextAreaFormFieldProps = {
-  field: FormField;
+  field: RetrievedApplicationFormField;
   formId: number;
   title: string;
   editable: boolean;
@@ -24,12 +24,12 @@ function TextAreaFormField({
   validationWarning,
 }: TextAreaFormFieldProps) {
   const { updateInputFields } = useApplicationDetails();
-  const [inputValue, setInputValue] = useState(field.value);
+  const [inputValue, setInputValue] = useState(field.value!);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (inputValue !== field.value) {
-        updateInputFields(formId, field.id, inputValue);
+        updateInputFields(formId, field.id!, inputValue);
       }
     }, 500);
 

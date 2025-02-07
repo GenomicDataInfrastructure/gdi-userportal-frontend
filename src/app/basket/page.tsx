@@ -10,16 +10,25 @@ import LoadingContainer from "@/components/LoadingContainer";
 import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
-import { createApplication } from "@/services/daam/index.client";
 import { faPaperPlane, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { signIn, useSession } from "next-auth/react";
 import DatasetList from "../datasets/DatasetList";
 import { AxiosError } from "axios";
+import { createApplicationApi } from "../api/access-management";
+import { useRouter } from "next/navigation";
+import { UrlSearchParams } from "@/app/params";
+import { use } from "react";
 
-export default function Page() {
+type BasketPageProps = {
+  searchParams: Promise<UrlSearchParams>;
+};
+
+export default function Page({ searchParams }: BasketPageProps) {
+  const _searchParams = use(searchParams);
   const { basket, isLoading, emptyBasket } = useDatasetBasket();
   const { setAlert } = useAlert();
   const { data: session, status } = useSession();
+  const router = useRouter();
 
   let heading = "Your Basket";
   if (basket.length > 0) {
@@ -36,9 +45,11 @@ export default function Page() {
       .filter((identifier): identifier is string => identifier !== undefined);
 
     try {
-      const response = await createApplication(identifiers);
+      const applicationId = await createApplicationApi({
+        datasetIds: identifiers,
+      });
       emptyBasket();
-      window.location.href = `/applications/${response.data.applicationId}`;
+      router.push(`/applications/${applicationId}`);
     } catch (error) {
       if (error instanceof AxiosError) {
         setAlert({
@@ -77,7 +88,7 @@ export default function Page() {
   }
 
   return (
-    <PageContainer>
+    <PageContainer searchParams={_searchParams}>
       <PageHeading>{heading}</PageHeading>
       <ListContainer>
         <div className="flex w-full justify-between">

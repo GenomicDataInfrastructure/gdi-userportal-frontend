@@ -5,30 +5,42 @@
 
 import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
-import { useEffect, useState } from "react";
-import { datasetList } from "@/services/discovery/index.public";
-import { SearchedDataset } from "@/services/discovery/types/dataset.types";
+import { use, useEffect, useState } from "react";
 import RecentDatasets from "@/components/RecentDatasets";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { useAlert } from "@/providers/AlertProvider";
 import { AxiosError } from "axios";
 import contentConfig from "@/config/contentConfig";
-import { filterValuesList } from "@/services/discovery/index.public";
-import { ValueLabel } from "@/services/discovery/types/datasetSearch.types";
-import { FilterValueType } from "@/services/discovery/types/dataset.types";
 import ValueList from "@/components/ValueList";
+import {
+  retrieveFilterValuesApi,
+  searchDatasetsApi,
+} from "@/app/api/discovery";
+import {
+  SearchedDataset,
+  ValueLabel,
+} from "@/app/api/discovery/open-api/schemas";
+import { FilterValueType } from "@/app/api/discovery/additional-types";
+import { UrlSearchParams } from "@/app/params";
 
-const HomePage = () => {
+type HomePageProps = {
+  searchParams: Promise<UrlSearchParams>;
+};
+
+const HomePage = ({ searchParams }: HomePageProps) => {
   const [datasets, setDatasets] = useState<SearchedDataset[]>([]);
   const [themes, setThemes] = useState<ValueLabel[]>([]);
   const { setAlert } = useAlert();
+  const _searchParams = use(searchParams);
 
   useEffect(() => {
     async function fetchThemes() {
       try {
-        const response = await filterValuesList(FilterValueType.THEME);
-        setThemes(response.data);
+        const filterValues = await retrieveFilterValuesApi(
+          FilterValueType.THEME
+        );
+        setThemes(filterValues);
       } catch (error) {
         if (error instanceof AxiosError) {
           setAlert({
@@ -39,17 +51,18 @@ const HomePage = () => {
         }
       }
     }
+
     fetchThemes();
   }, [setAlert]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await datasetList({
+        const data = await searchDatasetsApi({
           rows: 4,
           sort: "issued desc",
         });
-        setDatasets(response.data.results);
+        setDatasets(data.results!);
       } catch (error) {
         if (error instanceof AxiosError) {
           setAlert({
@@ -62,11 +75,15 @@ const HomePage = () => {
         }
       }
     }
+
     fetchData();
   }, [setAlert]);
 
   return (
-    <PageContainer className="container mx-auto px-4 pt-5 text-center">
+    <PageContainer
+      searchParams={_searchParams}
+      className="container mx-auto px-4 pt-5 text-center"
+    >
       <div className="my-8">
         <h1 className="font-bold text-4xl font-title">
           {contentConfig.homepageTitle}
@@ -77,7 +94,7 @@ const HomePage = () => {
       </div>
       <div className="flex justify-center mb-24">
         <div className="w-full lg:w-4/5 xl:w-3/4">
-          <SearchBar size="large" />
+          <SearchBar searchParams={_searchParams} size="large" />
         </div>
       </div>
       {themes.length > 0 && (

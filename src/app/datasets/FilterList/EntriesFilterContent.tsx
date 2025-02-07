@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { FilterItemProps } from "./FilterItem";
-import { useFilters } from "@/providers/FilterProvider";
-import { Disclosure } from "@headlessui/react";
 import Button from "@/components/Button";
+import { useFilters } from "@/providers/filters/FilterProvider";
 import { faCheck, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { DisclosurePanel } from "@headlessui/react";
+import { useEffect, useMemo, useState } from "react";
+import { FilterItemProps } from "./FilterItem";
 
 type EntriesFilterContentProps = FilterItemProps;
 
@@ -27,10 +27,14 @@ export default function EntriesFilterContent({
     (f) => f.key === filter.key && f.source === filter.source
   );
 
-  const initialEntryFormItems = filter.entries!.map((entry) => ({
-    ...entry,
-    value: "",
-  }));
+  const initialEntryFormItems = useMemo(
+    () =>
+      filter.entries!.map((entry) => ({
+        ...entry,
+        value: "",
+      })),
+    [filter.entries]
+  );
 
   const [entries, setEntries] = useState<EntryFormItem[]>(
     initialEntryFormItems
@@ -44,7 +48,7 @@ export default function EntriesFilterContent({
       const existingEntries = correspondingActiveFilter.entries!;
       setEntries(existingEntries);
     }
-  }, [correspondingActiveFilter]);
+  }, [correspondingActiveFilter, initialEntryFormItems]);
 
   const handleRemoveFilter = () => {
     removeActiveFilter(filter.key, filter.source);
@@ -74,7 +78,10 @@ export default function EntriesFilterContent({
   };
 
   return (
-    <Disclosure.Panel className="px-4 pb-2 pt-4 font-bryant font-normal text-base border-t-2 border-t-primary h-fit">
+    <DisclosurePanel
+      as="div"
+      className="px-4 pb-2 pt-4 font-bryant font-normal text-base border-t-2 border-t-primary h-fit"
+    >
       <form onSubmit={handleSubmitValue} className="flex flex-col gap-y-8 mt-4">
         <div className="flex flex-col gap-y-3">
           {entries.map((entry) => (
@@ -121,6 +128,6 @@ export default function EntriesFilterContent({
           </button>
         </div>
       </form>
-    </Disclosure.Panel>
+    </DisclosurePanel>
   );
 }

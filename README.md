@@ -31,7 +31,7 @@ Before using the GDI User Portal Front-end, make sure you have the required depe
 
 `npm install`
 
-You also have to create a new `env.local` file in the root directory, and copy the content of `.env.local.example` into the new file. Feel free to modify the environment variables as you wish.
+You also have to create a new `.env.local` file in the root directory, and copy the content of `.env.local.example` into the new file. Feel free to modify the environment variables as you wish.
 
 ### Using Docker
 
@@ -42,6 +42,12 @@ Alternatively, you can run the docker-compose file that provides a running insta
 ## Development server
 
 Run `npm run dev` for a dev server. Navigate to `http://localhost:3000/`. The application will automatically reload if you change any of the source files.
+
+## Modifying Open API Specifications
+
+In case of changes in the OpenAPI specifications, you must upgrade the client and schemas by running `npm run prebuild:service` where service is either `discovery` or `access-management`. The schemas will be automatically generated in `src/app/api/{service}/open-api/schemas.ts`.
+
+Additionally, you must export all the types defined in `schemas.ts` (can not be done automatically).
 
 ## Build
 

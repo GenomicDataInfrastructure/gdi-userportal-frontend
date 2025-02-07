@@ -3,24 +3,32 @@
 // SPDX-License-Identifier: Apache-2.0
 "use client";
 
-import Error from "@/app/error";
-import PageContainer from "@/components/PageContainer";
-import SearchBar from "@/components/Searchbar";
-import DatasetsProvider from "@/providers/datasets/DatasetsProvider";
-import { redirect, useSearchParams } from "next/navigation";
+import { redirect } from "next/navigation";
 import DatasetCount from "./DatasetCount";
 import DatasetListContainer from "./DatasetListContainer";
 import FilterList from "./FilterList";
 import NoDatasetMessage from "./NoDatasetMessage";
-import { useFilters } from "@/providers/FilterProvider";
+import { useFilters } from "@/providers/filters/FilterProvider";
+import { use } from "react";
+import PageContainer from "@/components/PageContainer";
+import SearchBar from "@/components/Searchbar";
 import ActiveFilters from "@/app/datasets/ActiveFilters";
+import DatasetsProvider from "@/providers/datasets/DatasetsProvider";
+import Error from "@/app/error";
+import { UrlSearchParams } from "@/app/params";
 
-export default function DatasetsPage() {
-  const searchParams = useSearchParams() as URLSearchParams;
+type DatasetsPageProps = {
+  searchParams: Promise<UrlSearchParams>;
+};
 
-  if (!searchParams.get("page")) {
+export default function DatasetsPage({ searchParams }: DatasetsPageProps) {
+  const _searchParams = use(searchParams);
+
+  if (!_searchParams.page) {
     redirect("/datasets?page=1");
   }
+
+  const currentPage = Number(_searchParams.page);
 
   const { error } = useFilters();
 
@@ -29,12 +37,12 @@ export default function DatasetsPage() {
   }
 
   return (
-    <PageContainer>
+    <PageContainer searchParams={_searchParams}>
       <div className="grid grid-cols-12">
         <div className="col-start-0 col-span-12 flex items-center justify-between xl:col-span-10 xl:col-start-2">
-          <SearchBar />
+          <SearchBar searchParams={_searchParams} />
         </div>
-        <DatasetsProvider>
+        <DatasetsProvider searchParams={_searchParams}>
           <DatasetCount />
           <div className="col-start-0 col-span-12 flex flex-col gap-4 sm:block xl:hidden">
             <div className="my-4 h-fit">
@@ -49,7 +57,7 @@ export default function DatasetsPage() {
           <div className="col-span-12 xl:col-span-8">
             <ActiveFilters />
             <NoDatasetMessage />
-            <DatasetListContainer />
+            <DatasetListContainer currentPage={currentPage} />
           </div>
         </DatasetsProvider>
       </div>

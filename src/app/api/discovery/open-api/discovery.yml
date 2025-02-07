@@ -1,0 +1,585 @@
+# SPDX-FileCopyrightText: 2024 PNED G.I.E.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+openapi: 3.0.3
+info:
+  title: Dataset Discovery Service - OpenAPI 3.0
+  description: |-
+    This is the OpenAPI 3.0 specification for the Dataset Discovery Service.
+    This service is responsible for dataset discovery, in the scope of Genomic Data Infrastructure (GDI).
+    The service provides endpoints for searching datasets, and retrieving DCAT-AP metadata.
+
+  #termsOfService: http://TODO/terms/
+  contact:
+    email: gdi-WP4@elixir-europe.org
+  license:
+    name: Apache 2.0
+    url: https://spdx.org/licenses/Apache-2.0.html
+  version: 0.0.0
+externalDocs:
+  description: Find out more about GDI
+  url: https://genomicdatainfrastructure.github.io/gdi-userportal-docs/
+servers:
+  - url: https://localhost:8080
+    description: Development server
+paths:
+  /api/v1/datasets/search:
+    post:
+      summary: Searches for packages based on criteria
+      operationId: dataset_search
+      tags:
+        - "dataset-query"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DatasetSearchQuery"
+      responses:
+        "200":
+          description: A list of datasets matching the search criteria
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DatasetsSearchResponse"
+      security:
+        - discovery_auth:
+            - read:datasets
+  /api/v1/datasets/{id}:
+    get:
+      summary: Retrieves a dataset by its ID
+      operationId: retrieve_dataset
+      tags:
+        - "dataset-query"
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the dataset to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The dataset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RetrievedDataset"
+        "404":
+          description: Dataset not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - discovery_auth:
+            - read:datasets
+  /api/v1/datasets/{id}.{format}:
+    get:
+      summary: Retrieves a dataset by its ID, in the requested format
+      operationId: retrieve_dataset_in_format
+      tags:
+        - "dataset-query"
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the dataset to retrieve
+          required: true
+          schema:
+            type: string
+        - name: format
+          in: path
+          description: the expected format of the response
+          required: true
+          schema:
+            type: string
+            enum:
+              - jsonld
+              - rdf
+              - ttl
+      responses:
+        "200":
+          description: The dataset in the requested format
+          content:
+            application/ld+json:
+              schema:
+                type: string
+            application/rdf+xml:
+              schema:
+                type: string
+            text/turtle:
+              schema:
+                type: string
+        "404":
+          description: Dataset not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - discovery_auth:
+            - read:datasets
+  /api/v1/filters:
+    get:
+      summary: Retrieves filters for querying datasets
+      operationId: retrieve_filters
+      tags:
+        - "filters-query"
+      responses:
+        "200":
+          description: A list of filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Filter"
+      security:
+        - discovery_auth:
+            - read:search-facets
+  /api/v1/filters/{key}/values:
+    get:
+      summary: Retrieves the values for a filter key
+      operationId: retrieve_filter_values
+      tags:
+        - "filters-query"
+      parameters:
+        - name: key
+          in: path
+          description: The key of the filter to retrieve values for
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The values for the filter key
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ValueLabel"
+      security:
+        - discovery_auth:
+            - read:search-facets
+components:
+  securitySchemes:
+    discovery_auth:
+      type: oauth2
+      description: This API uses OAuth 2 with the implicit grant flow.
+      flows:
+        authorizationCode:
+          tokenUrl: https://api.example.com/oauth2/token
+          authorizationUrl: https://api.example.com/oauth2/authorize
+          scopes:
+            read:datasets: read datasets
+  schemas:
+    DatasetSearchQuery:
+      type: object
+      properties:
+        query:
+          type: string
+          title: Solr search query
+        facets:
+          type: array
+          title: Facets
+          items:
+            $ref: "#/components/schemas/DatasetSearchQueryFacet"
+        sort:
+          type: string
+          title: Sorting of search results
+          default: "score desc, metadata_modified desc"
+        rows:
+          type: integer
+          title: Max number of rows to return
+          default: 10
+          minimum: 0
+          maximum: 1000
+        start:
+          type: integer
+          title: Offset in the complete result set
+          default: 0
+          minimum: 0
+        operator:
+          title: Ckan query operator
+          type: string
+          $ref: "#/components/schemas/QueryOperator"
+          default: OR
+    DatasetSearchQueryFacet:
+      type: object
+      properties:
+        source:
+          type: string
+          title: Facet source
+        type:
+          $ref: "#/components/schemas/FilterType"
+        key:
+          type: string
+          title: Facet key
+        value:
+          type: string
+          title: Facet value
+        operator:
+          $ref: "#/components/schemas/Operator"
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/QueryEntry"
+      required:
+        - source
+        - type
+        - label
+    FilterType:
+      type: string
+      enum:
+        - DROPDOWN
+        - FREE_TEXT
+        - ENTRIES
+      title: Filter type
+    Operator:
+      default: "="
+      description: Defines how the value relates to the field `id`.
+      enum:
+        - "="
+        - "<"
+        - ">"
+        - "!"
+        - ">="
+        - "<="
+      example: ">"
+      type: string
+    QueryEntry:
+      properties:
+        key:
+          type: string
+          title: label
+        value:
+          type: string
+          title: value
+      required:
+        - key
+        - value
+    QueryOperator:
+      type: string
+      enum:
+        - OR
+        - AND
+      title: Query operator
+    SearchedDataset:
+      type: object
+      properties:
+        id:
+          type: string
+          title: Identifier
+        identifier:
+          type: string
+          title: Identifier
+        title:
+          type: string
+          title: Title
+        description:
+          type: string
+          title: Description
+        publishers:
+          type: array
+          items:
+            $ref: "#/components/schemas/Agent"
+        themes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValueLabel"
+          title: Themes
+        keywords:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValueLabel"
+          title: Keywords
+        catalogue:
+          type: string
+          title: Catalogue
+        modifiedAt:
+          type: string
+          format: date-time
+          title: Dataset modified at
+        createdAt:
+          type: string
+          format: date-time
+          title: Metadata for dataset created at
+        recordsCount:
+          type: integer
+          title: Records count
+        distributionsCount:
+          type: integer
+          title: Distributions count
+      required:
+        - id
+        - title
+        - description
+    DatasetsSearchResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: The number of results found
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/SearchedDataset"
+    RetrievedDataset:
+      type: object
+      properties:
+        id:
+          type: string
+          title: Dataset internal ID
+        identifier:
+          type: string
+          title: Identifier
+        title:
+          type: string
+          title: Title
+        description:
+          type: string
+          title: Description
+        themes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValueLabel"
+        contacts:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContactPoint"
+        datasetRelationships:
+          type: array
+          items:
+            $ref: "#/components/schemas/DatasetRelationEntry"
+        dataDictionary:
+          type: array
+          items:
+            $ref: "#/components/schemas/DatasetDictionaryEntry"
+        catalogue:
+          type: string
+          title: Catalogue
+        createdAt:
+          type: string
+          format: date-time
+          title: Dataset created at
+        modifiedAt:
+          type: string
+          format: date-time
+          title: Dataset modified at
+        url:
+          type: string
+          title: Dataset URL
+        languages:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValueLabel"
+        creators:
+          type: array
+          items:
+            $ref: "#/components/schemas/Agent"
+        publishers:
+          type: array
+          items:
+            $ref: "#/components/schemas/Agent"
+        hasVersions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValueLabel"
+          deprecated: true
+        accessRights:
+          $ref: "#/components/schemas/ValueLabel"
+        conformsTo:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValueLabel"
+          deprecated: true
+        keywords:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValueLabel"
+        provenance:
+          type: string
+          title: Provenance
+        spatial:
+          $ref: "#/components/schemas/ValueLabel"
+        distributions:
+          type: array
+          items:
+            $ref: "#/components/schemas/RetrievedDistribution"
+          title: Distributions
+        dcatType:
+          $ref: "#/components/schemas/ValueLabel"
+      required:
+        - id
+        - title
+        - description
+    RetrievedDistribution:
+      type: object
+      properties:
+        id:
+          type: string
+          title: Distribution internal ID
+        title:
+          type: string
+          title: Title
+        description:
+          type: string
+          title: Description
+        format:
+          $ref: "#/components/schemas/ValueLabel"
+        accessUrl:
+          type: string
+          title: Access URL
+        downloadUrl:
+          type: string
+          title: Download URL
+        createdAt:
+          type: string
+          format: date-time
+          title: Distribution created at
+        modifiedAt:
+          type: string
+          format: date-time
+          title: Distribution modified at
+        languages:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValueLabel"
+      required:
+        - id
+        - title
+        - description
+    ValueLabel:
+      properties:
+        value:
+          type: string
+          title: value
+        label:
+          type: string
+          title: label
+        count:
+          type: integer
+          title: count
+      required:
+        - value
+        - label
+    ContactPoint:
+      properties:
+        name:
+          type: string
+          title: name
+        email:
+          type: string
+          title: email
+        uri:
+          type: string
+          title: uri
+      required:
+        - name
+        - email
+    Agent:
+      properties:
+        name:
+          type: string
+          title: name
+        email:
+          type: string
+          title: email
+        url:
+          type: string
+          title: url
+        type:
+          type: string
+          title: type
+        identifier:
+          type: string
+          title: identifier
+      required:
+        - name
+    DatasetRelationEntry:
+      properties:
+        relation:
+          type: string
+          title: relation
+        target:
+          type: string
+          title: target
+      required:
+        - target
+        - relation
+    DatasetDictionaryEntry:
+      properties:
+        name:
+          type: string
+          title: name
+        type:
+          type: string
+          title: type
+        description:
+          type: string
+          title: description
+      required:
+        - name
+        - type
+        - description
+    Filter:
+      properties:
+        source:
+          type: string
+          title: Filter source
+        group:
+          type: string
+          title: Filter group
+        type:
+          $ref: "#/components/schemas/FilterType"
+        key:
+          type: string
+          title: Key
+        label:
+          type: string
+          title: Label
+        values:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValueLabel"
+          title: values
+        operators:
+          type: array
+          items:
+            $ref: "#/components/schemas/Operator"
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/FilterEntry"
+          title: entries
+      required:
+        - source
+        - type
+        - key
+        - label
+    FilterEntry:
+      properties:
+        key:
+          type: string
+          title: id
+        label:
+          type: string
+          title: label
+      required:
+        - key
+        - label
+    ErrorResponse:
+      properties:
+        title:
+          type: string
+          title: Error title
+        status:
+          type: integer
+          title: Error status
+        detail:
+          type: string
+          title: Error detail
+      required:
+        - title
+        - status

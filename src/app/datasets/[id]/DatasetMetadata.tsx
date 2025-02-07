@@ -15,16 +15,17 @@ import {
   faKey,
   faLanguage,
   faIdBadge,
+  faDatabase,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
-import {
-  RetrievedDataset,
-  DatasetRelationEntry,
-  DatasetDictionaryEntry,
-} from "@/services/discovery/types/dataset.types";
 import DistributionAccordion from "./DistributionAccordion";
 import Link from "next/link";
 import Tooltip from "./Tooltip";
+import {
+  DatasetDictionaryEntry,
+  DatasetRelationEntry,
+  RetrievedDataset,
+} from "@/app/api/discovery/open-api/schemas";
 
 const DatasetMetadata = ({
   dataset,
@@ -113,7 +114,7 @@ const DatasetMetadata = ({
                     >
                       {publisher.name || "No title"}
                     </Link>
-                    {index < dataset.publishers.length - 1 && ", "}
+                    {index < dataset.publishers!.length - 1 && ", "}
                   </span>
                 ))}
               </span>
@@ -169,6 +170,21 @@ const DatasetMetadata = ({
             </span>
           </>
         )}
+        {dataset.dcatType && (
+          <>
+            <div className="text-lightaccent hidden sm:inline-block">|</div>
+            <span className="flex gap-2 items-center relative group">
+              <FontAwesomeIcon
+                icon={faDatabase}
+                className="align-middle text-primary"
+              />
+              <span className="align-middle">
+                Type: {dataset.dcatType.label}
+              </span>
+              <Tooltip message="The type of the dataset" />
+            </span>
+          </>
+        )}
       </div>
       {dataset.keywords && dataset.keywords.length > 0 && (
         <div className="mt-4">
@@ -201,7 +217,7 @@ const DatasetMetadata = ({
                 className="inline-flex bg-[#EFFAFE] px-4 py-1 rounded-full text-gray font-[500] text-[14px] group relative"
               >
                 <Link
-                  href={`/@${dataset.publishers.map((p) => p.name).join(",")}/${relationship.target}`}
+                  href={`/@${dataset.publishers?.map((p) => p.name).join(",")}/${relationship.target}`}
                   className="group-hover:text-red hover:font-bold"
                 >
                   <FontAwesomeIcon

@@ -3,14 +3,15 @@
 /* SPDX-License-Identifier: Apache-2.0 */
 "use client";
 
-import { Filter, FilterType } from "@/services/discovery/types/filter.type";
+import { FilterType } from "@/app/api/discovery/additional-types";
+import { Filter } from "@/app/api/discovery/open-api/schemas";
+import { useFilters } from "@/providers/filters/FilterProvider";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Disclosure } from "@headlessui/react";
 import { default as DropdownFilterContent } from "./DropdownFilterContent";
-import FreeTextFilterContent from "./FreeTextFilterContent";
-import { useFilters } from "@/providers/FilterProvider";
 import EntriesFilterContent from "./EntriesFilterContent";
+import FreeTextFilterContent from "./FreeTextFilterContent";
 
 export type FilterItemProps = {
   filter: Filter;
@@ -45,7 +46,7 @@ function FilterItem({ filter }: FilterItemProps) {
   return (
     <div className="flex flex-col gap-y-3">
       <div className="shadow-lg rounded-lg py-4 border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50">
-        <Disclosure>
+        <Disclosure as="div">
           {({ open }) => (
             <>
               <Disclosure.Button className="flex w-full justify-between px-4 py-2 text-left">
@@ -61,7 +62,7 @@ function FilterItem({ filter }: FilterItemProps) {
                   className={`h-5 w-5 transition-transform ${open ? "rotate-180" : ""}`}
                 />
               </Disclosure.Button>
-              {getFilterContent(filter.type)}
+              {getFilterContent(filter.type as FilterType)}
             </>
           )}
         </Disclosure>

@@ -10,15 +10,17 @@ import List from "@/components/List";
 import ListItem from "@/components/List/ListItem";
 import ListContainer from "@/components/ListContainer";
 import PageHeading from "@/components/PageHeading";
-import { listApplications } from "@/services/daam/index.client";
-import { ListedApplication } from "@/types/application.types";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
 import { Status } from "@/utils/pageStatus.types";
 import LoadingContainer from "@/components/LoadingContainer";
-import { ErrorResponse } from "@/types/api.types";
 import axios from "axios";
 import ApplicationCard from "./ApplicationCard";
+import { listApplicationsApi } from "../../api/access-management";
+import {
+  ErrorResponse,
+  ListedApplication,
+} from "@/app/api/access-management/open-api/schemas";
 
 interface ApplicationResponse {
   status: Status;
@@ -31,26 +33,22 @@ const ApplicationsPage: React.FC = () => {
     status: "loading",
   });
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await listApplications();
-        setResponse({ applications: response.data, status: "success" });
-      } catch (error) {
-        console.error(error);
-
-        let errorResponse;
-        if (axios.isAxiosError(error)) {
-          errorResponse = error.response!.data;
-        }
-
-        setResponse({
-          status: "error",
-          error: errorResponse,
-        });
-      }
+  const fetchApplications = async () => {
+    setResponse({ status: "loading" });
+    try {
+      const applications = await listApplicationsApi();
+      setResponse({ applications, status: "success" });
+    } catch (error) {
+      console.error(error);
+      setResponse({
+        status: "error",
+        error: axios.isAxiosError(error) ? error.response!.data : undefined,
+      });
     }
-    fetchData().catch((it) => console.log(it));
+  };
+
+  useEffect(() => {
+    fetchApplications().catch((error) => console.log(error));
   }, []);
 
   if (response.status === "loading") {

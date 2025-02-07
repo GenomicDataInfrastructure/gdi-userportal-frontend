@@ -7,14 +7,11 @@
 import PageContainer from "@/components/PageContainer";
 import { ITabItem, TabComponent } from "@/components/Tab";
 import { faDatabase, faFileText } from "@fortawesome/free-solid-svg-icons";
-import {
-  redirect,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import ApplicationsPage from "./applications";
 import EntitlementsPage from "./entitlements";
+import { UrlSearchParams } from "@/app/params";
+import { use } from "react";
 
 function createTabItems(): ITabItem[] {
   return [
@@ -29,12 +26,17 @@ function createTabItems(): ITabItem[] {
   ];
 }
 
-function RequestPage() {
+type RequestPageProps = {
+  searchParams: Promise<UrlSearchParams>;
+};
+
+function RequestPage({ searchParams }: RequestPageProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const _searchParams = use(searchParams);
+
   const path = usePathname();
 
-  const activeTab: string = searchParams?.get("tab") || "";
+  const activeTab: string = _searchParams.tab || "";
 
   const tabItems = createTabItems();
   const tabNames = tabItems.map(
@@ -53,7 +55,7 @@ function RequestPage() {
   }
 
   return (
-    <PageContainer className="pt-5">
+    <PageContainer searchParams={_searchParams} className="pt-5">
       <TabComponent
         tabItems={tabItems}
         activeTab={activeTab}

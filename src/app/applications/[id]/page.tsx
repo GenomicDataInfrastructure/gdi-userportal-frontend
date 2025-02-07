@@ -4,6 +4,8 @@
 
 "use client";
 
+import { ApplicationState } from "@/app/api/access-management/additional-types";
+import { ValidationWarning } from "@/app/api/access-management/open-api/schemas";
 import Error from "@/app/error";
 import Alert, { AlertState } from "@/components/Alert";
 import Button from "@/components/Button";
@@ -12,8 +14,6 @@ import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
 import Sidebar from "@/components/Sidebar";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
-import { ValidationWarning } from "@/types/api.types";
-import { State } from "@/types/application.types";
 import {
   formatApplicationProp,
   groupWarningsPerFormId,
@@ -28,11 +28,19 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import FormContainer from "./FormContainer";
 import { createApplicationSidebarItems } from "./sidebarItems";
+import { UrlSearchParams } from "@/app/params";
 
-export default function ApplicationDetailsPage() {
+type ApplicationDetailsPageProps = {
+  searchParams: Promise<UrlSearchParams>;
+};
+
+export default function ApplicationDetailsPage({
+  searchParams,
+}: ApplicationDetailsPageProps) {
+  const _searchParams = use(searchParams);
   const router = useRouter();
   const [alert, setAlert] = useState<AlertState | null>(null);
   const onCloseAlert = () => {
@@ -51,7 +59,7 @@ export default function ApplicationDetailsPage() {
   useEffect(() => {
     if (!!errorResponse) {
       setAlert({
-        message: errorResponse.detail,
+        message: errorResponse.detail || "",
         type: "error",
       });
     } else {
@@ -59,10 +67,10 @@ export default function ApplicationDetailsPage() {
     }
   }, [errorResponse]);
 
-  const handleSubmission = () => {
+  const handleSubmission = async () => {
     onCloseAlert();
     clearError();
-    submitApplication();
+    await submitApplication();
   };
 
   const handleDelete = async () => {
@@ -76,7 +84,7 @@ export default function ApplicationDetailsPage() {
 
   if (!application) {
     return (
-      <PageContainer>
+      <PageContainer searchParams={_searchParams}>
         {alert && (
           <Alert
             type={alert.type}
@@ -93,13 +101,13 @@ export default function ApplicationDetailsPage() {
   }
 
   const events = application.events;
-  const lastEvent = events[0];
+  const lastEvent = events![0];
   const editable = isApplicationEditable(application);
-  const isDraft = application.state === State.DRAFT;
+  const isDraft = application.state === ApplicationState.DRAFT;
 
   const formWarnings: ValidationWarning[] = [];
   const applicationWarnings: ValidationWarning[] = [];
-  errorResponse?.validationWarnings.forEach((it) => {
+  errorResponse?.validationWarnings?.forEach((it) => {
     if (!it.formId) {
       applicationWarnings.push(it);
     } else {
@@ -108,7 +116,7 @@ export default function ApplicationDetailsPage() {
   });
   const warningsPerForm = groupWarningsPerFormId(formWarnings);
   return (
-    <PageContainer>
+    <PageContainer searchParams={_searchParams}>
       {alert && (
         <Alert
           type={alert.type}
@@ -130,7 +138,7 @@ export default function ApplicationDetailsPage() {
               {application.id && (
                 <Chip
                   className="uppercase text-xs lg:text-sm tracking-widest"
-                  chip={formatApplicationProp(application.state)!}
+                  chip={formatApplicationProp(application.state!)!}
                 />
               )}
             </div>
@@ -162,7 +170,7 @@ export default function ApplicationDetailsPage() {
               <span>Saving Changes...</span>
             </div>
           ) : (
-            <p>{`Last Event: ${formatApplicationProp(lastEvent.eventType)} at ${formatDateTime(lastEvent.eventTime.toString())}`}</p>
+            <p>{`Last Event: ${formatApplicationProp(lastEvent.eventType!)} at ${formatDateTime(lastEvent.eventTime!.toString())}`}</p>
           )}
 
           <div className="h-[2px] bg-secondary opacity-80"></div>
@@ -190,14 +198,14 @@ export default function ApplicationDetailsPage() {
           )}
 
           <ul>
-            {application.forms.map(
+            {application.forms!.map(
               (form) =>
                 form && (
                   <li key={form.id}>
                     <FormContainer
                       form={form}
                       editable={editable}
-                      validationWarnings={warningsPerForm.get(form.id)}
+                      validationWarnings={warningsPerForm.get(form.id!)}
                     />
                   </li>
                 )

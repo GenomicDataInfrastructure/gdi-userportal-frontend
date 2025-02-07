@@ -9,7 +9,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
-import { User } from "@/types/user.types";
+import { getInitials } from "@/utils/avatarInitials";
+import { User } from "@/app/api/auth/types/user.types";
 import { keycloackSessionLogOut } from "@/utils/logout";
 import { faSignOut, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,16 +20,6 @@ import Image from "next/image";
 type AvatarProps = {
   user: User;
 };
-
-function getInitials(name?: string) {
-  if (!name) return null;
-
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
-}
 
 function handleSignOut() {
   keycloackSessionLogOut().then(() => signOut({ callbackUrl: "/" }));

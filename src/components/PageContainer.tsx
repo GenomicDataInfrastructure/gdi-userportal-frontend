@@ -5,19 +5,24 @@
 "use client";
 
 import React from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useAlert } from "@/providers/AlertProvider";
 import Alert from "@/components/Alert";
+import { UrlSearchParams } from "@/app/params";
 
 interface PageContainerProps {
   children: React.ReactNode;
   className?: string;
+  searchParams: UrlSearchParams;
 }
 
-function PageContainer({ children, className }: Readonly<PageContainerProps>) {
+function PageContainer({
+  children,
+  className,
+  searchParams,
+}: Readonly<PageContainerProps>) {
   const { alert, onCloseAlert, setAlert } = useAlert();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   React.useEffect(() => {
     setAlert(null);

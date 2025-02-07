@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Header from "@/components/Header";
+import Navbar from "@/components/Navbar";
 import { DatasetBasketProvider } from "@/providers/DatasetBasketProvider";
 import { AlertProvider } from "@/providers/AlertProvider";
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -13,7 +14,7 @@ import SessionProviderWrapper from "./SessionProviderWrapper";
 import "./globals.css";
 config.autoAddCss = false;
 import contentConfig from "@/config/contentConfig";
-import { FilterProvider } from "@/providers/FilterProvider";
+import { FilterProvider } from "@/providers/filters/FilterProvider";
 
 export default function RootLayout({
   children,
@@ -41,6 +42,7 @@ export default function RootLayout({
                 <FilterProvider>
                   <div>{children}</div>
                 </FilterProvider>
+                <Navbar />
                 <Footer />
               </SessionProviderWrapper>
             </div>

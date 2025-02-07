@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { CardItem } from "@/components/Card";
-import { ListedApplication } from "@/types/application.types";
 import { formatDate } from "@/utils/formatDate";
 import { getLabelName } from "@/utils/getLabelName";
 import {
@@ -11,6 +10,7 @@ import {
   faDatabase,
   faSyncAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import { ListedApplication } from "@/app/api/access-management/open-api/schemas";
 
 export function createApplicationCardItems(
   application: ListedApplication
@@ -30,8 +30,8 @@ export function createApplicationCardItems(
         "",
       icon: faSyncAlt,
     },
-    ...application.datasets.map((dataset) => ({
-      text: getLabelName(dataset.title),
+    ...application.datasets!.map((dataset) => ({
+      text: getLabelName(dataset.title!),
       icon: faDatabase,
     })),
   ];

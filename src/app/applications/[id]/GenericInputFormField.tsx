@@ -5,10 +5,10 @@
 import { useEffect, useState } from "react";
 import { Input } from "@/components/shadcn/input";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
-import { FormField } from "@/types/application.types";
+import { RetrievedApplicationFormField } from "@/app/api/access-management/open-api/schemas";
 
 type GenericInputFormFieldProps = {
-  field: FormField;
+  field: RetrievedApplicationFormField;
   formId: number;
   type: string;
   placeholder: string;
@@ -31,12 +31,12 @@ function GenericInputFormField({
   validationWarning,
 }: GenericInputFormFieldProps) {
   const { updateInputFields } = useApplicationDetails();
-  const [inputValue, setInputValue] = useState(field.value);
+  const [inputValue, setInputValue] = useState(field.value!);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (inputValue !== field.value) {
-        updateInputFields(formId, field.id, inputValue);
+        updateInputFields(formId, field.id!, inputValue);
       }
     }, 500);
 
@@ -64,8 +64,8 @@ function GenericInputFormField({
           {children}
           <Input
             type={type}
-            id={field.id.toString()}
-            name={field.id.toString()}
+            id={field.id!.toString()}
+            name={field.id!.toString()}
             value={inputValue}
             onChange={handleInputChange}
             className={`h-12 w-full rounded-md border-2 border-primary px-4 text-md py-[9px] ${

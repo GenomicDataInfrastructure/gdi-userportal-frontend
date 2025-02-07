@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import Button from "@/components/Button";
+import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 import { useWindowSize } from "@/hooks";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
-import { SearchedDataset } from "@/services/discovery/types/dataset.types";
 import { truncateDescription } from "@/utils/textProcessing";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card, { CardItem } from "../../components/Card";
 
 type DatasetCardProps = {
@@ -53,15 +53,24 @@ function DatasetCard({
       keywords={dataset.keywords?.map((keyword) => keyword.label)}
       button={
         displayBasketButton && (
-          <Button
-            text={isInBasket ? "Remove from basket" : "Add to basket"}
-            icon={isInBasket ? faMinusCircle : faPlusCircle}
-            onClick={toggleDatasetInBasket}
-            type={isInBasket ? "warning" : "primary"}
+          <button
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              if (buttonDisabled) {
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+              }
+              toggleDatasetInBasket(e);
+            }}
             disabled={buttonDisabled}
-            flex={true}
-            className="text-xs sm:text-base"
-          />
+            className={`text-xs sm:text-base rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide cursor-pointer flex-shrink-0 ${buttonDisabled ? "opacity-60 cursor-not-allowed" : ""} ${isInBasket ? "bg-warning text-black hover:bg-secondary hover:text-white" : "bg-primary text-white hover:bg-secondary"}`}
+          >
+            <FontAwesomeIcon
+              icon={isInBasket ? faMinusCircle : faPlusCircle}
+              className="mr-2"
+            />
+            <span>{isInBasket ? "Remove from basket" : "Add to basket"}</span>
+          </button>
         )
       }
     />

@@ -10,19 +10,24 @@ type GVariantsTableProps = {
   results: GVariantsSearchResponse[];
 };
 
-export default function GVariantsTable({results}: GVariantsTableProps) {
-  const groupedByBeacon = results.reduce((acc, variant) => {
-    if (!variant.beacon) return acc;
-    if (!acc[variant.beacon]) {
-      acc[variant.beacon] = [];
-    }
-    acc[variant.beacon].push(variant);
-    return acc;
-  }, {} as Record<string, GVariantsSearchResponse[]>);
-    return (
-      <div className="overflow-x-auto">
-        <table className="min-w-full border-collapse border border-gray-300">
-          <thead>
+export default function GVariantsTable({ results }: GVariantsTableProps) {
+  const groupedByBeacon = results.reduce(
+    (acc, variant) => {
+      if (!variant.beacon) {
+        return acc;
+      }
+      if (!acc[variant.beacon]) {
+        acc[variant.beacon] = [];
+      }
+      acc[variant.beacon].push(variant);
+      return acc;
+    },
+    {} as Record<string, GVariantsSearchResponse[]>
+  );
+  return (
+    <div className="overflow-x-auto">
+      <table className="min-w-full border-collapse border border-gray-300">
+        <thead>
           <tr className="bg-gray-200">
             <th className="border border-gray-300 px-4 py-2">Dataset</th>
             <th className="border border-gray-300 px-4 py-2">Population</th>
@@ -32,8 +37,8 @@ export default function GVariantsTable({results}: GVariantsTableProps) {
             <th className="border border-gray-300 px-4 py-2">Heterozygous</th>
             <th className="border border-gray-300 px-4 py-2">Frequency</th>
           </tr>
-          </thead>
-          <tbody>
+        </thead>
+        <tbody>
           {Object.entries(groupedByBeacon).map(([beacon, variants]) => (
             <React.Fragment key={beacon}>
               <tr className="bg-gray-300">
@@ -43,7 +48,9 @@ export default function GVariantsTable({results}: GVariantsTableProps) {
               </tr>
               {variants.map((variant, index) => (
                 <tr key={index} className="border border-gray-300">
-                  <td className="border border-gray-300 px-4 py-2">{variant.dataset}</td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {variant.dataset}
+                  </td>
                   <td className="border border-gray-300 px-4 py-2">
                     {PopulationReverseMap[variant.population ?? "lux"]}
                   </td>
@@ -66,8 +73,8 @@ export default function GVariantsTable({results}: GVariantsTableProps) {
               ))}
             </React.Fragment>
           ))}
-          </tbody>
-        </table>
-      </div>
-    );
+        </tbody>
+      </table>
+    </div>
+  );
 }

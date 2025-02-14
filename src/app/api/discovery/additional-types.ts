@@ -53,5 +53,5 @@ export const PopulationReverseMap: Record<string, string> = {
   svk: "SLOVAKIA",
   svn: "SLOVENIA",
   esp: "SPAIN",
-  swe: "SWEDEN"
+  swe: "SWEDEN",
 };

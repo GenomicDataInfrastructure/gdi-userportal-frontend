@@ -69,7 +69,7 @@ export type SearchInputData = {
 export default function GVariantsSearchBar({
   onSearchAction,
 }: GVariantsSearchBarProps) {
-  const [searchData, setSearchData] = useState<SearchInputData>({
+  const [searchFilterInput, setsearchFilterInput] = useState<SearchInputData>({
     referenceName: "3",
     start: "45864731",
     end: "",
@@ -79,12 +79,12 @@ export default function GVariantsSearchBar({
     cohort: "All",
   });
 
-  const handleChange = (field: keyof SearchInputData, value: string) => {
-    setSearchData((prev) => ({ ...prev, [field]: value }));
+  const updateData = (field: keyof SearchInputData, value: string) => {
+    setsearchFilterInput((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleButtonClick = () => {
-    onSearchAction(searchData);
+  const search = () => {
+    onSearchAction(searchFilterInput);
   };
 
   const formFields = [
@@ -130,9 +130,9 @@ export default function GVariantsSearchBar({
               key={key}
               label={label}
               type={type as "text" | "select"}
-              value={searchData[key as keyof SearchInputData] || ""}
+              value={searchFilterInput[key as keyof SearchInputData] || ""}
               onChange={(value) =>
-                handleChange(key as keyof SearchInputData, value)
+                updateData(key as keyof SearchInputData, value)
               }
               options={options}
               placeholder={placeholder}
@@ -142,7 +142,7 @@ export default function GVariantsSearchBar({
 
         <div className="flex flex-col">
           <button
-            onClick={handleButtonClick}
+            onClick={search}
             className="flex items-center justify-center bg-[#6B214F] text-white px-6 py-2 rounded hover:bg-[#5A1A42] transition w-full sm:w-auto"
           >
             <FontAwesomeIcon icon={faSearch} className="mr-2" />

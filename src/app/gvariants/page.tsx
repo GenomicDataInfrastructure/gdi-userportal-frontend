@@ -33,7 +33,7 @@ export default function GVariantsPage({ searchParams }: GVariantsPageProps) {
         params: {
           referenceName: props.referenceName,
           start: startPosition,
-          end:  endPosition,
+          end: endPosition,
           referenceBases: props.referenceBase,
           alternateBases: props.alternateBase,
           assemblyId: props.refGenome,

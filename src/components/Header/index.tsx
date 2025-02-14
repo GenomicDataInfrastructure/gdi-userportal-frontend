@@ -41,9 +41,15 @@ function Header() {
     },
     {
       icon: faDatabase,
-      label: "datasets",
+      label: "Datasets",
       href: "/datasets",
       isActive: (activePath: string) => activePath.includes("/datasets"),
+    },
+    {
+      icon: faDatabase,
+      label: "G-Variants",
+      href: "/gvariants",
+      isActive: (activePath: string) => activePath.includes("/gvariants"),
     },
     {
       icon: faWandSparkles,

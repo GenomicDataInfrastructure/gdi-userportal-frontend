@@ -36,6 +36,12 @@ function Navbar() {
       isActive: (activePath: string) => activePath.includes("/datasets"),
     },
     {
+      icon: faDatabase,
+      label: "G-Variants",
+      href: "/gvariants",
+      isActive: (activePath: string) => activePath.includes("/gvariants"),
+    },
+    {
       icon: faWandSparkles,
       label: "Themes",
       href: "/themes",

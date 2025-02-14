@@ -65,7 +65,38 @@ export type SearchInputData = {
   refGenome: string;
   cohort: string;
 };
-
+const formFields = [
+  {
+    label: "Ref Genome",
+    key: "refGenome",
+    type: "select",
+    options: [{ value: "GRCh37", label: "GRCh37" }],
+  },
+  {
+    label: "Start Position",
+    key: "start",
+    type: "number",
+    placeholder: "e.g. 45864731",
+  },
+  {
+    label: "End Position",
+    key: "end",
+    type: "number",
+    placeholder: "e.g. 45864731",
+  },
+  { label: "Reference Name", key: "referenceName", placeholder: "e.g. 3" },
+  { label: "Reference Base", key: "referenceBase", placeholder: "e.g. T" },
+  { label: "Alternate Base", key: "alternateBase", placeholder: "e.g. C" },
+  {
+    label: "Cohort",
+    key: "cohort",
+    type: "select",
+    options: [
+      { value: "All", label: "All" },
+      { value: "COVID", label: "COVID" },
+    ],
+  },
+];
 export default function GVariantsSearchBar({
   onSearchAction,
 }: GVariantsSearchBarProps) {
@@ -86,40 +117,6 @@ export default function GVariantsSearchBar({
   const search = () => {
     onSearchAction(searchFilterInput);
   };
-
-  const formFields = [
-    {
-      label: "Ref Genome",
-      key: "refGenome",
-      type: "select",
-      options: [{ value: "GRCh37", label: "GRCh37" }],
-    },
-    {
-      label: "Start Position",
-      key: "start",
-      type: "number",
-      placeholder: "e.g. 45864731",
-    },
-    {
-      label: "End Position",
-      key: "end",
-      type: "number",
-      placeholder: "e.g. 45864731",
-    },
-    { label: "Reference Name", key: "referenceName", placeholder: "e.g. 3" },
-    { label: "Reference Base", key: "referenceBase", placeholder: "e.g. T" },
-    { label: "Alternate Base", key: "alternateBase", placeholder: "e.g. C" },
-    {
-      label: "Cohort",
-      key: "cohort",
-      type: "select",
-      options: [
-        { value: "All", label: "All" },
-        { value: "COVID", label: "COVID" },
-      ],
-    },
-  ];
-
   return (
     <div className="mb-6">
       <h2 className="text-lg font-semibold mb-2">Search for your variant:</h2>

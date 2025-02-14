@@ -9,7 +9,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 // Reusable FormField component
 type FormFieldProps = {
   label: string;
-  type?: "text" | "select";
+  type?: "text" | "select" | "number";
   value: string;
   onChange: (value: string) => void;
   options?: { value: string; label: string }[];
@@ -41,7 +41,7 @@ const FormField: React.FC<FormFieldProps> = ({
         </select>
       ) : (
         <input
-          type="text"
+          type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className="border border-gray-300 p-2 rounded w-full"
@@ -57,7 +57,7 @@ type GVariantsSearchBarProps = {
 };
 
 export type SearchInputData = {
-  chromosome: string;
+  referenceName: string;
   start: string;
   end: string | undefined;
   referenceBase: string;
@@ -70,7 +70,7 @@ export default function GVariantsSearchBar({
   onSearchAction,
 }: GVariantsSearchBarProps) {
   const [searchData, setSearchData] = useState<SearchInputData>({
-    chromosome: "3",
+    referenceName: "3",
     start: "45864731",
     end: "",
     referenceBase: "T",
@@ -88,27 +88,26 @@ export default function GVariantsSearchBar({
   };
 
   const formFields = [
-    { label: "Chromosome", key: "chromosome", placeholder: "e.g. 3" },
-    { label: "Start Position", key: "start", placeholder: "e.g. 45864731" },
-    { label: "End Position", key: "end", placeholder: "e.g. 45864731" },
-    { label: "Reference Base", key: "referenceBase", placeholder: "e.g. T" },
-    { label: "Alternate Base", key: "alternateBase", placeholder: "e.g. C" },
     {
       label: "Ref Genome",
       key: "refGenome",
       type: "select",
       options: [
-        { value: "GRCh37", label: "GRCh37" },
-        { value: "GRCh38", label: "GRCh38" },
+        { value: "GRCh37", label: "GRCh37" }
       ],
     },
+    { label: "Start Position", key: "start", type:"number", placeholder: "e.g. 45864731" },
+    { label: "End Position", key: "end", type:"number", placeholder: "e.g. 45864731" },
+    { label: "Reference Name", key: "referenceName", placeholder: "e.g. 3" },
+    { label: "Reference Base", key: "referenceBase", placeholder: "e.g. T" },
+    { label: "Alternate Base", key: "alternateBase", placeholder: "e.g. C" },
     {
       label: "Cohort",
       key: "cohort",
       type: "select",
       options: [
         { value: "All", label: "All" },
-        { value: "Cohort1", label: "COVID" },
+        { value: "COVID", label: "COVID" },
       ],
     },
   ];

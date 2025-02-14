@@ -27,11 +27,13 @@ export default function GVariantsPage({ searchParams }: GVariantsPageProps) {
     setLoading(true);
     setResults([]);
     try {
+      const endPosition = props.end ? [parseInt(props.end)] : null;
+      const startPosition = props.start ? [parseInt(props.start)] : null;
       const response = await searchGVariantsApi({
         params: {
-          referenceName: props.chromosome,
-          start: [parseInt(props.start)],
-          end: props.end ? [parseInt(props.end)] : null,
+          referenceName: props.referenceName,
+          start: startPosition,
+          end:  endPosition,
           referenceBases: props.referenceBase,
           alternateBases: props.alternateBase,
           assemblyId: props.refGenome,

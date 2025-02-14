@@ -5,8 +5,10 @@
 "use server";
 
 import { discoveryClient } from "@/app/api/shared/client";
-import { DatasetSearchQuery } from "@/app/api/discovery/open-api/schemas";
-import { GVariantSearchQuery } from "@/app/api/discovery/open-api/schemas";
+import {
+  DatasetSearchQuery,
+  GVariantSearchQuery,
+} from "@/app/api/discovery/open-api/schemas";
 import { createHeaders } from "@/app/api/shared/headers";
 
 export const retrieveFiltersApi = async () => {

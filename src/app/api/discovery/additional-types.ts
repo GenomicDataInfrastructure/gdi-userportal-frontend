@@ -25,3 +25,33 @@ export enum Operator {
   DIFFERENT = "!=",
   CONTAINS = "%",
 }
+
+export const PopulationReverseMap: Record<string, string> = {
+  aut: "AUSTRIA",
+  bel: "BELGIUM",
+  bgr: "BULGARIA",
+  hrv: "CROATIA",
+  cyp: "CYPRUS",
+  cze: "CZECH REPUBLIC",
+  dnk: "DENMARK",
+  est: "ESTONIA",
+  fin: "FINLAND",
+  fra: "FRANCE",
+  deu: "GERMANY",
+  grc: "GREECE",
+  hun: "HUNGARY",
+  irl: "IRELAND",
+  ita: "ITALY",
+  lva: "LATVIA",
+  ltu: "LITHUANIA",
+  lux: "LUXEMBOURG",
+  mlt: "MALTA",
+  nld: "NETHERLANDS",
+  pol: "POLAND",
+  prt: "PORTUGAL",
+  rou: "ROMANIA",
+  svk: "SLOVAKIA",
+  svn: "SLOVENIA",
+  esp: "SPAIN",
+  swe: "SWEDEN"
+};

@@ -6,6 +6,7 @@
 
 import { discoveryClient } from "@/app/api/shared/client";
 import { DatasetSearchQuery } from "@/app/api/discovery/open-api/schemas";
+import { GVariantSearchQuery } from "@/app/api/discovery/open-api/schemas";
 import { createHeaders } from "@/app/api/shared/headers";
 
 export const retrieveFiltersApi = async () => {
@@ -45,4 +46,9 @@ export const retrieveDatasetInSpecifiedFormat = async (
     headers,
     responseType: "blob",
   });
+};
+
+export const searchGVariantsApi = async (options: GVariantSearchQuery) => {
+  const headers = await createHeaders();
+  return await discoveryClient.searchGenomicVariants(options, { headers });
 };

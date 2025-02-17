@@ -6,7 +6,6 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-// Reusable FormField component
 type FormFieldProps = {
   label: string;
   type?: "text" | "select" | "number";
@@ -54,6 +53,7 @@ const FormField: React.FC<FormFieldProps> = ({
 
 type GVariantsSearchBarProps = {
   onSearchAction: (inputData: SearchInputData) => void;
+  loading: boolean;
 };
 
 export type SearchInputData = {
@@ -99,8 +99,9 @@ const formFields = [
 ];
 export default function GVariantsSearchBar({
   onSearchAction,
+  loading,
 }: GVariantsSearchBarProps) {
-  const [searchFilterInput, setsearchFilterInput] = useState<SearchInputData>({
+  const [searchFilterInput, setSearchFilterInput] = useState<SearchInputData>({
     referenceName: "3",
     start: "45864731",
     end: "",
@@ -111,7 +112,7 @@ export default function GVariantsSearchBar({
   });
 
   const updateData = (field: keyof SearchInputData, value: string) => {
-    setsearchFilterInput((prev) => ({ ...prev, [field]: value }));
+    setSearchFilterInput((prev) => ({ ...prev, [field]: value }));
   };
 
   const search = () => {
@@ -139,6 +140,7 @@ export default function GVariantsSearchBar({
 
         <div className="flex flex-col">
           <button
+            disabled={loading}
             onClick={search}
             className="flex items-center justify-center bg-[#6B214F] text-white px-6 py-2 rounded hover:bg-[#5A1A42] transition w-full sm:w-auto"
           >

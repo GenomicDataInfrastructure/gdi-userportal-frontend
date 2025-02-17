@@ -24,55 +24,45 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
     },
     {} as Record<string, GVariantsSearchResponse[]>
   );
+
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full border-collapse border border-gray-300">
+    <div className="overflow-x-auto p-4">
+      <table className="min-w-full border border-surface shadow-lg rounded-xl overflow-hidden">
         <thead>
-          <tr className="bg-gray-200">
-            <th className="border border-gray-300 px-4 py-2">Dataset</th>
-            <th className="border border-gray-300 px-4 py-2">Population</th>
-            <th className="border border-gray-300 px-4 py-2">Allele Count</th>
-            <th className="border border-gray-300 px-4 py-2">Allele Number</th>
-            <th className="border border-gray-300 px-4 py-2">Homozygous</th>
-            <th className="border border-gray-300 px-4 py-2">Heterozygous</th>
-            <th className="border border-gray-300 px-4 py-2">Frequency</th>
-          </tr>
+        <tr className="bg-primary text-surface">
+          <th className="px-6 py-4 text-left">Dataset</th>
+          <th className="px-6 py-4 text-left">Population</th>
+          <th className="px-6 py-4 text-left">Allele Count</th>
+          <th className="px-6 py-4 text-left">Allele Number</th>
+          <th className="px-6 py-4 text-left">Homozygous</th>
+          <th className="px-6 py-4 text-left">Heterozygous</th>
+          <th className="px-6 py-4 text-left">Frequency</th>
+        </tr>
         </thead>
         <tbody>
-          {Object.entries(groupedByBeacon).map(([beacon, variants]) => (
-            <React.Fragment key={beacon}>
-              <tr className="bg-gray-300">
-                <td colSpan={7} className="text-left font-semibold px-4 py-2">
-                  Beacon: {beacon}
-                </td>
+        {Object.entries(groupedByBeacon).map(([beacon, variants]) => (
+          <React.Fragment key={beacon}>
+            <tr className="bg-secondary text-surface">
+              <td colSpan={7} className="px-6 py-4 font-semibold text-lg">
+                Beacon: {beacon}
+              </td>
+            </tr>
+            {variants.map((variant, index) => (
+              <tr
+                key={index}
+                className="border-t border-surface bg-surface"
+              >
+                <td className="px-6 py-4">{variant.dataset}</td>
+                <td className="px-6 py-4">{PopulationReverseMap[variant.population ?? "lux"]}</td>
+                <td className="px-6 py-4">{variant.alleleCount}</td>
+                <td className="px-6 py-4">{variant.alleleNumber}</td>
+                <td className="px-6 py-4">{variant.alleleCountHomozygous}</td>
+                <td className="px-6 py-4">{variant.alleleCountHeterozygous}</td>
+                <td className="px-6 py-4">{variant.alleleFrequency?.toFixed(4)}</td>
               </tr>
-              {variants.map((variant, index) => (
-                <tr key={index} className="border border-gray-300">
-                  <td className="border border-gray-300 px-4 py-2">
-                    {variant.dataset}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {PopulationReverseMap[variant.population ?? "lux"]}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {variant.alleleCount}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {variant.alleleNumber}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {variant.alleleCountHomozygous}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {variant.alleleCountHeterozygous}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {variant.alleleFrequency?.toFixed(4)}
-                  </td>
-                </tr>
-              ))}
-            </React.Fragment>
-          ))}
+            ))}
+          </React.Fragment>
+        ))}
         </tbody>
       </table>
     </div>

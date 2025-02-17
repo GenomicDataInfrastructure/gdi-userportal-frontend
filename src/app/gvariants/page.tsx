@@ -82,14 +82,12 @@ export default function GVariantsPage({ searchParams }: GVariantsPageProps) {
     >
       <GVariantsSearchBar onSearchAction={handleSearch} loading={loading} />
 
-      {/* Loading Indicator */}
       {loading && <p className="text-center text-gray-500">Loading...</p>}
 
       {!loading && triedSearching && results.length == 0 && (
         <p className="text-center text-gray-500">No results found</p>
       )}
 
-      {/* Results Table */}
       {!loading && results.length > 0 && <GVariantsTable results={results} />}
     </PageContainer>
   );

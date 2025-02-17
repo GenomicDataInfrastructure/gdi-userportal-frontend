@@ -140,9 +140,11 @@ export default function GVariantsSearchBar({
 
         <div className="flex flex-col">
           <button
-            disabled={loading}
             onClick={search}
-            className="flex items-center justify-center bg-[#6B214F] text-white px-6 py-2 rounded hover:bg-[#5A1A42] transition w-full sm:w-auto"
+            className={`flex items-center justify-center bg-primary text-white px-6 py-2 rounded hover:bg-secondary transition w-full sm:w-auto
+              ${
+              loading ? "pointer-events-none opacity-10" : ""
+            }`}
           >
             <FontAwesomeIcon icon={faSearch} className="mr-2" />
             Search

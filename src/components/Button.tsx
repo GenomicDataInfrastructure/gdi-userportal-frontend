@@ -43,7 +43,9 @@ const Button: React.FC<ButtonProps> = ({
     warning: "bg-warning text-black hover:bg-secondary hover:text-white",
   };
 
-  const disabledClasses = disabled ? "opacity-60 cursor-not-allowed" : "";
+  const disabledClasses = disabled
+    ? "opacity-60 cursor-not-allowed hover:bg-disabled"
+    : "";
   const flexClasses = flex ? "flex-shrink-0" : "sm:w-auto";
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {

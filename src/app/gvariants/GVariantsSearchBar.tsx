@@ -3,8 +3,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import Button from "@/components/Button";
 
 type FormFieldProps = {
   label: string;
@@ -139,16 +139,14 @@ export default function GVariantsSearchBar({
         )}
 
         <div className="flex flex-col">
-          <button
+          <Button
+            disabled={loading}
+            icon={faSearch}
             onClick={search}
-            className={`flex items-center justify-center bg-primary text-white px-6 py-2 rounded hover:bg-secondary transition w-full sm:w-auto
-              ${
-              loading ? "pointer-events-none opacity-10" : ""
-            }`}
-          >
-            <FontAwesomeIcon icon={faSearch} className="mr-2" />
-            Search
-          </button>
+            text="Search"
+            type="primary"
+            className="text-center"
+          />
         </div>
       </div>
     </div>

@@ -14,11 +14,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TermsAcceptance from "./TermsAcceptance";
 import { getLabelName } from "@/utils/getLabelName";
 import { RetrievedApplication } from "@/app/api/access-management/open-api/schemas";
+import AddParticipantForm from "./AddParticipantForm";
 
 export function createApplicationSidebarItems(
   application: RetrievedApplication
 ): SidebarItem[] {
-  const { datasets, applicant, events } = application;
+  const { datasets, applicant, events, members } = application;
 
   return [
     {
@@ -36,10 +37,21 @@ export function createApplicationSidebarItems(
     {
       label: "Participants",
       value: (
-        <div className="flex gap-6 items-center">
-          <FontAwesomeIcon icon={faUser} className="text-primary" />
-          <p>{createTextItem(applicant!.name!)}</p>
-        </div>
+        <>
+          <div className="mb-6">
+            <div className="flex gap-6 items-center">
+              <FontAwesomeIcon icon={faUser} className="text-primary" />
+              <p>{createTextItem(applicant!.name!)}</p>
+            </div>
+            {members!.map((member, index) => (
+              <div className="flex gap-6 items-center" key={index}>
+                <FontAwesomeIcon icon={faUser} className="text-primary" />
+                <p>{createTextItem(member!.name!)}</p>
+              </div>
+            ))}
+          </div>
+          <AddParticipantForm application={application} />
+        </>
       ),
     },
     {

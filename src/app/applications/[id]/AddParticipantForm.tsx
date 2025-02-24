@@ -39,7 +39,6 @@ const AddParticipantForm = ({
   };
 
   const handleInviteMember = async () => {
-    console.log("Send Invitation");
     const applicationId = application?.id;
 
     if (!applicationId) {
@@ -54,7 +53,6 @@ const AddParticipantForm = ({
 
       await inviteMemberApi(applicationId, body);
 
-      console.log("Invitation sent successfully");
       setAlert({
         type: "success",
         message: "Invitation sent successfully",

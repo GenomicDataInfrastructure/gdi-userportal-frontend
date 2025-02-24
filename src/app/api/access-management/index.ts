@@ -11,6 +11,7 @@ import {
 } from "@/app/api/access-management/open-api/schemas";
 import { accessManagementClient } from "@/app/api/shared/client";
 import { createHeaders } from "@/app/api/shared/headers";
+import { Slot } from "@radix-ui/react-slot";
 import { AxiosError, isAxiosError } from "axios";
 import { ZodError } from "zod";
 
@@ -157,7 +158,7 @@ export const inviteMemberApi = async (
     );
   } catch (error: AxiosError | unknown) {
     if (isAxiosError(error)) {
-      console.log(error.response);
+      console.log(error.response?.data);
       throw new Error(error.response?.data?.detail);
     } else if ((error as { cause: unknown }).cause instanceof ZodError) {
       const { cause } = error as { cause: ZodError };

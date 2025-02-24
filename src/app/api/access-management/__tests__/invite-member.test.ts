@@ -45,14 +45,12 @@ describe("Inviting member to application", () => {
     ).resolves.toBeUndefined();
   });
 
-  test("throws an error when AxiosError occurs", async () => {
+  test("throws an error when AxiosError occurs for 404 Not Found", async () => {
     const encryptedToken = encrypt("decryptedToken");
     mockedGetServerSession.mockResolvedValueOnce({
       access_token: encryptedToken,
     });
 
-    // simulate Axios error with 404 response
-    // Remove the nested "response" object so that error.response.data.detail is directly set.
     mockAccessManagementAdapter
       .onPost("/api/v1/applications/67/invite-member")
       .reply(404, {
@@ -68,13 +66,54 @@ describe("Inviting member to application", () => {
     ).rejects.toThrow("The application with Id 67 was not found.");
   });
 
+  test("throws an error when AxiosError occurs for 401 Unauthorized", async () => {
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
+
+    mockAccessManagementAdapter
+      .onPost("/api/v1/applications/67/invite-member")
+      .reply(401, {
+        status: 401,
+        detail: "Unauthorized Access.",
+      });
+
+    await expect(
+      inviteMemberApi(67, {
+        name: "John Doe",
+        email: "john.doe@example.com",
+      })
+    ).rejects.toThrow("Unauthorized Access.");
+  });
+
+  test("throws an error when AxiosError occurs for 500 Internal Server Error", async () => {
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
+
+    mockAccessManagementAdapter
+      .onPost("/api/v1/applications/67/invite-member")
+      .reply(500, {
+        status: 500,
+        detail: "Internal server error.",
+      });
+
+    await expect(
+      inviteMemberApi(67, {
+        name: "John Doe",
+        email: "john.doe@example.com",
+      })
+    ).rejects.toThrow("Internal server error.");
+  });
+
   test("throws detailed error when error.cause is a ZodError", async () => {
     const encryptedToken = encrypt("decryptedToken");
     mockedGetServerSession.mockResolvedValueOnce({
       access_token: encryptedToken,
     });
 
-    // Force the client method to throw an error containing a ZodError as cause
     const zodError = new ZodError([
       {
         code: "invalid_type",

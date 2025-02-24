@@ -440,6 +440,11 @@ paths:
           schema:
             type: integer
             format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InviteMember"
       responses:
         "204":
           description: Successful Response (no content)
@@ -1071,6 +1076,14 @@ components:
         - application.state/rejected
         - application.state/revoked
         - application.state/submitted
+      x-enum-varnames:
+        - DRAFT
+        - CLOSED
+        - APPROVED
+        - RETURNED
+        - REJECTED
+        - REVOKED
+        - SUBMITTED
     ListedBasket:
       properties:
         id:
@@ -1247,3 +1260,14 @@ components:
             format: int64
       required:
         - acceptedLicenses
+    InviteMember:
+      properties:
+        name:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          format: email
+      required:
+        - name
+        - email

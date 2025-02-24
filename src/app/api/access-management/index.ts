@@ -11,7 +11,8 @@ import {
 } from "@/app/api/access-management/open-api/schemas";
 import { accessManagementClient } from "@/app/api/shared/client";
 import { createHeaders } from "@/app/api/shared/headers";
-import { AxiosError } from "axios";
+import { AxiosError, isAxiosError } from "axios";
+import { ZodError } from "zod";
 
 export const createApplicationApi = async (createApplicationCommand: {
   datasetIds: string[];
@@ -141,4 +142,33 @@ export const retrieveEntitlementsApi = async () => {
   return accessManagementClient.retrieve_granted_dataset_identifiers({
     headers,
   });
+};
+
+export const inviteMemberApi = async (
+  applicationId: number,
+  { name, email }: { name: string; email: string }
+) => {
+  const headers = await createHeaders();
+
+  try {
+    await accessManagementClient.invite_member_to_application_v1(
+      { name, email },
+      { params: { id: applicationId }, headers }
+    );
+  } catch (error: AxiosError | unknown) {
+    if (isAxiosError(error)) {
+      throw new Error(error.response?.data?.detail);
+    } else if ((error as { cause: unknown }).cause instanceof ZodError) {
+      const { cause } = error as { cause: ZodError };
+
+      const message = cause.errors.reduce((acc, curr) => {
+        acc += `Field ${curr.path.join(", ")}: ${curr.message} \n`;
+        return acc;
+      }, "");
+
+      throw new Error(message);
+    } else {
+      throw new Error("Failed to invite member");
+    }
+  }
 };

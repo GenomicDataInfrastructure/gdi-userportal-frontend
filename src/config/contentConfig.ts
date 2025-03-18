@@ -18,6 +18,7 @@ interface ContentConfig {
   siteTitle: string;
   siteDescription: string;
   showBasketAndLogin: boolean;
+  addParticipantsEnabled: boolean;
 }
 
 const contentConfig: ContentConfig = {
@@ -43,6 +44,8 @@ const contentConfig: ContentConfig = {
     env("NEXT_PUBLIC_SITE_DESCRIPTION") ||
     "Genomic Data Infrastructure User Portal",
   showBasketAndLogin: env("NEXT_PUBLIC_SHOW_BASKET_AND_LOGIN") !== "false",
+  addParticipantsEnabled:
+    env("NEXT_PUBLIC_FEATURE_ADD_PARTICIPANTS") !== "false",
 };
 
 export default contentConfig;

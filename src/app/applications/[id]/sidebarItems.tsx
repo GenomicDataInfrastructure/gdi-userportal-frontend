@@ -15,6 +15,7 @@ import TermsAcceptance from "./TermsAcceptance";
 import { getLabelName } from "@/utils/getLabelName";
 import { RetrievedApplication } from "@/app/api/access-management/open-api/schemas";
 import AddParticipantForm from "./AddParticipantForm";
+import contentConfig from "@/config/contentConfig";
 
 export function createApplicationSidebarItems(
   application: RetrievedApplication
@@ -50,7 +51,9 @@ export function createApplicationSidebarItems(
               </div>
             ))}
           </div>
-          <AddParticipantForm application={application} />
+          {contentConfig.addParticipantsEnabled && (
+            <AddParticipantForm application={application} />
+          )}
         </>
       ),
     },

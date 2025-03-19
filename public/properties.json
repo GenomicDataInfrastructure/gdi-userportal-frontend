@@ -11,5 +11,6 @@
   "NEXT_PUBLIC_GITHUB_URL": "https://github.com/GenomicDataInfrastructure",
   "NEXT_PUBLIC_WEBSITE_URL": "https://gdi.onemilliongenomes.eu/",
   "NEXT_PUBLIC_EMAIL": "gdi-coordination@elixir-europe.org",
-  "NEXT_PUBLIC_SHOW_BASKET_AND_LOGIN": "true"
+  "NEXT_PUBLIC_SHOW_BASKET_AND_LOGIN": "true",
+  "NEXT_PUBLIC_FEATURE_ADD_PARTICIPANTS": "true"
 }

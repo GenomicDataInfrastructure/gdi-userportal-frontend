@@ -71,7 +71,7 @@ function GenericInputFormField({
             className={`h-12 w-full rounded-md border-2 border-primary px-4 text-md py-[9px] ${
               isDisabled
                 ? "border-slate-200 cursor-not-allowed opacity-50 bg-slate-50"
-                : "border-primary focus:outline-none focus:ring-primary"
+                : "border-primary focus:outline-hidden focus:ring-primary"
             }`}
             placeholder={placeholder}
             disabled={isDisabled}

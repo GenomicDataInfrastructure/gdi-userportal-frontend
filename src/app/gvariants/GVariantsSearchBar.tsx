@@ -30,7 +30,7 @@ const FormField: React.FC<FormFieldProps> = ({
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="border border-gray-300 p-2 rounded w-full"
+          className="border border-gray-300 p-2 rounded-sm w-full"
         >
           {options?.map((option) => (
             <option key={option.value} value={option.value}>
@@ -43,7 +43,7 @@ const FormField: React.FC<FormFieldProps> = ({
           type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="border border-gray-300 p-2 rounded w-full"
+          className="border border-gray-300 p-2 rounded-sm w-full"
           placeholder={placeholder}
         />
       )}

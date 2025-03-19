@@ -57,7 +57,7 @@ const InputComponent = forwardRef<
       "h-12 w-full rounded-md border-2 px-4 py-[9px] text-md",
       disabled
         ? "border-slate-200 cursor-not-allowed opacity-50 bg-slate-50"
-        : "border-primary focus:outline-none focus:ring-primary",
+        : "border-primary focus:outline-hidden focus:ring-primary",
       className,
       "ml-2"
     )}
@@ -100,7 +100,7 @@ const CountrySelect = ({
             "flex h-12 items-center gap-2 rounded-md border-2 px-4 transition-colors duration-200",
             disabled
               ? "border-slate-200 cursor-not-allowed opacity-50 bg-slate-50"
-              : "border-primary focus:outline-none focus:ring-primary"
+              : "border-primary focus:outline-hidden focus:ring-primary"
           )}
           disabled={disabled}
         >
@@ -157,7 +157,7 @@ CountrySelect.displayName = "CountrySelect";
 const FlagComponent = ({ country, countryName }: RPNInput.FlagProps) => {
   const Flag = flags[country];
   return (
-    <span className="bg-foreground/20 flex h-4 w-6 overflow-hidden rounded-sm">
+    <span className="bg-foreground/20 flex h-4 w-6 overflow-hidden rounded-xs">
       {Flag && <Flag title={countryName} />}
     </span>
   );

@@ -9,7 +9,7 @@ import * as React from "react";
 import { cn } from "@/utils/tailwindMerge";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-title ring-offset-background transition-colors focus-visible:outline-none disabled:cursor-not-allowed",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-title ring-offset-background transition-colors focus-visible:outline-hidden disabled:cursor-not-allowed",
   {
     variants: {
       variant: {

@@ -46,7 +46,7 @@ const Button: React.FC<ButtonProps> = ({
   const disabledClasses = disabled
     ? "opacity-60 cursor-not-allowed hover:bg-disabled"
     : "";
-  const flexClasses = flex ? "flex-shrink-0" : "sm:w-auto";
+  const flexClasses = flex ? "shrink-0" : "sm:w-auto";
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (disabled) {

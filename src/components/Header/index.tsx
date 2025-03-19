@@ -117,7 +117,7 @@ function Header() {
             <div className="menu-container hidden md:block lg:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-primary hover:text-secondary focus:outline-none p-2"
+                className="text-primary hover:text-secondary focus:outline-hidden p-2"
               >
                 <FontAwesomeIcon
                   icon={faBars}

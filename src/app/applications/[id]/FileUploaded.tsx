@@ -17,7 +17,7 @@ type FileUploadedProps = {
 function FileUploaded({ attachment, formId, fieldId }: FileUploadedProps) {
   const { application, isLoading, deleteAttachment } = useApplicationDetails();
   return (
-    <div className="relative mt-5 flex items-center justify-between gap-x-1 break-all rounded border-2 bg-surface px-3 py-1.5 sm:gap-x-3">
+    <div className="relative mt-5 flex items-center justify-between gap-x-1 break-all rounded-sm border-2 bg-surface px-3 py-1.5 sm:gap-x-3">
       <div className="flex items-center gap-x-2 sm:gap-x-4">
         <FontAwesomeIcon
           icon={faFileCircleCheck}

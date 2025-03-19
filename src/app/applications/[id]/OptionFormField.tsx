@@ -65,7 +65,7 @@ function OptionFormField({
               className={`w-full mt-4 rounded-md border-2 px-4 py-[9px] text-md pr-10 text-left ${
                 isDisabled
                   ? "border-slate-200 cursor-not-allowed bg-slate-50 opacity-50"
-                  : "border-primary focus:outline-none focus:ring-primary cursor-pointer"
+                  : "border-primary focus:outline-hidden focus:ring-primary cursor-pointer"
               }`}
             >
               {selectedOption

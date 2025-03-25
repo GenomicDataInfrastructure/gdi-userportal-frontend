@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version increment (major, minor, patch)'
+        description: 'Version Increment (major, minor, patch)'
         required: true
         default: 'patch'
 

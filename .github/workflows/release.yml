@@ -173,7 +173,7 @@ jobs:
           tags: ${{ steps.tag.outputs.last_tag }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Run Trivy Vulnerability Scanner
+      - name: Run Trivy vulnerability Scanner
         uses: aquasecurity/trivy-action@0.30.0
         with:
           image-ref: "${{ steps.tag.outputs.last_tag }}"

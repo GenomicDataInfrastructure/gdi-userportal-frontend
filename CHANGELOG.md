@@ -11,26 +11,181 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-## [1.3.3] - 2025-03-25
 
-### Changed
-- 
-
-
-
+## [v1.3.7] - 2025-03-25
 
 ### Added
+- feat(ART-11336): add dataset type and frontend element to display it by @Antoine Dorard in a73f09b
+- feat(ART-11570): simplify open api by @jadz94 in 0fa6e26
+- feat(ART-11332): update customization by @jadz94 in 5bd3491
+- feat(ART-11332): update login button by @jadz94 in 257e167
+- feat(ART-11332): add license by @jadz94 in 73dbe1b
+- feat(ART-11332): fix format by @jadz94 in 87bf61c
+- feat(ART-11332): move customizations to separate folder by @jadz94 in c8f0991
+- feat: ART-11337/intergrate otel dev by @Kacem Bechka in c4a5882
+
 
 ### Changed
+- chore(deps): update dependency eslint-config-prettier to v10 by @Renovate Bot in eb52fcc
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1736731764 by @Renovate Bot in 09fba4d
+- chore: add missing variables by @Bruno Pacheco in cb8c958
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1736425083 by @Renovate Bot in 6362b8c
+- chore: add labels to docker image by @Bruno Pacheco in 58fcd2e
+- chore(ART-11570): polish by @jadz94 in 761a854
+- chore(deps): upgrade nodejs base image by @Bruno Pacheco in 721ee0f
+- chore(ART-11332): polish by @jadz94 in 2f3f044
+- chore(ART-11570): update test script by @jadz94 in 8e4f6d3
+- chore(ART-11570): update test script by @jadz94 in 17a87c1
+- chore(ART-11332): refactor customizations by @jadz94 in d824f0f
+- chore(deps): automerge in branches by @Bruno Pacheco in 1f3e96f
+- chore: update legal.md by @Bruno Pacheco in 588ff34
 
-### Deprecated
-
-### Removed
 
 ### Fixed
+- fix(deps): update dependency next to v15.1.5 by @Renovate Bot in 7dccd85
+- chore: fix missing labels by @Bruno Pacheco in 182cade
+- fix(ART-11336): remove formatDate around dcatType by @Antoine Dorard in c06f212
+- fix(ART-11336): formatting by @Antoine Dorard in 1b54b32
+- fix(ART-11336): update dataset type tooltip message by @Antoine Dorard in 79742be
+- fix(ART-11336): change attribute 'type' to 'dcatType' by @Antoine Dorard in 53f06a5
+- chore: fix REPOSITORY_URL by @Bruno Pacheco in 82ce5bc
+- chore: fix github actions env variables by @Bruno Pacheco in b5902aa
+- fix: react-19-upgrade by @Younès Adem in 0a582d5
+- fix(ART-11336): fix typo in footer and README by @Antoine Dorard in 972605b
+- fix(deps): update dependency next to v15.1.4 by @Renovate Bot in fbf227b
+- fix(deps): update dependency npm-run-all2 to v7 by @Renovate Bot in f0ef7d0
+- fix(deps): replace dependency npm-run-all with npm-run-all2 ^5.0.0 by @Renovate Bot in 435cc3e
+- fix(deps): update react monorepo to v19 by @Renovate Bot in 78de24d
+- chore(deps): automerge all types of patch PRs by @Bruno Pacheco in ecd3a09
+- chore(deps): automerge patches by @Bruno Pacheco in aa7bbda
 
-### Security
+
+
+## [v1.3.6] - 2025-03-25
+
+### Added
+- feat: improve external service integration (#531) by @Younès Adem in 7c63c1a
+
+
+### Changed
+- chore(deps): update dependency eslint-config-next to v14.2.21 by @Renovate Bot in 0c66174
+- chore: move sonar check to the end of the pipeline by @Bruno Pacheco in 133bd46
+- chore(deps): upgrade typescript by @Bruno Pacheco in 23a0ab9
+- chore(deps): upgrade multiple packages by @Bruno Pacheco in 6b0e814
+- chore(deps): upgrade @types packages by @Bruno Pacheco in 587661c
+- chore(deps): upgrade @radix-ui packages by @Bruno Pacheco in 37674b7
+- chore(deps): upgrade @opentelemetry packages by @Bruno Pacheco in d4bbb04
+- chore(deps): upgrade @headlessui by @Bruno Pacheco in 13abbbe
+- chore(deps): upgrade @fortawesome packages by @Bruno Pacheco in e0f34a9
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-20-minimal docker tag to v9.5-1734514731 by @Renovate Bot in 1952ed3
+- chore(deps): update dependency tailwindcss to v3.4.17 by @Renovate Bot in 2646215
+- chore: update open-api-specifications by @Younès Adem in a9df88a
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-20-minimal docker tag to v9.5-1734309067 by @Renovate Bot in fd7e3fa
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-20-minimal docker tag to v9.5-1733824671 by @Renovate Bot in ba37fad
+- chore(deps): update dependency eslint-config-next to v14.2.20 by @Renovate Bot in db3463a
+- chore(deps): update devdependencies by @Renovate Bot in 8555ea8
+
+
+### Fixed
+- fix: infinite rendering on dataset page by @Younès Adem in 4d2a8d7
+- fix(deps): update dependency next to v14.2.21 by @Renovate Bot in 613dd2f
+- fix: upgrade class-variance-authority from 0.7.0 to 0.7.1 by @snyk-bot in b443c90
+- fix: upgrade cmdk from 1.0.0 to 1.0.4 by @snyk-bot in 6d9f8d9
+- fix: upgrade tailwind-merge from 2.5.3 to 2.5.5 by @snyk-bot in d379f5e
+- fix(deps): update opentelemetry-js monorepo to ^0.56.0 by @Renovate Bot in a0668aa
+- fix(deps): update dependency next to v14.2.20 by @Renovate Bot in 3f8322a
+- fix(deps): update dependency next to v14.2.19 by @Renovate Bot in 1b9ffaa
+
+
+
+## [v1.3.5] - 2025-03-25
+
+### Added
+- ART-10311/feat: add variant filters (#517) by @Younès Adem in 231f503
+- feat: ART-9692/change themes in homepage by @Kacem Bechka in cb1b8aa
+- feat: ART-9692/add themes and publishers by @Kacem Bechka in fd8b844
+
+
+### Changed
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-20-minimal docker tag to v9.5-1732617235 by @Renovate Bot in 2eb321f
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-20-minimal docker tag to v9 by @Renovate Bot in abcc901
+- chore(deps): update aquasecurity/trivy-action action to v0.29.0 by @Renovate Bot in a49c1af
+- update prettier version by @jadz94 in 81207b9
+- update prettier version by @jadz94 in caf415a
+- update prettier version by @jadz94 in 95d6ffd
+- Revert "update prettier version" by @jadz94 in 99c0f04
+- update prettier version by @jadz94 in 00a1570
+- update prettier version by @jadz94 in 44f06d7
+- chore(deps): bump cross-spawn from 7.0.3 to 7.0.6 by @dependabot[bot] in b1c8154
+- chore(deps): update dependency tailwindcss to v3.4.15 by @Renovate Bot in cbc21d2
+- chore(deps): update fsfe/reuse-action action to v5 by @Renovate Bot in e235e7b
+- chore(deps): update dependency eslint-config-next to v14.2.18 by @Renovate Bot in 9705294
+- Revert "chore(deps): update registry.access.redhat.com/ubi9/nodejs-20-minimal docker tag to v9" by @Kacem Bechka in 8c6a904
+- addressing comments by @Kacem Bechka in de2547f
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-20-minimal docker tag to v9 by @Renovate Bot in d965b65
+- chore(deps): update sonarsource/sonarqube-scan-action action to v4 by @Renovate Bot in f5f854b
+- Feat/Introducing free text filters + removing filters from url (#499) by @Younès Adem in 25adf11
+
+
+### Fixed
+- Revert "fix(deps): update dependency next to v15" by @Bruno Pacheco in 635b5d9
+- fix version issue by @jadz94 in ee9acfe
+- fix(deps): update dependency next to v15 by @Renovate Bot in 9d50341
+- fix(deps): update opentelemetry-js monorepo to ^0.55.0 by @Renovate Bot in 167e9f0
+- fix: ART-10765/not showing filter labels in applied filters by @Kacem Bechka in afc1916
+- fix(deps): update dependency date-fns to v4 by @Renovate Bot in 7125f46
+- fix: ART-9692/displaying themes on homepage correctly (#511) by @Kacem Bechka in 7131c4b
+- fix: reduce temporarily severity of trivy scanner to CRITICAL by @Bruno Pacheco in 7786377
+- fix(deps): update dependency next to v14.2.18 by @Renovate Bot in 505fecf
+- fix linter by @Kacem Bechka in 686d48a
+- fix: free text values sync with global states (#503) by @Younès Adem in 13c3284
+
+
+
+
+## [v1.3.4] - 2025-03-25
+
+### Added
+- feat: add languages to distribution by @Bruno Pacheco in fb88eb4
+
+
+
+## [v1.3.3] - 2025-03-25
+
+### Added
+- feat: sort datasets by issue date by @Bruno Pacheco in 716b8d6
+- feat: add otel by @Bruno Pacheco in a926626
+- feat: ART-10196/Header changes (#493) by @Kacem Bechka in ba3248c
+- feat: align with new dataset search endpoint by @Younès Adem in 8b18e36
+- feat: add free text filters by @Younès Adem in 094b427
+- feat: display distributionsCount and downloadUrl by @Bruno Pacheco in ee35ebd
+- feat: display coniditional fields properly by @Sulejman Karisik in ae69afa
+
+
+### Changed
+- chore(deps): update dependency eslint-config-next to v14.2.17 by @Renovate Bot in 1e33c08
+- chore: use cached trivy db by @Bruno Pacheco in 1e9b91c
+- chore: cache trivy db by @Bruno Pacheco in 20b855d
+- chore(deps): update dependency eslint-config-next to v14.2.16 (#486) by @LNDS-Sysadmins in f857f26
+- chore(deps): update dependency tailwindcss to v3.4.14 by @Renovate Bot in 94b432e
+- chore(deps): update aquasecurity/trivy-action action to v0.28.0 by @Renovate Bot in 1c9ae08
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-20-minimal docker tag to v1-63.1726695170 by @Renovate Bot in 7d1154f
+- docs: update CHANGELOG.md by @Bruno Pacheco in 9db8b6e
+- docs: update CHANGELOG.md by @Bruno Pacheco in 7673372
+- chore(deps): update dependencies by @Bruno Pacheco in b1fb3ef
+- chore(deps): update aquasecurity/trivy-action action to v0.27.0 (#480) by @LNDS-Sysadmins in 6609945
+
+
+### Fixed
+- fix(deps): update dependency next to v14.2.17 by @Renovate Bot in 5f2ffae
+- fix: run prettier on yml files by @Bruno Pacheco in c207483
+- fix: do checks in same iteration by @Sulejman Karisik in b3b03ec
+- fix: multiple themes not displaying correctly by @Younès Adem in 5207059
+- fix(deps): update dependency next to v14.2.16 (#487) by @LNDS-Sysadmins in 3057350
+- fix(docs): run prettier on CHANGELOG.md by @Bruno Pacheco in c6e51db
+
+
+
 
 ## [v1.3.2] - 2024-10-09
 

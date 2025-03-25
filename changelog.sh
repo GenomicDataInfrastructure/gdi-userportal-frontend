@@ -22,8 +22,8 @@ fi
 TAGS=($(git tag --sort=-creatordate))
 
 # Get latest and previous tag
-LATEST_TAG=${TAGS[1]}
-PREVIOUS_TAG=${TAGS[2]}
+LATEST_TAG=v1.3.7
+PREVIOUS_TAG=v1.3.6
 
 echo "📢 Generating changelog for $LATEST_TAG (since $PREVIOUS_TAG)..."
 
@@ -65,8 +65,8 @@ sed -i '' '14r temp_changelog.md' "$CHANGELOG_FILE"
 rm temp_changelog.md
 
 # Commit and push the updated CHANGELOG.md
-git add "$CHANGELOG_FILE"
-git commit -m "📜 Update CHANGELOG.md for $LATEST_TAG"
-git push origin main
+#git add "$CHANGELOG_FILE"
+#git commit -m "📜 Update CHANGELOG.md for $LATEST_TAG"
+#git push origin main
 
 echo "✅ CHANGELOG.md updated successfully!"

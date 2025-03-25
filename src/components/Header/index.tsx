@@ -11,6 +11,7 @@ import {
   faDatabase,
   faHome,
   faInfoCircle,
+  faLineChart,
   faShoppingCart,
   faUser,
   faWandSparkles,
@@ -46,10 +47,11 @@ function Header() {
       isActive: (activePath: string) => activePath.includes("/datasets"),
     },
     {
-      icon: faDatabase,
-      label: "G-Variants",
-      href: "/gvariants",
-      isActive: (activePath: string) => activePath.includes("/gvariants"),
+      icon: faLineChart,
+      label: "Allele Frequency",
+      href: "/allele-frequency",
+      isActive: (activePath: string) =>
+        activePath.includes("/allele-frequency"),
     },
     {
       icon: faWandSparkles,

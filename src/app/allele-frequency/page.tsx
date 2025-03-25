@@ -10,16 +10,18 @@ import PageContainer from "@/components/PageContainer";
 import React from "react";
 import GVariantsSearchBar, {
   SearchInputData,
-} from "@/app/gvariants/GVariantsSearchBar";
-import GVariantsTable from "@/app/gvariants/GVariantsTable";
+} from "@/app/allele-frequency/GVariantsSearchBar";
+import GVariantsTable from "@/app/allele-frequency/GVariantsTable";
 import { isAxiosError } from "axios";
 import ErrorComponent from "@/app/error";
 
-type GVariantsPageProps = {
+type AlleleFrequencyPageProps = {
   searchParams: Promise<UrlSearchParams>;
 };
 
-export default function GVariantsPage({ searchParams }: GVariantsPageProps) {
+export default function AlleleFrequencyPage({
+  searchParams,
+}: AlleleFrequencyPageProps) {
   const [results, setResults] = useState<GVariantsSearchResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [triedSearching, setTriedSearching] = useState(false);

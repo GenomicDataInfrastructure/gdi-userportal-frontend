@@ -5,6 +5,7 @@
 import Button from "@/components/Button";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
+import Tooltip from "../datasets/[id]/Tooltip";
 
 type FormFieldProps = {
   label: string;
@@ -12,6 +13,7 @@ type FormFieldProps = {
   value: string;
   onChange: (value: string) => void;
   options?: { value: string; label: string }[];
+  tooltip?: string;
   placeholder?: string;
 };
 
@@ -21,11 +23,18 @@ const FormField: React.FC<FormFieldProps> = ({
   value,
   onChange,
   options,
+  tooltip,
   placeholder,
 }) => {
   return (
     <div className={`flex flex-col lg:col-span-2 md:col-span-1 col-span-1`}>
-      <label className="font-semibold mb-1">{label}</label>
+      <Tooltip message="Example value: 3-45864731-T-C" />
+
+      <span className="flex gap-2 items-center relative group"></span>
+      <label className="font-semibold mb-1 relative group w-fit">
+        {label}
+        {tooltip && <Tooltip message={tooltip} />}
+      </label>
       {type === "select" ? (
         <select
           value={value}
@@ -68,6 +77,7 @@ const formFields = [
     key: "variant",
     type: "text",
     placeholder: "e.g. 3-45864731-T-C",
+    tooltip: "Example Value: 3-45864731-T-C",
   },
   {
     label: "Ref Genome",
@@ -83,6 +93,7 @@ const formFields = [
       { value: "All", label: "All" },
       { value: "COVID", label: "COVID" },
     ],
+    tooltip: "A group of people with a shared characteristic",
   },
 ];
 
@@ -137,7 +148,7 @@ export default function GVariantsSearchBar({
       <h2 className="text-lg font-semibold mb-2">Search for your variant:</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 items-end">
         {formFields.map(
-          ({ label, key, type = "text", options, placeholder }) => (
+          ({ label, key, type = "text", options, tooltip, placeholder }) => (
             <FormField
               key={key}
               label={label}
@@ -147,6 +158,7 @@ export default function GVariantsSearchBar({
                 updateData(key as keyof SearchInputData, value)
               }
               options={options}
+              tooltip={tooltip}
               placeholder={placeholder}
             />
           )

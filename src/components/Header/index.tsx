@@ -3,8 +3,9 @@
 
 "use client";
 
-import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { User } from "@/app/api/auth/types/user.types";
+import contentConfig from "@/config/contentConfig";
+import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import {
   faBars,
   faBook,
@@ -25,7 +26,6 @@ import { useEffect, useState } from "react";
 import Button from "../Button";
 import Avatar from "./Avatar";
 import RequestIcon from "./RequestIcon";
-import contentConfig from "@/config/contentConfig";
 
 function Header() {
   const { data: session, status } = useSession();
@@ -33,7 +33,7 @@ function Header() {
   const activeTab = usePathname();
   const { basket, isLoading } = useDatasetBasket();
 
-  const navItems = [
+  let navItems = [
     {
       icon: faHome,
       label: "Home",
@@ -72,6 +72,10 @@ function Header() {
       isActive: (activePath: string) => activePath === "/about",
     },
   ];
+
+  if (!contentConfig.showAlleleFrequency) {
+    navItems = navItems.filter((item) => item.href !== "/allele-frequency");
+  }
 
   const closeMenu = () => {
     setIsMenuOpen(false);

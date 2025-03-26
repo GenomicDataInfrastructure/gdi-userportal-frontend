@@ -3,6 +3,7 @@
 
 "use client";
 
+import contentConfig from "@/config/contentConfig";
 import debounce from "@/utils/debounce";
 import {
   faBook,
@@ -23,7 +24,7 @@ function Navbar() {
     typeof window !== "undefined" ? window.scrollY : 0
   );
 
-  const navItems = [
+  let navItems = [
     {
       icon: faHome,
       label: "Home",
@@ -56,6 +57,10 @@ function Navbar() {
       isActive: (activePath: string) => activePath === "/publishers",
     },
   ];
+
+  if (!contentConfig.showAlleleFrequency) {
+    navItems = navItems.filter((item) => item.href !== "/allele-frequency");
+  }
 
   useEffect(() => {
     const handleScroll = debounce(() => {

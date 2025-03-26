@@ -4,11 +4,11 @@
 
 "use server";
 
-import { discoveryClient } from "@/app/api/shared/client";
 import {
   DatasetSearchQuery,
   GVariantSearchQuery,
 } from "@/app/api/discovery/open-api/schemas";
+import { discoveryClient } from "@/app/api/shared/client";
 import { createHeaders } from "@/app/api/shared/headers";
 
 export const retrieveFiltersApi = async () => {
@@ -51,6 +51,5 @@ export const retrieveDatasetInSpecifiedFormat = async (
 };
 
 export const searchGVariantsApi = async (options: GVariantSearchQuery) => {
-  const headers = await createHeaders();
-  return await discoveryClient.searchGenomicVariants(options, { headers });
+  return await discoveryClient.searchGenomicVariants(options);
 };

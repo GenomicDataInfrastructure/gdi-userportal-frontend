@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 "use client";
 
-import React, { useState } from "react";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/Button";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from "react";
 
 type FormFieldProps = {
   label: string;
@@ -24,7 +24,7 @@ const FormField: React.FC<FormFieldProps> = ({
   placeholder,
 }) => {
   return (
-    <div className="flex flex-col">
+    <div className={`flex flex-col lg:col-span-2 md:col-span-1 col-span-1`}>
       <label className="font-semibold mb-1">{label}</label>
       {type === "select" ? (
         <select
@@ -57,36 +57,24 @@ type GVariantsSearchBarProps = {
 };
 
 export type SearchInputData = {
-  referenceName: string;
-  start: string;
-  end: string | undefined;
-  referenceBase: string;
-  alternateBase: string;
+  variant: string;
   refGenome: string;
   cohort: string;
 };
+
 const formFields = [
+  {
+    label: "Variant",
+    key: "variant",
+    type: "text",
+    placeholder: "e.g. 3-45864731-T-C",
+  },
   {
     label: "Ref Genome",
     key: "refGenome",
     type: "select",
     options: [{ value: "GRCh37", label: "GRCh37" }],
   },
-  {
-    label: "Start Position",
-    key: "start",
-    type: "number",
-    placeholder: "e.g. 45864731",
-  },
-  {
-    label: "End Position",
-    key: "end",
-    type: "number",
-    placeholder: "e.g. 45864731",
-  },
-  { label: "Reference Name", key: "referenceName", placeholder: "e.g. 3" },
-  { label: "Reference Base", key: "referenceBase", placeholder: "e.g. T" },
-  { label: "Alternate Base", key: "alternateBase", placeholder: "e.g. C" },
   {
     label: "Cohort",
     key: "cohort",
@@ -97,31 +85,57 @@ const formFields = [
     ],
   },
 ];
+
 export default function GVariantsSearchBar({
   onSearchAction,
   loading,
 }: GVariantsSearchBarProps) {
   const [searchFilterInput, setSearchFilterInput] = useState<SearchInputData>({
-    referenceName: "3",
-    start: "45864731",
-    end: "",
-    referenceBase: "T",
-    alternateBase: "C",
+    variant: "",
     refGenome: "GRCh37",
     cohort: "All",
   });
+  const [errorMessage, setErrorMessage] = useState("");
+
+  function isVariantValid(variant: string) {
+    if (!variant) {
+      return true;
+    }
+
+    const variantPattern =
+      /^[1-9]|1[0-9]|20|21|22|23|X-([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[Ee]([+-]?\d+))?-[ACGT]+-[ACGT]+$/;
+    return variantPattern.test(variant);
+  }
 
   const updateData = (field: keyof SearchInputData, value: string) => {
-    setSearchFilterInput((prev) => ({ ...prev, [field]: value }));
+    setSearchFilterInput((prev) => {
+      const updatedState = { ...prev, [field]: value };
+
+      setErrorMessage(() =>
+        isVariantValid(updatedState.variant)
+          ? ""
+          : "Incorrect variant information"
+      );
+      return updatedState;
+    });
   };
 
   const search = () => {
+    if (errorMessage) {
+      return;
+    }
+
+    if (!searchFilterInput.variant) {
+      setErrorMessage("Variant cannot be empty");
+      return;
+    }
+
     onSearchAction(searchFilterInput);
   };
   return (
     <div className="mb-6">
       <h2 className="text-lg font-semibold mb-2">Search for your variant:</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-4 items-end">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 items-end">
         {formFields.map(
           ({ label, key, type = "text", options, placeholder }) => (
             <FormField
@@ -138,7 +152,7 @@ export default function GVariantsSearchBar({
           )
         )}
 
-        <div className="flex flex-col">
+        <div className="flex flex-col col-span-1">
           <Button
             disabled={loading}
             icon={faSearch}
@@ -149,6 +163,7 @@ export default function GVariantsSearchBar({
           />
         </div>
       </div>
+      {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
     </div>
   );
 }

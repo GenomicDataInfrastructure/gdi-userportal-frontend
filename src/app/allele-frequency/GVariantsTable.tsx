@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 "use client";
 
-import React from "react";
-import { GVariantsSearchResponse } from "@/app/api/discovery/open-api/schemas";
 import { PopulationReverseMap } from "@/app/api/discovery/additional-types";
+import { GVariantsSearchResponse } from "@/app/api/discovery/open-api/schemas";
+import React from "react";
 
 type GVariantsTableProps = {
   results: GVariantsSearchResponse[];
@@ -42,8 +42,8 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
         <tbody>
           {Object.entries(groupedByBeacon).map(([beacon, variants]) => (
             <React.Fragment key={beacon}>
-              <tr className="bg-secondary text-surface">
-                <td colSpan={7} className="px-6 py-4 font-semibold text-lg">
+              <tr className="bg-[#70154C14] border border-secondary">
+                <td colSpan={7} className="px-6 py-4 text-lg font-bold">
                   Beacon: {beacon}
                 </td>
               </tr>

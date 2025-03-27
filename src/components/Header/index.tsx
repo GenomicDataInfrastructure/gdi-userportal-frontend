@@ -3,14 +3,16 @@
 
 "use client";
 
-import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { User } from "@/app/api/auth/types/user.types";
+import contentConfig from "@/config/contentConfig";
+import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import {
   faBars,
   faBook,
   faDatabase,
   faHome,
   faInfoCircle,
+  faLineChart,
   faShoppingCart,
   faUser,
   faWandSparkles,
@@ -24,7 +26,6 @@ import { useEffect, useState } from "react";
 import Button from "../Button";
 import Avatar from "./Avatar";
 import RequestIcon from "./RequestIcon";
-import contentConfig from "@/config/contentConfig";
 
 function Header() {
   const { data: session, status } = useSession();
@@ -32,7 +33,7 @@ function Header() {
   const activeTab = usePathname();
   const { basket, isLoading } = useDatasetBasket();
 
-  const navItems = [
+  let navItems = [
     {
       icon: faHome,
       label: "Home",
@@ -46,10 +47,11 @@ function Header() {
       isActive: (activePath: string) => activePath.includes("/datasets"),
     },
     {
-      icon: faDatabase,
-      label: "G-Variants",
-      href: "/gvariants",
-      isActive: (activePath: string) => activePath.includes("/gvariants"),
+      icon: faLineChart,
+      label: "Allele Frequency",
+      href: "/allele-frequency",
+      isActive: (activePath: string) =>
+        activePath.includes("/allele-frequency"),
     },
     {
       icon: faWandSparkles,
@@ -70,6 +72,10 @@ function Header() {
       isActive: (activePath: string) => activePath === "/about",
     },
   ];
+
+  if (!contentConfig.showAlleleFrequency) {
+    navItems = navItems.filter((item) => item.href !== "/allele-frequency");
+  }
 
   const closeMenu = () => {
     setIsMenuOpen(false);

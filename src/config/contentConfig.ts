@@ -19,6 +19,7 @@ interface ContentConfig {
   siteDescription: string;
   showBasketAndLogin: boolean;
   addParticipantsEnabled: boolean;
+  showAlleleFrequency: boolean;
 }
 
 const contentConfig: ContentConfig = {
@@ -46,6 +47,7 @@ const contentConfig: ContentConfig = {
   showBasketAndLogin: env("NEXT_PUBLIC_SHOW_BASKET_AND_LOGIN") !== "false",
   addParticipantsEnabled:
     env("NEXT_PUBLIC_FEATURE_ADD_PARTICIPANTS") !== "false",
+  showAlleleFrequency: env("NEXT_PUBLIC_SHOW_ALLELE_FREQUENCY") !== "false",
 };
 
 export default contentConfig;

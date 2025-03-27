@@ -3,17 +3,19 @@
 
 "use client";
 
+import contentConfig from "@/config/contentConfig";
+import debounce from "@/utils/debounce";
 import {
   faBook,
   faDatabase,
   faHome,
+  faLineChart,
   faWandSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import debounce from "@/utils/debounce";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function Navbar() {
   const activeTab = usePathname();
@@ -22,7 +24,7 @@ function Navbar() {
     typeof window !== "undefined" ? window.scrollY : 0
   );
 
-  const navItems = [
+  let navItems = [
     {
       icon: faHome,
       label: "Home",
@@ -36,10 +38,11 @@ function Navbar() {
       isActive: (activePath: string) => activePath.includes("/datasets"),
     },
     {
-      icon: faDatabase,
-      label: "G-Variants",
-      href: "/gvariants",
-      isActive: (activePath: string) => activePath.includes("/gvariants"),
+      icon: faLineChart,
+      label: "Allele Frequency",
+      href: "/allele-frequency",
+      isActive: (activePath: string) =>
+        activePath.includes("/allele-frequency"),
     },
     {
       icon: faWandSparkles,
@@ -54,6 +57,10 @@ function Navbar() {
       isActive: (activePath: string) => activePath === "/publishers",
     },
   ];
+
+  if (!contentConfig.showAlleleFrequency) {
+    navItems = navItems.filter((item) => item.href !== "/allele-frequency");
+  }
 
   useEffect(() => {
     const handleScroll = debounce(() => {
@@ -90,7 +97,9 @@ function Navbar() {
                     }`}
                   >
                     <FontAwesomeIcon icon={item.icon} className="w-6 h-6" />
-                    <span className="text-xs mt-1">{item.label}</span>
+                    <span className="text-xs mt-1 h-6 text-center">
+                      {item.label}
+                    </span>
                   </Link>
                 </li>
               );

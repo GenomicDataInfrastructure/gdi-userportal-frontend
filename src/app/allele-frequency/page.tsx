@@ -2,24 +2,25 @@
 // SPDX-License-Identifier: Apache-2.0
 "use client";
 
-import { use, useState } from "react";
-import { GVariantsSearchResponse } from "@/app/api/discovery/open-api/schemas";
-import { UrlSearchParams } from "@/app/params";
-import { searchGVariantsApi } from "@/app/api/discovery";
-import PageContainer from "@/components/PageContainer";
-import React from "react";
 import GVariantsSearchBar, {
   SearchInputData,
-} from "@/app/gvariants/GVariantsSearchBar";
-import GVariantsTable from "@/app/gvariants/GVariantsTable";
-import { isAxiosError } from "axios";
+} from "@/app/allele-frequency/GVariantsSearchBar";
+import GVariantsTable from "@/app/allele-frequency/GVariantsTable";
+import { searchGVariantsApi } from "@/app/api/discovery";
+import { GVariantsSearchResponse } from "@/app/api/discovery/open-api/schemas";
 import ErrorComponent from "@/app/error";
+import { UrlSearchParams } from "@/app/params";
+import PageContainer from "@/components/PageContainer";
+import { isAxiosError } from "axios";
+import { use, useState } from "react";
 
-type GVariantsPageProps = {
+type AlleleFrequencyPageProps = {
   searchParams: Promise<UrlSearchParams>;
 };
 
-export default function GVariantsPage({ searchParams }: GVariantsPageProps) {
+export default function AlleleFrequencyPage({
+  searchParams,
+}: AlleleFrequencyPageProps) {
   const [results, setResults] = useState<GVariantsSearchResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [triedSearching, setTriedSearching] = useState(false);
@@ -36,15 +37,16 @@ export default function GVariantsPage({ searchParams }: GVariantsPageProps) {
     setError(null);
 
     try {
-      const endPosition = props.end ? [parseInt(props.end)] : null;
-      const startPosition = props.start ? [parseInt(props.start)] : null;
+      const [referenceName, start, referenceBases, alternateBases] =
+        props.variant.split("-");
+      const startPosition = start ? [parseInt(start)] : null;
       const response = await searchGVariantsApi({
         params: {
-          referenceName: props.referenceName,
+          referenceName,
           start: startPosition,
-          end: endPosition,
-          referenceBases: props.referenceBase,
-          alternateBases: props.alternateBase,
+          end: null,
+          referenceBases,
+          alternateBases,
           assemblyId: props.refGenome,
         },
       });

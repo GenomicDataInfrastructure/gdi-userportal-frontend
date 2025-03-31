@@ -22,8 +22,8 @@ fi
 TAGS=($(git tag --sort=-creatordate))
 
 # Get latest and previous tag
-LATEST_TAG=v1.3.7
-PREVIOUS_TAG=v1.3.6
+LATEST_TAG=${TAGS[1]}
+PREVIOUS_TAG=${TAGS[2]}
 
 echo "📢 Generating changelog for $LATEST_TAG (since $PREVIOUS_TAG)..."
 

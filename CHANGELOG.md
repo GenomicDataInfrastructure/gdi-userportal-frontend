@@ -12,6 +12,52 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [v1.3.8] - 2025-03-31
+
+### Added
+- feat(ART-12300): add debounce for handleScroll by @Antoine Dorard in d9b0ac4
+- feat(ART-12300): change getInitials behavior: always include all letters if less than 3 names by @Antoine Dorard in 863dfbd
+- feat(ART-12300): make return initials if the name is entirely lowercase by @Antoine Dorard in 3ea0b0a
+- feat(ART-12300): exclude lower case letters for initials by @Antoine Dorard in 75de64b
+- feat(ART-12300): add bottom navbar for small screens and dropdown menu for medium screens by @Antoine Dorard in 8135d02
+
+
+### Changed
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1738870241 by @Renovate Bot in cb90e39
+- refractor(ART12300): move avatar initials logic to src/utils by @Antoine Dorard in e4b28b3
+- test(ART-12300): add test for getInitials by @Antoine Dorard in 4cd5016
+- chore(deps): update dependency tailwindcss to v4 (#571) by @LNDS-Sysadmins in 394cada
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1738661183 by @Renovate Bot in d1df398
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1737939980 by @Renovate Bot in f20a268
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1737619681 by @Renovate Bot in 048b597
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1737562536 by @Renovate Bot in 58e2103
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1737531032 by @Renovate Bot in b4486c1
+
+
+### Fixed
+- fix: revert tailwind v4 (#577) by @Kacem Bechka in 8ab24b0
+- fix(ART-12300): fix typo by @Antoine Dorard in 5876007
+- fix(ART-12300): remove unused icon from imports by @Antoine Dorard in 2ffed0e
+- fix(deps): update dependency tailwind-merge to v3 (#573) by @LNDS-Sysadmins in 1ffdf13
+- fix: ART-12303/custom text not displayed by @Kacem Bechka in 82584b2
+- fix: ART-12303/custom text not displayed by @Kacem Bechka in d3288da
+- style(ART-12300): fix format by @Antoine Dorard in 62836c9
+- fix: ART-12303/custom text not displayed by @Kacem Bechka in fb0e0e9
+- fix: ART-12303/custom text not displayed by @Kacem Bechka in ad5516d
+- fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.56.0 by @Renovate Bot in e345102
+- fix lint by @Kacem Bechka in f3aa36b
+- fix test by @Kacem Bechka in d93aad7
+- fix test by @Kacem Bechka in 7596638
+- fix: ART-12382/missing form validation by @Kacem Bechka in 61c221a
+- fix(deps): update dependency next to v15.1.6 by @Renovate Bot in 1069748
+
+
+### Removed
+- remove About link from small screens' navbar (link in the footer for all screen sizes) by @Antoine Dorard in 585b7ef
+- refractor(ART-12300): loop through nav items to remove redundant code by @Antoine Dorard in 51e9760
+
+
+
 ## [v1.3.7] - 2025-03-25
 
 ### Added

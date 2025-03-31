@@ -26,7 +26,7 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
   );
 
   return (
-    <div className="overflow-x-auto p-4">
+    <div className="overflow-x-auto">
       <table className="min-w-full border border-surface shadow-lg rounded-xl overflow-hidden">
         <thead>
           <tr className="bg-primary text-surface">

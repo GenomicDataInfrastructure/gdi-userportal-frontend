@@ -3,11 +3,13 @@
 "use client";
 
 import Button from "@/components/Button";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import Tooltip from "../datasets/[id]/Tooltip";
 
 type FormFieldProps = {
+  fieldKey: string;
   label: string;
   type?: "text" | "select" | "number";
   value: string;
@@ -18,6 +20,7 @@ type FormFieldProps = {
 };
 
 const FormField: React.FC<FormFieldProps> = ({
+  fieldKey,
   label,
   type = "text",
   value,
@@ -27,35 +30,55 @@ const FormField: React.FC<FormFieldProps> = ({
   placeholder,
 }) => {
   return (
-    <div className={`flex flex-col lg:col-span-2 md:col-span-1 col-span-1`}>
-      <Tooltip message="Example value: 3-45864731-T-C" />
+    <div className="lg:col-span-2 col-span-1">
+      <div className="flex flex-col">
+        {tooltip && (
+          <>
+            <Tooltip message="Example value: 3-45864731-T-C" />
+          </>
+        )}
 
-      <span className="flex gap-2 items-center relative group"></span>
-      <label className="font-semibold mb-1 relative group w-fit">
-        {label}
-        {tooltip && <Tooltip message={tooltip} />}
-      </label>
-      {type === "select" ? (
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="border border-gray-300 p-2 rounded-sm w-full"
+        <label
+          htmlFor={fieldKey}
+          className="flex gap-2 items-center justify-center font-semibold mb-1 w-fit"
         >
-          {options?.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <input
-          type={type}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="border border-gray-300 p-2 rounded-sm w-full"
-          placeholder={placeholder}
-        />
-      )}
+          <p>{label}</p>
+          <div className="relative group">
+            {tooltip && (
+              <>
+                <FontAwesomeIcon
+                  icon={faInfoCircle}
+                  className="text-lg text-info top-0"
+                />
+                <Tooltip message={tooltip} />
+              </>
+            )}
+          </div>
+        </label>
+        {type === "select" ? (
+          <select
+            id={fieldKey}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className="border border-gray-300 p-2 rounded-sm w-full"
+          >
+            {options?.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <input
+            id={fieldKey}
+            type={type}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className="border border-gray-300 p-2 rounded-sm w-full"
+            placeholder={placeholder}
+          />
+        )}
+      </div>
     </div>
   );
 };
@@ -74,20 +97,19 @@ export type SearchInputData = {
 const formFields = [
   {
     label: "Variant",
-    key: "variant",
+    fieldKey: "variant",
     type: "text",
-    placeholder: "e.g. 3-45864731-T-C",
-    tooltip: "Example Value: 3-45864731-T-C",
+    placeholder: "Search for a variant",
   },
   {
     label: "Ref Genome",
-    key: "refGenome",
+    fieldKey: "refGenome",
     type: "select",
     options: [{ value: "GRCh37", label: "GRCh37" }],
   },
   {
     label: "Cohort",
-    key: "cohort",
+    fieldKey: "cohort",
     type: "select",
     options: [
       { value: "All", label: "All" },
@@ -146,11 +168,19 @@ export default function GVariantsSearchBar({
   return (
     <div className="mb-6">
       <h2 className="text-lg font-semibold mb-2">Search for your variant:</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 items-end">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 items-end">
         {formFields.map(
-          ({ label, key, type = "text", options, tooltip, placeholder }) => (
+          ({
+            label,
+            fieldKey: key,
+            type = "text",
+            options,
+            tooltip,
+            placeholder,
+          }) => (
             <FormField
               key={key}
+              fieldKey={key}
               label={label}
               type={type as "text" | "select"}
               value={searchFilterInput[key as keyof SearchInputData] || ""}
@@ -175,7 +205,19 @@ export default function GVariantsSearchBar({
           />
         </div>
       </div>
-      {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+
+      <div className="text-md flex items-end gap-2 mt-2">
+        <span className="text-black text-md">Variant Example: </span>
+        <Button
+          className="text-info hover:underline p-0 m-0"
+          text="3-45864731-T-C"
+          onClick={() => updateData("variant", "3-45864731-T-C")}
+        />
+      </div>
+
+      {errorMessage && (
+        <p className="text-red-500 text-md mt-2">{errorMessage}</p>
+      )}
     </div>
   );
 }

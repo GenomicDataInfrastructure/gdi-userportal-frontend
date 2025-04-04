@@ -18,8 +18,6 @@ if [ ! -f "$CHANGELOG_FILE" ]; then
   echo -e "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n" > "$CHANGELOG_FILE"
 fi
 
-git fetch --tags
-
 # Get all tags sorted by date (latest first)
 TAGS=($(git tag --sort=-creatordate))
 
@@ -67,8 +65,8 @@ sed -i '' '14r temp_changelog.md' "$CHANGELOG_FILE"
 rm temp_changelog.md
 
 # Commit and push the updated CHANGELOG.md
-git add "$CHANGELOG_FILE"
-git commit -m "📜 Update CHANGELOG.md for $LATEST_TAG"
-git push origin main
+#git add "$CHANGELOG_FILE"
+#git commit -m "📜 Update CHANGELOG.md for $LATEST_TAG"
+#git push origin main
 
 echo "✅ CHANGELOG.md updated successfully!"

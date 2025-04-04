@@ -65,8 +65,8 @@ sed -i '' '14r temp_changelog.md' "$CHANGELOG_FILE"
 rm temp_changelog.md
 
 # Commit and push the updated CHANGELOG.md
-#git add "$CHANGELOG_FILE"
-#git commit -m "📜 Update CHANGELOG.md for $LATEST_TAG"
-#git push origin main
+git add "$CHANGELOG_FILE"
+git commit -m "📜 Update CHANGELOG.md for $LATEST_TAG"
+git push origin main
 
 echo "✅ CHANGELOG.md updated successfully!"

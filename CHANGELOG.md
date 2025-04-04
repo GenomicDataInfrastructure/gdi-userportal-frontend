@@ -12,6 +12,69 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [v1.3.9] - 2025-04-04
+
+### Added
+- feat(ART-12204): update changelog (#597) by @jadzlnds in 50317fc
+- feat: add example value by @Younès Adem in fc9ed8d
+- feat(ART-12204): update changelog by @jadzlnds in 5aea39c
+- feat: add tooltip for variant value example by @Younès Adem in d632975
+- feat: allele frequency behind feature flag by @Younès Adem in a663ec0
+- feat: improve allele frequency ui by @Younès Adem in 5845d24
+- feat: change navbar for allele frequency by @Younès Adem in 01debd8
+- feat(ART-12204): fix conflict by @jadzlnds in 8dde9ca
+- feat(ART-12204): update trivy by @jadzlnds in db84ebd
+- feat(ART-12204): update trivy by @jadzlnds in 59164eb
+- feat(ART-12204): update changelog.sh by @jadzlnds in d255e47
+- feat(ART-12204): update changelog.sh by @jadzlnds in a9f0a5f
+- feat(ART-12204): update release add changelog.sh by @jadzlnds in 1ade413
+- feat: #13681 add feature flag for add participants by @Emiliana in 573c17f
+- feat(ART-12204): add release trigger by @jadzlnds in 0dda796
+- feat(ART-12142): invite member form by @Antoine Dorard in 2d9f78d
+
+
+### Changed
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1742929466 by @Renovate Bot in 274cb55
+- 📜 Update CHANGELOG.md for 1.3.3 by @jadzlnds in 1c94283
+- chore: bump tailwind up to v4 by @Bruno Pacheco in b7b05f1
+- chore(deps): update aquasecurity/trivy-action action to v0.30.0 by @Renovate Bot in 5491ed1
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1741873206 by @Renovate Bot in 37d4062
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1741243183 by @Renovate Bot in 882edd1
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1741091630 by @Renovate Bot in 63e46b6
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1740651938 by @Renovate Bot in 4ae7491
+- chore(deps): update sonarsource/sonarqube-scan-action action to v5 by @Renovate Bot in 66798ec
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1740411730 by @Renovate Bot in 13d8001
+- refactor(ART-12142): remove unecessary console.log by @Antoine Dorard in 1c48711
+- test(ART-12142): add extra tests by @Antoine Dorard in 61c3d71
+- refactor(ART-12142): remove unecessary import by @Antoine Dorard in 06d0f70
+- refactor(ART-12142): remove unecessary console.log's by @Antoine Dorard in d7afc3f
+- chore(ART-10056): polishing by @jadz94 in 7434ae6
+- chore(ART-10056): polishing by @jadz94 in 0617117
+- chore(ART-10056): update error handling by @jadz94 in c411238
+- chore(ART-10056): polish by @jadz94 in b6986af
+- chore(ART-10056): use meaningful names by @jadz94 in b3b8588
+- chore(ART-10056): license by @jadz94 in e466501
+- chore(ART-10056): refactor by @jadz94 in 5481e95
+- chore(ART-10056): refactor by @jadz94 in e4aeb66
+- fear(ART-10056): add gvariants page by @jadz94 in 2ed4a57
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1739448964 by @Renovate Bot in dddecd8
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1739407042 by @Renovate Bot in 338a09e
+
+
+### Fixed
+- ignore cache in prettier to fix the pipeline by @zia alborzi in 6770982
+- fix(deps): update dependency next to v15.2.4 by @Renovate Bot in 9c094d8
+- fix(deps): update dependency react-markdown to v10 by @Renovate Bot in ee0aef1
+- fix(deps): update dependency next to v15.2.3 by @Renovate Bot in 0040465
+- chore(ART-10056): polish and fix bug by @jadz94 in 59a41a9
+- chore(ART-10056): fix formatting by @jadz94 in 2741a22
+- chore(ART-10056): fix formatting by @jadz94 in e738951
+- chore(ART-10056): fix formatting by @jadz94 in 0c0714f
+- chore(ART-10056): fix formatting by @jadz94 in 72b9d8d
+- fix(deps): update dependency next to v15.1.7 by @Renovate Bot in 377a5b2
+
+
+
 ## [v1.3.8] - 2025-03-31
 
 ### Added

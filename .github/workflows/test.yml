@@ -21,9 +21,10 @@ jobs:
       - name: Install
         run: |
           npm install
-      - name: Test
+      - name: Run Unit Test
         run: |
           npm run test
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 

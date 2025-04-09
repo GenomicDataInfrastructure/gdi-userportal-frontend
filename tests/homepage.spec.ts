@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import { test, expect } from "@playwright/test";
 
 test("Homepage renders correctly and loads dynamic content", async ({

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import { defineConfig, devices } from "@playwright/test";
 
 /**
@@ -29,7 +33,6 @@ export default defineConfig({
     },
   ],
 
-  /* Run your local dev server before starting the tests */
   webServer: {
     command: "npm run dev",
     url: "http://localhost:3000",

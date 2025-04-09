@@ -6,7 +6,9 @@ test("Dataset renders static and dynamic content correctly", async ({
   // Listen for unexpected errors
   const consoleErrors: string[] = [];
   page.on("console", (msg) => {
-    if (msg.type() === "error") consoleErrors.push(msg.text());
+    if (msg.type() === "error") {
+      consoleErrors.push(msg.text());
+    }
   });
 
   await page.goto("/");

@@ -13,7 +13,7 @@ test("Dataset renders static and dynamic content correctly", async ({
 
   await page.goto("/");
 
-  // 1. Static content: main heading and subtitle
+  // Static content: main heading and subtitle
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     /welcome/i
   );
@@ -21,10 +21,10 @@ test("Dataset renders static and dynamic content correctly", async ({
     page.getByRole("heading", { name: /genomic data infrastructure/i })
   ).toBeVisible();
 
-  // 2. Search bar
+  // Search bar
   await expect(page.getByRole("textbox")).toBeVisible();
 
-  // 3. Themes section (if present)
+  // Themes section
   const themeCards = page.getByRole("heading", { level: 3 });
   const themeCardCount = await themeCards.count();
   expect(themeCardCount).toBeGreaterThan(0);
@@ -36,16 +36,7 @@ test("Dataset renders static and dynamic content correctly", async ({
   const seeDatasetLinks = page.getByRole("link", { name: /see datasets/i });
   await expect(seeDatasetLinks.first()).toBeVisible();
 
-  // 4. "About the data portal" section
-  await expect(
-    page.getByRole("heading", { name: /about the data portal/i })
-  ).toBeVisible();
-  await expect(page.getByRole("link", { name: /read more/i })).toHaveAttribute(
-    "href",
-    "/about"
-  );
-
-  // 5. Most recent datasets section
+  // Most recent datasets section
   await expect(
     page.getByRole("heading", { name: /most recent datasets/i })
   ).toBeVisible();

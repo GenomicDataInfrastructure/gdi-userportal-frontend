@@ -3,7 +3,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { defineConfig, devices } from "@playwright/test";
+import dotenv from "dotenv";
 
+// Load E2E test env vars
+dotenv.config({ path: ".env.e2e.test" });
 /**
  * See https://playwright.dev/docs/test-configuration.
  */

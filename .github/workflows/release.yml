@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version Increment (major, minor, patch)'
+        description: "Version Increment (major, minor, patch)"
         required: true
-        default: 'patch'
+        default: "patch"
 
 env:
   REGISTRY: ghcr.io
@@ -84,7 +84,6 @@ jobs:
         run: ./changelog.sh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
   publish-release:
     runs-on: ubuntu-latest

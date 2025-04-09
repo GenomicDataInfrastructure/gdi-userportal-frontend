@@ -8,4 +8,9 @@ module.exports = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "/tests/", // Ignore Playwright tests
+    "/playwright-report/", // Just in case
+  ],
 };

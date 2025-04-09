@@ -55,3 +55,10 @@ tsconfig.tsbuildinfo
 .scannerwork
 /src/app/api/discovery/open-api/schemas.ts
 /src/app/api/access-management/open-api/schemas.ts
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

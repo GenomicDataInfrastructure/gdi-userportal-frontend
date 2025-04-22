@@ -11,7 +11,7 @@ WORKDIR /app
 # Install dependencies based on the available lock file
 COPY package.json ./
 COPY package-lock.json ./
-RUN  npm ci --ignore-scripts && npm rebuild lightningcss
+RUN  npm ci --ignore-scripts
 
 # Rebuild the source code only when needed
 FROM base AS builder

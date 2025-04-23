@@ -20,13 +20,17 @@ import { OTLPLogExporter } from "@opentelemetry/exporter-logs-otlp-http";
 const sdk = new NodeSDK({
   resource: new Resource({
     [ATTR_SERVICE_NAME]: process.env.OTEL_SERVICE_NAME,
-  }),
-  logRecordProcessors: [new BatchLogRecordProcessor(new OTLPLogExporter())],
+  }) as any,
+  logRecordProcessors: [
+    new BatchLogRecordProcessor(new OTLPLogExporter() as any),
+  ],
   instrumentations: [getNodeAutoInstrumentations()],
-  spanProcessors: [new BatchSpanProcessor(new OTLPTraceExporter())],
+  spanProcessors: [
+    new BatchSpanProcessor(new OTLPTraceExporter() as any) as any,
+  ],
   metricReader: new PeriodicExportingMetricReader({
-    exporter: new OTLPMetricExporter(),
-  }),
+    exporter: new OTLPMetricExporter() as any,
+  }) as any,
 });
 
 sdk.start();

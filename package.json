@@ -58,7 +58,7 @@
     "next-auth": "^4.24.11",
     "next-runtime-env": "^3.2.0",
     "node-mocks-http": "^1.16.2",
-    "npm-run-all2": "^7.0.0",
+    "npm-run-all2": "^8.0.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^10.0.0",

@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version Increment (major, minor, patch)'
+        description: "Version Increment (major, minor, patch)"
         required: true
-        default: 'patch'
+        default: "patch"
 
 env:
   REGISTRY: ghcr.io

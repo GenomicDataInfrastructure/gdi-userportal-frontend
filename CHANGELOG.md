@@ -11,10 +11,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
 ## [v1.3.9] - 2025-04-04
 
 ### Added
+
 - feat(ART-12204): update changelog (#597) by @jadzlnds in 50317fc
 - feat: add example value by @Younès Adem in fc9ed8d
 - feat(ART-12204): update changelog by @jadzlnds in 5aea39c
@@ -32,8 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - feat(ART-12204): add release trigger by @jadzlnds in 0dda796
 - feat(ART-12142): invite member form by @Antoine Dorard in 2d9f78d
 
-
 ### Changed
+
 - chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1742929466 by @Renovate Bot in 274cb55
 - 📜 Update CHANGELOG.md for 1.3.3 by @jadzlnds in 1c94283
 - chore: bump tailwind up to v4 by @Bruno Pacheco in b7b05f1
@@ -60,8 +60,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1739448964 by @Renovate Bot in dddecd8
 - chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1739407042 by @Renovate Bot in 338a09e
 
-
 ### Fixed
+
 - ignore cache in prettier to fix the pipeline by @zia alborzi in 6770982
 - fix(deps): update dependency next to v15.2.4 by @Renovate Bot in 9c094d8
 - fix(deps): update dependency react-markdown to v10 by @Renovate Bot in ee0aef1
@@ -73,19 +73,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - chore(ART-10056): fix formatting by @jadz94 in 72b9d8d
 - fix(deps): update dependency next to v15.1.7 by @Renovate Bot in 377a5b2
 
-
-
 ## [v1.3.8] - 2025-03-31
 
 ### Added
+
 - feat(ART-12300): add debounce for handleScroll by @Antoine Dorard in d9b0ac4
 - feat(ART-12300): change getInitials behavior: always include all letters if less than 3 names by @Antoine Dorard in 863dfbd
 - feat(ART-12300): make return initials if the name is entirely lowercase by @Antoine Dorard in 3ea0b0a
 - feat(ART-12300): exclude lower case letters for initials by @Antoine Dorard in 75de64b
 - feat(ART-12300): add bottom navbar for small screens and dropdown menu for medium screens by @Antoine Dorard in 8135d02
 
-
 ### Changed
+
 - chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1738870241 by @Renovate Bot in cb90e39
 - refractor(ART12300): move avatar initials logic to src/utils by @Antoine Dorard in e4b28b3
 - test(ART-12300): add test for getInitials by @Antoine Dorard in 4cd5016
@@ -96,8 +95,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1737562536 by @Renovate Bot in 58e2103
 - chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1737531032 by @Renovate Bot in b4486c1
 
-
 ### Fixed
+
 - fix: revert tailwind v4 (#577) by @Kacem Bechka in 8ab24b0
 - fix(ART-12300): fix typo by @Antoine Dorard in 5876007
 - fix(ART-12300): remove unused icon from imports by @Antoine Dorard in 2ffed0e
@@ -114,16 +113,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix: ART-12382/missing form validation by @Kacem Bechka in 61c221a
 - fix(deps): update dependency next to v15.1.6 by @Renovate Bot in 1069748
 
-
 ### Removed
+
 - remove About link from small screens' navbar (link in the footer for all screen sizes) by @Antoine Dorard in 585b7ef
 - refractor(ART-12300): loop through nav items to remove redundant code by @Antoine Dorard in 51e9760
-
-
 
 ## [v1.3.7] - 2025-03-25
 
 ### Added
+
 - feat(ART-11336): add dataset type and frontend element to display it by @Antoine Dorard in a73f09b
 - feat(ART-11570): simplify open api by @jadz94 in 0fa6e26
 - feat(ART-11332): update customization by @jadz94 in 5bd3491
@@ -133,8 +131,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - feat(ART-11332): move customizations to separate folder by @jadz94 in c8f0991
 - feat: ART-11337/intergrate otel dev by @Kacem Bechka in c4a5882
 
-
 ### Changed
+
 - chore(deps): update dependency eslint-config-prettier to v10 by @Renovate Bot in eb52fcc
 - chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1736731764 by @Renovate Bot in 09fba4d
 - chore: add missing variables by @Bruno Pacheco in cb8c958
@@ -149,8 +147,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - chore(deps): automerge in branches by @Bruno Pacheco in 1f3e96f
 - chore: update legal.md by @Bruno Pacheco in 588ff34
 
-
 ### Fixed
+
 - fix(deps): update dependency next to v15.1.5 by @Renovate Bot in 7dccd85
 - chore: fix missing labels by @Bruno Pacheco in 182cade
 - fix(ART-11336): remove formatDate around dcatType by @Antoine Dorard in c06f212
@@ -168,15 +166,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - chore(deps): automerge all types of patch PRs by @Bruno Pacheco in ecd3a09
 - chore(deps): automerge patches by @Bruno Pacheco in aa7bbda
 
-
-
 ## [v1.3.6] - 2025-03-25
 
 ### Added
+
 - feat: improve external service integration (#531) by @Younès Adem in 7c63c1a
 
-
 ### Changed
+
 - chore(deps): update dependency eslint-config-next to v14.2.21 by @Renovate Bot in 0c66174
 - chore: move sonar check to the end of the pipeline by @Bruno Pacheco in 133bd46
 - chore(deps): upgrade typescript by @Bruno Pacheco in 23a0ab9
@@ -194,8 +191,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - chore(deps): update dependency eslint-config-next to v14.2.20 by @Renovate Bot in db3463a
 - chore(deps): update devdependencies by @Renovate Bot in 8555ea8
 
-
 ### Fixed
+
 - fix: infinite rendering on dataset page by @Younès Adem in 4d2a8d7
 - fix(deps): update dependency next to v14.2.21 by @Renovate Bot in 613dd2f
 - fix: upgrade class-variance-authority from 0.7.0 to 0.7.1 by @snyk-bot in b443c90
@@ -205,17 +202,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix(deps): update dependency next to v14.2.20 by @Renovate Bot in 3f8322a
 - fix(deps): update dependency next to v14.2.19 by @Renovate Bot in 1b9ffaa
 
-
-
 ## [v1.3.5] - 2025-03-25
 
 ### Added
+
 - ART-10311/feat: add variant filters (#517) by @Younès Adem in 231f503
 - feat: ART-9692/change themes in homepage by @Kacem Bechka in cb1b8aa
 - feat: ART-9692/add themes and publishers by @Kacem Bechka in fd8b844
 
-
 ### Changed
+
 - chore(deps): update registry.access.redhat.com/ubi9/nodejs-20-minimal docker tag to v9.5-1732617235 by @Renovate Bot in 2eb321f
 - chore(deps): update registry.access.redhat.com/ubi9/nodejs-20-minimal docker tag to v9 by @Renovate Bot in abcc901
 - chore(deps): update aquasecurity/trivy-action action to v0.29.0 by @Renovate Bot in a49c1af
@@ -235,8 +231,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - chore(deps): update sonarsource/sonarqube-scan-action action to v4 by @Renovate Bot in f5f854b
 - Feat/Introducing free text filters + removing filters from url (#499) by @Younès Adem in 25adf11
 
-
 ### Fixed
+
 - Revert "fix(deps): update dependency next to v15" by @Bruno Pacheco in 635b5d9
 - fix version issue by @jadz94 in ee9acfe
 - fix(deps): update dependency next to v15 by @Renovate Bot in 9d50341
@@ -249,19 +245,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix linter by @Kacem Bechka in 686d48a
 - fix: free text values sync with global states (#503) by @Younès Adem in 13c3284
 
-
-
-
 ## [v1.3.4] - 2025-03-25
 
 ### Added
+
 - feat: add languages to distribution by @Bruno Pacheco in fb88eb4
-
-
 
 ## [v1.3.3] - 2025-03-25
 
 ### Added
+
 - feat: sort datasets by issue date by @Bruno Pacheco in 716b8d6
 - feat: add otel by @Bruno Pacheco in a926626
 - feat: ART-10196/Header changes (#493) by @Kacem Bechka in ba3248c
@@ -270,8 +263,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - feat: display distributionsCount and downloadUrl by @Bruno Pacheco in ee35ebd
 - feat: display coniditional fields properly by @Sulejman Karisik in ae69afa
 
-
 ### Changed
+
 - chore(deps): update dependency eslint-config-next to v14.2.17 by @Renovate Bot in 1e33c08
 - chore: use cached trivy db by @Bruno Pacheco in 1e9b91c
 - chore: cache trivy db by @Bruno Pacheco in 20b855d
@@ -284,17 +277,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - chore(deps): update dependencies by @Bruno Pacheco in b1fb3ef
 - chore(deps): update aquasecurity/trivy-action action to v0.27.0 (#480) by @LNDS-Sysadmins in 6609945
 
-
 ### Fixed
+
 - fix(deps): update dependency next to v14.2.17 by @Renovate Bot in 5f2ffae
 - fix: run prettier on yml files by @Bruno Pacheco in c207483
 - fix: do checks in same iteration by @Sulejman Karisik in b3b03ec
 - fix: multiple themes not displaying correctly by @Younès Adem in 5207059
 - fix(deps): update dependency next to v14.2.16 (#487) by @LNDS-Sysadmins in 3057350
 - fix(docs): run prettier on CHANGELOG.md by @Bruno Pacheco in c6e51db
-
-
-
 
 ## [v1.3.2] - 2024-10-09
 

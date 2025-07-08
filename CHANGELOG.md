@@ -12,6 +12,50 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+## [v1.3.10] - 2025-07-08
+
+### Added
+- feat(ART-13843): update sonar config by @jadzlnds in 5e16ad1
+- feat(ART-13843): update test env by @jadzlnds in 47ee4ba
+- feat(ART-13843): update test env by @jadzlnds in 21b60f4
+- feat(ART-13843): exclude e2e tests from unit tests by @jadzlnds in 9f5d1bd
+- feat(ART-13843): exclude e2e tests from unit tests by @jadzlnds in a777774
+- feat(ART-13843): add E2E by @jadzlnds in e4734e8
+- feat(ART-13843): add E2E by @jadzlnds in 4dce601
+- feat(ART-12204): update changelog by @jadzlnds in b613e10
+- feat(ART-12204): update changelog by @jadzlnds in 14cd46d
+- feat(ART-12204): update changelog by @jadzlnds in c90dfcc
+- feat(ART-12204): update changelog by @jadzlnds in cc430e5
+- feat(ART-12204): make changelog is updated when running release by splitting runners by @jadzlnds in 484eb92
+- feat(ART-12204): make changelog is updated when running release by splitting runners by @jadzlnds in 9884fa8
+- feat(ART-12204): update changelog by @jadzlnds in 091ef11
+
+
+### Changed
+- chore(deps): update aquasecurity/trivy-action action to v0.32.0 by @Renovate Bot in cfa701d
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.6-1751380832 by @Renovate Bot in 6306de2
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1746535384 by @Renovate Bot in 855c715
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.5-1746006420 by @Renovate Bot in fcf867b
+- add opentelemtry resources to be able to upgrade to the newest version by @zia alborzi in a8a1996
+- opentelemetry type check by @zia alborzi in 2fbe3b0
+- update package-lock.json by @zia alborzi in bfb5b42
+- update package-lock.json by @zia alborzi in 1d9aad3
+- revert changes by @zia alborzi in dd4c77a
+
+
+### Fixed
+- fix(deps): update dependency next to v15.3.5 by @Renovate Bot in 3266475
+- fix(deps): update dependency @opentelemetry/resources to v2.0.1 by @Renovate Bot in 2bfa016
+- fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.58.0 by @Renovate Bot in 42b3873
+- minimal fix by @zia alborzi in f084061
+- fix opentelemetry upgrade by @zia alborzi in cb276df
+- fix(deps): update opentelemetry-js monorepo to ^0.200.0 by @Renovate Bot in 5f5185f
+- fix fail by @zia alborzi in 98c077f
+- check fix by @zia alborzi in dc213e1
+- fix by @zia alborzi in bdc19bf
+- fix(deps): update dependency next to v15.2.5 by @Renovate Bot in cd36e15
+
+
 
 ### Added
 

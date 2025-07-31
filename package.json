@@ -65,7 +65,7 @@
     "react-phone-number-input": "^3.4.10",
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.0",
-    "sharp": "^0.34.2",
+    "sharp": "^0.34.3",
     "tailwind-merge": "^3.0.0",
     "tailwindcss-animate": "^1.0.7",
     "utils": "^0.2.2"

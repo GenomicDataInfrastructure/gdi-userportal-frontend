@@ -1,0 +1,16 @@
+{
+  "feature_flags": {
+    "enable_validation_via_group_manager": true,
+    "enable_duration_of_data": true,
+    "enable_conventions": true,
+    "enable_area_of_work_and_competence": true,
+    "enable_distribution_path": true,
+    "enable_notes": false,
+    "enable_distribution_notes": false,
+    "enable_specific_location": true,
+    "enable_authentic_source": true,
+    "enable_multi_tenants": true,
+    "enable_accords_de_principe": true,
+    "enable_upload_datasets_to_front_office": true
+  }
+}

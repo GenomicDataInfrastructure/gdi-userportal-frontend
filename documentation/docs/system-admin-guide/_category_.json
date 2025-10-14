@@ -1,0 +1,8 @@
+{
+  "label": "System admin guide",
+  "position": 7,
+  "link": {
+    "type": "generated-index",
+    "description": "Deploy and configure your own instance of the GDI User Portal application."
+  }
+}

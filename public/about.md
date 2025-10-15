@@ -10,7 +10,7 @@ personalised medicine for cancer, common, rare, and infectious diseases
 as well as access to a reference genome collection representing the
 European population (Genome of Europe).
 
-# Organizations
+## Organizations
 Luxembourg National Data Service (LNDS), Center for Genomic Regulation and Health-RI.
 
 ## User Portal

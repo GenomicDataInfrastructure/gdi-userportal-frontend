@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 PNED G.I.E.
+# SPDX-FileCopyrightText: 2025 PNED G.I.E.
 #
 # SPDX-License-Identifier: Apache-2.0
 FROM registry.access.redhat.com/ubi9/nodejs-22-minimal:9.6-1754870984 AS base

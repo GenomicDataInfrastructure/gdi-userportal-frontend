@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+// SPDX-FileCopyrightText: 2025 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
 import { iso6393 } from "iso-639-3/iso6393";

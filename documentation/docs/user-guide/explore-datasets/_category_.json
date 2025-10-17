@@ -1,0 +1,9 @@
+{
+    "label": "Explore datasets",
+    "position": 3,
+    "link": {
+        "type": "generated-index",
+        "title": "Search datasets",
+        "description": "Learn how to search and explore datasets in the GDI User Portal."
+    }
+}

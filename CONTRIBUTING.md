@@ -191,6 +191,11 @@ git push origin fix-bug-123
 
 Please note that these instructions are general guidelines and may vary depending on the specific project. Make sure to consult the project's documentation and communicate with the project team for any project-specific instructions or requirements.
 
+
+### Improving The Documentation
+
+To contribute to the documentation, read the [documentation readme](documentation/README.md).
+
 ## Styleguides
 
 ### Commit Messages

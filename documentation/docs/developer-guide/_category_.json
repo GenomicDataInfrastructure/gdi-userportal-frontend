@@ -1,0 +1,8 @@
+{
+  "label": "Developer guide",
+  "position": 8,
+  "link": {
+    "type": "generated-index",
+    "description": "Set up your development environment, contribute to the GDI User Portal project, and understand its architecture."
+  }
+}

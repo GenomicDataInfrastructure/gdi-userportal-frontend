@@ -1,0 +1,36 @@
+
+.card {
+  background: var(--ifm-card-background-color, #fff);
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  padding: 1.5rem;
+  margin: 1rem;
+  transition: box-shadow 0.2s, transform 0.15s;
+  will-change: transform;
+  cursor: pointer;
+}
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  border-color: #d1d5db;
+  transform: translateY(-4px) scale(1.02);
+}
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--ifm-heading-color, #222);
+}
+.cardTitleLink {
+  color: var(--ifm-color-primary, #2e8555);
+  text-decoration: none;
+  transition: text-decoration 0.2s;
+}
+.cardTitleLink:hover {
+  text-decoration: underline;
+}
+.cardDescription {
+  font-size: 1rem;
+  color: var(--ifm-font-color-base, #444);
+  margin: 0;
+}

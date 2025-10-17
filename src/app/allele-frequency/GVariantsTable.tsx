@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: Center for Genomic Regulation
+// SPDX-FileCopyrightText: 2025 Center for Genomic Regulation
 // SPDX-FileContributor: 2025 PNED G.I.E.
 // SPDX-License-Identifier: Apache-2.0
 "use client";

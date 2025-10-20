@@ -5,7 +5,7 @@ Copyright (c) 2025 Luxembourg National Data Service (LNDS).
 
 This product incorporates components and contributions from:
 
-- Center for Genomic Regulation
+- Centre for Genomic Regulation
 - Health-RI
 
 # Font Assets

@@ -1,5 +1,5 @@
-// SPDX-FileCopyrightText: 2024 PNED G.I.E.
-//
+// SPDX-FileCopyrightText: 2025 Centre for Genomic Regulation
+// SPDX-FileContributor: 2025 PNED G.I.E.
 // SPDX-License-Identifier: Apache-2.0
 
 import { searchGVariantsApi } from "@/app/api/discovery";

@@ -1,13 +1,13 @@
-<!-- 
-SPDX-FileCopyrightText: 2025 Genomic Data Infrastructure
-SPDX-License-Identifier: CC-BY-4.0
--->
-
 ---
 slug: /welcome-data-users
 sidebar_label: "Welcome"
 sidebar_position: 1
 ---
+
+<!-- 
+SPDX-FileCopyrightText: 2025 Genomic Data Infrastructure
+SPDX-License-Identifier: CC-BY-4.0
+-->
 
 # Welcome
 

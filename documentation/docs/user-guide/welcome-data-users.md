@@ -5,7 +5,7 @@ sidebar_position: 1
 ---
 
 <!-- 
-SPDX-FileCopyrightText: 2025 Genomic Data Infrastructure
+SPDX-FileCopyrightText: 2025 PNED G.I.E
 SPDX-License-Identifier: CC-BY-4.0
 -->
 

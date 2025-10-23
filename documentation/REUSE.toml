@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2025 PNED G.I.E
+# SPDX-License-Identifier: CC-BY-4.0
+
 version = 1
 SPDX-PackageName = "GDI User Portal Documentation"
 SPDX-PackageSupplier = "Genomic Data Infrastructure"
@@ -6,29 +9,29 @@ SPDX-PackageDownloadLocation = "https://github.com/GenomicDataInfrastructure/gdi
 [[annotations]]
 path = "docs/**"
 precedence = "closest"
-SPDX-FileCopyrightText = "2025 Genomic Data Infrastructure"
+SPDX-FileCopyrightText = "2025 PNED G.I.E"
 SPDX-License-Identifier = "CC-BY-4.0"
 
 [[annotations]]
 path = "src/**"
 precedence = "closest"
-SPDX-FileCopyrightText = "2025 Genomic Data Infrastructure"
+SPDX-FileCopyrightText = "2025 PNED G.I.E"
 SPDX-License-Identifier = "CC-BY-4.0"
 
 [[annotations]]
 path = "static/**"
 precedence = "closest"
-SPDX-FileCopyrightText = "2025 Genomic Data Infrastructure"
+SPDX-FileCopyrightText = "2025 PNED G.I.E"
 SPDX-License-Identifier = "CC-BY-4.0"
 
 [[annotations]]
 path = "scripts/**"
 precedence = "closest"
-SPDX-FileCopyrightText = "2025 Genomic Data Infrastructure"
+SPDX-FileCopyrightText = "2025 PNED G.I.E"
 SPDX-License-Identifier = "CC-BY-4.0"
 
 [[annotations]]
 path = ["*.md", "*.json", "*.js", "*.ts", "*.css"]
 precedence = "closest"
-SPDX-FileCopyrightText = "2025 Genomic Data Infrastructure"
+SPDX-FileCopyrightText = "2025 PNED G.I.E"
 SPDX-License-Identifier = "CC-BY-4.0"

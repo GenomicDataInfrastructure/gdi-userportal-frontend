@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2025 Genomic Data Infrastructure
+# SPDX-License-Identifier: CC-BY-4.0
+
 version = 1
 SPDX-PackageName = "GDI User Portal Documentation"
 SPDX-PackageSupplier = "Genomic Data Infrastructure"

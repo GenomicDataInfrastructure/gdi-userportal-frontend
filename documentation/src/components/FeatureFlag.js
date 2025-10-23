@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { loadConfig } from '../utils/configLoader';
+import React, { useState, useEffect } from "react";
+import { loadConfig } from "../utils/configLoader";
 
 /**
  * FeatureFlag component that conditionally renders content based on feature flags
@@ -11,23 +11,28 @@ import { loadConfig } from '../utils/configLoader';
  * @param {boolean} props.inverse - If true, renders children when flag is disabled (default: false)
  * @returns {React.ReactNode}
  */
-export default function FeatureFlag({ flag, children, fallback = null, inverse = false }) {
+export default function FeatureFlag({
+  flag,
+  children,
+  fallback = null,
+  inverse = false,
+}) {
   const [featureFlags, setFeatureFlags] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  console.log('FeatureFlag render:', { flag, inverse });
+  console.log("FeatureFlag render:", { flag, inverse });
 
   useEffect(() => {
     loadConfig()
-      .then(config => {
+      .then((config) => {
         setFeatureFlags(config.feature_flags || {});
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         setError(err);
         setLoading(false);
-        console.error('Failed to load feature flags:', err);
+        console.error("Failed to load feature flags:", err);
       });
   }, []);
 
@@ -60,12 +65,12 @@ export function useFeatureFlags() {
 
   useEffect(() => {
     loadConfig()
-      .then(config => {
+      .then((config) => {
         setFeatureFlags(config.feature_flags || {});
-        console.log('Feature flags loaded:', config.feature_flags);
+        console.log("Feature flags loaded:", config.feature_flags);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         setError(err);
         setLoading(false);
       });

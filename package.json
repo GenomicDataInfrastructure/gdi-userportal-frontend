@@ -25,6 +25,7 @@
     "validate": "npm run lint && npm run test && npm run type-check && npm run format"
   },
   "dependencies": {
+    "@docusaurus/preset-classic": "^3.9.1",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
@@ -59,6 +60,7 @@
     "next-runtime-env": "^3.2.0",
     "node-mocks-http": "^1.17.2",
     "npm-run-all2": "^8.0.4",
+    "prism-react-renderer": "^2.4.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^10.0.0",
@@ -71,6 +73,7 @@
     "utils": "^0.2.2"
   },
   "devDependencies": {
+    "@docusaurus/types": "^3.9.1",
     "@playwright/test": "^1.51.1",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/jest": "^30.0.0",

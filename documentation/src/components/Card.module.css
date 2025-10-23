@@ -1,17 +1,18 @@
-
 .card {
   background: var(--ifm-card-background-color, #fff);
   border-radius: 0.75rem;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
   padding: 1.5rem;
   margin: 1rem;
-  transition: box-shadow 0.2s, transform 0.15s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.15s;
   will-change: transform;
   cursor: pointer;
 }
 .card:hover {
-  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   border-color: #d1d5db;
   transform: translateY(-4px) scale(1.02);
 }

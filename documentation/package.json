@@ -1,5 +1,5 @@
 {
-  "name": "GDI User Portal Documentation",
+  "name": "gdi-user-portal-documentation",
   "version": "0.0.0",
   "private": false,
   "scripts": {
@@ -15,9 +15,9 @@
     "generate-search": "node scripts/generate-search-index.js"
   },
   "dependencies": {
-    "@docusaurus/core": "3.7.0",
-    "@docusaurus/preset-classic": "3.7.0",
-    "@docusaurus/theme-mermaid": "^3.7.0",
+    "@docusaurus/core": "^3.9.2",
+    "@docusaurus/preset-classic": "^3.9.2",
+    "@docusaurus/theme-mermaid": "^3.9.2",
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.0.0",
     "gray-matter": "^4.0.3",
@@ -26,14 +26,14 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.7.0",
-    "@docusaurus/tsconfig": "3.7.0",
-    "@docusaurus/types": "3.7.0",
+    "@docusaurus/module-type-aliases": "^3.9.2",
+    "@docusaurus/tsconfig": "^3.9.2",
+    "@docusaurus/types": "^3.9.2",
     "typescript": "~5.8.0"
   },
   "browserslist": {
     "production": [
-      ">0.5%",  
+      ">0.5%",
       "not dead",
       "not op_mini all"
     ],
@@ -45,5 +45,8 @@
   },
   "engines": {
     "node": ">=18.0"
+  },
+  "overrides": {
+    "brace-expansion": "^2.0.1"
   }
 }

@@ -20,7 +20,6 @@ const config: Config = {
   projectName: "gdi-userportal-frontend", // Your repository name
 
   onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "warn",
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -31,6 +30,9 @@ const config: Config = {
   },
   markdown: {
     mermaid: true,
+    hooks: {
+      onBrokenMarkdownLinks: "warn",
+    },
   },
   themes: ["@docusaurus/theme-mermaid"],
   plugins: [],
@@ -72,19 +74,19 @@ const config: Config = {
           label: "Data users",
         },
         {
-          type: "docSidebar", 
+          type: "docSidebar",
           sidebarId: "catalogManagersGuideSidebar",
           position: "right",
           label: "Catalog managers",
         },
         {
           type: "docSidebar",
-          sidebarId: "developerGuideSidebar", 
+          sidebarId: "developerGuideSidebar",
           position: "right",
           label: "Developers",
         },
         {
-          type: "docSidebar", 
+          type: "docSidebar",
           sidebarId: "systemAdminGuideSidebar",
           position: "right",
           label: "System admins",

@@ -6,29 +6,13 @@ sidebar_position: 3
 
 # Add participants to your application
 
-Invite other users as participants to help complete your application requirements and provide input. This is useful for teams or projects with multiple contributors, as all participants can access the same application details.
+### Collaborating on an Application
 
-## How it works
+<figure>
+  <img src="img/dashboard-overview/invite.gif" alt="Invite Participants" />
+  <figcaption></figcaption>
+</figure>
 
-After adding participants to your application, they can:
+The GDI Portal provides the ability to collaborate with other users on an application. Once you've created your application, you can invite others to join and contribute by adding them as participants. To do so, simply click on the **Add Participant** button on the application details page.
 
-- View the application details
-- Provide input and help complete missing information
-- Upload required documentation
-- Assist with form completion
-
-
-## Add participants
-
-To add participants to your application:
-
-1. Select the **folder icon** to access your applications.
-
-2. Under the **Applications** tab, select the application you want to add participants to.
-
-3. Select **Add Participant** on the application details page.
-
-4. Enter their **name** and **email address**, then select **Send**. This sends an email invitation to the participant with a link to access the application.
-
-5. After the invitee accepts the invitation, they will appear in the **Participants** section of the application details page.
-
+Collaborators can view the application, provide input, and help complete any missing details. This is especially useful for research teams or projects that involve multiple contributors. All participants added to the application will have access to the same details, ensuring everyone involved is on the same page. The collaboration feature makes the request process more efficient and transparent, allowing for better teamwork on dataset access requests.

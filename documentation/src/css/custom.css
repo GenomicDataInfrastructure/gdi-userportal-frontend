@@ -7,21 +7,21 @@
 /* You can override the default Infima variables here. */
 :root {
   /* Brand Colors */
-  --gdi-primary: #7B2D7E;  /* Primary brand purple */
-  --gdi-secondary: #F5A623; /* Secondary orange accent */
-  
+  --gdi-primary: #7b2d7e; /* Primary brand purple */
+  --gdi-secondary: #f5a623; /* Secondary orange accent */
+
   /* Primary color variants for light theme */
-  --ifm-color-primary: #7B2D7E;
-  --ifm-color-primary-dark: #6D2670;
-  --ifm-color-primary-darker: #5F1F62;
-  --ifm-color-primary-darkest: #4A1849;
-  --ifm-color-primary-light: #89348C;
-  --ifm-color-primary-lighter: #973B9A;
-  --ifm-color-primary-lightest: #A542A8;
-  
+  --ifm-color-primary: #7b2d7e;
+  --ifm-color-primary-dark: #6d2670;
+  --ifm-color-primary-darker: #5f1f62;
+  --ifm-color-primary-darkest: #4a1849;
+  --ifm-color-primary-light: #89348c;
+  --ifm-color-primary-lighter: #973b9a;
+  --ifm-color-primary-lightest: #a542a8;
+
   /* Secondary color for hover states */
-  --ifm-link-hover-color: #F5A623;
-  
+  --ifm-link-hover-color: #f5a623;
+
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
@@ -29,26 +29,26 @@
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme="dark"] {
   /* Lighter variants for dark theme */
-  --ifm-color-primary: #A542A8;
-  --ifm-color-primary-dark: #973B9A;
-  --ifm-color-primary-darker: #89348C;
-  --ifm-color-primary-darkest: #7B2D7E;
-  --ifm-color-primary-light: #B349B6;
-  --ifm-color-primary-lighter: #C150C4;
-  --ifm-color-primary-lightest: #CF57D2;
-  
+  --ifm-color-primary: #a542a8;
+  --ifm-color-primary-dark: #973b9a;
+  --ifm-color-primary-darker: #89348c;
+  --ifm-color-primary-darkest: #7b2d7e;
+  --ifm-color-primary-light: #b349b6;
+  --ifm-color-primary-lighter: #c150c4;
+  --ifm-color-primary-lightest: #cf57d2;
+
   /* Secondary color for hover states in dark mode */
-  --ifm-link-hover-color: #FFB84D;
-  
+  --ifm-link-hover-color: #ffb84d;
+
   /* Brighter link color for better readability on dark background */
-  --ifm-link-color: #D863DD;  /* Brighter purple for dark mode links */
-  
+  --ifm-link-color: #d863dd; /* Brighter purple for dark mode links */
+
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
 /* Custom styling for all images */
 img {
-  border: 1.5px solid #DFE1E6;
+  border: 1.5px solid #dfe1e6;
 }
 
 /* Ensure table headers are left-aligned */
@@ -102,12 +102,12 @@ table th {
 
 .search-scope-system-admin-guide .search-scope-indicator {
   background-color: rgba(110, 192, 167, 0.1);
-  color: #4A8A73;
+  color: #4a8a73;
 }
 
 .search-scope-developer-guide .search-scope-indicator {
   background-color: rgba(245, 201, 69, 0.1);
-  color: #B8941A;
+  color: #b8941a;
 }
 
 /* Custom search styling */
@@ -230,7 +230,7 @@ table th {
   .custom-search-wrapper {
     min-width: 200px;
   }
-  
+
   .search-input {
     font-size: 0.85rem;
     padding: 0.4rem 0.8rem;
@@ -260,8 +260,8 @@ table th {
 .hero__banner,
 [class*="heroBanner"],
 .heroBanner_src-pages-index-module {
-  background: #7B2D7E !important; /* Primary brand purple */
-  background-color: #7B2D7E !important;
+  background: #7b2d7e !important; /* Primary brand purple */
+  background-color: #7b2d7e !important;
   color: white !important;
 }
 
@@ -276,37 +276,37 @@ table th {
 [data-route="/"] .hero,
 [data-route="/"] [class*="heroBanner"],
 [data-route="/"] .heroBanner_src-pages-index-module {
-  background: linear-gradient(135deg, #7B2D7E 0%, #6D2670 100%) !important;
-  background-color: #7B2D7E !important;
+  background: linear-gradient(135deg, #7b2d7e 0%, #6d2670 100%) !important;
+  background-color: #7b2d7e !important;
 }
 
 /* Dark theme hero banner */
 [data-theme="dark"] .hero,
 [data-theme="dark"] [class*="heroBanner"],
 [data-theme="dark"] .heroBanner_src-pages-index-module {
-  background: linear-gradient(135deg, #6D2670 0%, #5F1F62 100%) !important;
-  background-color: #6D2670 !important;
+  background: linear-gradient(135deg, #6d2670 0%, #5f1f62 100%) !important;
+  background-color: #6d2670 !important;
 }
 
 /* Dark mode link colors - brighter purple for better readability */
 [data-theme="dark"] a {
-  color: #D863DD;  /* Brighter purple for dark mode links */
+  color: #d863dd; /* Brighter purple for dark mode links */
 }
 
 [data-theme="dark"] .markdown a {
-  color: #D863DD;  /* Ensure markdown links are also brighter */
+  color: #d863dd; /* Ensure markdown links are also brighter */
 }
 
 [data-theme="dark"] .menu__link {
-  color: #D863DD;  /* Sidebar navigation links */
+  color: #d863dd; /* Sidebar navigation links */
 }
 
 [data-theme="dark"] .table-of-contents__link {
-  color: #D863DD;  /* Table of contents links */
+  color: #d863dd; /* Table of contents links */
 }
 
 [data-theme="dark"] .pagination-nav__link {
-  color: #D863DD;  /* Next/Previous page links */
+  color: #d863dd; /* Next/Previous page links */
 }
 
 /* Link hover states with secondary color */
@@ -409,7 +409,7 @@ a:hover {
   .footer__item div {
     font-size: 0.9rem;
   }
-  
+
   .footer__item span {
     margin: 0 0.5rem !important;
   }

@@ -1,6 +1,7 @@
 # Documentation site
 
 In this guide
+
 - [Overview](#overview)
 - [Features](#features)
 - [Technical implementation](#technical-implementation)
@@ -17,21 +18,22 @@ This repository contains the source code for the GDI User Portal documentation s
 
 The documentation is built using [Docusaurus](https://docusaurus.io/), a modern static website generator. It is organized into three main sections, each targeting a specific audience.
 features three main guides:
-- [User guide](./docs/user-guide/welcome.md): For end users encompassing 2 user groups: 
-    - **Data users**/requesters (front office) 
-    - **Catalogue managers** (back office / CKAN users)
+
+- [User guide](./docs/user-guide/welcome.md): For end users encompassing 2 user groups:
+  - **Data users**/requesters (front office)
+  - **Catalogue managers** (back office / CKAN users)
 - [Developer guide](./docs/developer-guide/welcome.md): Instructions for developers on contributing to the platform.
 - [System admin guide](./docs/system-admin-guide/welcome.md): Instructions for system admins (Ops) on deploying and maintaining the GDI User Portal.
 
 ## Features
 
-This is a Docusaurus documentation site featuring advanced navigation and context-aware search  functionality.
+This is a Docusaurus documentation site featuring advanced navigation and context-aware search functionality.
 
 - **Context-aware search:** Search results are automatically filtered based on the current guide section. E.g., When searching from the User Guide, search returns only User Guide results. When on the homepage, search returns results from all sections.
 
 - **Dynamic navigation:** The top navigation bar adapts based on the current page context, hiding irrelevant links on the left navigation.
-    - **Top navigation bar:** Quick access to main guide sections (User Guide, System Admin Guide, Developer Guide).
-    - **Left navigation bar:** Adapts based on the current page context, hiding irrelevant links. E.g., When in the User Guide, only User Guide topics are shown.
+  - **Top navigation bar:** Quick access to main guide sections (User Guide, System Admin Guide, Developer Guide).
+  - **Left navigation bar:** Adapts based on the current page context, hiding irrelevant links. E.g., When in the User Guide, only User Guide topics are shown.
 
 ## Technical Implementation
 
@@ -44,11 +46,13 @@ The following components were created to achieve the desired functionality, on t
 - **Scoped Search Hook**: Uses `MutationObserver` to filter search results dynamically
 
 ### Search Configuration
+
 - **Lunr Search Plugin**: Enhanced with custom metadata for scope detection
 - **Dynamic Result Filtering**: Real-time filtering of search results based on current context
 - **Visual Scope Indicators**: Shows which section is being searched with colored indicators
 
 ### Styling
+
 - **Custom CSS**: Enhanced styling for search scopes and navigation
 - **Responsive Design**: Works seamlessly across different screen sizes
 - **Theme Integration**: Properly integrated with Docusaurus theming system
@@ -102,10 +106,10 @@ The documentation project is located in the `documentation/` directory and follo
 - **CSS3**: Custom styling and animations
 - **Git**: Version control
 
-
 ## Local development
 
 ### Prerequisites
+
 - Node.js 18+
 - npm or yarn
 
@@ -116,19 +120,21 @@ npm install
 ```
 
 ### Development
+
 ```bash
 npm start
 ```
 
 ### Build
+
 ```bash
 npm run build
 ```
 
 ### Deployment
+
 ```bash
 npm run serve
 ```
 
 ---
-

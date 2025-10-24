@@ -4,38 +4,59 @@ sidebar_label: "Apply for access"
 sidebar_position: 1
 ---
 
-# Apply for access
+# Apply for access to datasets
 
-The **Request Access** functionality in the GDI Portal allows users to formally request permission to access genomic datasets that are restricted for a variety of reasons, including privacy concerns and regulatory restrictions. Many datasets in the portal require prior approval before access is granted. This section will guide you through the process of requesting access, managing your applications, and monitoring their status.
+**Submit an application** to access and use genomic datasets. All applications are reviewed by a Data Access Committee to ensure compliance with data use policies and ethical standards.
 
-### Adding Datasets to the Basket
+To apply for access to datasets:
+
+1. [Browse or search](/category/explore-datasets-1) for datasets you want to access.
+
+2. Select **Add to basket** on each dataset you want to include in your application. You can do this from the search results or when you view the dataset details. The example below shows a search result:
 
 <figure>
-  <img src="img/dashboard-overview/basket.gif" alt="Basket" />
-  <figcaption></figcaption>
+    <img src="img/request-access/add-to-basket.png" alt="Screenshot of the Add to basket button on dataset page" width="900" />
+    <figcaption> </figcaption>
 </figure>
 
-Once you've identified datasets that are relevant to your research or project, you can add them to your **Basket**. The Basket acts as a holding area where you can gather and organize datasets before proceeding with the access request process. This feature is particularly helpful if you're considering multiple datasets and would like to submit a single application for all of them, saving you time and effort.
 
-You can add any number of datasets to the Basket, and once you're ready, you can proceed with creating your application to request access to these datasets.
+3. After you have added your desired datasets to your basket, select the **Basket** icon (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-5" style={{display: 'inline', width: '1em', height: '1em', verticalAlign: 'text-bottom'}}><path d="M1 1.75A.75.75 0 0 1 1.75 1h1.628a1.75 1.75 0 0 1 1.734 1.51L5.18 3a65.25 65.25 0 0 1 13.36 1.412.75.75 0 0 1 .58.875 48.645 48.645 0 0 1-1.618 6.2.75.75 0 0 1-.712.513H6a2.503 2.503 0 0 0-2.292 1.5H17.25a.75.75 0 0 1 0 1.5H2.76a.75.75 0 0 1-.748-.807 4.002 4.002 0 0 1 2.716-3.486L3.626 2.716a.25.25 0 0 0-.248-.216H1.75A.75.75 0 0 1 1 1.75ZM6 17.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM15.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/></svg>) to view your selected datasets. The Basket page opens.
 
-### Creating an Application
+<figure>
+    <img src="img/request-access/view-basket.png" alt="Screenshot of the Basket icon being  selected" width="500" />
+    <figcaption></figcaption>
+</figure>
 
-To begin the process of requesting access to datasets, follow these steps:
+4. Review your list of datasets and select **Remove from basket** to remove unwanted datasets.
 
-1. **Log in to your GDI Portal account.** Only logged-in users can submit applications.
-2. **Navigate to your Basket** where the datasets you have added are stored.
-3. Click on the **Create Application** button to start a new access request.
-4. Choose the datasets from your Basket that you want to include in the application.
-5. Your application will be saved in **Draft** status, which allows you to review and modify it before submission.
+5. Select **Request now** to create an application. The application form opens.
 
-Once your application is ready, you can submit it for review. But before submission, ensure that all required fields are filled out and that the relevant documentation is attached.
+<figure>
+    <img src="img/request-access/request-now.png" alt="Screenshot of the Request now button on the Basket page" width="900" />
+    <figcaption></figcaption>
+</figure>
 
-### Completing the Application Form
+6. Submit the requirements to access the dataset. Depending on the dataset, requirements may include documentation, research details, and other information as specified by the Data Access Committee. 
 
-Once your application is in **Draft** status, you will need to fill out all necessary details before submitting it. While the required information can vary depending on the dataset provider, typical requirements include:
+    Here's an example of requirements including document uploads:
 
-- **Additional Documentation**: Some datasets may require supplementary documents, such as ethics approval or data access agreements. These are typically requested for sensitive datasets that involve human or clinical data.
-- **Acceptance of Terms**: You must agree to the terms and conditions set by the dataset provider. This is often a legal agreement ensuring responsible use of the data, including adherence to privacy regulations and ethical standards.
+<figure>
+    <img src="img/request-access/submit-requirements.png" alt="Screenshot of application requirements" width="900" />
+    <figcaption></figcaption>
+</figure>
 
-Remember, specific instructions and required fields will be presented on the application details page, so be sure to follow them closely to ensure your application is complete.
+    <br/>
+
+:::tip Add collaborators
+Need help with your application? [**Add participants**](add-participants.md) to help submit requirements. After they accept your invitation, they can [continue the application](continue-an-application.md) process from their dashboard.
+:::
+
+3. Review the **Terms & Conditions** and select **Accept All** to agree to the terms.
+
+4. Select **Submit** to submit your application for review. You will receive a confirmation email and be notified of status updates.
+
+    :::tip Continue later
+
+    You can navigate away from the application page at any time. All unsubmitted applications are saved in **Draft** status, and you can [continue them later](/continue-an-application). 
+
+    :::

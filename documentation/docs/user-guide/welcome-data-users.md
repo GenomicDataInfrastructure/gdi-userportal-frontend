@@ -1,24 +1,38 @@
 ---
 slug: /welcome-data-users
-sidebar_label: "Welcome"
+sidebar_label: "Welcome to GDI Portal"
 sidebar_position: 1
 ---
 
-<!-- 
-SPDX-FileCopyrightText: 2025 PNED G.I.E
-SPDX-License-Identifier: CC-BY-4.0
--->
+# Welcome to GDI Portal
 
-# Welcome
+Welcome to the documentation for the **Genomic Data Infrastructure (GDI) Portal**!
 
-Welcome to the GDI Portal documentation!
+The **GDI Portal** connects you to Europe's largest network of **genomic datasets**—over one million genome sequences from across European countries. As part of the 1+ Million Genomes Initiative, this portal enables **federated and secure** cross-border access to high-quality genomic data and related phenotypic information across European countries.
 
-The GDI Portal is open-source data portal that supports users on dataset discovery and access request. This documentation introduces key concepts in the user portal, provides installation procedures as well as comprehensive reference sections.
+Whether you're a clinician, scientist, or healthcare policy maker, the GDI Portal is your gateway to Europe's genomic resources to support your work in:
 
-The Genomic Data Infrastructure (GDI) Portal is your gateway to an extensive network of genomic datasets designed to advance research, policymaking, and healthcare across Europe. As part of the GDI initiative, the portal facilitates seamless access to over one million genome sequences, supporting breakthroughs in personalized medicine, diagnostics, and treatment strategies for various diseases, including cancer and rare conditions.
+- Research and scientific innovation
+- Healthcare and clinical diagnostics
+- Health policy making and initiatives
 
-By integrating genomic, phenotypic, and clinical data, the GDI Portal enables researchers, scientists, and healthcare professionals to perform precise analyses, contributing to innovation in healthcare and scientific discovery. The platform offers powerful search and metadata filtering capabilities, allowing users to efficiently locate and request datasets relevant to their studies.
+## How it works
 
-The portal ensures compliance with stringent data governance policies, safeguarding data privacy while promoting responsible data sharing. Whether you are a researcher looking for curated genomic datasets or a policymaker aiming to leverage data for informed decision-making, the GDI Portal provides a user-friendly interface to streamline dataset discovery and access management.
+Access genomic datasets through a simple, secure process:
 
-Explore the GDI Portal and become part of a collaborative effort to enhance healthcare outcomes and foster genomic research innovation. For more details about the broader GDI project, visit the official GDI website.
+1. **Explore datasets:** Browse and search through detailed dataset information—search by any criteria such as keywords, research topics, disease areas, or allele frequency. [Explore datasets](/category/explore-datasets-1/).
+
+2. **Request access:** Found a dataset you want to use? Submit an application to access it. You may need to provide documentation or requirements for your request, and you can invite collaborators to assist you with your application. [Request access](/category/request-datasets-1/).
+
+3. **Download datasets:** Once your request is approved, you can download the datasets through the portal. [Download datasets](/download-datasets/).
+
+    :::info Stay compliant
+
+    All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to **use data responsibly** and according to the terms and agreements you signed during the application process.
+
+    :::
+
+
+## Get started
+
+Ready to explore? [Start by browsing](/category/explore-datasets-1/) available datasets, or [sign in](/sign-in) for full access to all features of the GDI Portal.

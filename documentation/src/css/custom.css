@@ -1,0 +1,416 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  /* Brand Colors */
+  --gdi-primary: #7b2d7e; /* Primary brand purple */
+  --gdi-secondary: #f5a623; /* Secondary orange accent */
+
+  /* Primary color variants for light theme */
+  --ifm-color-primary: #7b2d7e;
+  --ifm-color-primary-dark: #6d2670;
+  --ifm-color-primary-darker: #5f1f62;
+  --ifm-color-primary-darkest: #4a1849;
+  --ifm-color-primary-light: #89348c;
+  --ifm-color-primary-lighter: #973b9a;
+  --ifm-color-primary-lightest: #a542a8;
+
+  /* Secondary color for hover states */
+  --ifm-link-hover-color: #f5a623;
+
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme="dark"] {
+  /* Lighter variants for dark theme */
+  --ifm-color-primary: #a542a8;
+  --ifm-color-primary-dark: #973b9a;
+  --ifm-color-primary-darker: #89348c;
+  --ifm-color-primary-darkest: #7b2d7e;
+  --ifm-color-primary-light: #b349b6;
+  --ifm-color-primary-lighter: #c150c4;
+  --ifm-color-primary-lightest: #cf57d2;
+
+  /* Secondary color for hover states in dark mode */
+  --ifm-link-hover-color: #ffb84d;
+
+  /* Brighter link color for better readability on dark background */
+  --ifm-link-color: #d863dd; /* Brighter purple for dark mode links */
+
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Custom styling for all images */
+img {
+  border: 1.5px solid #dfe1e6;
+}
+
+/* Ensure table headers are left-aligned */
+table th {
+  text-align: left;
+}
+
+/* AGGRESSIVE: Hide ALL navbar items on homepage except brand/logo */
+[data-route="/"] .navbar__items .navbar__item,
+[data-route="/intro"] .navbar__items .navbar__item {
+  display: none !important;
+}
+
+/* Ensure brand/logo stays visible */
+[data-route="/"] .navbar__brand,
+[data-route="/intro"] .navbar__brand {
+  display: flex !important;
+}
+
+/* Ensure navbar title stays visible */
+[data-route="/"] .navbar__title,
+[data-route="/intro"] .navbar__title {
+  display: block !important;
+}
+
+/* Search scope styling */
+.search-scope-indicator {
+  font-size: 0.75rem;
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  background-color: var(--ifm-color-emphasis-100);
+  border-radius: 0.25rem;
+  display: inline-block;
+}
+
+.search-wrapper {
+  position: relative;
+}
+
+/* Style different search scopes */
+.search-scope-user-guide .search-scope-indicator {
+  background-color: rgba(53, 129, 184, 0.1);
+  color: var(--ifm-color-primary-dark);
+}
+
+.search-scope-catalog-managers-guide .search-scope-indicator {
+  background-color: rgba(245, 166, 35, 0.1);
+  color: var(--gdi-secondary);
+}
+
+.search-scope-system-admin-guide .search-scope-indicator {
+  background-color: rgba(110, 192, 167, 0.1);
+  color: #4a8a73;
+}
+
+.search-scope-developer-guide .search-scope-indicator {
+  background-color: rgba(245, 201, 69, 0.1);
+  color: #b8941a;
+}
+
+/* Custom search styling */
+.custom-search-wrapper {
+  position: relative;
+  min-width: 250px;
+}
+
+.search-input-wrapper {
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 1.5rem;
+  background-color: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: var(--gdi-primary);
+  box-shadow: 0 0 0 2px rgba(123, 45, 126, 0.2);
+}
+
+.search-input::placeholder {
+  color: var(--ifm-color-emphasis-600);
+}
+
+.search-results-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--ifm-background-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 9999;
+  margin-top: 0.25rem;
+}
+
+.search-result-item {
+  display: block;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+  background-color: var(--ifm-color-emphasis-100);
+  text-decoration: none;
+  color: inherit;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--ifm-color-primary);
+  font-size: 0.9rem;
+}
+
+.search-result-content {
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-700);
+  line-height: 1.4;
+  margin-bottom: 0.25rem;
+}
+
+.search-result-guide {
+  font-size: 0.7rem;
+  color: var(--ifm-color-emphasis-600);
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.no-results {
+  padding: 1rem;
+  text-align: center;
+  color: var(--ifm-color-emphasis-600);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .search-input {
+  background-color: var(--ifm-background-color);
+  border-color: var(--ifm-color-emphasis-400);
+}
+
+[data-theme="dark"] .search-input:focus {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 2px rgba(165, 66, 168, 0.3);
+}
+
+[data-theme="dark"] .search-results-dropdown {
+  background-color: var(--ifm-background-color);
+  border-color: var(--ifm-color-emphasis-400);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .search-result-item:hover {
+  background-color: var(--ifm-color-emphasis-200);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .custom-search-wrapper {
+    min-width: 200px;
+  }
+
+  .search-input {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+/* Custom search results styling - legacy support */
+.search-result-item {
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  padding: 0.5rem;
+}
+
+.search-result-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.search-result-link:hover {
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+/* Brand-specific styling */
+
+/* Hero banner background with primary color - more specific selectors */
+.hero,
+.hero__banner,
+[class*="heroBanner"],
+.heroBanner_src-pages-index-module {
+  background: #7b2d7e !important; /* Primary brand purple */
+  background-color: #7b2d7e !important;
+  color: white !important;
+}
+
+/* Additional hero styling */
+.hero__title,
+.hero__subtitle {
+  color: white !important;
+}
+
+/* Homepage hero banner specific targeting */
+.homepage .hero,
+[data-route="/"] .hero,
+[data-route="/"] [class*="heroBanner"],
+[data-route="/"] .heroBanner_src-pages-index-module {
+  background: linear-gradient(135deg, #7b2d7e 0%, #6d2670 100%) !important;
+  background-color: #7b2d7e !important;
+}
+
+/* Dark theme hero banner */
+[data-theme="dark"] .hero,
+[data-theme="dark"] [class*="heroBanner"],
+[data-theme="dark"] .heroBanner_src-pages-index-module {
+  background: linear-gradient(135deg, #6d2670 0%, #5f1f62 100%) !important;
+  background-color: #6d2670 !important;
+}
+
+/* Dark mode link colors - brighter purple for better readability */
+[data-theme="dark"] a {
+  color: #d863dd; /* Brighter purple for dark mode links */
+}
+
+[data-theme="dark"] .markdown a {
+  color: #d863dd; /* Ensure markdown links are also brighter */
+}
+
+[data-theme="dark"] .menu__link {
+  color: #d863dd; /* Sidebar navigation links */
+}
+
+[data-theme="dark"] .table-of-contents__link {
+  color: #d863dd; /* Table of contents links */
+}
+
+[data-theme="dark"] .pagination-nav__link {
+  color: #d863dd; /* Next/Previous page links */
+}
+
+/* Link hover states with secondary color */
+a:hover {
+  color: var(--ifm-link-hover-color) !important;
+  text-decoration: none;
+}
+
+/* Navbar link hover states */
+.navbar__link:hover {
+  color: var(--ifm-link-hover-color);
+}
+
+/* Footer link hover states */
+.footer__link-item:hover {
+  color: var(--ifm-link-hover-color);
+}
+
+/* Sidebar link hover states */
+.menu__link:hover {
+  color: var(--ifm-link-hover-color);
+}
+
+/* Table of contents link hover states */
+.table-of-contents__link:hover {
+  color: var(--ifm-link-hover-color);
+}
+
+/* Button hover states for secondary actions */
+.button--secondary:hover {
+  background-color: var(--gdi-secondary);
+  border-color: var(--gdi-secondary);
+  color: white;
+}
+
+/* Search result title uses primary color */
+.search-result-title {
+  color: var(--gdi-primary);
+}
+
+/* Update search scope styling with brand colors */
+.search-scope-user-guide .search-scope-indicator {
+  background-color: rgba(123, 45, 126, 0.1);
+  color: var(--gdi-primary);
+}
+
+.search-scope-catalog-managers-guide .search-scope-indicator {
+  background-color: rgba(245, 166, 35, 0.1);
+  color: var(--gdi-secondary);
+}
+
+.search-scope-system-admin-guide .search-scope-indicator {
+  background-color: rgba(245, 166, 35, 0.1);
+  color: var(--gdi-secondary);
+}
+
+.search-scope-developer-guide .search-scope-indicator {
+  background-color: rgba(123, 45, 126, 0.05);
+  color: var(--gdi-primary);
+}
+
+/* Footer custom styling for centered links */
+.footer__links {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.footer__item {
+  margin-bottom: 0.5rem;
+}
+
+.footer__item a {
+  color: var(--ifm-footer-link-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer__item a:hover {
+  color: var(--ifm-link-hover-color) !important;
+  text-decoration: none;
+}
+
+/* Ensure footer link separator maintains color */
+.footer__item span {
+  color: var(--ifm-footer-link-color);
+}
+
+/* Reduce spacing between footer links and copyright */
+.footer__bottom {
+  margin-top: 0.5rem;
+}
+
+.footer {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* Responsive footer adjustments */
+@media (max-width: 768px) {
+  .footer__item div {
+    font-size: 0.9rem;
+  }
+
+  .footer__item span {
+    margin: 0 0.5rem !important;
+  }
+}

@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2024 PNED G.I.E.
+SPDX-FileCopyrightText: 2025 PNED G.I.E.
 
 SPDX-License-Identifier: CC-BY-4.0
 -->
@@ -190,6 +190,10 @@ git push origin fix-bug-123
 9. **Merge your changes**: Once your pull request has been approved, it will be merged into the main branch. Congratulations on your contribution!
 
 Please note that these instructions are general guidelines and may vary depending on the specific project. Make sure to consult the project's documentation and communicate with the project team for any project-specific instructions or requirements.
+
+### Improving The Documentation
+
+To contribute to the documentation, read the [documentation readme](documentation/README.md).
 
 ## Styleguides
 

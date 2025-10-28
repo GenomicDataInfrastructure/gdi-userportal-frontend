@@ -8,7 +8,7 @@ sidebar_position: 2
 
 In this guide
 > [Why sign in?](#why-sign-in)  
-> [Sign in](#sign-in)  
+> [Sign in](#sign-in-1)  
 
 ## Why sign in?
 
@@ -20,7 +20,7 @@ In this guide
 
 ## Sign in
 
-GDI Portal connects with your **existing accounts** with other platforms such as Google, LinkedIn, and other widely used services so you don't need to create a separate account. For reliable authentication, the portal uses the Login Service for Academic and Administrative Institutions ([LSAAI](#about-lsaai)) to handle sign-ins.
+GDI Portal connects with your **existing accounts** with other platforms such as Google, LinkedIn, and other widely used services so you don't need to create a separate account. For reliable authentication, the portal uses the Login Service for Academic and Administrative Institutions (LSAAI) to handle sign-ins.
 
 To sign in to the GDI Portal:
 
@@ -44,7 +44,7 @@ To sign in to the GDI Portal:
 
 3. Follow the instructions to sign in with your selected account. If it's your first time signing in, you may need to verify your email address. 
 
-4. After you sign in, the GDI Portal home page loads and you can [explore the dashboard](/dashboard-overview).
+4. After you sign in, the GDI Portal home page loads and you can [start exploring datasets](/category/explore-datasets-1).
 
 <figure>
 <img src="img/sign-in/home-page.png" alt="Home page after signing in, showing a search bar and dataset cards" width="800" />

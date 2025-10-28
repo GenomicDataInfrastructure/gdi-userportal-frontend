@@ -57,11 +57,10 @@ export default function SearchBar() {
     else if (
       path.includes("/category/") ||
       path.includes("/welcome-data-users") ||
-      path.includes("/dashboard-overview") ||
       path.includes("/create-an-account") ||
       path.includes("/export-metadata") ||
       path.includes("/request-datasets") ||
-      path.includes("/search-datasets")
+      path.includes("/explore-datasets")
     ) {
       newScope = "user-guide";
     }

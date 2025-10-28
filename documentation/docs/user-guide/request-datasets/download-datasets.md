@@ -8,6 +8,6 @@ sidebar_position: 5
 
 :::info Please check back soon!
 
-We're still working on this section. In the mean time, you can explore other sections in this guide such as [**searching datasets**](/category/search-datasets) or [**requesting access**](/category/request-datasets-1).
+We're still working on this section. In the mean time, you can explore other sections in this guide such as [**searching datasets**](/category/explore-datasets-1) or [**requesting access**](/category/request-datasets-1).
 
 :::

@@ -4,24 +4,24 @@ sidebar_label: "Track your application"
 sidebar_position: 2
 ---
 
-# Track application
+# Track your application
 
-### Tracking and Managing Applications
+After submitting your application, **track its progress** and check for any status updates or additional requirements from the Data Access Committee.
 
-After creating and submitting your application, you can track its progress from the **Applications Page**. This centralized location lets you:
+To track your application:
 
-- View all active and past applications in one place.
-- Check the current status of each application to see if it's in **Draft**, **Submitted**, **Approved**, or **Rejected**.
-- Receive notifications if additional documentation is required or if your application needs further attention.
-- Access datasets directly from the portal once your application has been approved.
+1. Select the **folder icon** (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-5" style={{display: 'inline', width: '1em', height: '1em', verticalAlign: 'text-bottom'}}><path d="M4.75 3A1.75 1.75 0 0 0 3 4.75v2.752l.104-.002h13.792c.035 0 .07 0 .104.002V6.75A1.75 1.75 0 0 0 15.25 5h-3.836a.25.25 0 0 1-.177-.073L9.823 3.513A1.75 1.75 0 0 0 8.586 3H4.75ZM3.104 9a1.75 1.75 0 0 0-1.673 2.265l1.385 4.5A1.75 1.75 0 0 0 4.488 17h11.023a1.75 1.75 0 0 0 1.673-1.235l1.386-4.5A1.75 1.75 0 0 0 16.896 9H3.104Z"/></svg>) on your dashboard.
 
-### Application Statuses
+2. Select the **Applications** tab. The page displays all your applications with their current status, sorted by last modified date:
 
-Applications undergo several stages as they move through the approval process. The following are the key application statuses:
+    In this example, there is one `SUBMITTED` application and one `DRAFT` application:
+<figure>
+    <img src="img/request-access/application-list.png" alt="Screenshot of the application list showing different statuses" width="900" />
+    <figcaption></figcaption>
+</figure>
 
-- **Draft**: Your application is being prepared and can be modified. This is the initial status where you can add information, attach documents, and edit the application.
-- **Submitted**: The application has been sent for review and cannot be edited further. This marks the official submission of your request to the dataset provider.
-- **Approved**: The application has been approved, granting you access to the requested datasets. You will be notified, and you can begin retrieving the data.
-- **Rejected**: The application has been declined, and feedback may be provided regarding the reasons for the rejection. You can use this feedback to improve future applications.
-
-Each application status is updated in real-time on your **Applications Page**, so you can always keep track of where your request stands.
+3. Review your application status. Applications can have the following statuses:
+   - **DRAFT**: Application is incomplete and has not been submitted yet. [Continue the application](continue-an-application).
+   - **SUBMITTED**: Application is under review by the Data Access Committee. 
+   - **APPROVED**: Application has been approved and you can access the datasets. [Download the datasets (coming soon)](/download-datasets).
+   - **REJECTED**: Application has been declined with feedback provided. Select the application to view feedback and next steps.

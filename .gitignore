@@ -62,3 +62,6 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Documentation search indexes (auto-generated)
+documentation/static/search-indexes/search-indexes.json

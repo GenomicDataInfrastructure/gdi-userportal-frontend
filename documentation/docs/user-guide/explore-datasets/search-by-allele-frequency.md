@@ -34,7 +34,7 @@ This search tool allows you to:
    - **Ref Genome:** Select the reference genome assembly to use for the search.
    - **Cohort:** Select the cohort of interest. Cohorts are groups of individuals sharing common characteristics, for example, those with a specific condition such as COVID.
 
-4. Select **Search** or press **Enter**. The search results display dataset information in table format.
+3. Select **Search** or press **Enter**. The search results display dataset information in table format.
 
 
 ## Understanding your results

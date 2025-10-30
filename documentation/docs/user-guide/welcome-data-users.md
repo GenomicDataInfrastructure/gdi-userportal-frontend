@@ -24,7 +24,7 @@ Access genomic datasets through a simple, secure process:
 
 2. **Request access:** Found a dataset you want to use? Submit an application to access it. You may need to provide documentation or requirements for your request, and you can invite collaborators to assist you with your application. [Request access](/category/request-datasets-1/).
 
-3. **Download datasets:** Once your request is approved, you can download the datasets through the portal. [Download datasets](/download-datasets/).
+3. **Access approved datasets:** Once your request is approved, you will receive an email with a link to the Secure Processing Environment (SPE) where you can securely download and work with the datasets.
 
     :::info Stay compliant
 

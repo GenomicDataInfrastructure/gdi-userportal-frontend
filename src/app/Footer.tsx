@@ -55,8 +55,6 @@ function Footer() {
                         <Image
                           src={logo.src}
                           alt={logo.alt}
-                          width={70}
-                          height={50}
                           className="object-contain"
                         />
                       </div>

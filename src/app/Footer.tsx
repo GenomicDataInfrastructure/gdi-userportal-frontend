@@ -47,8 +47,7 @@ function Footer() {
                 width={150}
                 height={100}
               />
-              {contentConfig.footerLogosEnabled &&
-                contentConfig.footerLogos &&
+              {contentConfig.footerLogos &&
                 contentConfig.footerLogos.length > 0 && (
                   <div className="flex gap-4 items-center">
                     {contentConfig.footerLogos.map((logo) => (

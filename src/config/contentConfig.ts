@@ -21,9 +21,6 @@ interface ContentConfig {
   addParticipantsEnabled: boolean;
   showAlleleFrequency: boolean;
   footerLogos?: Array<{ src: string; alt: string }>;
-  footerLogosEnabled: boolean;
-  footerLogoWidth?: number;
-  footerLogoHeight?: number;
 }
 
 const contentConfig: ContentConfig = {
@@ -55,7 +52,6 @@ const contentConfig: ContentConfig = {
   footerLogos: env("NEXT_PUBLIC_FOOTER_LOGOS")
     ? JSON.parse(env("NEXT_PUBLIC_FOOTER_LOGOS") || "[]")
     : undefined,
-  footerLogosEnabled: env("NEXT_PUBLIC_FOOTER_LOGOS_ENABLED") === "true",
 };
 
 export default contentConfig;

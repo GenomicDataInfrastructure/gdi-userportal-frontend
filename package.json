@@ -75,7 +75,7 @@
   },
   "devDependencies": {
     "@docusaurus/types": "^3.9.1",
-    "@playwright/test": "^1.51.1",
+    "@playwright/test": "^1.56.1",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.2",

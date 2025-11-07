@@ -10,8 +10,7 @@ Welcome to the documentation for the **Genomic Data Infrastructure (GDI) Portal*
 
 The **GDI Portal** connects you to Europe's largest network of **genomic datasets**—over one million genome sequences from across European countries. As part of the 1+ Million Genomes Initiative, this portal enables **federated and secure** cross-border access to high-quality genomic data and related phenotypic information across European countries.
 
-Whether you're a clinician, scientist, or healthcare policy maker, the GDI Portal is your gateway to Europe's genomic resources to support your work in:
-
+The portal serves government agencies, healthcare providers, and researchers, providing a gateway to Europe's genomic resources for various applications, including: 
 - Research and scientific innovation
 - Healthcare and clinical diagnostics
 - Health policy making and initiatives

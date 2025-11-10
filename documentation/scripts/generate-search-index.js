@@ -15,9 +15,9 @@ const guides = {
       "manage-vocabularies",
     ],
   },
-  "catalog-managers-guide": {
-    paths: ["docs/catalog-managers-guide"],
-    routes: ["catalog-managers-guide"],
+  "catalogue-managers-guide": {
+    paths: ["docs/catalogue-managers-guide"],
+    routes: ["catalogue-managers-guide"],
   },
   "system-admin-guide": {
     paths: ["docs/system-admin-guide"],

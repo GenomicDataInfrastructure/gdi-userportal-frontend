@@ -77,7 +77,7 @@ const config: Config = {
           type: "docSidebar",
           sidebarId: "catalogManagersGuideSidebar",
           position: "right",
-          label: "Catalog managers",
+          label: "Catalogue managers",
         },
         {
           type: "docSidebar",

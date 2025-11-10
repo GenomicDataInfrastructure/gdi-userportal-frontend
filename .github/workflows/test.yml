@@ -49,7 +49,7 @@ jobs:
         run: |
           npm run type-check
       - name: REUSE Compliance Check
-        uses: fsfe/reuse-action@v5
+        uses: fsfe/reuse-action@v6
       # Temporarily disabled SonarQube scan due to API endpoint issues
       # Re-enable after resolving SonarCloud /analysis/analyses 404 error
       # - name: SonarQube Scan

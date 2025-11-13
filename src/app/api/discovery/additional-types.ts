@@ -11,6 +11,8 @@ export enum FilterType {
   DROPDOWN = "DROPDOWN",
   FREE_TEXT = "FREE_TEXT",
   ENTRIES = "ENTRIES",
+  DATETIME = "DATETIME",
+  NUMBER = "NUMBER",
 }
 
 export enum FilterValueType {

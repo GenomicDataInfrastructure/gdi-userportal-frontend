@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+// SPDX-FileCopyrightText: 2025 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -40,12 +40,28 @@ function Footer() {
         <div className="container mx-auto flex flex-col gap-16 md:flex-row md:gap-24">
           {/* First column: About the project */}
           <div className="flex flex-col items-start gap-4 w-full md:w-3/5">
-            <Image
-              src={"/footer-logo.png"}
-              alt="Footer logo"
-              width={150}
-              height={100}
-            />
+            <div className="flex items-center gap-4">
+              <Image
+                src={"/footer-logo.png"}
+                alt="Footer logo"
+                width={150}
+                height={100}
+              />
+              {contentConfig.footerLogos &&
+                contentConfig.footerLogos.length > 0 && (
+                  <div className="flex gap-4 items-center">
+                    {contentConfig.footerLogos.map((logo) => (
+                      <div key={logo.alt} className="flex items-center">
+                        <Image
+                          src={logo.src}
+                          alt={logo.alt}
+                          className="object-contain"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+            </div>
             <p className="text-xs md:text-sm">
               {contentConfig.footerText.split("\n").map((line, index) => (
                 <span key={index}>

@@ -1,0 +1,236 @@
+{
+  "user-guide": [
+    {
+      "id": "/gdi-userportal-frontend/user-guide/explore-datasets/browse-by-category",
+      "url": "/gdi-userportal-frontend/user-guide/explore-datasets/browse-by-category",
+      "title": "browse by category",
+      "content": "Browse datasets by category Browse datasets by Themes and Publishers directly from the main menu. While these categories are available as filters in the search page, you can access their dedicated sections from the main navigation menu for quick browsing. :::tip Sign in for better discovery Sign in to view comprehensive information. While you can use this tool without an account, signing in allows you to search and view more details, such as and other metadata, to help you find what you need. ::: Here's a quick demo of browsing datasets by publishers: To browse datasets by theme or publisher categories: 1. Select either Themes or Publishers from the main navigation menu. 2. Select a category to view all datasets within that theme or publisher. After you select a theme or publisher, the Datasets page opens with pre-applied filters based on your selection. In this example, we selected the theme: Health, and is pre-applied as a filter with its resulting datasets. 3. Explore more using the search, or apply more filters to narrow down results. 4. Found a dataset of interest? Select it to view more details or Request access to the dataset.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/explore-datasets/search-and-filter",
+      "url": "/gdi-userportal-frontend/user-guide/explore-datasets/search-and-filter",
+      "title": "search and filter",
+      "content": "Search and filter datasets Use the search bar and filters to find datasets relevant to your research. Both search and filters are available on all pages where browsing datasets is possible. This includes the Home page and the Datasets page. :::tip Sign in for enhanced search Sign in to get comprehensive search results. While you can search datasets without an account, signing in allows you to filter and view more details in the search results, such as and other metadata. ::: Search datasets On the Home or Datasets page, enter any term or phrase to search across all dataset information, including: - Disease names, research topics, or data types - Specific terms like gene names or scientific keywords - Any other information described in the dataset metadata Filter your results Use the filters on the left side of the search results page to narrow down your results. These filters are based on dataset metadata, and signing in gives you access to additional metadata-based filters. Common filters include: Access Rights, Data Types, Themes, and Publishers. Here's an example of a search result for the word \"cancer\", with filters applied for Access Rights: and Themes: and .",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/explore-datasets/search-by-allele-frequency",
+      "url": "/gdi-userportal-frontend/user-guide/explore-datasets/search-by-allele-frequency",
+      "title": "search by allele frequency",
+      "content": "Search by allele frequency Search for datasets containing specific genomic variants using the allele frequency search tool. Allele frequency refers to how common a specific genetic variant is within a population. This search tool allows you to: - Identify relevant datasets with your specific genomic variant of interest - Compare variant frequencies across different populations and research cohorts - Assess dataset suitability by viewing detailed prevalence data to select the most appropriate datasets for your research :::tip Sign in for enhanced search Sign in to get comprehensive search results. While you can use this tool without an account, signing in allows you to search and view more details, such as and other metadata, to help you find what you need. ::: Search by allele frequency 1. Select Allele Frequency from the main menu. 2. Enter your search criteria: - Variant: The full form of the genomic variant, usually represented in the format . Example: - Ref Genome: Select the reference genome assembly to use for the search. - Cohort: Select the cohort of interest. Cohorts are groups of individuals sharing common characteristics, for example, those with a specific condition such as COVID. 3. Select Search or press Enter. The search results display dataset information in table format. Understanding your results The search results display datasets containing your specified variant in table format. Here's an example of the search result using the allele frequency search tool: - Dataset: Name and source of the dataset. These are Beacon identifiers—the portal uses Beacon technology to retrieve information about whether genomic databases contain specific variants. - Population: Geographic or demographic group, such as countries. - Allele Count: Number of times the variant appears in the dataset. - Allele Number: Total number of alleles analysed in the dataset for this position. - Homozygous: Number of individuals with two copies of the variant. - Heterozygous: Number of individuals with one copy of the variant. - Frequency: How common the variant is in that population (as a decimal).",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/export-metadata",
+      "url": "/gdi-userportal-frontend/user-guide/export-metadata",
+      "title": "export metadata",
+      "content": "Export metadata Download dataset metadata for integration with various tools and systems. The metadata includes detailed information about the dataset such as data types, collection methods, access rights, and other descriptive information that can help you integrate the dataset information into your research workflow. You can export metadata in the following formats: - RDF: Resource Description Framework format for semantic web applications - TTL: Turtle format for human-readable RDF data - JSON-LD: JSON for Linked Data format for web-based applications To export metadata: 1. Browse or search for datasets you want to export metadata from. 2. Select a dataset to view its details. 3. Locate the Export Metadata In section and select your preferred format (RDF, TTL, or JSON-LD). In this example, we select JSON-LD: 4. Select Download to save the metadata file to your device.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/faq",
+      "url": "/gdi-userportal-frontend/user-guide/faq",
+      "title": "faq",
+      "content": "Frequently Asked Questions For additional questions or support, please contact our support team. Do I need an account to access GDI Portal? You do not need an account to access the GDI Portal and browse dataset information. However, you need to sign in to your account to request access to the dataset records. Signing in also enables additional features such as saving searches and receiving notifications. I found a dataset I want to use. What do I do? First, you need to submit an application to access the said data. You might be asked to provide additional information such as your research purpose, institutional affiliation, and ethics approval documentation. The portal will guide you through these requirements when you apply. Once your application is approved, you will receive instructions on how to download the data. How long does it take to get approval to access data? Approval times vary depending on the dataset, the requirements you provide, and the complexity of your request. The portal will connect you with the Data Access Committee who manage the approval process. Can I access data from multiple countries? Yes, the GDI Portal enables cross-border access to genomic data across European countries through its federated network approach.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/request-datasets/add-participants",
+      "url": "/gdi-userportal-frontend/user-guide/request-datasets/add-participants",
+      "title": "add participants",
+      "content": "Add participants to your application Add participants to collaborate with team members or colleagues on your dataset access request. You can invite multiple participants to help complete the application, upload required documents, and stay informed about the request status. You can add participants to draft and submitted applications. Participants can: - View the application details and requirements - Submit requirements such as forms and documents - Submit draft applications for review - Receive status updates via email To add participants to your application: 1. Select the folder icon () on your dashboard. 2. Select the Applications tab on your dashboard, and select your draft or submitted application. 3. Select Add Participant on the application details page. 4. Enter the name and email address you want to invite and select Send. Do this for each participant you want to add. :::tip Well done After participants accept your invitation, they can access the application from their dashboard and continue the application process.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/request-datasets/apply-for-access",
+      "url": "/gdi-userportal-frontend/user-guide/request-datasets/apply-for-access",
+      "title": "apply for access",
+      "content": "Apply for access to datasets Found datasets you want to use? Submit an application to access and use the datasets. The Data Access Committee will review your application to ensure compliance with data use policies and ethical standards. To apply for access to datasets: 1. Browse or search for datasets you want to access. 2. Select Add to basket on each dataset you want to include in your application. You can do this from the search results or when you view the dataset details. This example shows adding a dataset to the basket from the search results: 3. After you add datasets to your basket, select the Basket icon (). The Basket page opens with the list of datasets you selected. 4. Review your list of datasets. To remove a dataset, select Remove from basket. 5. Select Request now to create an application. The application form opens. 6. Submit the requirements to access the dataset. This can include filling out forms and uploading documents, depending on the dataset. Here's an example of requirements including document uploads: 7. (Optional) Need help with your application? Select Add Participant for collaborators to access your application, submit requirements, and continue your application. 8. Review the Terms & Conditions and select Accept All to agree to the terms. 9. Select Submit to complete your application. You will receive email notifications for status updates and if additional documentation is required. :::tip Continue later If you need more time, you can close or navigate away from the application page. The system automatically saves your progress as draft, and you or your collaborators can continue later. :::",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/request-datasets/continue-an-application",
+      "url": "/gdi-userportal-frontend/user-guide/request-datasets/continue-an-application",
+      "title": "continue an application",
+      "content": "Continue an application Continue working on applications that you or other collaborators have started earlier. All incomplete applications are saved as draft. To continue a draft application: 1. Select the folder icon () on your dashboard. 2. Select the Applications tab. The page lists applications, indicating their status. In this example, you have one application and one application: 3. Select the draft application you want to complete. 4. Complete the application form by providing all required information or uploading necessary documentation. 5. Review the Terms & Conditions and select Accept All to agree to the terms. 6. Select Submit to submit your completed application. You will receive a confirmation email and be notified of status updates. Or to save and continue later, simply navigate away from the page. The system saves your last completed input.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/request-datasets/download-datasets",
+      "url": "/gdi-userportal-frontend/user-guide/request-datasets/download-datasets",
+      "title": "download datasets",
+      "content": "Download datasets Once your application is approved, you'll receive an email with instructions to access the Secure Processing Environment (SPE) where you can securely download and work with your approved datasets. To access and work with your approved datasets: 1. Check your email for instructions and access links to the Secure Processing Environment (SPE). 2. Follow the instructions provided in the email to securely access the SPE. 3. Download and work with your approved datasets within the SPE. :::info Stay compliant All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to use data responsibly and according to the terms and agreements you signed during the application process. ::: View approved datasets in the portal You can also view your approved datasets directly in the GDI Portal to see their metadata and details. To view your approved datasets: 1. Select the folder icon () on your dashboard. 2. Select the Entitlements tab to see the list of your approved datasets. 3. Select the dataset to view its details. This view only displays the metadata of your approved datasets. To download and work with the datasets, use the Secure Processing Environment (SPE) as instructed in your approval email.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/request-datasets/track-application",
+      "url": "/gdi-userportal-frontend/user-guide/request-datasets/track-application",
+      "title": "track application",
+      "content": "Track your application After submitting your application, track its progress and check for any status updates or additional requirements from the Data Access Committee. To track your application: 1. Select the folder icon () on your dashboard. 2. Select the Applications tab. The page displays all your applications with their current status, sorted by last modified date: In this example, there is one application and one application: 3. Review your application status. Applications can have the following statuses: - DRAFT: Application is incomplete and has not been submitted yet. Continue the application. - SUBMITTED: Application is under review by the Data Access Committee. - APPROVED: Application has been approved and you can access the datasets. Download the datasets. - REJECTED: Application has been declined with feedback provided. Select the application to view feedback and next steps.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/sign-in",
+      "url": "/gdi-userportal-frontend/user-guide/sign-in",
+      "title": "sign in",
+      "content": "Sign in In this guide > Why sign in? > Sign in Why sign in? Signing in allows you to access enhanced features and request access to datasets. While you can browse datasets without an account, signing in allows you to: - Submit applications to request access to datasets. - Enhance your search with additional filters and more comprehensive search results. - See more dataset information including and other metadata to help assess if datasets meet your research needs. Sign in GDI Portal connects with your existing accounts with widely-used platforms so you don't need to create a separate account. This includes Google and LinkedIn, as well as institutions like your university or research organisation. To sign in to the GDI Portal: 1. Open the GDI Portal in your browser: https://portal.dev.gdi.lu/. 2. Select Login at the top right corner of the page. The login page opens. 3. Select LSAAI as your sign-in method. :::info Why LSAAI? GDI Portal requires you to sign in with LSAAI (Login Service for Academic and Administrative Institutions). LSAAI is a secure login system that lets you use your existing accounts like Google, LinkedIn, university, or other institutional accounts. This means you don't need to create a new account specifically for the GDI Portal. ::: 4. Select your account provider: Search for your institution in the search bar, or select from the list of options (LinkedIn, Apple, Google, ORCID, GitHub). 5. Follow the instructions to sign in with your selected account. If it's your first time signing in, you may need to verify your email address. 6. After you sign in, the GDI Portal home page loads and you can start exploring datasets.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/welcome-data-users",
+      "url": "/gdi-userportal-frontend/user-guide/welcome-data-users",
+      "title": "welcome data users",
+      "content": "Welcome to GDI Portal Welcome to the documentation for the Genomic Data Infrastructure (GDI) Portal! The GDI Portal connects you to Europe's largest network of genomic datasets—over one million genome sequences from across European countries. As part of the 1+ Million Genomes Initiative, this portal enables federated and secure cross-border access to high-quality genomic data and related phenotypic information across European countries. Whether you're a clinician, scientist, or healthcare policy maker, the GDI Portal is your gateway to Europe's genomic resources to support your work in: - Research and scientific innovation - Healthcare and clinical diagnostics - Health policy making and initiatives How it works Access genomic datasets through a simple, secure process: 1. Explore datasets: Browse and search through detailed dataset information—search by any criteria such as keywords, research topics, disease areas, or allele frequency. Explore datasets. 2. Request access: Found a dataset you want to use? Submit an application to access it. You may need to provide documentation or requirements for your request, and you can invite collaborators to assist you with your application. Request access. 3. Access approved datasets: Once your request is approved, you will receive an email with a link to the Secure Processing Environment (SPE) where you can securely download and work with the datasets. :::info Stay compliant All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to use data responsibly and according to the terms and agreements you signed during the application process. ::: Get started Ready to explore? Start by browsing available datasets, or sign in for full access to all features of the GDI Portal.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/_get-started/sign-in",
+      "url": "/gdi-userportal-frontend/user-guide/_get-started/sign-in",
+      "title": "sign in",
+      "content": "Sign in Sign in to GDI User Portal with your organisation credentials—no need to create a separate account. GDI User Portal uses your organisation’s Identity and Access Management (IAM) system to facilitate your access and permissions within the platform. For questions regarding your organisation account, please contact your Inventory Coordinator or IT support team. To sign in to GDI User Portal: 1. Obtain the link to GDI User Portal from your Inventory Coordinator. 2. Open GDI User Portal in your web browser. 3. Select your sign-in method and sign in with your organisation credentials. 4. After you sign in, the GDI User Portal home page loads and you can _explore the dashboard_ :::info Unauthorised Access? If you're signing in for the first time or if there are no roles assigned to your account, you may get an \"Unauthorized Access\" error. Contact your Inventory Coordinator and request that they assign the necessary roles to your account, and then try again. ::: Sign in Sign in to GDI User Portal with your organisation credentials—no need to create a separate account. GDI User Portal uses your organisation's Identity and Access Management (IAM) system to facilitate your access and permissions within the platform. For questions regarding your organisation account, please contact your IT support team. To sign in to GDI User Portal: 1. Obtain the link to GDI User Portal from your IT support team. 2. Open GDI User Portal in your web browser. 3. Select your sign-in method and sign in with your organisation credentials. 4. After you sign in, the GDI User Portal home page loads and you can explore the dashboard",
+      "guide": "user-guide"
+    }
+  ],
+  "catalog-managers-guide": [
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/welcome",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/welcome",
+      "title": "welcome",
+      "content": "We're almost there :::info Please check back soon! We're still working on this section. We're building a comprehensive documentation to help manage your organisation's genomic datasets effectively. In the meantime, you can explore the Data users guide to understand the platform from an end-user perspective. :::",
+      "guide": "catalog-managers-guide"
+    }
+  ],
+  "system-admin-guide": [
+    {
+      "id": "/gdi-userportal-frontend/system-admin-guide/welcome",
+      "url": "/gdi-userportal-frontend/system-admin-guide/welcome",
+      "title": "welcome",
+      "content": "We're almost there :::info Please check back soon! We're still working on this section. We're building a comprehensive documentation to help you deploy, configure, and maintain the GDI User Portal platform. In the meantime, you can explore the Data users guide to understand the platform from an end-user perspective. :::",
+      "guide": "system-admin-guide"
+    }
+  ],
+  "developer-guide": [
+    {
+      "id": "/gdi-userportal-frontend/developer-guide/welcome",
+      "url": "/gdi-userportal-frontend/developer-guide/welcome",
+      "title": "welcome",
+      "content": "We're almost there :::info Please check back soon! We're still working on this section. We're building a comprehensive documentation to help you contribute to the GDI User Portal platform. In the meantime, you can explore the Data users guide to understand the platform from an end-user perspective. :::",
+      "guide": "developer-guide"
+    }
+  ],
+  "all": [
+    {
+      "id": "/gdi-userportal-frontend/user-guide/explore-datasets/browse-by-category",
+      "url": "/gdi-userportal-frontend/user-guide/explore-datasets/browse-by-category",
+      "title": "browse by category",
+      "content": "Browse datasets by category Browse datasets by Themes and Publishers directly from the main menu. While these categories are available as filters in the search page, you can access their dedicated sections from the main navigation menu for quick browsing. :::tip Sign in for better discovery Sign in to view comprehensive information. While you can use this tool without an account, signing in allows you to search and view more details, such as and other metadata, to help you find what you need. ::: Here's a quick demo of browsing datasets by publishers: To browse datasets by theme or publisher categories: 1. Select either Themes or Publishers from the main navigation menu. 2. Select a category to view all datasets within that theme or publisher. After you select a theme or publisher, the Datasets page opens with pre-applied filters based on your selection. In this example, we selected the theme: Health, and is pre-applied as a filter with its resulting datasets. 3. Explore more using the search, or apply more filters to narrow down results. 4. Found a dataset of interest? Select it to view more details or Request access to the dataset.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/explore-datasets/search-and-filter",
+      "url": "/gdi-userportal-frontend/user-guide/explore-datasets/search-and-filter",
+      "title": "search and filter",
+      "content": "Search and filter datasets Use the search bar and filters to find datasets relevant to your research. Both search and filters are available on all pages where browsing datasets is possible. This includes the Home page and the Datasets page. :::tip Sign in for enhanced search Sign in to get comprehensive search results. While you can search datasets without an account, signing in allows you to filter and view more details in the search results, such as and other metadata. ::: Search datasets On the Home or Datasets page, enter any term or phrase to search across all dataset information, including: - Disease names, research topics, or data types - Specific terms like gene names or scientific keywords - Any other information described in the dataset metadata Filter your results Use the filters on the left side of the search results page to narrow down your results. These filters are based on dataset metadata, and signing in gives you access to additional metadata-based filters. Common filters include: Access Rights, Data Types, Themes, and Publishers. Here's an example of a search result for the word \"cancer\", with filters applied for Access Rights: and Themes: and .",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/explore-datasets/search-by-allele-frequency",
+      "url": "/gdi-userportal-frontend/user-guide/explore-datasets/search-by-allele-frequency",
+      "title": "search by allele frequency",
+      "content": "Search by allele frequency Search for datasets containing specific genomic variants using the allele frequency search tool. Allele frequency refers to how common a specific genetic variant is within a population. This search tool allows you to: - Identify relevant datasets with your specific genomic variant of interest - Compare variant frequencies across different populations and research cohorts - Assess dataset suitability by viewing detailed prevalence data to select the most appropriate datasets for your research :::tip Sign in for enhanced search Sign in to get comprehensive search results. While you can use this tool without an account, signing in allows you to search and view more details, such as and other metadata, to help you find what you need. ::: Search by allele frequency 1. Select Allele Frequency from the main menu. 2. Enter your search criteria: - Variant: The full form of the genomic variant, usually represented in the format . Example: - Ref Genome: Select the reference genome assembly to use for the search. - Cohort: Select the cohort of interest. Cohorts are groups of individuals sharing common characteristics, for example, those with a specific condition such as COVID. 3. Select Search or press Enter. The search results display dataset information in table format. Understanding your results The search results display datasets containing your specified variant in table format. Here's an example of the search result using the allele frequency search tool: - Dataset: Name and source of the dataset. These are Beacon identifiers—the portal uses Beacon technology to retrieve information about whether genomic databases contain specific variants. - Population: Geographic or demographic group, such as countries. - Allele Count: Number of times the variant appears in the dataset. - Allele Number: Total number of alleles analysed in the dataset for this position. - Homozygous: Number of individuals with two copies of the variant. - Heterozygous: Number of individuals with one copy of the variant. - Frequency: How common the variant is in that population (as a decimal).",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/export-metadata",
+      "url": "/gdi-userportal-frontend/user-guide/export-metadata",
+      "title": "export metadata",
+      "content": "Export metadata Download dataset metadata for integration with various tools and systems. The metadata includes detailed information about the dataset such as data types, collection methods, access rights, and other descriptive information that can help you integrate the dataset information into your research workflow. You can export metadata in the following formats: - RDF: Resource Description Framework format for semantic web applications - TTL: Turtle format for human-readable RDF data - JSON-LD: JSON for Linked Data format for web-based applications To export metadata: 1. Browse or search for datasets you want to export metadata from. 2. Select a dataset to view its details. 3. Locate the Export Metadata In section and select your preferred format (RDF, TTL, or JSON-LD). In this example, we select JSON-LD: 4. Select Download to save the metadata file to your device.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/faq",
+      "url": "/gdi-userportal-frontend/user-guide/faq",
+      "title": "faq",
+      "content": "Frequently Asked Questions For additional questions or support, please contact our support team. Do I need an account to access GDI Portal? You do not need an account to access the GDI Portal and browse dataset information. However, you need to sign in to your account to request access to the dataset records. Signing in also enables additional features such as saving searches and receiving notifications. I found a dataset I want to use. What do I do? First, you need to submit an application to access the said data. You might be asked to provide additional information such as your research purpose, institutional affiliation, and ethics approval documentation. The portal will guide you through these requirements when you apply. Once your application is approved, you will receive instructions on how to download the data. How long does it take to get approval to access data? Approval times vary depending on the dataset, the requirements you provide, and the complexity of your request. The portal will connect you with the Data Access Committee who manage the approval process. Can I access data from multiple countries? Yes, the GDI Portal enables cross-border access to genomic data across European countries through its federated network approach.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/request-datasets/add-participants",
+      "url": "/gdi-userportal-frontend/user-guide/request-datasets/add-participants",
+      "title": "add participants",
+      "content": "Add participants to your application Add participants to collaborate with team members or colleagues on your dataset access request. You can invite multiple participants to help complete the application, upload required documents, and stay informed about the request status. You can add participants to draft and submitted applications. Participants can: - View the application details and requirements - Submit requirements such as forms and documents - Submit draft applications for review - Receive status updates via email To add participants to your application: 1. Select the folder icon () on your dashboard. 2. Select the Applications tab on your dashboard, and select your draft or submitted application. 3. Select Add Participant on the application details page. 4. Enter the name and email address you want to invite and select Send. Do this for each participant you want to add. :::tip Well done After participants accept your invitation, they can access the application from their dashboard and continue the application process.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/request-datasets/apply-for-access",
+      "url": "/gdi-userportal-frontend/user-guide/request-datasets/apply-for-access",
+      "title": "apply for access",
+      "content": "Apply for access to datasets Found datasets you want to use? Submit an application to access and use the datasets. The Data Access Committee will review your application to ensure compliance with data use policies and ethical standards. To apply for access to datasets: 1. Browse or search for datasets you want to access. 2. Select Add to basket on each dataset you want to include in your application. You can do this from the search results or when you view the dataset details. This example shows adding a dataset to the basket from the search results: 3. After you add datasets to your basket, select the Basket icon (). The Basket page opens with the list of datasets you selected. 4. Review your list of datasets. To remove a dataset, select Remove from basket. 5. Select Request now to create an application. The application form opens. 6. Submit the requirements to access the dataset. This can include filling out forms and uploading documents, depending on the dataset. Here's an example of requirements including document uploads: 7. (Optional) Need help with your application? Select Add Participant for collaborators to access your application, submit requirements, and continue your application. 8. Review the Terms & Conditions and select Accept All to agree to the terms. 9. Select Submit to complete your application. You will receive email notifications for status updates and if additional documentation is required. :::tip Continue later If you need more time, you can close or navigate away from the application page. The system automatically saves your progress as draft, and you or your collaborators can continue later. :::",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/request-datasets/continue-an-application",
+      "url": "/gdi-userportal-frontend/user-guide/request-datasets/continue-an-application",
+      "title": "continue an application",
+      "content": "Continue an application Continue working on applications that you or other collaborators have started earlier. All incomplete applications are saved as draft. To continue a draft application: 1. Select the folder icon () on your dashboard. 2. Select the Applications tab. The page lists applications, indicating their status. In this example, you have one application and one application: 3. Select the draft application you want to complete. 4. Complete the application form by providing all required information or uploading necessary documentation. 5. Review the Terms & Conditions and select Accept All to agree to the terms. 6. Select Submit to submit your completed application. You will receive a confirmation email and be notified of status updates. Or to save and continue later, simply navigate away from the page. The system saves your last completed input.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/request-datasets/download-datasets",
+      "url": "/gdi-userportal-frontend/user-guide/request-datasets/download-datasets",
+      "title": "download datasets",
+      "content": "Download datasets Once your application is approved, you'll receive an email with instructions to access the Secure Processing Environment (SPE) where you can securely download and work with your approved datasets. To access and work with your approved datasets: 1. Check your email for instructions and access links to the Secure Processing Environment (SPE). 2. Follow the instructions provided in the email to securely access the SPE. 3. Download and work with your approved datasets within the SPE. :::info Stay compliant All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to use data responsibly and according to the terms and agreements you signed during the application process. ::: View approved datasets in the portal You can also view your approved datasets directly in the GDI Portal to see their metadata and details. To view your approved datasets: 1. Select the folder icon () on your dashboard. 2. Select the Entitlements tab to see the list of your approved datasets. 3. Select the dataset to view its details. This view only displays the metadata of your approved datasets. To download and work with the datasets, use the Secure Processing Environment (SPE) as instructed in your approval email.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/request-datasets/track-application",
+      "url": "/gdi-userportal-frontend/user-guide/request-datasets/track-application",
+      "title": "track application",
+      "content": "Track your application After submitting your application, track its progress and check for any status updates or additional requirements from the Data Access Committee. To track your application: 1. Select the folder icon () on your dashboard. 2. Select the Applications tab. The page displays all your applications with their current status, sorted by last modified date: In this example, there is one application and one application: 3. Review your application status. Applications can have the following statuses: - DRAFT: Application is incomplete and has not been submitted yet. Continue the application. - SUBMITTED: Application is under review by the Data Access Committee. - APPROVED: Application has been approved and you can access the datasets. Download the datasets. - REJECTED: Application has been declined with feedback provided. Select the application to view feedback and next steps.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/sign-in",
+      "url": "/gdi-userportal-frontend/user-guide/sign-in",
+      "title": "sign in",
+      "content": "Sign in In this guide > Why sign in? > Sign in Why sign in? Signing in allows you to access enhanced features and request access to datasets. While you can browse datasets without an account, signing in allows you to: - Submit applications to request access to datasets. - Enhance your search with additional filters and more comprehensive search results. - See more dataset information including and other metadata to help assess if datasets meet your research needs. Sign in GDI Portal connects with your existing accounts with widely-used platforms so you don't need to create a separate account. This includes Google and LinkedIn, as well as institutions like your university or research organisation. To sign in to the GDI Portal: 1. Open the GDI Portal in your browser: https://portal.dev.gdi.lu/. 2. Select Login at the top right corner of the page. The login page opens. 3. Select LSAAI as your sign-in method. :::info Why LSAAI? GDI Portal requires you to sign in with LSAAI (Login Service for Academic and Administrative Institutions). LSAAI is a secure login system that lets you use your existing accounts like Google, LinkedIn, university, or other institutional accounts. This means you don't need to create a new account specifically for the GDI Portal. ::: 4. Select your account provider: Search for your institution in the search bar, or select from the list of options (LinkedIn, Apple, Google, ORCID, GitHub). 5. Follow the instructions to sign in with your selected account. If it's your first time signing in, you may need to verify your email address. 6. After you sign in, the GDI Portal home page loads and you can start exploring datasets.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/welcome-data-users",
+      "url": "/gdi-userportal-frontend/user-guide/welcome-data-users",
+      "title": "welcome data users",
+      "content": "Welcome to GDI Portal Welcome to the documentation for the Genomic Data Infrastructure (GDI) Portal! The GDI Portal connects you to Europe's largest network of genomic datasets—over one million genome sequences from across European countries. As part of the 1+ Million Genomes Initiative, this portal enables federated and secure cross-border access to high-quality genomic data and related phenotypic information across European countries. Whether you're a clinician, scientist, or healthcare policy maker, the GDI Portal is your gateway to Europe's genomic resources to support your work in: - Research and scientific innovation - Healthcare and clinical diagnostics - Health policy making and initiatives How it works Access genomic datasets through a simple, secure process: 1. Explore datasets: Browse and search through detailed dataset information—search by any criteria such as keywords, research topics, disease areas, or allele frequency. Explore datasets. 2. Request access: Found a dataset you want to use? Submit an application to access it. You may need to provide documentation or requirements for your request, and you can invite collaborators to assist you with your application. Request access. 3. Access approved datasets: Once your request is approved, you will receive an email with a link to the Secure Processing Environment (SPE) where you can securely download and work with the datasets. :::info Stay compliant All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to use data responsibly and according to the terms and agreements you signed during the application process. ::: Get started Ready to explore? Start by browsing available datasets, or sign in for full access to all features of the GDI Portal.",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/_get-started/sign-in",
+      "url": "/gdi-userportal-frontend/user-guide/_get-started/sign-in",
+      "title": "sign in",
+      "content": "Sign in Sign in to GDI User Portal with your organisation credentials—no need to create a separate account. GDI User Portal uses your organisation’s Identity and Access Management (IAM) system to facilitate your access and permissions within the platform. For questions regarding your organisation account, please contact your Inventory Coordinator or IT support team. To sign in to GDI User Portal: 1. Obtain the link to GDI User Portal from your Inventory Coordinator. 2. Open GDI User Portal in your web browser. 3. Select your sign-in method and sign in with your organisation credentials. 4. After you sign in, the GDI User Portal home page loads and you can _explore the dashboard_ :::info Unauthorised Access? If you're signing in for the first time or if there are no roles assigned to your account, you may get an \"Unauthorized Access\" error. Contact your Inventory Coordinator and request that they assign the necessary roles to your account, and then try again. ::: Sign in Sign in to GDI User Portal with your organisation credentials—no need to create a separate account. GDI User Portal uses your organisation's Identity and Access Management (IAM) system to facilitate your access and permissions within the platform. For questions regarding your organisation account, please contact your IT support team. To sign in to GDI User Portal: 1. Obtain the link to GDI User Portal from your IT support team. 2. Open GDI User Portal in your web browser. 3. Select your sign-in method and sign in with your organisation credentials. 4. After you sign in, the GDI User Portal home page loads and you can explore the dashboard",
+      "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/welcome",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/welcome",
+      "title": "welcome",
+      "content": "We're almost there :::info Please check back soon! We're still working on this section. We're building a comprehensive documentation to help manage your organisation's genomic datasets effectively. In the meantime, you can explore the Data users guide to understand the platform from an end-user perspective. :::",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/system-admin-guide/welcome",
+      "url": "/gdi-userportal-frontend/system-admin-guide/welcome",
+      "title": "welcome",
+      "content": "We're almost there :::info Please check back soon! We're still working on this section. We're building a comprehensive documentation to help you deploy, configure, and maintain the GDI User Portal platform. In the meantime, you can explore the Data users guide to understand the platform from an end-user perspective. :::",
+      "guide": "system-admin-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/developer-guide/welcome",
+      "url": "/gdi-userportal-frontend/developer-guide/welcome",
+      "title": "welcome",
+      "content": "We're almost there :::info Please check back soon! We're still working on this section. We're building a comprehensive documentation to help you contribute to the GDI User Portal platform. In the meantime, you can explore the Data users guide to understand the platform from an end-user perspective. :::",
+      "guide": "developer-guide"
+    }
+  ]
+}

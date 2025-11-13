@@ -1,0 +1,145 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: #7b2d7e; /* Primary brand purple */
+  color: #fff; /* White text for contrast */
+}
+
+.hero__title,
+.hero__subtitle {
+  color: #fff; /* Ensure text is white on blue */
+}
+
+/* Docusaurus button override for hero banner */
+.heroBanner .button--primary {
+  background: #f5a623; /* Secondary orange accent */
+  color: #fff;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: background 0.2s;
+}
+.heroBanner .button--primary:hover,
+.heroBanner .button--primary:focus {
+  background: #e6951f; /* Slightly darker orange on hover */
+  color: #fff;
+}
+
+/* Dark theme overrides */
+html[data-theme="dark"] .heroBanner {
+  background: #6d2670; /* Slightly darker purple for dark mode */
+  color: #fff;
+}
+html[data-theme="dark"] .heroBanner .button--primary {
+  background: #ffb84d; /* Lighter orange for dark mode */
+  color: #fff !important; /* Force white text in dark mode */
+}
+
+.heroContent {
+  background: #7b2d7e; /* Primary brand purple */
+  color: #fff;
+  border-radius: 12px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: inline-block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.features {
+  margin-top: 5rem; /* Space between hero banner and features/persona section */
+}
+
+img[src$=".svg"] {
+  border: none !important; /* Removes the grey border from all svg images*/
+  box-shadow: none !important;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.card {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  background: var(--ifm-background-surface-color);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.homeCard {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: none;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 3.5rem; /* Add vertical spacing between feature cards */
+}
+
+.homeSubtext {
+  max-width: 280px;
+  margin: 0 auto;
+  font-size: 0.97rem;
+}
+
+/* .card p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ifm-color-content-secondary);
+  text-decoration: none;
+} */
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.card p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+.subtext {
+  font-size: 1.05rem;
+  color: var(--ifm-color-content-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.mainPaddingBottom {
+  padding-bottom: 8rem; /* Space between body text and footer */
+}

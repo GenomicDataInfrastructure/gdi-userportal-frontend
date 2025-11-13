@@ -276,6 +276,8 @@ components:
         - DROPDOWN
         - FREE_TEXT
         - ENTRIES
+        - DATETIME
+        - NUMBER
       title: Filter type
     Operator:
       default: "="
@@ -597,6 +599,16 @@ components:
           items:
             $ref: "#/components/schemas/FilterEntry"
           title: entries
+        range:
+          type: object
+          title: Range
+          properties:
+            min:
+              type: string
+              title: Minimum value
+            max:
+              type: string
+              title: Maximum value
       required:
         - source
         - type

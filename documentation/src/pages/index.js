@@ -57,14 +57,14 @@ export default function Home() {
                     style={{ width: 100, height: 100, marginBottom: 12 }}
                   />
                   <h3>
-                    <Link to="/welcome-catalogue-managers">
-                      Catalog managers
+                    <Link to="/catalogue-managers-guide/welcome">
+                      Catalogue managers
                     </Link>
                   </h3>
                   <p className={styles.homeSubtext}>
                     I'm a catalogue manager, admin, or{" "}
                     <strong>back-office staff</strong> who manages my
-                    organisation's genomic data catalog.
+                    organisation's genomic data catalogue.
                   </p>
                 </div>
               </div>

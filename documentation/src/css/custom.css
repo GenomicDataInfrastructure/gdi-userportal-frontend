@@ -95,7 +95,7 @@ table th {
   color: var(--ifm-color-primary-dark);
 }
 
-.search-scope-catalog-managers-guide .search-scope-indicator {
+.search-scope-catalogue-managers-guide .search-scope-indicator {
   background-color: rgba(245, 166, 35, 0.1);
   color: var(--gdi-secondary);
 }
@@ -353,7 +353,7 @@ a:hover {
   color: var(--gdi-primary);
 }
 
-.search-scope-catalog-managers-guide .search-scope-indicator {
+.search-scope-catalogue-managers-guide .search-scope-indicator {
   background-color: rgba(245, 166, 35, 0.1);
   color: var(--gdi-secondary);
 }

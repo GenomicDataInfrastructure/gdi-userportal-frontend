@@ -1,24 +1,21 @@
 ---
 slug: /welcome-data-users
-sidebar_label: "Welcome to GDI Portal"
+sidebar_label: "Welcome"
 sidebar_position: 1
 ---
 
-# Welcome to GDI Portal
+# Welcome to the GDI Portal
 
-Welcome to the documentation for the **Genomic Data Infrastructure (GDI) Portal**!
+Welcome to the GDI Portal user guide!
 
-The **GDI Portal** connects you to Europe's largest network of **genomic datasets**—over one million genome sequences from across European countries. As part of the 1+ Million Genomes Initiative, this portal enables **federated and secure** cross-border access to high-quality genomic data and related phenotypic information across European countries.
+**The GDI Portal connects you to Europe's largest network of genomic datasets**—over one million genome sequences from across European countries. As part of the 1+ Million Genomes Initiative, this portal enables federated and secure cross-border access to high-quality genomic data and related phenotypic information across European countries.
 
-Whether you're a clinician, scientist, or healthcare policy maker, the GDI Portal is your gateway to Europe's genomic resources to support your work in:
+**This guide is for data users**—healthcare researchers, policy-makers, and professionals—who want to discover and request access to genomic datasets for research and clinical purposes. 
 
-- Research and scientific innovation
-- Healthcare and clinical diagnostics
-- Health policy making and initiatives
 
 ## How it works
 
-Access genomic datasets through a simple, secure process:
+Access genomic datasets in three steps:
 
 1. **Explore datasets:** Browse and search through detailed dataset information—search by any criteria such as keywords, research topics, disease areas, or allele frequency. [Explore datasets](/category/explore-datasets-1/).
 
@@ -36,3 +33,5 @@ Access genomic datasets through a simple, secure process:
 ## Get started
 
 Ready to explore? [Start by browsing](/category/explore-datasets-1/) available datasets, or [sign in](/sign-in) for full access to all features of the GDI Portal.
+
+To learn more about the Genomic Data Infrastructure (GDI) and the initiatives behind it, see [About GDI](./about-gdi).

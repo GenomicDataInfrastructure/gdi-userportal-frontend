@@ -1,6 +1,6 @@
 ---
 sidebar_label: "Edit and update datasets"
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Edit and update datasets

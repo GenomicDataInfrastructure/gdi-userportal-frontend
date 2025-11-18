@@ -1,10 +1,10 @@
 ---
-sidebar_label: "Navigate the interface"
+sidebar_label: "Dashboard overview"
 sidebar_position: 2
 ---
 
-# Navigate the interface
+# Dashboard overview
 
 **Source:** New content needed
 
-- **Navigate the interface** - Basic UI orientation
+- **Dashboard overview** - Basic UI orientation and key areas overview

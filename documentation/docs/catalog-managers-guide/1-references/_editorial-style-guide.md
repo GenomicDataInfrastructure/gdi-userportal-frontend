@@ -254,3 +254,13 @@ Good: Download the template.
 
 Introduce tables and lists: Describe their purpose or summary.
 
+
+## Enumration formats
+
+When enumerating items within a sentence or paragraph, use the following formats for clarity:
+
+- **Key phrase:** Description of the item.
+
+Example:
+- **Publishing dataset records:** Create and maintain comprehensive descriptions of genomic datasets
+- **Managing data discoverability:** Ensure datasets can be found by researchers through the GDI User Portal

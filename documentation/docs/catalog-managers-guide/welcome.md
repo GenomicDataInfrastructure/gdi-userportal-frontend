@@ -16,10 +16,35 @@ The Dataset Catalogue is accessible at [https://catalogue.portal.gdi.lu](https:/
 
 To learn more about the Genomic Data Infrastructure (GDI) and founding initiatives, see [About GDI](./about-gdi). 
 
+## Your key responsibilities
+
+As a catalogue manager, you are responsible for:
+
+- **Publishing dataset records:** Create and maintain comprehensive descriptions of genomic datasets
+- **Managing data discoverability:** Ensure datasets can be found by researchers through the GDI User Portal
+- **Maintaining data quality:** Keep dataset information accurate and up to date
+- **Supporting collaboration:** Work with colleagues and institutions to share genomic resources
+- **Facilitating access:** Help authorised researchers find and request access to relevant datasets
+
+## What you can accomplish
+
+With this catalogue management system, you can:
+
+- **Add datasets:** Upload new research data to the catalogue
+- **Manage organisations:** Oversee your institution's data presence  
+- **Set up automated harvesting:** Import metadata from external sources
+- **Configure schemas:** Define how dataset information is structured
+- **Monitor activity:** Track changes and user interactions
+- **Resolve issues:** Troubleshoot common problems quickly
+
 ## What would you like to do?
 
-- **Add datasets** - Upload new research data to the catalogue
-- **Manage organisations** - Oversee your institution's data presence
-- **Maintain quality** - Ensure data descriptions meet standards
-- **Collaborate with teams** - Work with colleagues on data publishing
-- **Support data users** - Help researchers find relevant datasets
+- **Add datasets:** Upload new research data to the catalogue
+- **Manage organisations:** Oversee your institution's data presence
+- **Maintain quality:** Ensure data descriptions meet standards
+- **Collaborate with teams:** Work with colleagues on data publishing
+- **Support data users:** Help researchers find relevant datasets
+
+## Get started
+
+Ready to begin? Start by [signing in](./get-started/sign-in) to access the catalogue.

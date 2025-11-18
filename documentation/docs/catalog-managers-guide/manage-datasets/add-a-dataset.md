@@ -30,6 +30,6 @@ To add a dataset:
 
 :::tip Well done
 
-    Now that you have added your dataset, you can add it to a group, add more data resources, or sselect **Manage** to edit dataset details. 
+    Now that you have added your dataset, you can add it to a group, add more data resources, or select **Manage** to edit dataset details. 
 
 :::

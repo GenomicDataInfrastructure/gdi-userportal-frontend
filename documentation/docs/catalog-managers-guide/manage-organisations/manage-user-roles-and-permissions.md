@@ -9,7 +9,7 @@ position: 2
 
 :::info We are working on this page
 
-This page is under construction. Thank you for  your patience as we work to improve our documentation.
+This page is under construction. Thank you for your patience as we work to improve our documentation.
 
 :::
 

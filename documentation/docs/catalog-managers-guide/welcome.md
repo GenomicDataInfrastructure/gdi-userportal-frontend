@@ -23,5 +23,3 @@ To learn more about the Genomic Data Infrastructure (GDI) and founding initiativ
 - **Maintain quality** - Ensure data descriptions meet standards
 - **Collaborate with teams** - Work with colleagues on data publishing
 - **Support data users** - Help researchers find relevant datasets
-
-

@@ -58,7 +58,7 @@ export default function Home() {
                   />
                   <h3>
                     <Link to="/welcome-catalogue-managers">
-                      Catalog managers
+                      Catalogue managers
                     </Link>
                   </h3>
                   <p className={styles.homeSubtext}>

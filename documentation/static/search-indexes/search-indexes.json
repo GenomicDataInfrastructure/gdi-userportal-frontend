@@ -1,6 +1,13 @@
 {
   "user-guide": [
     {
+      "id": "/gdi-userportal-frontend/user-guide/about-gdi",
+      "url": "/gdi-userportal-frontend/user-guide/about-gdi",
+      "title": "About GDI",
+      "content": "",
+      "guide": "user-guide"
+    },
+    {
       "id": "/gdi-userportal-frontend/user-guide/explore-datasets/browse-by-category",
       "url": "/gdi-userportal-frontend/user-guide/explore-datasets/browse-by-category",
       "title": "browse by category",
@@ -81,7 +88,7 @@
       "id": "/gdi-userportal-frontend/user-guide/welcome-data-users",
       "url": "/gdi-userportal-frontend/user-guide/welcome-data-users",
       "title": "welcome data users",
-      "content": "Welcome to GDI Portal Welcome to the documentation for the Genomic Data Infrastructure (GDI) Portal! The GDI Portal connects you to Europe's largest network of genomic datasets—over one million genome sequences from across European countries. As part of the 1+ Million Genomes Initiative, this portal enables federated and secure cross-border access to high-quality genomic data and related phenotypic information across European countries. Whether you're a clinician, scientist, or healthcare policy maker, the GDI Portal is your gateway to Europe's genomic resources to support your work in: - Research and scientific innovation - Healthcare and clinical diagnostics - Health policy making and initiatives How it works Access genomic datasets through a simple, secure process: 1. Explore datasets: Browse and search through detailed dataset information—search by any criteria such as keywords, research topics, disease areas, or allele frequency. Explore datasets. 2. Request access: Found a dataset you want to use? Submit an application to access it. You may need to provide documentation or requirements for your request, and you can invite collaborators to assist you with your application. Request access. 3. Access approved datasets: Once your request is approved, you will receive an email with a link to the Secure Processing Environment (SPE) where you can securely download and work with the datasets. :::info Stay compliant All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to use data responsibly and according to the terms and agreements you signed during the application process. ::: Get started Ready to explore? Start by browsing available datasets, or sign in for full access to all features of the GDI Portal.",
+      "content": "Welcome to the GDI Portal Welcome to the GDI Portal user guide! The GDI Portal connects you to Europe's largest network of genomic datasets—over one million genome sequences from across European countries. As part of the 1+ Million Genomes Initiative, this portal enables federated and secure cross-border access to high-quality genomic data and related phenotypic information across European countries. This guide is for data users—healthcare researchers, policy-makers, and professionals—who want to discover and request access to genomic datasets for research and clinical purposes. How it works Access genomic datasets in three steps: 1. Explore datasets: Browse and search through detailed dataset information—search by any criteria such as keywords, research topics, disease areas, or allele frequency. Explore datasets. 2. Request access: Found a dataset you want to use? Submit an application to access it. You may need to provide documentation or requirements for your request, and you can invite collaborators to assist you with your application. Request access. 3. Access approved datasets: Once your request is approved, you will receive an email with a link to the Secure Processing Environment (SPE) where you can securely download and work with the datasets. :::info Stay compliant All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to use data responsibly and according to the terms and agreements you signed during the application process. ::: Get started Ready to explore? Start by browsing available datasets, or sign in for full access to all features of the GDI Portal. To learn more about the Genomic Data Infrastructure (GDI) and the initiatives behind it, see About GDI.",
       "guide": "user-guide"
     },
     {
@@ -94,14 +101,210 @@
   ],
   "catalog-managers-guide": [
     {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/about-gdi",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/about-gdi",
+      "title": "About GDI",
+      "content": "",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/auditing-user-activity-in-ckan/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/auditing-user-activity-in-ckan/_index",
+      "title": "Auditing User Activity in CKAN",
+      "content": "A full history of dataset changes is now displayed in the Activity Stream to admins, and optionally to the public. By default, this feature is enabled for new installations but is disabled for sites which upgrade, to prevent the exposure of potentially sensitive history. It is recommended for open data CKANs that are upgrading to make this history public. This can be achieved by setting the following in the file: More about ckan activity settings: https://docs.ckan.org/en/2.10/maintaining/configuration.html If you have expericience with older versions of CKAN: since 2.10 Activity needs to be activated as plugin. See changelog https://docs.ckan.org/en/2.10/changelog.html With the right permission. You can view activities at dataset level or at organisation level !Organisation level !Dataset level And the dif view !Diff view",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/ckan-user-roles/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/ckan-user-roles/_index",
+      "title": "CKAN User Roles",
+      "content": "Platform-Level Roles 1. Visitor - Capabilities: - Search and view public datasets. 2. Registered User - Capabilities: - Become a member of an organization (requires admin approval). - Publish, edit, or add datasets based on their role in the organization. - Manage their own profile. - Note: Creation of organizations is disabled. 3. Sysadmin - Capabilities: - Access and edit any organizations. - View and change user details. - Permanently delete datasets. - Customize the look and feel of the platform. Organization-Level Roles 1. Member - Capabilities: - View the organization’s private datasets. 2. Editor - Capabilities: - All capabilities of a Member. - Add new datasets to the organization. - Edit or delete any of the organization's datasets. - Make datasets public or private. 3. Organization Admin - Capabilities: - All capabilities of an Editor. - Add users to the organization, and set their role (member, editor, or admin). - Change the role of any user in the organization, including other admin users. - Remove members, editors, or other admins from the organization. - Edit the organization's details (e.g., title, description, image). - Delete the organization. --- For more detailed information, please visit the CKAN documentation on authorization: CKAN Authorization Documentation.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/extension-local-setup-and-testing/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/extension-local-setup-and-testing/_index",
+      "title": "Extension Development and testing",
+      "content": "{{}} * Local Installation To run CKAN and develop and/or test extensions locally, one needs to set up development environment as the following: 1. Set up virtual environment: Note, virtual enviromnent should stay activated during the whole installation process. 2. Install CKAN as a package into virtual environment: Installation of dependencies may fail due to some known or other compatibility issues, below is an example of troubleshooting. One of the known issues is building. If installation of fails, go to CKAN requirements.txt now cloned and located at , change => , rerun installation of the dependencies and install CKAN itself separately: Another case of dependencies incompatibility occurring for CKAN v2.9.10 is . In requirements.txt it may be set as or , if it causes the following error in the runtime , it should be downgraded to . 3. Install required extensions An extension can be cloned first to a desired location and then installed to the virtual environment from file, e.g.: For example on mac Or directly from Github location Then install dependencies: For example ckanext-harvest 4. Set up a postgres database, specify database connection string in and . Testing Testing strategy for a plugin would depend on plugin functionality. CKAN provides a number of helper functions allowing to generate dummy data in the database or clean the database afterwards. Please review official documentation for detailed info. To set up testing of a plugin make sure the following settings are configured correctly: 1. Make sure is installed to the virtual environment. Normally this dependency should be listed in of a plugin and therefore got installed. If you do not see it in output run . 2. Each plugin has an autogenerated file. Make sure it points to file of CKAN installation, e.g.: 3. Modify so configuration is correct. Most likely you need to modify parameter so it contains correct connection information: If testing of your plugin requires writing to the database it is recommended to set up a separate test instance of postgres database. Running tests Tests can be run via simple command or an extended one with desired options. The following example is to run tests with coverage: Per file/UT within PyCharm. Mark sure the following user environment variable is set",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/fair-data-point-harvester-update-strategy/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/fair-data-point-harvester-update-strategy/_index",
+      "title": "Fair Data Point Harvester Update Strategy",
+      "content": "{{}} * As was mentioned, a CKAN harvester must implement , and . During the fair data point harvester requests all the available resources from a source. For each resource a unique guid is generated. Guids are generated by the harvester as the following: - for a catalog - for a dataset where is an FDP reference URL (subject URL) of the resource. e.g. for the following dataset https://health-ri.sandbox.semlab-leiden.nl/dataset/d7129d28-b72a-437f-8db0-4f0258dd3c25 CKAN harvester guid will be . Then the harvester queries CKAN database for guids harvested from the same source before. The query is the following: where is the harvester source id of the current job. Based on these two lists of guids a harvest object is created and assigned with status , or . Data for the last two types of resources are collected and parsed during . During resources are deleted, updated or inserted to the CKAN database with regard of the harvester object status. As per documentation it is possible to configure a CKAN instance to prevent updating of certain fields. Deletion of a dataset On the guids of datasets to delete are defined as where - ids from CKAN table for a given source, a result of the query above. After that, still during the harvester sets the status of harvest objects to delete to . So they stay in the database but are not shown. Then, during the , the harvester actually deletes those datasets by calling . Caveat: - Datasets will be considered \"new\" if one configures a harvester source in CKAN, deletes it and re-configures then. - If a dataset is set for deletion and something goes wrong during the a dataset stays forever as no more current one. - If a dataset is moved in FDP from a catalogue to another catalogue (by updating reference on the dataset level) it will be considered a new one because a guid of CKAN harvested resource (unlike FDP itself) includes a catalogue id (see above).",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/harvesting-dcat-ap/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/harvesting-dcat-ap/_index",
+      "title": "Test harvesting of DCAT-AP",
+      "content": "Assuming the CKAN development with is set up as documented in this wiki. First, modify the file, add the following to plugins: . If you are intending using rdf harvester with a custom profile, make sure configuration CKAN.ini file contains the following properties: - - with a space-separated list of profiles (the order is important for the behaviour) - - to ensure compatibility with dcat_ parsers More about profiles and compatibility modes can be found in CKAN + DCAT documentation. Rebuild the containers. Go to CKAN harvest page (e.g. http://localhost:5500/harvest). Click “Add Harvest Source”. At URL, enter URL of dataset you want to harvest. Select harvester type and fill in the configuration. Save. Below we provide several example links one may use for testing: https://opendata.swiss/en/dataset/verbreitung-der-steinbockkolonien.xml http://national_catalogue_mock:8001/xnat.ttl https://raw.githubusercontent.com/Health-RI/starter-kit-info/main/example.ttl In the image below you can see example configuration for the last example file. You need to provide as to parse the file. as was needed to make sure parsing works with gdi_useportal schema which is different from CKAN default one. After a harvester job is configured, it can be triggered manually by clicking Reharvest in the job's Admin section. If you select the manual time interval, you need to do this each time you want to run the job. However, if you set the Update frequency to e.g. daily, a background process will automatically trigger the harvester at the end of each day. To test harvesting in Docker Desktop go to the container then click Terminal. Enter the command , the is the part of the URL of the harvest source. If successful you'll see datasets uploaded in CKAN. !Harvesting",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/harvesting-fair-data-points/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/harvesting-fair-data-points/_index",
+      "title": "Testing harvesting of FAIR Data Points",
+      "content": "First, make sure that the extension has been added to the CKAN plugins. After signing in to the CKAN portal, go to CKAN harvest page (e.g. http://localhost:5500/harvest). Click on “Add Harvest Source”. Fill in the following fields: - URL of the fair data points. Example: https://fair.healthinformationportal.eu/ - Title - Source type: \"FAIR data point harvester\" - Configuration: Click on \"Save\". Then, enter the CKAN container: Local development Inside the container, run the following command: . The harvester id is the last part of the URL of the harvest source. GDI CKAN container CRON Job for FAIR Data Harvesting Overview The GDI package, available from the GDI GitHub repository, includes a CRON job functionality designed to automate the harvesting of FAIR datapoints. This automation ensures continuous and efficient data collection without manual intervention. The harvesting process is initiated three background processes responsible for the operation: , and . Background Processes The harvesting operation relies on three main background processes: - : Manages the gathering of data sources to be harvested. - : Responsible for fetching the data from the sources identified by the gather process. - : Responsible for triggering the harvester at the end of each specified time interval (e.g., daily, weekly). These processes are crucial for the automated harvesting workflow, ensuring that data is continuously and efficiently collected and made available through the CKAN portal. Monitoring Process Status To monitor the status of these background processes, the command is used. Executing this command provides real-time status information about each process involved in the harvesting operation. Here's how to check the process status: Upon execution, you should see output similar to the following, indicating that both processes are running correctly: This output shows that both , and are in the RUNNING state, along with their respective process IDs and uptime, confirming their active operation within the system.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/nginx-rdf/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/nginx-rdf/_index",
+      "title": "Setting up nginx with correct MIME types with CKAN",
+      "content": "To test harvesting of DCAT in CKAN, it’s easiest to set up a simple web server. If CKAN is run using the previously set-up docker-compose, it can be done with a few commands. First load an nginx container to use as webserver. Replace by the folder you want to expose. Then check if http://localhost:8888 returns a valid web page. To make sure CKAN can access it too, connect the webserver to the same network: In ckan, as harvest source you can then set http://rdf:80/the_file.ttl To harvest data sources, CKAN looks at MIME types. Unfortunately nginx by default does not have the correct ones built-in. In Docker Desktop, go to the container, files, and add the following to /etc/nginx/conf.d/default.conf Can add it in the block e.g. above . Restart the container and then CKAN can harvest from this.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/_index",
+      "title": "Harvester",
+      "content": "{{}} * Basic harvest extension is publicly available and developed by CKAN community: https://github.com/ckan/ckanext-harvest It defines basic infrastructure for harvesting - a process that receives an end point and tries to identify how many objects are in there and sends each individual object to a fetch consumer which, in its turn, tries to convert each object to CKAN dataset or resource etc. In core CKAN-to-CKAN harvesting is implemented which means a CKAN instance can harvest other CKAN instances. In CKAN harvest core setup.py enabled plugins are listed, where : * is a harvesting infrastructure * is a basic harvester responsible for harvesting other CKANs These settings define choice of available source types in the UI harvester when a new harvester is added. Among publicly available and used the most is DCAT harvester, DCAT RDF harvester is well-documented and can be referenced as an example of a harvester configurations and code. There are several harversers in ckanext-dcat, all they extend core harvester interface . In the interface three methods are of particular interest and defining 80% of the harvesting process: * - goes to original URL and tries to define a single object and sends and saves it to the DB as harvester object (into table). * - checks what was saved with and if information is not complete, goes back to source to fetch additional data. * - maps data to CKAN fields. This is the place to implement hooks for data preprocessing etc.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/mapping-new-metadata-fields-strategy/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/mapping-new-metadata-fields-strategy/_index",
+      "title": "Mapping New Metadata Fields Strategy",
+      "content": "Dataset tables every field which extends the core schema lands in extra table. In demo schema table - columns are core fields of CKAN, and for every other field. Scheming extension of Civity allows more flexibility for managing extra fields than CKAN core default functionality but still such a field is converted to a string and lands in extra table. It is possible to write a mapper to and map all the extra fields. For DCAT there is an official extension: https://github.com/ckan/ckanext-dcat#json-dcat-harvester It is compatible with DCAT-AP v1.1 and 2.1 !Mapping Harvester tables In the DB there are several tables dedicated to store harvester-related information: * - harvested sources are defined * - the table where all the objects from a source are saved. Data from a source are stored in and from there will be converted to a CKAN dataset. harverters are also saved to table of harvest. Once you changed something in the DB directly, you must trigger re-indexing in Solr via search-index rebuild of CLI.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/schemas-format-extension-and-management/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/schemas-format-extension-and-management/_index",
+      "title": "Schemas format, extension and management",
+      "content": "This document describes CKAN scheming strategy and ways to configure, replace and maintain dataset schemas. Schema format and fields definitions A CKAN schema can be difined either as JSON or YAML file. Civity keeps using .json schemas but in the official documentation there are a lot of yaml references as well. A field in CKAN schema .json file can be of the following format: where * is CKAN field id * is UI field representation * is a text appearing under a field in the UI next to icon, square brackets are omitted and in this particular example contain information about how this field maps to DCAT-AP. More about these mapping and custom fields read CKAN DB Structure and Fields Mapping Strategy. Documentation on field keys and other schemas specifications can be found in the CKAN GitHub official repository. Other possible fields keys are: * - maybe useful to solve cardinality issue, not used by Civity. * - not used by Civity, added recently, refers to stages on create dataset page and manages which field will appear on which stage. * - for a drop-down - a list of dictionaries with a value and label. * - to form a drop-down dynamically or from an API. It is possible for example to point to another schema and take a field from there. * - values like , , - to enable automatic checks and not to define snippets. * - interacts with CKAN UI, defines a field representation (related to data input), if do not want to use presets or want to have more control. jinja2-based format. * - also interacts with CKAN UI, defines how data are shown in the UI, e.g. showing an e-mail as “mail to“ link etc. * - useful if you need to override representation, e.g. in case you have mapping to DCAT, then: * - to validate data. Available functions are listed in the official documentation and it is possible to add custom ones. By default there is almost no validation (ignore_missing (accepts if a value is missing) and unicode), if you are specifying a custom one - these two basic needs to be added explicitly. It is possible to write and configure a validation function of your own. To do so one needs to implement an extension where extend a interface so method returns a custom validation function. See validation functions documentation for the reference. * - complex data structures if assigned to a field are converted to a string in the DB, this field defines a validator on extracting the field from the DB and re-converting to an object. Changing schema in a running CKAN instance Schema used is defined in by setting where is a part of CKAN Command Line Interface. For more info on usage review documentation. Therefore in a running docker container it is defined in a configuration file in parameter It should refer to an extension under directory of repository. To replace the schema run A change of file triggers ckan update so changes will be applied almost immediately. A schema should be defined in the following format: : the extension is expected to be cloned under e.g. the path from the example above () resolves to the following: !Scheming Multischeming declaration IDatasetForm is an interface scheming is taking charge of to override schemas. 1. In CKAN.ini file In multiple (space-separated) values can be defined. Behaviour for CKAN core and CKAN Civity-extended differs in a way that for core CKAN if two schemas have the same field, the system will pick up the latest. Civity improved this so two schemas of the same type are merged, the order of schemas specified in will be reflected in order of fields in the CKAN UI. Another ckan.ini parameter is defines rules for merging. If set to and if schemas to merge have the same fields, definitions from the latest one will be prioritized. Fields are never deleted though, only can be added or modified. To delete a field you need to undeclared a field or set to empty explicitly. This behaviour is implemented as part of ()and documented on code level only. 2. In a Multischeming declaration .json file Initially it was implemented by Civity to allow an extension to have it’s own schema which is merged into core schema. For maintenance purposes instead of managing schemas in ckan.ini file it is possible to provide a .json config file under with a content like the following: This also allows to have several schemas at the same time, e.g.: In ckan.ini file a property with a path to the file with schemas should be added, e.g.: Civity documentation on multiple schemas configuration. It is possible to control which datasets are declared via API: and then UI search of all dataset types is configured in parameter (see documentation).",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/_index",
+      "title": "CKAN",
+      "content": "{{}} * CKAN: technology, extensions and deployment notes The space contains documentation describing CKAN technology, deployment and extensions. Publicly available documentation: * https://hackmd.io/@V9jXur4GSfWQJP5TAFnk9w/HkeIXsXnu * https://docs.ckan.org/en/latest/contents.html: * https://docs.ckan.org/en/latest/user-guide.html * https://docs.ckan.org/en/latest/sysadmin-guide.html * https://docs.ckan.org/en/latest/maintaining/index.html * https://docs.ckan.org/en/latest/api/index.html * https://docs.ckan.org/en/latest/extensions/index.html * https://docs.ckan.org/en/latest/theming/index.html CKAN community GitHub: * https://github.com/orgs/ckan/repositories?language=&q=&sort=&type=all CKAN API package: * https://github.com/ckan/ckanapi/blob/master/README.md#ckanapi-python-module Postman collection for some API calls: * https://www.postman.com/api-evangelist/workspace/data-gov/collection/35240-bc9332c4-d7ba-4398-b9a9-51c6aaf5271c CKAN gutter community chat: * https://app.gitter.im/#/room/#ckan_chat:gitter.im Table of Contents * Local setup and testing of an extension * CKAN, [WIP] CKAN DB Structure and Fields Mapping Strategy * CKAN, Schemas format, extension and management * Harvester * Test CKAN harvesting of DCAT-AP * Setting up nginx with correct MIME types with CKAN * How to harvest Fairdatapoints * How harvesting of Fairdatapoints works * User Roles * CKAN, Auditing",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/get-started/navigate-the-interface",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/get-started/navigate-the-interface",
+      "title": "navigate the interface",
+      "content": "Navigate the interface Source: New content needed - Navigate the interface - Basic UI orientation",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/get-started/overview",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/get-started/overview",
+      "title": "overview",
+      "content": "Overview Source: New content needed - Overview - Introduction to catalogue manager role and key tasks",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-datasets/add-datasets",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-datasets/add-datasets",
+      "title": "add datasets",
+      "content": "Add datasets Source: Test UI - Add datasets - Create a collection of data resources (such as files), together with a description and other information, at a fixed URL. Users see datasets when searching for data.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-datasets/edit-and-update-datasets",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-datasets/edit-and-update-datasets",
+      "title": "edit and update datasets",
+      "content": "Edit and update datasets Source: Test UI - Edit and update datasets - Modify existing dataset information and resources",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-datasets/organise-datasets-with-groups",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-datasets/organise-datasets-with-groups",
+      "title": "organise datasets with groups",
+      "content": "Organise datasets with groups Source: Test UI - Organise datasets with groups - Create and manage collections of datasets. Use this to catalogue datasets for a particular project or team, or on a particular theme, or as a simple way to help people find and search your own published datasets.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-organisations/add-organisations",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-organisations/add-organisations",
+      "title": "add organisations",
+      "content": "Add organisations Source: Test UI - Add organisations - Create, manage and publish collections of datasets. Users can have different roles within an organisation, depending on their level of authorisation to create, edit and publish.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-organisations/manage-user-roles-and-permissions",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-organisations/manage-user-roles-and-permissions",
+      "title": "manage user roles and permissions",
+      "content": "Manage user roles and permissions Source: Test UI - Manage user roles and permissions - Control platform-level roles (Visitor, Registered User, Sysadmin) and organisation-level roles (Member, Editor, Admin)",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-schemas/configure-multi-schema-setup",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-schemas/configure-multi-schema-setup",
+      "title": "configure multi schema setup",
+      "content": "Configure multi-schema setup Sources: and - Configure multi-schema setup - Manage multiple dataset types",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-schemas/define-schema-format-and-fields",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-schemas/define-schema-format-and-fields",
+      "title": "define schema format and fields",
+      "content": "Define schema format and fields Sources: and - Define schema format and fields - Define JSON/YAML schema definitions",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-schemas/update-schemas",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-schemas/update-schemas",
+      "title": "update schemas",
+      "content": "Update schemas Sources: and - Update schemas - Update schemas at runtime",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/monitor-system-activity/monitor-user-activity",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/monitor-system-activity/monitor-user-activity",
+      "title": "monitor user activity",
+      "content": "Monitor user activity Source: - Monitor user activity - Monitor admin oversight capabilities",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/monitor-system-activity/track-activity-streams",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/monitor-system-activity/track-activity-streams",
+      "title": "track activity streams",
+      "content": "Track activity streams Source: - Track activity streams - Track dataset and organisation changes",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/set-up-harvesters/add-harvester-sources",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/set-up-harvesters/add-harvester-sources",
+      "title": "add harvester sources",
+      "content": "Add harvester sources Sources: folder and Test UI - Add harvester sources - Import remote metadata into this catalogue. Configure remote sources such as other catalogues, CKAN instances, CSW servers or Web Accessible Folders (WAF)",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/set-up-harvesters/configure-dcat-ap-harvesting",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/set-up-harvesters/configure-dcat-ap-harvesting",
+      "title": "configure dcat ap harvesting",
+      "content": "Configure DCAT-AP harvesting Sources: folder and Test UI - Configure DCAT-AP harvesting () - Set up and configure step-by-step",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/set-up-harvesters/configure-fair-data-points-harvesting",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/set-up-harvesters/configure-fair-data-points-harvesting",
+      "title": "configure fair data points harvesting",
+      "content": "Configure Fair Data Points harvesting Sources: folder and Test UI - Configure Fair Data Points harvesting () - Implement specialised harvesting",
+      "guide": "catalog-managers-guide"
+    },
+    {
       "id": "/gdi-userportal-frontend/catalog-managers-guide/welcome",
       "url": "/gdi-userportal-frontend/catalog-managers-guide/welcome",
       "title": "welcome",
-      "content": "We're almost there :::info Please check back soon! We're still working on this section. We're building a comprehensive documentation to help manage your organisation's genomic datasets effectively. In the meantime, you can explore the Data users guide to understand the platform from an end-user perspective. :::",
+      "content": "Welcome, catalogue managers Welcome to the GDI Dataset Catalogue guide! The GDI Dataset Catalogue is where you publish and manage genomic dataset records that contribute to Europe's largest network of federated genomic datasets. The Dataset Catalogue is accessible at https://catalogue.portal.gdi.lu. The datasets you publish here become discoverable in the GDI User Portal, where authorised users can find and request access to genomic data. This guide is for catalogue managers—data managers, stewards, and other professionals—responsible for managing genomic data resources and ensuring they are discoverable and accessible through Europe's Genomic Data Infrastructure (GDI). To learn more about the Genomic Data Infrastructure (GDI) and founding initiatives, see About GDI. What would you like to do? - Add datasets - Upload new research data to the catalogue - Manage organisations - Oversee your institution's data presence - Maintain quality - Ensure data descriptions meet standards - Collaborate with teams - Work with colleagues on data publishing - Support data users - Help researchers find relevant datasets",
       "guide": "catalog-managers-guide"
     }
   ],
   "system-admin-guide": [
+    {
+      "id": "/gdi-userportal-frontend/system-admin-guide/about-gdi",
+      "url": "/gdi-userportal-frontend/system-admin-guide/about-gdi",
+      "title": "About GDI",
+      "content": "",
+      "guide": "system-admin-guide"
+    },
     {
       "id": "/gdi-userportal-frontend/system-admin-guide/welcome",
       "url": "/gdi-userportal-frontend/system-admin-guide/welcome",
@@ -112,6 +315,13 @@
   ],
   "developer-guide": [
     {
+      "id": "/gdi-userportal-frontend/developer-guide/about-gdi",
+      "url": "/gdi-userportal-frontend/developer-guide/about-gdi",
+      "title": "About GDI",
+      "content": "",
+      "guide": "developer-guide"
+    },
+    {
       "id": "/gdi-userportal-frontend/developer-guide/welcome",
       "url": "/gdi-userportal-frontend/developer-guide/welcome",
       "title": "welcome",
@@ -120,6 +330,13 @@
     }
   ],
   "all": [
+    {
+      "id": "/gdi-userportal-frontend/user-guide/about-gdi",
+      "url": "/gdi-userportal-frontend/user-guide/about-gdi",
+      "title": "About GDI",
+      "content": "",
+      "guide": "user-guide"
+    },
     {
       "id": "/gdi-userportal-frontend/user-guide/explore-datasets/browse-by-category",
       "url": "/gdi-userportal-frontend/user-guide/explore-datasets/browse-by-category",
@@ -201,7 +418,7 @@
       "id": "/gdi-userportal-frontend/user-guide/welcome-data-users",
       "url": "/gdi-userportal-frontend/user-guide/welcome-data-users",
       "title": "welcome data users",
-      "content": "Welcome to GDI Portal Welcome to the documentation for the Genomic Data Infrastructure (GDI) Portal! The GDI Portal connects you to Europe's largest network of genomic datasets—over one million genome sequences from across European countries. As part of the 1+ Million Genomes Initiative, this portal enables federated and secure cross-border access to high-quality genomic data and related phenotypic information across European countries. Whether you're a clinician, scientist, or healthcare policy maker, the GDI Portal is your gateway to Europe's genomic resources to support your work in: - Research and scientific innovation - Healthcare and clinical diagnostics - Health policy making and initiatives How it works Access genomic datasets through a simple, secure process: 1. Explore datasets: Browse and search through detailed dataset information—search by any criteria such as keywords, research topics, disease areas, or allele frequency. Explore datasets. 2. Request access: Found a dataset you want to use? Submit an application to access it. You may need to provide documentation or requirements for your request, and you can invite collaborators to assist you with your application. Request access. 3. Access approved datasets: Once your request is approved, you will receive an email with a link to the Secure Processing Environment (SPE) where you can securely download and work with the datasets. :::info Stay compliant All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to use data responsibly and according to the terms and agreements you signed during the application process. ::: Get started Ready to explore? Start by browsing available datasets, or sign in for full access to all features of the GDI Portal.",
+      "content": "Welcome to the GDI Portal Welcome to the GDI Portal user guide! The GDI Portal connects you to Europe's largest network of genomic datasets—over one million genome sequences from across European countries. As part of the 1+ Million Genomes Initiative, this portal enables federated and secure cross-border access to high-quality genomic data and related phenotypic information across European countries. This guide is for data users—healthcare researchers, policy-makers, and professionals—who want to discover and request access to genomic datasets for research and clinical purposes. How it works Access genomic datasets in three steps: 1. Explore datasets: Browse and search through detailed dataset information—search by any criteria such as keywords, research topics, disease areas, or allele frequency. Explore datasets. 2. Request access: Found a dataset you want to use? Submit an application to access it. You may need to provide documentation or requirements for your request, and you can invite collaborators to assist you with your application. Request access. 3. Access approved datasets: Once your request is approved, you will receive an email with a link to the Secure Processing Environment (SPE) where you can securely download and work with the datasets. :::info Stay compliant All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to use data responsibly and according to the terms and agreements you signed during the application process. ::: Get started Ready to explore? Start by browsing available datasets, or sign in for full access to all features of the GDI Portal. To learn more about the Genomic Data Infrastructure (GDI) and the initiatives behind it, see About GDI.",
       "guide": "user-guide"
     },
     {
@@ -212,11 +429,207 @@
       "guide": "user-guide"
     },
     {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/about-gdi",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/about-gdi",
+      "title": "About GDI",
+      "content": "",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/auditing-user-activity-in-ckan/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/auditing-user-activity-in-ckan/_index",
+      "title": "Auditing User Activity in CKAN",
+      "content": "A full history of dataset changes is now displayed in the Activity Stream to admins, and optionally to the public. By default, this feature is enabled for new installations but is disabled for sites which upgrade, to prevent the exposure of potentially sensitive history. It is recommended for open data CKANs that are upgrading to make this history public. This can be achieved by setting the following in the file: More about ckan activity settings: https://docs.ckan.org/en/2.10/maintaining/configuration.html If you have expericience with older versions of CKAN: since 2.10 Activity needs to be activated as plugin. See changelog https://docs.ckan.org/en/2.10/changelog.html With the right permission. You can view activities at dataset level or at organisation level !Organisation level !Dataset level And the dif view !Diff view",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/ckan-user-roles/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/ckan-user-roles/_index",
+      "title": "CKAN User Roles",
+      "content": "Platform-Level Roles 1. Visitor - Capabilities: - Search and view public datasets. 2. Registered User - Capabilities: - Become a member of an organization (requires admin approval). - Publish, edit, or add datasets based on their role in the organization. - Manage their own profile. - Note: Creation of organizations is disabled. 3. Sysadmin - Capabilities: - Access and edit any organizations. - View and change user details. - Permanently delete datasets. - Customize the look and feel of the platform. Organization-Level Roles 1. Member - Capabilities: - View the organization’s private datasets. 2. Editor - Capabilities: - All capabilities of a Member. - Add new datasets to the organization. - Edit or delete any of the organization's datasets. - Make datasets public or private. 3. Organization Admin - Capabilities: - All capabilities of an Editor. - Add users to the organization, and set their role (member, editor, or admin). - Change the role of any user in the organization, including other admin users. - Remove members, editors, or other admins from the organization. - Edit the organization's details (e.g., title, description, image). - Delete the organization. --- For more detailed information, please visit the CKAN documentation on authorization: CKAN Authorization Documentation.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/extension-local-setup-and-testing/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/extension-local-setup-and-testing/_index",
+      "title": "Extension Development and testing",
+      "content": "{{}} * Local Installation To run CKAN and develop and/or test extensions locally, one needs to set up development environment as the following: 1. Set up virtual environment: Note, virtual enviromnent should stay activated during the whole installation process. 2. Install CKAN as a package into virtual environment: Installation of dependencies may fail due to some known or other compatibility issues, below is an example of troubleshooting. One of the known issues is building. If installation of fails, go to CKAN requirements.txt now cloned and located at , change => , rerun installation of the dependencies and install CKAN itself separately: Another case of dependencies incompatibility occurring for CKAN v2.9.10 is . In requirements.txt it may be set as or , if it causes the following error in the runtime , it should be downgraded to . 3. Install required extensions An extension can be cloned first to a desired location and then installed to the virtual environment from file, e.g.: For example on mac Or directly from Github location Then install dependencies: For example ckanext-harvest 4. Set up a postgres database, specify database connection string in and . Testing Testing strategy for a plugin would depend on plugin functionality. CKAN provides a number of helper functions allowing to generate dummy data in the database or clean the database afterwards. Please review official documentation for detailed info. To set up testing of a plugin make sure the following settings are configured correctly: 1. Make sure is installed to the virtual environment. Normally this dependency should be listed in of a plugin and therefore got installed. If you do not see it in output run . 2. Each plugin has an autogenerated file. Make sure it points to file of CKAN installation, e.g.: 3. Modify so configuration is correct. Most likely you need to modify parameter so it contains correct connection information: If testing of your plugin requires writing to the database it is recommended to set up a separate test instance of postgres database. Running tests Tests can be run via simple command or an extended one with desired options. The following example is to run tests with coverage: Per file/UT within PyCharm. Mark sure the following user environment variable is set",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/fair-data-point-harvester-update-strategy/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/fair-data-point-harvester-update-strategy/_index",
+      "title": "Fair Data Point Harvester Update Strategy",
+      "content": "{{}} * As was mentioned, a CKAN harvester must implement , and . During the fair data point harvester requests all the available resources from a source. For each resource a unique guid is generated. Guids are generated by the harvester as the following: - for a catalog - for a dataset where is an FDP reference URL (subject URL) of the resource. e.g. for the following dataset https://health-ri.sandbox.semlab-leiden.nl/dataset/d7129d28-b72a-437f-8db0-4f0258dd3c25 CKAN harvester guid will be . Then the harvester queries CKAN database for guids harvested from the same source before. The query is the following: where is the harvester source id of the current job. Based on these two lists of guids a harvest object is created and assigned with status , or . Data for the last two types of resources are collected and parsed during . During resources are deleted, updated or inserted to the CKAN database with regard of the harvester object status. As per documentation it is possible to configure a CKAN instance to prevent updating of certain fields. Deletion of a dataset On the guids of datasets to delete are defined as where - ids from CKAN table for a given source, a result of the query above. After that, still during the harvester sets the status of harvest objects to delete to . So they stay in the database but are not shown. Then, during the , the harvester actually deletes those datasets by calling . Caveat: - Datasets will be considered \"new\" if one configures a harvester source in CKAN, deletes it and re-configures then. - If a dataset is set for deletion and something goes wrong during the a dataset stays forever as no more current one. - If a dataset is moved in FDP from a catalogue to another catalogue (by updating reference on the dataset level) it will be considered a new one because a guid of CKAN harvested resource (unlike FDP itself) includes a catalogue id (see above).",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/harvesting-dcat-ap/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/harvesting-dcat-ap/_index",
+      "title": "Test harvesting of DCAT-AP",
+      "content": "Assuming the CKAN development with is set up as documented in this wiki. First, modify the file, add the following to plugins: . If you are intending using rdf harvester with a custom profile, make sure configuration CKAN.ini file contains the following properties: - - with a space-separated list of profiles (the order is important for the behaviour) - - to ensure compatibility with dcat_ parsers More about profiles and compatibility modes can be found in CKAN + DCAT documentation. Rebuild the containers. Go to CKAN harvest page (e.g. http://localhost:5500/harvest). Click “Add Harvest Source”. At URL, enter URL of dataset you want to harvest. Select harvester type and fill in the configuration. Save. Below we provide several example links one may use for testing: https://opendata.swiss/en/dataset/verbreitung-der-steinbockkolonien.xml http://national_catalogue_mock:8001/xnat.ttl https://raw.githubusercontent.com/Health-RI/starter-kit-info/main/example.ttl In the image below you can see example configuration for the last example file. You need to provide as to parse the file. as was needed to make sure parsing works with gdi_useportal schema which is different from CKAN default one. After a harvester job is configured, it can be triggered manually by clicking Reharvest in the job's Admin section. If you select the manual time interval, you need to do this each time you want to run the job. However, if you set the Update frequency to e.g. daily, a background process will automatically trigger the harvester at the end of each day. To test harvesting in Docker Desktop go to the container then click Terminal. Enter the command , the is the part of the URL of the harvest source. If successful you'll see datasets uploaded in CKAN. !Harvesting",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/harvesting-fair-data-points/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/harvesting-fair-data-points/_index",
+      "title": "Testing harvesting of FAIR Data Points",
+      "content": "First, make sure that the extension has been added to the CKAN plugins. After signing in to the CKAN portal, go to CKAN harvest page (e.g. http://localhost:5500/harvest). Click on “Add Harvest Source”. Fill in the following fields: - URL of the fair data points. Example: https://fair.healthinformationportal.eu/ - Title - Source type: \"FAIR data point harvester\" - Configuration: Click on \"Save\". Then, enter the CKAN container: Local development Inside the container, run the following command: . The harvester id is the last part of the URL of the harvest source. GDI CKAN container CRON Job for FAIR Data Harvesting Overview The GDI package, available from the GDI GitHub repository, includes a CRON job functionality designed to automate the harvesting of FAIR datapoints. This automation ensures continuous and efficient data collection without manual intervention. The harvesting process is initiated three background processes responsible for the operation: , and . Background Processes The harvesting operation relies on three main background processes: - : Manages the gathering of data sources to be harvested. - : Responsible for fetching the data from the sources identified by the gather process. - : Responsible for triggering the harvester at the end of each specified time interval (e.g., daily, weekly). These processes are crucial for the automated harvesting workflow, ensuring that data is continuously and efficiently collected and made available through the CKAN portal. Monitoring Process Status To monitor the status of these background processes, the command is used. Executing this command provides real-time status information about each process involved in the harvesting operation. Here's how to check the process status: Upon execution, you should see output similar to the following, indicating that both processes are running correctly: This output shows that both , and are in the RUNNING state, along with their respective process IDs and uptime, confirming their active operation within the system.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/nginx-rdf/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/nginx-rdf/_index",
+      "title": "Setting up nginx with correct MIME types with CKAN",
+      "content": "To test harvesting of DCAT in CKAN, it’s easiest to set up a simple web server. If CKAN is run using the previously set-up docker-compose, it can be done with a few commands. First load an nginx container to use as webserver. Replace by the folder you want to expose. Then check if http://localhost:8888 returns a valid web page. To make sure CKAN can access it too, connect the webserver to the same network: In ckan, as harvest source you can then set http://rdf:80/the_file.ttl To harvest data sources, CKAN looks at MIME types. Unfortunately nginx by default does not have the correct ones built-in. In Docker Desktop, go to the container, files, and add the following to /etc/nginx/conf.d/default.conf Can add it in the block e.g. above . Restart the container and then CKAN can harvest from this.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/harvester/_index",
+      "title": "Harvester",
+      "content": "{{}} * Basic harvest extension is publicly available and developed by CKAN community: https://github.com/ckan/ckanext-harvest It defines basic infrastructure for harvesting - a process that receives an end point and tries to identify how many objects are in there and sends each individual object to a fetch consumer which, in its turn, tries to convert each object to CKAN dataset or resource etc. In core CKAN-to-CKAN harvesting is implemented which means a CKAN instance can harvest other CKAN instances. In CKAN harvest core setup.py enabled plugins are listed, where : * is a harvesting infrastructure * is a basic harvester responsible for harvesting other CKANs These settings define choice of available source types in the UI harvester when a new harvester is added. Among publicly available and used the most is DCAT harvester, DCAT RDF harvester is well-documented and can be referenced as an example of a harvester configurations and code. There are several harversers in ckanext-dcat, all they extend core harvester interface . In the interface three methods are of particular interest and defining 80% of the harvesting process: * - goes to original URL and tries to define a single object and sends and saves it to the DB as harvester object (into table). * - checks what was saved with and if information is not complete, goes back to source to fetch additional data. * - maps data to CKAN fields. This is the place to implement hooks for data preprocessing etc.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/mapping-new-metadata-fields-strategy/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/mapping-new-metadata-fields-strategy/_index",
+      "title": "Mapping New Metadata Fields Strategy",
+      "content": "Dataset tables every field which extends the core schema lands in extra table. In demo schema table - columns are core fields of CKAN, and for every other field. Scheming extension of Civity allows more flexibility for managing extra fields than CKAN core default functionality but still such a field is converted to a string and lands in extra table. It is possible to write a mapper to and map all the extra fields. For DCAT there is an official extension: https://github.com/ckan/ckanext-dcat#json-dcat-harvester It is compatible with DCAT-AP v1.1 and 2.1 !Mapping Harvester tables In the DB there are several tables dedicated to store harvester-related information: * - harvested sources are defined * - the table where all the objects from a source are saved. Data from a source are stored in and from there will be converted to a CKAN dataset. harverters are also saved to table of harvest. Once you changed something in the DB directly, you must trigger re-indexing in Solr via search-index rebuild of CLI.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/schemas-format-extension-and-management/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/schemas-format-extension-and-management/_index",
+      "title": "Schemas format, extension and management",
+      "content": "This document describes CKAN scheming strategy and ways to configure, replace and maintain dataset schemas. Schema format and fields definitions A CKAN schema can be difined either as JSON or YAML file. Civity keeps using .json schemas but in the official documentation there are a lot of yaml references as well. A field in CKAN schema .json file can be of the following format: where * is CKAN field id * is UI field representation * is a text appearing under a field in the UI next to icon, square brackets are omitted and in this particular example contain information about how this field maps to DCAT-AP. More about these mapping and custom fields read CKAN DB Structure and Fields Mapping Strategy. Documentation on field keys and other schemas specifications can be found in the CKAN GitHub official repository. Other possible fields keys are: * - maybe useful to solve cardinality issue, not used by Civity. * - not used by Civity, added recently, refers to stages on create dataset page and manages which field will appear on which stage. * - for a drop-down - a list of dictionaries with a value and label. * - to form a drop-down dynamically or from an API. It is possible for example to point to another schema and take a field from there. * - values like , , - to enable automatic checks and not to define snippets. * - interacts with CKAN UI, defines a field representation (related to data input), if do not want to use presets or want to have more control. jinja2-based format. * - also interacts with CKAN UI, defines how data are shown in the UI, e.g. showing an e-mail as “mail to“ link etc. * - useful if you need to override representation, e.g. in case you have mapping to DCAT, then: * - to validate data. Available functions are listed in the official documentation and it is possible to add custom ones. By default there is almost no validation (ignore_missing (accepts if a value is missing) and unicode), if you are specifying a custom one - these two basic needs to be added explicitly. It is possible to write and configure a validation function of your own. To do so one needs to implement an extension where extend a interface so method returns a custom validation function. See validation functions documentation for the reference. * - complex data structures if assigned to a field are converted to a string in the DB, this field defines a validator on extracting the field from the DB and re-converting to an object. Changing schema in a running CKAN instance Schema used is defined in by setting where is a part of CKAN Command Line Interface. For more info on usage review documentation. Therefore in a running docker container it is defined in a configuration file in parameter It should refer to an extension under directory of repository. To replace the schema run A change of file triggers ckan update so changes will be applied almost immediately. A schema should be defined in the following format: : the extension is expected to be cloned under e.g. the path from the example above () resolves to the following: !Scheming Multischeming declaration IDatasetForm is an interface scheming is taking charge of to override schemas. 1. In CKAN.ini file In multiple (space-separated) values can be defined. Behaviour for CKAN core and CKAN Civity-extended differs in a way that for core CKAN if two schemas have the same field, the system will pick up the latest. Civity improved this so two schemas of the same type are merged, the order of schemas specified in will be reflected in order of fields in the CKAN UI. Another ckan.ini parameter is defines rules for merging. If set to and if schemas to merge have the same fields, definitions from the latest one will be prioritized. Fields are never deleted though, only can be added or modified. To delete a field you need to undeclared a field or set to empty explicitly. This behaviour is implemented as part of ()and documented on code level only. 2. In a Multischeming declaration .json file Initially it was implemented by Civity to allow an extension to have it’s own schema which is merged into core schema. For maintenance purposes instead of managing schemas in ckan.ini file it is possible to provide a .json config file under with a content like the following: This also allows to have several schemas at the same time, e.g.: In ckan.ini file a property with a path to the file with schemas should be added, e.g.: Civity documentation on multiple schemas configuration. It is possible to control which datasets are declared via API: and then UI search of all dataset types is configured in parameter (see documentation).",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/_index",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/DRAFT-CM/ckan/_index",
+      "title": "CKAN",
+      "content": "{{}} * CKAN: technology, extensions and deployment notes The space contains documentation describing CKAN technology, deployment and extensions. Publicly available documentation: * https://hackmd.io/@V9jXur4GSfWQJP5TAFnk9w/HkeIXsXnu * https://docs.ckan.org/en/latest/contents.html: * https://docs.ckan.org/en/latest/user-guide.html * https://docs.ckan.org/en/latest/sysadmin-guide.html * https://docs.ckan.org/en/latest/maintaining/index.html * https://docs.ckan.org/en/latest/api/index.html * https://docs.ckan.org/en/latest/extensions/index.html * https://docs.ckan.org/en/latest/theming/index.html CKAN community GitHub: * https://github.com/orgs/ckan/repositories?language=&q=&sort=&type=all CKAN API package: * https://github.com/ckan/ckanapi/blob/master/README.md#ckanapi-python-module Postman collection for some API calls: * https://www.postman.com/api-evangelist/workspace/data-gov/collection/35240-bc9332c4-d7ba-4398-b9a9-51c6aaf5271c CKAN gutter community chat: * https://app.gitter.im/#/room/#ckan_chat:gitter.im Table of Contents * Local setup and testing of an extension * CKAN, [WIP] CKAN DB Structure and Fields Mapping Strategy * CKAN, Schemas format, extension and management * Harvester * Test CKAN harvesting of DCAT-AP * Setting up nginx with correct MIME types with CKAN * How to harvest Fairdatapoints * How harvesting of Fairdatapoints works * User Roles * CKAN, Auditing",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/get-started/navigate-the-interface",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/get-started/navigate-the-interface",
+      "title": "navigate the interface",
+      "content": "Navigate the interface Source: New content needed - Navigate the interface - Basic UI orientation",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/get-started/overview",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/get-started/overview",
+      "title": "overview",
+      "content": "Overview Source: New content needed - Overview - Introduction to catalogue manager role and key tasks",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-datasets/add-datasets",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-datasets/add-datasets",
+      "title": "add datasets",
+      "content": "Add datasets Source: Test UI - Add datasets - Create a collection of data resources (such as files), together with a description and other information, at a fixed URL. Users see datasets when searching for data.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-datasets/edit-and-update-datasets",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-datasets/edit-and-update-datasets",
+      "title": "edit and update datasets",
+      "content": "Edit and update datasets Source: Test UI - Edit and update datasets - Modify existing dataset information and resources",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-datasets/organise-datasets-with-groups",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-datasets/organise-datasets-with-groups",
+      "title": "organise datasets with groups",
+      "content": "Organise datasets with groups Source: Test UI - Organise datasets with groups - Create and manage collections of datasets. Use this to catalogue datasets for a particular project or team, or on a particular theme, or as a simple way to help people find and search your own published datasets.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-organisations/add-organisations",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-organisations/add-organisations",
+      "title": "add organisations",
+      "content": "Add organisations Source: Test UI - Add organisations - Create, manage and publish collections of datasets. Users can have different roles within an organisation, depending on their level of authorisation to create, edit and publish.",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-organisations/manage-user-roles-and-permissions",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-organisations/manage-user-roles-and-permissions",
+      "title": "manage user roles and permissions",
+      "content": "Manage user roles and permissions Source: Test UI - Manage user roles and permissions - Control platform-level roles (Visitor, Registered User, Sysadmin) and organisation-level roles (Member, Editor, Admin)",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-schemas/configure-multi-schema-setup",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-schemas/configure-multi-schema-setup",
+      "title": "configure multi schema setup",
+      "content": "Configure multi-schema setup Sources: and - Configure multi-schema setup - Manage multiple dataset types",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-schemas/define-schema-format-and-fields",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-schemas/define-schema-format-and-fields",
+      "title": "define schema format and fields",
+      "content": "Define schema format and fields Sources: and - Define schema format and fields - Define JSON/YAML schema definitions",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/manage-schemas/update-schemas",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/manage-schemas/update-schemas",
+      "title": "update schemas",
+      "content": "Update schemas Sources: and - Update schemas - Update schemas at runtime",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/monitor-system-activity/monitor-user-activity",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/monitor-system-activity/monitor-user-activity",
+      "title": "monitor user activity",
+      "content": "Monitor user activity Source: - Monitor user activity - Monitor admin oversight capabilities",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/monitor-system-activity/track-activity-streams",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/monitor-system-activity/track-activity-streams",
+      "title": "track activity streams",
+      "content": "Track activity streams Source: - Track activity streams - Track dataset and organisation changes",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/set-up-harvesters/add-harvester-sources",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/set-up-harvesters/add-harvester-sources",
+      "title": "add harvester sources",
+      "content": "Add harvester sources Sources: folder and Test UI - Add harvester sources - Import remote metadata into this catalogue. Configure remote sources such as other catalogues, CKAN instances, CSW servers or Web Accessible Folders (WAF)",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/set-up-harvesters/configure-dcat-ap-harvesting",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/set-up-harvesters/configure-dcat-ap-harvesting",
+      "title": "configure dcat ap harvesting",
+      "content": "Configure DCAT-AP harvesting Sources: folder and Test UI - Configure DCAT-AP harvesting () - Set up and configure step-by-step",
+      "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalog-managers-guide/set-up-harvesters/configure-fair-data-points-harvesting",
+      "url": "/gdi-userportal-frontend/catalog-managers-guide/set-up-harvesters/configure-fair-data-points-harvesting",
+      "title": "configure fair data points harvesting",
+      "content": "Configure Fair Data Points harvesting Sources: folder and Test UI - Configure Fair Data Points harvesting () - Implement specialised harvesting",
+      "guide": "catalog-managers-guide"
+    },
+    {
       "id": "/gdi-userportal-frontend/catalog-managers-guide/welcome",
       "url": "/gdi-userportal-frontend/catalog-managers-guide/welcome",
       "title": "welcome",
-      "content": "We're almost there :::info Please check back soon! We're still working on this section. We're building a comprehensive documentation to help manage your organisation's genomic datasets effectively. In the meantime, you can explore the Data users guide to understand the platform from an end-user perspective. :::",
+      "content": "Welcome, catalogue managers Welcome to the GDI Dataset Catalogue guide! The GDI Dataset Catalogue is where you publish and manage genomic dataset records that contribute to Europe's largest network of federated genomic datasets. The Dataset Catalogue is accessible at https://catalogue.portal.gdi.lu. The datasets you publish here become discoverable in the GDI User Portal, where authorised users can find and request access to genomic data. This guide is for catalogue managers—data managers, stewards, and other professionals—responsible for managing genomic data resources and ensuring they are discoverable and accessible through Europe's Genomic Data Infrastructure (GDI). To learn more about the Genomic Data Infrastructure (GDI) and founding initiatives, see About GDI. What would you like to do? - Add datasets - Upload new research data to the catalogue - Manage organisations - Oversee your institution's data presence - Maintain quality - Ensure data descriptions meet standards - Collaborate with teams - Work with colleagues on data publishing - Support data users - Help researchers find relevant datasets",
       "guide": "catalog-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/system-admin-guide/about-gdi",
+      "url": "/gdi-userportal-frontend/system-admin-guide/about-gdi",
+      "title": "About GDI",
+      "content": "",
+      "guide": "system-admin-guide"
     },
     {
       "id": "/gdi-userportal-frontend/system-admin-guide/welcome",
@@ -224,6 +637,13 @@
       "title": "welcome",
       "content": "We're almost there :::info Please check back soon! We're still working on this section. We're building a comprehensive documentation to help you deploy, configure, and maintain the GDI User Portal platform. In the meantime, you can explore the Data users guide to understand the platform from an end-user perspective. :::",
       "guide": "system-admin-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/developer-guide/about-gdi",
+      "url": "/gdi-userportal-frontend/developer-guide/about-gdi",
+      "title": "About GDI",
+      "content": "",
+      "guide": "developer-guide"
     },
     {
       "id": "/gdi-userportal-frontend/developer-guide/welcome",

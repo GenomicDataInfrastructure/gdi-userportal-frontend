@@ -1,0 +1,8 @@
+{
+  "label": "Set up harvesters",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Configure harvester sources and specialised harvesting"
+  }
+}

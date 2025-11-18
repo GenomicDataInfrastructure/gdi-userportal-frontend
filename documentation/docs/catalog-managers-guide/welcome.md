@@ -14,9 +14,13 @@ The Dataset Catalogue is accessible at [https://catalogue.portal.gdi.lu](https:/
 
 **This guide is for catalogue managers**—data managers, stewards, and other professionals—responsible for managing genomic data resources and ensuring they are discoverable and accessible through Europe's Genomic Data Infrastructure (GDI).
 
-To learn more about the Genomic Data Infrastructure (GDI) and founding initiatives, see [About GDI](./about-gdi). 
+:::note Learn more about GDI
 
-## Your key responsibilities
+To learn more about the Genomic Data Infrastructure (GDI) and its founding initiatives, see [About GDI](about-gdi.md).
+
+:::
+
+## Your role in the GDI ecosystem
 
 As a catalogue manager, you are responsible for:
 
@@ -26,17 +30,6 @@ As a catalogue manager, you are responsible for:
 - **Supporting collaboration:** Work with colleagues and institutions to share genomic resources
 - **Facilitating access:** Help authorised researchers find and request access to relevant datasets
 
-## What you can accomplish
-
-With this catalogue management system, you can:
-
-- **Add datasets:** Upload new research data to the catalogue
-- **Manage organisations:** Oversee your institution's data presence  
-- **Set up automated harvesting:** Import metadata from external sources
-- **Configure schemas:** Define how dataset information is structured
-- **Monitor activity:** Track changes and user interactions
-- **Resolve issues:** Troubleshoot common problems quickly
-
 ## What would you like to do?
 
 - **Add datasets:** Upload new research data to the catalogue
@@ -45,6 +38,3 @@ With this catalogue management system, you can:
 - **Collaborate with teams:** Work with colleagues on data publishing
 - **Support data users:** Help researchers find relevant datasets
 
-## Get started
-
-Ready to begin? Start by [signing in](./get-started/sign-in) to access the catalogue.

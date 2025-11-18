@@ -12,6 +12,11 @@ Welcome to the GDI Portal user guide!
 
 **This guide is for data users**—healthcare researchers, policy-makers, and professionals—who want to discover and request access to genomic datasets for research and clinical purposes. 
 
+:::note Learn more about GDI
+
+To learn more about the Genomic Data Infrastructure (GDI) and its founding initiatives, see [About GDI](about-gdi.md).
+
+:::
 
 ## How it works
 
@@ -30,8 +35,3 @@ Access genomic datasets in three steps:
     :::
 
 
-## Get started
-
-Ready to explore? [Start by browsing](/category/explore-datasets-1/) available datasets, or [sign in](/sign-in) for full access to all features of the GDI Portal.
-
-To learn more about the Genomic Data Infrastructure (GDI) and the initiatives behind it, see [About GDI](./about-gdi).

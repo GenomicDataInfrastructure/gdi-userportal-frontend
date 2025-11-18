@@ -9,13 +9,13 @@
 - **Navigate the interface** - Basic UI orientation
 
 #### 3. Manage datasets
-**Source:** Test UI
+**Source:** New content needed
 - **Add datasets** - Create a collection of data resources (such as files), together with a description and other information, at a fixed URL. Users see datasets when searching for data.
 - **Edit and update datasets** - Modify existing dataset information and resources
 - **Organise datasets with groups** - Create and manage collections of datasets. Use this to catalogue datasets for a particular project or team, or on a particular theme, or as a simple way to help people find and search your own published datasets.
 
 #### 4. Manage organisations
-**Source:** Test UI  
+**Source:** New content needed  
 - **Add organisations** - Create, manage and publish collections of datasets. Users can have different roles within an organisation, depending on their level of authorisation to create, edit and publish.
 - **Manage user roles and permissions** - Control platform-level roles (Visitor, Registered User, Sysadmin) and organisation-level roles (Member, Editor, Admin)
 

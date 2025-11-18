@@ -20,7 +20,7 @@ To learn more about the Genomic Data Infrastructure (GDI) and its founding initi
 
 :::
 
-## Your role in the GDI ecosystem
+## Your role in GDI
 
 As a catalogue manager, you are responsible for:
 

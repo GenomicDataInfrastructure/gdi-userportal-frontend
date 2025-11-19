@@ -6,9 +6,7 @@ sidebar_position: 2
 
 # Sign in
 
-In this guide
-> [Why sign in?](#why-sign-in)  
-> [Sign in](#sign-in-1)  
+Sign in to get full access to available datasets and request access.
 
 ## Why sign in?
 
@@ -18,9 +16,10 @@ In this guide
 - **Enhance your search** with additional filters and more comprehensive search results.
 - **See more dataset information** including `record counts` and other metadata to help assess if datasets meet your research needs.
 
+
 ## Sign in
 
-GDI Portal connects with your **existing accounts** with widely-used platforms so you don't need to create a separate account. This includes Google and LinkedIn, as well as institutions like your university or research organisation. 
+The GDI Portal uses your **existing accounts** with other platforms like **Google, LinkedIn, and organisations** like universities or research institutions, so you don't need to create a separate account.
 
 To sign in to the GDI Portal:
 

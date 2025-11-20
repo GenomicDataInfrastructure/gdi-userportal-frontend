@@ -1,10 +1,8 @@
+# Sample datasets
 
-# Sample dataset 1
+## Sample dataset 1
 
-
-
-
-**Basic info**
+**Metadata**
 - title: COVID-19 GWAS and Allele Frequency Lookup Dataset with Population 12 (Italian) subset 1
 - Description: This dataset is being used as part of the GDI Milestone 8, containing VCFs and phenotypic data in CSV format about 41514 samples. The dataset consists only of synthetic data.
 - keywords:
@@ -33,7 +31,7 @@
 - conformsto:
 - etc...
 
-**Data and Resources**
+**Data resources**
     - EN Name: GWAS and Allele Frequency Lookup Data Distribution for GDI MS8 - Population 12 (ITA), subset 1, Chromosome 16.
     - url: https://download.gdi.biodata.pt/files/GDIF-a662c85e-a1b5-11ef
     - NL Name:
@@ -67,6 +65,8 @@
     - access services:
     - url:
 
+
+## Sample dataset 2
 
 
 

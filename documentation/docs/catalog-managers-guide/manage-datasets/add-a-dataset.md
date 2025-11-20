@@ -14,11 +14,17 @@ To add a dataset:
 
 2. Select **Add Dataset**. 
 
-3. Fill out the form with metadata information. <!-- Is this correct: For guidance on filling out the form, see the definition of properties in the [DCAT-AP-LU Vocabulary](https://mindig_lu.gitlab.io/DCAT-AP-LU/#controlled-vocs). -->
+3. Fill out the dataset form. For guidance on filling out the form, see the definition of properties in the [DCAT-AP Vocabulary](https://semiceu.github.io/DCAT-AP/r5r/releases/3.0.0/). 
+    
+    :::tip Public visibility
+    
+    To make your dataset discoverable by researchers in the [GDI Data Portal](https://portal.gdi.lu/)<sup>↗</sup>, set the **Visibility** to **Public**. 
+
+    :::
 
 4. Select **Next: Add Data**. You must add at least one data resource to create your dataset. 
 
-5. Fill out the form with data resource information. For detailed guidance, see: [Add data resource to your dataset](add-data-to-dataset.md)
+5. Fill out the form with data resource information. For detailed guidance, see: [Add a data resource to your dataset](add-data-resource.md)
 
 6. Select **Finish** to add your dataset. After your dataset is successfully created, the dataset details page opens. 
 
@@ -26,10 +32,12 @@ To add a dataset:
     <img src="/gdi-userportal-frontend/img/catalogue-managers-guide/manage-datasets/dataset-details.png" alt="Dataset details page showing the newly created dataset" width="900" />
     <figcaption></figcaption>
 </figure>
-    
 
-:::tip Well done
+<br/>    
 
-    Now that you have added your dataset, you can add it to a group, add more data resources, or select **Manage** to edit dataset details. 
+
+:::tip Well done!
+
+    Now that you have added your dataset, here's what you can do next: add more data resources to your dataset, add your dataset to a group, or if you set the visibility to 'Public', view your dataset in the [GDI Data Portal](https://portal.gdi.lu/)<sup>↗</sup>.
 
 :::

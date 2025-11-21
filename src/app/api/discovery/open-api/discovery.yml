@@ -335,7 +335,9 @@ components:
         keywords:
           type: array
           items:
-            $ref: "#/components/schemas/ValueLabel"
+            oneOf:
+              - type: string
+              - $ref: "#/components/schemas/ValueLabel"
           title: Keywords
         catalogue:
           type: string
@@ -440,7 +442,9 @@ components:
         keywords:
           type: array
           items:
-            $ref: "#/components/schemas/ValueLabel"
+            oneOf:
+              - type: string
+              - $ref: "#/components/schemas/ValueLabel"
         provenance:
           type: string
           title: Provenance

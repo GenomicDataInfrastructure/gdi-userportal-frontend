@@ -6,7 +6,9 @@ sidebar_position: 2
 
 # Add a dataset
 
-Create a dataset record for your genomic data resource to make it discoverable in the GDI catalogue. If you're new to adding datasets, see: [What is a dataset?](what-is-a-dataset.md)
+Build your organisations genomic data catalogue by adding datasets and making them discoverable to researchers within and outside your organisation.
+
+To learn more about datasets and how to describe them, see: [What is a dataset?](what-is-a-dataset.md)
 
 To add a dataset:
 
@@ -21,6 +23,8 @@ To add a dataset:
     To make your dataset discoverable by researchers in the [GDI Data Portal](https://portal.gdi.lu/)<sup>↗</sup>, set the **Visibility** to **Public**. 
 
     :::
+
+<!-- TODO: verify dcat link -->
 
 4. Select **Next: Add Data**. You must add at least one data resource to create your dataset. 
 

@@ -29,7 +29,7 @@ Use passive voice only when the actor is unknown or irrelevant, or if the outcom
 **Good**:
 
 - Data is ingested every Monday at 09:00 (CET) (Emphasis on data ingestion)
-- During the security breach, all data were deleted. (The actor is unknown) 
+- During the security breach, all data were deleted. (The actor is unknown)
 
 ### "Select" not "click"
 
@@ -95,7 +95,7 @@ Using proper headers enhances your document in several ways:
 
 - It generates an accurate table of contents.
 - It supports accessible navigation for screen readers.
-- It enhances linking and search.  
+- It enhances linking and search.
 
 ## Language and grammar
 
@@ -123,7 +123,7 @@ Key features of MDC include:
 
 **Tip**: Use a period (.) at the end of a bullet point only when each item completes the introductory sentence.
 
-👉🏻 Also see Formatting numerical data 
+👉🏻 Also see Formatting numerical data
 
 ### Contractions
 
@@ -139,7 +139,7 @@ If you must use contractions, use them sparingly and only if they improve compre
 
 Other punctations
 
-Use the right punctations to prevent ambiguity, especially in instructions and policy documents.  
+Use the right punctations to prevent ambiguity, especially in instructions and policy documents.
 
 Quotation marks:
 
@@ -149,9 +149,9 @@ Use single quotation (' ') for quotes within quotes.
 
 Good:
 
-In the search box, enter “Policy 123”.  
+In the search box, enter “Policy 123”.
 
-The announcement says, “Report all ‘Critical Error 555’ warnings to the IT department”.   
+The announcement says, “Report all ‘Critical Error 555’ warnings to the IT department”.
 
 Hyphens, en dashes, and em dashes:
 
@@ -167,7 +167,7 @@ Access reports with real-time monitoring tools. (Hyphen)
 
 Data ingestion runs from 09:00–12:00 daily. (En dash)
 
-The system completed the job—no further action is required. (Em dash. Also works with a period.) 
+The system completed the job—no further action is required. (Em dash. Also works with a period.)
 
 Tips:
 
@@ -219,7 +219,7 @@ Add a solid, subtle grey border in all screenshots to separate them from the bod
 - Remove personally identifiable information (PII) and sensitive partner data in screenshots.
 - Remove shadows and any decorative elements.
 
-**Good**: 
+**Good**:
 
 ### Pictures and icons
 
@@ -232,9 +232,9 @@ Inclusive and accessible writing
 
 Ensure the documentation can be used by everyone, including people who use assistive technology such as screen readers.
 
-Avoid deep nesting of navigation items: When writing instructions, 
+Avoid deep nesting of navigation items: When writing instructions,
 
-Avoid more than three levels of navigation: When writing instructions or when creating nested pages, write up to three levels of navigation. Keep the content hierarchy as flat as possible to helps users find information quickly.  
+Avoid more than three levels of navigation: When writing instructions or when creating nested pages, write up to three levels of navigation. Keep the content hierarchy as flat as possible to helps users find information quickly.
 
 Good:
 
@@ -245,15 +245,14 @@ Getting Started > Manage Datasets > Add a Dataset. (Nested pages)
 Alternative texts to all images: Provide alternative texts (alt texts) that are descriptive, for users reading with assistive technologies.
 
 Bad: alt="Picture of a diagram"
-Good: alt="Diagram of ingestion, transformation, and serving" 
+Good: alt="Diagram of ingestion, transformation, and serving"
 
-Use descriptive links: Avoid “click here”. Use the goal or destination as display texts for links. 
+Use descriptive links: Avoid “click here”. Use the goal or destination as display texts for links.
 
 Bad: Click here for the template.
-Good: Download the template.  
+Good: Download the template.
 
 Introduce tables and lists: Describe their purpose or summary.
-
 
 ## Enumration formats
 
@@ -262,5 +261,6 @@ When enumerating items within a sentence or paragraph, use the following formats
 - **Key phrase:** Description of the item.
 
 Example:
+
 - **Publishing dataset records:** Create and maintain comprehensive descriptions of genomic datasets
 - **Managing data discoverability:** Ensure datasets can be found by researchers through the GDI User Portal

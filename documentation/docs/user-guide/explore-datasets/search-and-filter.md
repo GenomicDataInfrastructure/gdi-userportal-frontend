@@ -6,7 +6,7 @@ sidebar_position: 1
 
 # Search and filter datasets
 
-Use the **search bar** and **filters** to find datasets relevant to your research. Both search and filters are available on all pages where browsing datasets is possible. This includes the **Home** page and the **Datasets** page. 
+Use the **search bar** and **filters** to find datasets relevant to your research. Both search and filters are available on all pages where browsing datasets is possible. This includes the **Home** page and the **Datasets** page.
 
 :::tip Sign in for enhanced search
 
@@ -19,7 +19,7 @@ Use the **search bar** and **filters** to find datasets relevant to your researc
 On the **Home** or **Datasets** page, enter any term or phrase to search across all dataset information, including:
 
 - Disease names, research topics, or data types
-- Specific terms like gene names or scientific keywords  
+- Specific terms like gene names or scientific keywords
 - Any other information described in the dataset metadata
 
 ## Filter your results

@@ -28,4 +28,3 @@ With the right permission. You can view activities at dataset level or at organi
 And the dif view
 
 ![Diff view](./diff.png)
-

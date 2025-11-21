@@ -6,12 +6,13 @@ sidebar_position: 3
 
 # Add participants to your application
 
-**Add participants** to collaborate with team members or colleagues on your dataset access request. You can invite multiple participants to help complete the application, upload required documents, and stay informed about the request status. 
+**Add participants** to collaborate with team members or colleagues on your dataset access request. You can invite multiple participants to help complete the application, upload required documents, and stay informed about the request status.
 
 You can add participants to **draft** and **submitted** applications. Participants can:
+
 - View the application details and requirements
 - Submit requirements such as forms and documents
-- Submit draft applications for review 
+- Submit draft applications for review
 - Receive status updates via email
 
 To add participants to your application:
@@ -31,4 +32,4 @@ To add participants to your application:
 
 :::tip Well done
 
-After participants accept your invitation, they can access the application from their dashboard and  [continue the application process](/continue-an-application).
+After participants accept your invitation, they can access the application from their dashboard and [continue the application process](/continue-an-application).

@@ -6,15 +6,16 @@ sidebar_position: 1
 
 # What is a dataset?
 
-In GDI, a **dataset** is a comprehensive record that describes a genomic data resource. For example, a genomic data resource for *COVID-19 Viral Sequences* can include dataset records of: *patient data*, *virus samples*, or *hospital study results*.  
+In GDI, a **dataset** is a comprehensive record that describes a genomic data resource. For example, a genomic data resource for _COVID-19 Viral Sequences_ can include dataset records of: _patient data_, _virus samples_, or _hospital study results_.
 
 The quality of information contained in a dataset determines how easily users can find, understand, and access the genomic data resources it describes.
 
-**A dataset can have two sets of information:** 
+**A dataset can have two sets of information:**
+
 - **[Metadata:](#metadata)** Descriptive information
 - **[Data resource:](#data-resource)** The actual genomic data files or services
 
-## Metadata  
+## Metadata
 
 Metadata are descriptive details about your genomic dataset that provide context and information about the dataset itself. This includes details pertaining to:
 
@@ -22,7 +23,7 @@ Metadata are descriptive details about your genomic dataset that provide context
     - **Responsibility:** Contact points, publisher, creator, and data steward information
     - **Coverage details:** Geographic and temporal scope
     - **Access information:** Rights, availability, licensing, and access restrictions
-     
+
     and any other pertinent information that allows users to effectively locate and use the data.
 
 ## Data resource
@@ -36,10 +37,9 @@ Data resources are the actual files, databases, or data services that contain th
 
 and any other relevant information that helps users understand and use the data resources.
 
-
 ## Example
 
-A dataset record for *"Rare Genetic Forms of Diabetes Study"* would include:
+A dataset record for _"Rare Genetic Forms of Diabetes Study"_ would include:
 
 - **Metadata:** Study description, clinic contact information, data collection period (2022-2025), patient privacy requirements.
 - **Data resource:** Blood test results, genetic screening data in spreadsheet format, patient questionnaires, and study guidelines—each with download options, file sizes, and viewing permissions.

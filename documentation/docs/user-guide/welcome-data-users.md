@@ -10,7 +10,7 @@ Welcome to the GDI Portal user guide!
 
 **The GDI Portal connects you to Europe's largest network of genomic datasets**—over one million genome sequences from across European countries. As part of the 1+ Million Genomes Initiative, this portal enables federated and secure cross-border access to high-quality genomic data and related phenotypic information across European countries.
 
-**This guide is for data users**—healthcare researchers, policy-makers, and professionals—who want to discover and request access to genomic datasets for research and clinical purposes. 
+**This guide is for data users**—healthcare researchers, policy-makers, and professionals—who want to discover and request access to genomic datasets for research and clinical purposes.
 
 :::note Learn more about GDI
 
@@ -28,10 +28,8 @@ Access genomic datasets in three steps:
 
 3. **Access approved datasets:** Once your request is approved, you will receive an email with a link to the Secure Processing Environment (SPE) where you can securely download and work with the datasets.
 
-    :::info Stay compliant
+   :::info Stay compliant
 
-    All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to **use data responsibly** and according to the terms and agreements you signed during the application process.
+   All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to **use data responsibly** and according to the terms and agreements you signed during the application process.
 
-    :::
-
-
+   :::

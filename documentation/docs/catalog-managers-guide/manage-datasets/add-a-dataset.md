@@ -12,24 +12,23 @@ To add a dataset:
 
 1. Go to **Datasets** in the main menu.
 
-2. Select **Add Dataset**. 
+2. Select **Add Dataset**.
 
 3. Fill out the form with metadata information. <!-- Is this correct: For guidance on filling out the form, see the definition of properties in the [DCAT-AP-LU Vocabulary](https://mindig_lu.gitlab.io/DCAT-AP-LU/#controlled-vocs). -->
 
-4. Select **Next: Add Data**. You must add at least one data resource to create your dataset. 
+4. Select **Next: Add Data**. You must add at least one data resource to create your dataset.
 
 5. Fill out the form with data resource information. For detailed guidance, see: [Add data resource to your dataset](add-data-to-dataset.md)
 
-6. Select **Finish** to add your dataset. After your dataset is successfully created, the dataset details page opens. 
+6. Select **Finish** to add your dataset. After your dataset is successfully created, the dataset details page opens.
 
 <figure>
     <img src="/gdi-userportal-frontend/img/catalogue-managers-guide/manage-datasets/dataset-details.png" alt="Dataset details page showing the newly created dataset" width="900" />
     <figcaption></figcaption>
 </figure>
-    
 
 :::tip Well done
 
-    Now that you have added your dataset, you can add it to a group, add more data resources, or select **Manage** to edit dataset details. 
+    Now that you have added your dataset, you can add it to a group, add more data resources, or select **Manage** to edit dataset details.
 
 :::

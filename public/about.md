@@ -10,11 +10,11 @@ The **User Portal**, developed for the **Genomic Data Infrastructure (GDI)** pro
 
 ## Key Objectives
 
-- To link and provide cross-border access to genomic and related phenotypic datasets across Europe  
-- To advance understanding of genomics for more precise and faster clinical decision-making, diagnostics, and treatment systems, and to benefit the overall economy  
-- To align with developments under the **European Health Data Space (EHDS)**  
-- To facilitate research, policymaking, and healthcare improvements  
-- To maintain awareness, acceptance, and trust among the main stakeholder groups — notably European citizens, data holders, healthcare professionals, researchers, and public health authorities  
+- To link and provide cross-border access to genomic and related phenotypic datasets across Europe
+- To advance understanding of genomics for more precise and faster clinical decision-making, diagnostics, and treatment systems, and to benefit the overall economy
+- To align with developments under the **European Health Data Space (EHDS)**
+- To facilitate research, policymaking, and healthcare improvements
+- To maintain awareness, acceptance, and trust among the main stakeholder groups — notably European citizens, data holders, healthcare professionals, researchers, and public health authorities
 
 ## Contributing Organizations
 

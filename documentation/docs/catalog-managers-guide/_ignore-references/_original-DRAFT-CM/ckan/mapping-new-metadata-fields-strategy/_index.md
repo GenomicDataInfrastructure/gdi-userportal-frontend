@@ -1,6 +1,7 @@
 ---
 title: Mapping New Metadata Fields Strategy
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 Stichting Health-RI
 SPDX-FileContributor: PNED G.I.E.
@@ -21,8 +22,8 @@ In demo schema `ckan_ckan_dataplatform_nl` table `package` - columns are core fi
 
 In the DB there are several tables dedicated to store harvester-related information:
 
-* `harvest_source` - harvested sources are defined
-* `harvest_object` - the table where all the objects from a source are saved. Data from a source are stored in `harvest_object.content` and from there will be converted to a CKAN dataset.
+- `harvest_source` - harvested sources are defined
+- `harvest_object` - the table where all the objects from a source are saved. Data from a source are stored in `harvest_object.content` and from there will be converted to a CKAN dataset.
 
 harverters are also saved to `package` table of `type` harvest.
 

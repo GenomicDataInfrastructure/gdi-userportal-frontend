@@ -8,9 +8,9 @@ sidebar_position: 1
 
 Welcome to the GDI Dataset Catalogue guide!
 
-**The GDI Dataset Catalogue is where you publish and manage genomic dataset records** that contribute to Europe's largest network of federated genomic datasets.  
+**The GDI Dataset Catalogue is where you publish and manage genomic dataset records** that contribute to Europe's largest network of federated genomic datasets.
 
-The Dataset Catalogue is accessible at [https://catalogue.portal.gdi.lu](https://catalogue.portal.gdi.lu). The datasets you publish here become discoverable in the [GDI User Portal](https://portal.dev.gdi.lu/), where authorised users can find and request access to genomic data. 
+The Dataset Catalogue is accessible at [https://catalogue.portal.gdi.lu](https://catalogue.portal.gdi.lu). The datasets you publish here become discoverable in the [GDI User Portal](https://portal.dev.gdi.lu/), where authorised users can find and request access to genomic data.
 
 **This guide is for catalogue managers**—data managers, stewards, and other professionals—responsible for managing genomic data resources and ensuring they are discoverable and accessible through Europe's Genomic Data Infrastructure (GDI).
 
@@ -37,4 +37,3 @@ As a catalogue manager, you are responsible for:
 - **Maintain quality:** Ensure data descriptions meet standards
 - **Collaborate with teams:** Work with colleagues on data publishing
 - **Support data users:** Help researchers find relevant datasets
-

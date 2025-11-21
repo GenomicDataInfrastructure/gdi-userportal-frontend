@@ -1,10 +1,7 @@
-
 # Sample dataset 1
 
-
-
-
 **Basic info**
+
 - title: COVID-19 GWAS and Allele Frequency Lookup Dataset with Population 12 (Italian) subset 1
 - Description: This dataset is being used as part of the GDI Milestone 8, containing VCFs and phenotypic data in CSV format about 41514 samples. The dataset consists only of synthetic data.
 - keywords:
@@ -33,42 +30,4 @@
 - conformsto:
 - etc...
 
-**Data and Resources**
-    - EN Name: GWAS and Allele Frequency Lookup Data Distribution for GDI MS8 - Population 12 (ITA), subset 1, Chromosome 16.
-    - url: https://download.gdi.biodata.pt/files/GDIF-a662c85e-a1b5-11ef
-    - NL Name:
-    - EN Description: VCF file containing GWAS and allele frequency lookup data of synthetic COVID-19.cases and controls for GDI MS8 demonstration. VCF for chromosome 16 in population 12 (ITA), sub1
-    - NL Description
-    - Format:
-    - Media type:
-    - Compress format:
-    - Package format:
-    - Size:
-    - Hash: (checksum download file)
-    - Hash algorithm:
-    - EN Rights:
-    - NL Rights:
-    - Availablity:
-    - Status:
-    - License:
-    - access url:
-    - download url: 
-    - release date:
-    - time:
-    - modification date:
-    - time:
-    - retention period:
-    - temporal solution:
-    - spatial resolution:
-    - language:
-    - documentation:
-    - conformsto:
-    - applicable legislation:
-    - access services:
-    - url:
-
-
-
-
-
-
+**Data and Resources** - EN Name: GWAS and Allele Frequency Lookup Data Distribution for GDI MS8 - Population 12 (ITA), subset 1, Chromosome 16. - url: https://download.gdi.biodata.pt/files/GDIF-a662c85e-a1b5-11ef - NL Name: - EN Description: VCF file containing GWAS and allele frequency lookup data of synthetic COVID-19.cases and controls for GDI MS8 demonstration. VCF for chromosome 16 in population 12 (ITA), sub1 - NL Description - Format: - Media type: - Compress format: - Package format: - Size: - Hash: (checksum download file) - Hash algorithm: - EN Rights: - NL Rights: - Availablity: - Status: - License: - access url: - download url: - release date: - time: - modification date: - time: - retention period: - temporal solution: - spatial resolution: - language: - documentation: - conformsto: - applicable legislation: - access services: - url:

@@ -12,9 +12,14 @@
 **Source:** New content needed
 - **Add datasets** - Create a collection of data resources (such as files), together with a description and other information, at a fixed URL. Users see datasets when searching for data.
 - **Edit and update datasets** - Modify existing dataset information and resources
-- **Organise datasets with groups** - Create and manage collections of datasets. Use this to catalogue datasets for a particular project or team, or on a particular theme, or as a simple way to help people find and search your own published datasets.
 
-#### 4. Manage organisations
+#### 4. Manage groups
+**Source:** New content needed
+- **Create groups** - Create and manage collections of datasets for particular projects, teams, themes, or to help people find and search published datasets
+- **Add datasets to groups** - Organize datasets by adding them to relevant groups
+- **Manage group members** - Add members to groups and assign roles (Admin: edit group information and manage members; Member: add/remove datasets from groups)
+
+#### 5. Manage organisations
 **Source:** New content needed  
 - **Add organisations** - Create, manage and publish collections of datasets. Users can have different roles within an organisation, depending on their level of authorisation to create, edit and publish.
 - **Manage user roles and permissions** - Control platform-level roles (Visitor, Registered User, Sysadmin) and organisation-level roles (Member, Editor, Admin)
@@ -42,4 +47,3 @@
 - **Harvester problems** - Fix harvesting failures and connection issues
 - **User access issues** - Solve login and permission problems
 
- 

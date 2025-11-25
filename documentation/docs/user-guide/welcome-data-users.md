@@ -4,19 +4,16 @@ sidebar_label: "Welcome"
 sidebar_position: 1
 ---
 
-# Welcome to the GDI Portal
+# Welcome to the GDI Data Portal
 
-Welcome to the GDI Portal user guide!
+Welcome to the GDI Data Portal user guide!
 
-**The GDI Portal connects you to Europe's largest network of genomic datasets**—over one million genome sequences from across European countries. As part of the 1+ Million Genomes Initiative, this portal enables federated and secure cross-border access to high-quality genomic data and related phenotypic information across European countries.
+The **GDI Data Portal** gives you access to Europe's largest network of genomic datasets for your research and analysis needs. As part of the 1+ Million Genomes Initiative, this portal enables federated and secure cross-border access to high-quality genomic data and related phenotypic information across European countries.
 
-**This guide is for data users**—healthcare researchers, policy-makers, and professionals—who want to discover and request access to genomic datasets for research and clinical purposes. 
+This guide is for **data users**—healthcare researchers, policy-makers, and professionals—who want to discover and request access to genomic datasets for research and clinical purposes. 
 
-:::note Learn more about GDI
+Learn more about [Genomic Data Infrastructure (GDI)](about-gdi.md) and its founding initiatives.
 
-To learn more about the Genomic Data Infrastructure (GDI) and its founding initiatives, see [About GDI](about-gdi.md).
-
-:::
 
 ## How it works
 

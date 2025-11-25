@@ -414,3 +414,47 @@ a:hover {
     margin: 0 0.5rem !important;
   }
 }
+
+/* Widen sidebar to prevent text wrapping */
+@media (min-width: 997px) {
+  .theme-doc-sidebar-container {
+    --doc-sidebar-width: 325px !important;
+    min-width: 325px !important;
+    max-width: 325px !important;
+    width: 325px !important;
+    flex: 0 0 325px !important;
+    padding-right: 0.5rem !important;
+  }
+  
+  aside[class*="docSidebarContainer"] {
+    width: 325px !important;
+    min-width: 325px !important;
+    padding-right: 0.5rem !important;
+  }
+  
+  .menu {
+    padding: 0.5rem;
+    padding-right: 0.5rem;
+    width: 100%;
+  }
+  
+  .theme-doc-sidebar-menu {
+    width: 325px !important;
+    padding-right: 0.5rem !important;
+  }
+  
+  .menu__list {
+    width: 100%;
+    padding-right: 0.5rem;
+  }
+  
+  .menu__link {
+    padding-right: 1rem;
+    white-space: normal;
+    word-wrap: break-word;
+  }
+  
+  .menu__list-item-collapsible {
+    padding-right: 1rem;
+  }
+}

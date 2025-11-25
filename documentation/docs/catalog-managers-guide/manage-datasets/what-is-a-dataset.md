@@ -6,44 +6,63 @@ sidebar_position: 1
 
 # What is a dataset?
 
-In GDI, a **dataset** is a comprehensive record that describes a genomic data resource. For example, a genomic data resource for *COVID-19 Viral Sequences* can include dataset records of: *patient data*, *virus samples*, or *hospital study results*.  
+In general terms, a **dataset** is a structured collection of data that describes a specific subject. In GDI, this subject is genomic information pertaining to human health, diseases, and research studies.
 
-The quality of information contained in a dataset determines how easily users can find, understand, and access the genomic data resources it describes.
+**A dataset in GDI** can be a single file or a collection of files that provide comprehensive genomic information about a specific research topic, disease area, or study cohort. For example, a genomic data for *COVID-19 Viral Sequences* can include dataset records describing *patient data*, *virus samples*, and *sequencing results*.
 
-**A dataset can have two sets of information:** 
-- **[Metadata:](#metadata)** Descriptive information
-- **[Data resource:](#data-resource)** The actual genomic data files or services
 
-## Metadata  
+## Dataset components
 
-Metadata are descriptive details about your genomic dataset that provide context and information about the dataset itself. This includes details pertaining to:
+In GDI, a dataset has two sets of information that together provide a complete picture of the genomic subject: **metadata** and **data resources**.
+
+    :::tip Why is this important?
+
+     The **metadata** and **data resources** you provide when creating datasets impact how easily users can find and understand them. When creating datasets, provide comprehensive information to help researchers find the data they need to support their studies.
+    
+    :::
+
+### Metadata
+    
+    **Metadata** are descriptive details about your genomic dataset that provide context and information about the dataset itself. It includes details pertaining to:
 
     - **Identification:** Title, description, keywords, and unique identifiers
     - **Responsibility:** Contact points, publisher, creator, and data steward information
-    - **Coverage details:** Geographic and temporal scope
     - **Access information:** Rights, availability, licensing, and access restrictions
-     
-    and any other pertinent information that allows users to effectively locate and use the data.
+    - **Others:** Other key information that allows users to locate and access the data.
 
-## Data resource
+    In the GDI Catalogue, the metadata appears under **Additional Info** when you open a datase. Here's an example:
 
-Data resources are the actual files, databases, or data services that contain the genomic information. This includes details pertaining to:
+<figure>
+    <img src="/gdi-userportal-frontend/img/catalogue-managers-guide/manage-datasets/dataset-additional-info.png" alt="Dataset details page showing the newly created dataset" width="700" />
+    <figcaption></figcaption>
+</figure>
 
-    - **Access details:** URLs for viewing or downloading the data
-    - **Technical specifications:** File format, media type, file size, and compression details
-    - **Descriptions:** What each specific file or resource contains
-    - **Legal information:** Licensing, rights, and availability status
+### Data resources
 
-and any other relevant information that helps users understand and use the data resources.
+    A **data resource** pertains to the actual genomic data files associated with a dataset. In GDI, you can upload the file or provide links to external data resources. GDI supports common genomic data file formats, including:
+
+    - **VCF (Variant Call Format):** For storing gene sequence variations
+    - **FASTA/FASTQ:** For storing raw sequence reads 
+    - **BAM/CRAM:** For storing aligned sequence data
+    - **CSV/TSV:** For storing tabular data such as phenotypic 
+
+<!-- TODO: verify supported file types -->
+
+Here's an example of a data resource file in a dataset:
+
+<figure>
+    <img src="/gdi-userportal-frontend/img/catalogue-managers-guide/manage-datasets/data-resources.png" alt="Dataset details page showing the newly created dataset" width="700" />
+    <figcaption></figcaption>
+</figure>
 
 
-## Example
+    When you add a data resource to your dataset, you provide its metadata—information about the data file, such as its name, description, format, and access details.
 
-A dataset record for *"Rare Genetic Forms of Diabetes Study"* would include:
 
-- **Metadata:** Study description, clinic contact information, data collection period (2022-2025), patient privacy requirements.
-- **Data resource:** Blood test results, genetic screening data in spreadsheet format, patient questionnaires, and study guidelines—each with download options, file sizes, and viewing permissions.
+:::tip Organising datasets
 
-When you publish this dataset in the GDI Catalogue, researchers can discover it through the GDI User Portal. The details you provide help them understand what data is available, so they can assess if it meets their research needs, and request access if necessary.
+Datasets in GDI can be organised in serveral ways—such as by **organisation** and **groups**—to help you manage data effectively, while making it easy for researchers to find relevant datasets.
 
-**What's next:** [Add a dataset](add-a-datasets).
+:::  
+
+**What's next:** [Add a dataset](add-a-dataset.md).

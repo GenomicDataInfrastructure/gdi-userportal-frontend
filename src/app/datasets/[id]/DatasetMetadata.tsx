@@ -195,12 +195,12 @@ const DatasetMetadata = ({
             />
             <span className="align-middle">Keywords:</span>
             <div className="flex flex-wrap gap-1">
-              {dataset.keywords.map((keyword) => (
+              {dataset.keywords.map((keyword, index) => (
                 <span
                   className="bg-[var(--color-warning)] bg-opacity-50 px-4 py-1 rounded-full text-gray font-[500] text-[14px] inline-block"
-                  key={keyword.value}
+                  key={`${keyword}-${index}`}
                 >
-                  {keyword.label}
+                  {keyword}
                 </span>
               ))}
             </div>

@@ -20,16 +20,7 @@ describe("entitlementCardItems", () => {
       title: "",
       description: "dataset1 description",
       themes: [{ value: "theme1", label: "theme1" }],
-      keywords: [
-        {
-          label: "keyword1",
-          value: "keyword1",
-        },
-        {
-          label: "keyword2",
-          value: "keyword2",
-        },
-      ],
+      keywords: ["keyword1", "keyword2"],
       distributionsCount: 2,
       publishers: [
         {

@@ -12,6 +12,8 @@ import { Disclosure } from "@headlessui/react";
 import { default as DropdownFilterContent } from "./DropdownFilterContent";
 import EntriesFilterContent from "./EntriesFilterContent";
 import FreeTextFilterContent from "./FreeTextFilterContent";
+import DateTimeFilterContent from "./DateTimeFilterContent";
+import NumberFilterContent from "./NumberFilterContent";
 
 export type FilterItemProps = {
   filter: Filter;
@@ -38,6 +40,10 @@ function FilterItem({ filter }: FilterItemProps) {
         return <FreeTextFilterContent filter={filter} />;
       case FilterType.ENTRIES:
         return <EntriesFilterContent filter={filter} />;
+      case FilterType.DATETIME:
+        return <DateTimeFilterContent filter={filter} />;
+      case FilterType.NUMBER:
+        return <NumberFilterContent filter={filter} />;
       default:
         throw new Error(`Unknown filter type: ${type}`);
     }

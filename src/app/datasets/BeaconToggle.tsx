@@ -14,16 +14,17 @@ export default function BeaconToggle() {
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
 
-  // Check if user has Beacon access (adjust role name as needed)
+  // Check if user is logged in
+  // TODO: Add role check later - only show for users with BEACON_USER role
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const hasBeaconAccess = (session?.user as any)?.roles?.includes(
-    "BEACON_USER"
-  );
+  // const userRoles = (session?.user as any)?.roles;
+  // const hasBeaconAccess = userRoles?.includes("BEACON_USER");
+  const hasBeaconAccess = !!session?.user; // Show for all logged-in users for now
 
   // Get current state from URL parameter
   const includeBeacon = searchParams.get("beacon") === "true";
 
-  // Don't show toggle if user doesn't have Beacon access
+  // Don't show toggle if user is not logged in
   if (!hasBeaconAccess) {
     return null;
   }

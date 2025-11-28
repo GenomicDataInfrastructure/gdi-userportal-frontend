@@ -7,6 +7,7 @@ export type UrlSearchParams = Partial<{
   q: string;
   sort: string;
   tab: string;
+  beacon: string;
 }>;
 
 export type UrlParams = Partial<{

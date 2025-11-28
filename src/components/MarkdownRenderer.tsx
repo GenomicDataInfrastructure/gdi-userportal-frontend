@@ -37,10 +37,10 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
         ),
         p: ({ ...props }) => <p className="mb-6 leading-relaxed" {...props} />,
         ul: ({ ...props }) => (
-          <ul className="list-inside list-disc mb-6" {...props} />
+          <ul className="list-disc mb-6 ml-6" {...props} />
         ),
         ol: ({ ...props }) => (
-          <ol className="list-inside list-decimal mb-6" {...props} />
+          <ol className="list-decimal mb-6 ml-6" {...props} />
         ),
         li: ({ ...props }) => <li className="mb-3" {...props} />,
         a: ({ ...props }) => (

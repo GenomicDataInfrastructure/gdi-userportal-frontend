@@ -45,7 +45,7 @@ export default function DatasetsPage({ searchParams }: DatasetsPageProps) {
         </div>
 
         {/* Beacon Toggle Component */}
-        <div className="col-start-0 col-span-12 xl:col-span-10 xl:col-start-2">
+        <div className="mt-4 col-start-0 col-span-12 xl:col-span-10 xl:col-start-2">
           <BeaconToggle />
         </div>
 

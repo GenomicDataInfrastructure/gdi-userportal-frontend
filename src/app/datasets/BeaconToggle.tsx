@@ -6,13 +6,11 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
 
 export default function BeaconToggle() {
   const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
 
   // Check if user is logged in
   // TODO: Add role check later - only show for users with BEACON_USER role
@@ -30,8 +28,6 @@ export default function BeaconToggle() {
   }
 
   const handleToggle = (checked: boolean) => {
-    setIsLoading(true);
-
     const params = new URLSearchParams(searchParams);
 
     if (checked) {
@@ -65,8 +61,7 @@ export default function BeaconToggle() {
             id="beacon-toggle"
             checked={includeBeacon}
             onChange={(e) => handleToggle(e.target.checked)}
-            disabled={isLoading}
-            className="mt-1 h-4 w-4 border rounded-md checked:accent-warning flex-none cursor-pointer disabled:opacity-50"
+            className="mt-1 h-4 w-4 border rounded-md checked:accent-warning flex-none cursor-pointer"
           />
           <div className="flex-1">
             <div className="flex items-center gap-2 font-semibold text-base mb-1">

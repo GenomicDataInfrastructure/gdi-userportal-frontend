@@ -65,7 +65,6 @@ export default function BeaconToggle() {
           />
           <div className="flex-1">
             <div className="flex items-center gap-2 font-semibold text-base mb-1">
-              <span>🔬</span>
               <span>Include Beacon Network</span>
               {includeBeacon && (
                 <span className="text-xs bg-warning text-black px-2 py-0.5 rounded-full font-normal">

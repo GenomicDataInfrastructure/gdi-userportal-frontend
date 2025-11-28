@@ -45,7 +45,7 @@ export default function FilterList() {
       {ckanFilters.length > 0 && (
         <section>
           <h3 className="text-sm font-semibold text-gray-500 uppercase mb-4 tracking-wide">
-            📂 Catalog Filters
+            Catalog Filters
           </h3>
           <ul className="flex flex-col gap-y-6">
             {ckanFilters.map((filter) => (
@@ -62,7 +62,7 @@ export default function FilterList() {
         <section>
           <div className="border-t pt-6">
             <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2 tracking-wide">
-              🔬 Beacon Network Filters
+              Beacon Network Filters
             </h3>
             <p className="text-xs text-gray-600 mb-4">
               Filter by individual-level data characteristics

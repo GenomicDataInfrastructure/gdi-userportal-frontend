@@ -50,46 +50,50 @@ export default function BeaconToggle() {
   return (
     <div className="mb-6">
       <div
-        className={`flex items-start gap-4 p-4 rounded-lg border-2 transition-colors ${
+        className={`shadow-lg rounded-lg border-b-4 transition ${
           includeBeacon
-            ? "bg-blue-50 border-blue-300"
-            : "bg-gray-50 border-gray-200"
+            ? "border-b-secondary bg-gray-50"
+            : "border-b-[#B5BFC4] hover:border-b-secondary hover:bg-gray-50"
         }`}
       >
-        <input
-          type="checkbox"
-          id="beacon-toggle"
-          checked={includeBeacon}
-          onChange={(e) => handleToggle(e.target.checked)}
-          disabled={isLoading}
-          className="mt-1 w-5 h-5 text-primary rounded focus:ring-2 focus:ring-primary cursor-pointer disabled:opacity-50"
-        />
         <label
           htmlFor="beacon-toggle"
-          className="flex-1 cursor-pointer select-none"
+          className="flex items-start gap-4 p-4 cursor-pointer"
         >
-          <div className="flex items-center gap-2 font-semibold text-base mb-1">
-            <span>🔬</span>
-            <span>Include Beacon Network</span>
-            {includeBeacon && (
-              <span className="text-xs bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full">
-                Active
-              </span>
-            )}
-          </div>
-          <div className="text-sm text-gray-600">
-            {includeBeacon ? (
-              <>
-                Showing datasets with available individual-level data and record
-                counts from Beacon Network.{" "}
-                <span className="text-blue-600">(Searches may be slower)</span>
-              </>
-            ) : (
-              <>
-                Get individual-level data filters and record counts by enabling
-                Beacon Network.
-              </>
-            )}
+          <input
+            type="checkbox"
+            id="beacon-toggle"
+            checked={includeBeacon}
+            onChange={(e) => handleToggle(e.target.checked)}
+            disabled={isLoading}
+            className="mt-1 h-4 w-4 border rounded-md checked:accent-warning flex-none cursor-pointer disabled:opacity-50"
+          />
+          <div className="flex-1">
+            <div className="flex items-center gap-2 font-semibold text-base mb-1">
+              <span>🔬</span>
+              <span>Include Beacon Network</span>
+              {includeBeacon && (
+                <span className="text-xs bg-warning text-black px-2 py-0.5 rounded-full font-normal">
+                  Active
+                </span>
+              )}
+            </div>
+            <div className="text-sm text-gray-600 font-normal">
+              {includeBeacon ? (
+                <>
+                  Showing datasets with individual-level data and record counts
+                  from Beacon Network{" "}
+                  <span className="text-secondary font-medium">
+                    (searches may be slower)
+                  </span>
+                </>
+              ) : (
+                <>
+                  Enable to filter by individual-level data characteristics and
+                  see record counts
+                </>
+              )}
+            </div>
           </div>
         </label>
       </div>

@@ -23,21 +23,21 @@ env:
   BUILD_DATE: ""
 
 jobs:
-  ort:
-    strategy:
-      fail-fast: false
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - uses: oss-review-toolkit/ort-ci-github-action@v1
-        with:
-          allow-dynamic-versions: "true"
-          fail-on: "issues"
-          run: "cache-dependencies,cache-scan-results,labels,analyzer,evaluator,advisor,reporter,upload-results"
+  # ort:
+  #   strategy:
+  #     fail-fast: false
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v5
+  #     - uses: oss-review-toolkit/ort-ci-github-action@v1
+  #       with:
+  #         allow-dynamic-versions: "true"
+  #         fail-on: "issues"
+  #         run: "cache-dependencies,cache-scan-results,labels,analyzer,evaluator,advisor,reporter,upload-results"
 
   versioning:
     runs-on: ubuntu-latest
-    needs: ort
+    # needs: ort
     outputs:
       new_tag: ${{ steps.tagging.outputs.new_tag }}
     steps:

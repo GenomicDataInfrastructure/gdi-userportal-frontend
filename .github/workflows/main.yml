@@ -22,23 +22,22 @@ env:
   BUILD_DATE: ""
 
 jobs:
-  # TODO: Re-enable ORT once memory issues are resolved
-  # ort:
-  #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     JAVA_OPTS: "-Xmx6g"
-  #   steps:
-  #     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-  #     - uses: oss-review-toolkit/ort-ci-github-action@v1
-  #       with:
-  #         allow-dynamic-versions: "true"
-  #         fail-on: "issues"
-  #         run: "cache-dependencies,cache-scan-results,labels,analyzer,evaluator,advisor,reporter,upload-results"
+  ort:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    env:
+      JDK_JAVA_OPTIONS: "-Xmx8g"
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: oss-review-toolkit/ort-ci-github-action@v1
+        with:
+          allow-dynamic-versions: "true"
+          fail-on: "issues"
+          run: "cache-dependencies,cache-scan-results,labels,analyzer,evaluator,advisor,reporter,upload-results"
 
   build-and-push-image:
     runs-on: ubuntu-latest
-    # needs: ort
+    needs: ort
     permissions:
       contents: read
       packages: write

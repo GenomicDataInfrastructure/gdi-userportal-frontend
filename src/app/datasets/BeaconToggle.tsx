@@ -45,13 +45,7 @@ export default function BeaconToggle() {
 
   return (
     <div className="mb-6">
-      <div
-        className={`shadow-lg rounded-lg border-b-4 transition ${
-          includeBeacon
-            ? "border-b-secondary bg-gray-50"
-            : "border-b-[#B5BFC4] hover:border-b-secondary hover:bg-gray-50"
-        }`}
-      >
+      <div className="shadow-lg rounded-lg border-l-4 border-l-info bg-info/5">
         <label
           htmlFor="beacon-toggle"
           className="flex items-start gap-4 p-4 cursor-pointer"

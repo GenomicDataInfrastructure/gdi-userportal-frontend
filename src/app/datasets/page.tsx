@@ -16,6 +16,7 @@ import ActiveFilters from "@/app/datasets/ActiveFilters";
 import DatasetsProvider from "@/providers/datasets/DatasetsProvider";
 import Error from "@/app/error";
 import { UrlSearchParams } from "@/app/params";
+import BeaconToggle from "./BeaconToggle";
 
 type DatasetsPageProps = {
   searchParams: Promise<UrlSearchParams>;
@@ -42,6 +43,12 @@ export default function DatasetsPage({ searchParams }: DatasetsPageProps) {
         <div className="col-start-0 col-span-12 flex items-center justify-between xl:col-span-10 xl:col-start-2">
           <SearchBar searchParams={_searchParams} />
         </div>
+
+        {/* Beacon Toggle Component */}
+        <div className="mt-4 col-start-0 col-span-12 xl:col-span-10 xl:col-start-2">
+          <BeaconToggle />
+        </div>
+
         <DatasetsProvider searchParams={_searchParams}>
           <DatasetCount />
           <div className="col-start-0 col-span-12 flex flex-col gap-4 sm:block xl:hidden">

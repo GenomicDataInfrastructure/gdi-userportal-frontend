@@ -20,8 +20,11 @@ The **User Portal**, developed for the **Genomic Data Infrastructure (GDI)** pro
 
 The User Portal has been developed through a collaboration between the following organizations:
 
-- [**Luxembourg National Data Service**](https://www.lnds.lu/) is responsible for the development of the User Portal.
+#### [**Luxembourg National Data Service**](https://www.lnds.lu/)
+LNDS is responsible for the development of the User Portal.
 
-- [**Health-RI**](https://www.health-ri.nl/) is responsible for implementing the dataset catalogue integration with 1+MG infrastructures and enforcing a harmonised metadata model.
+#### [**Health-RI**](https://www.health-ri.nl/)
+Health-RI is responsible for implementing the dataset catalogue integration with 1+MG infrastructures and enforcing a harmonised metadata model.
 
-- [**Centre for Genomic Regulation**](https://www.crg.eu/) was responsible for the design and implementation of the original Allele Frequency Browser concept, which was later ported to the User Portal.
+#### [**Centre for Genomic Regulation**](https://www.crg.eu/)
+CRG was responsible for the design and implementation of the original Allele Frequency Browser concept, which was later ported to the User Portal.

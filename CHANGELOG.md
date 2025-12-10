@@ -12,6 +12,108 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+## [v1.4.0] - 2025-11-28
+
+### Added
+- feat: add DATETIME and NUMBER filter components (#712) by @Inderpal Singh in f486164
+- feat: add footer feature flag (#669) by @RaniaHamdani2 in bb8e0bd
+
+
+### Changed
+- doc: rearrange contributing organizations section by @Bruno Pacheco in 3a8e4bf
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.7-1763382208 by @Renovate Bot in f7515d0
+- chore(deps): update actions/checkout action to v5.0.1 by @Renovate Bot in 2594bcb
+- chore: temporarily disable ORT job due to memory issues (#707) by @Inderpal Singh in b08e0db
+- docs: ART-20515 Add CM guides for get started, dataset management, group management by @Rhocela Pasigna in 7bce243
+- moved to-ignore files by @Rhocela Pasigna in bae6ea0
+- add dataset by @Rhocela Pasigna in f90b70f
+- what is a dataset by @Rhocela Pasigna in 90b3252
+- add structure by @Rhocela Pasigna in e230bfe
+- refine structure by @Rhocela Pasigna in 10f5456
+- add original content and create files and folder structures by @Rhocela Pasigna in 5bd3ae3
+- ad welcome CM and about GDI by @Rhocela Pasigna in cfe44ea
+- chore(deps): update dependency brace-expansion to v4 by @Renovate Bot in 221ea42
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.7-1762215467 by @Renovate Bot in 90bfb65
+- chore(deps): update actions/upload-pages-artifact action to v4 by @Renovate Bot in 8b09c1b
+- chore(deps): update actions/upload-artifact action to v5 by @Renovate Bot in e86d18b
+- chore(deps): update actions/checkout action to v5 by @Renovate Bot in 615be50
+- chore(deps): update docker/metadata-action action to v5.9.0 by @Renovate Bot in 569cab0
+- chore(deps): update docker/login-action action to v3.6.0 by @Renovate Bot in d2e03d7
+- chore(deps): update aquasecurity/trivy-action action to v0.33.1 by @Renovate Bot in b818692
+- chore(deps): update fsfe/reuse-action action to v6 by @Renovate Bot in 44d3f3d
+- chore(deps): update docker/build-push-action action to v6.18.0 by @Renovate Bot in 34ec8eb
+- chore(deps): update devdependencies by @Renovate Bot in b98762d
+- chore(deps): update actions/checkout action to v4.3.0 by @Renovate Bot in 587c126
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.6-1760544659 by @Renovate Bot in 10503e0
+- Fix/upgrade axios (#673) by @RaniaHamdani2 in 130f31c
+- chore: temporarily disable SonarQube scan to unblock CI/CD by @Rania Hamdani in 1745394
+- chore(deps): update actions/setup-node action to v6 by @Renovate Bot in 44aca4c
+- docs: ART-20006 Guides for application results by @Rhocela Pasigna in b8e8b09
+- doc: update about.md by @Bruno Pacheco in e10cf2f
+- chore(deps): update azure/webapps-deploy action to v3.0.6 by @Renovate Bot in 3e023fc
+- chore(deps): update actions/checkout action to v4.2.2 by @Renovate Bot in e8a34f8
+- docs: ART-20012 Add export metadata guide and gitignored autogen search files by @Rhocela Pasigna in 001f443
+- chore(deps): update fsfe/reuse-action digest to bb774aa by @Renovate Bot in 5480496
+- chore(deps): update aquasecurity/trivy-action digest to dc5a429 by @Renovate Bot in 5f77e56
+- chore: update the vulnerable sonarcloud version (#640) by @sehaartuc in 1b789e9
+- docs: ART-11771 write the docs - user portal by @Rhocela Pasigna in f29e42e
+- Fix GitHub Pages deployment and update repository configuration by @Rhocela Pasigna in 773c3dd
+- docs: ART-19782 deploy docs to GitHub Pages by @Rhocela Pasigna in a049ae9
+- doc: update copyright text in about.md.license by @Bruno Pacheco in b957643
+- docs: ART-14672 licenses review by @Rania Hamdani in 5c221db
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.6-1760544659 by @Renovate Bot in 6b10ea8
+- chore(deps): bump http-proxy-middleware in /documentation by @dependabot[bot] in 2fd5cfb
+- style: ♯14672 formatting by @Rania Hamdani in 52b562b
+- docs: set up doc app and initial user guide content by @Rhocela Pasigna in a84f5e3
+- docs: ART-14672 add organizations to NOTICE.md, about.md, and source headers by @Rania Hamdani in 1ba6d09
+- chore(deps): bump SonarSource/sonarqube-scan-action by @dependabot[bot] in 3a0f950
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.6-1754870984 by @Renovate Bot in ab7f46f
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.6-1754479264 by @Renovate Bot in 7c66d69
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.6-1754381159 by @Renovate Bot in 82cc796
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.6-1754272205 by @Renovate Bot in 1d20939
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.6-1753796458 by @Renovate Bot in 4e16628
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.6-1752501970 by @Renovate Bot in 5c49080
+- doc: update CHANGELOG.md for v1.3.10 by @LNDS-Sysadmins in b37eb10
+
+
+### Fixed
+- fix: temporarily disable ORT in release workflow (#716) by @Inderpal Singh in e8de6b4
+- fix: upgrade node-forge to 1.3.2 to fix CVE-2025-12816 (#713) by @Inderpal Singh in 63fea26
+- fix: increase ORT Java heap memory to 6GB (#706) by @Inderpal Singh in 318f8aa
+- fix: update OpenAPI schemas for CKAN data type compatibility (#705) by @Inderpal Singh in e183086
+- fix: add DATETIME and NUMBER to FilterType enum (#701) by @Inderpal Singh in b0e8f00
+- fixed typos by @Rhocela Pasigna in c8e19ef
+- fix(deps): update opentelemetry-js monorepo by @Renovate Bot in 95372b7
+- fix: pin aquasecurity/trivy-action to full commit SHA by @Rania Hamdani in 6999048
+- fix: Updated next from 15.3.5 to ^15.5.6 by @Rania Hamdani in 1bb1490
+- fix(deps): update font awesome by @Renovate Bot in 0756907
+- fix(deps): update opentelemetry-js monorepo by @Renovate Bot in 97606dc
+- fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.67.0 by @Renovate Bot in 623d9b7
+- fix: pin fsfe/reuse-action to full commit SHA by @Rania Hamdani in c0154d6
+- fix: upgrade Next.js from 15.3.5 to 15.5.6 by @Rania Hamdani in fcbd9ae
+- fix: upgrade Next.js from 15.3.5 to 15.4.7 to fix next-runtime-env vulnerabilities by @Rania Hamdani in c43034a
+- fix: upgrade playwright to 1.56.1 by @Rania Hamdani in 8ede5a8
+- fix: upgrade axios to 1.13.2 by @Rania Hamdani in da3d1cb
+- fix: sonar config by @Rania Hamdani in 5a38cd8
+- fix: package.json & package-lock.json to reduce vulnerabilities by @snyk-bot in ee6ddd6
+- docs(fix): ART-11771 Fix links and recreate missing pages by @Rhocela Pasigna in 2e9e973
+- fix: documentation publication workflow (#660) by @Inderpal Singh in e00b484
+- docs: ART-19782 Update docusaurus to fix gh GH page deployment (#658) by @Rose Pasigna in 5965eb6
+- fix typo by @Rania Hamdani in b262859
+- Restore problematic files from main branch to fix Sonar issues by @Rania Hamdani in ad7ef4e
+- docs: ♯14672 fix format and license date by @Rania Hamdani in 91cfe85
+- fix: ♯14672 address sourcery comments by @Rania Hamdani in 80c2660
+
+
+### Removed
+- removed duplicate reference file by @Rhocela Pasigna in 74486d8
+
+
+### Security
+- Fix/snyk vulnerabilities (#680) by @RaniaHamdani2 in 2a8727a
+- Fix/snyk vulnerabilities (#677) by @RaniaHamdani2 in 2b4aaa8
+
+
 
 ## [v1.3.10] - 2025-07-08
 

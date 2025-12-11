@@ -335,7 +335,9 @@ components:
         keywords:
           type: array
           items:
-            type: string
+            oneOf:
+              - type: string
+              - $ref: "#/components/schemas/ValueLabel"
           title: Keywords
         catalogue:
           type: string
@@ -354,6 +356,18 @@ components:
         distributionsCount:
           type: integer
           title: Distributions count
+        conformsTo:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValueLabel"
+        url:
+          type: string
+          title: Dataset URL
+        distributions:
+          type: array
+          items:
+            $ref: "#/components/schemas/RetrievedDistribution"
+          title: Distributions
       required:
         - id
         - title
@@ -440,7 +454,9 @@ components:
         keywords:
           type: array
           items:
-            type: string
+            oneOf:
+              - type: string
+              - $ref: "#/components/schemas/ValueLabel"
         provenance:
           type: string
           title: Provenance
@@ -471,6 +487,9 @@ components:
           title: Description
         format:
           $ref: "#/components/schemas/ValueLabel"
+        uri:
+          type: string
+          title: Distribution URI
         accessUrl:
           type: string
           title: Access URL

@@ -13,6 +13,7 @@ import Tooltip from "./Tooltip";
 import { createDatasetSidebarItems } from "./sidebarItems";
 import { retrieveDatasetApi } from "../../api/discovery";
 import { UrlParams, UrlSearchParams } from "@/app/params";
+import { getConformsToLabel } from "@/utils/datasetHelpers";
 
 type DatasetDetailsPageProps = {
   params: Promise<UrlParams>;
@@ -36,6 +37,8 @@ export default async function Page({
     const relationships = dataset.datasetRelationships || [];
 
     const dictionary = dataset.dataDictionary || [];
+
+    const conformsToLabel = getConformsToLabel(dataset);
 
     return (
       <PageContainer searchParams={_searchParams}>
@@ -61,6 +64,18 @@ export default async function Page({
                 ))}
               </ul>
             </div>
+
+            {conformsToLabel && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold text-gray-700">
+                  Conforms To:
+                </span>
+                <span className="text-sm font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20">
+                  {conformsToLabel}
+                </span>
+              </div>
+            )}
+
             <div className="flex items-center">
               <p className="text-gray">{dataset.description}</p>
             </div>

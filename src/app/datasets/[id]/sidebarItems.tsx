@@ -9,8 +9,12 @@ import { faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExportDatasetButton from "@/app/datasets/[id]/ExportDatasetButton";
 import { RetrievedDataset } from "@/app/api/discovery/open-api/schemas";
+import { isExternalDataset, getFirstAccessUrl } from "@/utils/datasetHelpers";
+import ExternalDatasetLink from "./ExternalDatasetLink";
 
 function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
+  const isExternal = isExternalDataset(dataset);
+  const externalAccessUrl = getFirstAccessUrl(dataset.distributions);
   const metaFormats = [
     {
       format: "rdf",
@@ -34,8 +38,24 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
 
   return [
     {
-      label: "Request data access",
-      value: (
+      label: isExternal ? "External Dataset" : "Request data access",
+      value: isExternal ? (
+        <div className="flex flex-col gap-2">
+          <p className="text-xs text-gray-600">
+            This dataset is not available for request through the GDI User
+            Portal.
+            {externalAccessUrl &&
+              " Access it via the external provider's portal."}
+          </p>
+          {externalAccessUrl ? (
+            <ExternalDatasetLink url={externalAccessUrl} />
+          ) : (
+            <span className="text-xs px-3 py-2 font-semibold bg-gray-200 text-gray-600 rounded-md w-fit">
+              No external link available
+            </span>
+          )}
+        </div>
+      ) : (
         <AddToBasketButton
           dataset={{
             ...dataset,

@@ -10,6 +10,11 @@ import {
 } from "@/app/api/discovery/open-api/schemas";
 import { discoveryClient } from "@/app/api/shared/client";
 import { createHeaders } from "@/app/api/shared/headers";
+import { applyMockData } from "@/utils/mockDatasets";
+
+// Toggle this flag to enable/disable mock data for testing
+// REMOVE THIS IN PRODUCTION!
+const ENABLE_MOCK_DATA = true;
 
 export const retrieveFiltersApi = async () => {
   const headers = await createHeaders();
@@ -26,11 +31,26 @@ export const retrieveFilterValuesApi = async (key: string) => {
 
 export const searchDatasetsApi = async (options: DatasetSearchQuery) => {
   const headers = await createHeaders();
-  return await discoveryClient.dataset_search(options, { headers });
+  const response = await discoveryClient.dataset_search(options, { headers });
+
+  // Apply mock data to all datasets if enabled
+  if (ENABLE_MOCK_DATA && response.results) {
+    response.results = response.results.map((dataset) =>
+      applyMockData(dataset)
+    );
+  }
+
+  return response;
 };
 
 export const retrieveDatasetApi = async (id: string) => {
-  return await discoveryClient.retrieve_dataset({ params: { id } });
+  const dataset = await discoveryClient.retrieve_dataset({ params: { id } });
+
+  if (ENABLE_MOCK_DATA) {
+    return applyMockData(dataset);
+  }
+
+  return dataset;
 };
 
 export const retrieveDatasetInSpecifiedFormat = async (

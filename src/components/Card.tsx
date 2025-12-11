@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import Chips from "./Chips";
 import contentConfig from "@/config/contentConfig";
+import ExternalDatasetCardLink from "./ExternalDatasetCardLink";
 
 export type CardItem = {
   text: string;
@@ -21,6 +22,8 @@ type CardProps = {
   cardItems: CardItem[];
   keywords?: string[];
   button?: React.ReactNode;
+  conformsTo?: string;
+  externalUrl?: string;
 };
 
 export default function Card({
@@ -31,7 +34,10 @@ export default function Card({
   cardItems,
   keywords = [],
   button,
+  conformsTo,
+  externalUrl,
 }: CardProps) {
+  const isExternal = !!externalUrl;
   return (
     <Link
       href={url}
@@ -55,6 +61,14 @@ export default function Card({
           <div className="font-bold text-[20px] group-hover:text-info group-hover:underline">
             {title}
           </div>
+
+          {conformsTo && (
+            <div className="mt-2 inline-block">
+              <span className="text-xs font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20">
+                {conformsTo}
+              </span>
+            </div>
+          )}
 
           {description && (
             <p className="mt-3 line-clamp-2 font-normal text-base">
@@ -80,11 +94,40 @@ export default function Card({
           </div>
         </div>
       </div>
-      {(keywords.length > 0 || button) && (
-        <div className="mt-6 flex justify-between items-start pr-2">
-          <Chips chips={keywords} />
-          {contentConfig.showBasketAndLogin && button}
+      {isExternal ? (
+        <div className="mt-6 pr-2">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="flex-1">
+                <p className="text-xs font-semibold text-gray-800">
+                  External Dataset
+                </p>
+                <p className="text-xs text-gray-600 mt-0.5">
+                  Not available for request through this portal
+                </p>
+              </div>
+              {externalUrl ? (
+                <ExternalDatasetCardLink url={externalUrl} />
+              ) : (
+                <span className="text-xs px-3 py-1.5 font-semibold bg-gray-200 text-gray-500 rounded-md shrink-0 whitespace-nowrap">
+                  No Link Available
+                </span>
+              )}
+            </div>
+            {keywords.length > 0 && (
+              <div>
+                <Chips chips={keywords} />
+              </div>
+            )}
+          </div>
         </div>
+      ) : (
+        (keywords.length > 0 || button) && (
+          <div className="mt-6 flex justify-between items-start pr-2">
+            <Chips chips={keywords} />
+            {contentConfig.showBasketAndLogin && button}
+          </div>
+        )
       )}
     </Link>
   );

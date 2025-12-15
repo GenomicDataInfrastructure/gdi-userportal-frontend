@@ -16,18 +16,24 @@ import {
   DialogTitle,
 } from "@/components/shadcn/dialog";
 
-type ExternalDatasetCardLinkProps = {
+type ExternalDatasetDialogLinkProps = {
   url: string;
+  onOpenChange?: (open: boolean) => void;
+  children: (handlers: {
+    onClick: (e: React.MouseEvent) => void;
+  }) => React.ReactNode;
 };
 
-export default function ExternalDatasetCardLink({
+export function ExternalDatasetDialogLink({
   url,
-}: ExternalDatasetCardLinkProps) {
+  onOpenChange,
+  children,
+}: ExternalDatasetDialogLinkProps) {
   const [showDialog, setShowDialog] = useState(false);
 
   const handleConfirm = () => {
-    setShowDialog(false);
     window.open(url, "_blank", "noopener,noreferrer");
+    setShowDialog(false);
   };
 
   const handleClick = (e: React.MouseEvent) => {
@@ -38,14 +44,14 @@ export default function ExternalDatasetCardLink({
 
   return (
     <>
-      <button
-        onClick={handleClick}
-        className="text-xs rounded-md px-3 py-1.5 font-semibold bg-info text-white hover:bg-secondary transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer"
+      {children({ onClick: handleClick })}
+      <Dialog
+        open={showDialog}
+        onOpenChange={(open) => {
+          setShowDialog(open);
+          onOpenChange?.(open);
+        }}
       >
-        View External →
-      </button>
-
-      <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent className="sm:max-w-md bg-white">
           <DialogHeader>
             <DialogTitle>External Dataset</DialogTitle>
@@ -73,5 +79,26 @@ export default function ExternalDatasetCardLink({
         </DialogContent>
       </Dialog>
     </>
+  );
+}
+
+type ExternalDatasetCardLinkProps = {
+  url: string;
+};
+
+export default function ExternalDatasetCardLink({
+  url,
+}: ExternalDatasetCardLinkProps) {
+  return (
+    <ExternalDatasetDialogLink url={url}>
+      {({ onClick }) => (
+        <button
+          onClick={onClick}
+          className="text-xs rounded-md px-3 py-1.5 font-semibold bg-info text-white hover:bg-secondary transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer"
+        >
+          View External →
+        </button>
+      )}
+    </ExternalDatasetDialogLink>
   );
 }

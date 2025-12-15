@@ -10,46 +10,34 @@ import {
 
 export const CONFORMS_TO_STANDARDS = {
   EXTERNALLY_GOVERNED: "Externally governed",
-  ONE_PLUS_MG_COMPLIANT: "1+MG compliant",
-  ONE_PLUS_MG_COHORT: "1+MG cohort / EDIC controlled",
 } as const;
+
+const EXTERNALLY_GOVERNED_LOWER =
+  CONFORMS_TO_STANDARDS.EXTERNALLY_GOVERNED.toLowerCase();
 
 export function isExternalDataset(
   dataset: SearchedDataset | RetrievedDataset
 ): boolean {
-  if (!dataset.conformsTo || dataset.conformsTo.length === 0) {
+  if (!dataset.conformsTo?.length) {
     return false;
   }
 
-  const isExternal = dataset.conformsTo.some((item) => {
+  return dataset.conformsTo.some((item) => {
     const valueOrLabel = (item.value || item.label || "").toLowerCase();
-    return (
-      valueOrLabel.includes("externally governed") ||
-      valueOrLabel.includes("external")
-    );
+    return valueOrLabel.includes(EXTERNALLY_GOVERNED_LOWER);
   });
-
-  return isExternal;
 }
 
 export function getFirstAccessUrl(
   distributions?: RetrievedDistribution[]
 ): string | undefined {
-  if (!distributions || distributions.length === 0) {
+  if (!distributions?.length) {
     return undefined;
   }
 
   for (const distribution of distributions) {
-    if (distribution.uri?.trim()) {
-      return distribution.uri;
-    }
-
     if (distribution.accessUrl?.trim()) {
       return distribution.accessUrl;
-    }
-
-    if (distribution.downloadUrl?.trim()) {
-      return distribution.downloadUrl;
     }
   }
 
@@ -59,21 +47,9 @@ export function getFirstAccessUrl(
 export function getConformsToLabel(
   dataset: SearchedDataset | RetrievedDataset
 ): string | undefined {
-  if (!dataset.conformsTo || dataset.conformsTo.length === 0) {
+  if (!dataset.conformsTo?.length) {
     return undefined;
   }
 
-  return dataset.conformsTo
-    .map((item) => {
-      const value = item.value || "";
-      if (
-        value.includes("Externally governed") ||
-        value.includes("1+MG compliant") ||
-        value.includes("EDIC controlled")
-      ) {
-        return value;
-      }
-      return item.label || item.value;
-    })
-    .join(", ");
+  return dataset.conformsTo.map((item) => item.label || item.value).join(", ");
 }

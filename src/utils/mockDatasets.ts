@@ -8,6 +8,33 @@ import {
 } from "@/app/api/discovery/open-api/schemas";
 import { CONFORMS_TO_STANDARDS } from "./datasetHelpers";
 
+const MOCK_CONFORMS_TO_VALUES = {
+  EXTERNALLY_GOVERNED: CONFORMS_TO_STANDARDS.EXTERNALLY_GOVERNED,
+  ONE_PLUS_MG_COMPLIANT: "1+MG compliant",
+  ONE_PLUS_MG_COHORT: "1+MG cohort / EDIC controlled",
+} as const;
+
+const VALID_CONFORMS_TO_VALUES = new Set([
+  MOCK_CONFORMS_TO_VALUES.EXTERNALLY_GOVERNED.toLowerCase(),
+  MOCK_CONFORMS_TO_VALUES.ONE_PLUS_MG_COMPLIANT.toLowerCase(),
+  MOCK_CONFORMS_TO_VALUES.ONE_PLUS_MG_COHORT.toLowerCase(),
+]);
+
+const CONFORMS_TO_OPTIONS = [
+  {
+    value: MOCK_CONFORMS_TO_VALUES.EXTERNALLY_GOVERNED,
+    label: MOCK_CONFORMS_TO_VALUES.EXTERNALLY_GOVERNED,
+  },
+  {
+    value: MOCK_CONFORMS_TO_VALUES.ONE_PLUS_MG_COMPLIANT,
+    label: MOCK_CONFORMS_TO_VALUES.ONE_PLUS_MG_COMPLIANT,
+  },
+  {
+    value: MOCK_CONFORMS_TO_VALUES.ONE_PLUS_MG_COHORT,
+    label: MOCK_CONFORMS_TO_VALUES.ONE_PLUS_MG_COHORT,
+  },
+] as const;
+
 function hashString(str: string): number {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -18,41 +45,20 @@ function hashString(str: string): number {
   return Math.abs(hash);
 }
 
-function getRandomConformsTo(datasetId: string): {
-  value: string;
-  label: string;
-} {
+function getRandomConformsTo(datasetId: string) {
   const hash = hashString(datasetId);
   const index = hash % 3;
-
-  const values = [
-    {
-      value: CONFORMS_TO_STANDARDS.EXTERNALLY_GOVERNED,
-      label: CONFORMS_TO_STANDARDS.EXTERNALLY_GOVERNED,
-    },
-    {
-      value: CONFORMS_TO_STANDARDS.ONE_PLUS_MG_COMPLIANT,
-      label: CONFORMS_TO_STANDARDS.ONE_PLUS_MG_COMPLIANT,
-    },
-    {
-      value: CONFORMS_TO_STANDARDS.ONE_PLUS_MG_COHORT,
-      label: CONFORMS_TO_STANDARDS.ONE_PLUS_MG_COHORT,
-    },
-  ];
-
-  return values[index];
+  return CONFORMS_TO_OPTIONS[index];
 }
 
 export function addMockConformsTo<T extends SearchedDataset | RetrievedDataset>(
   dataset: T
 ): T {
-  if (dataset.conformsTo && dataset.conformsTo.length > 0) {
+  if (dataset.conformsTo?.length) {
     const hasValidValue = dataset.conformsTo.some((item) => {
       const value = (item.value || "").toLowerCase();
-      return (
-        value.includes("externally governed") ||
-        value.includes("1+mg compliant") ||
-        value.includes("edic controlled")
+      return Array.from(VALID_CONFORMS_TO_VALUES).some((valid) =>
+        value.includes(valid)
       );
     });
 
@@ -61,11 +67,9 @@ export function addMockConformsTo<T extends SearchedDataset | RetrievedDataset>(
     }
   }
 
-  const conformsTo = getRandomConformsTo(dataset.id);
-
   return {
     ...dataset,
-    conformsTo: [conformsTo],
+    conformsTo: [getRandomConformsTo(dataset.id)],
   } as T;
 }
 

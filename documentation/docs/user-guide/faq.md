@@ -1,6 +1,6 @@
 ---
 slug: /faq
-sidebar_label: Frequently asked questions 
+sidebar_label: Frequently asked questions
 sidebar_position: 5
 ---
 
@@ -23,4 +23,3 @@ Approval times vary depending on the dataset, the requirements you provide, and 
 ### Can I access data from multiple countries?
 
 Yes, the GDI Portal enables cross-border access to genomic data across European countries through its federated network approach.
-

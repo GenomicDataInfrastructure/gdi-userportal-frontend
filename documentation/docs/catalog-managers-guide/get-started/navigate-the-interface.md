@@ -50,4 +50,3 @@ Access your personal settings and dashboard from the controls in the top-right c
 - **Profile:** Access your profile settings and preferences
 - **Dashboard:** View your datasets, organisations, and groups
 - **Login/Logout:** Sign in or out of your account
-

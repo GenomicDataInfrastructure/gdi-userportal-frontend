@@ -25,14 +25,13 @@ Then, enter the CKAN container:
 
 `docker compose exec -it ckan-dev bash`
 
-# Local development  
+# Local development
 
 Inside the container, run the following command:
 
 `ckan --config=/srv/app/ckan.ini harvester run-test <id of harvester>`.
 
 The harvester id is the last part of the URL of the harvest source.
-
 
 # GDI CKAN container CRON Job for FAIR Data Harvesting
 
@@ -61,12 +60,9 @@ supervisorctl status
 Upon execution, you should see output similar to the following, indicating that both processes are running correctly:
 
 ```
-ckan_fetch_consumer              RUNNING   
-ckan_gather_consumer             RUNNING   
+ckan_fetch_consumer              RUNNING
+ckan_gather_consumer             RUNNING
 crond                            RUNNING
 ```
 
 This output shows that both `ckan_fetch_consumer`, `ckan_gather_consumer` and `crond` are in the RUNNING state, along with their respective process IDs and uptime, confirming their active operation within the system.
-
-
-

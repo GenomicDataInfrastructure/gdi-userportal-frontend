@@ -37,4 +37,3 @@ As a **catalogue manager** of your organisation, you are responsible for:
 - **Maintain quality:** Ensure data descriptions meet standards
 - **Collaborate with teams:** Work with colleagues on data publishing
 - **Support data users:** Help researchers find relevant datasets
-

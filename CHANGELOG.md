@@ -12,21 +12,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+
 ## [v1.5.0] - 2025-11-28
 
 ### Changed
+
 - doc: replace bullet by header in contributions by @Bruno Pacheco in 91e7b09
 - doc: update CHANGELOG.md for v1.4.0 by @LNDS-Sysadmins in afb40eb
-
 
 ## [v1.4.0] - 2025-11-28
 
 ### Added
+
 - feat: add DATETIME and NUMBER filter components (#712) by @Inderpal Singh in f486164
 - feat: add footer feature flag (#669) by @RaniaHamdani2 in bb8e0bd
 
-
 ### Changed
+
 - doc: rearrange contributing organizations section by @Bruno Pacheco in 3a8e4bf
 - chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.7-1763382208 by @Renovate Bot in f7515d0
 - chore(deps): update actions/checkout action to v5.0.1 by @Renovate Bot in 2594bcb
@@ -82,8 +84,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.6-1752501970 by @Renovate Bot in 5c49080
 - doc: update CHANGELOG.md for v1.3.10 by @LNDS-Sysadmins in b37eb10
 
-
 ### Fixed
+
 - fix: temporarily disable ORT in release workflow (#716) by @Inderpal Singh in e8de6b4
 - fix: upgrade node-forge to 1.3.2 to fix CVE-2025-12816 (#713) by @Inderpal Singh in 63fea26
 - fix: increase ORT Java heap memory to 6GB (#706) by @Inderpal Singh in 318f8aa
@@ -111,16 +113,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - docs: ♯14672 fix format and license date by @Rania Hamdani in 91cfe85
 - fix: ♯14672 address sourcery comments by @Rania Hamdani in 80c2660
 
-
 ### Removed
+
 - removed duplicate reference file by @Rhocela Pasigna in 74486d8
 
-
 ### Security
+
 - Fix/snyk vulnerabilities (#680) by @RaniaHamdani2 in 2a8727a
 - Fix/snyk vulnerabilities (#677) by @RaniaHamdani2 in 2b4aaa8
-
-
 
 ## [v1.3.10] - 2025-07-08
 

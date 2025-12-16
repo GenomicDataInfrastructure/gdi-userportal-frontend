@@ -30,7 +30,7 @@ On the Profile Settings page, you can view and update:
 - **Email:** Your contact email address
 - **Organisation:** Your affiliated organisation (if applicable)
 - **Preferences:** Notification and display preferences
-<!-- 
+<!--
 <figure>
 <img src="img/catalogue-managers-guide/profile/profile-settings-page.png" alt="Profile settings page showing editable fields" width="700" />
 <figcaption></figcaption>

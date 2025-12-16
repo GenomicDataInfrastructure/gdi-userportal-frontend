@@ -4,9 +4,10 @@ sidebar_position: 2
 
 # Add datasets to groups
 
-In this guide  
+In this guide
+
 > [Add datasets to a group](#add-datasets-to-a-group)  
-> [Remove datasets from a group](#remove-datasets-from-a-group)  
+> [Remove datasets from a group](#remove-datasets-from-a-group)
 
 <br/>
 
@@ -42,8 +43,4 @@ To remove a dataset from a group:
 <figure>
     <img src="/gdi-userportal-frontend/img/catalogue-managers-guide/group-datasets/remove-dataset-from-group.png" alt="Remove button appearing on hover over a group in the dataset groups tab" width="800" />
     <figcaption></figcaption>
-</figure> 
-
-
-
-
+</figure>

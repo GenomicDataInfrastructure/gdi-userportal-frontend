@@ -16,7 +16,6 @@ Sign in to build and manage your organisation's genomic data catalogue.
 - **Manage organisations** to control access and collaboration within your institution.
 - **Publish datasets** to make them available and discoverable in the GDI Data Portal.
 
-
 ## Sign in
 
 1. Request for an account from your organisation's Catalogue Manager administrator.
@@ -30,11 +29,9 @@ Sign in to build and manage your organisation's genomic data catalogue.
     <figcaption></figcaption>
 </figure>
 
-
 4. Enter your **username or email** and **password**.
 
 5. Select **Login**.
-
 
 <!-- SSO feature is under development for CKAN -- current sign in requires manually entering credentials.
 

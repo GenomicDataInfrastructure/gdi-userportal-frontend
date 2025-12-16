@@ -1,6 +1,7 @@
 ---
 title: Schemas format, extension and management
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 Stichting Health-RI
 SPDX-FileContributor: PNED G.I.E.
@@ -30,22 +31,22 @@ A field in CKAN schema .json file can be of the following format:
 
 where
 
-* `field_name` is CKAN field id
-* `label` is UI field representation
-* `help_text` is a text appearing under a field in the UI next to `i` icon, square brackets are omitted and in this particular example contain information about how this field maps to DCAT-AP. More about these mapping and custom fields read [CKAN DB Structure and Fields Mapping Strategy](https://health-ri.atlassian.net/wiki/spaces/HD/pages/184811642/WIP+CKAN+DB+Structure+and+Fields+Mapping+Strategy).
+- `field_name` is CKAN field id
+- `label` is UI field representation
+- `help_text` is a text appearing under a field in the UI next to `i` icon, square brackets are omitted and in this particular example contain information about how this field maps to DCAT-AP. More about these mapping and custom fields read [CKAN DB Structure and Fields Mapping Strategy](https://health-ri.atlassian.net/wiki/spaces/HD/pages/184811642/WIP+CKAN+DB+Structure+and+Fields+Mapping+Strategy).
 
 Documentation on field keys and other schemas specifications can be found in the [CKAN GitHub official repository.](https://github.com/ckan/ckanext-scheming/tree/release-3.0.0#field-keys)
 
 Other possible fields keys are:
 
-* `repeating_subfields` - maybe useful to solve cardinality issue, not used by Civity.
-* `start_form_page` - not used by Civity, added recently, refers to stages on create dataset page and manages which field will appear on which stage.
-* `choices` - for a drop-down - a list of dictionaries with a value and label.
-* `choices_helper` - to form a drop-down dynamically or from an API. It is possible for example to point to another schema and take a field from there.
-* `presets` - values like `radio`, `multiple_checkbox`, `date` - to enable automatic checks and not to define snippets.
-* `form_snippet` - interacts with CKAN UI, defines a field representation (related to data input), if do not want to use presets or want to have more control. jinja2-based format.
-* `display_snippet` - also interacts with CKAN UI, defines how data are shown in the UI, e.g. showing an e-mail as “mail to“ link etc.
-* `display_property` - useful if you need to override representation, e.g. in case you have mapping to DCAT, then:
+- `repeating_subfields` - maybe useful to solve cardinality issue, not used by Civity.
+- `start_form_page` - not used by Civity, added recently, refers to stages on create dataset page and manages which field will appear on which stage.
+- `choices` - for a drop-down - a list of dictionaries with a value and label.
+- `choices_helper` - to form a drop-down dynamically or from an API. It is possible for example to point to another schema and take a field from there.
+- `presets` - values like `radio`, `multiple_checkbox`, `date` - to enable automatic checks and not to define snippets.
+- `form_snippet` - interacts with CKAN UI, defines a field representation (related to data input), if do not want to use presets or want to have more control. jinja2-based format.
+- `display_snippet` - also interacts with CKAN UI, defines how data are shown in the UI, e.g. showing an e-mail as “mail to“ link etc.
+- `display_property` - useful if you need to override representation, e.g. in case you have mapping to DCAT, then:
 
 ```java
 - field_name: author
@@ -53,8 +54,8 @@ Other possible fields keys are:
   display_property: dc:creator
 ```
 
-* `validators` - to validate data. Available functions are listed in the [official documentation](https://docs.ckan.org/en/2.9/extensions/validators.html) and it is possible to add custom ones. By default there is almost no validation (ignore_missing (accepts if a value is missing) and unicode), if you are specifying a custom one - these two basic needs to be added explicitly. It is possible to write and configure a validation function of your own. To do so one needs to implement an extension where extend a `IValidators` interface so `get_validators()` method returns a custom validation function. See [validation functions documentation](https://docs.ckan.org/en/2.9/extensions/validators.html) for the reference.
-* `output_validators` - complex data structures if assigned to a field are converted to a string in the DB, this field defines a validator on extracting the field from the DB and re-converting to an object.
+- `validators` - to validate data. Available functions are listed in the [official documentation](https://docs.ckan.org/en/2.9/extensions/validators.html) and it is possible to add custom ones. By default there is almost no validation (ignore_missing (accepts if a value is missing) and unicode), if you are specifying a custom one - these two basic needs to be added explicitly. It is possible to write and configure a validation function of your own. To do so one needs to implement an extension where extend a `IValidators` interface so `get_validators()` method returns a custom validation function. See [validation functions documentation](https://docs.ckan.org/en/2.9/extensions/validators.html) for the reference.
+- `output_validators` - complex data structures if assigned to a field are converted to a string in the DB, this field defines a validator on extracting the field from the DB and re-converting to an object.
 
 ### Changing schema in a running CKAN instance
 

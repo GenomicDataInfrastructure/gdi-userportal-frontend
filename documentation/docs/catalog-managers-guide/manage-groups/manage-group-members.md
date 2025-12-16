@@ -4,10 +4,11 @@ sidebar_position: 3
 
 # Manage group members
 
-In this guide  
+In this guide
+
 > [Group member roles](#group-member-roles)  
 > [Add members to a group](#add-members-to-a-group)  
-> [Remove members from a group](#remove-members-from-a-group)  
+> [Remove members from a group](#remove-members-from-a-group)
 
 <br/>
 
@@ -39,7 +40,7 @@ You can add members to a group either **individually** or **in bulk** using a CS
 
 5. To add members in bulk, select **CSV** to download the CSV template, and then fill out the file.
 
-6. Select **Add Member** or upload the CSV file to complete the process. 
+6. Select **Add Member** or upload the CSV file to complete the process.
 
 <!-- TODO: Dev: UI: where to upload CSV file? -->
 
@@ -47,9 +48,8 @@ You can add members to a group either **individually** or **in bulk** using a CS
 
 1. Open the group you want to remove members from.
 
-3. Select **Manage**, and then select the **Members** tab.
+2. Select **Manage**, and then select the **Members** tab.
 
-5. Find the member you want to remove from the list.
+3. Find the member you want to remove from the list.
 
-6. Select the remove icon [x] next to the member's name.
-
+4. Select the remove icon [x] next to the member's name.

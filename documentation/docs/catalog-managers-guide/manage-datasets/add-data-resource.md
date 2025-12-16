@@ -6,7 +6,8 @@ sidebar_position: 3
 
 # Add a data resource to your dataset
 
-In this guide  
+In this guide
+
 > [Add a data resource](#add-a-data-resource)  
 > [Reorder data resources](#reorder-data-resources)
 
@@ -20,15 +21,14 @@ To add a data resource to your dataset:
 
 2. On the dataset details page, select **Manage**.
 
-3. On the left panel under **Resources**, select **Add new resource**. 
+3. On the left panel under **Resources**, select **Add new resource**.
 
 <figure>
     <img src="/gdi-userportal-frontend/img/catalogue-managers-guide/manage-datasets/add-data-resource.png" alt="Screenshot adding a data resource" width="900" />
     <figcaption></figcaption>
 </figure>
 
-
-4. Fill out the data resource form. For guidance on filling out the form, see the definition of properties in the [DCAT-AP Vocabulary](https://semiceu.github.io/DCAT-AP/r5r/releases/3.0.0/). 
+4. Fill out the data resource form. For guidance on filling out the form, see the definition of properties in the [DCAT-AP Vocabulary](https://semiceu.github.io/DCAT-AP/r5r/releases/3.0.0/).
 
 5. Select **Add** to save the data resource, or **Save & add another** to add more data resources.
 
@@ -38,7 +38,6 @@ Once the data resources is added, it appears in the list of data resources for t
     <img src="/gdi-userportal-frontend/img/catalogue-managers-guide/manage-datasets/example-resource-added.png" alt="Screen showing the dataset details page with the newly added data resource" width="700" />
     <figcaption></figcaption>
 </figure>
-
 
 ## Reorder data resources
 
@@ -58,4 +57,3 @@ To reorder data resources:
 </figure>
 
 4. Select **Save order**. The data resources are reordered and displayed in the new sequence on the dataset details page and the Data Portal.
-

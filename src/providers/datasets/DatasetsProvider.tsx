@@ -102,10 +102,13 @@ export default function DatasetsProvider({
   const { activeFilters } = useFilters();
   const [{ datasets, datasetCount, isLoading, errorCode }, dispatch] =
     useReducer(reducer, initialState);
-  const { page, q, sort } = searchParams;
+  const { page, q, sort, beacon } = searchParams;
 
   const fetchDatasets = useCallback(async () => {
     dispatch({ type: DatasetsActionType.LOADING });
+
+    // Get Beacon preference from URL parameter
+    const includeBeacon = beacon === "true";
 
     const options: DatasetSearchQuery = {
       query: q,
@@ -113,6 +116,7 @@ export default function DatasetsProvider({
       sort: sort || "score desc, metadata_modified desc",
       start: page ? (Number(page) - 1) * DATASET_PER_PAGE : 0,
       rows: DATASET_PER_PAGE,
+      includeBeacon,
     };
 
     try {
@@ -133,11 +137,11 @@ export default function DatasetsProvider({
       });
       console.error(error);
     }
-  }, [activeFilters, page, q, sort]);
+  }, [activeFilters, page, q, sort, beacon]);
 
   useEffect(() => {
     fetchDatasets();
-  }, [fetchDatasets, activeFilters, page, q, sort]);
+  }, [fetchDatasets, activeFilters, page, q, sort, beacon]);
 
   return (
     <DatasetsContext.Provider

@@ -1,0 +1,8 @@
+analyzer:
+  skip_excluded: true
+
+excludes:
+  paths:
+    - pattern: "documentation/**"
+      reason: "DOCUMENTATION_OF"
+      comment: "Documentation folder that is not shipped"

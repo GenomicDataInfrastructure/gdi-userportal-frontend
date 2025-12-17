@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
 import { defineConfig, globalIgnores } from 'eslint/config'
 import nextVitals from 'eslint-config-next/core-web-vitals'
 import prettier from 'eslint-config-prettier/flat'

@@ -46,6 +46,7 @@
     "@radix-ui/react-scroll-area": "^1.2.2",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-toast": "^1.2.4",
+    "@zodios/core": "^10.9.6",
     "axios": "^1.13.2",
     "axios-mock-adapter": "^2.1.0",
     "class-variance-authority": "^0.7.1",

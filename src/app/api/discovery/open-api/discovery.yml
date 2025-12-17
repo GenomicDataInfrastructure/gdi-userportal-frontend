@@ -356,18 +356,9 @@ components:
         distributionsCount:
           type: integer
           title: Distributions count
-        conformsTo:
-          type: array
-          items:
-            $ref: "#/components/schemas/ValueLabel"
         url:
           type: string
           title: Dataset URL
-        distributions:
-          type: array
-          items:
-            $ref: "#/components/schemas/RetrievedDistribution"
-          title: Distributions
       required:
         - id
         - title

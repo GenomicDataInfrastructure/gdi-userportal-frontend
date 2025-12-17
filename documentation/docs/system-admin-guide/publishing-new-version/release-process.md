@@ -35,7 +35,7 @@ Commit the `CHANGELOG.md`:
 $ git commit -m "Prepare for release v1.2"
 ```
 
-Push the branch tot remote repository
+Push the branch to the remote repository
 
 ```bash
 $ git push origin releases/v1.2

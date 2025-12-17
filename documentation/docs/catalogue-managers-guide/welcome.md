@@ -8,10 +8,9 @@ sidebar_position: 1
 
 :::info content in progress
 
-We are working on this catalogue manager guide. 
+We are working on this catalogue manager guide.
 
 :::
-
 
 Welcome to the **GDI Dataset Catalogue Portal Guide**! This comprehensive documentation is designed for business users responsible for managing and curating data catalogues within the GDI ecosystem.
 

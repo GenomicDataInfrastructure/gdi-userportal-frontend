@@ -12,7 +12,6 @@ We are working on this guide.
 
 :::
 
-
 Learn how to configure and manage CKAN dataset schemas for the GDI User Portal. This guide covers schema format, field definitions, and deployment procedures.
 
 ## Schema format and field definitions
@@ -37,6 +36,7 @@ A field in CKAN schema JSON file has the following format:
 ```
 
 Where:
+
 - **`field_name`** - CKAN field identifier
 - **`label`** - UI field representation
 - **`help_text`** - Text appearing under field in UI next to `i` icon. Square brackets contain DCAT-AP mapping information
@@ -57,6 +57,7 @@ Available field keys include:
 - **`display_property`** - Override representation for DCAT mapping
 
 Example with display property:
+
 ```json
 {
   "field_name": "author",
@@ -111,10 +112,10 @@ For better maintainability, create a JSON configuration file under extension sch
 ```json
 [
   {
-   "dataset_type": "dataset",
-   "about": "Dataset",
-   "about_url": "https://dataplatform.nl/what-is-a-dataset",
-   "schemas": [
+    "dataset_type": "dataset",
+    "about": "Dataset",
+    "about_url": "https://dataplatform.nl/what-is-a-dataset",
+    "schemas": [
       "ckanext.healthri:scheming/schemas/core_schema.json",
       "ckanext.healthri:scheming/schemas/health_ri.json"
     ]
@@ -129,26 +130,25 @@ Support for multiple schema types:
 ```json
 [
   {
-   "dataset_type": "dataset",
-   "about": "Dataset",
-   "about_url": "https://dataplatform.nl/what-is-a-dataset",
-   "schemas": [
+    "dataset_type": "dataset",
+    "about": "Dataset",
+    "about_url": "https://dataplatform.nl/what-is-a-dataset",
+    "schemas": [
       "ckanext.healthri:scheming/schemas/core_schema.json",
       "ckanext.healthri:scheming/schemas/health_ri.json"
     ]
   },
   {
-   "dataset_type": "geo_dataset",
-   "about": "Geo Document",
-   "about_url": "https://dataplatform.nl/what-is-a-geo-document",
-   "schemas": [
-      "ckanext.healthri:scheming/schemas/geo_document.json"
-    ]
+    "dataset_type": "geo_dataset",
+    "about": "Geo Document",
+    "about_url": "https://dataplatform.nl/what-is-a-geo-document",
+    "schemas": ["ckanext.healthri:scheming/schemas/geo_document.json"]
   }
 ]
 ```
 
 Configure in `ckan.ini`:
+
 ```
 scheming.dataset_multi_schemas = ckanext.healthri:scheming/schemas/multi_schemas.json
 ```
@@ -179,6 +179,7 @@ GET http(s)://<ckan-host>/api/action/scheming_dataset_schema_show?type=<dataset_
 ### Search configuration
 
 Control dataset type visibility in search with:
+
 ```
 ckan.search.show_all_types = true
 ```

@@ -8,10 +8,9 @@ sidebar_position: 1
 
 :::info content in progress
 
-We are working on this deployment guide. 
+We are working on this deployment guide.
 
 :::
-
 
 Welcome to the **GDI User Portal System Administration Guide**! This comprehensive documentation is designed for system administrators responsible for deploying, configuring, and maintaining the GDI User Portal platform and its associated services.
 

@@ -8,10 +8,9 @@ sidebar_position: 1
 
 :::info content in progress
 
-We are working on this developer guide. 
+We are working on this developer guide.
 
 :::
-
 
 Welcome to the **GDI User Portal Developer Guide**! This comprehensive documentation will help you contribute to the Genomic Data Infrastructure (GDI) User Portal platform, whether you're developing new features, fixing bugs, or extending functionality.
 
@@ -40,4 +39,3 @@ Choose your development focus:
 Before contributing, review our coding standards and follow the established Git workflow. Ensure comprehensive testing coverage and update documentation for new features.
 
 **GitHub Repository:** [GenomicDataInfrastructure/gdi-userportal-frontend](https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend)
-

@@ -15,10 +15,12 @@ Understanding CKAN user roles is essential for effective system administration. 
 ### Platform-level roles
 
 #### 1. Visitor
+
 - **Capabilities**: Search and view public datasets
 - **Access level**: Anonymous/unauthenticated users
 
 #### 2. Registered User
+
 - **Capabilities**:
   - Become a member of an organisation (requires admin approval)
   - Publish, edit, or add datasets based on their role in the organisation
@@ -26,6 +28,7 @@ Understanding CKAN user roles is essential for effective system administration. 
 - **Configuration note**: Creation of organisations is typically disabled for regular users
 
 #### 3. Sysadmin
+
 - **Capabilities**:
   - Access and edit any organisations
   - View and change user details
@@ -36,10 +39,12 @@ Understanding CKAN user roles is essential for effective system administration. 
 ### Organisation-level roles
 
 #### 1. Member
+
 - **Capabilities**: View the organisation's private datasets
 - **Use case**: Users who need access to restricted organisational data
 
 #### 2. Editor
+
 - **Capabilities**:
   - All capabilities of a Member
   - Add new datasets to the organisation
@@ -48,6 +53,7 @@ Understanding CKAN user roles is essential for effective system administration. 
 - **Use case**: Content contributors and data curators
 
 #### 3. Organisation Admin
+
 - **Capabilities**:
   - All capabilities of an Editor
   - Add users to the organisation, and set their role (member, editor, or admin)
@@ -60,12 +66,15 @@ Understanding CKAN user roles is essential for effective system administration. 
 ## User management procedures
 
 ### Configure platform roles
+
 Use CKAN's admin interface to manage platform-level user permissions and system access.
 
 ### Set up organisation permissions
+
 Configure organisation-specific roles and manage member access to datasets within organisational boundaries.
 
 ### Role assignment best practices
+
 - Follow principle of least privilege
 - Regular audit of user permissions
 - Document role assignments and changes
@@ -105,6 +114,7 @@ For complete activity configuration options, see [CKAN activity settings documen
 ## Next steps
 
 After configuring user roles:
+
 - [Manage data and services](../manage-data-services) - Set up data management workflows
 - [Monitor and maintain the system](../monitor-maintain) - Ongoing system maintenance
 - [Deploy and manage infrastructure](../deploy-infrastructure) - Infrastructure management

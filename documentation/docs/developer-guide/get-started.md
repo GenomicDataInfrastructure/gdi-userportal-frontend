@@ -12,7 +12,6 @@ We are working on this guide.
 
 :::
 
-
 This guide helps you set up a complete development environment for the GDI User Portal platform, including all necessary tools and dependencies.
 
 ## Prerequisites
@@ -76,6 +75,7 @@ docker-compose -f docker-compose.dev.yml up -d
 ```
 
 This starts:
+
 - CKAN instance with GDI extensions
 - PostgreSQL database
 - Keycloak authentication server
@@ -114,12 +114,14 @@ src/
 ## Local development workflow
 
 ### 1. Feature development
+
 - Create feature branches from `main`
 - Use descriptive commit messages
 - Follow the established coding conventions
 - Write tests for new functionality
 
 ### 2. Testing
+
 Run the test suite before committing:
 
 ```bash
@@ -130,6 +132,7 @@ npm run type-check # TypeScript checking
 ```
 
 ### 3. Code quality
+
 Maintain code quality with automated tools:
 
 ```bash
@@ -140,15 +143,15 @@ npm run eslint    # Check for linting issues
 ## Backend services integration
 
 ### Dataset Discovery Service
+
 The DDS provides abstraction over CKAN APIs. For local development:
 
 - Repository: [gdi-userportal-dataset-discovery-service](https://github.com/GenomicDataInfrastructure/gdi-userportal-dataset-discovery-service)
 - Local URL: `http://localhost:8080`
 
-### Access Management Service  
+### Access Management Service
+
 The AMS handles access requests and user permissions:
 
 - Repository: [gdi-userportal-access-management-service](https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service)
 - Local URL: `http://localhost:8081`
-
-

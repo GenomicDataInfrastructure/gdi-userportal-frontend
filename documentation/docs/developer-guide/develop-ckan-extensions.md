@@ -52,6 +52,7 @@ pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.10.5#egg=ckan'
 #### PyYAML compatibility issues
 
 For CKAN v2.9.10, if you encounter this error:
+
 ```
 TypeError: load() missing 1 required positional argument: 'Loader'
 ```
@@ -69,14 +70,15 @@ pip install -e file:///<path to local extension repo>/ckan-fairdatapoint#egg=cka
 ```
 
 Example on macOS:
+
 ```bash
-pip install -e file:///Users/<username>/Github/gdi-userportal-ckanext-fairdatapoint#egg=ckanext-fairdatapoint  
+pip install -e file:///Users/<username>/Github/gdi-userportal-ckanext-fairdatapoint#egg=ckanext-fairdatapoint
 ```
 
 #### Install from GitHub
 
 ```bash
-pip3 install -e git+https://github.com/ckan/ckanext-dcat.git@v2.1.0#egg=ckanext-dcat 
+pip3 install -e git+https://github.com/ckan/ckanext-dcat.git@v2.1.0#egg=ckanext-dcat
 ```
 
 #### Install extension dependencies
@@ -87,9 +89,10 @@ pip install -r <path to local extension repo>/dev-requirements.txt
 ```
 
 Example for ckanext-harvest:
+
 ```bash
-pip3 install -r https://raw.githubusercontent.com/ckan/ckanext-harvest/master/requirements.txt 
-pip3 install -r https://raw.githubusercontent.com/ckan/ckanext-harvest/master/dev-requirements.txt  
+pip3 install -r https://raw.githubusercontent.com/ckan/ckanext-harvest/master/requirements.txt
+pip3 install -r https://raw.githubusercontent.com/ckan/ckanext-harvest/master/dev-requirements.txt
 ```
 
 ### 5. Configure database
@@ -103,11 +106,13 @@ Testing strategy depends on extension functionality. CKAN provides helper functi
 ### Testing setup
 
 1. **Install pytest-ckan**: Should be in extension's `dev-requirements.txt`
+
    ```bash
    pip install pytest-ckan  # if not already installed
    ```
 
 2. **Configure test.ini**: Point to CKAN's test configuration
+
    ```ini
    [app:main]
    use = config:/etc/ckan/default/src/ckan/test-core.ini
@@ -137,6 +142,7 @@ pytest --ckan-ini=test.ini --disable-warnings ./ckanext/fairdatapoint --cov ./ck
 #### PyCharm configuration
 
 Set environment variable:
+
 ```bash
 CKAN_INI=test.ini
 ```
@@ -152,6 +158,7 @@ CKAN_INI=test.ini
 ## Extension development workflow
 
 For detailed extension development procedures, see:
+
 - [Add and modify features](../add-modify-features) - Complete feature development guide
 - [Work with backend services](../work-with-backend) - Integration patterns
 - [CKAN extensions documentation](https://docs.ckan.org/en/latest/extensions/index.html) - Official guide
@@ -159,6 +166,7 @@ For detailed extension development procedures, see:
 ## Next steps
 
 After setting up your development environment:
+
 - **[Add and modify features](../add-modify-features)** - Build complete features
 - **[Work with backend services](../work-with-backend)** - Integrate with GDI services
 - **[Get started](../get-started)** - Review overall development setup

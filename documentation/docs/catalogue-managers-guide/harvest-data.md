@@ -17,6 +17,7 @@ Data harvesting is a crucial process for automatically collecting and integratin
 ## Overview
 
 The GDI User Portal supports harvesting from multiple data source types:
+
 - FAIR Data Points
 - DCAT-AP endpoints
 - Other CKAN instances
@@ -25,13 +26,17 @@ The GDI User Portal supports harvesting from multiple data source types:
 ## Harvesting tasks
 
 ### Set up harvesters
+
 Learn how to configure and deploy harvesters for different data sources, including authentication and scheduling options.
 
 ### Harvest from FAIR Data Points
+
 Specific guidance for harvesting metadata from FAIR Data Point implementations, including configuration requirements and best practices.
 
 ### Harvest DCAT-AP data
+
 Instructions for setting up DCAT-AP harvesters to collect standardised metadata from European data portals and catalogues.
 
 ### Troubleshoot harvest issues
+
 Common problems and solutions for harvesting operations, including network issues, authentication failures, and data mapping problems.

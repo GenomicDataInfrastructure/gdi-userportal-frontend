@@ -3,6 +3,7 @@ slug: /elixir-lu
 sidebar_label: "Elixir LU"
 sidebar_position: 2
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -10,6 +11,7 @@ SPDX-License-Identifier: CC-BY-4.0
 -->
 
 ### Current deployment
+
 - `portal.dev.gdi.lu` - User Portal
 - `id.portal.dev.gdi.lu` - IAM
 - `api.portal.dev.gdi.lu` - API Gateway

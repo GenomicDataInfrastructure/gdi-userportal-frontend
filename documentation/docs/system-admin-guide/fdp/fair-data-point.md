@@ -21,7 +21,7 @@ To add GDI-specific SHACL validation, perform the following steps:
 
 #### Step 1: Download SHACL Shapes
 
-- Access the GDI-specific SHACL shapes from this [GDI metadata repository](<https://github.com/GenomicDataInfrastructure/gdi-metadata/tree/main/Formulasation(shacl)/core/PiecesShape>).
+- Access the GDI-specific SHACL shapes from this [GDI metadata repository](https://github.com/GenomicDataInfrastructure/gdi-metadata).
 - Download each SHACL shape file (e.g., `Resource.ttl` and others).
 
 #### Step 2: Upload SHACL Shapes to FDP

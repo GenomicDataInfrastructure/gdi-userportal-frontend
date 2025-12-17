@@ -19,7 +19,7 @@ This guide will walk you through the process of deploying an environment using A
 - **Azure CLI installed:** Make sure you have Azure CLI installed on your machine. You can install it via Homebrew with the command `brew install azure-cli`.
 - **GitHub Personal Access Token (classic):** You'll need a personal access token from GitHub with pack read permissions.
 - **Azure Account with Sufficient Permissions:** Ensure you have an Azure account with permissions that, at a minimum, allow you to create a resource group.
-- **PSQL installed:** Ensure that PSQL is installed (eg. `sudo apt-get install postgresql -y`)
+- **PSQL installed:** Ensure that PSQL is installed (e.g. `sudo apt-get install postgresql -y`)
 
 ## Initial Setup
 

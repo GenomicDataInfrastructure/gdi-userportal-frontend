@@ -16,7 +16,7 @@ import {
   DialogTitle,
 } from "@/components/shadcn/dialog";
 
-type ExternalDatasetDialogLinkProps = {
+type ExternalDatasetConfirmationDialogProps = {
   url: string;
   onOpenChange?: (open: boolean) => void;
   children: (handlers: {
@@ -24,11 +24,11 @@ type ExternalDatasetDialogLinkProps = {
   }) => React.ReactNode;
 };
 
-export function ExternalDatasetDialogLink({
+export function ExternalDatasetConfirmationDialog({
   url,
   onOpenChange,
   children,
-}: ExternalDatasetDialogLinkProps) {
+}: ExternalDatasetConfirmationDialogProps) {
   const [showDialog, setShowDialog] = useState(false);
 
   const handleConfirm = () => {
@@ -82,6 +82,9 @@ export function ExternalDatasetDialogLink({
   );
 }
 
+// Backwards compatibility export
+export const ExternalDatasetDialogLink = ExternalDatasetConfirmationDialog;
+
 type ExternalDatasetCardLinkProps = {
   url: string;
 };
@@ -90,7 +93,7 @@ export default function ExternalDatasetCardLink({
   url,
 }: ExternalDatasetCardLinkProps) {
   return (
-    <ExternalDatasetDialogLink url={url}>
+    <ExternalDatasetConfirmationDialog url={url}>
       {({ onClick }) => (
         <button
           onClick={onClick}
@@ -99,6 +102,6 @@ export default function ExternalDatasetCardLink({
           View External →
         </button>
       )}
-    </ExternalDatasetDialogLink>
+    </ExternalDatasetConfirmationDialog>
   );
 }

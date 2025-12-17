@@ -4,7 +4,7 @@
 
 "use client";
 
-import { ExternalDatasetDialogLink } from "@/components/ExternalDatasetCardLink";
+import { ExternalDatasetConfirmationDialog } from "@/components/ExternalDatasetCardLink";
 
 type ExternalDatasetLinkProps = {
   url: string;
@@ -12,7 +12,7 @@ type ExternalDatasetLinkProps = {
 
 export default function ExternalDatasetLink({ url }: ExternalDatasetLinkProps) {
   return (
-    <ExternalDatasetDialogLink url={url}>
+    <ExternalDatasetConfirmationDialog url={url}>
       {({ onClick }) => (
         <button
           onClick={onClick}
@@ -22,6 +22,6 @@ export default function ExternalDatasetLink({ url }: ExternalDatasetLinkProps) {
           <span>→</span>
         </button>
       )}
-    </ExternalDatasetDialogLink>
+    </ExternalDatasetConfirmationDialog>
   );
 }

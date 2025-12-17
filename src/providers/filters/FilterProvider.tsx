@@ -61,8 +61,8 @@ function reducer(
         activeFilters:
           existingIndex >= 0
             ? state.activeFilters.map((f, i) =>
-                i === existingIndex ? updatedFilter : f
-              )
+              i === existingIndex ? updatedFilter : f
+            )
             : [...state.activeFilters, updatedFilter],
         error: null,
       };
@@ -117,10 +117,6 @@ function FilterProvider({ children }: { children: React.ReactNode }) {
     initialState
   );
 
-  useEffect(() => {
-    retrieveFilters();
-  }, []);
-
   const retrieveFilters = async () => {
     dispatch({ type: FilterActionType.LOADING });
 
@@ -139,6 +135,10 @@ function FilterProvider({ children }: { children: React.ReactNode }) {
       });
     }
   };
+
+  useEffect(() => {
+    retrieveFilters();
+  }, []);
 
   const addActiveFilter = (filter: ActiveFilter) => {
     dispatch({ type: FilterActionType.ACTIVE_FILTER_ADDED, payload: filter });

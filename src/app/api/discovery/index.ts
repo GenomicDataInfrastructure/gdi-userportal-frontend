@@ -26,11 +26,13 @@ export const retrieveFilterValuesApi = async (key: string) => {
 
 export const searchDatasetsApi = async (options: DatasetSearchQuery) => {
   const headers = await createHeaders();
-  return await discoveryClient.dataset_search(options, { headers });
+  const response = await discoveryClient.dataset_search(options, { headers });
+  return response;
 };
 
 export const retrieveDatasetApi = async (id: string) => {
-  return await discoveryClient.retrieve_dataset({ params: { id } });
+  const dataset = await discoveryClient.retrieve_dataset({ params: { id } });
+  return dataset;
 };
 
 export const retrieveDatasetInSpecifiedFormat = async (

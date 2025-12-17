@@ -8,7 +8,6 @@ import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { truncateDescription } from "@/utils/textProcessing";
 import {
   isExternalDataset,
-  getConformsToLabel,
   getFirstAccessUrl,
 } from "@/utils/datasetHelpers";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
@@ -36,7 +35,6 @@ function DatasetCard({
 
   const isInBasket = basket.some((ds) => ds.id === dataset.id);
   const isExternal = isExternalDataset(dataset);
-  const conformsToLabel = getConformsToLabel(dataset);
   const externalAccessUrl = getFirstAccessUrl(dataset.distributions);
 
   const toggleDatasetInBasket = (e: React.MouseEvent) => {
@@ -82,7 +80,6 @@ function DatasetCard({
       keywords={dataset.keywords?.map((keyword) =>
         typeof keyword === "string" ? keyword : keyword.label
       )}
-      conformsTo={conformsToLabel}
       externalUrl={isExternal ? externalAccessUrl : undefined}
       button={isExternal ? undefined : renderButton()}
     />

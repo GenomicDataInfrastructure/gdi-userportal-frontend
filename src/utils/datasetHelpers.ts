@@ -42,13 +42,3 @@ export function getFirstAccessUrl(
 
   return undefined;
 }
-
-export function getConformsToLabel(
-  dataset: SearchedDataset | RetrievedDataset
-): string | undefined {
-  if (!dataset.conformsTo?.length) {
-    return undefined;
-  }
-
-  return dataset.conformsTo.map((item) => item.label || item.value).join(", ");
-}

@@ -13,7 +13,6 @@ import Tooltip from "./Tooltip";
 import { createDatasetSidebarItems } from "./sidebarItems";
 import { retrieveDatasetApi } from "../../api/discovery";
 import { UrlParams, UrlSearchParams } from "@/app/params";
-import { getConformsToLabel } from "@/utils/datasetHelpers";
 
 type DatasetDetailsPageProps = {
   params: Promise<UrlParams>;
@@ -37,8 +36,6 @@ export default async function Page({
     const relationships = dataset.datasetRelationships || [];
 
     const dictionary = dataset.dataDictionary || [];
-
-    const conformsToLabel = getConformsToLabel(dataset);
 
     return (
       <PageContainer searchParams={_searchParams}>
@@ -65,13 +62,29 @@ export default async function Page({
               </ul>
             </div>
 
-            {conformsToLabel && (
+            {dataset.conformsTo && dataset.conformsTo.length > 0 ? (
+              <div className="flex items-start gap-2 flex-wrap">
+                <span className="text-sm font-semibold text-gray-700">
+                  Conforms To:
+                </span>
+                <div className="flex gap-2 flex-wrap">
+                  {dataset.conformsTo.map((item) => (
+                    <span
+                      key={item.value}
+                      className="text-sm font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20"
+                    >
+                      {item.label || item.value}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : (
               <div className="flex items-center gap-2">
                 <span className="text-sm font-semibold text-gray-700">
                   Conforms To:
                 </span>
-                <span className="text-sm font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20">
-                  {conformsToLabel}
+                <span className="text-sm font-semibold px-3 py-1 rounded-full bg-gray/10 text-gray border border-gray/20">
+                  NA
                 </span>
               </div>
             )}

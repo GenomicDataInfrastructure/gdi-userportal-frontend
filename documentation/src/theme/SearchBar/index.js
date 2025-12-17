@@ -29,10 +29,10 @@ export default function SearchBar() {
 
     // Check for catalog managers guide paths FIRST (more specific)
     if (
-      path.includes("/catalog-managers-guide/") ||
+      path.includes("/catalogue-managers-guide/") ||
       path.includes("/welcome-catalogue-managers")
     ) {
-      newScope = "catalog-managers-guide";
+      newScope = "catalogue-managers-guide";
     }
     // Check for developer guide paths
     else if (
@@ -149,8 +149,8 @@ export default function SearchBar() {
         return "Search all documentation";
       case "user-guide":
         return "Search data user guide";
-      case "catalog-managers-guide":
-        return "Search catalog manager guide";
+      case "catalogue-managers-guide":
+        return "Search catalogue manager guide";
       case "system-admin-guide":
         return "Search system admin guide";
       case "developer-guide":

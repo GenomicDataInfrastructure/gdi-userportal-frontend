@@ -64,7 +64,7 @@ export default function Home() {
                   <p className={styles.homeSubtext}>
                     I'm a catalogue manager, admin, or{" "}
                     <strong>back-office staff</strong> who manages my
-                    organisation's genomic data catalog.
+                    organisation's genomic data catalogue.
                   </p>
                 </div>
               </div>

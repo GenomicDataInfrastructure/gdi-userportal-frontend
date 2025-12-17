@@ -99,7 +99,7 @@
       "guide": "user-guide"
     }
   ],
-  "catalog-managers-guide": [
+  "catalogue-managers-guide": [
     {
       "id": "/gdi-userportal-frontend/catalog-managers-guide/about-gdi",
       "url": "/gdi-userportal-frontend/catalog-managers-guide/about-gdi",
@@ -386,7 +386,7 @@
       "id": "/gdi-userportal-frontend/system-admin-guide/welcome",
       "url": "/gdi-userportal-frontend/system-admin-guide/welcome",
       "title": "welcome",
-      "content": "We're almost there :::info Please check back soon! We're still working on this section. We're building a comprehensive documentation to help you deploy, configure, and maintain the GDI User Portal platform. In the meantime, you can explore the Data users guide to understand the platform from an end-user perspective. :::",
+      "content": "Welcome, system administrators :::info content in progress We are working on this deployment guide. ::: Welcome to the GDI User Portal System Administration Guide! This comprehensive documentation is designed for system administrators responsible for deploying, configuring, and maintaining the GDI User Portal platform and its associated services. Get started Choose your focus area based on your immediate needs: - New deployment? Start with Deploy and manage infrastructure - Setting up users? Begin with Set up authentication and authorisation - Managing access? Go to Manage user roles and permissions - Configuring data? Check out Manage data and services - System health? Explore Monitor and maintain the system This guide provides the technical knowledge you need to successfully deploy and maintain the GDI User Portal platform for the European genomic data research community.",
       "guide": "system-admin-guide"
     }
   ],
@@ -402,7 +402,14 @@
       "id": "/gdi-userportal-frontend/developer-guide/welcome",
       "url": "/gdi-userportal-frontend/developer-guide/welcome",
       "title": "welcome",
-      "content": "We're almost there :::info Please check back soon! We're still working on this section. We're building a comprehensive documentation to help you contribute to the GDI User Portal platform. In the meantime, you can explore the Data users guide to understand the platform from an end-user perspective. :::",
+      "content": "Welcome, developers :::info content in progress We are working on this developer guide. ::: Welcome to the GDI User Portal Developer Guide! This comprehensive documentation will help you contribute to the Genomic Data Infrastructure (GDI) User Portal platform, whether you're developing new features, fixing bugs, or extending functionality. Development overview The GDI User Portal is built with modern web technologies and follows best practices for scalability, security, and maintainability: - Frontend: Next.js with TypeScript - Backend Services: Java/Spring Boot microservices - Data Catalogue: CKAN with custom extensions - Authentication: Keycloak with LS-AAI integration - Containerisation: Docker and Docker Compose Getting started Choose your development focus: - New to the project? Start with Get started - Frontend development? Go to Develop frontend features - Backend integration? Check out Work with backend services - CKAN extensions? Explore Develop CKAN extensions - Feature development? See Add and modify features Contributing Before contributing, review our coding standards and follow the established Git workflow. Ensure comprehensive testing coverage and update documentation for new features. GitHub Repository: GenomicDataInfrastructure/gdi-userportal-frontend",
+      "guide": "developer-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/developer-guide/work-with-backend",
+      "url": "/gdi-userportal-frontend/developer-guide/work-with-backend",
+      "title": "work with backend",
+      "content": "Work with backend services The GDI User Portal integrates with multiple backend services to provide comprehensive genomic data infrastructure functionality. This section covers integration patterns, API communication, and service orchestration. Backend architecture Service overview The platform consists of several interconnected services: - Dataset Discovery Service (DDS) - Data catalogue API abstraction - Access Management Service (AMS) - Access control and requests - CKAN - Core data catalogue system - Keycloak - Authentication and authorisation - PostgreSQL - Data persistence - Solr - Search and indexing Service communication Services communicate using: - REST APIs with JSON payloads - OAuth2/OpenID Connect for authentication - Service-to-service authentication tokens - Event-driven patterns for asynchronous operations Dataset Discovery Service integration Integrate Dataset Discovery Service The DDS provides a clean API layer over CKAN, abstracting complex CKAN operations and providing enhanced functionality. API Endpoints Dataset Search and Retrieval React Integration Access Management Service integration Connect Access Management Service The AMS handles all aspects of data access requests, user permissions, and compliance tracking. Access Request Flow AMS Client Implementation Authentication flow implementation Implement authentication flows Integration with Keycloak and LS-AAI requires careful handling of OAuth2 flows and token management. NextAuth Configuration Token management Error handling and resilience Service error handling Implement robust error handling for service communication: Retry logic Service monitoring and logging Health checks Implement service health monitoring: Testing backend integration Integration testing Mocking services Next steps After mastering backend integration: - Add and modify features - Build complete features - Develop frontend features - Enhance user interfaces - Get started - Review development setup",
       "guide": "developer-guide"
     }
   ],
@@ -789,7 +796,7 @@
       "id": "/gdi-userportal-frontend/system-admin-guide/welcome",
       "url": "/gdi-userportal-frontend/system-admin-guide/welcome",
       "title": "welcome",
-      "content": "We're almost there :::info Please check back soon! We're still working on this section. We're building a comprehensive documentation to help you deploy, configure, and maintain the GDI User Portal platform. In the meantime, you can explore the Data users guide to understand the platform from an end-user perspective. :::",
+      "content": "Welcome, system administrators :::info content in progress We are working on this deployment guide. ::: Welcome to the GDI User Portal System Administration Guide! This comprehensive documentation is designed for system administrators responsible for deploying, configuring, and maintaining the GDI User Portal platform and its associated services. Get started Choose your focus area based on your immediate needs: - New deployment? Start with Deploy and manage infrastructure - Setting up users? Begin with Set up authentication and authorisation - Managing access? Go to Manage user roles and permissions - Configuring data? Check out Manage data and services - System health? Explore Monitor and maintain the system This guide provides the technical knowledge you need to successfully deploy and maintain the GDI User Portal platform for the European genomic data research community.",
       "guide": "system-admin-guide"
     },
     {
@@ -803,7 +810,14 @@
       "id": "/gdi-userportal-frontend/developer-guide/welcome",
       "url": "/gdi-userportal-frontend/developer-guide/welcome",
       "title": "welcome",
-      "content": "We're almost there :::info Please check back soon! We're still working on this section. We're building a comprehensive documentation to help you contribute to the GDI User Portal platform. In the meantime, you can explore the Data users guide to understand the platform from an end-user perspective. :::",
+      "content": "Welcome, developers :::info content in progress We are working on this developer guide. ::: Welcome to the GDI User Portal Developer Guide! This comprehensive documentation will help you contribute to the Genomic Data Infrastructure (GDI) User Portal platform, whether you're developing new features, fixing bugs, or extending functionality. Development overview The GDI User Portal is built with modern web technologies and follows best practices for scalability, security, and maintainability: - Frontend: Next.js with TypeScript - Backend Services: Java/Spring Boot microservices - Data Catalogue: CKAN with custom extensions - Authentication: Keycloak with LS-AAI integration - Containerisation: Docker and Docker Compose Getting started Choose your development focus: - New to the project? Start with Get started - Frontend development? Go to Develop frontend features - Backend integration? Check out Work with backend services - CKAN extensions? Explore Develop CKAN extensions - Feature development? See Add and modify features Contributing Before contributing, review our coding standards and follow the established Git workflow. Ensure comprehensive testing coverage and update documentation for new features. GitHub Repository: GenomicDataInfrastructure/gdi-userportal-frontend",
+      "guide": "developer-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/developer-guide/work-with-backend",
+      "url": "/gdi-userportal-frontend/developer-guide/work-with-backend",
+      "title": "work with backend",
+      "content": "Work with backend services The GDI User Portal integrates with multiple backend services to provide comprehensive genomic data infrastructure functionality. This section covers integration patterns, API communication, and service orchestration. Backend architecture Service overview The platform consists of several interconnected services: - Dataset Discovery Service (DDS) - Data catalogue API abstraction - Access Management Service (AMS) - Access control and requests - CKAN - Core data catalogue system - Keycloak - Authentication and authorisation - PostgreSQL - Data persistence - Solr - Search and indexing Service communication Services communicate using: - REST APIs with JSON payloads - OAuth2/OpenID Connect for authentication - Service-to-service authentication tokens - Event-driven patterns for asynchronous operations Dataset Discovery Service integration Integrate Dataset Discovery Service The DDS provides a clean API layer over CKAN, abstracting complex CKAN operations and providing enhanced functionality. API Endpoints Dataset Search and Retrieval React Integration Access Management Service integration Connect Access Management Service The AMS handles all aspects of data access requests, user permissions, and compliance tracking. Access Request Flow AMS Client Implementation Authentication flow implementation Implement authentication flows Integration with Keycloak and LS-AAI requires careful handling of OAuth2 flows and token management. NextAuth Configuration Token management Error handling and resilience Service error handling Implement robust error handling for service communication: Retry logic Service monitoring and logging Health checks Implement service health monitoring: Testing backend integration Integration testing Mocking services Next steps After mastering backend integration: - Add and modify features - Build complete features - Develop frontend features - Enhance user interfaces - Get started - Review development setup",
       "guide": "developer-guide"
     }
   ]

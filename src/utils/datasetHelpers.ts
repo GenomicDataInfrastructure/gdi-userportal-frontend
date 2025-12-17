@@ -22,10 +22,9 @@ export function isExternalDataset(
     return false;
   }
 
-  return dataset.conformsTo.some((item) => {
-    const valueOrLabel = (item.value || item.label || "").toLowerCase();
-    return valueOrLabel.includes(EXTERNALLY_GOVERNED_LOWER);
-  });
+  return dataset.conformsTo.some(
+    (item) => item.value?.toLowerCase() === EXTERNALLY_GOVERNED_LOWER
+  );
 }
 
 export function getFirstAccessUrl(

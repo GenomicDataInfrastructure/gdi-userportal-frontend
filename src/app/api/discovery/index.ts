@@ -31,16 +31,19 @@ export const searchDatasetsApi = async (options: DatasetSearchQuery) => {
   const headers = await createHeaders();
   const response = await discoveryClient.dataset_search(options, { headers });
 
-  if (ENABLE_MOCK_DATA && response.results) {
-    response.results = response.results.map(applyMockData);
+  if (!ENABLE_MOCK_DATA || !response.results) {
+    return response;
   }
 
-  return response;
+  return {
+    ...response,
+    results: response.results.map(applyMockData),
+  };
 };
 
 export const retrieveDatasetApi = async (id: string) => {
   const dataset = await discoveryClient.retrieve_dataset({ params: { id } });
-  return ENABLE_MOCK_DATA ? applyMockData(dataset) : dataset;
+  return !ENABLE_MOCK_DATA ? dataset : applyMockData(dataset);
 };
 
 export const retrieveDatasetInSpecifiedFormat = async (

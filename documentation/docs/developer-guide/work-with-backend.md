@@ -11,17 +11,20 @@ The GDI User Portal integrates with multiple backend services to provide compreh
 ## Backend architecture
 
 ### Service overview
+
 The platform consists of several interconnected services:
 
 - **Dataset Discovery Service (DDS)** - Data catalogue API abstraction
-- **Access Management Service (AMS)** - Access control and requests  
+- **Access Management Service (AMS)** - Access control and requests
 - **CKAN** - Core data catalogue system
 - **Keycloak** - Authentication and authorisation
 - **PostgreSQL** - Data persistence
 - **Solr** - Search and indexing
 
 ### Service communication
+
 Services communicate using:
+
 - REST APIs with JSON payloads
 - OAuth2/OpenID Connect for authentication
 - Service-to-service authentication tokens
@@ -30,21 +33,24 @@ Services communicate using:
 ## Dataset Discovery Service integration
 
 ### Integrate Dataset Discovery Service
+
 The DDS provides a clean API layer over CKAN, abstracting complex CKAN operations and providing enhanced functionality.
 
 #### API Endpoints
+
 ```typescript
 // Common DDS endpoints
 const DDS_ENDPOINTS = {
-  datasets: '/api/v1/datasets',
-  dataset: '/api/v1/datasets/{id}',
-  search: '/api/v1/search',
-  facets: '/api/v1/facets',
-  organizations: '/api/v1/organizations'
+  datasets: "/api/v1/datasets",
+  dataset: "/api/v1/datasets/{id}",
+  search: "/api/v1/search",
+  facets: "/api/v1/facets",
+  organizations: "/api/v1/organizations",
 };
 ```
 
 #### Dataset Search and Retrieval
+
 ```typescript
 // utils/dds-client.ts
 export class DDSClient {
@@ -87,22 +93,23 @@ export class DDSClient {
 
   private getAuthHeaders(): HeadersInit {
     return {
-      'Content-Type': 'application/json',
-      ...(this.token && { 'Authorization': `Bearer ${this.token}` }),
+      "Content-Type": "application/json",
+      ...(this.token && { Authorization: `Bearer ${this.token}` }),
     };
   }
 }
 ```
 
 #### React Integration
+
 ```typescript
 // hooks/use-dds.ts
-import { useSession } from 'next-auth/react';
-import { DDSClient } from '@/utils/dds-client';
+import { useSession } from "next-auth/react";
+import { DDSClient } from "@/utils/dds-client";
 
 export function useDDS() {
   const { data: session } = useSession();
-  
+
   const client = useMemo(() => {
     return new DDSClient(
       process.env.NEXT_PUBLIC_DDS_API_URL!,
@@ -117,16 +124,18 @@ export function useDDS() {
 ## Access Management Service integration
 
 ### Connect Access Management Service
+
 The AMS handles all aspects of data access requests, user permissions, and compliance tracking.
 
 #### Access Request Flow
+
 ```typescript
 // types/access-request.ts
 export interface AccessRequest {
   id: string;
   datasetId: string;
   userId: string;
-  status: 'draft' | 'submitted' | 'approved' | 'rejected';
+  status: "draft" | "submitted" | "approved" | "rejected";
   requestData: {
     purpose: string;
     organization: string;
@@ -140,29 +149,35 @@ export interface AccessRequest {
 export interface Participant {
   name: string;
   email: string;
-  role: 'principal_investigator' | 'researcher' | 'analyst';
+  role: "principal_investigator" | "researcher" | "analyst";
   organization: string;
 }
 ```
 
 #### AMS Client Implementation
+
 ```typescript
 // utils/ams-client.ts
 export class AMSClient {
-  constructor(private baseUrl: string, private token?: string) {}
+  constructor(
+    private baseUrl: string,
+    private token?: string
+  ) {}
 
-  async submitAccessRequest(request: CreateAccessRequest): Promise<AccessRequest> {
+  async submitAccessRequest(
+    request: CreateAccessRequest
+  ): Promise<AccessRequest> {
     const response = await fetch(`${this.baseUrl}/api/v1/requests`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.token}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
       },
       body: JSON.stringify(request),
     });
 
     if (!response.ok) {
-      throw new Error('Failed to submit access request');
+      throw new Error("Failed to submit access request");
     }
 
     return response.json();
@@ -171,12 +186,12 @@ export class AMSClient {
   async getAccessRequest(id: string): Promise<AccessRequest> {
     const response = await fetch(`${this.baseUrl}/api/v1/requests/${id}`, {
       headers: {
-        'Authorization': `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.token}`,
       },
     });
 
     if (!response.ok) {
-      throw new Error('Access request not found');
+      throw new Error("Access request not found");
     }
 
     return response.json();
@@ -185,12 +200,12 @@ export class AMSClient {
   async getUserRequests(): Promise<AccessRequest[]> {
     const response = await fetch(`${this.baseUrl}/api/v1/requests`, {
       headers: {
-        'Authorization': `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.token}`,
       },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch user requests');
+      throw new Error("Failed to fetch user requests");
     }
 
     const data = await response.json();
@@ -202,13 +217,15 @@ export class AMSClient {
 ## Authentication flow implementation
 
 ### Implement authentication flows
+
 Integration with Keycloak and LS-AAI requires careful handling of OAuth2 flows and token management.
 
 #### NextAuth Configuration
+
 ```typescript
 // app/api/auth/[...nextauth]/route.ts
-import NextAuth from 'next-auth';
-import KeycloakProvider from 'next-auth/providers/keycloak';
+import NextAuth from "next-auth";
+import KeycloakProvider from "next-auth/providers/keycloak";
 
 const handler = NextAuth({
   providers: [
@@ -218,7 +235,7 @@ const handler = NextAuth({
       issuer: process.env.KEYCLOAK_ISSUER,
       authorization: {
         params: {
-          scope: 'openid profile email',
+          scope: "openid profile email",
         },
       },
     }),
@@ -237,8 +254,8 @@ const handler = NextAuth({
     },
   },
   pages: {
-    signIn: '/auth/signin',
-    error: '/auth/error',
+    signIn: "/auth/signin",
+    error: "/auth/error",
   },
 });
 
@@ -246,6 +263,7 @@ export { handler as GET, handler as POST };
 ```
 
 #### Token management
+
 ```typescript
 // utils/token-manager.ts
 export class TokenManager {
@@ -254,7 +272,7 @@ export class TokenManager {
 
     // Check if token is still valid
     const isValid = await this.validateToken(session.accessToken);
-    
+
     if (isValid) {
       return session.accessToken;
     }
@@ -265,16 +283,21 @@ export class TokenManager {
 
   private static async validateToken(token: string): Promise<boolean> {
     try {
-      const response = await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/userinfo`, {
-        headers: { 'Authorisation': `Bearer ${token}` },
-      });
+      const response = await fetch(
+        `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/userinfo`,
+        {
+          headers: { Authorisation: `Bearer ${token}` },
+        }
+      );
       return response.ok;
     } catch {
       return false;
     }
   }
 
-  private static async refreshToken(refreshToken: string): Promise<string | null> {
+  private static async refreshToken(
+    refreshToken: string
+  ): Promise<string | null> {
     // Implement token refresh logic
     // Return new access token or null if refresh fails
   }
@@ -284,6 +307,7 @@ export class TokenManager {
 ## Error handling and resilience
 
 ### Service error handling
+
 Implement robust error handling for service communication:
 
 ```typescript
@@ -295,7 +319,7 @@ export class APIError extends Error {
     public service: string
   ) {
     super(message);
-    this.name = 'APIError';
+    this.name = "APIError";
   }
 }
 
@@ -317,10 +341,14 @@ export async function handleServiceResponse<T>(
 ```
 
 ### Retry logic
+
 ```typescript
 // utils/retry-client.ts
 export class RetryClient {
-  constructor(private maxRetries = 3, private backoffMs = 1000) {}
+  constructor(
+    private maxRetries = 3,
+    private backoffMs = 1000
+  ) {}
 
   async withRetry<T>(operation: () => Promise<T>): Promise<T> {
     let lastError: Error;
@@ -330,12 +358,12 @@ export class RetryClient {
         return await operation();
       } catch (error) {
         lastError = error as Error;
-        
+
         if (attempt < this.maxRetries && this.isRetryableError(error)) {
           await this.delay(this.backoffMs * Math.pow(2, attempt));
           continue;
         }
-        
+
         throw error;
       }
     }
@@ -348,7 +376,7 @@ export class RetryClient {
   }
 
   private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
 ```
@@ -356,13 +384,14 @@ export class RetryClient {
 ## Service monitoring and logging
 
 ### Health checks
+
 Implement service health monitoring:
 
 ```typescript
 // utils/health-checker.ts
 export class HealthChecker {
   async checkServiceHealth(): Promise<ServiceHealthStatus> {
-    const services = ['dds', 'ams', 'keycloak'];
+    const services = ["dds", "ams", "keycloak"];
     const healthStatus: ServiceHealthStatus = {};
 
     await Promise.all(
@@ -371,12 +400,12 @@ export class HealthChecker {
           const endpoint = this.getHealthEndpoint(service);
           const response = await fetch(endpoint, { timeout: 5000 });
           healthStatus[service] = {
-            status: response.ok ? 'healthy' : 'unhealthy',
-            responseTime: response.headers.get('x-response-time') || 'unknown',
+            status: response.ok ? "healthy" : "unhealthy",
+            responseTime: response.headers.get("x-response-time") || "unknown",
           };
         } catch (error) {
           healthStatus[service] = {
-            status: 'unreachable',
+            status: "unreachable",
             error: error.message,
           };
         }
@@ -400,12 +429,13 @@ export class HealthChecker {
 ## Testing backend integration
 
 ### Integration testing
+
 ```typescript
 // tests/integration/services.test.ts
-import { DDSClient } from '@/utils/dds-client';
-import { AMSClient } from '@/utils/ams-client';
+import { DDSClient } from "@/utils/dds-client";
+import { AMSClient } from "@/utils/ams-client";
 
-describe('Service Integration', () => {
+describe("Service Integration", () => {
   let ddsClient: DDSClient;
   let amsClient: AMSClient;
 
@@ -414,30 +444,31 @@ describe('Service Integration', () => {
     amsClient = new AMSClient(process.env.TEST_AMS_URL!);
   });
 
-  it('should search datasets successfully', async () => {
+  it("should search datasets successfully", async () => {
     const results = await ddsClient.searchDatasets({
-      q: 'test',
+      q: "test",
       limit: 10,
     });
 
-    expect(results).toHaveProperty('datasets');
+    expect(results).toHaveProperty("datasets");
     expect(Array.isArray(results.datasets)).toBe(true);
   });
 
-  it('should handle service errors gracefully', async () => {
-    const invalidClient = new DDSClient('http://invalid-url');
-    
-    await expect(
-      invalidClient.searchDatasets({ q: 'test' })
-    ).rejects.toThrow('DDS API error');
+  it("should handle service errors gracefully", async () => {
+    const invalidClient = new DDSClient("http://invalid-url");
+
+    await expect(invalidClient.searchDatasets({ q: "test" })).rejects.toThrow(
+      "DDS API error"
+    );
   });
 });
 ```
 
 ### Mocking services
+
 ```typescript
 // tests/mocks/service-mocks.ts
-import { rest } from 'msw';
+import { rest } from "msw";
 
 export const serviceMocks = [
   rest.get(`${process.env.DDS_API_URL}/api/v1/datasets`, (req, res, ctx) => {
@@ -452,8 +483,8 @@ export const serviceMocks = [
   rest.post(`${process.env.AMS_API_URL}/api/v1/requests`, (req, res, ctx) => {
     return res(
       ctx.json({
-        id: 'mock-request-id',
-        status: 'submitted',
+        id: "mock-request-id",
+        status: "submitted",
       })
     );
   }),
@@ -463,6 +494,7 @@ export const serviceMocks = [
 ## Next steps
 
 After mastering backend integration:
+
 - **[Add and modify features](../add-modify-features)** - Build complete features
 - **[Develop frontend features](../develop-frontend)** - Enhance user interfaces
 - **[Get started](../get-started)** - Review development setup

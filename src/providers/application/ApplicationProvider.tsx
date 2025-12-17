@@ -168,6 +168,25 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   const params = useParams<{ id: string }>();
   const id = params?.id;
 
+
+  function handleErrorResponseAfterAction(error: Error) {
+    if (error instanceof AxiosError) {
+      dispatch({
+        type: ApplicationActionType.REJECTED,
+        payload: error.response?.data,
+      });
+    } else {
+      dispatch({
+        type: ApplicationActionType.REJECTED,
+        payload: {
+          title: "Internal server error",
+          detail: "An error occurred while processing your request",
+          status: 500,
+        },
+      });
+    }
+  }
+
   const fetchApplication = useCallback(async () => {
     if (!id) return;
     dispatch({ type: ApplicationActionType.LOADING });
@@ -384,24 +403,6 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
     },
     200
   );
-
-  function handleErrorResponseAfterAction(error: Error) {
-    if (error instanceof AxiosError) {
-      dispatch({
-        type: ApplicationActionType.REJECTED,
-        payload: error.response?.data,
-      });
-    } else {
-      dispatch({
-        type: ApplicationActionType.REJECTED,
-        payload: {
-          title: "Internal server error",
-          detail: "An error occurred while processing your request",
-          status: 500,
-        },
-      });
-    }
-  }
 
   return (
     <ApplicationContext.Provider

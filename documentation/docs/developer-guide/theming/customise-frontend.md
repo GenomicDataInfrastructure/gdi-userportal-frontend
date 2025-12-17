@@ -12,28 +12,27 @@ We are working on this guide.
 
 :::
 
-
 The GDI User Portal offers extensive customisation options through configuration files and public assets. This guide will help you understand how to customise various aspects of the portal.
 
 ## Configuration options
 
 The following configuration options can be set in the `properties.json` file:
 
-| Variable Name                        | Explanation                                              | Example Value                                                  |
-| ----------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------- |
-| NEXT_PUBLIC_SITE_TITLE              | Main title of the website                                | "GDI - User Portal"                                           |
-| NEXT_PUBLIC_SITE_DESCRIPTION        | Brief description of the site                            | "Genomic Data Infrastructure User Portal"                      |
-| NEXT_PUBLIC_HOMEPAGE_TITLE          | Main heading on the homepage                             | "WELCOME TO GDI"                                              |
-| NEXT_PUBLIC_HOMEPAGE_SUBTITLE       | Subheading text on the homepage                          | "The Genomic Data Infrastructure (GDI) project..."             |
-| NEXT_PUBLIC_HOMEPAGE_ABOUT_CONTENT  | Detailed content for the about section                   | "The Genomic Data Infrastructure (GDI) homepage..."            |
-| NEXT_PUBLIC_BANNER_LINK             | Navigation link for the banner                           | "/howto"                                                      |
-| NEXT_PUBLIC_FOOTER_TEXT             | Text displayed in the footer                             | "GDI project receives funding from the European Union..."      |
-| NEXT_PUBLIC_LINKEDIN_URL            | LinkedIn social media link                               | "https://www.linkedin.com/company/gdi-euproject/"             |
-| NEXT_PUBLIC_TWITTER_URL             | Twitter/X social media link                              | "https://twitter.com/GDI_EUproject"                           |
-| NEXT_PUBLIC_GITHUB_URL              | GitHub repository link                                   | "https://github.com/GenomicDataInfrastructure"                |
-| NEXT_PUBLIC_WEBSITE_URL             | Main project website link                                | "https://gdi.onemilliongenomes.eu/"                           |
-| NEXT_PUBLIC_EMAIL                   | Contact email address                                    | "gdi-coordination@elixir-europe.org"                          |
-| NEXT_PUBLIC_SHOW_BASKET_AND_LOGIN   | Feature flag for basket and login functionality          | "true"                                                        |
+| Variable Name                      | Explanation                                     | Example Value                                             |
+| ---------------------------------- | ----------------------------------------------- | --------------------------------------------------------- |
+| NEXT_PUBLIC_SITE_TITLE             | Main title of the website                       | "GDI - User Portal"                                       |
+| NEXT_PUBLIC_SITE_DESCRIPTION       | Brief description of the site                   | "Genomic Data Infrastructure User Portal"                 |
+| NEXT_PUBLIC_HOMEPAGE_TITLE         | Main heading on the homepage                    | "WELCOME TO GDI"                                          |
+| NEXT_PUBLIC_HOMEPAGE_SUBTITLE      | Subheading text on the homepage                 | "The Genomic Data Infrastructure (GDI) project..."        |
+| NEXT_PUBLIC_HOMEPAGE_ABOUT_CONTENT | Detailed content for the about section          | "The Genomic Data Infrastructure (GDI) homepage..."       |
+| NEXT_PUBLIC_BANNER_LINK            | Navigation link for the banner                  | "/howto"                                                  |
+| NEXT_PUBLIC_FOOTER_TEXT            | Text displayed in the footer                    | "GDI project receives funding from the European Union..." |
+| NEXT_PUBLIC_LINKEDIN_URL           | LinkedIn social media link                      | "https://www.linkedin.com/company/gdi-euproject/"         |
+| NEXT_PUBLIC_TWITTER_URL            | Twitter/X social media link                     | "https://twitter.com/GDI_EUproject"                       |
+| NEXT_PUBLIC_GITHUB_URL             | GitHub repository link                          | "https://github.com/GenomicDataInfrastructure"            |
+| NEXT_PUBLIC_WEBSITE_URL            | Main project website link                       | "https://gdi.onemilliongenomes.eu/"                       |
+| NEXT_PUBLIC_EMAIL                  | Contact email address                           | "gdi-coordination@elixir-europe.org"                      |
+| NEXT_PUBLIC_SHOW_BASKET_AND_LOGIN  | Feature flag for basket and login functionality | "true"                                                    |
 
 ## Public assets customisation
 
@@ -79,7 +78,7 @@ The portal's appearance can be customised through various files in the `/public`
 
 ## Customisation best practices
 
-1. **Colours**: 
+1. **Colours**:
    - Use the `palette.css` file to maintain consistent branding
    - Consider both light and dark mode colour schemes
    - Ensure sufficient contrast for accessibility

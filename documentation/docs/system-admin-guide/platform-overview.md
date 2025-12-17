@@ -20,5 +20,3 @@ The GDI User Portal consists of multiple interconnected components:
 - **CKAN** - Open-source data catalogue management system with custom extensions
 - **Keycloak** - Authentication and authorisation service
 - **Supporting services** - PostgreSQL, Elasticsearch/Solr, Redis, Docker containers
-
-

@@ -62,21 +62,19 @@ Configure multiple schemas using a declaration file for different dataset types:
 ```json
 [
   {
-   "dataset_type": "dataset",
-   "about": "Dataset",
-   "about_url": "https://dataplatform.nl/what-is-a-dataset",
-   "schemas": [
+    "dataset_type": "dataset",
+    "about": "Dataset",
+    "about_url": "https://dataplatform.nl/what-is-a-dataset",
+    "schemas": [
       "ckanext.healthri:scheming/schemas/core_schema.json",
       "ckanext.healthri:scheming/schemas/health_ri.json"
     ]
   },
   {
-   "dataset_type": "geo_dataset",
-   "about": "Geo Document",
-   "about_url": "https://dataplatform.nl/what-is-a-dataset",
-   "schemas": [
-      "ckanext.healthri:scheming/schemas/geo_document.json"
-    ]
+    "dataset_type": "geo_dataset",
+    "about": "Geo Document",
+    "about_url": "https://dataplatform.nl/what-is-a-dataset",
+    "schemas": ["ckanext.healthri:scheming/schemas/geo_document.json"]
   }
 ]
 ```
@@ -121,12 +119,14 @@ GET http(s)://<ckan-host>/api/action/scheming_dataset_schema_show?type=<dataset_
 ## Best practices
 
 ### Schema design
+
 - Follow DCAT-AP standards for interoperability
 - Design for user experience, not just technical requirements
 - Include comprehensive help text for complex fields
 - Test schemas with real users before deployment
 
 ### Deployment
+
 - Test schema changes in development environment first
 - Document all schema modifications
 - Consider migration impact on existing datasets
@@ -137,6 +137,7 @@ For comprehensive schema development, see the [CKAN scheming documentation](http
 ## Next steps
 
 After configuring schemas:
+
 - [Manage user roles and permissions](../manage-user-roles) - Control access to schema management
 - [Manage data and services](../manage-data-services) - Configure data workflows
 - [Monitor and maintain the system](../monitor-maintain) - Track schema usage and performance

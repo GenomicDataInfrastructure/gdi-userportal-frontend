@@ -3,6 +3,7 @@ slug: /azure
 sidebar_label: "Azure"
 sidebar_position: 1
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -18,11 +19,12 @@ This guide will walk you through the process of deploying an environment using A
 - **Azure CLI installed:** Make sure you have Azure CLI installed on your machine. You can install it via Homebrew with the command `brew install azure-cli`.
 - **GitHub Personal Access Token (classic):** You'll need a personal access token from GitHub with pack read permissions.
 - **Azure Account with Sufficient Permissions:** Ensure you have an Azure account with permissions that, at a minimum, allow you to create a resource group.
-- **PSQL installed:** Ensure that PSQL is installed  (eg. `sudo apt-get install postgresql -y`)
+- **PSQL installed:** Ensure that PSQL is installed (e.g. `sudo apt-get install postgresql -y`)
 
 ## Initial Setup
 
 Before running the script, you'll find several parameters at the beginning of the script that can be customized:
+
 - Passwords for the CKAN database, Keycloak database, and the PostgreSQL admin. Change these to secure passwords as desired.
 
 ## Deployment Steps
@@ -60,4 +62,3 @@ Before running the script, you'll find several parameters at the beginning of th
 ## Note
 
 This setup is intended for development use. Before moving to a production environment, review and adjust the security and performance settings to meet the necessary requirements.
-

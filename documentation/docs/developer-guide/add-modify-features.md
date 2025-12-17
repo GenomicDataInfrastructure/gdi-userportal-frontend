@@ -12,7 +12,6 @@ We are working on this guide.
 
 :::
 
-
 This section covers advanced development topics including metadata field management, extension development, and comprehensive testing strategies for adding new features to the GDI User Portal.
 
 ## Feature development overview
@@ -20,7 +19,7 @@ This section covers advanced development topics including metadata field managem
 Adding new features to the GDI User Portal typically involves:
 
 1. **Frontend development** - User interface and experience
-2. **Backend integration** - API endpoints and data processing  
+2. **Backend integration** - API endpoints and data processing
 3. **Metadata management** - Schema updates and field additions
 4. **Testing** - Comprehensive testing across all layers
 5. **Documentation** - User and developer documentation
@@ -28,9 +27,11 @@ Adding new features to the GDI User Portal typically involves:
 ## Metadata field management
 
 ### Manage metadata fields
+
 Adding, modifying, or deleting metadata fields requires updates across multiple components of the CKAN ecosystem.
 
 #### Process overview
+
 When adding new metadata fields, you must update:
 
 1. **CKAN DCAT model** - Core schema definition
@@ -40,6 +41,7 @@ When adding new metadata fields, you must update:
 5. **Discovery Service** - API mapping
 
 #### CKAN DCAT model updates
+
 For DCAT-AP 3 compliant fields:
 
 ```bash
@@ -52,6 +54,7 @@ cd ckanext-dcat
 ```
 
 Example schema addition:
+
 ```yaml
 dataset_fields:
   - field_name: custom_field
@@ -64,6 +67,7 @@ dataset_fields:
 ```
 
 #### Solr Search Configuration
+
 To make fields searchable:
 
 ```xml
@@ -76,11 +80,13 @@ To make fields searchable:
 ```
 
 After changes, rebuild the search index:
+
 ```bash
 ckan -c /etc/ckan/default/ckan.ini search-index rebuild
 ```
 
 #### FAIR Data Point integration
+
 Add SHACL shapes in FDP:
 
 ```turtle
@@ -94,6 +100,7 @@ Add SHACL shapes in FDP:
 ```
 
 #### SeMPyRO integration
+
 Add property to relevant class:
 
 ```python
@@ -106,6 +113,7 @@ custom_field: Optional[str] = Field(
 ```
 
 #### Discovery Service mapping
+
 Update OpenAPI definitions and mapping:
 
 ```java
@@ -125,9 +133,11 @@ For complete metadata field procedures, see [Metadata field management](./add-up
 ## Extension development
 
 ### Develop extensions
+
 CKAN extensions provide powerful capabilities to enhance catalogue functionality.
 
 #### Extension structure
+
 ```
 ckanext-your-extension/
 ├── ckanext/
@@ -143,6 +153,7 @@ ckanext-your-extension/
 ```
 
 #### Plugin development
+
 ```python
 # ckanext/your_extension/plugin.py
 import ckan.plugins as plugins
@@ -151,7 +162,7 @@ import ckan.plugins.toolkit as toolkit
 class YourExtensionPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IPackageController)
-    
+
     def update_config(self, config_):
         toolkit.add_template_directory(config_, 'templates')
         toolkit.add_public_directory(config_, 'public')
@@ -167,6 +178,7 @@ class YourExtensionPlugin(plugins.SingletonPlugin):
 ```
 
 #### Custom Validators
+
 ```python
 # ckanext/your_extension/validators.py
 import ckan.plugins.toolkit as toolkit
@@ -174,10 +186,10 @@ import ckan.plugins.toolkit as toolkit
 def custom_validator(value):
     if not value:
         raise toolkit.Invalid('This field is required')
-    
+
     if len(value) < 3:
         raise toolkit.Invalid('Value must be at least 3 characters')
-    
+
     return value
 
 def get_validators():
@@ -187,25 +199,25 @@ def get_validators():
 ```
 
 #### Template Customization
+
 ```html
 <!-- templates/package/read.html -->
-{% ckan_extends %}
-
-{% block package_additional_info %}
-  {{ super() }}
-  <tr>
-    <th scope="row">{{ _('Custom Field') }}</th>
-    <td>{{ pkg.custom_field or _('Not specified') }}</td>
-  </tr>
+{% ckan_extends %} {% block package_additional_info %} {{ super() }}
+<tr>
+  <th scope="row">{{ _('Custom Field') }}</th>
+  <td>{{ pkg.custom_field or _('Not specified') }}</td>
+</tr>
 {% endblock %}
 ```
 
 ## Testing Strategies
 
 ### Write and Run Tests
+
 Comprehensive testing ensures feature reliability and maintainability.
 
 #### Frontend Testing
+
 ```typescript
 // components/__tests__/dataset-card.test.tsx
 import { render, screen } from '@testing-library/react';
@@ -221,7 +233,7 @@ describe('DatasetCard', () => {
 
   it('renders dataset information correctly', () => {
     render(<DatasetCard dataset={mockDataset} />);
-    
+
     expect(screen.getByText('Test Dataset')).toBeInTheDocument();
     expect(screen.getByText('Test description')).toBeInTheDocument();
     expect(screen.getByText('Test Org')).toBeInTheDocument();
@@ -230,7 +242,7 @@ describe('DatasetCard', () => {
   it('handles missing optional fields gracefully', () => {
     const minimalDataset = { id: 'test', title: 'Test' };
     render(<DatasetCard dataset={minimalDataset} />);
-    
+
     expect(screen.getByText('Test')).toBeInTheDocument();
     // Should not crash when optional fields are missing
   });
@@ -238,30 +250,33 @@ describe('DatasetCard', () => {
 ```
 
 #### API Integration Testing
+
 ```typescript
 // api/__tests__/datasets.test.ts
-import { GET } from '../datasets/route';
-import { NextRequest } from 'next/server';
+import { GET } from "../datasets/route";
+import { NextRequest } from "next/server";
 
 // Mock external dependencies
-jest.mock('@/utils/dds-client');
+jest.mock("@/utils/dds-client");
 
-describe('/api/datasets', () => {
-  it('returns datasets successfully', async () => {
-    const request = new NextRequest('http://localhost:3000/api/datasets');
+describe("/api/datasets", () => {
+  it("returns datasets successfully", async () => {
+    const request = new NextRequest("http://localhost:3000/api/datasets");
     const response = await GET(request);
-    
+
     expect(response.status).toBe(200);
-    
+
     const data = await response.json();
-    expect(data).toHaveProperty('datasets');
+    expect(data).toHaveProperty("datasets");
     expect(Array.isArray(data.datasets)).toBe(true);
   });
 
-  it('handles search queries', async () => {
-    const request = new NextRequest('http://localhost:3000/api/datasets?q=test');
+  it("handles search queries", async () => {
+    const request = new NextRequest(
+      "http://localhost:3000/api/datasets?q=test"
+    );
     const response = await GET(request);
-    
+
     expect(response.status).toBe(200);
     // Verify search functionality
   });
@@ -269,37 +284,43 @@ describe('/api/datasets', () => {
 ```
 
 #### E2E Testing
+
 ```typescript
 // e2e/dataset-discovery.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Dataset Discovery', () => {
-  test('user can search for datasets', async ({ page }) => {
-    await page.goto('/datasets');
-    
+test.describe("Dataset Discovery", () => {
+  test("user can search for datasets", async ({ page }) => {
+    await page.goto("/datasets");
+
     // Search for datasets
-    await page.fill('[data-testid="search-input"]', 'genomic');
+    await page.fill('[data-testid="search-input"]', "genomic");
     await page.click('[data-testid="search-button"]');
-    
+
     // Verify results
-    await expect(page.locator('[data-testid="dataset-card"]')).toHaveCount.greaterThan(0);
-    await expect(page.locator('text=genomic')).toBeVisible();
+    await expect(
+      page.locator('[data-testid="dataset-card"]')
+    ).toHaveCount.greaterThan(0);
+    await expect(page.locator("text=genomic")).toBeVisible();
   });
 
-  test('user can filter by category', async ({ page }) => {
-    await page.goto('/datasets');
-    
+  test("user can filter by category", async ({ page }) => {
+    await page.goto("/datasets");
+
     // Apply category filter
     await page.click('[data-testid="filter-category"]');
-    await page.click('text=Health');
-    
+    await page.click("text=Health");
+
     // Verify filtered results
-    await expect(page.locator('[data-testid="active-filter"]')).toHaveText('Health');
+    await expect(page.locator('[data-testid="active-filter"]')).toHaveText(
+      "Health"
+    );
   });
 });
 ```
 
 #### Extension Testing
+
 ```python
 # tests/test_plugin.py
 import pytest
@@ -309,17 +330,17 @@ from ckanext.your_extension.plugin import YourExtensionPlugin
 
 @pytest.mark.usefixtures("clean_db", "with_plugins")
 class TestYourExtension:
-    
+
     def test_custom_validator(self):
         dataset = factories.Dataset(custom_field='test value')
         assert dataset['custom_field'] == 'test value'
-    
+
     def test_before_dataset_index(self):
         plugin = YourExtensionPlugin()
         dataset_dict = {'id': 'test', 'title': 'Test Dataset'}
-        
+
         result = plugin.before_dataset_index(dataset_dict)
-        
+
         # Assert custom indexing logic
         assert 'custom_index_field' in result
 ```
@@ -327,18 +348,20 @@ class TestYourExtension:
 ## Performance Considerations
 
 ### Optimization Strategies
+
 - **Database Indexing** - Ensure proper indexes for new fields
 - **Caching** - Implement appropriate caching for expensive operations
 - **Lazy Loading** - Load heavy components only when needed
 - **Bundle Optimization** - Minimize JavaScript bundle size
 
 ### Monitoring
+
 ```typescript
 // utils/performance-monitor.ts
 export class PerformanceMonitor {
   static trackUserInteraction(action: string, metadata?: Record<string, any>) {
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', action, {
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", action, {
         ...metadata,
         timestamp: Date.now(),
       });
@@ -346,11 +369,11 @@ export class PerformanceMonitor {
   }
 
   static trackAPICall(endpoint: string, duration: number, success: boolean) {
-    this.trackUserInteraction('api_call', {
+    this.trackUserInteraction("api_call", {
       endpoint,
       duration,
       success,
     });
   }
 }
-``` 
+```

@@ -359,6 +359,16 @@ components:
         url:
           type: string
           title: Dataset URL
+        conformsTo:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValueLabel"
+          title: Conforms To
+        distributions:
+          type: array
+          items:
+            $ref: "#/components/schemas/RetrievedDistribution"
+          title: Distributions
       required:
         - id
         - title

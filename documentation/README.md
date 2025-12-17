@@ -79,9 +79,10 @@ Located in `documentation/package.json`
 The documentation project is located in the `documentation/` directory and follows this structure:
 
 ```
-├── docs/                          # Documentation content
-│   ├── user-guide/               # User guide documentation
-│   ├── system-admin-guide/       # System admin guide documentation
+├── docs/                         # Documentation content
+│   ├── user-guide/               # User guide for data users / requesters
+│   ├── system-admin-guide/       # Deployment documentation
+│   ├── catalogue-manager-guide/  # User guide for catalogue managers
 │   ├── developer-guide/          # Developer guide documentation
 │   └── key-concepts/             # Shared concepts documentation
 ├── src/

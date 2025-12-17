@@ -1,23 +1,22 @@
 ---
 slug: /welcome-data-users
-sidebar_label: "Welcome to GDI Portal"
+sidebar_label: "Welcome"
 sidebar_position: 1
 ---
 
-# Welcome to GDI Portal
+# Welcome to the GDI Data Portal
 
-Welcome to the documentation for the **Genomic Data Infrastructure (GDI) Portal**!
+Welcome to the GDI Data Portal user guide!
 
-The **GDI Portal** connects you to Europe's largest network of **genomic datasets**—over one million genome sequences from across European countries. As part of the 1+ Million Genomes Initiative, this portal enables **federated and secure** cross-border access to high-quality genomic data and related phenotypic information across European countries.
+The **GDI Data Portal** gives you access to Europe's largest network of genomic datasets for your research and analysis needs. As part of the 1+ Million Genomes Initiative, this portal enables federated and secure cross-border access to high-quality genomic data and related phenotypic information across European countries.
 
-The portal serves government agencies, healthcare providers, and researchers, providing a gateway to Europe's genomic resources for various applications, including: 
-- Research and scientific innovation
-- Healthcare and clinical diagnostics
-- Health policy making and initiatives
+This guide is for **data users**—healthcare researchers, policy-makers, and professionals—who want to discover and request access to genomic datasets for research and clinical purposes.
+
+Learn more about [Genomic Data Infrastructure (GDI)](about-gdi.md) and its founding initiatives.
 
 ## How it works
 
-Access genomic datasets through a simple, secure process:
+Access genomic datasets in three steps:
 
 1. **Explore datasets:** Browse and search through detailed dataset information—search by any criteria such as keywords, research topics, disease areas, or allele frequency. [Explore datasets](/category/explore-datasets-1/).
 
@@ -25,13 +24,8 @@ Access genomic datasets through a simple, secure process:
 
 3. **Access approved datasets:** Once your request is approved, you will receive an email with a link to the Secure Processing Environment (SPE) where you can securely download and work with the datasets.
 
-    :::info Stay compliant
+   :::info Stay compliant
 
-    All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to **use data responsibly** and according to the terms and agreements you signed during the application process.
+   All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to **use data responsibly** and according to the terms and agreements you signed during the application process.
 
-    :::
-
-
-## Get started
-
-Ready to explore? [Start by browsing](/category/explore-datasets-1/) available datasets, or [sign in](/sign-in) for full access to all features of the GDI Portal.
+   :::

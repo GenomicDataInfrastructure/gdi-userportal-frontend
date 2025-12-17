@@ -6,9 +6,7 @@ sidebar_position: 2
 
 # Sign in
 
-In this guide
-> [Why sign in?](#why-sign-in)  
-> [Sign in](#sign-in-1)  
+Sign in to get full access to available datasets and request access.
 
 ## Why sign in?
 
@@ -20,7 +18,7 @@ In this guide
 
 ## Sign in
 
-GDI Portal connects with your **existing accounts** with widely-used platforms so you don't need to create a separate account. This includes Google and LinkedIn, as well as institutions like your university or research organisation. 
+The GDI Portal uses your **existing accounts** with other platforms like **Google, LinkedIn, and organisations** like universities or research institutions, so you don't need to create a separate account.
 
 To sign in to the GDI Portal:
 
@@ -30,11 +28,11 @@ To sign in to the GDI Portal:
 
 3. Select **LSAAI** as your sign-in method.
 
-    :::info Why LSAAI?
+   :::info Why LSAAI?
 
-    GDI Portal requires you to **sign in with LSAAI** (Login Service for Academic and Administrative Institutions). LSAAI is a secure login system that lets you use your existing accounts like Google, LinkedIn, university, or other institutional accounts. This means you don't need to create a new account specifically for the GDI Portal.
+   GDI Portal requires you to **sign in with LSAAI** (Login Service for Academic and Administrative Institutions). LSAAI is a secure login system that lets you use your existing accounts like Google, LinkedIn, university, or other institutional accounts. This means you don't need to create a new account specifically for the GDI Portal.
 
-    :::
+   :::
 
 4. Select your account provider: Search for your institution in the search bar, or select from the list of options (LinkedIn, Apple, Google, ORCID, GitHub).
 <figure>
@@ -42,7 +40,7 @@ To sign in to the GDI Portal:
 <figcaption></figcaption>
 </figure>
 
-5. Follow the instructions to sign in with your selected account. If it's your first time signing in, you may need to verify your email address. 
+5. Follow the instructions to sign in with your selected account. If it's your first time signing in, you may need to verify your email address.
 
 6. After you sign in, the GDI Portal home page loads and you can [start exploring datasets](/category/explore-datasets-1).
 
@@ -50,4 +48,3 @@ To sign in to the GDI Portal:
 <img src="img/sign-in/home-page.png" alt="Home page after signing in, showing a search bar and dataset cards" width="800" />
 <figcaption></figcaption>
 </figure>
-

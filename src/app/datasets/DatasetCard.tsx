@@ -50,7 +50,7 @@ function DatasetCard({
       subTitles={dataset.themes?.map((theme) => theme.label)}
       description={truncatedDesc || "No description available"}
       cardItems={cardItems}
-      keywords={dataset.keywords?.map((keyword) => keyword.label)}
+      keywords={dataset.keywords}
       button={
         displayBasketButton && (
           <button

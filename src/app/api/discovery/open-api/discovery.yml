@@ -276,6 +276,8 @@ components:
         - DROPDOWN
         - FREE_TEXT
         - ENTRIES
+        - DATETIME
+        - NUMBER
       title: Filter type
     Operator:
       default: "="
@@ -333,7 +335,7 @@ components:
         keywords:
           type: array
           items:
-            $ref: "#/components/schemas/ValueLabel"
+            type: string
           title: Keywords
         catalogue:
           type: string
@@ -438,7 +440,7 @@ components:
         keywords:
           type: array
           items:
-            $ref: "#/components/schemas/ValueLabel"
+            type: string
         provenance:
           type: string
           title: Provenance
@@ -534,7 +536,9 @@ components:
           type: string
           title: uri
         type:
-          type: string
+          oneOf:
+            - type: string
+            - $ref: "#/components/schemas/ValueLabel"
           title: type
         identifier:
           type: string

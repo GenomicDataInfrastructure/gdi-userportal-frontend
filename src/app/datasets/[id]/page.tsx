@@ -8,6 +8,8 @@ import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
 import Sidebar from "@/components/Sidebar";
 import axios from "axios";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DatasetMetadata from "./DatasetMetadata";
 import Tooltip from "./Tooltip";
 import { createDatasetSidebarItems } from "./sidebarItems";
@@ -77,13 +79,9 @@ export default async function Page({
                 ))}
               </div>
             ) : (
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-gray-700">
-                  Conforms To:
-                </span>
-                <span className="text-sm font-semibold px-3 py-1 rounded-full bg-gray-100 text-gray-600 border border-gray-200">
-                  NA
-                </span>
+              <div className="flex items-center gap-2 text-sm text-gray-500 italic">
+                <FontAwesomeIcon icon={faCircleInfo} className="w-4 h-4 flex-shrink-0" />
+                <span>Conforms To: Not specified for this dataset</span>
               </div>
             )}
 

@@ -58,7 +58,7 @@ function DatasetCard({
           className="text-xs sm:text-base rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide cursor-pointer shrink-0 bg-secondary text-white hover:bg-primary inline-block"
         >
           <FontAwesomeIcon icon={faArrowRight} className="mr-2" />
-          <span>See more</span>
+          <span>View dataset details</span>
         </Link>
       );
     }

@@ -63,27 +63,25 @@ export default async function Page({
             </div>
 
             {dataset.conformsTo && dataset.conformsTo.length > 0 ? (
-              <div className="flex items-start gap-2 flex-wrap">
-                <span className="text-sm font-semibold text-gray-700">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-sm font-semibold text-gray-700 whitespace-nowrap">
                   Conforms To:
                 </span>
-                <div className="flex gap-2 flex-wrap">
-                  {dataset.conformsTo.map((item) => (
-                    <span
-                      key={item.value}
-                      className="text-sm font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20"
-                    >
-                      {item.label || item.value}
-                    </span>
-                  ))}
-                </div>
+                {dataset.conformsTo.map((item) => (
+                  <span
+                    key={item.value}
+                    className="text-sm font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20"
+                  >
+                    {item.label || item.value}
+                  </span>
+                ))}
               </div>
             ) : (
               <div className="flex items-center gap-2">
                 <span className="text-sm font-semibold text-gray-700">
                   Conforms To:
                 </span>
-                <span className="text-sm font-semibold px-3 py-1 rounded-full bg-gray/10 text-gray border border-gray/20">
+                <span className="text-sm font-semibold px-3 py-1 rounded-full bg-gray-100 text-gray-600 border border-gray-200">
                   NA
                 </span>
               </div>

@@ -26,11 +26,11 @@ Anybody can use the public features of the website (https://portal.dev.gdi.lu), 
 
 ### 3.3. Authorised Access and Rules of Use
 
-Although the website includes public features, some features are strictly limited to Users with a set up infrastructure account. Such accounts shall follow the following principles:
+Although the website includes public features, some features are strictly limited to Users with an infrastructure account set up. Such accounts shall follow the following principles:
 
 - The User, under the created account, may request and obtain access to the Portal (https://portal.gdi.lu/) and the GDI's database synthetic data layer, provided that the current Terms are understood, fulfilled, and accepted;
 - Users must not share access credentials and/or login details with others;
-- When requesting access to data, Users must provide accurate and complete information (name, e-mail, intended use of the data, and the User's organizational affiliation. Only approved institutions that are partners of the GDI project can submit an account request on the Portal. The access request shall be based on prior authorization from the User's original institution, which approves both platform and data access. LNDS reserves the right to refuse account creation or deactivate any User account that fails to demonstrate a valid link to a relevant GDI participant institution. Users are obligated to keep their registered information accurate and up to date, and to communicate any changes within a reasonable time frame. LNDS shall not be responsible for any inability to access the User account resulting from misstatements, inaccurate data, or failure to communicate changes in information;
+- When requesting access to data, Users must provide accurate and complete information (name, e-mail, intended use of the data, and the User's organizational affiliation). Only approved institutions that are partners of the GDI project can submit an account request on the Portal. The access request shall be based on prior authorization from the User's original institution, which approves both platform and data access. LNDS reserves the right to refuse account creation or deactivate any User account that fails to demonstrate a valid link to a relevant GDI participant institution. Users are obligated to keep their registered information accurate and up to date, and to communicate any changes within a reasonable time frame. LNDS shall not be responsible for any inability to access the User account resulting from misstatements, inaccurate data, or failure to communicate changes in information:
 - The User is prohibited from taking screenshots of the data environment and using any tools, including artificial intelligence applications, that may impact the GDI data environment, in particular distorting or compromising the implementation of the FAIR data principle and information security;
 - The User shall immediately report to LNDS any known or suspected security breach or misuse of the GDI data via [incident@lnds.lu](mailto:incident@lnds.lu);
 - Any research result from using the GDI database should refer to the source with an appropriate acknowledgment, or citation of the data source provided by the Portal.
@@ -51,7 +51,7 @@ LNDS does not guarantee that this Portal is free from errors, viruses, or malici
 
 This Portal serves as a Users' interface allowing to search the data made available by GDI participant institutions. The data is provided on an 'as is' basis and without any express, implied, or statutory warranty of any kind regarding the accuracy of the data.
 
-LNDS does not warrant that this Portal or its content will meet Users' need, or will otherwise be uninterrupted, error-free, or continuously functional.
+LNDS does not warrant that this Portal or its content will meet Users' needs, or will otherwise be uninterrupted, error-free, or continuously functional.
 
 Users assume full responsibility for selecting the Portal and determining whether to use or rely on its contents. The User is liable for any consequences resulting from a violation of these conditions of use. Such consequences may include, but are not limited to, reporting the violation to the associated participating institution and, if the User's activities are deemed unlawful, reporting to the appropriate authorities.
 
@@ -93,7 +93,7 @@ LNDS reserves the right to modify these Terms at any time. Users will be notifie
 
 LNDS and the GDI participants are not liable for any delay or failure to perform obligation under these Terms, due to circumstances beyond LNDS control, including but not limited to electrical, technological, or other utility failures, force majeure, embargoes, acts or orders of government, acts of terrorism or war, changes in legislation or any other events outside of LNDS' control.
 
-In the case of any questions relating to Terms, Users' rights and obligations arising from these Terms, and infrastructure account, or any other matter, please contact [info@lnds.lu](mailto:info@lnds.lu).
+In the case of any questions relating to Terms, Users' rights and obligations arising from these Terms, and any infrastructure account, or any other matter, please contact [info@lnds.lu](mailto:info@lnds.lu).
 
 If any provision or part-provision of these Terms is or becomes invalid, illegal or unenforceable, it shall be deemed deleted. However, that shall not affect the validity and enforceability of the rest of these Terms.
 
@@ -140,7 +140,7 @@ LNDS shall transfer no Personal Data, governed by the rules of this website, out
 
 ## Data Retention
 
-LNDS shall not retain any Personal Data, after the provision of service is completed, excepted where mandatory by applicable law.
+LNDS shall not retain any Personal Data, after the provision of service is completed, except where required by applicable law.
 
 ## Your Statutory Rights
 
@@ -182,5 +182,3 @@ Most web browsers allow control of most cookies through browser settings. Learn 
 - [Mozilla Firefox](https://support.mozilla.org/en-US/kb/enhanced-tracking-protection-firefox-desktop?redirectslug=enable-and-disable-cookies-website-preferences&redirectlocale=en-US)
 - [Opera](https://help.opera.com/en/latest/web-preferences/)
 - [Safari](https://support.apple.com/en-gb/guide/safari/sfri11471/16.1/mac/13.0)
-
-

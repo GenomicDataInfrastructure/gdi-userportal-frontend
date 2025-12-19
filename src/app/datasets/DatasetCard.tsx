@@ -7,14 +7,9 @@ import { useWindowSize } from "@/hooks";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { truncateDescription } from "@/utils/textProcessing";
 import { isExternalDataset, getFirstAccessUrl } from "@/utils/datasetHelpers";
-import {
-  faMinusCircle,
-  faPlusCircle,
-  faArrowRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card, { CardItem } from "../../components/Card";
-import Link from "next/link";
 
 type DatasetCardProps = {
   dataset: SearchedDataset;
@@ -50,19 +45,6 @@ function DatasetCard({
   const renderButton = () => {
     if (!displayBasketButton) return undefined;
 
-    if (isExternal) {
-      return (
-        <Link 
-          href={`/datasets/${dataset.id}`}
-          onClick={(e) => e.stopPropagation()}
-          className="text-xs sm:text-base rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide cursor-pointer shrink-0 bg-secondary text-white hover:bg-primary inline-block"
-        >
-          <FontAwesomeIcon icon={faArrowRight} className="mr-2" />
-          <span>See more</span>
-        </Link>
-      );
-    }
-
     return (
       <button
         onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
@@ -96,7 +78,7 @@ function DatasetCard({
         typeof keyword === "string" ? keyword : keyword.label
       )}
       externalUrl={isExternal ? externalAccessUrl : undefined}
-      button={renderButton()}
+      button={isExternal ? undefined : renderButton()}
     />
   );
 }

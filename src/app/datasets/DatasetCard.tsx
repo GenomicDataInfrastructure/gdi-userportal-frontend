@@ -41,22 +41,26 @@ function DatasetCard({
     useDatasetBasket();
 
   const [conformsTo, setConformsTo] = useState<ValueLabel[] | undefined>(
-    undefined
+    dataset.conformsTo
   );
   const hasFetchedRef = useRef(false);
 
   useEffect(() => {
-    if (dataset.id && !hasFetchedRef.current) {
+    const isConformsToEmpty =
+      conformsTo === null ||
+      conformsTo === undefined ||
+      (Array.isArray(conformsTo) && conformsTo.length === 0);
+
+    const shouldFetch =
+      dataset.id && !hasFetchedRef.current && isConformsToEmpty;
+
+    if (shouldFetch) {
       hasFetchedRef.current = true;
-      retrieveDatasetApi(dataset.id)
-        .then((fullDataset) => {
-          setConformsTo(fullDataset?.conformsTo);
-        })
-        .catch(() => {
-          setConformsTo(undefined);
-        });
+      retrieveDatasetApi(dataset.id).then((fullDataset) => {
+        setConformsTo(fullDataset?.conformsTo);
+      });
     }
-  }, [dataset.id]);
+  }, [dataset.id, conformsTo]);
 
   const datasetWithConformsTo = {
     ...dataset,

@@ -458,6 +458,11 @@ components:
           title: Provenance
         spatial:
           $ref: "#/components/schemas/ValueLabel"
+        conformsTo:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValueLabel"
+          deprecated: true
         distributions:
           type: array
           items:

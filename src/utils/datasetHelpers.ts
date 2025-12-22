@@ -20,15 +20,12 @@ export function isExternalDataset(
 
   return dataset.conformsTo.some((item) => {
     if (item.name === EXTERNALLY_GOVERNED_URI) {
-      console.log(`✓ External (by URI): ${dataset.id}`);
       return true;
     }
     if (item.value?.toLowerCase() === EXTERNALLY_GOVERNED_LABEL.toLowerCase()) {
-      console.log(`✓ External (by value): ${dataset.id}`);
       return true;
     }
     if (item.label?.toLowerCase() === EXTERNALLY_GOVERNED_LABEL.toLowerCase()) {
-      console.log(`✓ External (by label): ${dataset.id}`);
       return true;
     }
     return false;
@@ -38,15 +35,5 @@ export function isExternalDataset(
 export function getFirstAccessUrl(
   distributions?: RetrievedDistribution[]
 ): string | undefined {
-  if (!distributions?.length) {
-    return undefined;
-  }
-
-  for (const distribution of distributions) {
-    if (distribution.accessUrl?.trim()) {
-      return distribution.accessUrl;
-    }
-  }
-
-  return undefined;
+  return distributions?.find((dist) => dist.accessUrl?.trim())?.accessUrl;
 }

@@ -49,18 +49,23 @@ export default async function Page({
               <PageHeading className="text-black">{dataset.title}</PageHeading>
 
               <ul className="flex gap-x-3 gap-y-2 flex-wrap">
-                {dataset.themes?.map((theme) => (
-                  <li
-                    key={theme.label}
-                    className="tracking-widest uppercase flex items-center relative group"
-                  >
-                    <Chip
-                      className="flex justify-center items-center w-24 md:w-32 h-12 text-[10px] md:text-xs text-center px-1 md:px-2"
-                      chip={theme.label}
-                    />
-                    <Tooltip message="Theme associated with the dataset." />
-                  </li>
-                ))}
+                {dataset.themes
+                  ?.filter(
+                    (theme): theme is typeof theme & { label?: string } =>
+                      !!(theme.label || theme.display_name)
+                  )
+                  .map((theme) => (
+                    <li
+                      key={theme.label || theme.display_name}
+                      className="tracking-widest uppercase flex items-center relative group"
+                    >
+                      <Chip
+                        className="flex justify-center items-center w-24 md:w-32 h-12 text-[10px] md:text-xs text-center px-1 md:px-2"
+                        chip={theme.label || theme.display_name || ""}
+                      />
+                      <Tooltip message="Theme associated with the dataset." />
+                    </li>
+                  ))}
               </ul>
             </div>
 
@@ -69,14 +74,19 @@ export default async function Page({
                 <span className="text-sm font-semibold text-gray-700 whitespace-nowrap">
                   Conforms To:
                 </span>
-                {dataset.conformsTo.map((item) => (
-                  <span
-                    key={item.value}
-                    className="text-sm font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20"
-                  >
-                    {item.label || item.value}
-                  </span>
-                ))}
+                {dataset.conformsTo
+                  ?.filter(
+                    (item): item is typeof item & { value?: string; label?: string } =>
+                      !!(item.value || item.label || item.name)
+                  )
+                  .map((item) => (
+                    <span
+                      key={item.value || item.label || item.name}
+                      className="text-sm font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20"
+                    >
+                      {item.label || item.value || item.name}
+                    </span>
+                  ))}
               </div>
             ) : (
               <div className="flex items-center gap-2 text-sm text-gray-500 italic">

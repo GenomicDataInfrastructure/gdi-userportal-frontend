@@ -76,8 +76,12 @@ export default async function Page({
                 </span>
                 {dataset.conformsTo
                   ?.filter(
-                    (item): item is typeof item & { value?: string; label?: string } =>
-                      !!(item.value || item.label || item.name)
+                    (
+                      item
+                    ): item is typeof item & {
+                      value?: string;
+                      label?: string;
+                    } => !!(item.value || item.label || item.name)
                   )
                   .map((item) => (
                     <span

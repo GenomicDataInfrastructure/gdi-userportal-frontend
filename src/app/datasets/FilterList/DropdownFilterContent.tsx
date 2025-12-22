@@ -68,8 +68,10 @@ export default function DropdownFilterContent({
       className="px-4 pb-2 pt-4 font-bryant font-normal flex flex-col gap-y-3 text-base border-t-2 border-t-primary max-h-80 overflow-y-auto"
     >
       {filter.values!.length > 0 ? (
-        filter.values!
-          .filter((item): item is typeof item & { value: string } => !!item.value)
+        filter
+          .values!.filter(
+            (item): item is typeof item & { value: string } => !!item.value
+          )
           .map((item) => (
             <div
               key={item.value}

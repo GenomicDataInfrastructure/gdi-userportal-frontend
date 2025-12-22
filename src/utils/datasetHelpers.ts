@@ -18,17 +18,22 @@ export function isExternalDataset(
     return false;
   }
 
+  const normalizedLabel = EXTERNALLY_GOVERNED_LABEL.toLowerCase();
+
   return dataset.conformsTo.some((item) => {
-    if (item.name === EXTERNALLY_GOVERNED_URI) {
+    if (
+      item.name === EXTERNALLY_GOVERNED_URI ||
+      item.value === EXTERNALLY_GOVERNED_URI ||
+      item.label === EXTERNALLY_GOVERNED_URI
+    ) {
       return true;
     }
-    if (item.value?.toLowerCase() === EXTERNALLY_GOVERNED_LABEL.toLowerCase()) {
-      return true;
-    }
-    if (item.label?.toLowerCase() === EXTERNALLY_GOVERNED_LABEL.toLowerCase()) {
-      return true;
-    }
-    return false;
+
+    const displayNameMatch = item.display_name?.toLowerCase() === normalizedLabel;
+    const valueMatch = item.value?.toLowerCase() === normalizedLabel;
+    const labelMatch = item.label?.toLowerCase() === normalizedLabel;
+
+    return displayNameMatch || valueMatch || labelMatch;
   });
 }
 

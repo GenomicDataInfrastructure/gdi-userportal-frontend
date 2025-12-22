@@ -80,7 +80,10 @@ export default async function Page({
               </div>
             ) : (
               <div className="flex items-center gap-2 text-sm text-gray-500 italic">
-                <FontAwesomeIcon icon={faCircleInfo} className="w-4 h-4 flex-shrink-0" />
+                <FontAwesomeIcon
+                  icon={faCircleInfo}
+                  className="w-4 h-4 flex-shrink-0"
+                />
                 <span>Conforms To: Not specified for this dataset</span>
               </div>
             )}

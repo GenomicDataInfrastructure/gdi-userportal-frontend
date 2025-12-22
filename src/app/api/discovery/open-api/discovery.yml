@@ -363,7 +363,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ValueLabel"
-          title: Conforms To
+          deprecated: true
         distributions:
           type: array
           items:
@@ -447,11 +447,6 @@ components:
           deprecated: true
         accessRights:
           $ref: "#/components/schemas/ValueLabel"
-        conformsTo:
-          type: array
-          items:
-            $ref: "#/components/schemas/ValueLabel"
-          deprecated: true
         keywords:
           type: array
           items:
@@ -521,12 +516,16 @@ components:
         label:
           type: string
           title: label
+        name:
+          type: string
+          title: name
+        display_name:
+          type: string
+          title: display_name
         count:
           type: integer
           title: count
-      required:
-        - value
-        - label
+      required: []
     ContactPoint:
       properties:
         name:

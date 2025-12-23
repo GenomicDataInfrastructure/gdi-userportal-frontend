@@ -13,14 +13,17 @@ const EXTERNALLY_GOVERNED_URI = "http://data.gdi.eu/core/p2/ExternallyGoverned";
 export function getExternalDatasetInfo(
   dataset: SearchedDataset | RetrievedDataset
 ): { isExternal: boolean; label?: string } {
-  const item = dataset.conformsTo?.find(
-    (item) => item.value === EXTERNALLY_GOVERNED_URI
+  const item = (Array.isArray(dataset.conformsTo) ? dataset.conformsTo : [dataset.conformsTo])?.find(
+    (c) => (typeof c === "string" ? c : c?.value) === EXTERNALLY_GOVERNED_URI || 
+           (typeof c === "object" && c?.label?.toLowerCase().includes("external"))
   );
-  return { isExternal: !!item, label: item?.label };
+
+  return {
+    isExternal: !!item,
+    label: typeof item === "object" ? item?.label : undefined,
+  };
 }
 
-export function getFirstAccessUrl(
+export const getFirstAccessUrl = (
   distributions?: RetrievedDistribution[]
-): string | undefined {
-  return distributions?.find((dist) => dist.accessUrl?.trim())?.accessUrl;
-}
+): string | undefined => distributions?.find((d) => d.accessUrl?.trim())?.accessUrl;

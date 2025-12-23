@@ -10,7 +10,7 @@ import { retrieveDatasetApi } from "@/app/api/discovery";
 import { useWindowSize } from "@/hooks";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { truncateDescription } from "@/utils/textProcessing";
-import { isExternalDataset, getFirstAccessUrl } from "@/utils/datasetHelpers";
+import { getFirstAccessUrl, getExternalDatasetInfo } from "@/utils/datasetHelpers";
 import {
   faMinusCircle,
   faPlusCircle,
@@ -18,7 +18,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card, { CardItem } from "../../components/Card";
-import Link from "next/link";
 import { useEffect, useState, useRef, useMemo } from "react";
 import { ExternalDatasetConfirmationDialog } from "@/components/ExternalDatasetCardLink";
 
@@ -50,11 +49,7 @@ function DatasetCard({
   const hasFetchedRef = useRef(false);
 
   useEffect(() => {
-    const isConformsToEmpty =
-      conformsTo === null ||
-      conformsTo === undefined ||
-      (Array.isArray(conformsTo) && conformsTo.length === 0);
-
+    const isConformsToEmpty = !conformsTo?.length;
     const shouldFetch =
       dataset.id && !hasFetchedRef.current && isConformsToEmpty;
 
@@ -69,8 +64,11 @@ function DatasetCard({
     }
   }, [dataset.id]);
 
-  const isExternal = useMemo(
-    () => isExternalDataset({ id: dataset.id, conformsTo } as SearchedDataset),
+  const { isExternal, label: externalLabel } = useMemo(
+    () => {
+      const dataset_ = { id: dataset.id, conformsTo } as SearchedDataset;
+      return getExternalDatasetInfo(dataset_);
+    },
     [dataset.id, conformsTo]
   );
   const isInBasket = basket.some((ds) => ds.id === dataset.id);
@@ -142,7 +140,7 @@ function DatasetCard({
   const subTitles = useMemo(
     () =>
       dataset.themes
-        ?.map((theme) => theme.label || theme.display_name)
+        ?.map((theme) => theme.label)
         .filter((title): title is string => !!title),
     [dataset.themes]
   );
@@ -153,7 +151,7 @@ function DatasetCard({
         ?.map((keyword) =>
           typeof keyword === "string"
             ? keyword
-            : keyword.label || keyword.display_name
+            : keyword.label
         )
         .filter((kw): kw is string => !!kw),
     [dataset.keywords]
@@ -170,6 +168,7 @@ function DatasetCard({
       externalUrl={isExternal ? externalAccessUrl : undefined}
       button={buttonElement}
       isExternal={isExternal}
+      externalLabel={externalLabel}
     />
   );
 }

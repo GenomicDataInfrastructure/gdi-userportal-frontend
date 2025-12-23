@@ -9,12 +9,13 @@ import { faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExportDatasetButton from "@/app/datasets/[id]/ExportDatasetButton";
 import { RetrievedDataset } from "@/app/api/discovery/open-api/schemas";
-import { isExternalDataset, getFirstAccessUrl } from "@/utils/datasetHelpers";
+import { getFirstAccessUrl, getExternalDatasetInfo } from "@/utils/datasetHelpers";
 import ExternalDatasetLink from "./ExternalDatasetLink";
 
 function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
-  const isExternal = isExternalDataset(dataset);
+  const externalInfo = getExternalDatasetInfo(dataset);
   const externalAccessUrl = getFirstAccessUrl(dataset.distributions);
+  const externalLabel = externalInfo.label || "External Dataset";
   const metaFormats = [
     {
       format: "rdf",
@@ -38,8 +39,8 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
 
   return [
     {
-      label: isExternal ? "External Dataset" : "Request data access",
-      value: isExternal ? (
+      label: externalInfo.isExternal ? externalLabel : "Request data access",
+      value: externalInfo.isExternal ? (
         <div className="flex flex-col gap-2">
           <p className="text-xs text-gray-600">
             This dataset is not available for request through the GDI User

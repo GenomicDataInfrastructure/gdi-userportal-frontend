@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import Chips from "./Chips";
 import contentConfig from "@/config/contentConfig";
-import ExternalDatasetCardLink from "./ExternalDatasetCardLink";
 
 export type CardItem = {
   text: string;
@@ -24,6 +23,7 @@ type CardProps = {
   button?: React.ReactNode;
   externalUrl?: string;
   isExternal?: boolean;
+  externalLabel?: string;
 };
 
 export default function Card({
@@ -36,6 +36,7 @@ export default function Card({
   button,
   externalUrl,
   isExternal: isExternalProp,
+  externalLabel,
 }: CardProps) {
   const isExternal = isExternalProp ?? !!externalUrl;
   return (
@@ -49,8 +50,8 @@ export default function Card({
             <div className="flex flex-wrap gap-2 font-normal text-xs sm:text-sm leading-[12px] uppercase pb-2">
               {subTitles.map((subTitle, index) => (
                 <span
-                  key={index}
-                  className={`${index ? "sm:border-l-[2px] sm:pl-2 sm:border-l-info" : ""}`}
+                  key={subTitle}
+                  className={index ? "sm:border-l-[2px] sm:pl-2 sm:border-l-info" : undefined}
                 >
                   {subTitle}
                 </span>
@@ -65,7 +66,7 @@ export default function Card({
           {isExternal && (
             <div className="inline-block w-fit">
               <span className="text-xs font-bold px-3 py-1 rounded-full bg-orange-100 text-orange-700 border border-orange-300">
-                EXTERNAL
+                {externalLabel || "EXTERNAL"}
               </span>
             </div>
           )}

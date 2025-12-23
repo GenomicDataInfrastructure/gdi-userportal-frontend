@@ -9,32 +9,20 @@ import {
 } from "@/app/api/discovery/open-api/schemas";
 
 const EXTERNALLY_GOVERNED_URI = "http://data.gdi.eu/core/p2/ExternallyGoverned";
-const EXTERNALLY_GOVERNED_LABEL = "Externally governed";
 
 export function isExternalDataset(
   dataset: SearchedDataset | RetrievedDataset
 ): boolean {
-  if (!dataset.conformsTo?.length) {
-    return false;
-  }
+  return dataset.conformsTo?.some((item) => item.value === EXTERNALLY_GOVERNED_URI) ?? false;
+}
 
-  const normalizedLabel = EXTERNALLY_GOVERNED_LABEL.toLowerCase();
-
-  return dataset.conformsTo.some((item) => {
-    if (
-      item.name === EXTERNALLY_GOVERNED_URI ||
-      item.value === EXTERNALLY_GOVERNED_URI ||
-      item.label === EXTERNALLY_GOVERNED_URI
-    ) {
-      return true;
-    }
-
-    const displayNameMatch = item.display_name?.toLowerCase() === normalizedLabel;
-    const valueMatch = item.value?.toLowerCase() === normalizedLabel;
-    const labelMatch = item.label?.toLowerCase() === normalizedLabel;
-
-    return displayNameMatch || valueMatch || labelMatch;
-  });
+export function getExternalDatasetInfo(
+  dataset: SearchedDataset | RetrievedDataset
+): { isExternal: boolean; label?: string } {
+  const item = dataset.conformsTo?.find(
+    (item) => item.value === EXTERNALLY_GOVERNED_URI
+  );
+  return { isExternal: !!item, label: item?.label };
 }
 
 export function getFirstAccessUrl(

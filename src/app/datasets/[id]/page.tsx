@@ -51,17 +51,17 @@ export default async function Page({
               <ul className="flex gap-x-3 gap-y-2 flex-wrap">
                 {dataset.themes
                   ?.filter(
-                    (theme): theme is typeof theme & { label?: string } =>
-                      !!(theme.label || theme.display_name)
+                    (theme): theme is typeof theme & { label: string } =>
+                      !!theme.label
                   )
                   .map((theme) => (
                     <li
-                      key={theme.label || theme.display_name}
+                      key={theme.label}
                       className="tracking-widest uppercase flex items-center relative group"
                     >
                       <Chip
                         className="flex justify-center items-center w-24 md:w-32 h-12 text-[10px] md:text-xs text-center px-1 md:px-2"
-                        chip={theme.label || theme.display_name || ""}
+                        chip={theme.label}
                       />
                       <Tooltip message="Theme associated with the dataset." />
                     </li>

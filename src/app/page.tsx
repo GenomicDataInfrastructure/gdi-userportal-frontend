@@ -104,14 +104,17 @@ const HomePage = ({ searchParams }: HomePageProps) => {
           title="Themes"
         />
       )}
-      <div className="mb-20 relative text-left flex items-center">
+      <div className="mb-20 relative text-left flex items-center py-8">
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="w-screen absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url("/homepage-about-background.png")`,
+            backgroundImage: `url("/hero-bg.svg")`,
+            left: '50%',
+            right: 'auto',
+            transform: 'translateX(-50%)',
           }}
         ></div>
-        <div className="relative z-10 w-full md:w-3/4 lg:w-2/3 xl:w-3/5 bg-white bg-opacity-75 rounded-lg min-h-[300px]">
+        <div className="relative z-10 w-full md:w-3/4 lg:w-2/3 xl:w-3/5">
           <h3 className="mb-4 text-2xl">About the data portal</h3>
           <p className="text-lg">
             {contentConfig.aboutContent.split("\n").map((line, index) => (

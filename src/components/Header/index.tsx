@@ -157,11 +157,11 @@ function Header() {
 
             <Link href="/" className="py-2">
               <Image
-                src={"/header-logo.svg"}
+                src={"/logo.png"}
                 alt={"Logo"}
-                width="200"
-                height="73"
-                className={"mb-4 mt-4 w-[140px] md:w-[200px]"}
+                width="100"
+                height="37"
+                className={"mb-2 mt-2 w-[70px] md:w-[100px]"}
               />
             </Link>
 

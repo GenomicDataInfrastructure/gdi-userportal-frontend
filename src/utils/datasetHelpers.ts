@@ -8,37 +8,19 @@ import {
   SearchedDataset,
 } from "@/app/api/discovery/open-api/schemas";
 
-export const CONFORMS_TO_STANDARDS = {
-  EXTERNALLY_GOVERNED: "Externally governed",
-} as const;
+const EXTERNALLY_GOVERNED_URI = "http://data.gdi.eu/core/p2/ExternallyGoverned";
 
-const EXTERNALLY_GOVERNED_LOWER =
-  CONFORMS_TO_STANDARDS.EXTERNALLY_GOVERNED.toLowerCase();
-
-export function isExternalDataset(
+export function getExternalDatasetInfo(
   dataset: SearchedDataset | RetrievedDataset
-): boolean {
-  if (!dataset.conformsTo?.length) {
-    return false;
-  }
-
-  return dataset.conformsTo.some(
-    (item) => item.value?.toLowerCase() === EXTERNALLY_GOVERNED_LOWER
+): { isExternal: boolean; label?: string } {
+  const item = dataset.conformsTo?.find(
+    (item) => item.value === EXTERNALLY_GOVERNED_URI
   );
+  return { isExternal: !!item, label: item?.label };
 }
 
 export function getFirstAccessUrl(
   distributions?: RetrievedDistribution[]
 ): string | undefined {
-  if (!distributions?.length) {
-    return undefined;
-  }
-
-  for (const distribution of distributions) {
-    if (distribution.accessUrl?.trim()) {
-      return distribution.accessUrl;
-    }
-  }
-
-  return undefined;
+  return distributions?.find((dist) => dist.accessUrl?.trim())?.accessUrl;
 }

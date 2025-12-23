@@ -16,12 +16,17 @@ interface ValueListProps {
 
 const ValueList: React.FC<ValueListProps> = ({ items, filterKey, title }) => {
   const { addActiveFilter } = useFilters();
+  const validItems = items.filter(
+    (item): item is typeof item & { value: string } => !!item.value
+  );
+
   const handleClick = (value: ValueLabel) => {
+    if (!value.value) return;
     addActiveFilter({
       key: filterKey,
       source: "ckan",
       type: "DROPDOWN",
-      values: [{ value: value.value, label: value.label }],
+      values: [{ value: value.value, label: value.label || value.value }],
       label: title,
     });
   };
@@ -29,7 +34,7 @@ const ValueList: React.FC<ValueListProps> = ({ items, filterKey, title }) => {
     <div className="bg-white mb-16 px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col w-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 justify-center">
-          {items.map((item) => (
+          {validItems.map((item) => (
             <div
               key={item.value}
               className="bg-white py-4 flex flex-col items-start justify-start rounded-lg shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50 text-left w-full sm:max-w-[260px]"

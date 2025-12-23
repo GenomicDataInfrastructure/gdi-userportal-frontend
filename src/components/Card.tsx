@@ -2,12 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { IconDefinition, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import Chips from "./Chips";
 import contentConfig from "@/config/contentConfig";
-import ExternalDatasetCardLink from "./ExternalDatasetCardLink";
 
 export type CardItem = {
   text: string;
@@ -22,8 +21,9 @@ type CardProps = {
   cardItems: CardItem[];
   keywords?: string[];
   button?: React.ReactNode;
-  conformsTo?: string;
   externalUrl?: string;
+  isExternal?: boolean;
+  externalLabel?: string;
 };
 
 export default function Card({
@@ -34,10 +34,11 @@ export default function Card({
   cardItems,
   keywords = [],
   button,
-  conformsTo,
   externalUrl,
+  isExternal: isExternalProp,
+  externalLabel,
 }: CardProps) {
-  const isExternal = !!externalUrl;
+  const isExternal = isExternalProp ?? !!externalUrl;
   return (
     <Link
       href={url}
@@ -49,8 +50,8 @@ export default function Card({
             <div className="flex flex-wrap gap-2 font-normal text-xs sm:text-sm leading-[12px] uppercase pb-2">
               {subTitles.map((subTitle, index) => (
                 <span
-                  key={index}
-                  className={`${index ? "sm:border-l-[2px] sm:pl-2 sm:border-l-info" : ""}`}
+                  key={subTitle}
+                  className={index ? "sm:border-l-[2px] sm:pl-2 sm:border-l-info" : undefined}
                 >
                   {subTitle}
                 </span>
@@ -62,13 +63,21 @@ export default function Card({
             {title}
           </div>
 
-          {conformsTo && (
-            <div className="mt-2 inline-block">
-              <span className="text-xs font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20">
-                {conformsTo}
+          {isExternal && externalLabel ? (
+            <div className="inline-block w-fit">
+              <span className="text-xs font-bold px-3 py-1 rounded-full bg-orange-100 text-orange-700 border border-orange-300">
+                {externalLabel}
               </span>
             </div>
-          )}
+          ) : isExternal && !externalLabel ? (
+            <div className="flex items-center gap-2 text-xs text-gray-500 italic">
+              <FontAwesomeIcon
+                icon={faCircleInfo}
+                className="w-3 h-3 flex-shrink-0"
+              />
+              <span>Conforms To: Not specified for this dataset</span>
+            </div>
+          ) : null}
 
           {description && (
             <p className="mt-3 line-clamp-2 font-normal text-base">
@@ -94,40 +103,11 @@ export default function Card({
           </div>
         </div>
       </div>
-      {isExternal ? (
-        <div className="mt-6 pr-2">
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <div className="flex-1">
-                <p className="text-xs font-semibold text-gray-800">
-                  External Dataset
-                </p>
-                <p className="text-xs text-gray-600 mt-0.5">
-                  Not available for request through this portal
-                </p>
-              </div>
-              {externalUrl ? (
-                <ExternalDatasetCardLink url={externalUrl} />
-              ) : (
-                <span className="text-xs px-3 py-1.5 font-semibold bg-gray-200 text-gray-500 rounded-md shrink-0 whitespace-nowrap">
-                  No Link Available
-                </span>
-              )}
-            </div>
-            {keywords.length > 0 && (
-              <div>
-                <Chips chips={keywords} />
-              </div>
-            )}
-          </div>
+      {(keywords.length > 0 || button) && (
+        <div className="mt-6 flex justify-between items-start pr-2">
+          {keywords.length > 0 && <Chips chips={keywords} />}
+          {contentConfig.showBasketAndLogin && button}
         </div>
-      ) : (
-        (keywords.length > 0 || button) && (
-          <div className="mt-6 flex justify-between items-start pr-2">
-            <Chips chips={keywords} />
-            {contentConfig.showBasketAndLogin && button}
-          </div>
-        )
       )}
     </Link>
   );

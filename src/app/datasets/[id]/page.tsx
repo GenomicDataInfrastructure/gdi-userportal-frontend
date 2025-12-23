@@ -81,14 +81,14 @@ export default async function Page({
                     ): item is typeof item & {
                       value?: string;
                       label?: string;
-                    } => !!(item.value || item.label || item.name)
+                    } => !!(item.value || item.label)
                   )
                   .map((item) => (
                     <span
-                      key={item.value || item.label || item.name}
+                      key={item.value || item.label}
                       className="text-sm font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20"
                     >
-                      {item.label || item.value || item.name}
+                      {item.label || item.value}
                     </span>
                   ))}
               </div>

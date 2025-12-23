@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { IconDefinition, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import Chips from "./Chips";
@@ -63,13 +63,21 @@ export default function Card({
             {title}
           </div>
 
-          {isExternal && (
+          {isExternal && externalLabel ? (
             <div className="inline-block w-fit">
               <span className="text-xs font-bold px-3 py-1 rounded-full bg-orange-100 text-orange-700 border border-orange-300">
-                {externalLabel || "EXTERNAL"}
+                {externalLabel}
               </span>
             </div>
-          )}
+          ) : isExternal && !externalLabel ? (
+            <div className="flex items-center gap-2 text-xs text-gray-500 italic">
+              <FontAwesomeIcon
+                icon={faCircleInfo}
+                className="w-3 h-3 flex-shrink-0"
+              />
+              <span>Conforms To: Not specified for this dataset</span>
+            </div>
+          ) : null}
 
           {description && (
             <p className="mt-3 line-clamp-2 font-normal text-base">

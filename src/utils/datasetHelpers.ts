@@ -10,12 +10,6 @@ import {
 
 const EXTERNALLY_GOVERNED_URI = "http://data.gdi.eu/core/p2/ExternallyGoverned";
 
-export function isExternalDataset(
-  dataset: SearchedDataset | RetrievedDataset
-): boolean {
-  return dataset.conformsTo?.some((item) => item.value === EXTERNALLY_GOVERNED_URI) ?? false;
-}
-
 export function getExternalDatasetInfo(
   dataset: SearchedDataset | RetrievedDataset
 ): { isExternal: boolean; label?: string } {

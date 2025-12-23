@@ -521,12 +521,6 @@ components:
         label:
           type: string
           title: label
-        name:
-          type: string
-          title: name
-        display_name:
-          type: string
-          title: display_name
         count:
           type: integer
           title: count

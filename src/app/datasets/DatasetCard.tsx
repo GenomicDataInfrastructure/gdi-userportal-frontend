@@ -43,9 +43,6 @@ function DatasetCard({
   const [conformsTo, setConformsTo] = useState<ValueLabel[] | undefined>(
     dataset.conformsTo
   );
-  const [fullDataset, setFullDataset] = useState<typeof dataset | undefined>(
-    undefined
-  );
   const hasFetchedRef = useRef(false);
 
   useEffect(() => {
@@ -55,12 +52,14 @@ function DatasetCard({
 
     if (shouldFetch) {
       hasFetchedRef.current = true;
-      retrieveDatasetApi(dataset.id).then((retrievedDataset) => {
-        if (retrievedDataset) {
-          setConformsTo(retrievedDataset.conformsTo);
-          setFullDataset(retrievedDataset);
-        }
-      });
+      retrieveDatasetApi(dataset.id)
+        .then((fullDataset) => {
+          setConformsTo(fullDataset?.conformsTo);
+        })
+        .catch((error) => {
+          console.error("Failed to retrieve dataset", error);
+          hasFetchedRef.current = false;
+        });
     }
   }, [dataset.id]);
 
@@ -73,7 +72,7 @@ function DatasetCard({
   );
   const isInBasket = basket.some((ds) => ds.id === dataset.id);
   const externalAccessUrl = getFirstAccessUrl(
-    fullDataset?.distributions || dataset.distributions
+    dataset.distributions
   );
 
   const toggleDatasetInBasket = (e: React.MouseEvent) => {

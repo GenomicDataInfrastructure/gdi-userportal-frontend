@@ -10,7 +10,10 @@ import { retrieveDatasetApi } from "@/app/api/discovery";
 import { useWindowSize } from "@/hooks";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { truncateDescription } from "@/utils/textProcessing";
-import { getFirstAccessUrl, getExternalDatasetInfo } from "@/utils/datasetHelpers";
+import {
+  getFirstAccessUrl,
+  getExternalDatasetInfo,
+} from "@/utils/datasetHelpers";
 import {
   faMinusCircle,
   faPlusCircle,
@@ -43,37 +46,42 @@ function DatasetCard({
   const [conformsTo, setConformsTo] = useState<ValueLabel[] | undefined>(
     dataset.conformsTo
   );
+  const [distributions, setDistributions] = useState(dataset.distributions);
   const hasFetchedRef = useRef(false);
+
+  const { isExternal } = useMemo(() => {
+    const dataset_ = { id: dataset.id, conformsTo } as SearchedDataset;
+    return getExternalDatasetInfo(dataset_);
+  }, [dataset.id, conformsTo]);
 
   useEffect(() => {
     const isConformsToEmpty = !conformsTo?.length;
     const shouldFetch =
-      dataset.id && !hasFetchedRef.current && isConformsToEmpty;
+      dataset.id &&
+      !hasFetchedRef.current &&
+      (isConformsToEmpty ||
+        (isExternal && !distributions?.some((d) => d.accessUrl)));
 
     if (shouldFetch) {
       hasFetchedRef.current = true;
       retrieveDatasetApi(dataset.id)
         .then((fullDataset) => {
           setConformsTo(fullDataset?.conformsTo);
+          setDistributions(fullDataset?.distributions);
         })
         .catch((error) => {
           console.error("Failed to retrieve dataset", error);
           hasFetchedRef.current = false;
         });
     }
-  }, [dataset.id]);
+  }, [dataset.id, isExternal]);
 
-  const { isExternal, label: externalLabel } = useMemo(
-    () => {
-      const dataset_ = { id: dataset.id, conformsTo } as SearchedDataset;
-      return getExternalDatasetInfo(dataset_);
-    },
-    [dataset.id, conformsTo]
-  );
+  const { label: externalLabel } = useMemo(() => {
+    const dataset_ = { id: dataset.id, conformsTo } as SearchedDataset;
+    return getExternalDatasetInfo(dataset_);
+  }, [dataset.id, conformsTo]);
   const isInBasket = basket.some((ds) => ds.id === dataset.id);
-  const externalAccessUrl = getFirstAccessUrl(
-    dataset.distributions
-  );
+  const externalAccessUrl = getFirstAccessUrl(distributions);
 
   const toggleDatasetInBasket = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -148,9 +156,7 @@ function DatasetCard({
     () =>
       dataset.keywords
         ?.map((keyword) =>
-          typeof keyword === "string"
-            ? keyword
-            : keyword.label
+          typeof keyword === "string" ? keyword : keyword.label
         )
         .filter((kw): kw is string => !!kw),
     [dataset.keywords]

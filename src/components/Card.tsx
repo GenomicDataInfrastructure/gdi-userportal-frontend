@@ -2,7 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { IconDefinition, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import {
+  IconDefinition,
+  faCircleInfo,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import Chips from "./Chips";
@@ -51,7 +54,11 @@ export default function Card({
               {subTitles.map((subTitle, index) => (
                 <span
                   key={subTitle}
-                  className={index ? "sm:border-l-[2px] sm:pl-2 sm:border-l-info" : undefined}
+                  className={
+                    index
+                      ? "sm:border-l-[2px] sm:pl-2 sm:border-l-info"
+                      : undefined
+                  }
                 >
                   {subTitle}
                 </span>
@@ -65,7 +72,7 @@ export default function Card({
 
           {isExternal && externalLabel ? (
             <div className="inline-block w-fit">
-              <span className="text-xs font-bold px-3 py-1 rounded-full bg-orange-100 text-orange-700 border border-orange-300">
+              <span className="text-xs font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20">
                 {externalLabel}
               </span>
             </div>

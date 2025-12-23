@@ -48,8 +48,10 @@ function DatasetCard({
   );
   const [distributions, setDistributions] = useState(dataset.distributions);
   const hasFetchedRef = useRef(false);
-
-  const { isExternal } = useMemo(() => {
+  useEffect(() => {
+    setDistributions(dataset.distributions);
+  }, [dataset.id, dataset.distributions]);
+  const { isExternal, label: externalLabel } = useMemo(() => {
     const dataset_ = { id: dataset.id, conformsTo } as SearchedDataset;
     return getExternalDatasetInfo(dataset_);
   }, [dataset.id, conformsTo]);
@@ -74,12 +76,8 @@ function DatasetCard({
           hasFetchedRef.current = false;
         });
     }
-  }, [dataset.id, isExternal]);
+  }, [dataset.id, isExternal, distributions]);
 
-  const { label: externalLabel } = useMemo(() => {
-    const dataset_ = { id: dataset.id, conformsTo } as SearchedDataset;
-    return getExternalDatasetInfo(dataset_);
-  }, [dataset.id, conformsTo]);
   const isInBasket = basket.some((ds) => ds.id === dataset.id);
   const externalAccessUrl = getFirstAccessUrl(distributions);
 

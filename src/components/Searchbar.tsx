@@ -62,9 +62,7 @@ function SearchBar({ size, searchParams }: Readonly<SearchBarProps>) {
       <div className="relative">
         <input
           placeholder="Search datasets"
-          className={`${sizeClass} w-full rounded-lg px-4 py-[9px] shadow-xl ease-in-out hover:shadow-2xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-focus-ring focus:outline-none transition-all duration-300 ${
-            isFocused ? "ring-2 ring-primary" : ""
-          }`}
+          className={`${sizeClass} w-full rounded-lg px-4 py-[9px] shadow-xl ease-in-out hover:shadow-2xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-focus-ring focus:outline-none transition-all duration-300`}
           value={query}
           onChange={handleQueryChange}
           onKeyDown={handleEnter}

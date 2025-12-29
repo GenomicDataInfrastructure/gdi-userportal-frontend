@@ -138,7 +138,7 @@ function Header() {
                         <li key={item.href}>
                           <Link
                             href={item.href}
-                            className="block px-8 py-3 hover:bg-hover-color hover:text-white text-lg"
+                            className="block px-8 py-3 hover:bg-primary hover:text-white text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary transition-colors duration-200"
                             onClick={closeMenu}
                           >
                             <FontAwesomeIcon
@@ -172,7 +172,7 @@ function Header() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`relative px-4 py-2 rounded-md transition-all duration-300 ${
+                    className={`relative px-4 py-2 rounded-md transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary ${
                       isActive
                         ? "bg-primary text-white"
                         : "text-black hover:bg-primary hover:text-white"

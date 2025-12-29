@@ -63,14 +63,14 @@ function Footer() {
                 )}
               <Image
                 src={"/secondary-logo-v1.png"}
-                alt="Secondary logo"
+                alt="1+MG Initiative logo - European genomic data sharing initiative"
                 width={100}
                 height={70}
                 className="object-contain"
               />
               <Image
                 src={"/b1mg-logo.png"}
-                alt="B1MG logo"
+                alt="B1MG project logo - Beyond 1 Million Genomes"
                 width={100}
                 height={70}
                 className="object-contain"

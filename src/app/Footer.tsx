@@ -89,7 +89,7 @@ function Footer() {
           </div>
           {/* Second column: Legal */}
           <div className="flex flex-col gap-2 text-left w-full md:w-1/6">
-            <h3 className="text-lg">Legal</h3>
+            <h3 className="text-lg font-bold">Legal</h3>
             <a href="/legal#website-terms" className="hover:text-info">
               Terms & Conditions
             </a>
@@ -102,7 +102,7 @@ function Footer() {
           </div>
           {/* Third column: Portal links */}
           <div className="flex flex-col gap-2 text-left w-full md:w-1/6">
-            <h3 className="text-lg">Portal Links</h3>
+            <h3 className="text-lg font-bold">Portal Links</h3>
             <Link className="hover:text-info" href="/datasets">
               Datasets
             </Link>
@@ -118,7 +118,7 @@ function Footer() {
           </div>
           {/* Fourth column: Contact us */}
           <div className="flex flex-col gap-2 text-left w-full md:w-1/3">
-            <h3 className="text-lg">Contact Us</h3>
+            <h3 className="text-lg font-bold">Contact Us</h3>
             <div className="flex gap-4">
               {contentConfig.linkedInUrl && (
                 <a

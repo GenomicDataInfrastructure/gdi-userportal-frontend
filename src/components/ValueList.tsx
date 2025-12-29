@@ -32,24 +32,23 @@ const ValueList: React.FC<ValueListProps> = ({ items, filterKey, title }) => {
           {items.map((item) => (
             <div
               key={item.value}
-              className="bg-white py-4 flex flex-col items-start justify-start rounded-lg shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50 text-left w-full sm:max-w-[260px]"
+              className="bg-white py-4 flex flex-col items-start justify-start rounded-lg shadow-lg border-b-4 border-b-[#B5BFC4] hover:border-b-primary transition-all duration-300 hover:shadow-xl text-left w-full sm:max-w-[260px] card-hover"
             >
               <div className="p-4 h-full flex flex-col">
                 <h3 className="text-lg truncate-lines-1 font-title mb-1">
                   {item.label}
                 </h3>
-                <div className="flex items-center mb-3 text-sm">
+                <div className="flex items-center mb-3 text-sm text-heading-secondary">
                   <FontAwesomeIcon icon={faDatabase} className="mr-2" />
                   {item.count} {item.count === 1 ? "dataset" : "datasets"}
                 </div>
-                <div className="mt-auto text-primary flex items-center gap-1 transition hover:underline duration-1000 text-sm">
+                <div className="mt-auto text-sm">
                   <Link
                     onClick={() => handleClick(item)}
                     href={`/datasets?page=1`}
-                    className="flex items-center gap-1"
+                    className="link-arrow text-primary hover:text-hover-color"
                   >
                     See datasets
-                    <FontAwesomeIcon icon={faArrowRight} className="w-4 h-4" />
                   </Link>
                 </div>
               </div>

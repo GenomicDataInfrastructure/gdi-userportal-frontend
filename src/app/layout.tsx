@@ -27,6 +27,7 @@ export default function RootLayout({
         <title>{contentConfig.siteTitle}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content={contentConfig.siteDescription} />
+        <link rel="icon" href="/secondary-logo-v1.png" type="image/png" />
         <PublicEnvScript />
         <link rel="stylesheet" href={"/palette.css"} />
         <link rel="stylesheet" href={"/fonts.css"} />

@@ -15,6 +15,9 @@
   --color-disclaimer: var(--color-disclaimer);
   --color-surface: var(--color-surface);
   --color-footer: var(--color-footer);
+  --color-heading-secondary: var(--color-heading-secondary);
+  --color-card-shadow: var(--color-card-shadow);
+  --color-focus-ring: var(--color-focus-ring);
 
   --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
   --background-image-gradient-conic: conic-gradient(
@@ -55,7 +58,11 @@
     border-radius: 0.375rem;
     color: white;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .button:hover {
+    box-shadow: 0 0.5rem 1rem var(--color-card-shadow);
   }
 
   .custom-button {
@@ -69,6 +76,45 @@
 
   .custom-button .button-icon {
     margin-right: 0.25rem;
+  }
+
+  /* Card hover effect */
+  .card-hover {
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .card-hover:hover {
+    box-shadow: 0 0.5rem 1rem var(--color-card-shadow);
+  }
+
+  /* Link with arrow indicator */
+  .link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+
+  .link-arrow::after {
+    content: "→";
+    transition: transform 0.2s ease;
+  }
+
+  .link-arrow:hover::after {
+    transform: translateX(0.25rem);
+  }
+
+  /* Form focus states */
+  .input-focus:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.25rem var(--color-focus-ring);
+  }
+
+  /* Section background */
+  .bg-section {
+    background-color: var(--color-surface);
   }
 
   body {

@@ -128,14 +128,10 @@ const HomePage = ({ searchParams }: HomePageProps) => {
           </p>
           <br />
           <a
-            className="text-primary flex items-center gap-1 transition hover:underline duration-1000"
+            className="link-arrow text-primary hover:text-hover-color"
             href="/about"
           >
             Read more
-            <FontAwesomeIcon
-              icon={faArrowUpRightFromSquare}
-              className="w-4 h-4"
-            />
           </a>
         </div>
       </div>

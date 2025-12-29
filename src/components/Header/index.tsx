@@ -138,7 +138,7 @@ function Header() {
                         <li key={item.href}>
                           <Link
                             href={item.href}
-                            className="block px-8 py-3 hover:bg-hover-color hover:text-white text-lg"
+                            className="block px-8 py-3 hover:bg-primary hover:text-white text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary transition-colors duration-200"
                             onClick={closeMenu}
                           >
                             <FontAwesomeIcon
@@ -157,32 +157,28 @@ function Header() {
 
             <Link href="/" className="py-2">
               <Image
-                src={"/header-logo.svg"}
+                src={"/logo.png"}
                 alt={"Logo"}
-                width="200"
-                height="73"
-                className={"mb-4 mt-4 w-[140px] md:w-[200px]"}
+                width="100"
+                height="37"
+                className={"mb-2 mt-2 w-[70px] md:w-[100px]"}
               />
             </Link>
 
-            <div className="hidden items-center gap-x-4 text-base font-body text-black lg:flex lg:text-lg xl:gap-x-6">
+            <div className="hidden items-center gap-x-2 text-base font-body lg:flex lg:text-lg xl:gap-x-4">
               {navItems.map((item) => {
+                const isActive = item.isActive(activeTab);
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`relative px-3 py-1 lg:px-7 transition-opacity duration-300 text-black`}
+                    className={`relative px-4 py-2 rounded-md transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary ${
+                      isActive
+                        ? "bg-primary text-white"
+                        : "text-black hover:bg-primary hover:text-white"
+                    }`}
                   >
-                    <span className="relative group">
-                      {item.label}
-                      <span
-                        className={`absolute left-0 bottom-[-2px] w-full h-[2px] transition-transform duration-300 transform ${
-                          item.isActive(activeTab)
-                            ? "bg-primary scale-x-100"
-                            : "bg-secondary scale-x-0"
-                        } group-hover:scale-x-100 group-hover:bg-secondary`}
-                      ></span>
-                    </span>
+                    {item.label}
                   </Link>
                 );
               })}

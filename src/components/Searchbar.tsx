@@ -62,9 +62,7 @@ function SearchBar({ size, searchParams }: Readonly<SearchBarProps>) {
       <div className="relative">
         <input
           placeholder="Search datasets"
-          className={`${sizeClass} w-full rounded-lg px-4 py-[9px] shadow-xl ease-in-out hover:shadow-2xl ${
-            isFocused ? "ring-2 focus:outline ring-primary" : ""
-          }`}
+          className={`${sizeClass} w-full rounded-lg px-4 py-[9px] shadow-xl ease-in-out hover:shadow-2xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-focus-ring focus:outline-none transition-all duration-300`}
           value={query}
           onChange={handleQueryChange}
           onKeyDown={handleEnter}
@@ -76,7 +74,7 @@ function SearchBar({ size, searchParams }: Readonly<SearchBarProps>) {
         >
           <button
             type="submit"
-            className="flex w-full cursor-pointer items-center rounded-r-lg bg-primary px-4 tracking-wide text-white transition-colors duration-200 hover:bg-secondary sm:w-auto"
+            className="flex w-full cursor-pointer items-center rounded-r-lg bg-primary px-4 tracking-wide text-white transition-all duration-300 hover:bg-hover-color sm:w-auto"
           >
             <FontAwesomeIcon icon={faSearch} />
           </button>

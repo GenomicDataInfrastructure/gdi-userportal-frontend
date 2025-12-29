@@ -165,24 +165,20 @@ function Header() {
               />
             </Link>
 
-            <div className="hidden items-center gap-x-4 text-base font-body text-black lg:flex lg:text-lg xl:gap-x-6">
+            <div className="hidden items-center gap-x-2 text-base font-body lg:flex lg:text-lg xl:gap-x-4">
               {navItems.map((item) => {
+                const isActive = item.isActive(activeTab);
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`relative px-3 py-1 lg:px-7 transition-opacity duration-300 text-black`}
+                    className={`relative px-4 py-2 rounded-md transition-all duration-300 ${
+                      isActive
+                        ? "bg-primary text-white"
+                        : "text-black hover:bg-primary hover:text-white"
+                    }`}
                   >
-                    <span className="relative group">
-                      {item.label}
-                      <span
-                        className={`absolute left-0 bottom-[-2px] w-full h-[2px] transition-transform duration-300 transform ${
-                          item.isActive(activeTab)
-                            ? "bg-primary scale-x-100"
-                            : "bg-secondary scale-x-0"
-                        } group-hover:scale-x-100 group-hover:bg-secondary`}
-                      ></span>
-                    </span>
+                    {item.label}
                   </Link>
                 );
               })}

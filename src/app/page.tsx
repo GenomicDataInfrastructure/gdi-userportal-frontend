@@ -109,9 +109,9 @@ const HomePage = ({ searchParams }: HomePageProps) => {
           className="w-screen absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: `url("/hero-bg.svg")`,
-            left: '50%',
-            right: 'auto',
-            transform: 'translateX(-50%)',
+            left: "50%",
+            right: "auto",
+            transform: "translateX(-50%)",
           }}
         ></div>
         <div className="relative z-10 w-full md:w-3/4 lg:w-2/3 xl:w-3/5">
@@ -128,7 +128,7 @@ const HomePage = ({ searchParams }: HomePageProps) => {
           </p>
           <br />
           <a
-            className="text-secondary flex items-center gap-1 transition hover:underline duration-1000"
+            className="text-primary flex items-center gap-1 transition hover:underline duration-1000"
             href="/about"
           >
             Read more

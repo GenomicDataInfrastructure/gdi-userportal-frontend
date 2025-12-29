@@ -42,7 +42,7 @@ const ValueList: React.FC<ValueListProps> = ({ items, filterKey, title }) => {
                   <FontAwesomeIcon icon={faDatabase} className="mr-2" />
                   {item.count} {item.count === 1 ? "dataset" : "datasets"}
                 </div>
-                <div className="mt-auto text-secondary flex items-center gap-1 transition hover:underline duration-1000 text-sm">
+                <div className="mt-auto text-primary flex items-center gap-1 transition hover:underline duration-1000 text-sm">
                   <Link
                     onClick={() => handleClick(item)}
                     href={`/datasets?page=1`}

@@ -35,7 +35,7 @@ const RecentDatasets = ({ datasets }: { datasets: SearchedDataset[] }) => {
       <div className="flex justify-end mt-12">
         <Link
           href="/datasets"
-          className="flex items-center gap-1 transition hover:underline duration-1000 text-secondary"
+          className="flex items-center gap-1 transition hover:underline duration-1000 text-primary"
         >
           See all
           <FontAwesomeIcon icon={faArrowRight} className="w-5 h-5" />
@@ -57,7 +57,7 @@ function DatasetLink({
       </span>
       <h3 className="text-lg font-title mb-2 line-clamp-2">{title}</h3>
       <p className=" mb-4 line-clamp-3">{description}</p>
-      <div className="mt-auto text-secondary text-sm font-title flex items-center gap-1 transition hover:underline duration-300">
+      <div className="mt-auto text-primary text-sm font-title flex items-center gap-1 transition hover:underline duration-300">
         Read More <FontAwesomeIcon icon={faArrowRight} className="w-3 h-3" />
       </div>
     </div>

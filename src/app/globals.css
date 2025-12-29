@@ -14,6 +14,7 @@
   --color-hover-color: var(--color-hover);
   --color-disclaimer: var(--color-disclaimer);
   --color-surface: var(--color-surface);
+  --color-footer: var(--color-footer);
 
   --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
   --background-image-gradient-conic: conic-gradient(

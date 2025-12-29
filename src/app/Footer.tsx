@@ -36,7 +36,7 @@ function Footer() {
           <FontAwesomeIcon icon={faArrowRight} className="ml-2 text-white" />
         </a>
       </div>
-      <footer className="flex flex-col items-center bg-gray-50 justify-center gap-y-4 border-t-primary p-7 md:flex-row md:gap-x-12 md:gap-y-0">
+      <footer className="flex flex-col items-center bg-footer justify-center gap-y-4 border-t-primary p-7 md:flex-row md:gap-x-12 md:gap-y-0">
         <div className="container mx-auto flex flex-col gap-16 md:flex-row md:gap-24">
           {/* First column: About the project */}
           <div className="flex flex-col items-start gap-4 w-full md:w-3/5">
@@ -61,6 +61,20 @@ function Footer() {
                     ))}
                   </div>
                 )}
+              <Image
+                src={"/secondary-logo-v1.png"}
+                alt="Secondary logo"
+                width={100}
+                height={70}
+                className="object-contain"
+              />
+              <Image
+                src={"/b1mg-logo.png"}
+                alt="B1MG logo"
+                width={100}
+                height={70}
+                className="object-contain"
+              />
             </div>
             <p className="text-xs md:text-sm">
               {contentConfig.footerText.split("\n").map((line, index) => (

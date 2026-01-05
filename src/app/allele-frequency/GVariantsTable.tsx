@@ -3,14 +3,51 @@
 // SPDX-License-Identifier: Apache-2.0
 "use client";
 
-import { PopulationReverseMap } from "@/app/api/discovery/additional-types";
+import {
+  parsePopulationName,
+  formatPopulationDisplay,
+} from "@/app/api/discovery/additional-types";
 import { GVariantsSearchResponse } from "@/app/api/discovery/open-api/schemas";
+import { retrieveDatasetApi } from "@/app/api/discovery";
+import AddToBasketButton from "@/components/AddToBasketButton";
 import Link from "next/link";
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 
 type GVariantsTableProps = {
   results: GVariantsSearchResponse[];
 };
+
+function DatasetActionCell({ datasetId }: { datasetId: string }) {
+  const [dataset, setDataset] = useState<SearchedDataset | null>(null);
+  const [notFound, setNotFound] = useState(false);
+  const hasFetchedRef = useRef(false);
+
+  useEffect(() => {
+    if (hasFetchedRef.current || !datasetId) return;
+
+    hasFetchedRef.current = true;
+    retrieveDatasetApi(datasetId)
+      .then((data) => {
+        setDataset(data as SearchedDataset);
+      })
+      .catch((error) => {
+        console.error("Failed to retrieve dataset", error);
+        setNotFound(true);
+      });
+  }, [datasetId]);
+
+  if (notFound) {
+    return (
+      <span className="text-xs text-gray-500" title="Dataset not available">
+        Not available
+      </span>
+    );
+  }
+
+  if (!dataset) return null;
+  return <AddToBasketButton dataset={dataset} />;
+}
 
 export default function GVariantsTable({ results }: GVariantsTableProps) {
   const groupedByBeacon = results.reduce(
@@ -39,18 +76,22 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
             <th className="px-6 py-4 text-left">Homozygous</th>
             <th className="px-6 py-4 text-left">Heterozygous</th>
             <th className="px-6 py-4 text-left">Frequency</th>
+            <th className="px-6 py-4 text-center">Action</th>
           </tr>
         </thead>
         <tbody>
           {Object.entries(groupedByBeacon).map(([beacon, variants]) => (
             <React.Fragment key={beacon}>
               <tr className="bg-[#70154C14] border border-secondary">
-                <td colSpan={7} className="px-6 py-4 text-lg font-bold">
+                <td colSpan={8} className="px-6 py-4 text-lg font-bold">
                   Beacon: {beacon}
                 </td>
               </tr>
-              {variants.map((variant, index) => (
-                <tr key={index} className="border-t border-surface bg-surface">
+              {variants.map((variant) => (
+                <tr
+                  key={`${beacon}-${variant.dataset}-${variant.population}`}
+                  className="border-t border-surface bg-surface"
+                >
                   <td className="px-6 py-4">
                     <Link
                       href={`/datasets/${variant.dataset}`}
@@ -60,7 +101,10 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
                     </Link>
                   </td>
                   <td className="px-6 py-4">
-                    {PopulationReverseMap[variant.population ?? "lux"]}
+                    {formatPopulationDisplay(
+                      variant.population ?? "lux",
+                      parsePopulationName(variant.population ?? "lux")
+                    )}
                   </td>
                   <td className="px-6 py-4">{variant.alleleCount}</td>
                   <td className="px-6 py-4">{variant.alleleNumber}</td>
@@ -70,6 +114,11 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
                   </td>
                   <td className="px-6 py-4">
                     {variant.alleleFrequency?.toFixed(4)}
+                  </td>
+                  <td className="px-6 py-4 flex justify-center">
+                    {variant.dataset && (
+                      <DatasetActionCell datasetId={variant.dataset} />
+                    )}
                   </td>
                 </tr>
               ))}

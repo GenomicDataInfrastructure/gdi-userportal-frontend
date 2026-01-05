@@ -38,6 +38,7 @@ describe("Search GVariants", () => {
         alleleNumber: 82998,
         alleleCountHomozygous: 0,
         alleleCountHeterozygous: 357,
+        alleleCountHemizygous: 0,
         alleleFrequency: 0.004301310051232576,
       },
     ]);

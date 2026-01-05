@@ -3,10 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 "use client";
 
-import {
-  parsePopulationName,
-  formatPopulationDisplay,
-} from "@/app/api/discovery/additional-types";
+import { formatPopulationDisplay } from "@/app/api/discovery/additional-types";
 import { GVariantsSearchResponse } from "@/app/api/discovery/open-api/schemas";
 import { retrieveDatasetApi } from "@/app/api/discovery";
 import AddToBasketButton from "@/components/AddToBasketButton";
@@ -75,6 +72,7 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
             <th className="px-6 py-4 text-left">Allele Number</th>
             <th className="px-6 py-4 text-left">Homozygous</th>
             <th className="px-6 py-4 text-left">Heterozygous</th>
+            <th className="px-6 py-4 text-left">Hemizygous</th>
             <th className="px-6 py-4 text-left">Frequency</th>
             <th className="px-6 py-4 text-center">Action</th>
           </tr>
@@ -83,7 +81,7 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
           {Object.entries(groupedByBeacon).map(([beacon, variants]) => (
             <React.Fragment key={beacon}>
               <tr className="bg-[#70154C14] border border-secondary">
-                <td colSpan={8} className="px-6 py-4 text-lg font-bold">
+                <td colSpan={9} className="px-6 py-4 text-lg font-bold">
                   Beacon: {beacon}
                 </td>
               </tr>
@@ -101,16 +99,18 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
                     </Link>
                   </td>
                   <td className="px-6 py-4">
-                    {formatPopulationDisplay(
-                      variant.population ?? "lux",
-                      parsePopulationName(variant.population ?? "lux")
-                    )}
+                    {formatPopulationDisplay(variant.population || "LU")}
                   </td>
                   <td className="px-6 py-4">{variant.alleleCount}</td>
                   <td className="px-6 py-4">{variant.alleleNumber}</td>
                   <td className="px-6 py-4">{variant.alleleCountHomozygous}</td>
                   <td className="px-6 py-4">
                     {variant.alleleCountHeterozygous}
+                  </td>
+                  <td className="px-6 py-4">
+                    {typeof variant.alleleCountHemizygous === "number"
+                      ? variant.alleleCountHemizygous
+                      : "-"}
                   </td>
                   <td className="px-6 py-4">
                     {variant.alleleFrequency?.toFixed(4)}

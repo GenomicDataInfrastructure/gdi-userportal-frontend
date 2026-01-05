@@ -7,6 +7,7 @@ import Button from "@/components/Button";
 import { faInfoCircle, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
+import { EU_COUNTRIES_OPTIONS } from "@/app/api/discovery/additional-types";
 import Tooltip from "../datasets/[id]/Tooltip";
 
 type FormFieldProps = {
@@ -102,36 +103,6 @@ interface FormFieldConfig {
   defaultValue?: string;
 }
 
-const EU_COUNTRIES: FilterOption[] = [
-  { value: "aut", label: "Austria" },
-  { value: "bel", label: "Belgium" },
-  { value: "bgr", label: "Bulgaria" },
-  { value: "hrv", label: "Croatia" },
-  { value: "cyp", label: "Cyprus" },
-  { value: "cze", label: "Czech Republic" },
-  { value: "dnk", label: "Denmark" },
-  { value: "est", label: "Estonia" },
-  { value: "fin", label: "Finland" },
-  { value: "fra", label: "France" },
-  { value: "deu", label: "Germany" },
-  { value: "grc", label: "Greece" },
-  { value: "hun", label: "Hungary" },
-  { value: "irl", label: "Ireland" },
-  { value: "ita", label: "Italy" },
-  { value: "lva", label: "Latvia" },
-  { value: "ltu", label: "Lithuania" },
-  { value: "lux", label: "Luxembourg" },
-  { value: "mlt", label: "Malta" },
-  { value: "nld", label: "Netherlands" },
-  { value: "pol", label: "Poland" },
-  { value: "prt", label: "Portugal" },
-  { value: "rou", label: "Romania" },
-  { value: "svk", label: "Slovakia" },
-  { value: "svn", label: "Slovenia" },
-  { value: "esp", label: "Spain" },
-  { value: "swe", label: "Sweden" },
-];
-
 const FORM_FIELDS_CONFIG: FormFieldConfig[] = [
   {
     label: "Variant",
@@ -164,9 +135,8 @@ const FORM_FIELDS_CONFIG: FormFieldConfig[] = [
     type: "select",
     options: [
       { value: "", label: "All" },
-      { value: "MALE", label: "Male" },
-      { value: "FEMALE", label: "Female" },
-      { value: "OTHER", label: "Other" },
+      { value: "M", label: "Male" },
+      { value: "F", label: "Female" },
     ],
     defaultValue: "",
   },
@@ -174,7 +144,7 @@ const FORM_FIELDS_CONFIG: FormFieldConfig[] = [
     label: "Country of Birth",
     fieldKey: "countryOfBirth",
     type: "select",
-    options: [{ value: "", label: "All" }, ...EU_COUNTRIES],
+    options: [{ value: "", label: "All" }, ...EU_COUNTRIES_OPTIONS],
     defaultValue: "",
   },
 ];

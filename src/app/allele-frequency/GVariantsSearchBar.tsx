@@ -31,55 +31,45 @@ const FormField: React.FC<FormFieldProps> = ({
   placeholder,
 }) => {
   return (
-    <div className="lg:col-span-2 col-span-1">
-      <div className="flex flex-col">
+    <div className="flex flex-col">
+      <label
+        htmlFor={fieldKey}
+        className="flex gap-2 items-center font-semibold mb-1 w-fit"
+      >
+        <p>{label}</p>
         {tooltip && (
-          <>
-            <Tooltip message="Example value: 3-45864731-T-C" />
-          </>
-        )}
-
-        <label
-          htmlFor={fieldKey}
-          className="flex gap-2 items-center justify-center font-semibold mb-1 w-fit"
-        >
-          <p>{label}</p>
           <div className="relative group">
-            {tooltip && (
-              <>
-                <FontAwesomeIcon
-                  icon={faInfoCircle}
-                  className="text-lg text-info top-0"
-                />
-                <Tooltip message={tooltip} />
-              </>
-            )}
+            <FontAwesomeIcon
+              icon={faInfoCircle}
+              className="text-lg text-info"
+            />
+            <Tooltip message={tooltip} />
           </div>
-        </label>
-        {type === "select" ? (
-          <select
-            id={fieldKey}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            className="border border-gray-300 p-2 rounded-sm w-full"
-          >
-            {options?.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <input
-            id={fieldKey}
-            type={type}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            className="border border-gray-300 p-2 rounded-sm w-full"
-            placeholder={placeholder}
-          />
         )}
-      </div>
+      </label>
+      {type === "select" ? (
+        <select
+          id={fieldKey}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="border border-gray-300 p-2 rounded-sm w-full"
+        >
+          {options?.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <input
+          id={fieldKey}
+          type={type}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="border border-gray-300 p-2 rounded-sm w-full"
+          placeholder={placeholder}
+        />
+      )}
     </div>
   );
 };
@@ -93,20 +83,69 @@ export type SearchInputData = {
   variant: string;
   refGenome: string;
   cohort: string;
+  sex: string;
+  countryOfBirth: string;
 };
 
-const formFields = [
+interface FilterOption {
+  value: string;
+  label: string;
+}
+
+interface FormFieldConfig {
+  label: string;
+  fieldKey: keyof SearchInputData;
+  type: "text" | "select";
+  options?: FilterOption[];
+  placeholder?: string;
+  tooltip?: string;
+  defaultValue?: string;
+}
+
+const EU_COUNTRIES: FilterOption[] = [
+  { value: "aut", label: "Austria" },
+  { value: "bel", label: "Belgium" },
+  { value: "bgr", label: "Bulgaria" },
+  { value: "hrv", label: "Croatia" },
+  { value: "cyp", label: "Cyprus" },
+  { value: "cze", label: "Czech Republic" },
+  { value: "dnk", label: "Denmark" },
+  { value: "est", label: "Estonia" },
+  { value: "fin", label: "Finland" },
+  { value: "fra", label: "France" },
+  { value: "deu", label: "Germany" },
+  { value: "grc", label: "Greece" },
+  { value: "hun", label: "Hungary" },
+  { value: "irl", label: "Ireland" },
+  { value: "ita", label: "Italy" },
+  { value: "lva", label: "Latvia" },
+  { value: "ltu", label: "Lithuania" },
+  { value: "lux", label: "Luxembourg" },
+  { value: "mlt", label: "Malta" },
+  { value: "nld", label: "Netherlands" },
+  { value: "pol", label: "Poland" },
+  { value: "prt", label: "Portugal" },
+  { value: "rou", label: "Romania" },
+  { value: "svk", label: "Slovakia" },
+  { value: "svn", label: "Slovenia" },
+  { value: "esp", label: "Spain" },
+  { value: "swe", label: "Sweden" },
+];
+
+const FORM_FIELDS_CONFIG: FormFieldConfig[] = [
   {
     label: "Variant",
     fieldKey: "variant",
     type: "text",
     placeholder: "Search for a variant",
+    defaultValue: "",
   },
   {
     label: "Ref Genome",
     fieldKey: "refGenome",
     type: "select",
     options: [{ value: "GRCh37", label: "GRCh37" }],
+    defaultValue: "GRCh37",
   },
   {
     label: "Cohort",
@@ -117,18 +156,45 @@ const formFields = [
       { value: "COVID", label: "COVID" },
     ],
     tooltip: "A group of people with a shared characteristic",
+    defaultValue: "All",
+  },
+  {
+    label: "Sex",
+    fieldKey: "sex",
+    type: "select",
+    options: [
+      { value: "", label: "All" },
+      { value: "MALE", label: "Male" },
+      { value: "FEMALE", label: "Female" },
+      { value: "OTHER", label: "Other" },
+    ],
+    defaultValue: "",
+  },
+  {
+    label: "Country of Birth",
+    fieldKey: "countryOfBirth",
+    type: "select",
+    options: [{ value: "", label: "All" }, ...EU_COUNTRIES],
+    defaultValue: "",
   },
 ];
+
+const getDefaultValues = (): SearchInputData => {
+  return FORM_FIELDS_CONFIG.reduce(
+    (acc, field) => ({
+      ...acc,
+      [field.fieldKey]: field.defaultValue ?? "",
+    }),
+    {} as SearchInputData
+  );
+};
 
 export default function GVariantsSearchBar({
   onSearchAction,
   loading,
 }: GVariantsSearchBarProps) {
-  const [searchFilterInput, setSearchFilterInput] = useState<SearchInputData>({
-    variant: "",
-    refGenome: "GRCh37",
-    cohort: "All",
-  });
+  const [searchFilterInput, setSearchFilterInput] =
+    useState<SearchInputData>(getDefaultValues());
   const [errorMessage, setErrorMessage] = useState("");
 
   function isVariantValid(variant: string) {
@@ -169,8 +235,8 @@ export default function GVariantsSearchBar({
   return (
     <div className="mb-6">
       <h2 className="text-lg font-semibold mb-2">Search for your variant:</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 items-end">
-        {formFields.map(
+      <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-6 gap-4 items-end">
+        {FORM_FIELDS_CONFIG.map(
           ({
             label,
             fieldKey: key,
@@ -178,7 +244,7 @@ export default function GVariantsSearchBar({
             options,
             tooltip,
             placeholder,
-          }) => (
+          }: FormFieldConfig) => (
             <FormField
               key={key}
               fieldKey={key}
@@ -195,14 +261,14 @@ export default function GVariantsSearchBar({
           )
         )}
 
-        <div className="flex flex-col col-span-1">
+        <div className="flex flex-col justify-end">
           <Button
             disabled={loading}
             icon={faSearch}
             onClick={search}
             text="Search"
             type="primary"
-            className="text-center"
+            className="w-full"
           />
         </div>
       </div>

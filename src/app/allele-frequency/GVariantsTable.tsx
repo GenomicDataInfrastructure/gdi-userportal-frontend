@@ -5,6 +5,7 @@
 
 import { PopulationReverseMap } from "@/app/api/discovery/additional-types";
 import { GVariantsSearchResponse } from "@/app/api/discovery/open-api/schemas";
+import Link from "next/link";
 import React from "react";
 
 type GVariantsTableProps = {
@@ -50,7 +51,14 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
               </tr>
               {variants.map((variant, index) => (
                 <tr key={index} className="border-t border-surface bg-surface">
-                  <td className="px-6 py-4">{variant.dataset}</td>
+                  <td className="px-6 py-4">
+                    <Link
+                      href={`/datasets/${variant.dataset}`}
+                      className="text-primary hover:underline hover:text-primary-dark transition-colors"
+                    >
+                      {variant.dataset}
+                    </Link>
+                  </td>
                   <td className="px-6 py-4">
                     {PopulationReverseMap[variant.population ?? "lux"]}
                   </td>

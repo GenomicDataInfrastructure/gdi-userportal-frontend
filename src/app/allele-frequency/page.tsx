@@ -15,8 +15,22 @@ import PageContainer from "@/components/PageContainer";
 import { isAxiosError } from "axios";
 import { use, useState } from "react";
 
+type ErrorState = {
+  statusCode: number;
+  title?: string;
+  detail?: string;
+};
+
 type AlleleFrequencyPageProps = {
   searchParams: Promise<UrlSearchParams>;
+};
+
+const FILTER_DEFAULTS: Record<keyof SearchInputData, string> = {
+  variant: "",
+  refGenome: "GRCh37",
+  cohort: "All",
+  sex: "All",
+  countryOfBirth: "All",
 };
 
 export default function AlleleFrequencyPage({
@@ -25,12 +39,37 @@ export default function AlleleFrequencyPage({
   const [results, setResults] = useState<GVariantsSearchResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [triedSearching, setTriedSearching] = useState(false);
+  const [error, setError] = useState<ErrorState | null>(null);
   const _searchParams = use(searchParams);
-  const [error, setError] = useState<{
-    statusCode: number;
-    title?: string;
-    detail?: string;
-  } | null>(null);
+
+  const buildSearchParams = (input: SearchInputData): Record<string, any> => {
+    const [referenceName, , referenceBases, alternateBases] =
+      input.variant.split("-");
+
+    const params: Record<string, any> = {
+      referenceName,
+      referenceBases,
+      alternateBases,
+      assemblyId: input.refGenome,
+    };
+
+    // Add optional filters only if user selected a non-default value
+    if (input.sex && input.sex !== FILTER_DEFAULTS.sex && input.sex !== "All") {
+      params.sex = input.sex;
+    }
+    if (
+      input.countryOfBirth &&
+      input.countryOfBirth !== FILTER_DEFAULTS.countryOfBirth &&
+      input.countryOfBirth !== "All"
+    ) {
+      params.countryOfBirth = input.countryOfBirth;
+    }
+    if (input.cohort && input.cohort !== FILTER_DEFAULTS.cohort) {
+      params.cohort = input.cohort;
+    }
+
+    return params;
+  };
 
   const handleSearch = async (props: SearchInputData) => {
     setLoading(true);
@@ -38,37 +77,27 @@ export default function AlleleFrequencyPage({
     setError(null);
 
     try {
-      const [referenceName, start, referenceBases, alternateBases] =
-        props.variant.split("-");
-      const startPosition = start ? [parseInt(start)] : null;
-      const response = await searchGVariantsApi({
-        params: {
-          referenceName,
-          start: startPosition,
-          end: null,
-          referenceBases,
-          alternateBases,
-          assemblyId: props.refGenome,
-        },
-      });
+      const params = buildSearchParams(props);
+      const response = await searchGVariantsApi({ params });
       setResults(response);
       setTriedSearching(true);
     } catch (error) {
-      console.error(error);
       if (isAxiosError(error) && error.response) {
         setError({
           statusCode: error.response.status,
-          title: error.response.data.title,
-          detail: error.response.data.detail,
+          title: error.response.data?.title,
+          detail: error.response.data?.detail,
         });
       } else {
         setError({ statusCode: 500 });
       }
+      setTriedSearching(true);
     } finally {
       setLoading(false);
     }
   };
-  if (error) {
+
+  if (error && !triedSearching) {
     return (
       <ErrorComponent
         statusCode={error.statusCode}
@@ -85,9 +114,20 @@ export default function AlleleFrequencyPage({
     >
       <GVariantsSearchBar onSearchAction={handleSearch} loading={loading} />
 
+      {error && triedSearching && (
+        <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-4">
+          <p className="text-red-800 font-semibold">
+            {error.title || "Search Error"}
+          </p>
+          {error.detail && (
+            <p className="text-red-700 text-sm mt-1">{error.detail}</p>
+          )}
+        </div>
+      )}
+
       {loading && <p className="text-center text-gray-500">Loading...</p>}
 
-      {!loading && triedSearching && results.length == 0 && (
+      {!loading && triedSearching && results.length === 0 && !error && (
         <p className="text-center text-gray-500">No results found</p>
       )}
 

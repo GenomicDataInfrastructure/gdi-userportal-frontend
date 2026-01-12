@@ -49,6 +49,17 @@ export default function AlleleFrequencyPage({
         refGenome: props.refGenome,
       };
 
+      // Only include optional filters if they are not "All"
+      if (props.cohort && props.cohort !== "All") {
+        params.cohort = props.cohort;
+      }
+      if (props.sex && props.sex !== "All") {
+        params.sex = props.sex;
+      }
+      if (props.countryOfBirth && props.countryOfBirth !== "All") {
+        params.countryOfBirth = props.countryOfBirth;
+      }
+
       const response = await searchGVariantsApi({
         params,
       });

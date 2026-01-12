@@ -53,5 +53,6 @@ export const retrieveDatasetInSpecifiedFormat = async (
 };
 
 export const searchGVariantsApi = async (options: GVariantSearchQuery) => {
-  return await discoveryClient.searchGenomicVariants(options);
+  const headers = await createHeaders();
+  return await discoveryClient.searchGenomicVariants(options, { headers });
 };

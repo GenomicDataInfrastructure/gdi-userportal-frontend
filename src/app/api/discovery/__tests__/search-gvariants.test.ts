@@ -32,12 +32,15 @@ describe("Search GVariants", () => {
     mockDiscoveryAdapter.onPost("/api/v1/g_variants").reply(200, [
       {
         beacon: "org.nbis.ga4gh-approval-beacon-test",
-        dataset: "COVID_pop11_fin_1",
-        population: "fin",
+        dataset: "EGAD50000000276",
+        population: "FI_M",
+        sex: "M",
+        countryOfBirth: "FI",
         alleleCount: 357,
         alleleNumber: 82998,
         alleleCountHomozygous: 0,
         alleleCountHeterozygous: 357,
+        alleleCountHemizygous: 0,
         alleleFrequency: 0.004301310051232576,
       },
     ]);

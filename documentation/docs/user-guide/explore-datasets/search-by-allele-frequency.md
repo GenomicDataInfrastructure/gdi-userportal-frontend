@@ -33,6 +33,8 @@ This search tool allows you to:
    - **Variant:** The full form of the genomic variant, usually represented in the format `chr-position-ref-alt`. Example: `3-45864731-T-C`
    - **Ref Genome:** Select the reference genome assembly to use for the search.
    - **Cohort:** Select the cohort of interest. Cohorts are groups of individuals sharing common characteristics, for example, those with a specific condition such as COVID.
+   - **Sex (optional):** Filter results by biological sex (Male or Female).
+   - **Country of Birth (optional):** Filter results by country of birth using 2-letter ISO country codes.
 
 3. Select **Search** or press **Enter**. The search results display dataset information in table format.
 
@@ -46,9 +48,11 @@ The search results display datasets containing your specified variant in table f
 </figure>
 
 - **Dataset**: Name and source of the dataset. These are Beacon identifiers—the portal uses Beacon technology to retrieve information about whether genomic databases contain specific variants.
-- **Population**: Geographic or demographic group, such as countries.
+- **Population**: Population identifier from the dataset (e.g., "FR_M" for French males in GoE format).
 - **Allele Count**: Number of times the variant appears in the dataset.
 - **Allele Number**: Total number of alleles analysed in the dataset for this position.
 - **Homozygous**: Number of individuals with two copies of the variant.
 - **Heterozygous**: Number of individuals with one copy of the variant.
+- **Hemizygous**: Number of individuals with one copy of the variant on a sex chromosome (relevant for X/Y chromosomes).
 - **Frequency**: How common the variant is in that population (as a decimal).
+- **Actions**: Add the dataset to your basket for requesting access later.

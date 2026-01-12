@@ -131,7 +131,7 @@ const formFields = [
       { value: "All", label: "All" },
       { value: "M", label: "Male" },
       { value: "F", label: "Female" },
-    ]
+    ],
   },
   {
     label: "Country of Birth",

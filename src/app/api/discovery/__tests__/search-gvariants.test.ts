@@ -45,8 +45,11 @@ describe("Search GVariants", () => {
       },
     ]);
     const response = await searchGVariantsApi({
-      params: {},
-    } as GVariantSearchQuery);
+      params: {
+        variant: "15-101055235-G-A",
+        refGenome: "GRCh38",
+      },
+    });
 
     expect(response).toBeDefined();
     expect(response.length).toEqual(1);

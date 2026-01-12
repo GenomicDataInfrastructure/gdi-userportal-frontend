@@ -52,7 +52,14 @@ export const findDatasetByIdentifier = async (
 ): Promise<SearchedDataset | undefined> => {
   const { results } = await searchDatasetsApi({
     rows: 1,
-    facets: [{ source: "ckan", type: "DROPDOWN", key: "identifier", value: identifier }],
+    facets: [
+      {
+        source: "ckan",
+        type: "DROPDOWN",
+        key: "identifier",
+        value: identifier,
+      },
+    ],
   });
   return results?.[0];
 };

@@ -5,6 +5,7 @@
 import {
   createDatasetEntitlements,
   mapToDatasetEntitlement,
+  findDatasetByIdentifier,
 } from "@/utils/datasetEntitlements";
 import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 import { Entitlement } from "@/app/api/access-management/open-api/schemas";
@@ -85,5 +86,32 @@ describe("datasetEntitlements", () => {
         end: "2022-12-31",
       },
     ]);
+  });
+
+  it("should find dataset by identifier", async () => {
+    const mockDataset: SearchedDataset = {
+      identifier: "EGAD50000000276",
+      title: "Test Dataset",
+    } as SearchedDataset;
+
+    mockedSearchDatasets.mockResolvedValue({
+      results: [mockDataset],
+      count: 1,
+    });
+
+    const result = await findDatasetByIdentifier("EGAD50000000276");
+
+    expect(result).toEqual(mockDataset);
+    expect(mockedSearchDatasets).toHaveBeenCalledWith({
+      rows: 1,
+      facets: [
+        {
+          source: "ckan",
+          type: "DROPDOWN",
+          key: "identifier",
+          value: "EGAD50000000276",
+        },
+      ],
+    });
   });
 });

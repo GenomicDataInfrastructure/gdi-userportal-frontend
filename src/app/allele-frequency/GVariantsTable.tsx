@@ -65,12 +65,12 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
               {variants.map((variant, index) => (
                 <tr key={index} className="border-t border-surface bg-surface">
                   <td className="px-6 py-4">
-                    {variant.dataset ? (
+                    {variant.datasetId ? (
                       <button
-                        onClick={() => handleDatasetClick(variant.dataset!)}
+                        onClick={() => handleDatasetClick(variant.datasetId!)}
                         className="text-primary hover:text-secondary underline hover:no-underline transition-colors cursor-pointer"
                       >
-                        {variant.dataset}
+                        {variant.datasetId}
                       </button>
                     ) : (
                       "-"
@@ -90,9 +90,9 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
                   <td className="px-6 py-4">
                     <AddToBasketButton
                       dataset={{
-                        id: variant.dataset || "",
-                        identifier: variant.dataset || "",
-                        title: variant.dataset || "",
+                        id: variant.datasetId || "",
+                        identifier: variant.datasetId || "",
+                        title: variant.datasetId || "",
                         description: `Dataset from beacon: ${variant.beacon}`,
                         themes: [],
                         keywords: [],

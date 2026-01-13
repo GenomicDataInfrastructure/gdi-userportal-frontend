@@ -48,8 +48,6 @@ export default function AlleleFrequencyPage({
         variant: props.variant,
         refGenome: props.refGenome,
       };
-
-      // Only include optional filters if they are not "All"
       if (props.cohort && props.cohort !== "All") {
         params.cohort = props.cohort;
       }

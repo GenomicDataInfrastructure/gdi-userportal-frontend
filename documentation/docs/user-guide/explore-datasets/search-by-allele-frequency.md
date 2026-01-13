@@ -53,6 +53,6 @@ The search results display datasets containing your specified variant in table f
 - **Allele Number**: Total number of alleles analysed in the dataset for this position.
 - **Homozygous**: Number of individuals with two copies of the variant.
 - **Heterozygous**: Number of individuals with one copy of the variant.
-- **Hemizygous**: Number of individuals with one copy of the variant on a sex chromosome (relevant for X/Y chromosomes).
+- **Hemizygous**: Number of individuals with one copy of the variant on a sex chromosome (relevant for an X or Y chromosome).
 - **Frequency**: How common the variant is in that population (as a decimal).
-- **Actions**: Add the dataset to your basket for requesting access later.
+- **Actions**: Add the dataset to your basket to request access later.

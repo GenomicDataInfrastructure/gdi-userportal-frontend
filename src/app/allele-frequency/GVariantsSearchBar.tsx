@@ -105,7 +105,7 @@ const formFields = [
     type: "text",
     placeholder: "Search for a variant",
     tooltip:
-      "The genomic variant in format: chromosome-position-reference-alternate",
+      "The genomic variant in format: chromosome:position:reference:alternate (e.g., 11:87202:G:T)",
   },
   {
     label: "Ref Genome",

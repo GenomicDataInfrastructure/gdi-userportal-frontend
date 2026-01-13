@@ -15,6 +15,7 @@ export const discoveryClient = createDiscoveryApiClient(
   serverConfig.discoveryUrl,
   { axiosInstance: discoveryAxiosInstance }
 );
+
 export const accessManagementClient = createAccessManagementApiClient(
   serverConfig.daamUrl,
   { axiosInstance: accessManagementAxiosInstance }

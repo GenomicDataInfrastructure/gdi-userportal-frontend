@@ -41,7 +41,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
 
   return [
     {
-      label: externalInfo.isExternal ? "" : "Request data access",
+      label: "",
       value: externalInfo.isExternal ? (
         <div className="flex flex-col gap-2">
           <p className="text-xs text-gray-600">
@@ -66,7 +66,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
           }}
         />
       ),
-      hideItem: !contentConfig.showBasketAndLogin,
+      hideItem: false,
     },
     {
       label: "Export Metadata in",

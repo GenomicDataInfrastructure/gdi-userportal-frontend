@@ -4,7 +4,7 @@
 "use client";
 
 import { GVariantsSearchResponse } from "@/app/api/discovery/open-api/schemas";
-import AddToBasketButton from "@/components/AddToBasketButton";
+import VariantAddToBasketButton from "./components/VariantAddToBasketButton";
 import { findDatasetByIdentifier } from "@/utils/datasetEntitlements";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -88,15 +88,8 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
                     {variant.alleleFrequency?.toFixed(4)}
                   </td>
                   <td className="px-6 py-4">
-                    <AddToBasketButton
-                      dataset={{
-                        id: variant.datasetId || "",
-                        identifier: variant.datasetId || "",
-                        title: variant.datasetId || "",
-                        description: `Dataset from beacon: ${variant.beacon}`,
-                        themes: [],
-                        keywords: [],
-                      }}
+                    <VariantAddToBasketButton
+                      datasetId={variant.datasetId || ""}
                     />
                   </td>
                 </tr>

@@ -26,9 +26,13 @@ function Sidebar({ items }: Readonly<SidebarProps>) {
             <div
               className="flex flex-col rounded-2xl px-7 py-5 gap-y-4"
               style={{ backgroundColor: "var(--color-surface)" }}
-              key={item.label}
+              key={item.label || "empty-label"}
             >
-              <h3 className="sm:text-md lg:text-lg font-bold">{item.label}</h3>
+              {item.label && (
+                <h3 className="sm:text-md lg:text-lg font-bold">
+                  {item.label}
+                </h3>
+              )}
               <span className="text-sm sm:text-base lg:text-lg">
                 {item.value}
               </span>

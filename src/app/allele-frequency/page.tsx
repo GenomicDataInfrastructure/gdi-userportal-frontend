@@ -38,18 +38,28 @@ export default function AlleleFrequencyPage({
     setError(null);
 
     try {
-      const [referenceName, start, referenceBases, alternateBases] =
-        props.variant.split("-");
-      const startPosition = start ? [parseInt(start)] : null;
+      const params: {
+        variant: string;
+        refGenome: string;
+        cohort?: string;
+        sex?: string;
+        countryOfBirth?: string;
+      } = {
+        variant: props.variant,
+        refGenome: props.refGenome,
+      };
+      if (props.cohort && props.cohort !== "All") {
+        params.cohort = props.cohort;
+      }
+      if (props.sex && props.sex !== "All") {
+        params.sex = props.sex;
+      }
+      if (props.countryOfBirth && props.countryOfBirth !== "All") {
+        params.countryOfBirth = props.countryOfBirth;
+      }
+
       const response = await searchGVariantsApi({
-        params: {
-          referenceName,
-          start: startPosition,
-          end: null,
-          referenceBases,
-          alternateBases,
-          assemblyId: props.refGenome,
-        },
+        params,
       });
       setResults(response);
       setTriedSearching(true);

@@ -4,6 +4,7 @@
 "use client";
 
 import Button from "@/components/Button";
+import { COUNTRY_OPTIONS } from "@/app/api/discovery/additional-types";
 import { faInfoCircle, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
@@ -31,7 +32,7 @@ const FormField: React.FC<FormFieldProps> = ({
   placeholder,
 }) => {
   return (
-    <div className="lg:col-span-2 col-span-1">
+    <div className="col-span-1">
       <div className="flex flex-col">
         {tooltip && (
           <>
@@ -93,6 +94,8 @@ export type SearchInputData = {
   variant: string;
   refGenome: string;
   cohort: string;
+  sex: string;
+  countryOfBirth: string;
 };
 
 const formFields = [
@@ -101,6 +104,8 @@ const formFields = [
     fieldKey: "variant",
     type: "text",
     placeholder: "Search for a variant",
+    tooltip:
+      "The genomic variant in format: chromosome:position:reference:alternate (e.g., 11:87202:G:T)",
   },
   {
     label: "Ref Genome",
@@ -118,6 +123,22 @@ const formFields = [
     ],
     tooltip: "A group of people with a shared characteristic",
   },
+  {
+    label: "Sex",
+    fieldKey: "sex",
+    type: "select",
+    options: [
+      { value: "All", label: "All" },
+      { value: "M", label: "Male" },
+      { value: "F", label: "Female" },
+    ],
+  },
+  {
+    label: "Country of Birth",
+    fieldKey: "countryOfBirth",
+    type: "select",
+    options: [{ value: "All", label: "All" }, ...COUNTRY_OPTIONS],
+  },
 ];
 
 export default function GVariantsSearchBar({
@@ -128,6 +149,8 @@ export default function GVariantsSearchBar({
     variant: "",
     refGenome: "GRCh37",
     cohort: "All",
+    sex: "All",
+    countryOfBirth: "All",
   });
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -169,7 +192,7 @@ export default function GVariantsSearchBar({
   return (
     <div className="mb-6">
       <h2 className="text-lg font-semibold mb-2">Search for your variant:</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 items-end">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 items-end">
         {formFields.map(
           ({
             label,

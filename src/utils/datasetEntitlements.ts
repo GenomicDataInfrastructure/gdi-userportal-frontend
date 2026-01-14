@@ -46,3 +46,20 @@ export const createDatasetEntitlements = async (
 
   return mapToDatasetEntitlement(datasets!, entitlements);
 };
+
+export const findDatasetByIdentifier = async (
+  identifier: string
+): Promise<SearchedDataset | undefined> => {
+  const { results } = await searchDatasetsApi({
+    rows: 1,
+    facets: [
+      {
+        source: "ckan",
+        type: "DROPDOWN",
+        key: "identifier",
+        value: identifier,
+      },
+    ],
+  });
+  return results?.[0];
+};

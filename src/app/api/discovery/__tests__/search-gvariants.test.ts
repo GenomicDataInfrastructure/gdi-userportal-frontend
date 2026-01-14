@@ -32,20 +32,35 @@ describe("Search GVariants", () => {
     mockDiscoveryAdapter.onPost("/api/v1/g_variants").reply(200, [
       {
         beacon: "org.nbis.ga4gh-approval-beacon-test",
-        dataset: "COVID_pop11_fin_1",
-        population: "fin",
-        alleleCount: 357,
-        alleleNumber: 82998,
-        alleleCountHomozygous: 0,
-        alleleCountHeterozygous: 357,
-        alleleFrequency: 0.004301310051232576,
+        datasetId: "EGAD50000000276",
+        population: "FR_M",
+        sex: "M",
+        countryOfBirth: "FR",
+        alleleCount: 7102.0,
+        alleleNumber: 54233.0,
+        alleleCountHomozygous: 2400.0,
+        alleleCountHeterozygous: 4702.0,
+        alleleCountHemizygous: 0.0,
+        alleleFrequency: 0.13095,
       },
     ]);
     const response = await searchGVariantsApi({
-      params: {},
-    } as GVariantSearchQuery);
+      params: {
+        variant: "15:101055235:G:A",
+        refGenome: "GRCh38",
+      },
+    });
 
     expect(response).toBeDefined();
     expect(response.length).toEqual(1);
+    expect(response[0]).toMatchObject({
+      beacon: "org.nbis.ga4gh-approval-beacon-test",
+      datasetId: "EGAD50000000276",
+      population: "FR_M",
+      sex: "M",
+      countryOfBirth: "FR",
+      alleleCountHemizygous: 0.0,
+      alleleFrequency: 0.13095,
+    });
   });
 });

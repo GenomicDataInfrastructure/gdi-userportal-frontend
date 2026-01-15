@@ -41,7 +41,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
 
   return [
     {
-      label: "",
+      label: "Request data access",
       value: externalInfo.isExternal ? (
         <div className="flex flex-col gap-2">
           <p className="text-xs text-gray-600">

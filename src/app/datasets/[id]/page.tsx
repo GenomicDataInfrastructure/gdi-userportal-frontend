@@ -16,7 +16,6 @@ import { createDatasetSidebarItems } from "./sidebarItems";
 // import { retrieveDatasetApi } from "../../api/discovery";
 import { retrieveDatasetApi } from "../../api/discovery-v1/index";
 import { UrlParams, UrlSearchParams } from "@/app/params";
-import { getExternalDatasetInfo } from "@/utils/datasetHelpers";
 
 type DatasetDetailsPageProps = {
   params: Promise<UrlParams>;
@@ -40,8 +39,6 @@ export default async function Page({
     const relationships = dataset?.datasetRelationships || [];
 
     const dictionary = dataset.dataDictionary || [];
-
-    const externalInfo = getExternalDatasetInfo(dataset);
 
     return (
       <PageContainer searchParams={_searchParams}>
@@ -73,16 +70,7 @@ export default async function Page({
               </ul>
             </div>
 
-            {externalInfo.isExternal ? (
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm font-semibold text-gray-700 whitespace-nowrap">
-                  Conforms To:
-                </span>
-                <span className="text-sm font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20">
-                  Externally governed
-                </span>
-              </div>
-            ) : dataset.conformsTo && dataset.conformsTo.length > 0 ? (
+            {dataset.conformsTo && dataset.conformsTo.length > 0 ? (
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-sm font-semibold text-gray-700 whitespace-nowrap">
                   Conforms To:

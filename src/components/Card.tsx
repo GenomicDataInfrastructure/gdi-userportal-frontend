@@ -70,13 +70,13 @@ export default function Card({
             {title}
           </div>
 
-          {isExternal ? (
+          {isExternal && externalLabel ? (
             <div className="inline-block w-fit">
               <span className="text-xs font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20">
-                Externally governed
+                {externalLabel}
               </span>
             </div>
-          ) : (
+          ) : isExternal && !externalLabel ? (
             <div className="flex items-center gap-2 text-xs text-gray-500 italic">
               <FontAwesomeIcon
                 icon={faCircleInfo}
@@ -84,7 +84,7 @@ export default function Card({
               />
               <span>Conforms To: Not specified for this dataset</span>
             </div>
-          )}
+          ) : null}
 
           {description && (
             <p className="mt-3 line-clamp-2 font-normal text-base">

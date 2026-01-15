@@ -46,8 +46,12 @@ describe("Search GVariants", () => {
     ]);
     const response = await searchGVariantsApi({
       params: {
-        variant: "15:101055235:G:A",
-        refGenome: "GRCh38",
+        referenceName: "15",
+        start: [101055235],
+        end: null,
+        referenceBases: "G",
+        alternateBases: "A",
+        assemblyId: "GRCh38",
       },
     });
 

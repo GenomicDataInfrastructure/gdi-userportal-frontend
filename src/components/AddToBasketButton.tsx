@@ -9,25 +9,27 @@ import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 
 type AddToBasketButtonProps = {
-  dataset: SearchedDataset;
+  dataset: SearchedDataset | null;
+  disabled?: boolean;
 };
 
-function AddToBasketButton({ dataset }: Readonly<AddToBasketButtonProps>) {
+function AddToBasketButton({
+  dataset,
+  disabled: isDisabledProp = false,
+}: Readonly<AddToBasketButtonProps>) {
   const { basket, addDatasetToBasket, removeDatasetFromBasket, isLoading } =
     useDatasetBasket();
 
-  const isInBasket = basket.some((ds) => ds.id === dataset.id);
+  const isInBasket = dataset
+    ? basket.some((ds) => ds.id === dataset.id)
+    : false;
+  const buttonDisabled = isLoading || !dataset?.identifier || isDisabledProp;
 
   const toggleDatasetInBasket = () => {
-    if (isInBasket) {
-      removeDatasetFromBasket(dataset);
-    } else {
-      addDatasetToBasket(dataset);
-    }
+    if (!dataset) return;
+    if (isInBasket) removeDatasetFromBasket(dataset);
+    else addDatasetToBasket(dataset);
   };
-
-  const hasIdentifier = !!dataset.identifier;
-  const buttonDisabled = isLoading || !hasIdentifier;
 
   return (
     <Button
@@ -36,7 +38,7 @@ function AddToBasketButton({ dataset }: Readonly<AddToBasketButtonProps>) {
       onClick={toggleDatasetInBasket}
       type={isInBasket ? "warning" : "primary"}
       disabled={buttonDisabled}
-      className="custom-button"
+      className={`custom-button ${isDisabledProp || !dataset ? "opacity-50" : ""}`}
     />
   );
 }

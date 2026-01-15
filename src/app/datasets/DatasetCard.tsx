@@ -5,6 +5,7 @@
 import {
   SearchedDataset,
   ValueLabel,
+  RetrievedDistribution,
 } from "@/app/api/discovery/open-api/schemas";
 import { retrieveDatasetApi } from "@/app/api/discovery";
 import { useWindowSize } from "@/hooks";
@@ -46,11 +47,11 @@ function DatasetCard({
   const [conformsTo, setConformsTo] = useState<ValueLabel[] | undefined>(
     dataset.conformsTo
   );
-  const [distributions, setDistributions] = useState(dataset.distributions);
+  const [distributions, setDistributions] = useState<RetrievedDistribution[]>(
+    []
+  );
   const hasFetchedRef = useRef(false);
-  useEffect(() => {
-    setDistributions(dataset.distributions);
-  }, [dataset.id, dataset.distributions]);
+
   const { isExternal, label: externalLabel } = useMemo(() => {
     const dataset_ = { id: dataset.id, conformsTo } as SearchedDataset;
     return getExternalDatasetInfo(dataset_);
@@ -69,7 +70,7 @@ function DatasetCard({
       retrieveDatasetApi(dataset.id)
         .then((fullDataset) => {
           setConformsTo(fullDataset?.conformsTo);
-          setDistributions(fullDataset?.distributions);
+          setDistributions(fullDataset?.distributions || []);
         })
         .catch((error) => {
           console.error("Failed to retrieve dataset", error);
@@ -151,12 +152,7 @@ function DatasetCard({
   );
 
   const keywords = useMemo(
-    () =>
-      dataset.keywords
-        ?.map((keyword) =>
-          typeof keyword === "string" ? keyword : keyword.label
-        )
-        .filter((kw): kw is string => !!kw),
+    () => dataset.keywords?.filter((kw): kw is string => !!kw),
     [dataset.keywords]
   );
 

@@ -27,7 +27,7 @@ describe("datasetCardItems", () => {
           name: "publisher1",
           email: "publisher1@example.com",
           url: "https://publisher1.com",
-          type: "publisher",
+          type: { value: "publisher", label: "Publisher" },
           identifier: "publisher1",
         },
       ],

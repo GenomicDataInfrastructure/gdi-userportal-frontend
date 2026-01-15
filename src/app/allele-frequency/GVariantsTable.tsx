@@ -6,15 +6,20 @@
 import { GVariantsSearchResponse } from "@/app/api/discovery/open-api/schemas";
 import VariantAddToBasketButton from "./components/VariantAddToBasketButton";
 import { findDatasetByIdentifier } from "@/utils/datasetEntitlements";
-import { useRouter } from "next/navigation";
 import React from "react";
 
 type GVariantsTableProps = {
   results: GVariantsSearchResponse[];
 };
 
+const renderCell = (value: any) =>
+  value != null ? (
+    value
+  ) : (
+    <span className="text-xs text-gray-400">not available</span>
+  );
+
 export default function GVariantsTable({ results }: GVariantsTableProps) {
-  const router = useRouter();
   const groupedByBeacon = results.reduce(
     (acc, variant) => {
       if (!variant.beacon) {
@@ -32,7 +37,7 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
   const handleDatasetClick = async (identifier: string) => {
     const dataset = await findDatasetByIdentifier(identifier);
     if (dataset?.id) {
-      router.push(`/datasets/${dataset.id}`);
+      window.open(`/datasets/${dataset.id}`, "_blank");
     } else {
       console.warn(`Dataset not found for identifier: ${identifier}`);
     }
@@ -67,35 +72,43 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
                   <td className="px-3 py-2">
                     {variant.datasetId ? (
                       <button
-                        onClick={() => handleDatasetClick(variant.datasetId!)}
+                        onClick={() =>
+                          handleDatasetClick(variant.datasetId as string)
+                        }
                         className="text-primary hover:text-secondary underline hover:no-underline transition-colors cursor-pointer"
                       >
                         {variant.datasetId}
                       </button>
                     ) : (
-                      "-"
-                    )}
-                  </td>
-                  <td className="px-3 py-2">{variant.population || "-"}</td>
-                  <td className="px-3 py-2">{variant.alleleCount}</td>
-                  <td className="px-3 py-2">{variant.alleleNumber}</td>
-                  <td className="px-3 py-2">{variant.alleleCountHomozygous}</td>
-                  <td className="px-3 py-2">
-                    {variant.alleleCountHeterozygous}
-                  </td>
-                  <td className="px-3 py-2">
-                    {variant.alleleCountHemizygous ?? (
-                      <span className="text-xs text-gray-400">
-                        not available
-                      </span>
+                      renderCell(undefined)
                     )}
                   </td>
                   <td className="px-3 py-2">
-                    {variant.alleleFrequency?.toFixed(4)}
+                    {variant.population || "-"}
+                  </td>
+                  <td className="px-3 py-2">
+                    {renderCell(variant.alleleCount)}
+                  </td>
+                  <td className="px-3 py-2">
+                    {renderCell(variant.alleleNumber)}
+                  </td>
+                  <td className="px-3 py-2">
+                    {renderCell(variant.alleleCountHomozygous)}
+                  </td>
+                  <td className="px-3 py-2">
+                    {renderCell(variant.alleleCountHeterozygous)}
+                  </td>
+                  <td className="px-3 py-2">
+                    {renderCell(variant.alleleCountHemizygous)}
+                  </td>
+                  <td className="px-3 py-2">
+                    {variant.alleleFrequency != null
+                      ? variant.alleleFrequency.toFixed(4)
+                      : renderCell(undefined)}
                   </td>
                   <td className="px-3 py-2">
                     <VariantAddToBasketButton
-                      datasetId={variant.datasetId || ""}
+                      datasetId={(variant.datasetId as string) || ""}
                     />
                   </td>
                 </tr>

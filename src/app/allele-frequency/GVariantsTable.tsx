@@ -70,22 +70,22 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
               {variants.map((variant, index) => (
                 <tr key={index} className="border-t border-surface bg-surface">
                   <td className="px-3 py-2">
-                    {variant.datasetId ? (
-                      <button
-                        onClick={() =>
-                          handleDatasetClick(variant.datasetId as string)
-                        }
-                        className="text-primary hover:text-secondary underline hover:no-underline transition-colors cursor-pointer"
-                      >
-                        {variant.datasetId}
-                      </button>
-                    ) : (
-                      renderCell(undefined)
-                    )}
+                    <button
+                      onClick={() =>
+                        variant.datasetId &&
+                        handleDatasetClick(variant.datasetId as string)
+                      }
+                      disabled={!variant.datasetId}
+                      className={`underline transition-colors ${
+                        variant.datasetId
+                          ? "text-primary hover:text-secondary hover:no-underline cursor-pointer"
+                          : "text-gray-400 cursor-not-allowed opacity-50"
+                      }`}
+                    >
+                      {variant.datasetId || "not available"}
+                    </button>
                   </td>
-                  <td className="px-3 py-2">
-                    {variant.population || "-"}
-                  </td>
+                  <td className="px-3 py-2">{variant.population || "-"}</td>
                   <td className="px-3 py-2">
                     {renderCell(variant.alleleCount)}
                   </td>

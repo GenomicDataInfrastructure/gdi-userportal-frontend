@@ -38,7 +38,7 @@ function AddToBasketButton({
       onClick={toggleDatasetInBasket}
       type={isInBasket ? "warning" : "primary"}
       disabled={buttonDisabled}
-      className={`custom-button ${isDisabledProp || !dataset ? "opacity-50" : ""}`}
+      className={`custom-button ${buttonDisabled ? "opacity-50" : ""}`}
     />
   );
 }

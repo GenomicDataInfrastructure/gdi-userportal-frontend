@@ -38,9 +38,12 @@ export default function AlleleFrequencyPage({
     setError(null);
 
     try {
-      const [referenceName, start, referenceBases, alternateBases] =
-        props.variant.split("-");
-      const startPosition = start ? [parseInt(start)] : [0];
+      const parts = props.variant.split("-");
+      if (parts.length !== 4) throw new Error("Invalid variant format");
+      const [referenceName, start, referenceBases, alternateBases] = parts;
+      const startNum = parseInt(start, 10);
+      if (isNaN(startNum)) throw new Error("Invalid start position");
+      const startPosition = [startNum];
 
       const params: {
         referenceName: string;

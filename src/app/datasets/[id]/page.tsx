@@ -73,7 +73,7 @@ export default async function Page({
             {dataset.conformsTo && dataset.conformsTo.length > 0 ? (
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-sm font-semibold text-gray-700 whitespace-nowrap">
-                  Conforms To:
+                  Conforms to:
                 </span>
                 {dataset.conformsTo
                   ?.filter(
@@ -99,7 +99,7 @@ export default async function Page({
                   icon={faCircleInfo}
                   className="w-4 h-4 flex-shrink-0"
                 />
-                <span>Conforms To: Not specified for this dataset</span>
+                <span>Conforms to: Not specified for this dataset</span>
               </div>
             )}
 

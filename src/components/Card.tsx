@@ -82,7 +82,7 @@ export default function Card({
                 icon={faCircleInfo}
                 className="w-3 h-3 flex-shrink-0"
               />
-              <span>Conforms To: Not specified for this dataset</span>
+              <span>Conforms to: Not specified for this dataset</span>
             </div>
           ) : null}
 

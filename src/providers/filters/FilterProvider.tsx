@@ -61,8 +61,8 @@ function reducer(
         activeFilters:
           existingIndex >= 0
             ? state.activeFilters.map((f, i) =>
-              i === existingIndex ? updatedFilter : f
-            )
+                i === existingIndex ? updatedFilter : f
+              )
             : [...state.activeFilters, updatedFilter],
         error: null,
       };

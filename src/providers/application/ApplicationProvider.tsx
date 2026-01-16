@@ -168,7 +168,6 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   const params = useParams<{ id: string }>();
   const id = params?.id;
 
-
   function handleErrorResponseAfterAction(error: Error) {
     if (error instanceof AxiosError) {
       dispatch({

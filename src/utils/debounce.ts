@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
- 
+
 function debounce<T extends (...args: any[]) => void>(
   func: T,
   wait: number

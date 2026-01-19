@@ -15,6 +15,18 @@ const eslintConfig = defineConfig([
       "react-hooks/refs": "off",
     },
   },
+  {
+    files: ["documentation/**/*.js", "documentation/**/*.jsx"],
+    rules: {
+      "@next/next/no-img-element": "off",
+    },
+  },
+  {
+    files: ["src/app/layout.tsx"],
+    rules: {
+      "@next/next/no-page-custom-font": "off",
+    },
+  },
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",

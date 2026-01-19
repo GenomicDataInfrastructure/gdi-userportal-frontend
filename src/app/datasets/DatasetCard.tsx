@@ -82,7 +82,7 @@ function DatasetCard({
           hasFetchedRef.current = false;
         });
     }
-  }, [dataset.id, isExternal, distributions]);
+  }, [dataset.id, isExternal, distributions, conformsTo?.length]);
 
   const isInBasket = basket.some((ds) => ds.id === dataset.id);
   const externalAccessUrl = getFirstAccessUrl(distributions);

@@ -65,17 +65,47 @@ const MetadataField = ({
   label,
   children,
   icon,
+  tooltip,
 }: {
   label: string;
   children: React.ReactNode;
   icon?: IconDefinition;
+  tooltip?: string;
 }) => (
-  <div className="flex items-center gap-2 flex-wrap">
+  <div className="flex items-center gap-2 flex-wrap relative group">
     {icon && <FontAwesomeIcon icon={icon} className="text-primary text-xs" />}
     <span className="font-medium shrink-0">{label}:</span>
     <span>{children}</span>
+    {tooltip && <Tooltip message={tooltip} />}
   </div>
 );
+
+const NotProvided = () => <span className="text-primary">Not provided</span>;
+
+const isHealthDcatApCompatible = (dataset: RetrievedDataset): boolean => {
+  const healthDcatApIndicators = [
+    dataset.healthTheme && dataset.healthTheme.length > 0,
+    dataset.healthCategory && dataset.healthCategory.length > 0,
+    dataset.hdab && dataset.hdab.length > 0,
+    dataset.trustedDataHolder !== undefined,
+    dataset.legalBasis && dataset.legalBasis.length > 0,
+    dataset.applicableLegislation && dataset.applicableLegislation.length > 0,
+    dataset.purpose && dataset.purpose.length > 0,
+    dataset.personalData && dataset.personalData.length > 0,
+    dataset.codingSystem && dataset.codingSystem.length > 0,
+    dataset.codeValues && dataset.codeValues.length > 0,
+    dataset.populationCoverage,
+    dataset.numberOfRecords !== undefined,
+    dataset.numberOfUniqueIndividuals !== undefined,
+    dataset.minTypicalAge !== undefined,
+    dataset.maxTypicalAge !== undefined,
+    dataset.publisherType && dataset.publisherType.length > 0,
+    dataset.publisherNote,
+    dataset.retentionPeriod && dataset.retentionPeriod.length > 0,
+  ];
+
+  return healthDcatApIndicators.some((indicator) => indicator);
+};
 
 const DatasetMetadata = ({
   dataset,
@@ -313,82 +343,107 @@ const DatasetMetadata = ({
         </div>
       )}
 
-      {((dataset.healthTheme && dataset.healthTheme.length > 0) ||
+      {(isHealthDcatApCompatible(dataset) ||
+        (dataset.healthTheme && dataset.healthTheme.length > 0) ||
         (dataset.healthCategory && dataset.healthCategory.length > 0)) && (
         <MetadataSection title="Health Information" icon={faHeartPulse}>
           <div className="flex flex-col gap-3 text-sm">
-            {dataset.healthTheme && dataset.healthTheme.length > 0 && (
-              <div className="flex flex-wrap gap-2 items-center">
-                <span className="font-medium shrink-0">Health Themes:</span>
+            <div className="flex flex-wrap gap-2 items-center relative group">
+              <span className="font-medium shrink-0">Health Themes:</span>
+              {dataset.healthTheme && dataset.healthTheme.length > 0 ? (
                 <Chips
                   chips={dataset.healthTheme.map((item) => item.label)}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
-              </div>
-            )}
-            {dataset.healthCategory && dataset.healthCategory.length > 0 && (
-              <div className="flex flex-wrap gap-2 items-center">
-                <span className="font-medium shrink-0">Health Categories:</span>
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Health-related themes or topics covered by this dataset." />
+            </div>
+            <div className="flex flex-wrap gap-2 items-center relative group">
+              <span className="font-medium shrink-0">Health Categories:</span>
+              {dataset.healthCategory && dataset.healthCategory.length > 0 ? (
                 <Chips
                   chips={dataset.healthCategory.map((item) => item.label)}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
-              </div>
-            )}
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Health data categories this dataset belongs to." />
+            </div>
           </div>
         </MetadataSection>
       )}
 
-      {(dataset.populationCoverage ||
+      {(isHealthDcatApCompatible(dataset) ||
+        dataset.populationCoverage ||
         dataset.numberOfRecords !== undefined ||
         dataset.numberOfUniqueIndividuals !== undefined ||
         dataset.minTypicalAge !== undefined ||
         dataset.maxTypicalAge !== undefined) && (
         <MetadataSection title="Population & Demographics" icon={faUsers}>
           <div className="flex flex-col gap-3 text-sm">
-            {dataset.populationCoverage && (
-              <MetadataField label="Population Coverage">
-                {dataset.populationCoverage}
+            <MetadataField
+              label="Population Coverage"
+              tooltip="Description of the population covered by this dataset."
+            >
+              {dataset.populationCoverage || <NotProvided />}
+            </MetadataField>
+            <div className="flex items-center gap-4 flex-wrap">
+              <MetadataField
+                label="Number of Records"
+                icon={faChartBar}
+                tooltip="Total number of records in the dataset."
+              >
+                {dataset.numberOfRecords !== undefined ? (
+                  dataset.numberOfRecords.toLocaleString()
+                ) : (
+                  <NotProvided />
+                )}
               </MetadataField>
-            )}
-            {(dataset.numberOfRecords !== undefined ||
-              dataset.numberOfUniqueIndividuals !== undefined ||
-              dataset.minTypicalAge !== undefined ||
-              dataset.maxTypicalAge !== undefined) && (
-              <div className="flex items-center gap-4 flex-wrap">
-                {dataset.numberOfRecords !== undefined && (
-                  <MetadataField label="Number of Records" icon={faChartBar}>
-                    {dataset.numberOfRecords.toLocaleString()}
-                  </MetadataField>
+              <MetadataField
+                label="Unique Individuals"
+                icon={faUsers}
+                tooltip="Number of unique individuals represented in the dataset."
+              >
+                {dataset.numberOfUniqueIndividuals !== undefined ? (
+                  dataset.numberOfUniqueIndividuals.toLocaleString()
+                ) : (
+                  <NotProvided />
                 )}
-                {dataset.numberOfUniqueIndividuals !== undefined && (
-                  <MetadataField label="Unique Individuals" icon={faUsers}>
-                    {dataset.numberOfUniqueIndividuals.toLocaleString()}
-                  </MetadataField>
-                )}
-                {(dataset.minTypicalAge !== undefined ||
-                  dataset.maxTypicalAge !== undefined) && (
-                  <MetadataField label="Age Range" icon={faCalendarAlt}>
+              </MetadataField>
+              <MetadataField
+                label="Age Range"
+                icon={faCalendarAlt}
+                tooltip="Typical age range of individuals in the dataset."
+              >
+                {dataset.minTypicalAge !== undefined ||
+                dataset.maxTypicalAge !== undefined ? (
+                  <>
                     {dataset.minTypicalAge ?? "N/A"} -{" "}
                     {dataset.maxTypicalAge ?? "N/A"} years
-                  </MetadataField>
+                  </>
+                ) : (
+                  <NotProvided />
                 )}
-              </div>
-            )}
+              </MetadataField>
+            </div>
           </div>
         </MetadataSection>
       )}
 
-      {((dataset.spatialCoverage && dataset.spatialCoverage.length > 0) ||
+      {(isHealthDcatApCompatible(dataset) ||
+        (dataset.spatialCoverage && dataset.spatialCoverage.length > 0) ||
         (dataset.temporalCoverage &&
           (dataset.temporalCoverage.start || dataset.temporalCoverage.end)) ||
         dataset.temporalResolution ||
         dataset.spatialResolutionInMeters !== undefined) && (
         <MetadataSection title="Coverage" icon={faGlobe}>
           <div className="flex flex-col gap-3 text-sm">
-            {dataset.spatialCoverage && dataset.spatialCoverage.length > 0 && (
-              <div className="flex flex-wrap gap-2 items-center">
-                <span className="font-medium shrink-0">Spatial Coverage:</span>
+            <div className="flex flex-wrap gap-2 items-center relative group">
+              <span className="font-medium shrink-0">Spatial Coverage:</span>
+              {dataset.spatialCoverage && dataset.spatialCoverage.length > 0 ? (
                 <Chips
                   chips={dataset.spatialCoverage.map(
                     (coverage) =>
@@ -396,12 +451,19 @@ const DatasetMetadata = ({
                   )}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
-              </div>
-            )}
-            {dataset.temporalCoverage &&
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Geographic regions covered by this dataset." />
+            </div>
+            <MetadataField
+              label="Temporal Coverage"
+              tooltip="Time period covered by the data in this dataset."
+            >
+              {dataset.temporalCoverage &&
               (dataset.temporalCoverage.start ||
-                dataset.temporalCoverage.end) && (
-                <MetadataField label="Temporal Coverage" icon={faClock}>
+                dataset.temporalCoverage.end) ? (
+                <>
                   {dataset.temporalCoverage.start
                     ? formatDate(dataset.temporalCoverage.start)
                     : "N/A"}{" "}
@@ -409,77 +471,98 @@ const DatasetMetadata = ({
                   {dataset.temporalCoverage.end
                     ? formatDate(dataset.temporalCoverage.end)
                     : "Present"}
-                </MetadataField>
+                </>
+              ) : (
+                <NotProvided />
               )}
-            {dataset.temporalResolution && (
-              <MetadataField label="Temporal Resolution">
-                {dataset.temporalResolution}
-              </MetadataField>
-            )}
-            {dataset.spatialResolutionInMeters !== undefined && (
-              <MetadataField label="Spatial Resolution">
-                {dataset.spatialResolutionInMeters} meters
-              </MetadataField>
-            )}
+            </MetadataField>
+            <MetadataField
+              label="Temporal Resolution"
+              tooltip="Minimum time period resolvable in the dataset."
+            >
+              {dataset.temporalResolution || <NotProvided />}
+            </MetadataField>
+            <MetadataField
+              label="Spatial Resolution"
+              tooltip="Minimum spatial separation resolvable in the dataset, measured in meters."
+            >
+              {dataset.spatialResolutionInMeters !== undefined ? (
+                <>{dataset.spatialResolutionInMeters} meters</>
+              ) : (
+                <NotProvided />
+              )}
+            </MetadataField>
           </div>
         </MetadataSection>
       )}
 
-      {((dataset.legalBasis && dataset.legalBasis.length > 0) ||
+      {(isHealthDcatApCompatible(dataset) ||
+        (dataset.legalBasis && dataset.legalBasis.length > 0) ||
         (dataset.applicableLegislation &&
           dataset.applicableLegislation.length > 0) ||
         (dataset.purpose && dataset.purpose.length > 0) ||
         (dataset.personalData && dataset.personalData.length > 0)) && (
         <MetadataSection title="Legal & Compliance" icon={faGavel}>
           <div className="flex flex-col gap-3 text-sm">
-            {dataset.legalBasis && dataset.legalBasis.length > 0 && (
-              <div className="flex flex-wrap gap-2 items-center">
-                <span className="font-medium shrink-0">Legal Basis:</span>
+            <div className="flex flex-wrap gap-2 items-center relative group">
+              <span className="font-medium shrink-0">Legal Basis:</span>
+              {dataset.legalBasis && dataset.legalBasis.length > 0 ? (
                 <Chips
                   chips={dataset.legalBasis.map((item) => item.label)}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
-              </div>
-            )}
-            {dataset.applicableLegislation &&
-              dataset.applicableLegislation.length > 0 && (
-                <div className="flex flex-wrap gap-2 items-center">
-                  <span className="font-medium shrink-0">
-                    Applicable Legislation:
-                  </span>
-                  <Chips
-                    chips={dataset.applicableLegislation.map(
-                      (item) => item.label
-                    )}
-                    className="bg-primary/10 text-primary rounded-full py-1"
-                  />
-                </div>
+              ) : (
+                <NotProvided />
               )}
-            {dataset.purpose && dataset.purpose.length > 0 && (
-              <div className="flex flex-wrap gap-2 items-center">
-                <span className="font-medium shrink-0">Purpose:</span>
+              <Tooltip message="Legal basis under which this dataset is processed." />
+            </div>
+            <div className="flex flex-wrap gap-2 items-center relative group">
+              <span className="font-medium shrink-0">
+                Applicable Legislation:
+              </span>
+              {dataset.applicableLegislation &&
+              dataset.applicableLegislation.length > 0 ? (
+                <Chips
+                  chips={dataset.applicableLegislation.map(
+                    (item) => item.label
+                  )}
+                  className="bg-primary/10 text-primary rounded-full py-1"
+                />
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Legislation applicable to this dataset." />
+            </div>
+            <div className="flex flex-wrap gap-2 items-center relative group">
+              <span className="font-medium shrink-0">Purpose:</span>
+              {dataset.purpose && dataset.purpose.length > 0 ? (
                 <Chips
                   chips={dataset.purpose.map((item) => item.label)}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
-              </div>
-            )}
-            {dataset.personalData && dataset.personalData.length > 0 && (
-              <div className="flex flex-wrap gap-2 items-center">
-                <span className="font-medium shrink-0">
-                  Personal Data Types:
-                </span>
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Purpose for which the data was collected or is being processed." />
+            </div>
+            <div className="flex flex-wrap gap-2 items-center relative group">
+              <span className="font-medium shrink-0">Personal Data Types:</span>
+              {dataset.personalData && dataset.personalData.length > 0 ? (
                 <Chips
                   chips={dataset.personalData.map((item) => item.label)}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
-              </div>
-            )}
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Types of personal data contained in this dataset." />
+            </div>
           </div>
         </MetadataSection>
       )}
 
-      {(dataset.publisherNote ||
+      {(isHealthDcatApCompatible(dataset) ||
+        dataset.publisherNote ||
         (dataset.publisherType && dataset.publisherType.length > 0) ||
         (dataset.hdab && dataset.hdab.length > 0) ||
         dataset.trustedDataHolder !== undefined) && (
@@ -488,58 +571,63 @@ const DatasetMetadata = ({
           icon={faUserShield}
         >
           <div className="flex flex-col gap-3 text-sm">
-            {dataset.publisherNote && (
-              <div className="flex items-center gap-2 flex-wrap">
-                <FontAwesomeIcon
-                  icon={faNoteSticky}
-                  className="text-primary text-xs"
-                />
-                <span className="font-medium shrink-0">Publisher Note:</span>
-                <span>{dataset.publisherNote}</span>
-              </div>
-            )}
-            {dataset.publisherType && dataset.publisherType.length > 0 && (
-              <div className="flex items-center gap-2 flex-wrap">
-                <FontAwesomeIcon
-                  icon={faUser}
-                  className="text-primary text-xs"
-                />
-                <span className="font-medium shrink-0">Publisher Type:</span>
+            <div className="flex items-center gap-2 flex-wrap relative group">
+              <FontAwesomeIcon
+                icon={faNoteSticky}
+                className="text-primary text-xs"
+              />
+              <span className="font-medium shrink-0">Publisher Note:</span>
+              <span>{dataset.publisherNote || <NotProvided />}</span>
+              <Tooltip message="Additional notes from the data publisher." />
+            </div>
+            <div className="flex items-center gap-2 flex-wrap relative group">
+              <FontAwesomeIcon icon={faUser} className="text-primary text-xs" />
+              <span className="font-medium shrink-0">Publisher Type:</span>
+              {dataset.publisherType && dataset.publisherType.length > 0 ? (
                 <Chips
                   chips={dataset.publisherType.map((item) => item.label)}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
-              </div>
-            )}
-            {dataset.trustedDataHolder !== undefined && (
-              <div className="flex items-center gap-2">
-                <FontAwesomeIcon
-                  icon={faCheckCircle}
-                  className={
-                    dataset.trustedDataHolder ? "text-info" : "text-gray-400"
-                  }
-                />
-                <span className="font-medium">Trusted Data Holder:</span>
-                <span
-                  className={
-                    dataset.trustedDataHolder ? "text-info font-medium" : ""
-                  }
-                >
-                  {dataset.trustedDataHolder ? "Yes" : "No"}
-                </span>
-              </div>
-            )}
-            {dataset.hdab && dataset.hdab.length > 0 && (
-              <div className="flex items-center gap-2 flex-wrap">
-                <FontAwesomeIcon
-                  icon={faBuilding}
-                  className="text-primary text-xs"
-                />
-
-                <span className="font-medium shrink-0">
-                  Health Data Access Body (HDAB):
-                </span>
-                {dataset.hdab.map((agent, index) => (
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Type of organization publishing this dataset." />
+            </div>
+            <div className="flex items-center gap-2 relative group">
+              <FontAwesomeIcon
+                icon={faCheckCircle}
+                className={
+                  dataset.trustedDataHolder ? "text-info" : "text-gray-400"
+                }
+              />
+              <span className="font-medium">Trusted Data Holder:</span>
+              <span
+                className={
+                  dataset.trustedDataHolder ? "text-info font-medium" : ""
+                }
+              >
+                {dataset.trustedDataHolder !== undefined ? (
+                  dataset.trustedDataHolder ? (
+                    "Yes"
+                  ) : (
+                    "No"
+                  )
+                ) : (
+                  <NotProvided />
+                )}
+              </span>
+              <Tooltip message="Indicates whether the data holder is a trusted entity." />
+            </div>
+            <div className="flex items-center gap-2 flex-wrap relative group">
+              <FontAwesomeIcon
+                icon={faBuilding}
+                className="text-primary text-xs"
+              />
+              <span className="font-medium shrink-0">
+                Health Data Access Body (HDAB):
+              </span>
+              {dataset.hdab && dataset.hdab.length > 0 ? (
+                dataset.hdab.map((agent, index) => (
                   <span key={index} className="flex items-center gap-1">
                     <span>
                       {agent.name}
@@ -549,62 +637,79 @@ const DatasetMetadata = ({
                     </span>
                     {index < dataset.hdab!.length - 1 && ","}
                   </span>
-                ))}
-              </div>
-            )}
+                ))
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Health Data Access Body responsible for granting access to this dataset." />
+            </div>
           </div>
         </MetadataSection>
       )}
 
-      {((dataset.codingSystem && dataset.codingSystem.length > 0) ||
+      {(isHealthDcatApCompatible(dataset) ||
+        (dataset.codingSystem && dataset.codingSystem.length > 0) ||
         (dataset.codeValues && dataset.codeValues.length > 0)) && (
         <MetadataSection title="Coding & Standards" icon={faCode}>
           <div className="flex flex-col gap-3 text-sm">
-            {dataset.codingSystem && dataset.codingSystem.length > 0 && (
-              <div className="flex flex-wrap gap-2 items-center">
-                <span className="font-medium shrink-0">Coding Systems:</span>
+            <div className="flex flex-wrap gap-2 items-center relative group">
+              <span className="font-medium shrink-0">Coding Systems:</span>
+              {dataset.codingSystem && dataset.codingSystem.length > 0 ? (
                 <Chips
                   chips={dataset.codingSystem.map((item) => item.label)}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
-              </div>
-            )}
-            {dataset.codeValues && dataset.codeValues.length > 0 && (
-              <div className="flex flex-wrap gap-2 items-center">
-                <span className="font-medium shrink-0">Code Values:</span>
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Coding systems or standards used in this dataset (e.g., ICD-10, SNOMED CT)." />
+            </div>
+            <div className="flex flex-wrap gap-2 items-center relative group">
+              <span className="font-medium shrink-0">Code Values:</span>
+              {dataset.codeValues && dataset.codeValues.length > 0 ? (
                 <Chips
                   chips={dataset.codeValues.map((item) => item.label)}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
-              </div>
-            )}
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Specific code values used within the coding systems." />
+            </div>
           </div>
         </MetadataSection>
       )}
 
-      {dataset.retentionPeriod && dataset.retentionPeriod.length > 0 && (
+      {(isHealthDcatApCompatible(dataset) ||
+        (dataset.retentionPeriod && dataset.retentionPeriod.length > 0)) && (
         <MetadataSection title="Retention Period" icon={faClock}>
-          <div className="flex flex-col gap-2 text-sm">
-            {dataset.retentionPeriod.map((period, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <span>
-                  {period.start ? formatDate(period.start) : "N/A"} -{" "}
-                  {period.end ? formatDate(period.end) : "Indefinite"}
-                </span>
-              </div>
-            ))}
+          <div className="flex flex-col gap-2 text-sm relative group">
+            {dataset.retentionPeriod && dataset.retentionPeriod.length > 0 ? (
+              dataset.retentionPeriod.map((period, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <span>
+                    {period.start ? formatDate(period.start) : "N/A"} -{" "}
+                    {period.end ? formatDate(period.end) : "Indefinite"}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <NotProvided />
+            )}
+            <Tooltip message="Period during which the data will be retained." />
           </div>
         </MetadataSection>
       )}
 
-      {(dataset.homepage ||
+      {(isHealthDcatApCompatible(dataset) ||
+        dataset.homepage ||
         dataset.uri ||
         (dataset.documentation && dataset.documentation.length > 0) ||
         (dataset.isReferencedBy && dataset.isReferencedBy.length > 0)) && (
         <MetadataSection title="Links & References" icon={faLink}>
           <div className="flex flex-col gap-2 text-sm">
             {dataset.homepage && (
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap relative group">
                 <span className="font-medium shrink-0">Homepage:</span>
                 <a
                   href={dataset.homepage}
@@ -614,11 +719,12 @@ const DatasetMetadata = ({
                 >
                   {dataset.homepage}
                 </a>
+                <Tooltip message="Homepage URL for more information about this dataset." />
               </div>
             )}
-            {dataset.uri && (
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-medium shrink-0">URI:</span>
+            <div className="flex items-center gap-2 flex-wrap relative group">
+              <span className="font-medium shrink-0">URI:</span>
+              {dataset.uri ? (
                 <a
                   href={dataset.uri}
                   target="_blank"
@@ -627,10 +733,13 @@ const DatasetMetadata = ({
                 >
                   {dataset.uri}
                 </a>
-              </div>
-            )}
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Unique Resource Identifier for this dataset." />
+            </div>
             {dataset.documentation && dataset.documentation.length > 0 && (
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap relative group">
                 <span className="font-medium shrink-0">Documentation:</span>
                 {dataset.documentation.map((doc, index) => (
                   <a
@@ -643,47 +752,63 @@ const DatasetMetadata = ({
                     {doc}
                   </a>
                 ))}
+                <Tooltip message="Links to documentation about this dataset." />
               </div>
             )}
             {dataset.isReferencedBy && dataset.isReferencedBy.length > 0 && (
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap relative group">
                 <span className="font-medium shrink-0">Referenced By:</span>
                 {dataset.isReferencedBy.map((ref, index) => (
                   <span key={index}>{ref}</span>
                 ))}
+                <Tooltip message="Resources that reference this dataset." />
               </div>
             )}
           </div>
         </MetadataSection>
       )}
 
-      {(dataset.version || dataset.versionNotes || dataset.frequency) && (
+      {(isHealthDcatApCompatible(dataset) ||
+        dataset.version ||
+        dataset.versionNotes ||
+        dataset.frequency) && (
         <MetadataSection title="Version Information" icon={faInfoCircle}>
           <div className="flex flex-col gap-2 text-sm">
-            {dataset.version && (
-              <MetadataField label="Version">{dataset.version}</MetadataField>
-            )}
-            {dataset.frequency && (
-              <MetadataField label="Update Frequency">
-                {dataset.frequency.label}
-              </MetadataField>
-            )}
-            {dataset.versionNotes && (
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-medium shrink-0">Version Notes:</span>
-                <span>{dataset.versionNotes}</span>
-              </div>
-            )}
+            <MetadataField
+              label="Version"
+              tooltip="Version number or designation of this dataset."
+            >
+              {dataset.version || <NotProvided />}
+            </MetadataField>
+            <MetadataField
+              label="Update Frequency"
+              tooltip="How often the dataset is updated."
+            >
+              {dataset.frequency?.label || <NotProvided />}
+            </MetadataField>
+            <div className="flex items-center gap-2 flex-wrap relative group">
+              <span className="font-medium shrink-0">Version Notes:</span>
+              <span>{dataset.versionNotes || <NotProvided />}</span>
+              <Tooltip message="Notes about this version of the dataset." />
+            </div>
           </div>
         </MetadataSection>
       )}
 
-      {dataset.analytics && dataset.analytics.length > 0 && (
+      {(isHealthDcatApCompatible(dataset) ||
+        (dataset.analytics && dataset.analytics.length > 0)) && (
         <MetadataSection title="Analytics" icon={faChartBar}>
-          <Chips
-            chips={dataset.analytics}
-            className="bg-primary/10 text-primary rounded-full py-1"
-          />
+          <div className="relative group">
+            {dataset.analytics && dataset.analytics.length > 0 ? (
+              <Chips
+                chips={dataset.analytics}
+                className="bg-primary/10 text-primary rounded-full py-1"
+              />
+            ) : (
+              <NotProvided />
+            )}
+            <Tooltip message="Analytics capabilities or methods available for this dataset." />
+          </div>
         </MetadataSection>
       )}
 

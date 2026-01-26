@@ -6,21 +6,21 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  /* Brand Colors */
-  --gdi-primary: #7b2d7e; /* Primary brand purple */
-  --gdi-secondary: #f5a623; /* Secondary orange accent */
+  /* Brand Colors - Updated to match main app */
+  --gdi-primary: #377a80; /* Primary brand teal */
+  --gdi-secondary: #00b9b3; /* Secondary cyan accent */
 
   /* Primary color variants for light theme */
-  --ifm-color-primary: #7b2d7e;
-  --ifm-color-primary-dark: #6d2670;
-  --ifm-color-primary-darker: #5f1f62;
-  --ifm-color-primary-darkest: #4a1849;
-  --ifm-color-primary-light: #89348c;
-  --ifm-color-primary-lighter: #973b9a;
-  --ifm-color-primary-lightest: #a542a8;
+  --ifm-color-primary: #377a80;
+  --ifm-color-primary-dark: #2f6a6f;
+  --ifm-color-primary-darker: #2a5f63;
+  --ifm-color-primary-darkest: #1f4a4d;
+  --ifm-color-primary-light: #3f8a91;
+  --ifm-color-primary-lighter: #4a9aa2;
+  --ifm-color-primary-lightest: #5aaab2;
 
   /* Secondary color for hover states */
-  --ifm-link-hover-color: #f5a623;
+  --ifm-link-hover-color: #00b9b3;
 
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
@@ -29,19 +29,19 @@
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme="dark"] {
   /* Lighter variants for dark theme */
-  --ifm-color-primary: #a542a8;
-  --ifm-color-primary-dark: #973b9a;
-  --ifm-color-primary-darker: #89348c;
-  --ifm-color-primary-darkest: #7b2d7e;
-  --ifm-color-primary-light: #b349b6;
-  --ifm-color-primary-lighter: #c150c4;
-  --ifm-color-primary-lightest: #cf57d2;
+  --ifm-color-primary: #5aaab2;
+  --ifm-color-primary-dark: #4a9aa2;
+  --ifm-color-primary-darker: #3f8a91;
+  --ifm-color-primary-darkest: #377a80;
+  --ifm-color-primary-light: #6abac0;
+  --ifm-color-primary-lighter: #7acace;
+  --ifm-color-primary-lightest: #8adadd;
 
   /* Secondary color for hover states in dark mode */
-  --ifm-link-hover-color: #ffb84d;
+  --ifm-link-hover-color: #00d4cd;
 
   /* Brighter link color for better readability on dark background */
-  --ifm-link-color: #d863dd; /* Brighter purple for dark mode links */
+  --ifm-link-color: #5aaab2; /* Brighter teal for dark mode links */
 
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
@@ -260,8 +260,8 @@ table th {
 .hero__banner,
 [class*="heroBanner"],
 .heroBanner_src-pages-index-module {
-  background: #7b2d7e !important; /* Primary brand purple */
-  background-color: #7b2d7e !important;
+  background: #377a80 !important; /* Primary brand teal */
+  background-color: #377a80 !important;
   color: white !important;
 }
 
@@ -276,37 +276,37 @@ table th {
 [data-route="/"] .hero,
 [data-route="/"] [class*="heroBanner"],
 [data-route="/"] .heroBanner_src-pages-index-module {
-  background: linear-gradient(135deg, #7b2d7e 0%, #6d2670 100%) !important;
-  background-color: #7b2d7e !important;
+  background: linear-gradient(135deg, #377a80 0%, #2f6a6f 100%) !important;
+  background-color: #377a80 !important;
 }
 
 /* Dark theme hero banner */
 [data-theme="dark"] .hero,
 [data-theme="dark"] [class*="heroBanner"],
 [data-theme="dark"] .heroBanner_src-pages-index-module {
-  background: linear-gradient(135deg, #6d2670 0%, #5f1f62 100%) !important;
-  background-color: #6d2670 !important;
+  background: linear-gradient(135deg, #2f6a6f 0%, #2a5f63 100%) !important;
+  background-color: #2f6a6f !important;
 }
 
-/* Dark mode link colors - brighter purple for better readability */
+/* Dark mode link colors - brighter teal for better readability */
 [data-theme="dark"] a {
-  color: #d863dd; /* Brighter purple for dark mode links */
+  color: #5aaab2; /* Brighter teal for dark mode links */
 }
 
 [data-theme="dark"] .markdown a {
-  color: #d863dd; /* Ensure markdown links are also brighter */
+  color: #5aaab2; /* Ensure markdown links are also brighter */
 }
 
 [data-theme="dark"] .menu__link {
-  color: #d863dd; /* Sidebar navigation links */
+  color: #5aaab2; /* Sidebar navigation links */
 }
 
 [data-theme="dark"] .table-of-contents__link {
-  color: #d863dd; /* Table of contents links */
+  color: #5aaab2; /* Table of contents links */
 }
 
 [data-theme="dark"] .pagination-nav__link {
-  color: #d863dd; /* Next/Previous page links */
+  color: #5aaab2; /* Next/Previous page links */
 }
 
 /* Link hover states with secondary color */

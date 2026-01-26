@@ -495,6 +495,6 @@ export const serviceMocks = [
 
 After mastering backend integration:
 
-- **[Add and modify features](../add-modify-features)** - Build complete features
-- **[Develop frontend features](../develop-frontend)** - Enhance user interfaces
-- **[Get started](../get-started)** - Review development setup
+- **[Add and modify features](/developer-guide/add-modify-features)** - Build complete features
+- **[Develop frontend features](/developer-guide/develop-frontend)** - Enhance user interfaces
+- **[Get started](/developer-guide/get-started)** - Review development setup

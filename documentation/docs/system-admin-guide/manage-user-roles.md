@@ -115,6 +115,6 @@ For complete activity configuration options, see [CKAN activity settings documen
 
 After configuring user roles:
 
-- [Manage data and services](../manage-data-services) - Set up data management workflows
-- [Monitor and maintain the system](../monitor-maintain) - Ongoing system maintenance
-- [Deploy and manage infrastructure](../deploy-infrastructure) - Infrastructure management
+- [Manage data and services](/system-admin-guide/manage-data-services) - Set up data management workflows
+- [Monitor and maintain the system](/system-admin-guide/monitor-maintain) - Ongoing system maintenance
+- [Deploy and manage infrastructure](/system-admin-guide/deploy-infrastructure) - Infrastructure management

@@ -28,11 +28,11 @@ The GDI User Portal is built with modern web technologies and follows best pract
 
 Choose your development focus:
 
-- **New to the project?** Start with [Get started](./get-started)
-- **Frontend development?** Go to [Develop frontend features](./develop-frontend)
-- **Backend integration?** Check out [Work with backend services](./work-with-backend)
-- **CKAN extensions?** Explore [Develop CKAN extensions](./develop-ckan-extensions)
-- **Feature development?** See [Add and modify features](./add-modify-features)
+- **New to the project?** Start with [Get started](/developer-guide/get-started)
+- **Frontend development?** Go to [Develop frontend features](/developer-guide/develop-frontend)
+- **Backend integration?** Check out [Work with backend services](/developer-guide/work-with-backend)
+- **CKAN extensions?** Explore [Develop CKAN extensions](/developer-guide/develop-ckan-extensions)
+- **Feature development?** See [Add and modify features](/developer-guide/add-modify-features)
 
 ## Contributing
 

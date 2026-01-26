@@ -27,6 +27,14 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, account }: JWTCallbackEntry) {
+      // Bypass token validation in development when SKIP_AUTH is set
+      if (process.env.SKIP_AUTH === "true") {
+        if (account) {
+          return completeTokenWithAccountInfo(token, account);
+        }
+        return token;
+      }
+
       const currTimestamp = Math.floor(Date.now() / 1000);
       const isTokenExpired = (token?.expires_at as number) - 60 < currTimestamp;
 

@@ -9,7 +9,10 @@ import { faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExportDatasetButton from "@/app/datasets/[id]/ExportDatasetButton";
 import { RetrievedDataset } from "@/app/api/discovery/open-api/schemas";
-import { getFirstAccessUrl, getExternalDatasetInfo } from "@/utils/datasetHelpers";
+import {
+  getFirstAccessUrl,
+  getExternalDatasetInfo,
+} from "@/utils/datasetHelpers";
 import ExternalDatasetLink from "./ExternalDatasetLink";
 
 function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {

@@ -23,6 +23,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card, { CardItem } from "../../components/Card";
 import { useEffect, useState, useRef, useMemo } from "react";
 import { ExternalDatasetConfirmationDialog } from "@/components/ExternalDatasetCardLink";
+import { createBasketApi } from "../api/access-management-v1";
 
 type DatasetCardProps = {
   dataset: SearchedDataset;
@@ -83,7 +84,15 @@ function DatasetCard({
 
   const toggleDatasetInBasket = (e: React.MouseEvent) => {
     e.preventDefault();
-    (isInBasket ? removeDatasetFromBasket : addDatasetToBasket)(dataset);
+    if (isInBasket) {
+      removeDatasetFromBasket(dataset);
+    } else {
+      addDatasetToBasket(dataset);
+    }
+    createBasketApi({
+      dataset_id: "c5c8f354-465e-447f-bcb3-e0003b484d64",
+      distribution_id: "d6866ab6-3597-4ef6-bd58-013de955cf61",
+    });
   };
 
   const hasIdentifier = !!dataset.identifier;

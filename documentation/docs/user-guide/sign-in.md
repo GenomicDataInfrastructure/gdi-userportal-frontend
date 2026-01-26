@@ -45,6 +45,6 @@ To sign in to the GDI Portal:
 6. After you sign in, the GDI Portal home page loads and you can [start exploring datasets](/category/explore-datasets-1).
 
 <figure>
-<img src="img/sign-in/home-page.png" alt="Home page after signing in, showing a search bar and dataset cards" width="800" />
+<img src="img/sign-in/home-page.png" alt="Home page after signing in, showing a search bar and dataset cards" width="900" />
 <figcaption></figcaption>
 </figure>

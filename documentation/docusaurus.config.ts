@@ -7,7 +7,7 @@ import type * as Preset from "@docusaurus/preset-classic";
 const config: Config = {
   title: "GDI Portal Documentation",
   tagline: "Documentation for the GDI User Portal",
-  favicon: "img/favicon.svg",
+  favicon: "img/favicon.png",
 
   // Set the production url of your site here
   url: "https://GenomicDataInfrastructure.github.io",

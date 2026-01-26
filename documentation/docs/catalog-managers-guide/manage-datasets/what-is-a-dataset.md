@@ -6,7 +6,7 @@ sidebar_position: 1
 
 # What is a dataset?
 
-In general terms, a **dataset** is a structured collection of data that describes a specific subject. In GDI, this subject is genomic information pertaining to human health, diseases, and research studies.
+A **dataset** is a structured collection of data that describes a specific subject. In **GDI**, this subject is genomic information pertaining to human health, diseases, and research studies.
 
 **A dataset in GDI** can be a single file or a collection of files that provide comprehensive genomic information about a specific research topic, disease area, or study cohort. For example, a genomic data for _COVID-19 Viral Sequences_ can include dataset records describing _patient data_, _virus samples_, and _sequencing results_.
 

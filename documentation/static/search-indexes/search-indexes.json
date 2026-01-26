@@ -1,13 +1,6 @@
 {
   "user-guide": [
     {
-      "id": "/gdi-userportal-frontend/user-guide/_get-started/sign-in",
-      "url": "/gdi-userportal-frontend/user-guide/_get-started/sign-in",
-      "title": "sign in",
-      "content": "Sign in Sign in to GDI User Portal with your organisation credentials—no need to create a separate account. GDI User Portal uses your organisation’s Identity and Access Management (IAM) system to facilitate your access and permissions within the platform. For questions regarding your organisation account, please contact your Inventory Coordinator or IT support team. To sign in to GDI User Portal: 1. Obtain the link to GDI User Portal from your Inventory Coordinator. 2. Open GDI User Portal in your web browser. 3. Select your sign-in method and sign in with your organisation credentials. 4. After you sign in, the GDI User Portal home page loads and you can _explore the dashboard_ :::info Unauthorised Access? If you're signing in for the first time or if there are no roles assigned to your account, you may get an \"Unauthorized Access\" error. Contact your Inventory Coordinator and request that they assign the necessary roles to your account, and then try again. ::: Sign in Sign in to GDI User Portal with your organisation credentials—no need to create a separate account. GDI User Portal uses your organisation's Identity and Access Management (IAM) system to facilitate your access and permissions within the platform. For questions regarding your organisation account, please contact your IT support team. To sign in to GDI User Portal: 1. Obtain the link to GDI User Portal from your IT support team. 2. Open GDI User Portal in your web browser. 3. Select your sign-in method and sign in with your organisation credentials. 4. After you sign in, the GDI User Portal home page loads and you can explore the dashboard",
-      "guide": "user-guide"
-    },
-    {
       "id": "/gdi-userportal-frontend/user-guide/about-gdi",
       "url": "/gdi-userportal-frontend/user-guide/about-gdi",
       "title": "About GDI",
@@ -97,6 +90,13 @@
       "title": "welcome data users",
       "content": "Welcome to the GDI Data Portal Welcome to the GDI Data Portal user guide! The GDI Data Portal gives you access to Europe's largest network of genomic datasets for your research and analysis needs. As part of the 1+ Million Genomes Initiative, this portal enables federated and secure cross-border access to high-quality genomic data and related phenotypic information across European countries. This guide is for data users—healthcare researchers, policy-makers, and professionals—who want to discover and request access to genomic datasets for research and clinical purposes. Learn more about Genomic Data Infrastructure (GDI) and its founding initiatives. How it works Access genomic datasets in three steps: 1. Explore datasets: Browse and search through detailed dataset information—search by any criteria such as keywords, research topics, disease areas, or allele frequency. Explore datasets. 2. Request access: Found a dataset you want to use? Submit an application to access it. You may need to provide documentation or requirements for your request, and you can invite collaborators to assist you with your application. Request access. 3. Access approved datasets: Once your request is approved, you will receive an email with a link to the Secure Processing Environment (SPE) where you can securely download and work with the datasets. :::info Stay compliant All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to use data responsibly and according to the terms and agreements you signed during the application process. :::",
       "guide": "user-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/user-guide/_get-started/sign-in",
+      "url": "/gdi-userportal-frontend/user-guide/_get-started/sign-in",
+      "title": "sign in",
+      "content": "Sign in Sign in to GDI User Portal with your organisation credentials—no need to create a separate account. GDI User Portal uses your organisation’s Identity and Access Management (IAM) system to facilitate your access and permissions within the platform. For questions regarding your organisation account, please contact your Inventory Coordinator or IT support team. To sign in to GDI User Portal: 1. Obtain the link to GDI User Portal from your Inventory Coordinator. 2. Open GDI User Portal in your web browser. 3. Select your sign-in method and sign in with your organisation credentials. 4. After you sign in, the GDI User Portal home page loads and you can _explore the dashboard_ :::info Unauthorised Access? If you're signing in for the first time or if there are no roles assigned to your account, you may get an \"Unauthorized Access\" error. Contact your Inventory Coordinator and request that they assign the necessary roles to your account, and then try again. ::: Sign in Sign in to GDI User Portal with your organisation credentials—no need to create a separate account. GDI User Portal uses your organisation's Identity and Access Management (IAM) system to facilitate your access and permissions within the platform. For questions regarding your organisation account, please contact your IT support team. To sign in to GDI User Portal: 1. Obtain the link to GDI User Portal from your IT support team. 2. Open GDI User Portal in your web browser. 3. Select your sign-in method and sign in with your organisation credentials. 4. After you sign in, the GDI User Portal home page loads and you can explore the dashboard",
+      "guide": "user-guide"
     }
   ],
   "catalogue-managers-guide": [
@@ -105,6 +105,13 @@
       "url": "/gdi-userportal-frontend/catalogue-managers-guide/ensure-quality",
       "title": "ensure quality",
       "content": "Ensure data quality Maintaining high-quality data in your catalogue is essential for user trust and effective data discovery. This section covers validation, monitoring, and auditing processes to ensure your catalogue maintains quality standards. :::info content in progress We are working on this data quality guide. :::",
+      "guide": "catalogue-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalogue-managers-guide/get-started/sign-in",
+      "url": "/gdi-userportal-frontend/catalogue-managers-guide/get-started/sign-in",
+      "title": "sign in",
+      "content": "Sign in to the catalogue Access the GDI Dataset Catalogue to manage your organisation's genomic datasets. You need an active account with appropriate permissions to perform catalogue management tasks. Prerequisites Before signing in, ensure you have: - An active GDI user account - Catalogue manager permissions for your organisation - Access to your institution's authentication system (LS AAI or configured identity provider) Sign in 1. Open the Catalogue Portal at https://catalogue.portal.gdi.lu 2. Select Log in in the top-right corner of the page. 3. Select LSAAI as your sign-in method. 4. Select your account provider: Search for your institution in the search bar, or select from the list of options (LinkedIn, Apple, Google, ORCID, GitHub). 5. Follow the instructions to sign in with your selected account. If it's your first time signing in, you may need to verify your email address. After you sign in, the Catalogue Portal homepage opens and you can start managing datasets.",
       "guide": "catalogue-managers-guide"
     },
     {
@@ -324,13 +331,6 @@
   ],
   "all": [
     {
-      "id": "/gdi-userportal-frontend/user-guide/_get-started/sign-in",
-      "url": "/gdi-userportal-frontend/user-guide/_get-started/sign-in",
-      "title": "sign in",
-      "content": "Sign in Sign in to GDI User Portal with your organisation credentials—no need to create a separate account. GDI User Portal uses your organisation’s Identity and Access Management (IAM) system to facilitate your access and permissions within the platform. For questions regarding your organisation account, please contact your Inventory Coordinator or IT support team. To sign in to GDI User Portal: 1. Obtain the link to GDI User Portal from your Inventory Coordinator. 2. Open GDI User Portal in your web browser. 3. Select your sign-in method and sign in with your organisation credentials. 4. After you sign in, the GDI User Portal home page loads and you can _explore the dashboard_ :::info Unauthorised Access? If you're signing in for the first time or if there are no roles assigned to your account, you may get an \"Unauthorized Access\" error. Contact your Inventory Coordinator and request that they assign the necessary roles to your account, and then try again. ::: Sign in Sign in to GDI User Portal with your organisation credentials—no need to create a separate account. GDI User Portal uses your organisation's Identity and Access Management (IAM) system to facilitate your access and permissions within the platform. For questions regarding your organisation account, please contact your IT support team. To sign in to GDI User Portal: 1. Obtain the link to GDI User Portal from your IT support team. 2. Open GDI User Portal in your web browser. 3. Select your sign-in method and sign in with your organisation credentials. 4. After you sign in, the GDI User Portal home page loads and you can explore the dashboard",
-      "guide": "user-guide"
-    },
-    {
       "id": "/gdi-userportal-frontend/user-guide/about-gdi",
       "url": "/gdi-userportal-frontend/user-guide/about-gdi",
       "title": "About GDI",
@@ -422,10 +422,24 @@
       "guide": "user-guide"
     },
     {
+      "id": "/gdi-userportal-frontend/user-guide/_get-started/sign-in",
+      "url": "/gdi-userportal-frontend/user-guide/_get-started/sign-in",
+      "title": "sign in",
+      "content": "Sign in Sign in to GDI User Portal with your organisation credentials—no need to create a separate account. GDI User Portal uses your organisation’s Identity and Access Management (IAM) system to facilitate your access and permissions within the platform. For questions regarding your organisation account, please contact your Inventory Coordinator or IT support team. To sign in to GDI User Portal: 1. Obtain the link to GDI User Portal from your Inventory Coordinator. 2. Open GDI User Portal in your web browser. 3. Select your sign-in method and sign in with your organisation credentials. 4. After you sign in, the GDI User Portal home page loads and you can _explore the dashboard_ :::info Unauthorised Access? If you're signing in for the first time or if there are no roles assigned to your account, you may get an \"Unauthorized Access\" error. Contact your Inventory Coordinator and request that they assign the necessary roles to your account, and then try again. ::: Sign in Sign in to GDI User Portal with your organisation credentials—no need to create a separate account. GDI User Portal uses your organisation's Identity and Access Management (IAM) system to facilitate your access and permissions within the platform. For questions regarding your organisation account, please contact your IT support team. To sign in to GDI User Portal: 1. Obtain the link to GDI User Portal from your IT support team. 2. Open GDI User Portal in your web browser. 3. Select your sign-in method and sign in with your organisation credentials. 4. After you sign in, the GDI User Portal home page loads and you can explore the dashboard",
+      "guide": "user-guide"
+    },
+    {
       "id": "/gdi-userportal-frontend/catalogue-managers-guide/ensure-quality",
       "url": "/gdi-userportal-frontend/catalogue-managers-guide/ensure-quality",
       "title": "ensure quality",
       "content": "Ensure data quality Maintaining high-quality data in your catalogue is essential for user trust and effective data discovery. This section covers validation, monitoring, and auditing processes to ensure your catalogue maintains quality standards. :::info content in progress We are working on this data quality guide. :::",
+      "guide": "catalogue-managers-guide"
+    },
+    {
+      "id": "/gdi-userportal-frontend/catalogue-managers-guide/get-started/sign-in",
+      "url": "/gdi-userportal-frontend/catalogue-managers-guide/get-started/sign-in",
+      "title": "sign in",
+      "content": "Sign in to the catalogue Access the GDI Dataset Catalogue to manage your organisation's genomic datasets. You need an active account with appropriate permissions to perform catalogue management tasks. Prerequisites Before signing in, ensure you have: - An active GDI user account - Catalogue manager permissions for your organisation - Access to your institution's authentication system (LS AAI or configured identity provider) Sign in 1. Open the Catalogue Portal at https://catalogue.portal.gdi.lu 2. Select Log in in the top-right corner of the page. 3. Select LSAAI as your sign-in method. 4. Select your account provider: Search for your institution in the search bar, or select from the list of options (LinkedIn, Apple, Google, ORCID, GitHub). 5. Follow the instructions to sign in with your selected account. If it's your first time signing in, you may need to verify your email address. After you sign in, the Catalogue Portal homepage opens and you can start managing datasets.",
       "guide": "catalogue-managers-guide"
     },
     {

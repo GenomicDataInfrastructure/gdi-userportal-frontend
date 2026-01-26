@@ -1,0 +1,8 @@
+{
+  "label": "Manage datasets",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Create, edit, and organise datasets and groups"
+  }
+}

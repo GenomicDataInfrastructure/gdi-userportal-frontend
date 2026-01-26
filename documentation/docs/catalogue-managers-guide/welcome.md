@@ -28,8 +28,8 @@ As a catalogue manager, you're a business user who plays a crucial role in ensur
 
 This documentation covers everything you need to manage datasets effectively:
 
-- **[Manage datasets](./manage-datasets)** - Learn to publish and update datasets
-- **[Manage organisations](./manage-organisations)** - Oversee your institution's data presence
+- **[Manage datasets](/manage-datasets)** - Learn to publish and update datasets
+- **[Manage organisations](/manage-organisations)** - Oversee your institution's data presence
 - **[Ensure data quality](./ensure-quality)** - Maintain high-quality data descriptions
 - **[Work with advanced features](./work-with-extensions)** - Explore enhanced portal capabilities
 
@@ -37,8 +37,8 @@ This documentation covers everything you need to manage datasets effectively:
 
 Choose your starting point based on your immediate needs:
 
-- **New to the portal?** Start with [Manage datasets](./manage-datasets)
-- **Setting up your team?** Begin with [Manage organisations](./manage-organisations)
+- **New to the portal?** Start with [Manage datasets](/manage-datasets)
+- **Setting up your team?** Begin with [Manage organisations](/manage-organisations)
 - **Focus on quality?** Go to [Ensure data quality](./ensure-quality)
 - **Exploring features?** Check out [Work with advanced features](./work-with-extensions)
 

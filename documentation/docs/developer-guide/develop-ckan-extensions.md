@@ -159,14 +159,14 @@ CKAN_INI=test.ini
 
 For detailed extension development procedures, see:
 
-- [Add and modify features](../add-modify-features) - Complete feature development guide
-- [Work with backend services](../work-with-backend) - Integration patterns
+- [Add and modify features](/developer-guide/add-modify-features) - Complete feature development guide
+- [Work with backend services](/developer-guide/work-with-backend) - Integration patterns
 - [CKAN extensions documentation](https://docs.ckan.org/en/latest/extensions/index.html) - Official guide
 
 ## Next steps
 
 After setting up your development environment:
 
-- **[Add and modify features](../add-modify-features)** - Build complete features
-- **[Work with backend services](../work-with-backend)** - Integrate with GDI services
-- **[Get started](../get-started)** - Review overall development setup
+- **[Add and modify features](/developer-guide/add-modify-features)** - Build complete features
+- **[Work with backend services](/developer-guide/work-with-backend)** - Integrate with GDI services
+- **[Get started](/developer-guide/get-started)** - Review overall development setup

@@ -14,17 +14,17 @@ To apply for access to datasets:
 
 2. Select **Add to basket** on each dataset you want to include in your application. You can add datasets to your basket from multiple searches or browsing sessions. 
 
-    For example, you can add datasets directly from the search results:
-
+    For example, you can add datasets directly from the search results:   
     <figure>
     <img src="img/request-access/add-from-search-results.png" alt="Screenshot of Add to basket button on search results" width="900" />
     <figcaption> </figcaption>
     </figure>
 
     Or you can add datasets from the dataset details page: 
+
     <figure>
     <img src="img/request-access/add-from-details-page.png" alt="Screenshot of Add to basket button on search results" width="900" />
-    <figcaption> </figcaption>
+        <figcaption> </figcaption>
     </figure>
 
 
@@ -49,7 +49,7 @@ To apply for access to datasets:
     <figcaption></figcaption>
 </figure>
 
-    <br/>
+<br/>
 
 7. (Optional) Need help with your application? Select **Add Participant** for collaborators to access your application, submit requirements, and continue your application.
 

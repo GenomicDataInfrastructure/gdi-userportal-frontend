@@ -198,7 +198,3 @@ The command will probably generate a bunch of errors, but will regenerate the cl
 3. Update test cases, they are found in `src/test/java/io/github/genomicdatainfrastructure/discovery/services/PackageShowMapperTest.java`. Make sure to update 1. empty dataset examples 2. filled examples. You'll need to update both the `CkanPackage` objects (which reflects the CKAN API output) as well as the expected output, which is in the form of a `RetrievedDataset`.
 4. Finally, test using both automatic testing `mvn test`, as well as run the package (`mvn compile quarkus:dev`) and check with Postman if mapping and output is as expected.
 ```
-
-## General Improvements
-
-As you update metadata fields, make sure to update documentation and example payloads in the GDI User Portal to keep guidance aligned with the latest schema changes.

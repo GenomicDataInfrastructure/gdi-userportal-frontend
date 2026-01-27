@@ -41,20 +41,19 @@ Connect an external data source to automatically import and synchronise datasets
    - Set filtering criteria to harvest only specific datasets
    - Configure timeout and retry settings
 
-6. Select **Save** to create the harvest source. <!-- VERIFY UI: Button label -->
+6. Select **Save** to create the harvest source. 
 
 7. Start the initial harvest:
 
-   - Select **Reharvest** to begin importing datasets immediately, OR <!-- VERIFY UI: Button label -->
+   - Select **Reharvest** to begin importing datasets immediately, OR  
    - Wait for the next scheduled harvest time
-
 
 
 ## Check harvest progress
 
 1. Go to **Harvest Sources** and select your source.
 
-2. Select the **Jobs** tab. <!-- VERIFY UI: Tab label -->
+2. Select the **Jobs** tab. 
 
 3. View the most recent job to see:
    - Current status (Running, Complete, Failed)

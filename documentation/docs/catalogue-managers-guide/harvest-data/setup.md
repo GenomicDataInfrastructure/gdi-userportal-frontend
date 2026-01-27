@@ -1,59 +1,73 @@
 ---
 slug: /catalogue-managers-guide/harvest-data/setup
-sidebar_label: "Set up a source"
+sidebar_label: "Add a harvest source"
 sidebar_position: 2
 ---
 
-# Set up a harvest source
+# Add a harvest source
 
-In this guide
+Connect an external data source to automatically import and synchronise datasets to your catalogue.
 
-> [Set up a harvest source](#set-up-a-harvest-source-1)  
-> [Monitor harvest jobs](#monitor-harvest-jobs)
+**Before you begin:**
+- Obtain the source URL (endpoint address) of the data source
+- Confirm you have permission to harvest from this source and get authentication credentials if required
+- Decide which organisation will own the harvested datasets
 
-To set up a harvest source, you need:
-- Admin or Editor role in your organization
-- Source URL (the endpoint URL of the data source)
-- Authentication credentials (if required by the source)
+**To add a harvest source:**
 
-## Set up a harvest source
+1. Go to **Harvest Sources** and select **Add Harvest Source**.  
 
-1. Go to **Harvest Sources** in the main menu. <!-- VERIFY UI: Menu path -->
+2. Fill out the source details:
 
-2. Select **Add Harvest Source**. <!-- VERIFY UI: Button label -->
+   - **URL:** Enter the endpoint address of the data source  
+   - **Title:** Enter a descriptive name (example: "ELIXIR Beacon datasets") 
+   - **Description:** Add notes about what this source provides (optional) 
+   - **Source type:** Select the type that matches your source: 
+        - FAIR Data Point
+        - DCAT-AP
+        - CKAN
+   - **Organisation:** Select which organisation will own the harvested datasets  
+   - **Update frequency:** Choose how often to check for updates 
 
-3. Fill out the harvest source form:
+4. Configure authentication (if required):
 
-   - **URL** - The endpoint of the data source
-   - **Title** - A descriptive name for this harvest source
-   - **Description** - Optional notes about what this source provides
-   - **Source type** - Select from available types <!-- VERIFY UI: Actual dropdown options -->
-   - **Organization** - Select which organization will own the harvested datasets
-   - **Update frequency** - Choose how often to check for updates
+   - Enter API keys or credentials
+   - Configure OAuth settings
+   - Set access tokens
 
-4. Configure advanced options (if needed):
+5. Set advanced options (optional):
 
-   - Authentication settings
-   - Metadata mapping rules
-   - Dataset filtering criteria
+   - Add metadata mapping rules to transform source metadata
+   - Set filtering criteria to harvest only specific datasets
+   - Configure timeout and retry settings
 
-5. Select **Save** to create the harvest source.
+6. Select **Save** to create the harvest source. <!-- VERIFY UI: Button label -->
 
-6. Select **Reharvest** to start the initial harvest, or wait for the scheduled time. <!-- VERIFY UI: Button label -->
+7. Start the initial harvest:
 
-## Monitor harvest jobs
+   - Select **Reharvest** to begin importing datasets immediately, OR <!-- VERIFY UI: Button label -->
+   - Wait for the next scheduled harvest time
+
+
+
+## Check harvest progress
 
 1. Go to **Harvest Sources** and select your source.
 
-2. Select the **Jobs** tab to view:
-   - Harvest history and status
-   - Number of datasets created/updated/deleted
-   - Error logs (if any failures occurred)
+2. Select the **Jobs** tab. <!-- VERIFY UI: Tab label -->
 
-3. Select a specific job to see detailed logs.
+3. View the most recent job to see:
+   - Current status (Running, Complete, Failed)
+   - Number of datasets added, updated, or deleted
+   - Error messages if the harvest failed
+   - Completion timestamp
 
-:::tip FIRST HARVEST
+4. Select a job to view detailed logs and troubleshooting information.
 
-The initial harvest may take longer than subsequent updates, especially for large data sources. Monitor the job status to ensure completion.
+## Next steps
 
-:::
+[Monitor and manage your harvest sources](./manage-sources.md) - Edit, pause, or delete sources
+
+[Troubleshoot harvest issues](./troubleshoot.md) - Resolve common problems
+
+[Review harvested datasets](./manage-sources.md#manage-harvested-datasets) - Edit or remove imported datasets

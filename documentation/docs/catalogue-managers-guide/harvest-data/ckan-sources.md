@@ -1,168 +1,178 @@
 ---
 slug: /catalogue-managers-guide/harvest-data/ckan-sources
-sidebar_label: "CKAN instances"
+sidebar_label: "Harvest from CKAN catalogues"
 sidebar_position: 6
 ---
 
-# Harvest from CKAN instances
+# Harvest from CKAN catalogues
 
-In this guide
+Synchronise datasets from partner CKAN catalogues to enable cross-institutional collaboration and maintain distributed dataset collections.
 
-> [Configure a CKAN source](#configure-a-ckan-source)  
-> [Find API endpoints](#find-api-endpoints)  
-> [Avoid duplicates](#avoid-duplicates)  
-> [Advanced configuration](#advanced-configuration)  
-> [Best practices](#best-practices)  
-> [Troubleshoot common issues](#troubleshoot-common-issues)
-
-## Overview
-
-Synchronize datasets from other CKAN catalogues to enable cross-institutional collaboration and maintain distributed dataset collections.
-
-**When to use CKAN harvest:**
+**Use CKAN harvesting to:**
 - Share datasets between partner institutions running CKAN
 - Maintain a central catalogue that aggregates data from multiple CKAN instances
-- Keep local copies of important datasets from external CKAN catalogues
+- Keep local copies of important datasets from external catalogues
+- Enable seamless collaboration across the GDI network
 
-## Configure a CKAN source
+**Prerequisites:**
+- The CKAN instance URL
+- API key (if accessing private datasets)
+- Permission to harvest from the source
 
-To set up a CKAN harvest source, you need:
-- Access to the CKAN instance URL
-- API key (if required for private datasets)
+<br/>
 
-1. Go to **Harvest Sources** → **Add Harvest Source**. <!-- VERIFY UI: Menu path -->
+1. Go to **Harvest Sources** and select **Add Harvest Source**. <!-- VERIFY UI: Menu path and button -->
 
-2. Fill out the form:
-   - **URL:** Enter the CKAN API endpoint (format: `https://[ckan-instance]/api/3/action/package_list`)
-   - **Source type:** Select "CKAN" <!-- VERIFY UI: Exact option name -->
-   - **Title:** Descriptive name (example: "Partner Institution Catalogue")
-   - **Organization:** Select your organization
+2. Fill out the source details:
 
-3. Add authentication (if needed):
-   - In **Advanced options**, enter API key
-   - Required only for accessing private datasets
+   **URL** - Enter the CKAN API endpoint <!-- VERIFY UI: Field label -->  
+   Format: `https://[ckan-instance]/api/3/action/package_list`  
+   Example: `https://catalogue.example.org/api/3/action/package_list`
+   
+   **Source type** - Select **CKAN** <!-- VERIFY UI: Dropdown option -->
+   
+   **Title** - Enter a descriptive name  
+   Example: \"Partner Institution Catalogue\"
+   
+   **Organisation** - Select which organisation will own the imported datasets <!-- VERIFY UI: Field label -->
 
-4. Configure filters (optional):
-   - Filter by organization
-   - Filter by tags or groups
-   - Limit to specific datasets
+3. Configure authentication (for private datasets):
 
-5. Select **Save**.
+   - Select **Advanced options**
+   - Enter your API key from the source CKAN instance
+   - Verify the API key has access to required datasets
 
-6. Select **Reharvest** to start the harvest. <!-- VERIFY UI: Button label -->
+4. Set filters (recommended):
 
-## Find API endpoints
+   **Filter by organisation:**
+   ```json
+   {
+     \"fq\": \"organization:specific-org\"
+   }
+   ```
 
-To find the correct CKAN API endpoint:
+   **Filter by tags:**
+   ```json
+   {
+     \"fq\": \"tags:genomics\"
+   }
+   ```
 
-1. Open the source CKAN instance in your web browser.
-2. Go to the API documentation (usually at `/api`).
-3. Look for the Action API v3 endpoint.
-4. Use `package_list` or `package_search` actions.
+   **Limit dataset count:**
+   ```json
+   {
+     \"rows\": 100
+   }
+   ```
 
-**Example endpoints:**
+5. Select **Save** to create the source.
+
+6. Select **Reharvest** to begin importing datasets. <!-- VERIFY UI: Button label -->
+
+## Find the correct API endpoint
+
+1. Open the source CKAN instance in your browser.
+2. Navigate to `/api` to view API documentation.
+3. Look for the Action API v3 section.
+4. Use the `package_list` or `package_search` endpoint.
+
+**Common endpoint formats:**
 - Package list: `https://example.org/api/3/action/package_list`
 - Package search: `https://example.org/api/3/action/package_search`
 
-## Avoid duplicates
-
-When you harvest from multiple CKAN instances, use filters to prevent duplicate datasets.
-
-**Filter by organization:**
-```json
-{
-  "fq": "organization:specific-org"
-}
-```
-
-**Filter by tags:**
-```json
-{
-  "fq": "tags:genomics"
-}
-```
-
-**Exclude already harvested datasets:**  
-The harvester automatically tracks source IDs to prevent duplicates from the same source.
-
-## Advanced configuration
-
-**Harvest private datasets**
-
-To harvest private datasets from another CKAN instance:
-
-1. Obtain an API key from the source CKAN instance.
-2. Ensure the API key has access to the datasets.
-3. Add the API key in harvest source advanced options.
-4. Decide visibility: keep private or make public in your catalogue.
-
-**Custom metadata schemas**
-
-If the source CKAN uses custom schemas:
-
-1. Document the custom fields.
-2. Configure field mapping in advanced options.
-3. Test with a small subset first.
-4. Verify all important metadata is preserved.
-
-**Filter by query**
-
-Use CKAN's search query syntax to filter datasets:
-
-```json
-{
-  "fq": "tags:genomics AND organization:university",
-  "rows": 100
-}
-```
-
-## Best practices
-
-**Verify API accessibility**  
-Test the API endpoint before you set up the harvest:
+**Test the endpoint:**
 ```bash
 curl https://example.org/api/3/action/package_list
 ```
 
-**Coordinate with source administrators**  
-- Inform them of your harvest plans
-- Understand their update schedule
-- Respect their terms of use
+## Prevent duplicate datasets
 
-**Monitor source changes**  
-- Watch for CKAN upgrades at the source
-- Monitor for schema changes
-- Adjust mapping if needed
+The harvester automatically tracks source IDs to prevent duplicates from the same source. When harvesting from multiple CKAN instances, use filters to avoid importing the same datasets twice.
 
-**Respect harvest frequency**  
-- Don't over-harvest (excessive API calls)
-- Align frequency with source update schedule
-- Consider the source system's load
+**Coordinate with other catalogues:**
+- Document which sources you're harvesting from
+- Use organisation or tag filters for clear boundaries
+- Review harvested datasets regularly for duplicates
 
-## Troubleshoot common issues
+## Harvest private datasets
 
-**API version mismatch**
-- Verify the source CKAN version
-- Use the appropriate API version
-- Consult CKAN API documentation
+To import private datasets from another CKAN catalogue:
 
-**Authentication failures**
-- Check API key is valid and not expired
-- Verify API key permissions
-- Ensure API key is correctly configured
+1. Obtain an API key from the source CKAN instance.
+2. Verify the API key has access permissions for the private datasets.
+3. Add the API key in harvest source advanced options.
+4. Choose whether to keep datasets private or make them public in your catalogue.
 
-**Incomplete datasets**
-- Some fields may not transfer if source uses custom schema
-- Review field mapping configuration
-- Consider manual enrichment for missing fields
+**Security considerations:**
+- Store API keys securely
+- Use separate API keys for each harvest source
+- Respect the source catalogue's access control policies
+- Regularly review and rotate API keys
 
-**Rate limiting**
-- Source may limit API calls
-- Reduce harvest frequency if you encounter errors
-- Contact source administrators about limits
+## Handle custom metadata schemas
 
-:::warning DATASET OWNERSHIP
+If the source CKAN uses custom metadata schemas:
 
-Harvested datasets from other CKAN instances belong to your organization in your catalogue, but the original source is tracked. Always respect the original data provider's licensing and attribution requirements.
+1. Review the source schema documentation.
+2. Document custom fields you need to preserve.
+3. Configure field mapping in advanced harvest options.
+4. Test with a small dataset subset first.
+5. Verify all important metadata is transferred correctly.
+
+## Coordinate with source administrators
+
+**Before you start harvesting:**
+- Inform source administrators of your plans
+- Understand their dataset update schedule
+- Confirm you have permission to harvest
+- Agree on appropriate harvest frequency
+- Respect their terms of use and attribution requirements
+
+**Ongoing communication:**
+- Report any harvest issues promptly
+- Notify them if you stop harvesting
+- Coordinate before making major configuration changes
+- Share feedback about data quality
+
+## Troubleshoot issues
+
+**API version mismatch**  
+- Verify the source CKAN version (check `/api` page)
+- Use the appropriate API version (v3 recommended)
+- Consult [CKAN API documentation](https://docs.ckan.org/en/2.11/api/)<sup>↗</sup> for version differences
+
+**Authentication fails**  
+- Confirm your API key is current and not expired
+- Verify the API key has necessary permissions
+- Check the API key is correctly entered in advanced options
+- Test the API key directly using curl
+
+**Datasets incomplete or missing fields**  
+- Review the source catalogue's metadata schema
+- Check field mapping configuration
+- Some custom fields may not transfer automatically
+- Consider manual enrichment for critical missing metadata
+
+**Rate limiting or timeout errors**  
+- The source may limit API request frequency
+- Reduce your harvest frequency
+- Contact source administrators about rate limits
+- Consider harvesting during off-peak hours
+
+**Harvest jobs fail repeatedly**  
+- Check source CKAN instance availability
+- Review error messages in harvest job logs
+- Verify network connectivity to source
+- Test API endpoint accessibility manually
+
+:::warning DATASET OWNERSHIP AND ATTRIBUTION
+
+Harvested datasets belong to your organisation in your catalogue, but the original source is tracked in metadata. Always respect the original data provider's licensing terms, attribution requirements, and usage policies.
 
 :::
+
+## Next steps
+
+[Monitor and manage your sources](./manage-sources.md) - Edit, pause, or delete harvest sources
+
+[Review technical specifications](./technical-specs.md) - Understand harvest timing and behaviour

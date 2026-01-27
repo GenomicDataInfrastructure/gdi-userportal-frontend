@@ -1,8 +1,8 @@
 {
-  "label": "Set up harvest sources",
+  "label": "Harvest external datasets",
   "position": 4,
   "link": {
     "type": "generated-index",
-    "description": "Learn how to automatically collect and integrate datasets from external sources using the GDI Data Catalogue's harvesting feature."
+    "description": "Automate dataset collection from external sources to keep your catalogue up to date without manual data entry"
   }
 }

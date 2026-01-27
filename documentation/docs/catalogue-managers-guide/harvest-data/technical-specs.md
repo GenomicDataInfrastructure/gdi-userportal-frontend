@@ -1,74 +1,138 @@
 ---
 slug: /catalogue-managers-guide/harvest-data/technical-specs
 sidebar_label: "Technical specifications"
-sidebar_position: 3
+sidebar_position: 8
 ---
 
 # Technical specifications
 
-In this guide
+Understand harvest timing, limits, and system behaviour to optimise your harvest configuration and troubleshoot issues.
 
-> [Harvest frequency](#harvest-frequency)  
-> [Initial harvest behavior](#initial-harvest-behavior)  
-> [Data synchronization](#data-synchronization)  
-> [Performance considerations](#performance-considerations)  
-> [Data Portal synchronization](#data-portal-synchronization)  
-> [Monitor and logs](#monitor-and-logs)
+## Harvest timing and frequency
 
-This page documents technical details of how the GDI harvester operates, including timing, limits, and synchronization behavior.
+<!-- VERIFY SYSTEM: Actual harvest intervals and scheduling options -->
+**Standard harvest interval**  
+[NEEDS VERIFICATION] - Check with system administrators for default schedule
 
-## Harvest frequency
+**Custom scheduling**  
+[NEEDS VERIFICATION] - Available options for custom harvest frequencies
 
-<!-- VERIFY SYSTEM: All values below -->
-- **Standard harvest interval:** [NEEDS VERIFICATION]
-- **Custom scheduling:** [NEEDS VERIFICATION]
-- **Manual trigger:** Available anytime from the harvest source page
+**Manual triggers**  
+You can trigger a harvest manually at any time from the harvest source page, regardless of the scheduled interval.
 
-## Initial harvest behavior
+## Initial harvest behaviour
 
-<!-- VERIFY SYSTEM: All specifications below -->
-- **First-time data pull:** [NEEDS VERIFICATION]
-- **Dataset limit per harvest:** [NEEDS VERIFICATION]
-- **Timeout settings:** [NEEDS VERIFICATION]
-- **Retry policy:** [NEEDS VERIFICATION]
+<!-- VERIFY SYSTEM: First-time harvest specifications -->
+**First harvest characteristics:**
+- May take significantly longer than subsequent updates
+- Imports all available datasets from the source
+- Processes datasets in batches
+- Creates new dataset records in your catalogue
 
-## Data synchronization
+**Timeout settings:** [NEEDS VERIFICATION]  
 
-<!-- VERIFY SYSTEM: Synchronization method -->
-- **Update detection:** [NEEDS VERIFICATION]
-- **Deletion handling:** [NEEDS VERIFICATION]
-- **Conflict resolution:** [NEEDS VERIFICATION]
+**Dataset limits:** [NEEDS VERIFICATION]  
+
+**Retry policy:** [NEEDS VERIFICATION] - Automatic retry behaviour for failed harvests
+
+## Synchronisation behaviour
+
+<!-- VERIFY SYSTEM: How updates and changes are detected -->
+**Update detection:** [NEEDS VERIFICATION]  
+How the harvester identifies changed datasets at the source
+
+**New datasets:**  
+Automatically added to your catalogue during each harvest run
+
+**Updated datasets:**  
+Modified metadata is synchronised from the source
+
+**Deleted datasets:** [NEEDS VERIFICATION]  
+Behaviour when datasets are removed from the source
+
+**Conflict resolution:** [NEEDS VERIFICATION]  
+How the system handles conflicts between local edits and source updates
 
 ## Performance considerations
 
-**Large data sources**
+**Harvesting large data sources:**
 
-When you harvest from sources with many datasets:
-- The initial harvest may take several hours
-- Consider using filters to limit the scope
-- Monitor job logs for performance metrics
+When connecting to sources with thousands of datasets:
+- Initial harvest may take several hours
+- Subsequent updates are typically faster (only changes are processed)
+- Consider using filters to limit scope and improve performance
+- Monitor job logs to track progress and identify bottlenecks
+- Plan initial harvests during off-peak hours
 
-**Network reliability**
+**Network reliability:**
 
-- The harvester includes automatic retry logic for transient failures
+- The harvester includes automatic retry logic for transient network failures
 - Long-running harvests may be affected by network interruptions
-- Check job logs if harvests fail repeatedly
+- Timeout errors typically trigger automatic retries
+- Review job logs if harvests fail repeatedly
+- Contact support if you experience persistent network issues
 
-## Data Portal synchronization
+**Optimisation strategies:**
 
-<!-- VERIFY SYSTEM: Data Portal synchronization timing -->
-**Publication timing**  
-Harvested datasets appear in the [GDI Data Portal](https://portal.gdi.lu/)<sup>↗</sup> after import to the catalogue (for public datasets).
+- Use specific filters rather than harvesting entire catalogues
+- Schedule harvests during low-traffic periods
+- Start with a small test harvest before full import
+- Monitor system resources during large harvests
+- Adjust harvest frequency based on source update patterns
 
-**Update propagation**  
-Changes from harvest updates propagate to the Data Portal on the same schedule.
+## Data Portal synchronisation
 
-## Monitor and logs
+<!-- VERIFY SYSTEM: Data Portal publication timing -->
+**Publication to GDI Data Portal:**
 
-All harvest operations are logged with:
+Harvested datasets appear in the [GDI Data Portal](https://portal.gdi.lu/)<sup>↗</sup> after import to the catalogue (for public datasets only).
+
+**Update propagation:**  
+Changes from harvest updates propagate to the Data Portal on the same schedule as manually created datasets.
+
+**Private datasets:**  
+Private harvested datasets remain visible only within your organisation and do not appear in the public Data Portal.
+
+## Monitor harvest operations
+
+**Access harvest logs:**
+
+1. Go to **Harvest Sources**
+2. Select your harvest source
+3. Select the **Jobs** tab
+4. Select a specific job to view detailed logs
+
+**Log information includes:**
 - Start and end timestamps
-- Number of datasets processed
-- Success/failure status
-- Detailed error messages for failures
+- Job duration
+- Number of datasets processed (added, updated, deleted)
+- Success or failure status
+- Detailed error messages for any failures
+- Network and connectivity information
+- Processing performance metrics
 
-Access logs: **Harvest Sources** → [Your Source] → **Jobs** tab
+**Use logs to:**
+- Verify harvest completed successfully
+- Identify specific failed datasets
+- Diagnose authentication or connectivity issues
+- Monitor processing time and performance
+- Track changes over time
+
+## System limits and quotas
+
+<!-- VERIFY SYSTEM: Any limits on harvest operations -->
+
+**Potential limits to be aware of:**
+- Maximum datasets per harvest run
+- API rate limits from source systems
+- Network timeout thresholds
+- Storage quota for harvested datasets
+- Concurrent harvest job limits
+
+Contact system administrators for specific limit information applicable to your GDI instance.
+
+## Next steps
+
+[Troubleshoot harvest issues](./troubleshoot.md) - Resolve common problems
+
+[Monitor and manage sources](./manage-sources.md) - Edit, pause, or delete harvest sources

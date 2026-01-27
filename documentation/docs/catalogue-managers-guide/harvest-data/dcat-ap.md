@@ -1,103 +1,160 @@
 ---
 slug: /catalogue-managers-guide/harvest-data/dcat-ap
-sidebar_label: "DCAT-AP endpoints"
+sidebar_label: "Harvest from DCAT-AP endpoints"
 sidebar_position: 5
 ---
 
 # Harvest from DCAT-AP endpoints
 
-In this guide
+Connect to European data portals using the DCAT-AP standard to import standardised public sector datasets.
 
-> [Configure a DCAT-AP source](#configure-a-dcat-ap-source)  
-> [Metadata mapping](#metadata-mapping)  
-> [Find DCAT-AP endpoints](#find-dcat-ap-endpoints)  
-> [Best practices](#best-practices)  
-> [Troubleshoot common issues](#troubleshoot-common-issues)
+**What is DCAT-AP:**  
+Data Catalog Vocabulary - Application Profile is a European standard for describing public sector data catalogues. Many European national and regional portals use DCAT-AP to expose their metadata.
 
-DCAT-AP (Data Catalog Vocabulary - Application Profile) is a European standard for describing public sector data catalogues. Many European data portals expose their metadata using DCAT-AP.
+**Prerequisites:**
+- The DCAT-AP endpoint URL (typically ends in `/catalog.rdf` or `/dcat-ap.xml`)
+- Understanding of which datasets you want to import
+- Permission to harvest from the source portal
 
-## Configure a DCAT-AP source
+<br/>
 
-1. Go to **Harvest Sources** → **Add Harvest Source**. <!-- VERIFY UI: Menu path -->
+1. Go to **Harvest Sources** and select **Add Harvest Source**. <!-- VERIFY UI: Menu path and button -->
 
-2. Fill out the form:
-   - **URL:** Enter the DCAT-AP endpoint URL (typically ends in `/catalog.rdf` or `/dcat-ap.xml`)
-   - **Source type:** Select "DCAT-AP" <!-- VERIFY UI: Exact option name -->
-   - **Title:** Descriptive name (example: "National Data Portal")
-   - **Organization:** Select your organization
+2. Fill out the source details:
 
-3. Configure metadata mapping:
-   - Review default DCAT-AP to CKAN field mapping
+   **URL** - Enter the DCAT-AP endpoint URL <!-- VERIFY UI: Field label -->  
+   Common formats:
+   - `https://portal.example.eu/catalog.rdf`
+   - `https://data.example.eu/dcat-ap.xml`
+   
+   **Source type** - Select **DCAT-AP** <!-- VERIFY UI: Dropdown option -->
+   
+   **Title** - Enter a descriptive name  
+   Example: "Luxembourg National Data Portal"
+   
+   **Organisation** - Select which organisation will own the imported datasets <!-- VERIFY UI: Field label -->
+
+3. Configure filters (recommended for large portals):
+
+   - Filter by theme or category
+   - Limit to specific organisations
+   - Focus on health or genomics-related datasets
+   - Set dataset limits to test before full harvest
+
+4. Review metadata mapping:
+
+   - Check default DCAT-AP to CKAN field mapping
    - Adjust if the source uses custom properties
+   - Verify required GDI fields are mapped correctly
 
-4. Select **Save**.
+5. Select **Save** to create the source.
 
-5. Select **Reharvest** to start the harvest. <!-- VERIFY UI: Button label -->
+6. Select **Reharvest** to begin importing datasets. <!-- VERIFY UI: Button label -->
 
-## Metadata mapping
+## Understand metadata mapping
 
 DCAT-AP metadata is automatically mapped to CKAN fields:
 
-| DCAT-AP Property | CKAN Field |
-|-----------------|------------|
-| dcat:Dataset | Package (Dataset) |
-| dct:title | title |
-| dct:description | notes (description) |
-| dcat:keyword | tags |
-| dcat:theme | groups |
-| dct:publisher | organization |
-| dcat:distribution | resources |
-| dct:issued | metadata_created |
-| dct:modified | metadata_modified |
+| DCAT-AP Property | CKAN Field | Description |
+|-----------------|------------|-------------|
+| dcat:Dataset | Package | Dataset record |
+| dct:title | title | Dataset title |
+| dct:description | notes | Dataset description |
+| dcat:keyword | tags | Keywords |
+| dcat:theme | groups | Themes/categories |
+| dct:publisher | organisation | Publishing organisation |
+| dcat:distribution | resources | Data files and links |
+| dct:issued | metadata_created | Creation date |
+| dct:modified | metadata_modified | Last update date |
 
-Review the mapping in harvest job logs to ensure data quality.
+Review harvest job logs after import to verify mapping quality.
 
 ## Find DCAT-AP endpoints
 
-Many European portals provide DCAT-AP exports:
-
 **EU-level portals:**
-- [data.europa.eu](https://data.europa.eu/)<sup>↗</sup>
-- European Data Portal API
+- [data.europa.eu](https://data.europa.eu/)<sup>↗</sup> - European Data Portal
+- EU Open Data Portal API documentation
 
 **National portals:**
-- Check your country's open data portal documentation
-- Look for "API", "Export", or "DCAT" sections
+- **Germany:** [GovData.de](https://www.govdata.de/)<sup>↗</sup>
+- **France:** [data.gouv.fr](https://www.data.gouv.fr/)<sup>↗</sup>
+- **Netherlands:** [data.overheid.nl](https://data.overheid.nl/)<sup>↗</sup>
+- **Luxembourg:** [data.public.lu](https://data.public.lu/)<sup>↗</sup>
 
-**Discovery:**
+**How to find endpoints:**
 - Visit the portal's API documentation
-- Look for RDF, XML, or DCAT endpoints
-- Contact the portal administrators
+- Look for "API", "Export", "DCAT", or "RDF" sections
+- Check for XML or RDF endpoint URLs
+- Contact portal administrators for endpoint details
 
-## Best practices
+## Verify endpoint quality
 
-**Verify endpoint format**  
-Ensure the endpoint returns valid DCAT-AP:
+**Test the endpoint before harvesting:**
+
 ```bash
 curl https://example.com/catalog.rdf
 ```
 
-**Check DCAT-AP version**  
-Different versions may have different properties. DCAT-AP 2.0+ is recommended for compatibility with GDI requirements.
+Check that the response contains valid DCAT-AP XML or RDF metadata.
 
-**Use filters wisely**  
-Large national portals may contain thousands of datasets:
-- Filter by theme/category if possible
-- Limit to relevant organizations
-- Focus on genomic/health-related datasets
+**Check DCAT-AP version:**  
+DCAT-AP 2.0 or later is recommended for compatibility with GDI requirements. Earlier versions may have incomplete metadata fields.
 
-**Monitor metadata quality**  
-After harvest:
-- Check that required fields are populated
-- Review dataset descriptions for completeness
-- Verify license information is present
+**Review metadata quality:**
+- Ensure required fields are present (title, description, publisher)
+- Verify licence information is included
+- Check that dataset URLs are accessible
+- Confirm temporal coverage is specified where relevant
 
-## Troubleshoot common issues
+## Optimise for large portals
 
-**National portals:**
-- Germany: GovData.de
-- France: data.gouv.fr
-- Netherlands: data.overheid.nl
+National portals may contain thousands of datasets. Use filters to import only relevant data:
+
+**Filter by theme:**
+- Health and life sciences
+- Research and innovation
+- Science and technology
+
+**Filter by organisation:**
+- Research institutions
+- Healthcare providers
+- Genomic data centres
+
+**Limit dataset count initially:**
+- Test with 100-500 datasets first
+- Verify quality and relevance
+- Expand filters after successful test
+
+## Troubleshoot issues
+
+**Invalid endpoint URL**  
+- Verify the URL returns DCAT-AP formatted data
+- Check for typos in the endpoint address
+- Try alternative endpoint formats (.rdf, .xml, .ttl)
+- Contact the portal support team
+
+**Incomplete metadata**  
+- Check the source portal's data quality
+- Some portals have incomplete DCAT-AP implementations
+- Consider manual enrichment for critical datasets
+- Report quality issues to portal administrators
+
+**Too many datasets imported**  
+- Review and refine your filter criteria
+- Delete irrelevant datasets manually
+- Update harvest source with stricter filters
+- Consider multiple harvest sources with specific filters
+
+**Character encoding issues**  
+- Verify the endpoint uses UTF-8 encoding
+- Check harvest logs for encoding errors
+- Contact support if non-English characters are corrupted
+
+## Next steps
+
+[Monitor and manage your sources](./manage-sources.md) - Edit, pause, or delete harvest sources
+
+[Review technical specifications](./technical-specs.md) - Understand harvest timing and behaviour
 - Many others across Europe
 
 ## Troubleshooting

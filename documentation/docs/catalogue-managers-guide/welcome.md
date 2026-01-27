@@ -45,16 +45,16 @@ This documentation covers everything you need to manage datasets effectively:
 
 - **[Get started](./get-started/sign-in)** - Access the Data Catalogue
 - **[Manage datasets](/manage-datasets)** - Quick reference for dataset operations
-- **[Manage organisations](/manage-organisations)** - Quick reference for organization operations
-- **[Set up harvest sources](./harvest-data/overview)** - Configure automated data collection (GDI-specific)
+- **[Manage organisations](/manage-organisations)** - Quick reference for organisation operations
+- **[Harvest datasets from sources](./harvest-data/overview)** - Automatically collect datasets from external sources (GDI-specific)
 
 ## Getting started
 
 Choose your starting point based on your immediate needs:
 
 - **New to the portal?** Start with [Get started](./get-started/sign-in)
-- **Setting up harvesters?** Go to [Harvesting overview](./harvest-data/overview)
+- **Setting up harvesters?** Go to [Understand dataset harvesting](./harvest-data/overview)
 - **Managing datasets manually?** See [Manage datasets](/manage-datasets) and [CKAN's Dataset Guide](https://docs.ckan.org/en/2.11/user-guide.html#datasets-and-resources)<sup>↗</sup>
-- **Setting up your team?** Begin with [Manage organisations](/manage-organisations) and [CKAN's Organization Guide](https://docs.ckan.org/en/2.11/user-guide.html#organizations)<sup>↗</sup>
+- **Setting up your team?** Begin with [Manage organisations](/manage-organisations) and [CKAN's Organisation Guide](https://docs.ckan.org/en/2.11/user-guide.html#organizations)<sup>↗</sup>
 
 Your work in managing datasets helps ensure that Europe's genomic data infrastructure serves the research community effectively.

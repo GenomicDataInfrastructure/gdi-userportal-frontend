@@ -24,6 +24,7 @@ This guide covers the common tasks for managing organisations. For detailed inst
 Create an organisation to group your institution's datasets and manage your team's access.
 
 1. Go to **Organizations** and select **Add Organization**.  
+
 2. Fill out the organization form:
     - **Name:** Use your institution's official name for consistency across the GDI ecosystem  
     - **URL:** Auto-generated from the organization name. Select edit to customise it
@@ -48,6 +49,7 @@ Add team members to your organisation and assign roles to control their access p
     - **For new users:** Enter their email address under **New User** to send them an invitation. Then, come back to this step after they create their account. 
 
 5. Enter the member's username and select their role:  
+
    - **Admin:** Full control over organization and all datasets
    - **Editor:** Can add and edit datasets
    - **Member:** Can view private datasets

@@ -1,79 +1,86 @@
 ---
 slug: /catalogue-managers-guide/harvest-data/fair-data-points
-sidebar_label: "FAIR Data Points"
+sidebar_label: "Harvest from FAIR Data Points"
 sidebar_position: 4
 ---
 
 # Harvest from FAIR Data Points
 
-In this guide
+Connect to FAIR Data Points to import scientific datasets that follow FAIR principles (Findable, Accessible, Interoperable, Reusable).
 
-> [Configure a FAIR Data Point source](#configure-a-fair-data-point-source)  
-> [Best practices](#best-practices)  
-> [Troubleshoot common issues](#troubleshoot-common-issues)
+**What are FAIR Data Points:**  
+Standardised metadata endpoints for scientific data that ensure data can be easily found and reused by researchers. Learn more about [FAIR principles](https://www.go-fair.org/fair-principles/)<sup>↗</sup>.
 
-FAIR Data Points follow the [FAIR principles](https://www.go-fair.org/fair-principles/)<sup>↗</sup> (Findable, Accessible, Interoperable, Reusable) and provide standardized metadata access for scientific data.
+**Prerequisites:**
+- The FAIR Data Point base URL
+- API token (if required by the source)
+- Permission to harvest from the FDP
 
-## Configure a FAIR Data Point source
+<br/>
 
-To set up a FAIR Data Point harvest source, you need:
-- Access to the FAIR Data Point URL
-- API token (if required - contact the FDP administrator)
+1. Go to **Harvest Sources** and select **Add Harvest Source**. <!-- VERIFY UI: Menu path and button -->
 
-1. Go to **Harvest Sources** → **Add Harvest Source**. <!-- VERIFY UI: Menu path -->
+2. Fill out the source details:
 
-2. Fill out the form:
-   - **URL:** Enter the FAIR Data Point base URL (format: `https://[hostname]/fdp`)
-   - **Source type:** Select "FAIR Data Point" <!-- VERIFY UI: Exact option name -->
-   - **Title:** Descriptive name (example: "Institution XYZ FDP")
-   - **Organization:** Select your organization
+   **URL** - Enter the FAIR Data Point base URL <!-- VERIFY UI: Field label -->  
+   Format: `https://[hostname]/fdp`
+   
+   **Source type** - Select **FAIR Data Point** <!-- VERIFY UI: Dropdown option -->
+   
+   **Title** - Enter a descriptive name  
+   Example: "ELIXIR Luxembourg FDP"
+   
+   **Organisation** - Select which organisation will own the imported datasets <!-- VERIFY UI: Field label -->
 
-3. Add authentication (if required):
-   - In **Advanced options**, enter your API token
-   - Format depends on the FDP implementation (check with the source administrator)
+3. Configure authentication (if required):
 
-4. Select **Save**.
+   - Select **Advanced options**
+   - Enter your API token
+   - Confirm the token format with the FDP administrator
 
-5. Select **Reharvest** to start the harvest. <!-- VERIFY UI: Button label -->
+4. Select **Save** to create the source.
 
-## Best practices
+5. Select **Reharvest** to begin importing datasets. <!-- VERIFY UI: Button label -->
 
-**Verify accessibility**  
-Before you create the harvest source:
-- Open the FDP URL in your web browser
-- Check if it returns valid metadata
-- Ensure you have necessary permissions
+## Verify the harvest
 
-**Test with small datasets**  
-If possible, test the harvest with a subset of data first to verify:
-- Metadata mapping is correct
-- All required fields are populated
-- Data quality meets your standards
+**Before you create the source:**
+- Open the FDP URL in your browser to verify it's accessible
+- Check that metadata is returned correctly
+- Confirm you have necessary access permissions
 
-**Review metadata mapping**  
-After the first harvest:
-- Check that GDI required fields are populated
-- Review metadata quality in imported datasets
-- Adjust mapping configuration if needed
+**After the first harvest:**
+- Review imported datasets for metadata completeness
+- Check that required GDI fields are populated
+- Verify data quality meets your standards
 
-**Monitor regularly**  
-- Check harvest job logs periodically
-- Ensure datasets update as expected
-- Watch for schema changes at the source
+## Troubleshoot issues
 
-## Troubleshoot common issues
+**Authentication fails**  
+- Verify your API token is current and correctly formatted
+- Contact the FDP administrator to confirm access permissions
+- Check that your IP address is allowed (if the FDP has IP restrictions)
 
-**Authentication failures**
-- Verify your API token is current
-- Check token format matches the FDP's requirements
-- Contact the FDP administrator to confirm your access
-
-**Incomplete metadata**
-- Review the FDP's metadata completeness
-- Check if all DCAT-AP required fields are provided
+**Metadata incomplete**  
+- Review the source FDP's metadata quality
+- Check if all DCAT-AP required fields are provided by the source
 - Consider manual enrichment for critical missing fields
+- Contact the source administrator about data quality issues
 
-**Connection timeouts**
-- Large FDPs may take time to respond
-- Contact support to adjust timeout settings if needed
-- Consider filtering to reduce dataset count
+**Connection timeouts**  
+- Large FDPs with many datasets may respond slowly
+- Try harvesting during off-peak hours
+- Contact support to request timeout setting adjustments
+- Consider using filters to reduce the dataset count
+
+**Datasets not updating**  
+- Check the FDP's last modified timestamps
+- Verify your harvest schedule is appropriate
+- Review harvest job logs for synchronisation errors
+- Confirm the FDP supports incremental updates
+
+## Next steps
+
+[Monitor and manage your sources](./manage-sources.md) - Edit, pause, or delete harvest sources
+
+[Review technical specifications](./technical-specs.md) - Understand harvest timing and behaviour

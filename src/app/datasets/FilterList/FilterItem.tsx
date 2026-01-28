@@ -45,14 +45,21 @@ function FilterItem({ filter }: FilterItemProps) {
       case FilterType.NUMBER:
         return <NumberFilterContent filter={filter} />;
       default:
-        throw new Error(`Unknown filter type: ${type}`);
+        console.warn("🚨 Unsupported filter type - needs implementation", {
+          filterType: type,
+          filterLabel: filter.label,
+          filterKey: filter.key,
+          filterSource: filter.source,
+          fullFilter: filter,
+        });
+        return <div className="px-4 py-2 text-red-600">Filter type not supported: {type}</div>;
     }
   };
 
   return (
     <div className="flex flex-col gap-y-3">
       <div className="shadow-lg rounded-lg py-4 border-b-4 border-b-[#B5BFC4] hover:border-b-secondary transition hover:bg-gray-50">
-        <Disclosure as="div">
+        <Disclosure as="div" key={`${filter.key}-${filter.source}`}>
           {({ open }) => (
             <>
               <Disclosure.Button className="flex w-full justify-between px-4 py-2 text-left">

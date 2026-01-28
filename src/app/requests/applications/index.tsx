@@ -16,7 +16,8 @@ import { Status } from "@/utils/pageStatus.types";
 import LoadingContainer from "@/components/LoadingContainer";
 import axios from "axios";
 import ApplicationCard from "./ApplicationCard";
-import { listApplicationsApi } from "../../api/access-management";
+// import { listApplicationsApi } from "../../api/access-management";
+import { listApplicationsApi } from "../../api/access-management-v1/index";
 import {
   ErrorResponse,
   ListedApplication,
@@ -37,6 +38,7 @@ const ApplicationsPage: React.FC = () => {
     setResponse({ status: "loading" });
     try {
       const applications = await listApplicationsApi();
+      console.log("Applications fetched:", applications);
       setResponse({ applications, status: "success" });
     } catch (error) {
       console.error(error);

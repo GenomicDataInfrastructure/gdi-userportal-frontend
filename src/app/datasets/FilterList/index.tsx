@@ -15,8 +15,8 @@ export default function FilterList() {
 
   return (
     <ul className="flex flex-col gap-y-6">
-      {filtersSortedBySource.map((filter) => (
-        <li key={filter.key} className="list-none">
+      {filtersSortedBySource.map((filter, index) => (
+        <li key={`${filter.key}-${index}`} className="list-none">
           <FilterItem filter={filter} />
         </li>
       ))}

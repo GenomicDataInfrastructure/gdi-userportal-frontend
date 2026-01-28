@@ -20,7 +20,6 @@ export default function DatasetListContainer({
   currentPage,
 }: DatasetListContainerProps) {
   const { datasets, datasetCount, isLoading, errorCode } = useDatasets();
-
   if (isLoading) {
     return (
       <div className="col-start-0 col-span-12 xl:col-span-8 xl:col-start-5">

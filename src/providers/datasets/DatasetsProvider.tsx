@@ -18,7 +18,8 @@ import {
   DatasetsState,
 } from "./DatasetProvider.types";
 import { useFilters } from "@/providers/filters/FilterProvider";
-import { searchDatasetsApi } from "../../app/api/discovery";
+// import { searchDatasetsApi } from "../../app/api/discovery";
+import { searchDatasetsApi } from "../../app/api/discovery-v1/index";
 import {
   DatasetSearchQuery,
   DatasetSearchQueryFacet,

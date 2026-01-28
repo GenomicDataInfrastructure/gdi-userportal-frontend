@@ -6,7 +6,8 @@
 
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 import { AxiosError } from "axios";
-import { retrieveFiltersApi } from "../../app/api/discovery";
+// import { retrieveFiltersApi } from "../../app/api/discovery";
+import { retrieveFiltersApi } from "../../app/api/discovery-v1/index";
 import { Filter } from "@/app/api/discovery/open-api/schemas";
 import {
   ActiveFilter,
@@ -61,8 +62,8 @@ function reducer(
         activeFilters:
           existingIndex >= 0
             ? state.activeFilters.map((f, i) =>
-              i === existingIndex ? updatedFilter : f
-            )
+                i === existingIndex ? updatedFilter : f
+              )
             : [...state.activeFilters, updatedFilter],
         error: null,
       };
@@ -122,6 +123,8 @@ function FilterProvider({ children }: { children: React.ReactNode }) {
 
     try {
       const filters = await retrieveFiltersApi();
+
+      console.log("Filters retrieved:", filters);
       dispatch({ type: FilterActionType.FILTERS_RETRIEVED, payload: filters });
     } catch (error) {
       const message =

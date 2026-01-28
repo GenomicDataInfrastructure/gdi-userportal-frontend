@@ -17,16 +17,22 @@ import { OTLPLogExporter } from "@opentelemetry/exporter-logs-otlp-http";
 //import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
 //diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
 
-const sdk = new NodeSDK({
-  resource: resourceFromAttributes({
-    [ATTR_SERVICE_NAME]: process.env.OTEL_SERVICE_NAME,
-  }),
-  logRecordProcessors: [new BatchLogRecordProcessor(new OTLPLogExporter())],
-  instrumentations: [getNodeAutoInstrumentations()],
-  spanProcessors: [new BatchSpanProcessor(new OTLPTraceExporter())],
-  metricReader: new PeriodicExportingMetricReader({
-    exporter: new OTLPMetricExporter(),
-  }),
-});
+// Only initialize OpenTelemetry if OTEL_EXPORTER_OTLP_ENDPOINT is configured
+const OTEL_ENABLED = Boolean(process.env.OTEL_EXPORTER_OTLP_ENDPOINT);
 
-sdk.start();
+if (OTEL_ENABLED) {
+  const sdk = new NodeSDK({
+    resource: resourceFromAttributes({
+      [ATTR_SERVICE_NAME]:
+        process.env.OTEL_SERVICE_NAME || "gdi-userportal-frontend",
+    }),
+    logRecordProcessors: [new BatchLogRecordProcessor(new OTLPLogExporter())],
+    instrumentations: [getNodeAutoInstrumentations()],
+    spanProcessors: [new BatchSpanProcessor(new OTLPTraceExporter())],
+    metricReader: new PeriodicExportingMetricReader({
+      exporter: new OTLPMetricExporter(),
+    }),
+  });
+
+  sdk.start();
+}

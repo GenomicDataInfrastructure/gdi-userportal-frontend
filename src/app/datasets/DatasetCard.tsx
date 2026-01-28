@@ -6,7 +6,8 @@ import {
   SearchedDataset,
   ValueLabel,
 } from "@/app/api/discovery/open-api/schemas";
-import { retrieveDatasetApi } from "@/app/api/discovery";
+// import { retrieveDatasetApi } from "@/app/api/discovery";
+import { retrieveDatasetApi } from "@/app/api/discovery-v1/index";
 import { useWindowSize } from "@/hooks";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { truncateDescription } from "@/utils/textProcessing";
@@ -23,7 +24,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card, { CardItem } from "../../components/Card";
 import { useEffect, useState, useRef, useMemo } from "react";
 import { ExternalDatasetConfirmationDialog } from "@/components/ExternalDatasetCardLink";
-import { createBasketApi } from "../api/access-management-v1";
+import { createAddDatasetToBasketApi, removeDatasetFromBasketApi } from "../api/access-management-v1";
 
 type DatasetCardProps = {
   dataset: SearchedDataset;
@@ -67,6 +68,7 @@ function DatasetCard({
 
     if (shouldFetch) {
       hasFetchedRef.current = true;
+      console.log("Fetching full dataset info for", dataset);
       retrieveDatasetApi(dataset.id)
         .then((fullDataset) => {
           setConformsTo(fullDataset?.conformsTo);
@@ -84,15 +86,17 @@ function DatasetCard({
 
   const toggleDatasetInBasket = (e: React.MouseEvent) => {
     e.preventDefault();
+    console.log("Dataset" ,dataset);
     if (isInBasket) {
       removeDatasetFromBasket(dataset);
+      removeDatasetFromBasketApi(dataset.id);
     } else {
       addDatasetToBasket(dataset);
+      createAddDatasetToBasketApi({
+        dataset_id: dataset.id,
+        distribution_id: dataset.distributions?.[0]?.id ?? "",
+      });
     }
-    createBasketApi({
-      dataset_id: "c5c8f354-465e-447f-bcb3-e0003b484d64",
-      distribution_id: "d6866ab6-3597-4ef6-bd58-013de955cf61",
-    });
   };
 
   const hasIdentifier = !!dataset.identifier;

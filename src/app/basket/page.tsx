@@ -77,89 +77,90 @@ export default function Page({ searchParams }: BasketPageProps) {
     const identifiers = basket
       .map((dataset) => dataset.identifier)
       .filter((identifier): identifier is string => identifier !== undefined);
+
+      console.log("Datasets: in BASKET ", basket);
     try {
       const applicationId = await createApplicationApi({
-        title: "Test 21",
-        datasets: [
-          {
-            dataset_id: "9d38aa98-2b82-481b-8591-feffc496b182",
-            catalog_id: "e844e83e-a88f-47dd-a362-bf102d001096",
-            distributions: [
-              { distribution_id: "d6866ab6-3597-4ef6-bd58-013de955cf61" },
-            ],
-            distributions_sample: [
-              {
-                datasetId: "9d38aa98-2b82-481b-8591-feffc496b182",
-                variables: [
-                  {
-                    name: "EncounterID",
-                    titles: { en: "Encounter ID" },
-                    datatype: "integer",
-                    description: { en: "Unique encounter identifier." },
-                    propertyUrl: "",
+        title: data.name,
+        datasets: basket.map(dataset => ({
+          dataset_id: dataset.id,
+          catalog_id: dataset.catalogue || "",
+          distributions: dataset.distributions?.map(distribution => ({
+            distribution_id: distribution.id
+          })) || [],
+          distributions_sample: [
+            {
+              datasetId: dataset.id,
+              // TODO: Address variables properly
+              variables: [
+                {
+                  name: "EncounterID",
+                  titles: { en: "Encounter ID" },
+                  datatype: "integer",
+                  description: { en: "Unique encounter identifier." },
+                  propertyUrl: "",
+                },
+                {
+                  name: "CountryOfResidence",
+                  titles: { en: "Country of Residence" },
+                  datatype: "string",
+                  description: {
+                    en: "The patient's country of residence, using the EU country authority list.",
                   },
-                  {
-                    name: "CountryOfResidence",
-                    titles: { en: "Country of Residence" },
-                    datatype: "string",
-                    description: {
-                      en: "The patient's country of residence, using the EU country authority list.",
-                    },
-                    propertyUrl:
-                      "http://publications.europa.eu/resource/authority/country",
+                  propertyUrl:
+                    "http://publications.europa.eu/resource/authority/country",
+                },
+                {
+                  name: "CauseOfDeathIndicator",
+                  titles: { en: "Cause of Death Indicator" },
+                  datatype: "boolean",
+                  description: {
+                    en: "Indicates whether this encounter is related to a cause of death.",
                   },
-                  {
-                    name: "CauseOfDeathIndicator",
-                    titles: { en: "Cause of Death Indicator" },
-                    datatype: "boolean",
-                    description: {
-                      en: "Indicates whether this encounter is related to a cause of death.",
-                    },
-                    propertyUrl:
-                      "https://terminology.health.com/glossary/CauseOfDeathIndicator",
+                  propertyUrl:
+                    "https://terminology.health.com/glossary/CauseOfDeathIndicator",
+                },
+                {
+                  name: "Diabetes",
+                  titles: { en: "Diabetes Diagnosis" },
+                  datatype: "boolean",
+                  description: {
+                    en: "True if patient has a diabetes diagnosis.",
                   },
-                  {
-                    name: "Diabetes",
-                    titles: { en: "Diabetes Diagnosis" },
-                    datatype: "boolean",
-                    description: {
-                      en: "True if patient has a diabetes diagnosis.",
-                    },
-                    propertyUrl: "",
-                  },
-                  {
-                    name: "DiagnosisCode",
-                    titles: { en: "Diagnosis Code" },
-                    datatype: "string",
-                    description: { en: "Primary diagnosis (ICD-10 code)." },
-                    propertyUrl: "http://purl.bioontology.org/ontology/ICD10",
-                  },
-                  {
-                    name: "PatientID",
-                    titles: { en: "Patient ID" },
-                    datatype: "string",
-                    description: { en: "Pseudonymized patient identifier." },
-                    propertyUrl: "",
-                  },
-                  {
-                    name: "VisitDate",
-                    titles: { en: "Visit Date" },
-                    datatype: "dateTime",
-                    description: { en: "Date and time of the clinical visit." },
-                    propertyUrl: "",
-                  },
-                  {
-                    name: "Temperature",
-                    titles: { en: "Temperature (°C)" },
-                    datatype: "decimal",
-                    description: { en: "Body temperature in °C." },
-                    propertyUrl: "",
-                  },
-                ],
-              },
-            ],
-          },
-        ],
+                  propertyUrl: "",
+                },
+                {
+                  name: "DiagnosisCode",
+                  titles: { en: "Diagnosis Code" },
+                  datatype: "string",
+                  description: { en: "Primary diagnosis (ICD-10 code)." },
+                  propertyUrl: "http://purl.bioontology.org/ontology/ICD10",
+                },
+                {
+                  name: "PatientID",
+                  titles: { en: "Patient ID" },
+                  datatype: "string",
+                  description: { en: "Pseudonymized patient identifier." },
+                  propertyUrl: "",
+                },
+                {
+                  name: "VisitDate",
+                  titles: { en: "Visit Date" },
+                  datatype: "dateTime",
+                  description: { en: "Date and time of the clinical visit." },
+                  propertyUrl: "",
+                },
+                {
+                  name: "Temperature",
+                  titles: { en: "Temperature (°C)" },
+                  datatype: "decimal",
+                  description: { en: "Body temperature in °C." },
+                  propertyUrl: "",
+                },
+              ],
+            },
+          ],
+        })),
         inputLanguage: "en",
       });
       emptyBasket();

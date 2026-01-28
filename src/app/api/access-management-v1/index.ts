@@ -46,7 +46,7 @@ export const createApplicationApi = async (
   }
 };
 
-export const createBasketApi = async (
+export const createAddDatasetToBasketApi = async (
   basketSubmissionApplication: BasketSubmission
 ) => {
   const headers = await createHeaders();
@@ -69,6 +69,74 @@ export const createBasketApi = async (
     if (isAxiosError(error)) {
       console.error("❌ AMS request failed", {
         status: error,
+        message: error.message,
+        responseData: error.response?.data,
+      });
+      throw error;
+    } else {
+      console.error("❌ Non-Axios error", error);
+      throw error;
+    }
+  }
+};
+
+
+export const removeDatasetFromBasketApi = async (
+  datasetId: string
+) => {
+  const headers = await createHeaders();
+  try {
+    const client = accessManagementClient;
+    const requestPath = "basket/" + encodeURIComponent(datasetId);
+    const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
+    console.log("Deleting Basket with URL:", fullUrl);
+    const response = await client.delete(
+      requestPath,
+      {
+        headers,
+      }
+    );
+
+    console.debug("✅ AMS request succeeded", { status: response.status });
+    return response.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.error("❌ AMS request failed", {
+        status: error.response?.status,
+        message: error.message,
+        responseData: error.response?.data,
+      });
+      throw error;
+    } else {
+      console.error("❌ Non-Axios error", error);
+      throw error;
+    }
+  }
+};
+
+
+
+export const listApplicationsApi = async () => {
+  const headers = await createHeaders();
+  try {
+    const client = accessManagementClient;
+    const requestPath = "data-access/application?limit=1000";
+    const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
+    console.log("Getting all applications URL:", fullUrl);
+    const response = await client.get(
+      requestPath,
+      {
+        headers,
+      }
+    );
+
+    console.debug("✅ AMS request succeeded", { status: response.status });
+    console.log("Applications data:", response.data);
+    return response.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.error("❌ AMS request failed", {
+        status: error.response?.status,
         message: error.message,
         responseData: error.response?.data,
       });

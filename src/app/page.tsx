@@ -14,9 +14,13 @@ import { AxiosError } from "axios";
 import contentConfig from "@/config/contentConfig";
 import ValueList from "@/components/ValueList";
 import {
-  retrieveFilterValuesApi,
+  // retrieveFiltersApi,
+  // retrieveFilterValuesApi,
   searchDatasetsApi,
 } from "@/app/api/discovery";
+import {
+  retrieveFiltersApi,
+} from "@/app/api/discovery-v1/index";
 import {
   SearchedDataset,
   ValueLabel,
@@ -37,9 +41,11 @@ const HomePage = ({ searchParams }: HomePageProps) => {
   useEffect(() => {
     async function fetchThemes() {
       try {
-        const filterValues = await retrieveFilterValuesApi(
-          FilterValueType.THEME
-        );
+        // const filterValues = await retrieveFilterValuesApi(
+        //   FilterValueType.THEME
+        // );
+        const filterValues = await retrieveFiltersApi();
+        console.log("Filtered Values API", filterValues);
         setThemes(filterValues);
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -62,6 +68,7 @@ const HomePage = ({ searchParams }: HomePageProps) => {
           rows: 4,
           sort: "issued desc",
         });
+        console.log("Data - Search Dataset API", data);
         setDatasets(data.results!);
       } catch (error) {
         if (error instanceof AxiosError) {

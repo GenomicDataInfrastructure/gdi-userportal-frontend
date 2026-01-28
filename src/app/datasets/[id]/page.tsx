@@ -13,7 +13,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DatasetMetadata from "./DatasetMetadata";
 import Tooltip from "./Tooltip";
 import { createDatasetSidebarItems } from "./sidebarItems";
-import { retrieveDatasetApi } from "../../api/discovery";
+// import { retrieveDatasetApi } from "../../api/discovery";
+import { retrieveDatasetApi } from "../../api/discovery-v1/index";
 import { UrlParams, UrlSearchParams } from "@/app/params";
 
 type DatasetDetailsPageProps = {
@@ -28,6 +29,8 @@ export default async function Page({
   const _params = await params;
   const _searchParams = await searchParams;
 
+  console.log("Params ", _params)
+
   if (!_params.id) {
     throw new Error("Missing dataset id");
   }
@@ -35,9 +38,9 @@ export default async function Page({
   try {
     const dataset = await retrieveDatasetApi(_params.id);
 
-    const relationships = dataset.datasetRelationships || [];
+    const relationships = dataset?.datasetRelationships || [];
 
-    const dictionary = dataset.dataDictionary || [];
+    const dictionary = dataset?.dataDictionary || [];
 
     return (
       <PageContainer searchParams={_searchParams}>

@@ -8,7 +8,12 @@
     },
     {
       "description": "Group React monorepo packages together",
-      "matchPackageNames": ["react", "react-dom", "@types/react", "@types/react-dom"],
+      "matchPackageNames": [
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom"
+      ],
       "depTypeList": ["dependencies", "devDependencies", "overrides"],
       "groupName": "react monorepo",
       "groupSlug": "react-monorepo"

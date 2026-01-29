@@ -12,9 +12,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+
 ## [v1.6.0] - 2026-01-26
 
 ### Added
+
 - feat: Enhance DatasetMetadata component with tooltips and compatibility checks by @nolliia in b5914e3
 - feat: add Healthdcat-ap fields in dataset details page (#761) by @Kacem Bechka in 606ec35
 - feat: remove population.dataset and use datasetId by @Rania Hamdani in 4ac9752
@@ -32,8 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - feat: remove add to basket button for external datasets by @Rania Hamdani in d50d3a1
 - feat: add logic and UI for external datasets by @Rania Hamdani in 9cb8be0
 
-
 ### Changed
+
 - Update/packagelock (#775) by @Kacem Bechka in 49ac12e
 - update packa-lock.json (#774) by @Kacem Bechka in 6f5bfcf
 - chore(deps): update base image in Dockerfile to nodejs-24-minimal version 9.7-1769057030 (#771) by @Kacem Bechka in 391279b
@@ -81,8 +83,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - doc: update CHANGELOG.md for v1.5.0 by @LNDS-Sysadmins in 561b42b
 - initial content for CM, Developers, and Sys Admins by @Rhocela Pasigna in ea21bc1
 
-
 ### Fixed
+
 - chore(deps): update devdependencies (patch) (#773) by @Kacem Bechka in 82a517c
 - fix: exclude dependabot from SonarQube scan in CI workflow (#772) by @Kacem Bechka in e3496ad
 - fix: upgrade react-dom from 19.2.0 to 19.2.1 (#751) by @RaniaHamdani2 in 4216bda
@@ -120,11 +122,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix: upgrade React to 19.1.2+ to patch CVE-2025-55182 (#728) by @Inderpal Singh in 2a82e88
 - fix(deps): update dependency next to v15.5.7 [security] by @Renovate Bot in 1fd91c7
 
-
 ### Removed
+
 - Refactor datasetHelpers to remove logs and simplify code by @RaniaHamdani2 in 8e35d7d
-
-
 
 ## [v1.5.0] - 2025-11-28
 

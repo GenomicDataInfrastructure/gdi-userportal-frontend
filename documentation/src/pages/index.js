@@ -57,7 +57,7 @@ export default function Home() {
                     style={{ width: 100, height: 100, marginBottom: 12 }}
                   />
                   <h3>
-                    <Link to="/welcome-catalogue-managers">
+                    <Link to="/catalogue-managers-guide/welcome">
                       Catalogue managers
                     </Link>
                   </h3>

@@ -14,16 +14,7 @@ We are working on this guide.
 
 This document outlines the steps required to add, modify, or delete fields across various components of the CKAN ecosystem, including DCAT-AP schema updates, Solr search configuration, SeMPyRO, Discovery Service, and FAIR Data Point (FDP).
 
-## Table of Contents
-
-1. [CKAN DCAT Model](#ckan-dcat-model)
-2. [Solr Search Integration](#solr-search-integration)
-3. [FAIR Data Point](#fair-data-point)
-4. [SeMPyRO](#sempyro)
-5. [Discovery Service](#discovery-service)
-6. [General Improvements](#general-improvements)
-
----
+<!-- This draft is not ready for review - content from original guide -->
 
 ## CKAN DCAT Model
 

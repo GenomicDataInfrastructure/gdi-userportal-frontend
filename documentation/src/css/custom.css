@@ -260,8 +260,8 @@ table th {
 .hero__banner,
 [class*="heroBanner"],
 .heroBanner_src-pages-index-module {
-  background: #377a80 !important; /* Primary brand teal */
-  background-color: #377a80 !important;
+  background: var(--gdi-primary) !important; /* Primary brand teal */
+  background-color: var(--gdi-primary) !important;
   color: white !important;
 }
 
@@ -276,37 +276,37 @@ table th {
 [data-route="/"] .hero,
 [data-route="/"] [class*="heroBanner"],
 [data-route="/"] .heroBanner_src-pages-index-module {
-  background: linear-gradient(135deg, #377a80 0%, #2f6a6f 100%) !important;
-  background-color: #377a80 !important;
+  background: linear-gradient(135deg, var(--gdi-primary) 0%, var(--ifm-color-primary-dark) 100%) !important;
+  background-color: var(--gdi-primary) !important;
 }
 
 /* Dark theme hero banner */
 [data-theme="dark"] .hero,
 [data-theme="dark"] [class*="heroBanner"],
 [data-theme="dark"] .heroBanner_src-pages-index-module {
-  background: linear-gradient(135deg, #2f6a6f 0%, #2a5f63 100%) !important;
-  background-color: #2f6a6f !important;
+  background: linear-gradient(135deg, var(--ifm-color-primary-dark) 0%, var(--ifm-color-primary-darker) 100%) !important;
+  background-color: var(--ifm-color-primary-dark) !important;
 }
 
 /* Dark mode link colors - brighter teal for better readability */
 [data-theme="dark"] a {
-  color: #5aaab2; /* Brighter teal for dark mode links */
+  color: var(--ifm-color-primary-lightest); /* Brighter teal for dark mode links */
 }
 
 [data-theme="dark"] .markdown a {
-  color: #5aaab2; /* Ensure markdown links are also brighter */
+  color: var(--ifm-color-primary-lightest); /* Ensure markdown links are also brighter */
 }
 
 [data-theme="dark"] .menu__link {
-  color: #5aaab2; /* Sidebar navigation links */
+  color: var(--ifm-color-primary-lightest); /* Sidebar navigation links */
 }
 
 [data-theme="dark"] .table-of-contents__link {
-  color: #5aaab2; /* Table of contents links */
+  color: var(--ifm-color-primary-lightest); /* Table of contents links */
 }
 
 [data-theme="dark"] .pagination-nav__link {
-  color: #5aaab2; /* Next/Previous page links */
+  color: var(--ifm-color-primary-lightest); /* Next/Previous page links */
 }
 
 /* Link hover states with secondary color */

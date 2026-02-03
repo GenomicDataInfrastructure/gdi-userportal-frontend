@@ -18,10 +18,10 @@ Welcome to the **GDI User Portal System Administration Guide**! This comprehensi
 
 Choose your focus area based on your immediate needs:
 
-- **New deployment?** Start with [Deploy and manage infrastructure](./deploy-infrastructure)
-- **Setting up users?** Begin with [Set up authentication and authorisation](./configure-auth)
-- **Managing access?** Go to [Manage user roles and permissions](./manage-user-roles)
-- **Configuring data?** Check out [Manage data and services](./manage-data-services)
-- **System health?** Explore [Monitor and maintain the system](./monitor-maintain)
+- **New deployment?** Start with [Deploy and manage infrastructure](/system-admin-guide/deploy-infrastructure)
+- **Setting up users?** Begin with [Set up authentication and authorisation](/system-admin-guide/configure-auth)
+- **Managing access?** Go to [Manage user roles and permissions](/system-admin-guide/manage-user-roles)
+- **Configuring data?** Check out [Manage data and services](/system-admin-guide/manage-data-services)
+- **System health?** Explore [Monitor and maintain the system](/system-admin-guide/monitor-maintain)
 
 This guide provides the technical knowledge you need to successfully deploy and maintain the GDI User Portal platform for the European genomic data research community.

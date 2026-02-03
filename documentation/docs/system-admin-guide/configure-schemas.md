@@ -138,6 +138,6 @@ For comprehensive schema development, see the [CKAN scheming documentation](http
 
 After configuring schemas:
 
-- [Manage user roles and permissions](../manage-user-roles) - Control access to schema management
-- [Manage data and services](../manage-data-services) - Configure data workflows
-- [Monitor and maintain the system](../monitor-maintain) - Track schema usage and performance
+- [Manage user roles and permissions](/system-admin-guide/manage-user-roles) - Control access to schema management
+- [Manage data and services](/system-admin-guide/manage-data-services) - Configure data workflows
+- [Monitor and maintain the system](/system-admin-guide/monitor-maintain) - Track schema usage and performance

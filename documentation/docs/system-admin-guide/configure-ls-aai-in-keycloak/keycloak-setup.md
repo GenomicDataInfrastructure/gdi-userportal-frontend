@@ -6,7 +6,7 @@ sidebar_position: 8
 
 # Configure LS-AAI in Keycloak
 
-Keycloak can be obtained by running the CKAN deployment script that you can find in the following guide: [Azure CLI Script Deployment Guide](./../deployment/azure)
+Keycloak can be obtained by running the CKAN deployment script that you can find in the following guide: [Azure CLI Script Deployment Guide](/azure)
 
 ## Configuring Identity Providers (IdPs)
 
@@ -19,7 +19,7 @@ When configuring identity providers (IdPs), the following information becomes cr
 - Redirect URI
 
 Both the 'Token URL' and 'Authorization URL' are derived from the IdP. When registering a service, you acquire the clientId and secret. The 'Redirect URI', which remains constant, is provided by Keycloak:  
-[https://{app_name_azure}.azurewebsites.net/auth/realms/master/broker/azuread/endpoint](https://{app_name_azure}.azurewebsites.net/auth/realms/master/broker/azuread/endpoint)
+`https://{app_name_azure}.azurewebsites.net/auth/realms/master/broker/azuread/endpoint`
 
 Additionally, the corresponding configuration entails:
 

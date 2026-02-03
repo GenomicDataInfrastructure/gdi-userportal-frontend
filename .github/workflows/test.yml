@@ -51,6 +51,7 @@ jobs:
       - name: REUSE Compliance Check
         uses: fsfe/reuse-action@v6
       - name: SonarQube Scan
+        if: github.actor != 'dependabot[bot]'
         uses: SonarSource/sonarqube-scan-action@v7
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

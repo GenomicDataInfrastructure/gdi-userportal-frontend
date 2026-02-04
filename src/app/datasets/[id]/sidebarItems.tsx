@@ -18,7 +18,6 @@ import ExternalDatasetLink from "./ExternalDatasetLink";
 function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
   const externalInfo = getExternalDatasetInfo(dataset);
   const externalAccessUrl = getFirstAccessUrl(dataset.distributions);
-  const externalLabel = externalInfo.label || "External Dataset";
   const metaFormats = [
     {
       format: "rdf",
@@ -42,7 +41,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
 
   return [
     {
-      label: externalInfo.isExternal ? externalLabel : "Request data access",
+      label: externalInfo.isExternal ? "" : "Request data access",
       value: externalInfo.isExternal ? (
         <div className="flex flex-col gap-2">
           <p className="text-xs text-gray-600">

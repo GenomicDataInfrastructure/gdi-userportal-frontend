@@ -16,6 +16,7 @@ import { createDatasetSidebarItems } from "./sidebarItems";
 // import { retrieveDatasetApi } from "../../api/discovery";
 import { retrieveDatasetApi } from "../../api/discovery-v1/index";
 import { UrlParams, UrlSearchParams } from "@/app/params";
+import { getExternalDatasetInfo } from "@/utils/datasetHelpers";
 
 type DatasetDetailsPageProps = {
   params: Promise<UrlParams>;
@@ -38,7 +39,9 @@ export default async function Page({
 
     const relationships = dataset?.datasetRelationships || [];
 
-    const dictionary = dataset?.dataDictionary || [];
+    const dictionary = dataset.dataDictionary || [];
+    
+    const externalInfo = getExternalDatasetInfo(dataset);
 
     return (
       <PageContainer searchParams={_searchParams}>
@@ -75,23 +78,29 @@ export default async function Page({
                 <span className="text-sm font-semibold text-gray-700 whitespace-nowrap">
                   Conforms To:
                 </span>
-                {dataset.conformsTo
-                  ?.filter(
-                    (
-                      item
-                    ): item is typeof item & {
-                      value?: string;
-                      label?: string;
-                    } => !!(item.value || item.label)
-                  )
-                  .map((item) => (
-                    <span
-                      key={item.value || item.label}
-                      className="text-sm font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20"
-                    >
-                      {item.label || item.value}
-                    </span>
-                  ))}
+                {externalInfo.isExternal ? (
+                  <span className="text-sm font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20">
+                    Externally governed
+                  </span>
+                ) : (
+                  dataset.conformsTo
+                    ?.filter(
+                      (
+                        item
+                      ): item is typeof item & {
+                        value?: string;
+                        label?: string;
+                      } => !!(item.value || item.label)
+                    )
+                    .map((item) => (
+                      <span
+                        key={item.value || item.label}
+                        className="text-sm font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20"
+                      >
+                        {item.label || item.value}
+                      </span>
+                    ))
+                )}
               </div>
             ) : (
               <div className="flex items-center gap-2 text-sm text-gray-500 italic">

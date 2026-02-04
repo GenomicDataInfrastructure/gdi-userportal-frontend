@@ -9,14 +9,13 @@ import { createHeaders } from "@/app/api/shared/headers";
 import { isAxiosError } from "axios";
 import {
   DatasetSearchQuery,
-  DatasetSearchQueryFacet,
-  Operator,
   SearchedDataset,
   ValueLabel,
   RetrievedDistribution,
   Agent,
   RetrievedDataset,
   ContactPoint,
+  DatasetDictionaryEntry,
 } from "@/app/api/discovery/open-api/schemas";
 
 type FilterItem = {
@@ -24,6 +23,27 @@ type FilterItem = {
   label: string;
   count: number;
 };
+
+type LocalizedText = Record<string, unknown> | string | undefined;
+
+type DiscoveryVariable = {
+  name?: string;
+  titles?: LocalizedText;
+  datatype?: string;
+  description?: LocalizedText;
+  propertyUrl?: string;
+};
+
+function isDiscoveryVariable(value: unknown): value is DiscoveryVariable {
+  if (!value || typeof value !== "object") return false;
+  return (
+    "name" in value ||
+    "titles" in value ||
+    "datatype" in value ||
+    "description" in value ||
+    "propertyUrl" in value
+  );
+}
 
 function normalizeTitle(title: unknown, fallbackId: unknown): string {
   if (typeof title === "string") return title;
@@ -36,6 +56,22 @@ function normalizeTitle(title: unknown, fallbackId: unknown): string {
     if (typeof en === "string") return en;
   }
   return String(fallbackId ?? "");
+}
+
+function normalizeVariables(variables: unknown): DatasetDictionaryEntry[] {
+  if (!Array.isArray(variables)) return [];
+
+  return (variables as DiscoveryVariable[])
+    .filter(isDiscoveryVariable)
+    .map((variable) => {
+      const name = String(variable.name ?? "");
+      return {
+        name,
+        type: String(variable.datatype ?? ""),
+        description: normalizeTitle(variable.description, name),
+      };
+    })
+    .filter((entry) => entry.name.length > 0);
 }
 
 function toDataThemeResource(code: string): string {
@@ -63,6 +99,8 @@ function mapDiscoveryDatasetToSearched(dataset: any): SearchedDataset {
   const id = String(dataset?.id ?? "");
   const title = normalizeTitle(dataset?.title, id);
   const description = normalizeTitle(dataset?.description, "");
+  const rawVariables = dataset?.distributions_sample?.[0]?.variables;
+  const variables = rawVariables ? normalizeVariables(rawVariables) : [];
 
   // Map categories to themes
   const themes: ValueLabel[] = (dataset?.categories ?? []).map((cat: any) => ({
@@ -125,6 +163,7 @@ function mapDiscoveryDatasetToSearched(dataset: any): SearchedDataset {
     publishers,
     keywords,
     distributions,
+    dataDictionary: variables,
     catalogue: dataset?.catalog?.id,
     createdAt: dataset?.issued,
     modifiedAt: dataset?.modified,
@@ -140,6 +179,8 @@ function mapDiscoveryDatasetToRetrieved(dataset: any): RetrievedDataset {
   const title = normalizeTitle(dataset?.title, id);
   const description = normalizeTitle(dataset?.description, "");
   const provenance = normalizeTitle(dataset?.provenance, "");
+  const rawVariables = dataset?.distributions_sample?.[0]?.variables;
+  const variables = rawVariables ? normalizeVariables(rawVariables) : [];
 
   // Map themes/categories
   const themes: ValueLabel[] = (dataset?.categories ?? []).map((cat: any) => ({
@@ -148,10 +189,12 @@ function mapDiscoveryDatasetToRetrieved(dataset: any): RetrievedDataset {
   }));
 
   // Map languages
-  const languages: ValueLabel[] = (dataset?.language ?? []).map((lang: any) => ({
-    value: String(lang?.id ?? ""),
-    label: String(lang?.label ?? ""),
-  }));
+  const languages: ValueLabel[] = (dataset?.language ?? []).map(
+    (lang: any) => ({
+      value: String(lang?.id ?? ""),
+      label: String(lang?.label ?? ""),
+    })
+  );
 
   // Map creators
   const creators: Agent[] = dataset?.creator
@@ -270,6 +313,7 @@ function mapDiscoveryDatasetToRetrieved(dataset: any): RetrievedDataset {
     conformsTo,
     distributions,
     dcatType,
+    dataDictionary: variables,
     catalogue: dataset?.catalog?.id,
     url: dataset?.resource,
     createdAt: dataset?.issued,
@@ -283,7 +327,7 @@ export const retrieveFiltersApi = async () => {
     const client = discoveryHdEuClient;
     const requestPath = "search?filters=dataset"; // avoid leading slash so baseURL path is preserved
     const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
-    console.log("Retrieving filters with URL:", fullUrl);
+
     const response = await client.get(requestPath, {
       headers,
     });
@@ -319,7 +363,7 @@ export const searchDatasetsApi = async (
     // Build query parameters from options
     const params = new URLSearchParams();
     params.append("filters", "dataset");
-    
+
     if (options.query) {
       params.append("q", options.query);
     }
@@ -332,19 +376,17 @@ export const searchDatasetsApi = async (
 
     const requestPath = `search?${params.toString()}`; // avoid leading slash so baseURL path is preserved
     const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
-    console.log("Searching datasets with URL:", fullUrl);
     const response = await client.get(requestPath, {
       headers,
     });
-    console.log("Discovery search response data:", response.data.results);
     console.debug("✅ Discovery request succeeded", {
       status: response.status,
     });
 
     // Map discovery datasets to SearchedDataset format
-    const results: SearchedDataset[] = (response.data?.result?.results ?? []).map(
-      (dataset: any) => mapDiscoveryDatasetToSearched(dataset)
-    );
+    const results: SearchedDataset[] = (
+      response.data?.result?.results ?? []
+    ).map((dataset: any) => mapDiscoveryDatasetToSearched(dataset));
 
     return {
       count: response.data?.result?.count ?? 0,
@@ -407,8 +449,6 @@ export const retrieveDatasetApi = async (id: string) => {
 //     headers,
 //   });
 // };
-
-
 
 // export const retrieveDatasetInSpecifiedFormat = async (
 //   id: string,

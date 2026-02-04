@@ -2,21 +2,149 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { UpdateApplicationSection2Request } from "@/app/api/access-management-v1";
+import { SectionProps } from "../ApplicationFormContent";
 
-const Section2: React.FC = () => {
+const Section2: React.FC<SectionProps> = ({
+  applicationData,
+  sectionDataRef,
+}) => {
   const [showAllPurposes, setShowAllPurposes] = useState(false);
+  const [projectName, setProjectName] = useState("");
+  const [projectLeader, setProjectLeader] = useState("");
+  const [countryOfProjectLeader, setCountryOfProjectLeader] = useState<{
+    key: string;
+    value: string;
+  } | null>(null);
+  const [selectedPurposes, setSelectedPurposes] = useState<Set<string>>(
+    new Set()
+  );
+  const [summaryOfTheProject, setSummaryOfTheProject] = useState("");
   const [noSummary, setNoSummary] = useState(false);
+  const [noSummaryReason, setNoSummaryReason] = useState("");
 
-  const purposes = [
-    "a. The public interest in the areas of public or occupational health, such as activities to protect against serious cross-border threats to health, public health surveillance or activities ensuring high levels of quality and safety of healthcare, including patient safety, and of medicinal products or medical devices.",
-    "b. Policy making and regulatory activities to support public sector bodies or Union institutions, bodies, offices and agencies, including regulatory authorities, in the health or care sector to carry out their tasks defined in their mandates.",
-    "c. Statistics as defined in Article 3, point (1), of Regulation (EU) No 223/2009, such as national, multi-national and Union level official statistics, related to health or care sectors.",
-    "d. Education or teaching activities in health or care sectors at vocational or higher education level.",
-    "e. Scientific research related to health or care sectors that contributes to public health or health technology assessment, or ensures high levels of quality and safety of healthcare, of medicinal products or of medical devices, with the aim of benefitting end-users, such as patients, health professionals and health administrators, including:\n(i) development and innovation activities for products or services;\n(ii) training, testing and evaluation of algorithms, including in medical devices, in vitro diagnostic medical devices, AI systems and digital health applications.",
+  const purposeList = [
+    {
+      key: "a",
+      value:
+        "a. The public interest in the areas of public or occupational health, such as activities to protect against serious cross-border threats to health, public health surveillance or activities ensuring high levels of quality and safety of healthcare, including patient safety, and of medicinal products or medical devices.",
+    },
+    {
+      key: "b",
+      value:
+        "b. Policy making and regulatory activities to support public sector bodies or Union institutions, bodies, offices and agencies, including regulatory authorities, in the health or care sector to carry out their tasks defined in their mandates.",
+    },
+    {
+      key: "c",
+      value:
+        "c. Statistics as defined in Article 3, point (1), of Regulation (EU) No 223/2009, such as national, multi-national and Union level official statistics, related to health or care sectors.",
+    },
+    {
+      key: "d",
+      value:
+        "d. Education or teaching activities in health or care sectors at vocational or higher education level.",
+    },
+    {
+      key: "e",
+      value:
+        "e. Scientific research related to health or care sectors that contributes to public health or health technology assessment, or ensures high levels of quality and safety of healthcare, of medicinal products or of medical devices, with the aim of benefitting end-users, such as patients, health professionals and health administrators, including:\n(i) development and innovation activities for products or services;\n(ii) training, testing and evaluation of algorithms, including in medical devices, in vitro diagnostic medical devices, AI systems and digital health applications.",
+    },
   ];
+
+  const countries = [
+    {
+      key: "http://publications.europa.eu/resource/authority/country/NLD",
+      value: "Netherlands",
+    },
+    {
+      key: "http://publications.europa.eu/resource/authority/country/DEU",
+      value: "Germany",
+    },
+    {
+      key: "http://publications.europa.eu/resource/authority/country/FRA",
+      value: "France",
+    },
+    {
+      key: "http://publications.europa.eu/resource/authority/country/ESP",
+      value: "Spain",
+    },
+  ];
+
+  // Initialize form data from applicationData
+  useEffect(() => {
+    if (applicationData?.form?.section2) {
+      const section2 = applicationData.form.section2;
+      setProjectName(section2.projectName ?? "");
+      setProjectLeader(section2.projectLeader ?? "");
+      setCountryOfProjectLeader(section2.countryOfProjectLeader ?? null);
+
+      if (section2.purposeForWhichDataWillBeUsed) {
+        const purposeKeys = new Set(
+          section2.purposeForWhichDataWillBeUsed.map((p) => p.key)
+        );
+        setSelectedPurposes(purposeKeys);
+      }
+
+      setSummaryOfTheProject(section2.summaryOfTheProject ?? "");
+      setNoSummary(
+        section2.theNatureOfTheProjectDoesNotLetYouProvideASummary ?? false
+      );
+      setNoSummaryReason(
+        section2.theNatureOfTheProjectDoesNotLetYouProvideASummaryReason ?? ""
+      );
+    }
+  }, [applicationData?.form?.section2]);
+
+  // Update sectionDataRef when form data changes
+  useEffect(() => {
+    if (sectionDataRef) {
+      const section2Data: UpdateApplicationSection2Request = {
+        sectionNumber: 2,
+        projectName,
+        projectLeader,
+        countryOfProjectLeader: countryOfProjectLeader ?? {
+          key: "",
+          value: "",
+        },
+        purposeForWhichDataWillBeUsed: Array.from(selectedPurposes).map(
+          (key) => {
+            const purpose = purposeList.find((p) => p.key === key);
+            return { key, value: purpose?.value ?? "" };
+          }
+        ),
+        summaryOfTheProject: noSummary ? undefined : summaryOfTheProject,
+        theNatureOfTheProjectDoesNotLetYouProvideASummary: noSummary,
+        theNatureOfTheProjectDoesNotLetYouProvideASummaryReason: noSummary
+          ? noSummaryReason
+          : undefined,
+      };
+      sectionDataRef.current = section2Data;
+    }
+  }, [
+    sectionDataRef,
+    projectName,
+    projectLeader,
+    countryOfProjectLeader,
+    selectedPurposes,
+    summaryOfTheProject,
+    noSummary,
+    noSummaryReason,
+  ]);
+
+  const handlePurposeToggle = (key: string) => {
+    const newPurposes = new Set(selectedPurposes);
+    if (newPurposes.has(key)) {
+      newPurposes.delete(key);
+    } else {
+      newPurposes.add(key);
+    }
+    setSelectedPurposes(newPurposes);
+  };
+
+  const purposes = purposeList.map((p) => p.value);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -55,6 +183,8 @@ const Section2: React.FC = () => {
         </label>
         <input
           type="text"
+          value={projectName}
+          onChange={(e) => setProjectName(e.target.value)}
           className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
         />
       </div>
@@ -76,6 +206,8 @@ const Section2: React.FC = () => {
         </div>
         <input
           type="text"
+          value={projectLeader}
+          onChange={(e) => setProjectLeader(e.target.value)}
           className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
         />
       </div>
@@ -87,12 +219,20 @@ const Section2: React.FC = () => {
           <span className="text-red-600">*</span>
         </label>
         <div className="relative">
-          <select className="w-full border border-gray-300 rounded px-3 py-2 text-sm appearance-none focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary">
+          <select
+            value={countryOfProjectLeader?.key ?? ""}
+            onChange={(e) => {
+              const country = countries.find((c) => c.key === e.target.value);
+              setCountryOfProjectLeader(country ?? null);
+            }}
+            className="w-full border border-gray-300 rounded px-3 py-2 text-sm appearance-none focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
+          >
             <option value="">Select a country</option>
-            <option value="NL">Netherlands</option>
-            <option value="DE">Germany</option>
-            <option value="FR">France</option>
-            <option value="ES">Spain</option>
+            {countries.map((country) => (
+              <option key={country.key} value={country.key}>
+                {country.value}
+              </option>
+            ))}
           </select>
           <FontAwesomeIcon
             icon={faChevronDown}
@@ -119,21 +259,26 @@ const Section2: React.FC = () => {
         <div className="space-y-3">
           {purposes
             .slice(0, showAllPurposes ? purposes.length : 3)
-            .map((purpose, index) => (
-              <div key={index} className="flex items-start">
-                <input
-                  type="checkbox"
-                  id={`purpose-${index}`}
-                  className="mt-1 mr-3 h-4 w-4"
-                />
-                <label
-                  htmlFor={`purpose-${index}`}
-                  className="text-sm text-gray-700 leading-relaxed"
-                >
-                  {purpose}
-                </label>
-              </div>
-            ))}
+            .map((purpose, index) => {
+              const purposeKey = purposeList[index]?.key;
+              return (
+                <div key={index} className="flex items-start">
+                  <input
+                    type="checkbox"
+                    id={`purpose-${index}`}
+                    checked={selectedPurposes.has(purposeKey)}
+                    onChange={() => handlePurposeToggle(purposeKey)}
+                    className="mt-1 mr-3 h-4 w-4"
+                  />
+                  <label
+                    htmlFor={`purpose-${index}`}
+                    className="text-sm text-gray-700 leading-relaxed"
+                  >
+                    {purpose}
+                  </label>
+                </div>
+              );
+            })}
         </div>
         {!showAllPurposes && (
           <button
@@ -164,6 +309,8 @@ const Section2: React.FC = () => {
         </div>
         <textarea
           rows={6}
+          value={summaryOfTheProject}
+          onChange={(e) => setSummaryOfTheProject(e.target.value)}
           disabled={noSummary}
           className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary disabled:bg-gray-100 disabled:cursor-not-allowed"
         />
@@ -179,6 +326,20 @@ const Section2: React.FC = () => {
             The nature of your project does not let you provide a summary
           </label>
         </div>
+        {noSummary && (
+          <div className="mt-4">
+            <label className="block text-sm font-semibold text-gray-900 mb-2">
+              Please explain why you cannot provide a summary *
+            </label>
+            <textarea
+              rows={3}
+              value={noSummaryReason}
+              onChange={(e) => setNoSummaryReason(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
+              placeholder="Explain the reason..."
+            />
+          </div>
+        )}
       </div>
 
       {/* Go To Top Button */}

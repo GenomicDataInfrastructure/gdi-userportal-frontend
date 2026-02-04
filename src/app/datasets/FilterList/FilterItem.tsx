@@ -52,7 +52,11 @@ function FilterItem({ filter }: FilterItemProps) {
           filterSource: filter.source,
           fullFilter: filter,
         });
-        return <div className="px-4 py-2 text-red-600">Filter type not supported: {type}</div>;
+        return (
+          <div className="px-4 py-2 text-red-600">
+            Filter type not supported: {type}
+          </div>
+        );
     }
   };
 

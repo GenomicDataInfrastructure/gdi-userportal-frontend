@@ -5,8 +5,9 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-
-const Section7: React.FC = () => {
+import { RetrievedApplicationData } from "@/app/api/access-management-v1";
+import { SectionProps } from "../ApplicationFormContent";
+const Section7: React.FC<SectionProps> = ({ applicationData }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };

@@ -3,18 +3,21 @@
 // SPDX-License-Identifier: Apache-2.0
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 import LoadingContainer from "@/components/LoadingContainer";
-import { UrlSearchParams } from "@/app/params";
-import { use } from "react";
 import ApplicationFormSidebar from "@/components/ApplicationForm/ApplicationFormSidebar";
 import ApplicationFormTopBar from "@/components/ApplicationForm/ApplicationFormTopBar";
 import ApplicationFormContent from "@/components/ApplicationForm/ApplicationFormContent";
-
-type ApplicationPageProps = {
-  searchParams: Promise<UrlSearchParams>;
-};
+import {
+  getApplicationApi,
+  RetrievedApplicationData,
+  updateApplicationSection1Api,
+  updateApplicationSection2Api,
+  updateApplicationSection3Api,
+  updateApplicationSection4Api,
+} from "@/app/api/access-management-v1";
 
 interface FormSection {
   id: number;
@@ -25,19 +28,100 @@ interface FormSection {
   isActive: boolean;
 }
 
-export default function Page({ searchParams }: ApplicationPageProps) {
-  console.log("Rendering ApplicationForm Page");
-  const _searchParams = use(searchParams);
+export default function Page() {
+  const searchParams = useSearchParams();
+  const applicationId = searchParams.get("id");
   const { data: session, status } = useSession();
   const [currentSection, setCurrentSection] = useState<number>(1);
   const [language, setLanguage] = useState<string>("English");
+  const [applicationData, setApplicationData] =
+    useState<RetrievedApplicationData | null>(null);
+  const [isLoadingApplication, setIsLoadingApplication] =
+    useState<boolean>(true);
+  const sectionDataRef = useRef<any>(null);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+
+  const handleSaveSection = async () => {
+    try {
+      setIsSaving(true);
+
+      if (!applicationId || !sectionDataRef.current) {
+        console.error("Missing application ID or section data");
+        return;
+      }
+
+      const sectionData = sectionDataRef.current;
+      const sectionNumber = sectionData.sectionNumber;
+
+      switch (sectionNumber) {
+        case 1:
+          console.log("Saving Section 1 data:", sectionData);
+          await updateApplicationSection1Api(
+            String(applicationId),
+            sectionData
+          );
+          console.log("✅ Section 1 saved successfully");
+          break;
+        case 2:
+          console.log("Saving Section 2 data:", sectionData);
+          await updateApplicationSection2Api(
+            String(applicationId),
+            sectionData
+          );
+          console.log("✅ Section 2 saved successfully");
+          break;
+        case 3:
+          console.log("Saving Section 3 data:", sectionData);
+          await updateApplicationSection3Api(
+            String(applicationId),
+            sectionData
+          );
+          console.log("✅ Section 3 saved successfully");
+          break;
+        case 4:
+          console.log("Saving Section 4 data:", sectionData);
+          await updateApplicationSection4Api(
+            String(applicationId),
+            sectionData
+          );
+          console.log("✅ Section 4 saved successfully");
+          break;
+        // Add more cases for other sections as needed
+        default:
+          console.warn(`No save handler for section ${sectionNumber}`);
+      }
+    } catch (error) {
+      console.error("Failed to save section:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchApplication = async () => {
+      try {
+        setIsLoadingApplication(true);
+        const data = await getApplicationApi(String(applicationId));
+        console.log("Fetched Application Data:", data);
+        setApplicationData(data);
+      } catch (error) {
+        console.error("Failed to fetch application:", error);
+      } finally {
+        setIsLoadingApplication(false);
+      }
+    };
+
+    if (applicationId) {
+      fetchApplication();
+    }
+  }, [applicationId]);
 
   const [sections, setSections] = useState<FormSection[]>([
     {
       id: 1,
       title: "Section 1",
       label: "Selecting data sources for ...",
-      completed: 6,
+      completed: 1,
       total: 6,
       isActive: true,
     },
@@ -45,7 +129,7 @@ export default function Page({ searchParams }: ApplicationPageProps) {
       id: 2,
       title: "Section 2",
       label: "Public information of the pr...",
-      completed: 5,
+      completed: 1,
       total: 6,
       isActive: false,
     },
@@ -53,7 +137,7 @@ export default function Page({ searchParams }: ApplicationPageProps) {
       id: 3,
       title: "Section 3",
       label: "Applicant and contact pers...",
-      completed: 14,
+      completed: 1,
       total: 14,
       isActive: false,
     },
@@ -61,7 +145,7 @@ export default function Page({ searchParams }: ApplicationPageProps) {
       id: 4,
       title: "Section 4",
       label: "Payment details",
-      completed: 15,
+      completed: 1,
       total: 15,
       isActive: false,
     },
@@ -69,7 +153,7 @@ export default function Page({ searchParams }: ApplicationPageProps) {
       id: 5,
       title: "Section 5",
       label: "Purpose of data use",
-      completed: 8,
+      completed: 1,
       total: 9,
       isActive: false,
     },
@@ -77,7 +161,7 @@ export default function Page({ searchParams }: ApplicationPageProps) {
       id: 6,
       title: "Section 6",
       label: "Description of the data nee...",
-      completed: 24,
+      completed: 1,
       total: 24,
       isActive: false,
     },
@@ -85,7 +169,7 @@ export default function Page({ searchParams }: ApplicationPageProps) {
       id: 7,
       title: "Section 7",
       label: "Additional information",
-      completed: 2,
+      completed: 1,
       total: 2,
       isActive: false,
     },
@@ -93,13 +177,13 @@ export default function Page({ searchParams }: ApplicationPageProps) {
       id: 8,
       title: "Section 8",
       label: "Confirmation of information",
-      completed: 4,
+      completed: 1,
       total: 4,
       isActive: false,
     },
   ]);
 
-  if (status === "loading") {
+  if (status === "loading" || isLoadingApplication) {
     return <LoadingContainer text="Loading application..." />;
   }
 
@@ -121,8 +205,12 @@ export default function Page({ searchParams }: ApplicationPageProps) {
   return (
     <>
       {/* Fixed Top Bar */}
-      <ApplicationFormTopBar language={language} setLanguage={setLanguage} />
-
+      <ApplicationFormTopBar
+        language={language}
+        setLanguage={setLanguage}
+        onSave={handleSaveSection}
+        isSaving={isSaving}
+      />
       {/* Main Content - Fixed Sidebar + Scrollable Content */}
       <div className="flex">
         {/* Fixed Sidebar */}
@@ -137,6 +225,8 @@ export default function Page({ searchParams }: ApplicationPageProps) {
           <ApplicationFormContent
             section={currentSectionData}
             progressPercentage={progressPercentage}
+            applicationData={applicationData}
+            sectionDataRef={sectionDataRef}
           />
         </div>
       </div>

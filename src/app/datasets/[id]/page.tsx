@@ -29,8 +29,6 @@ export default async function Page({
   const _params = await params;
   const _searchParams = await searchParams;
 
-  console.log("Params ", _params)
-
   if (!_params.id) {
     throw new Error("Missing dataset id");
   }

@@ -11,6 +11,7 @@ import Section5 from "@/components/ApplicationForm/Sections/Section5";
 import Section6 from "@/components/ApplicationForm/Sections/Section6";
 import Section7 from "@/components/ApplicationForm/Sections/Section7";
 import Section8 from "@/components/ApplicationForm/Sections/Section8";
+import { RetrievedApplicationData } from "@/app/api/access-management-v1";
 
 interface FormSection {
   id: number;
@@ -21,12 +22,21 @@ interface FormSection {
   isActive: boolean;
 }
 
+export interface SectionProps {
+  applicationData?: RetrievedApplicationData | null;
+  sectionDataRef?: React.MutableRefObject<any>;
+}
+
 interface ApplicationFormContentProps {
   section?: FormSection;
   progressPercentage: number;
+  applicationData?: RetrievedApplicationData | null;
+  sectionDataRef?: React.MutableRefObject<any>;
+  onSave?: () => Promise<void>;
+  isSaving?: boolean;
 }
 
-const sectionComponents: { [key: number]: React.FC } = {
+const sectionComponents: { [key: number]: React.FC<SectionProps> } = {
   1: Section1,
   2: Section2,
   3: Section3,
@@ -40,6 +50,8 @@ const sectionComponents: { [key: number]: React.FC } = {
 const ApplicationFormContent: React.FC<ApplicationFormContentProps> = ({
   section,
   progressPercentage,
+  applicationData,
+  sectionDataRef,
 }) => {
   if (!section) {
     return (
@@ -73,7 +85,14 @@ const ApplicationFormContent: React.FC<ApplicationFormContentProps> = ({
 
       {/* Dynamic Section Content */}
       <div className="px-8 py-6">
-        {SectionComponent ? <SectionComponent /> : <div>Section not found</div>}
+        {SectionComponent ? (
+          <SectionComponent
+            applicationData={applicationData}
+            sectionDataRef={sectionDataRef}
+          />
+        ) : (
+          <div>Section not found</div>
+        )}
 
         {/* Navigation Buttons */}
         <div className="mt-8 flex gap-4 pb-8">

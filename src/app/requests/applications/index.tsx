@@ -38,8 +38,7 @@ const ApplicationsPage: React.FC = () => {
     setResponse({ status: "loading" });
     try {
       const applications = await listApplicationsApi();
-      console.log("Applications fetched:", applications);
-      setResponse({ applications, status: "success" });
+      setResponse({ applications: applications, status: "success" });
     } catch (error) {
       console.error(error);
       setResponse({

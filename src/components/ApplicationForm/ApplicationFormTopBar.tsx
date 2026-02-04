@@ -9,11 +9,15 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 interface ApplicationFormTopBarProps {
   language: string;
   setLanguage: (language: string) => void;
+  onSave?: () => Promise<void>;
+  isSaving?: boolean;
 }
 
 const ApplicationFormTopBar: React.FC<ApplicationFormTopBarProps> = ({
   language,
   setLanguage,
+  onSave,
+  isSaving = false,
 }) => {
   const languages = ["English", "French", "German", "Spanish"];
 
@@ -66,8 +70,12 @@ const ApplicationFormTopBar: React.FC<ApplicationFormTopBarProps> = ({
             Options
           </button>
 
-          <button className="rounded bg-warning px-4 py-2 text-sm font-medium text-black hover:bg-secondary hover:text-white">
-            Save
+          <button
+            onClick={onSave}
+            disabled={isSaving}
+            className="rounded bg-warning px-4 py-2 text-sm font-medium text-black hover:bg-secondary hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isSaving ? "Saving..." : "Save"}
           </button>
 
           <button className="rounded bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-secondary">

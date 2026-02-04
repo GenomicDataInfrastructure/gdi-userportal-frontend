@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { UrlSearchParams } from "@/app/params";
 import { use, useState } from "react";
 import ApplicationCreationModal from "@/components/ApplicationForm/ApplicationCreationModal";
+import { VariableDefinition } from "../api/access-management-v1/additional-types";
 
 type BasketPageProps = {
   searchParams: Promise<UrlSearchParams>;
@@ -78,86 +79,29 @@ export default function Page({ searchParams }: BasketPageProps) {
       .map((dataset) => dataset.identifier)
       .filter((identifier): identifier is string => identifier !== undefined);
 
-      console.log("Datasets: in BASKET ", basket);
+    console.log("Datasets: in BASKET ", basket);
     try {
-      const applicationId = await createApplicationApi({
+      const application = await createApplicationApi({
         title: data.name,
-        datasets: basket.map(dataset => ({
+        datasets: basket.map((dataset) => ({
           dataset_id: dataset.id,
           catalog_id: dataset.catalogue || "",
-          distributions: dataset.distributions?.map(distribution => ({
-            distribution_id: distribution.id
-          })) || [],
+          distributions:
+            dataset.distributions?.map((distribution) => ({
+              distribution_id: distribution.id,
+            })) || [],
           distributions_sample: [
             {
               datasetId: dataset.id,
-              // TODO: Address variables properly
-              variables: [
-                {
-                  name: "EncounterID",
-                  titles: { en: "Encounter ID" },
-                  datatype: "integer",
-                  description: { en: "Unique encounter identifier." },
-                  propertyUrl: "",
-                },
-                {
-                  name: "CountryOfResidence",
-                  titles: { en: "Country of Residence" },
-                  datatype: "string",
-                  description: {
-                    en: "The patient's country of residence, using the EU country authority list.",
-                  },
-                  propertyUrl:
-                    "http://publications.europa.eu/resource/authority/country",
-                },
-                {
-                  name: "CauseOfDeathIndicator",
-                  titles: { en: "Cause of Death Indicator" },
-                  datatype: "boolean",
-                  description: {
-                    en: "Indicates whether this encounter is related to a cause of death.",
-                  },
-                  propertyUrl:
-                    "https://terminology.health.com/glossary/CauseOfDeathIndicator",
-                },
-                {
-                  name: "Diabetes",
-                  titles: { en: "Diabetes Diagnosis" },
-                  datatype: "boolean",
-                  description: {
-                    en: "True if patient has a diabetes diagnosis.",
-                  },
-                  propertyUrl: "",
-                },
-                {
-                  name: "DiagnosisCode",
-                  titles: { en: "Diagnosis Code" },
-                  datatype: "string",
-                  description: { en: "Primary diagnosis (ICD-10 code)." },
-                  propertyUrl: "http://purl.bioontology.org/ontology/ICD10",
-                },
-                {
-                  name: "PatientID",
-                  titles: { en: "Patient ID" },
-                  datatype: "string",
-                  description: { en: "Pseudonymized patient identifier." },
-                  propertyUrl: "",
-                },
-                {
-                  name: "VisitDate",
-                  titles: { en: "Visit Date" },
-                  datatype: "dateTime",
-                  description: { en: "Date and time of the clinical visit." },
-                  propertyUrl: "",
-                },
-                {
-                  name: "Temperature",
-                  titles: { en: "Temperature (°C)" },
-                  datatype: "decimal",
-                  description: { en: "Body temperature in °C." },
-                  propertyUrl: "",
-                },
-              ],
+              variables: dataset.dataDictionary.map(
+                (variable: VariableDefinition) => ({
+                  name: variable.name,
+                  titles: { en: variable.titles },
+                  datatype: variable.datatype,
+                  description: { en: variable.description },
+                  propertyUrl: variable.propertyUrl || "",
+                })
+              ),
             },
           ],
         })),
@@ -165,7 +109,8 @@ export default function Page({ searchParams }: BasketPageProps) {
       });
       emptyBasket();
       setIsModalOpen(false);
-      router.push("/applications/new");
+      console.log("Redirecting to application ID:", application.id);
+      router.push("/applications/new?id=" + application.id);
     } catch (error) {
       if (error instanceof AxiosError) {
         setAlert({

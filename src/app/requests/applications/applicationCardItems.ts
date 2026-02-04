@@ -31,7 +31,8 @@ export function createApplicationCardItems(
       icon: faSyncAlt,
     },
     ...application.datasets!.map((dataset) => ({
-      text: getLabelName(dataset.title!),
+      // text: getLabelName(dataset.title!),
+      text: "Text",
       icon: faDatabase,
     })),
   ];

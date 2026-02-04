@@ -24,7 +24,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card, { CardItem } from "../../components/Card";
 import { useEffect, useState, useRef, useMemo } from "react";
 import { ExternalDatasetConfirmationDialog } from "@/components/ExternalDatasetCardLink";
-import { createAddDatasetToBasketApi, removeDatasetFromBasketApi } from "../api/access-management-v1";
+import {
+  createAddDatasetToBasketApi,
+  removeDatasetFromBasketApi,
+} from "../api/access-management-v1";
 
 type DatasetCardProps = {
   dataset: SearchedDataset;
@@ -68,7 +71,6 @@ function DatasetCard({
 
     if (shouldFetch) {
       hasFetchedRef.current = true;
-      console.log("Fetching full dataset info for", dataset);
       retrieveDatasetApi(dataset.id)
         .then((fullDataset) => {
           setConformsTo(fullDataset?.conformsTo);
@@ -86,7 +88,6 @@ function DatasetCard({
 
   const toggleDatasetInBasket = (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log("Dataset" ,dataset);
     if (isInBasket) {
       removeDatasetFromBasket(dataset);
       removeDatasetFromBasketApi(dataset.id);

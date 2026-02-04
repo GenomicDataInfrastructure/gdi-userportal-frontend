@@ -2,9 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import { RetrievedApplicationData } from "@/app/api/access-management-v1";
 import React, { useState } from "react";
+import { SectionProps } from "../ApplicationFormContent";
 
-const Section8: React.FC = () => {
+const Section8: React.FC<SectionProps> = ({ applicationData }) => {
   const [confirmations, setConfirmations] = useState({
     statistics: false,
     processingFee: false,

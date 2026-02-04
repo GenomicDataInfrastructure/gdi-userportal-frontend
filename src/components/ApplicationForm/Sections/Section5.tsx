@@ -5,8 +5,10 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { RetrievedApplicationData } from "@/app/api/access-management-v1";
+import { SectionProps } from "../ApplicationFormContent";
 
-const Section5: React.FC = () => {
+const Section5: React.FC<SectionProps> = ({ applicationData }) => {
   const [showAllPurposes, setShowAllPurposes] = useState(false);
   const [sameAsDataUse, setSameAsDataUse] = useState(false);
   const [sameAsResearch, setSameAsResearch] = useState(false);

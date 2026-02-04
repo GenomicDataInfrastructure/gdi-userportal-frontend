@@ -9,6 +9,10 @@ export type UrlSearchParams = Partial<{
   tab: string;
 }>;
 
+export type UrlApplicationParams = Partial<{
+  id: string;
+}>;
+
 export type UrlParams = Partial<{
   id: string;
 }>;

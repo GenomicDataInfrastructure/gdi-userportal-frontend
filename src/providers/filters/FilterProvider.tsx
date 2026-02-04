@@ -124,7 +124,7 @@ function FilterProvider({ children }: { children: React.ReactNode }) {
     try {
       const filters = await retrieveFiltersApi();
 
-      console.log("Filters retrieved:", filters);
+      // console.log("Filters retrieved:", filters);
       dispatch({ type: FilterActionType.FILTERS_RETRIEVED, payload: filters });
     } catch (error) {
       const message =

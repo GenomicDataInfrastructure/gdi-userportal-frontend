@@ -13,7 +13,7 @@ export default function ApplicationCard({
 }>) {
   return (
     <Card
-      url={`/applications/${application.id}`}
+      url={`/applications/new?id=${application.id}`}
       title={application.title!}
       subTitles={[application.currentState!.split("/").pop() || ""]}
       description={application.description!}

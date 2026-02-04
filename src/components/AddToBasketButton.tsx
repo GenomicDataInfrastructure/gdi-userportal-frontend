@@ -17,8 +17,14 @@ function AddToBasketButton({ dataset }: Readonly<AddToBasketButtonProps>) {
     useDatasetBasket();
 
   const isInBasket = basket.some((ds) => ds.id === dataset.id);
-
   const toggleDatasetInBasket = () => {
+    console.log(
+      "Dataset ID:",
+      dataset.id,
+      "Is in basket:",
+      isInBasket,
+      dataset
+    );
     if (isInBasket) {
       removeDatasetFromBasket(dataset);
     } else {

@@ -9,6 +9,8 @@ import {
   faTrash,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import { RetrievedApplicationData } from "@/app/api/access-management-v1";
+import { SectionProps } from "../ApplicationFormContent";
 
 type TabType = "section6" | "section6.1";
 
@@ -17,7 +19,7 @@ interface TabulationPlan {
   data?: string;
 }
 
-const Section6: React.FC = () => {
+const Section6: React.FC<SectionProps> = ({ applicationData }) => {
   const [activeTab, setActiveTab] = useState<TabType>("section6");
   const [cohortSize, setCohortSize] = useState<string>("12");
   const [cohortSizeType, setCohortSizeType] = useState<string>("estimation");

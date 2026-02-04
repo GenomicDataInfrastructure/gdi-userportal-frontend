@@ -19,11 +19,10 @@ export default function VariantAddToBasketButton({
 
   React.useEffect(() => {
     if (!datasetId) return;
-
     findDatasetByIdentifier(datasetId)
       .then((data) => setDataset(data ?? null))
       .catch(console.error);
   }, [datasetId]);
 
-  return dataset ? <AddToBasketButton dataset={dataset} /> : null;
+  return <AddToBasketButton dataset={dataset} disabled={!datasetId} />;
 }

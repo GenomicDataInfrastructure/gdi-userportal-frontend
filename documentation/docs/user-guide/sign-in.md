@@ -6,17 +6,11 @@ sidebar_position: 2
 
 # Sign in
 
-Sign in to get full access to available datasets and request access.
-
-## Why sign in?
-
 **Signing in** allows you to access enhanced features and request access to datasets. While you can browse datasets without an account, signing in allows you to:
 
 - **Submit applications** to request access to datasets.
 - **Enhance your search** with additional filters and more comprehensive search results.
 - **See more dataset information** including `record counts` and other metadata to help assess if datasets meet your research needs.
-
-## Sign in
 
 The GDI Portal uses your **existing accounts** with other platforms like **Google, LinkedIn, and organisations** like universities or research institutions, so you don't need to create a separate account.
 
@@ -45,6 +39,6 @@ To sign in to the GDI Portal:
 6. After you sign in, the GDI Portal home page loads and you can [start exploring datasets](/category/explore-datasets-1).
 
 <figure>
-<img src="img/sign-in/home-page.png" alt="Home page after signing in, showing a search bar and dataset cards" width="800" />
+<img src="img/sign-in/home-page.png" alt="Home page after signing in, showing a search bar and dataset cards" width="900" />
 <figcaption></figcaption>
 </figure>

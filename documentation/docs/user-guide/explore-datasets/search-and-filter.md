@@ -26,9 +26,9 @@ On the **Home** or **Datasets** page, enter any term or phrase to search across 
 
 Use the filters on the left side of the search results page to narrow down your results. These filters are based on dataset metadata, and signing in gives you access to additional metadata-based filters. Common filters include: Access Rights, Data Types, Themes, and Publishers.
 
-Here's an example of a search result for the word "cancer", with filters applied for Access Rights: `Public` and Themes: `Colorectal Cancer` and `Health`.
+Here's an example of a search result for the word "cancer", with filters applied for Access Rights: `Public`.
 
 <figure>
-    <img src="img/explore-datasets/search-sample.png" alt="Screenshot showing Themes and Publishers on main navigation menu" width="800" />
+    <img src="img/explore-datasets/search-sample.png" alt="Screenshot showing Themes and Publishers on main navigation menu" width="900" />
     <figcaption></figcaption>
 </figure>

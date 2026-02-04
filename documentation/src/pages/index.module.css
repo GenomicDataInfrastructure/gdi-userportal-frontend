@@ -4,11 +4,11 @@
  */
 
 .heroBanner {
-  padding: 4rem 0;
+  padding: 6rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
-  background: #7b2d7e; /* Primary brand purple */
+  background: var(--gdi-primary); /* Primary brand teal */
   color: #fff; /* White text for contrast */
 }
 
@@ -19,7 +19,7 @@
 
 /* Docusaurus button override for hero banner */
 .heroBanner .button--primary {
-  background: #f5a623; /* Secondary orange accent */
+  background: var(--gdi-secondary); /* Secondary cyan accent */
   color: #fff;
   border: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -27,22 +27,22 @@
 }
 .heroBanner .button--primary:hover,
 .heroBanner .button--primary:focus {
-  background: #e6951f; /* Slightly darker orange on hover */
+  background: color-mix(in srgb, var(--gdi-secondary) 85%, black); /* Slightly darker cyan on hover */
   color: #fff;
 }
 
 /* Dark theme overrides */
 html[data-theme="dark"] .heroBanner {
-  background: #6d2670; /* Slightly darker purple for dark mode */
+  background: var(--ifm-color-primary-dark); /* Slightly darker teal for dark mode */
   color: #fff;
 }
 html[data-theme="dark"] .heroBanner .button--primary {
-  background: #ffb84d; /* Lighter orange for dark mode */
+  background: var(--ifm-link-hover-color); /* Lighter cyan for dark mode */
   color: #fff !important; /* Force white text in dark mode */
 }
 
 .heroContent {
-  background: #7b2d7e; /* Primary brand purple */
+  background: var(--gdi-primary); /* Primary brand teal */
   color: #fff;
   border-radius: 12px;
   padding: 2rem 2.5rem;

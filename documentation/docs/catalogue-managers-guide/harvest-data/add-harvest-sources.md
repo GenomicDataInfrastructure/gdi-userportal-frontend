@@ -53,7 +53,6 @@ In this guide
    - Select **Reharvest** to begin importing datasets immediately, OR  
    - Wait for the next scheduled harvest time
 
-
 ## Check harvest progress
 
 1. Go to **Harvest Sources** and select your source.
@@ -72,4 +71,3 @@ In this guide
 
 - [Monitor and manage your harvest sources](./manage-sources.md): Edit, pause, or delete sources
 - [Troubleshoot harvest issues](./troubleshoot.md): Resolve common problems
-- [Review harvested datasets](./manage-sources.md#manage-harvested-datasets): Edit or remove imported datasets

@@ -16,27 +16,20 @@ Browse datasets by **Themes** and **Publishers** directly from the main menu. Wh
 
 <br/>
 
-Here's a quick demo of browsing datasets by **publishers:**
+To browse datasets by theme or publisher categories:
 
+1.  Select either **Themes** or **Publishers** from the main navigation menu.
 <figure>
     <img src="img/explore-datasets/sample-browse-publishers.gif" alt="Gif showing user exploring through publisher categories" />
     <figcaption></figcaption>
 </figure>
 
-<br/>
+2.  Select the theme or publisher name. The **Datasets** page opens with pre-applied filters based on your selection. In this example, "University of Oslo" is selected under Publishers.  
 
-To browse datasets by theme or publisher categories:
-
-1.  Select either **Themes** or **Publishers** from the main navigation menu.
-
-2.  Select a category to view all datasets within that theme or publisher.
-
-        After you select a theme or publisher, the **Datasets** page opens with pre-applied filters based on your selection. In this example, we selected the theme: *Health*, and `Health` is pre-applied as a filter with its resulting datasets.
-
-    <figure>
-        <img src="img/explore-datasets/pre-applied-publisher-filter.png" alt="Screenshot showing pre-applied theme filter" width="800" />
-        <figcaption></figcaption>
-    </figure>
+<figure>
+    <img src="img/explore-datasets/pre-applied-publisher-filter.png" alt="Screenshot showing pre-applied theme filter" width="900" />
+    <figcaption></figcaption>
+</figure>
 
 3.  Explore more using the search, or apply more filters to narrow down results.
 

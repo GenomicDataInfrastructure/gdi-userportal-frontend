@@ -14,13 +14,11 @@ This guide is for **data users**—healthcare researchers, policy-makers, and pr
 
 Learn more about [Genomic Data Infrastructure (GDI)](about-gdi.md) and its founding initiatives.
 
-## How it works
+## Access genomic datasets in three steps
 
-Access genomic datasets in three steps:
+1. **[Explore datasets](/category/explore-datasets-1/):** Browse and search through detailed dataset information—search by any criteria such as keywords, research topics, disease areas, or allele frequency.
 
-1. **Explore datasets:** Browse and search through detailed dataset information—search by any criteria such as keywords, research topics, disease areas, or allele frequency. [Explore datasets](/category/explore-datasets-1/).
-
-2. **Request access:** Found a dataset you want to use? Submit an application to access it. You may need to provide documentation or requirements for your request, and you can invite collaborators to assist you with your application. [Request access](/category/request-datasets-1/).
+2. **[Request access](/category/request-datasets-1/):** Found a dataset you want to use? Submit an application to access it. You may need to provide documentation or requirements for your request, and you can invite collaborators to assist you with your application.
 
 3. **Access approved datasets:** Once your request is approved, you will receive an email with a link to the Secure Processing Environment (SPE) where you can securely download and work with the datasets.
 

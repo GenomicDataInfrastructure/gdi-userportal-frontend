@@ -599,15 +599,12 @@ components:
             $ref: "#/components/schemas/ValueLabel"
         homepage:
           type: string
-          format: uri
         uri:
           type: string
-          format: uri
         documentation:
           type: array
           items:
             type: string
-            format: uri
         frequency:
           $ref: "#/components/schemas/ValueLabel"
         inSeries:
@@ -622,11 +619,6 @@ components:
           type: array
           items:
             type: object
-            required:
-              - dct_type
-              - label
-              - uri
-              - startedAtTime
             properties:
               dct_type:
                 type: string
@@ -646,16 +638,11 @@ components:
           type: array
           items:
             type: object
-            required:
-              - body
-              - target
             properties:
               body:
                 $ref: "#/components/schemas/ValueLabel"
-              motivated_by:
-                oneOf:
-                  - $ref: "#/components/schemas/ValueLabel"
-                  - type: "null"
+              motivatedBy:
+                $ref: "#/components/schemas/ValueLabel"
               target:
                 type: string
         qualifiedAttribution:
@@ -679,13 +666,14 @@ components:
         accessUrl:
           type: string
           title: Access URL
-          format: uri
         applicableLegislation:
           type: array
           items:
             $ref: "#/components/schemas/ValueLabel"
         byteSize:
           type: integer
+          format: int64
+          minimum: 0
         checksum:
           type: string
         checksumAlgorithm:
@@ -699,11 +687,9 @@ components:
           type: array
           items:
             type: string
-            format: uri
         downloadUrl:
           type: string
           title: Download URL
-          format: uri
         format:
           $ref: "#/components/schemas/ValueLabel"
         languages:
@@ -787,7 +773,6 @@ components:
                 type: array
                 items:
                   type: string
-                  format: uri
               format:
                 type: array
                 items:
@@ -823,18 +808,16 @@ components:
               theme:
                 type: array
                 items:
-                  type: string
-                  format: uri
+                  $ref: "#/components/schemas/ValueLabel"
               uri:
                 type: string
-                format: uri
               title:
                 type: string
               hvdCategory:
                 type: array
                 description: A data category defined in the High Value Dataset Implementing Regulation.
                 items:
-                  type: string
+                  $ref: "#/components/schemas/ValueLabel"
             required:
               - id
               - title
@@ -897,7 +880,6 @@ components:
           title: uri
         homepage:
           type: string
-          format: uri
           title: homepage
           description: Homepage URL for the agent.
         type:
@@ -1147,11 +1129,6 @@ components:
 
     ProvenanceActivity:
       type: object
-      required:
-        - dct_type
-        - label
-        - uri
-        - startedAtTime
       properties:
         dct_type:
           type: string

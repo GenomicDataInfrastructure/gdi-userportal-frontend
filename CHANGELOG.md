@@ -13,6 +13,119 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.3.9] - 2025-04-04
 
+## [v1.6.0] - 2026-01-26
+
+### Added
+
+- feat: Enhance DatasetMetadata component with tooltips and compatibility checks by @nolliia in b5914e3
+- feat: add Healthdcat-ap fields in dataset details page (#761) by @Kacem Bechka in 606ec35
+- feat: remove population.dataset and use datasetId by @Rania Hamdani in 4ac9752
+- feat: Add Genome of Europe filters and allele frequency search by @Rania Hamdani in 5398362
+- feat: adress sourery comments by @Rania Hamdani in 5205986
+- feat: add license for added logos by @Rania Hamdani in bfeca97
+- feat: add effects for cards to match 1+mg website by @Rania Hamdani in b63c586
+- feat: change UI colors, fonts, css to natch 1+MG by @Rania Hamdani in dfce42f
+- feat: change color palette, logo and background by @Rania Hamdani in b1f6817
+- feat: enhance conforms to label code by @Rania Hamdani in c41c835
+- feat: enhance code quality by @Rania Hamdani in 265b636
+- feat: the users have an option in the dataset search page to be redirected to the access url of the dataset by @Rania Hamdani in 93c3b9b
+- feat: return conformsto value from dataset details API by @Rania Hamdani in 7108c48
+- feat: check external dataset in dataset search page by @Rania Hamdani in 908910b
+- feat: remove add to basket button for external datasets by @Rania Hamdani in d50d3a1
+- feat: add logic and UI for external datasets by @Rania Hamdani in 9cb8be0
+
+### Changed
+
+- Update/packagelock (#775) by @Kacem Bechka in 49ac12e
+- update packa-lock.json (#774) by @Kacem Bechka in 6f5bfcf
+- chore(deps): update base image in Dockerfile to nodejs-24-minimal version 9.7-1769057030 (#771) by @Kacem Bechka in 391279b
+- chore(deps): update actions/setup-node action to v6.2.0 (#767) by @LNDS-Sysadmins in cd80f33
+- [Snyk] Upgrade @opentelemetry/auto-instrumentations-node from 0.67.2 to 0.67.3 (#757) by @RaniaHamdani2 in 3bfeb0b
+- chore(deps): bump lodash from 4.17.21 to 4.17.23 (#770) by @dependabot[bot] in 8d3c639
+- chore(deps): update actions/checkout action to v6.0.2 by @Renovate Bot in d38aa39
+- ART-21977: Fix lint and type-check errors by @Inderpal Singh in 92ba2b3
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v9.7-1767673702 by @Renovate Bot in 1d224d2
+- chore(deps): update dependency eslint-config-next to v16.1.1 by @Renovate Bot in 228c355
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v9.7-1766364136 by @Renovate Bot in 832c8be
+- Update src/app/datasets/DatasetCard.tsx by @RaniaHamdani2 in 540c293
+- chore(deps): update dependency eslint-config-next to v16.1.0 by @Renovate Bot in f2132ff
+- ART-20575: Update legal terms and conditions document by @Rania Hamdani in e381e08
+- refactor: dataset helpers by @Rania Hamdani in deaa2a0
+- chore: revert frontend files exclusion from sonarqube analysis by @Rania Hamdani in c2df842
+- chore: exclude proxy.ts from sonarqube analysis by @Rania Hamdani in db12b6b
+- chore: exclude datasetHelpers from sonarqube analysis by @Rania Hamdani in 26c5563
+- chore: exclude mock data files from sonarqube analysis by @Rania Hamdani in 98b8d65
+- chore(deps): upgrade nodejs by @Bruno Pacheco in e8d5495
+- chore(deps): update actions/checkout action to v6 by @Renovate Bot in d312568
+- chore(deps): update actions/checkout action to v5.0.1 by @Renovate Bot in b97ac77
+- chore: update sonar exclusions by @Bruno Pacheco in 616bc5a
+- refactor: consolidate external dataset dialog logic into shared component by @Rania Hamdani in 3efc447
+- chore: ignore local proxy API routes by @Rania Hamdani in 8cc9460
+- Update documentation/docs/system-admin-guide/fdp/fair-data-point.md by @Bruno Pacheco in 29559be
+- Update documentation/docs/system-admin-guide/publishing-new-version/release-process.md by @Bruno Pacheco in e371cd5
+- Update documentation/docs/system-admin-guide/installation/azure.md by @Bruno Pacheco in b0924c1
+- chore: add license files by @Bruno Pacheco in babd43d
+- chore(deps): migrate to next lint to eslint by @Bruno Pacheco in c1cb726
+- chore(deps): upgrade remaining packages by @Bruno Pacheco in 7930afa
+- doc: run prettier by @Bruno Pacheco in 185d416
+- chore(deps): upgrade next by @Bruno Pacheco in 4fc767b
+- chore: run prettier in all files by @Bruno Pacheco in 54afac4
+- chore(deps): update actions/upload-artifact action to v6 by @Renovate Bot in 8b9ea07
+- chore(deps): update sonarsource/sonarqube-scan-action action to v7 by @Renovate Bot in 25a9ef8
+- chore(deps): update fsfe/reuse-action action to v6 by @Renovate Bot in 072dc4c
+- chore(deps): update actions/checkout action to v6 by @Renovate Bot in 5317943
+- chore(deps): update actions/cache action to v5 by @Renovate Bot in 8cd94d2
+- chore(deps): update docker/metadata-action action to v5.10.0 by @Renovate Bot in 518077c
+- chore(deps): update actions/setup-node action to v6.1.0 by @Renovate Bot in 8ac531d
+- chore(deps): bump next from 15.5.8 to 15.5.9 by @dependabot[bot] in 3ea0918
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.7-1764822684 by @Renovate Bot in 645571b
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-22-minimal docker tag to v9.7-1764607007 by @Renovate Bot in 794d753
+- doc: update CHANGELOG.md for v1.5.0 by @LNDS-Sysadmins in 561b42b
+- initial content for CM, Developers, and Sys Admins by @Rhocela Pasigna in ea21bc1
+
+### Fixed
+
+- chore(deps): update devdependencies (patch) (#773) by @Kacem Bechka in 82a517c
+- fix: exclude dependabot from SonarQube scan in CI workflow (#772) by @Kacem Bechka in e3496ad
+- fix: upgrade react-dom from 19.2.0 to 19.2.1 (#751) by @RaniaHamdani2 in 4216bda
+- fix: upgrade react from 19.2.0 to 19.2.1 (#750) by @RaniaHamdani2 in ffaaf47
+- fix(deps): update dependency next to v16.1.4 by @Renovate Bot in ba81697
+- fix some fields shouldn't show when they are empty by @nolliia in ce3fca3
+- fix: disable handle click dataset when datasetId is not available by @Rania Hamdani in 837eedc
+- fix: generalize not available column + window open instead of router open for dataset details pag by @Rania Hamdani in b302a3d
+- fix: Keep conformsTo behaviour as it was and add request data access label back by @Rania Hamdani in 179e804
+- fix: adress sourcery comments by @Rania Hamdani in 2a5b822
+- fix: params to respect beacon API by @Rania Hamdani in 7132e6f
+- fix: add to basket missing dataset params by @Rania Hamdani in d25d009
+- fix: sourcery comments by @Rania Hamdani in 212c0ae
+- fix: remove uri and replace conforms to label by @Rania Hamdani in 7f3a40c
+- fix: Only include optional filters if they are not All by @Rania Hamdani in 82c64d7
+- fix: fix unit tests to have the required params by @Rania Hamdani in 2f1d1ec
+- fix: getExternalDatasetInfo called twice by @Rania Hamdani in ec3edb1
+- fix: distribution url in search page by @Rania Hamdani in 694750a
+- fix(deps): update dependency next to v16.1.1 by @Renovate Bot in f183425
+- fix: reduce card renders by @Rania Hamdani in 902672c
+- fix: npm check filter out invalid values by @Rania Hamdani in 956f5f5
+- fix: conforms to not available message by @Rania Hamdani in b781c4f
+- fix: legal links by @Rania Hamdani in 57cc42a
+- fix(deps): update dependency next to v16.1.0 by @Renovate Bot in 3246d4d
+- fix; comment playwright by @Rania Hamdani in 9583e8d
+- fix: update sonar properties by @Rania Hamdani in 5fa0db6
+- fix: remove getcomformsto label by @Rania Hamdani in dd7dea4
+- fix: typecheck by @Rania Hamdani in e86be09
+- fix: remove mock data by @Rania Hamdani in f4f968a
+- refactor: fix issues reported by sonar in index file by @Rania Hamdani in cc8c1e5
+- fix: enhance code quality by @Rania Hamdani in dfc8d5a
+- chore: fix ORT configuration by @Bruno Pacheco in e02376f
+- chore(deps): fix vulnerabilities by @Bruno Pacheco in 181fb55
+- fix(deps): update dependency next to v15.5.8 [security] by @Renovate Bot in 389f9f0
+- fix: upgrade React to 19.1.2+ to patch CVE-2025-55182 (#728) by @Inderpal Singh in 2a82e88
+- fix(deps): update dependency next to v15.5.7 [security] by @Renovate Bot in 1fd91c7
+
+### Removed
+
+- Refactor datasetHelpers to remove logs and simplify code by @RaniaHamdani2 in 8e35d7d
+
 ## [v1.5.0] - 2025-11-28
 
 ### Changed

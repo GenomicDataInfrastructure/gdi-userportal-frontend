@@ -24,9 +24,9 @@ To export metadata:
 
         In this example, we select **JSON-LD:**
 
-    <figure>
-        <img src="img/export-metadata/export-metadata.png" alt="Screenshot of Export Metadata In section with JSON-LD selected" width="900" />
-        <figcaption></figcaption>
-    </figure>
+<figure>
+    <img src="img/export-metadata/export-metadata.png" alt="Screenshot of Export Metadata In section with JSON-LD selected" width="900" />
+    <figcaption></figcaption>
+</figure>
 
 4.  Select **Download** to save the metadata file to your device.

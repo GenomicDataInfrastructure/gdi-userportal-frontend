@@ -7,6 +7,18 @@
       "groupName": "devDependencies"
     },
     {
+      "description": "Group React monorepo packages together",
+      "matchPackageNames": [
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom"
+      ],
+      "depTypeList": ["dependencies", "devDependencies", "overrides"],
+      "groupName": "react monorepo",
+      "groupSlug": "react-monorepo"
+    },
+    {
       "description": "Trigger fix release for patch updates",
       "automerge": true,
       "matchUpdateTypes": ["patch", "pin", "digest"],

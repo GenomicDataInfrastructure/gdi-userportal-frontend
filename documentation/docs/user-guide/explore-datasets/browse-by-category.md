@@ -24,7 +24,7 @@ To browse datasets by theme or publisher categories:
     <figcaption></figcaption>
 </figure>
 
-2.  Select the theme or publisher name. The **Datasets** page opens with pre-applied filters based on your selection. In this example, "University of Oslo" is selected under Publishers.  
+2.  Select the theme or publisher name. The **Datasets** page opens with pre-applied filters based on your selection. In this example, "University of Oslo" is selected under Publishers.
 
 <figure>
     <img src="img/explore-datasets/pre-applied-publisher-filter.png" alt="Screenshot showing pre-applied theme filter" width="900" />

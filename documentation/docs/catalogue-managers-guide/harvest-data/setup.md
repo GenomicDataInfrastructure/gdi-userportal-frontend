@@ -1,5 +1,5 @@
 ---
-slug: /catalogue-managers-guide/harvest-data/setup
+slug: /catalogue-managers-guide/setup
 sidebar_label: "Add a harvest source"
 sidebar_position: 2
 ---

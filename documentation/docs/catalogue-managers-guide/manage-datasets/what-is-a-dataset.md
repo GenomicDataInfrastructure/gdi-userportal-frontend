@@ -1,5 +1,5 @@
 ---
-slug: what-is-a-dataset
+slug: /catalogue-managers-guide/what-is-a-dataset
 sidebar_label: "What is a dataset?"
 sidebar_position: 1
 ---
@@ -8,9 +8,9 @@ sidebar_position: 1
 
 In GDI, a **dataset** is a structured collection of genomic information pertaining to human health, diseases, and research studies. A dataset can be a single file or a collection of files that provide comprehensive information about a specific resarch topic, disease area, or study cohort. For example, a genomic data for _COVID-19 Viral Sequences_ can include dataset records describing _patient data_, _virus samples_, and _sequencing results_.
 
-## Dataset components
+## Metadata and data resources
 
-GDI datasets have two sets of information that altogether provide a complete picture of the genomic subject: **metadata** and **data resources**. When creating datasets, providing comprehensive metadata and data resources allows users to understand them better and find the data they need.
+When you add a dataset to the GDI Data Catalogue, you provide two types of information that together give a complete picture of the genomic subject: **metadata** describes the dataset itself, and **data resources** are the actual genomic data files associated with the dataset. 
 
 ### Metadata
 

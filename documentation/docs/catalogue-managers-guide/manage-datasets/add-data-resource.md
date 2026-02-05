@@ -1,5 +1,5 @@
 ---
-slug: add-data-resources
+slug: /catalogue-managers-guide/add-data-resources
 sidebar_label: "Add data resources"
 sidebar_position: 3
 ---
@@ -21,7 +21,7 @@ This guide covers the common tasks for managing datasets. For detailed instructi
 
 ## Add a data resource
 
-Add more files or links to your dataset to provide comprehensive genomic information. A data resource represents the actual data described by your dataset. New to adding data resources? Learn [about data resources](what-is-a-dataset.md#data-resources) and their significance in datasets.
+Add more files or links to your dataset to provide comprehensive genomic information. A data resource represents the actual data described by your dataset.
 
 To add a data resource to your dataset:
 

@@ -1,5 +1,5 @@
 ---
-slug: /catalogue-managers-guide/harvest-data/manage-sources
+slug: /catalogue-managers-guide/manage-sources
 sidebar_label: "Monitor and manage sources"
 sidebar_position: 7
 ---

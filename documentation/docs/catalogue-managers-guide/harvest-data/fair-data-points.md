@@ -1,5 +1,5 @@
 ---
-slug: /catalogue-managers-guide/harvest-data/fair-data-points
+slug: /catalogue-managers-guide/fair-data-points
 sidebar_label: "Harvest from FAIR Data Points"
 sidebar_position: 4
 ---

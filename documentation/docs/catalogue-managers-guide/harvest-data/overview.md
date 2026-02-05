@@ -1,5 +1,5 @@
 ---
-slug: /catalogue-managers-guide/harvest-data/overview
+slug: /catalogue-managers-guide/overview
 sidebar_label: "About harvesting datasets"
 sidebar_position: 1
 ---

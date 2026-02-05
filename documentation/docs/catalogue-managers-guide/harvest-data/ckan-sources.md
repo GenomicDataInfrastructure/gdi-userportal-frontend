@@ -1,5 +1,5 @@
 ---
-slug: /catalogue-managers-guide/harvest-data/ckan-sources
+slug: /catalogue-managers-guide/ckan-sources
 sidebar_label: "Harvest from CKAN catalogues"
 sidebar_position: 6
 ---

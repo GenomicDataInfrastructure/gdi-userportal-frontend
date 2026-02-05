@@ -1,5 +1,5 @@
 ---
-slug: /catalogue-managers-guide/harvest-data/troubleshoot
+slug: /catalogue-managers-guide/troubleshoot
 sidebar_label: "Troubleshoot harvest issues"
 sidebar_position: 9
 ---

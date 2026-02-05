@@ -1,5 +1,5 @@
 ---
-slug: /catalogue-managers-guide/harvest-data/technical-specs
+slug: /catalogue-managers-guide/technical-specs
 sidebar_label: "Technical specifications"
 sidebar_position: 8
 ---

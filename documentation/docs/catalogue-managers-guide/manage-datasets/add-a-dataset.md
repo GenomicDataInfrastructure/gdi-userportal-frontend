@@ -1,16 +1,16 @@
 ---
-slug: /add-datasets
+slug: /catalogue-managers-guide/add-datasets
 sidebar_label: "Add datasets"
 sidebar_position: 2
 ---
 
 # Add datasets
 
-Create datasets to build your organisation's genomic data catalogue, and make them discoverable to researchers within and outside your organisation. New to datasets? Learn [about datasets](what-is-a-dataset.md) and how to describe them.
+Build your organisation's genomic data catalogue by adding datasets, and make them discoverable to researchers within and outside your organisation. New to datasets? Learn [about datasets](/catalogue-managers-guide/what-is-a-dataset) and how to describe them.
 
 :::tip Full documentation
 
-This guide covers the common tasks for managing datasets. For detailed instructions on all dataset operations, see the [**full CKAN documentation**](https://docs.ckan.org/en/2.11/user-guide.html#datasets-and-resources)<sup>↗</sup>. CKAN is the system that powers the GDI Data Catalogue. 
+This guide covers the common tasks for managing datasets. For a complete guide to all dataset operations, see the [**CKAN documentation**](https://docs.ckan.org/en/2.11/user-guide.html#datasets-and-resources)<sup>↗</sup>. CKAN is the system that powers the GDI Catalogue Portal. 
 
 :::
 
@@ -27,10 +27,9 @@ To add a dataset:
     <figcaption></figcaption>
 </figure>
 
-:::tip DATASET VISIBILITY
-
-When you fill out the **Visibility** field, select **Public** to make your dataset discoverable by all users in the [GDI Data Portal](https://portal.gdi.lu/)<sup>↗</sup>. Or select **Private** to make it visible only to users within your organisation.
-
+:::tip Setting the dataset visibility
+- **Private datasets** will be visible to users within your organisation in the Data Catalogue.  
+- **Public datasets** will be discoverable by all users in the [GDI Data Portal](https://portal.gdi.lu/)<sup>↗</sup>.
 :::
 
 3. Select **Next: Add Data** to add a data resource. For guidance in filling out the form, see [Add a data resource to your dataset](add-data-resource.md). You must add at least one data resource to create your dataset. <!-- VERIFY UI: Button label -->

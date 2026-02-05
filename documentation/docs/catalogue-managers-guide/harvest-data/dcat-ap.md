@@ -1,5 +1,5 @@
 ---
-slug: /catalogue-managers-guide/harvest-data/dcat-ap
+slug: /catalogue-managers-guide/dcat-ap
 sidebar_label: "Harvest from DCAT-AP endpoints"
 sidebar_position: 5
 ---

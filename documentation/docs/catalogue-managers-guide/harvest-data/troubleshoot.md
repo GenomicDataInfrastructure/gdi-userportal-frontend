@@ -6,249 +6,65 @@ sidebar_position: 9
 
 # Troubleshoot harvest issues
 
-Resolve common harvest problems by reviewing job logs and applying targeted solutions.
+Understand known issues and limitations with the harvesting process.
 
-**Start here:** Always check harvest job logs for detailed error messages before troubleshooting.
+## Test a harvest source
 
-## Check harvest job logs
+To verify a harvest source is working correctly:
 
-1. Go to **Harvest Sources**. <!-- VERIFY UI: Menu path -->
-2. Select your harvest source.
-3. Select the **Jobs** tab. <!-- VERIFY UI: Tab label -->
-4. Select the specific job to investigate.
-5. Review the detailed log output.
+1. Access the CKAN container terminal
+2. Run the command: `ckan --config=/srv/app/ckan.ini harvester run-test <id of harvester>`
+   - For FAIR Data Points, the harvester id is the last part of the URL of the harvest source
+   - For DCAT-AP sources, the harvester id is the part of the URL of the harvest source
 
-**Look for in logs:**
-- Error messages and stack traces
-- Authentication failures (401, 403 errors)
-- Network connectivity issues
-- Specific dataset processing failures
-- Timeout warnings
-- Number of datasets successfully processed
+If successful, you'll see datasets uploaded in CKAN.
 
-## Authentication fails
+## Check background processes
 
-**Symptoms:**
-- Job status shows "Authentication failed"
-- Error logs show 401 Unauthorized or 403 Forbidden
-- No datasets are imported
+The automated harvesting relies on three background processes. If harvesting is not working as expected, verify these processes are running:
 
-**Solutions:**
-1. Verify API credentials are current and correctly entered
-2. Check if authentication tokens need renewal
-3. Confirm your API key has necessary permissions
-4. Verify your IP address is not blocked by the source
-5. Test API access manually using curl
-6. Contact source administrators to confirm your access rights
-
-**Test authentication:**
 ```bash
-curl -H "Authorization: Bearer YOUR_TOKEN" https://source-url/api
+supervisorctl status
 ```
 
-## No datasets imported
+You should see output showing that these processes are RUNNING:
+- `ckan_fetch_consumer`
+- `ckan_gather_consumer`
+- `crond`
 
-**Symptoms:**
-- Harvest job completes successfully but imports 0 datasets
-- Job logs show no errors
-- Source should contain datasets
+## Known deletion issues
 
-**Solutions:**
-1. Verify the source URL is correct and accessible in a browser
-2. Check if filters are too restrictive
-3. Review the source's dataset visibility (public vs private)
-4. Ensure you have authentication if accessing private datasets
-5. Verify datasets at the source match your filter criteria
-6. Test the endpoint URL manually
+When datasets are removed from the source, they should be deleted from your catalogue during the next harvest. However, there is a known caveat:
 
-**Test the endpoint:**
-```bash
-curl https://source-url/catalog.rdf
-```
+**If a dataset is set for deletion and something goes wrong during the `import_stage`, the dataset stays forever as no more current one.**
 
-## Incomplete or missing metadata
+This means if there's an error during the deletion process, the dataset will remain in the database but not be shown, and won't be properly cleaned up by subsequent harvests.
 
-**Symptoms:**
-- Datasets import but are missing key information
-- Required fields are empty
-- Descriptions or titles are truncated or garbled
+## MIME type configuration
 
-**Solutions:**
-1. Review metadata mapping configuration
-2. Check if the source provides all required DCAT-AP fields
-3. Verify the source's metadata quality
-4. Adjust field mapping in advanced options
-5. Consider manual enrichment for critical missing fields
-6. Contact source administrators about metadata completeness
-7. Check character encoding (UTF-8 recommended)
+For DCAT-AP sources, the harvester looks at MIME types to parse files. If you're having issues harvesting DCAT-AP sources:
 
-## Harvest jobs time out or run slowly
+- For turtle format files (.ttl), you need to provide `text/turtle` as `rdf_format` in the configuration
+- For RDF/XML files (.rdf), the MIME type should be `application/rdf+xml`
 
-**Symptoms:**
-- Harvest jobs take many hours to complete
-- Jobs fail with timeout errors
-- Progress stalls partway through
-- Log shows repeated connection attempts
+## Reconfiguring harvest sources
 
-**Solutions:**
-1. Reduce dataset count using more specific filters
-2. Contact support to adjust timeout settings
-3. Split large sources into multiple smaller harvest jobs
-4. Schedule harvests during off-peak hours
-5. Check network connectivity and bandwidth
-6. Monitor source system availability and response time
-7. Review source system load (it may be experiencing high traffic)
+Be aware that if you delete a harvest source and then re-configure it:
 
-**Optimisation strategies:**
-- Start with 100-500 datasets to test configuration
-- Gradually increase scope after successful tests
-- Use theme or organisation filters to reduce load
-- Harvest during low-traffic periods
+**Datasets will be considered "new" rather than updates to existing datasets.**
 
-## Duplicate datasets
+This means you may end up with duplicate datasets if the original harvested datasets were not deleted before reconfiguring the source.
 
-**Symptoms:**
-- Same dataset appears multiple times in your catalogue
-- Dataset titles or identifiers are duplicated
-- Multiple records point to the same source data
+## FAIR Data Point-specific behavior
 
-**Solutions:**
-1. Check if you have multiple harvest sources pointing to the same endpoint
-2. Review and compare harvest source configurations
-3. Use filters to prevent overlap between harvest sources
-4. Verify the source doesn't contain duplicate datasets
-5. Manually remove duplicates if necessary
-6. Document filter criteria to prevent future duplicates
+When harvesting from FAIR Data Points:
 
-## Harvest job stuck
+**If a dataset is moved in FDP from one catalogue to another catalogue (by updating `DCTERMS.isPartOf` reference on the dataset level), it will be considered a new dataset.**
 
-**Symptoms:**
-- Job shows "Running" status for many hours with no progress
-- No new log entries appear
-- Cannot start a new harvest
-
-**Solutions:**
-1. Wait for automatic timeout (may take several hours)
-2. Contact support to manually terminate the stuck job
-3. Check if the source system is still responding
-4. Review system resource usage
-5. Check for network interruptions
-6. After termination, review logs before restarting
-
-## Datasets deleted unexpectedly
-
-**Symptoms:**
-- Previously harvested datasets are missing from your catalogue
-- Harvest logs show deletion events
-- Dataset count decreased after harvest
-
-**Solutions:**
-1. Check if datasets were removed from the source
-2. Review deletion handling policy in harvest configuration
-3. Verify the source is still accessible
-4. Check if the harvest source URL changed
-5. Review harvest job logs for deletion events
-6. Contact source administrators about removed datasets
-7. Consider pausing harvest if deletions are unexpected
-
-## Incorrect metadata mapping
-
-**Symptoms:**
-- Data appears in wrong fields
-- Tags or categories are incorrectly assigned
-- Dataset relationships are broken
-- Field values don't match source
-
-**Solutions:**
-1. Review metadata mapping configuration in harvest source settings
-2. Check if the source uses a custom metadata schema
-3. Adjust field mapping in advanced options
-4. Test mapping with a small sample dataset first
-5. Document source-specific mapping requirements
-6. Verify DCAT-AP version compatibility
-7. Contact support for complex mapping scenarios
-
-## Network and connectivity issues
-
-**Source unreachable:**
-
-**Symptoms:**
-- Connection timeout errors
-- DNS resolution failures
-- "Network unreachable" messages
-
-**Solutions:**
-1. Verify the source URL is correct (check for typos)
-2. Check if the source system is online and accessible
-3. Test connectivity using ping or curl
-4. Review firewall rules that might block access
-5. Verify DNS configuration
-6. Try accessing from a different network
-7. Contact network administrators
-
-**SSL/TLS certificate errors:**
-
-**Symptoms:**
-- Certificate validation failures
-- SSL handshake errors
-- "Invalid certificate" warnings
-
-**Solutions:**
-1. Verify the source uses a valid SSL certificate
-2. Check certificate expiration date
-3. Ensure certificate matches the domain name
-4. Contact source administrators about certificate issues
-5. Check if your system trusts the certificate authority
-
-## Data quality and encoding issues
-
-**Character encoding problems:**
-
-**Symptoms:**
-- Special characters display incorrectly (� symbols)
-- Non-English text appears garbled
-- Accents and diacritics are corrupted
-
-**Solutions:**
-1. Verify the source uses UTF-8 encoding
-2. Check harvest logs for encoding errors
-3. Review character set configuration
-4. Contact source administrators about encoding standards
-5. Test with datasets containing special characters
-
-**Invalid dates or numbers:**
-
-**Symptoms:**
-- Date fields show errors or incorrect values
-- Numeric values are wrong or unparseable
-- Format validation errors in logs
-
-**Solutions:**
-1. Check the source's date format (ISO 8601 recommended)
-2. Review number formatting (decimal separators, thousands separators)
-3. Adjust parsing configuration if available
-4. Contact source administrators about format standards
-5. Document expected formats for reference
-
-## Get additional help
-
-If you've tried the solutions above and still experience issues:
-
-1. Gather diagnostic information:
-   - Harvest source configuration
-   - Complete error logs from failed jobs
-   - Source URL and type
-   - Number of datasets at source
-   - When the problem started
-
-2. Contact support with:
-   - Detailed problem description
-   - Steps you've already tried
-   - Diagnostic information
-   - Screenshots of error messages
+This is because the CKAN harvester guid includes the catalogue id, so moving a dataset between catalogues changes its identifier.
 
 ## Next steps
 
 [Review technical specifications](./technical-specs.md) - Understand harvest system behaviour
 
-[Monitor and manage sources](./manage-sources.md) - Edit or pause problematic sources
+[Monitor and manage sources](./manage-sources.md) - Manage your harvest sources

@@ -1,5 +1,5 @@
 {
-  "label": "Harvest external datasets",
+  "label": "Harvest datasets",
   "position": 4,
   "link": {
     "type": "generated-index",

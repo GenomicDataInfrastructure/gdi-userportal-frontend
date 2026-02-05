@@ -1,19 +1,24 @@
 ---
 slug: /catalogue-managers-guide/setup
-sidebar_label: "Add a harvest source"
+sidebar_label: "Add harvest sources"
 sidebar_position: 2
 ---
 
-# Add a harvest source
+# Add harvest sources
 
 Connect an external data source to automatically import and synchronise datasets to your catalogue.
 
-**Before you begin:**
+In this guide  
+> [Add a harvest source](#add-a-harvest-source)  
+> [Check harvest progress](#check-harvest-progress)   
+
+
+## Before you begin
 - Obtain the source URL (endpoint address) of the data source
 - Confirm you have permission to harvest from this source and get authentication credentials if required
 - Decide which organisation will own the harvested datasets
 
-**To add a harvest source:**
+## Add a harvest source
 
 1. Go to **Harvest Sources** and select **Add Harvest Source**.  
 
@@ -65,8 +70,6 @@ Connect an external data source to automatically import and synchronise datasets
 
 ## Next steps
 
-[Monitor and manage your harvest sources](./manage-sources.md) - Edit, pause, or delete sources
-
-[Troubleshoot harvest issues](./troubleshoot.md) - Resolve common problems
-
-[Review harvested datasets](./manage-sources.md#manage-harvested-datasets) - Edit or remove imported datasets
+- [Monitor and manage your harvest sources](./manage-sources.md): Edit, pause, or delete sources
+- [Troubleshoot harvest issues](./troubleshoot.md): Resolve common problems
+- [Review harvested datasets](./manage-sources.md#manage-harvested-datasets): Edit or remove imported datasets

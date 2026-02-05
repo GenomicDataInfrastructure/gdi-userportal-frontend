@@ -41,5 +41,6 @@ The GDI Data Catalogue can harvest from:
     - New datasets from the source are added to your catalogue
     - Updated datasets are refreshed with current metadata
     - Datasets deleted at the source are removed from your catalogue
- 
+    - All changes are logged for review
+
 - **Publication to Data Portal:** Public harvested datasets appear in the [GDI Data Portal](https://portal.gdi.lu/)<sup>↗</sup> after import to the catalogue. Private datasets remain visible only to members of your organisation. 

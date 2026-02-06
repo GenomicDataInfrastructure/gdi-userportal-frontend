@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/manage-sources
-sidebar_label: "Monitor and manage sources"
-sidebar_position: 7
+sidebar_label: "Manage harvest sources"
+sidebar_position: 8
 ---
 
 # Monitor and manage harvest sources
@@ -178,6 +178,6 @@ curl https://catalogue.portal.gdi.lu/api/3/action/package_show?id=dataset-id
 
 ## Next steps
 
-[Troubleshoot harvest issues](./troubleshoot.md) - Resolve common problems
+[Troubleshoot harvest issues](./troubleshoot-harvesting.md) - Resolve common problems
 
-[Review technical specifications](./technical-specs.md) - Understand harvest timing and behaviour
+[Review technical specifications](./harvesting-technical-reference.md) - Understand harvest timing and behaviour

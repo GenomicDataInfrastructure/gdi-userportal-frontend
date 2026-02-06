@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/dcat-ap
 sidebar_label: "Harvest from DCAT-AP endpoints"
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # Harvest from DCAT-AP endpoints
@@ -152,9 +152,9 @@ National portals may contain thousands of datasets. Use filters to import only r
 
 ## Next steps
 
-[Monitor and manage your sources](./manage-sources.md) - Edit, pause, or delete harvest sources
+[Monitor and manage your sources](./manage-harvest-sources.md) - Edit, pause, or delete harvest sources
 
-[Review technical specifications](./technical-specs.md) - Understand harvest timing and behaviour
+[Review technical specifications](./harvesting-technical-reference.md) - Understand harvest timing and behaviour
 - Many others across Europe
 
 ## Troubleshooting

@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/ckan-sources
 sidebar_label: "Harvest from CKAN catalogues"
-sidebar_position: 6
+sidebar_position: 7
 ---
 
 # Harvest from CKAN catalogues
@@ -173,6 +173,6 @@ Harvested datasets belong to your organisation in your catalogue, but the origin
 
 ## Next steps
 
-[Monitor and manage your sources](./manage-sources.md) - Edit, pause, or delete harvest sources
+[Monitor and manage your sources](./manage-harvest-sources.md) - Edit, pause, or delete harvest sources
 
-[Review technical specifications](./technical-specs.md) - Understand harvest timing and behaviour
+[Review technical specifications](./harvesting-technical-reference.md) - Understand harvest timing and behaviour

@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/delete-dataset
 sidebar_label: "Delete datasets"
-sidebar_position: 5
+sidebar_position: 14
 ---
 
 # Delete datasets

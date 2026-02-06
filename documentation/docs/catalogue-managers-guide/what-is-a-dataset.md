@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/what-is-a-dataset
 sidebar_label: "What is a dataset?"
-sidebar_position: 1
+sidebar_position: 3
 ---
 
 # What is a dataset?
@@ -38,4 +38,4 @@ Datasets in GDI can be organised in serveral ways—such as by **organisation** 
 
 :::
 
-**What's next:** [Add a dataset](add-a-dataset.md)
+**What's next:** [Add a dataset](add-datasets-manually.md)

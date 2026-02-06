@@ -1,6 +1,6 @@
 ---
 slug: /catalogue-managers-guide/troubleshoot
-sidebar_label: "Troubleshoot harvest issues"
+sidebar_label: "Troubleshoot harvesting"
 sidebar_position: 9
 ---
 
@@ -55,7 +55,7 @@ Be aware that if you delete a harvest source and then re-configure it:
 
 This means you may end up with duplicate datasets if the original harvested datasets were not deleted before reconfiguring the source.
 
-## FAIR Data Point-specific behavior
+## FAIR Data Point-specific behaviour
 
 When harvesting from FAIR Data Points:
 
@@ -65,6 +65,6 @@ This is because the CKAN harvester guid includes the catalogue id, so moving a d
 
 ## Next steps
 
-[Review technical specifications](./technical-specs.md) - Understand harvest system behaviour
+[Review technical specifications](./harvesting-technical-reference.md) - Understand harvest system behaviour
 
-[Monitor and manage sources](./manage-sources.md) - Manage your harvest sources
+[Monitor and manage sources](./manage-harvest-sources.md) - Manage your harvest sources

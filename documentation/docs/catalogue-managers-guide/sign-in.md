@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/sign-in
 sidebar_label: "Sign in"
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 # Sign in to the catalogue

@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/fair-data-points
 sidebar_label: "Harvest from FAIR Data Points"
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 # Harvest from FAIR Data Points
@@ -81,6 +81,6 @@ Standardised metadata endpoints for scientific data that ensure data can be easi
 
 ## Next steps
 
-[Monitor and manage your sources](./manage-sources.md) - Edit, pause, or delete harvest sources
+[Monitor and manage your sources](./manage-harvest-sources.md) - Edit, pause, or delete harvest sources
 
-[Review technical specifications](./technical-specs.md) - Understand harvest timing and behaviour
+[Review technical specifications](./harvesting-technical-reference.md) - Understand harvest timing and behaviour

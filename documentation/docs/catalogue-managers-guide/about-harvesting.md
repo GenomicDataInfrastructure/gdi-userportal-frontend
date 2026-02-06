@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/overview
-sidebar_label: "About harvesting datasets"
-sidebar_position: 1
+sidebar_label: "About harvesting"
+sidebar_position: 4
 ---
 
 # About harvesting datasets
@@ -23,9 +23,9 @@ Dataset harvesting allows you to import and synchronise datasets from external d
 
 The GDI Data Catalogue can harvest from:
 
-- **[FAIR Data Points](./fair-data-points.md):** Research data repositories that follow FAIR principles
-- **[DCAT-AP endpoints](./dcat-ap.md):** European data portals using the DCAT-AP standard
-- **[CKAN catalogues](./ckan-sources.md):** Other CKAN instances operated by partner organisations
+- **[FAIR Data Points](./harvest-from-fair-data-points.md):** Research data repositories that follow FAIR principles
+- **[DCAT-AP endpoints](./harvest-from-dcat-ap.md):** European data portals using the DCAT-AP standard
+- **[CKAN catalogues](./harvest-from-ckan.md):** Other CKAN instances operated by partner organisations
 
 ## How harvesting works  
 

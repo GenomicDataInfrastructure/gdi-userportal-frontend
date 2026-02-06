@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/technical-specs
-sidebar_label: "Technical specifications"
-sidebar_position: 8
+sidebar_label: "Harvesting technical reference"
+sidebar_position: 10
 ---
 
 # Technical specifications
@@ -133,6 +133,6 @@ Contact system administrators for specific limit information applicable to your 
 
 ## Next steps
 
-[Troubleshoot harvest issues](./troubleshoot.md) - Resolve common problems
+[Troubleshoot harvest issues](./troubleshoot-harvesting.md) - Resolve common problems
 
-[Monitor and manage sources](./manage-sources.md) - Edit, pause, or delete harvest sources
+[Monitor and manage sources](./manage-harvest-sources.md) - Edit, pause, or delete harvest sources

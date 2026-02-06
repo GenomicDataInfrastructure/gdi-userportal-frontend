@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/manage-sources
 sidebar_label: "Manage harvest sources"
-sidebar_position: 8
+sidebar_position: 9
 ---
 
 # Monitor and manage harvest sources

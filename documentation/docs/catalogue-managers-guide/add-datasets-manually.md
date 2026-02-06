@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/add-datasets
 sidebar_label: "Add datasets manually"
-sidebar_position: 13
+sidebar_position: 14
 ---
 
 # Add datasets manually

@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/manage-organisations
 sidebar_label: "Manage organisations"
-sidebar_position: 11
+sidebar_position: 12
 ---
 
 # Manage organisations

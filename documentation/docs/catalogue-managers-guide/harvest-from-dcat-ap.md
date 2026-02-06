@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/dcat-ap
 sidebar_label: "Harvest from DCAT-AP endpoints"
-sidebar_position: 6
+sidebar_position: 7
 ---
 
 # Harvest from DCAT-AP endpoints

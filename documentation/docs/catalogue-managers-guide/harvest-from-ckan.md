@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/ckan-sources
 sidebar_label: "Harvest from CKAN catalogues"
-sidebar_position: 7
+sidebar_position: 8
 ---
 
 # Harvest from CKAN catalogues

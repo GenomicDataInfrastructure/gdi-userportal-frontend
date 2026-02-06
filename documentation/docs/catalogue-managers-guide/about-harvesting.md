@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/overview
 sidebar_label: "About harvesting"
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 # About harvesting datasets

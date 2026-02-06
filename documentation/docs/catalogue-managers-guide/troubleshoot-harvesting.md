@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/troubleshoot
 sidebar_label: "Troubleshoot harvesting"
-sidebar_position: 9
+sidebar_position: 10
 ---
 
 # Troubleshoot harvest issues

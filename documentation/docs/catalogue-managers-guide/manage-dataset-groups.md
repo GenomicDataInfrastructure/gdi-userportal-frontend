@@ -1,6 +1,6 @@
 ---
 sidebar_label: "Manage dataset groups"
-sidebar_position: 12
+sidebar_position: 13
 ---
 
 # Organise datasets into groups

@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/technical-specs
 sidebar_label: "Harvesting technical reference"
-sidebar_position: 10
+sidebar_position: 11
 ---
 
 # Technical specifications

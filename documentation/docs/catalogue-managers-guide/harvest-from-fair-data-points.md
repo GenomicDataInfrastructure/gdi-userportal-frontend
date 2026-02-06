@@ -1,7 +1,7 @@
 ---
 slug: /catalogue-managers-guide/fair-data-points
 sidebar_label: "Harvest from FAIR Data Points"
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # Harvest from FAIR Data Points

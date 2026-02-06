@@ -36,7 +36,7 @@ To sign in to the GDI Portal:
 
 5. Follow the instructions to sign in with your selected account. If it's your first time signing in, you may need to verify your email address.
 
-6. After you sign in, the GDI Portal home page loads and you can [start exploring datasets](/category/explore-datasets-1).
+6. After you sign in, the GDI Portal home page loads and you can [start exploring datasets](/category/explore-datasets).
 
 <figure>
 <img src="img/sign-in/home-page.png" alt="Home page after signing in, showing a search bar and dataset cards" width="900" />

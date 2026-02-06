@@ -10,7 +10,7 @@ sidebar_position: 1
 
 To apply for access to datasets:
 
-1. [Browse or search](/category/explore-datasets-1) for datasets you want to access.
+1. [Browse or search](/category/explore-datasets) for datasets you want to access.
 
 
 2. Select **Add to basket** on each dataset you want to access.  

@@ -14,7 +14,7 @@ In this guide
 <br/>
 :::tip Full documentation
 
-This guide covers the common tasks for managing datasets. For detailed instructions on all dataset operations, see the [**full CKAN documentation**](https://docs.ckan.org/en/2.11/user-guide.html#datasets-and-resources)<sup>↗</sup>. CKAN is the system that powers the GDI Data Catalogue. 
+This guide covers the common tasks for managing datasets. For a complete guide to all dataset operations, see the [**CKAN documentation**](https://docs.ckan.org/en/2.11/user-guide.html#datasets-and-resources)<sup>↗</sup>. CKAN is the system that powers the GDI Catalogue Portal. 
 
 :::
 

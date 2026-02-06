@@ -10,51 +10,49 @@ Understand harvest timing, limits, and system behaviour to optimise your harvest
 
 ## Harvest timing and frequency
 
+<!-- VERIFY SYSTEM: Actual harvest intervals and scheduling options -->
 **Standard harvest interval**  
-Harvest jobs can be configured with various update frequencies (e.g., daily, weekly, or manual). When set to an automatic interval like daily, a background process automatically triggers the harvester at the end of each specified time interval.
+[NEEDS VERIFICATION] - Check with system administrators for default schedule
 
 **Custom scheduling**  
-Available frequency options include manual, daily, weekly, and other custom intervals. Select "manual" if you want to trigger each harvest manually rather than on an automatic schedule.
+[NEEDS VERIFICATION] - Available options for custom harvest frequencies
 
 **Manual triggers**  
-You can trigger a harvest manually at any time by clicking "Reharvest" in the job's Admin section on the harvest source page, regardless of the scheduled interval.
+You can trigger a harvest manually at any time from the harvest source page, regardless of the scheduled interval.
 
 ## Initial harvest behaviour
 
+<!-- VERIFY SYSTEM: First-time harvest specifications -->
 **First harvest characteristics:**
 - May take significantly longer than subsequent updates
 - Imports all available datasets from the source
-- Processes datasets through three stages: gather, fetch, and import
+- Processes datasets in batches
 - Creates new dataset records in your catalogue
-- All datasets are marked as "new" during the first harvest
 
-**Three-stage harvest process:**
-1. **Gather stage:** Identifies objects at the source URL, generates unique GUIDs, and saves them to the database as harvest objects
-2. **Fetch stage:** Retrieves complete data for harvested objects if information from gather stage is incomplete
-3. **Import stage:** Maps data to CKAN fields and creates/updates/deletes dataset records
+**Timeout settings:** [NEEDS VERIFICATION]  
 
-**Important considerations:**
-- If you delete and reconfigure a harvest source, datasets will be considered "new" again
-- Failed deletions during import stage may leave datasets marked as not current indefinitely
-- Moving datasets between catalogs in the source may cause them to be treated as new datasets due to GUID generation including catalog references
+**Dataset limits:** [NEEDS VERIFICATION]  
+
+**Retry policy:** [NEEDS VERIFICATION] - Automatic retry behaviour for failed harvests
 
 ## Synchronisation behaviour
 
 <!-- VERIFY SYSTEM: How updates and changes are detected -->
-**Update detection:**  
-The harvester queries the database for previously harvested GUIDs and compares them with GUIDs from the current harvest. Based on this comparison, harvest objects are created and assigned status: `delete`, `new`, or `change`.
+**Update detection:** [NEEDS VERIFICATION]  
+How the harvester identifies changed datasets at the source
 
 **New datasets:**  
-Automatically added to your catalogue during each harvest run. Datasets are imported during the import stage after being gathered and fetched.
+Automatically added to your catalogue during each harvest run
 
 **Updated datasets:**  
-Modified metadata is synchronized from the source. Changes are detected by comparing GUIDs and processing updated datasets during the import stage.
+Modified metadata is synchronised from the source
 
-**Deleted datasets:**  
-When datasets are removed from the source, the harvester identifies them during the gather stage. These datasets are marked with `'current': False` status and then deleted by calling the package_delete action during the import stage.
+**Deleted datasets:** [NEEDS VERIFICATION]  
+Behaviour when datasets are removed from the source
 
-**Conflict resolution:**  
-The harvester can be configured to prevent overwriting certain fields on update. Without this configuration, harvest updates will overwrite local changes. Field-level protection settings must be configured at the CKAN instance level.
+**Conflict resolution:** [NEEDS VERIFICATION]  
+How the system handles conflicts between local edits and source updates
+
 ## Performance considerations
 
 **Harvesting large data sources:**
@@ -65,19 +63,19 @@ When connecting to sources with thousands of datasets:
 - Consider using filters to limit scope and improve performance
 - Monitor job logs to track progress and identify bottlenecks
 - Plan initial harvests during off-peak hours
-Long-running harvests may be affected by network interruptions
-- Review job logs if harvests fail repeatedly
-- Contact support if you experience persistent network issues
-- Ensure proper network connectivity between CKAN and the source systemons
+
+**Network reliability:**
+
+- The harvester includes automatic retry logic for transient network failures
+- Long-running harvests may be affected by network interruptions
 - Timeout errors typically trigger automatic retries
 - Review job logs if harvests fail repeatedly
 - Contact support if you experience persistent network issues
 
 **Optimisation strategies:**
- using the run-test command
-- Monitor system resources during large harvests
-- Adjust harvest frequency based on source update patterns
-- Ensure proper harvester configuration including profiles and compatibility modes for optimal parsing
+
+- Use specific filters rather than harvesting entire catalogues
+- Schedule harvests during low-traffic periods
 - Start with a small test harvest before full import
 - Monitor system resources during large harvests
 - Adjust harvest frequency based on source update patterns
@@ -95,27 +93,14 @@ Changes from harvest updates propagate to the Data Portal on the same schedule a
 **Private datasets:**  
 Private harvested datasets remain visible only within your organisation and do not appear in the public Data Portal.
 
-## Monitor harvest operation (e.g., http://localhost:5500/harvest in development)
+## Monitor harvest operations
+
+**Access harvest logs:**
+
+1. Go to **Harvest Sources**
 2. Select your harvest source
-3. Select the **Jobs** tab or Admin section
+3. Select the **Jobs** tab
 4. Select a specific job to view detailed logs
-
-**Testing harvest operations:**
-
-For development and testing, you can run a harvest test command directly:
-```
-ckan --config=/srv/app/ckan.ini harvester run-test <id of harvester>
-```
-The harvester ID is the last part of the URL of the harvest source.
-
-**Background monitoring:**
-
-Three main background processes handle harvesting operations:
-- `gather_consumer`: Manages gathering of data sources
-- `fetch_consumer`: Fetches data from identified sources  
-- `run`: Triggers harvester at specified time intervals
-
-Use `supervisorctl status` to monitor these processes.
 
 **Log information includes:**
 - Start and end timestamps
@@ -123,12 +108,9 @@ Use `supervisorctl status` to monitor these processes.
 - Number of datasets processed (added, updated, deleted)
 - Success or failure status
 - Detailed error messages for any failures
-- Processing stage information (gather, fetch, import)
+- Network and connectivity information
+- Processing performance metrics
 
-**Use logs to:**
-- Verify harvest completed successfully
-- Identify specific failed datasets or stages
-- Diagnose connectivity or configuration
 **Use logs to:**
 - Verify harvest completed successfully
 - Identify specific failed datasets

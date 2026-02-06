@@ -19,6 +19,41 @@ Dataset harvesting allows you to import and synchronise datasets from external d
 - Contact information and licences
 - Update timestamps and versioning information
 
+## Harvesting workflow
+
+The diagram below shows how data flows from external sources through the GDI Data Catalogue to the public-facing GDI Data Portal:
+
+```mermaid
+flowchart LR
+    subgraph sources["External data sources"]
+        fdp["FAIR data points"]
+        dcat["DCAT-AP endpoints"]
+        ckan["CKAN catalogues"]
+    end
+    
+    subgraph catalogue["**GDI Data Catalogue**"]
+        harvester["Automated <br/>harvester"]
+        datasets["Dataset <br/>repository"]
+    end
+    
+    subgraph portal["**GDI Data Portal**"]
+        public["Public <br/>datasets"]
+        users["Data <br/>users"]
+    end
+    
+    fdp -->|Harvest| harvester
+    dcat -->|Harvest| harvester
+    ckan -->|Harvest| harvester
+    
+    harvester -->|Import <br/>& sync| datasets
+    datasets -->|Publish <br/> public datasets| public
+    public -->|Browse <br/>& request| users
+    
+    style sources fill:#e1f5ff
+    style catalogue fill:#fff4e1
+    style portal fill:#e8f5e9
+```
+
 ## Supported source types
 
 The GDI Data Catalogue can harvest from:

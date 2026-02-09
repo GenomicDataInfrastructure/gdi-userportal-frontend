@@ -27,7 +27,7 @@ export default function RootLayout({
         <title>{contentConfig.siteTitle}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content={contentConfig.siteDescription} />
-        <link rel="icon" href="/secondary-logo-v1.png" type="image/png" />
+        <link rel="icon" href={contentConfig.favicon} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"

@@ -2,12 +2,44 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { RetrievedApplicationData } from "@/app/api/access-management-v1";
+import { UpdateApplicationSection7Request } from "@/app/api/access-management-v1";
 import { SectionProps } from "../ApplicationFormContent";
-const Section7: React.FC<SectionProps> = ({ applicationData }) => {
+
+const Section7: React.FC<SectionProps> = ({
+  applicationData,
+  sectionDataRef,
+}) => {
+  const [additionalInformation, setAdditionalInformation] =
+    useState<string>("");
+  const [additionalAttachment, setAdditionalAttachment] = useState<any[]>([]);
+
+  // Initialize from applicationData
+  useEffect(() => {
+    if (applicationData?.form?.section7) {
+      setAdditionalInformation(
+        applicationData.form.section7.additionalInformation ?? ""
+      );
+      setAdditionalAttachment(
+        applicationData.form.section7.additionalAttachment ?? []
+      );
+    }
+  }, [applicationData?.form?.section7]);
+
+  // Update sectionDataRef whenever data changes
+  useEffect(() => {
+    if (sectionDataRef) {
+      const section7Data: UpdateApplicationSection7Request = {
+        sectionNumber: 7,
+        additionalAttachment: additionalAttachment,
+        additionalInformation: additionalInformation,
+      };
+      sectionDataRef.current = section7Data;
+    }
+  }, [sectionDataRef, additionalInformation, additionalAttachment]);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -32,6 +64,8 @@ const Section7: React.FC<SectionProps> = ({ applicationData }) => {
         </div>
         <textarea
           rows={6}
+          value={additionalInformation}
+          onChange={(e) => setAdditionalInformation(e.target.value)}
           className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
         />
       </div>

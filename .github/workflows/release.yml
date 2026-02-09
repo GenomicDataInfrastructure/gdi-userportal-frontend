@@ -33,9 +33,34 @@ jobs:
           fail-on: "issues"
           run: "cache-dependencies,cache-scan-results,labels,analyzer,evaluator,advisor,reporter,upload-results"
 
-  versioning:
+  e2e-tests:
     runs-on: ubuntu-latest
     needs: ort
+    env:
+      E2E_MODE: real
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Install
+        run: |
+          npm install
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright E2E tests
+        run: npx playwright test
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7
+
+  versioning:
+    runs-on: ubuntu-latest
+    needs: [ort, e2e-tests]
     outputs:
       new_tag: ${{ steps.tagging.outputs.new_tag }}
     steps:

@@ -327,7 +327,7 @@ export const retrieveFiltersApi = async () => {
     const client = discoveryHdEuClient;
     const requestPath = "search?filters=dataset"; // avoid leading slash so baseURL path is preserved
     const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
-
+    console.log("Retrieving filters with URL:", fullUrl);
     const response = await client.get(requestPath, {
       headers,
     });

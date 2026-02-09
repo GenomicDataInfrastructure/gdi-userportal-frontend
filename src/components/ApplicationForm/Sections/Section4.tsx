@@ -56,7 +56,9 @@ const Section4: React.FC<SectionProps> = ({
       setVatNumber(section4.vatNumber ?? "");
       // Map enum keys: "a" = yes, "b" = no
       const financiallyKey = section4.isTheProjectFinanciallyCovered?.key ?? "";
-      setFinanciallyCovered(financiallyKey === "a" ? "yes" : financiallyKey === "b" ? "no" : "");
+      setFinanciallyCovered(
+        financiallyKey === "a" ? "yes" : financiallyKey === "b" ? "no" : ""
+      );
       setInvoiceReferenceNumber(section4.invoiceReferenceNumber ?? "");
       setInvoiceAddress(section4.invoiceAddress ?? "");
       setPeppolCode(section4.peppolCode ?? "");
@@ -89,7 +91,10 @@ const Section4: React.FC<SectionProps> = ({
         invoiceReferenceNumber,
         invoiceAddress: invoiceType === "paper" ? invoiceAddress : undefined,
         peppolCode,
-        rangeOfAmountOfFinancing: financiallyCovered === "yes" ? rangeOfAmountOfFinancing ?? undefined : undefined,
+        rangeOfAmountOfFinancing:
+          financiallyCovered === "yes"
+            ? (rangeOfAmountOfFinancing ?? undefined)
+            : undefined,
       };
       sectionDataRef.current = section4Data;
     }
@@ -241,7 +246,8 @@ const Section4: React.FC<SectionProps> = ({
       {/* Business ID of the organisation */}
       <div className="mb-6">
         <label className="block text-sm font-semibold text-gray-900 mb-2">
-          Business ID of the organisation <span className="text-red-600">*</span>
+          Business ID of the organisation{" "}
+          <span className="text-red-600">*</span>
         </label>
         <input
           type="text"
@@ -321,7 +327,8 @@ const Section4: React.FC<SectionProps> = ({
       {invoiceType === "paper" && (
         <div className="mb-6">
           <label className="block text-sm font-semibold text-gray-900 mb-2">
-            E-invoice address (EDI or IBAN) <span className="text-red-600">*</span>
+            E-invoice address (EDI or IBAN){" "}
+            <span className="text-red-600">*</span>
           </label>
           <input
             type="text"

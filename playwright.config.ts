@@ -5,8 +5,46 @@
 import { defineConfig, devices } from "@playwright/test";
 import dotenv from "dotenv";
 
+const defaultMode = "mocked";
+const e2eMode = process.env.E2E_MODE ?? defaultMode;
+const isMocked = e2eMode === "mocked";
+const mockApiPort = Number(process.env.MOCK_API_PORT || 4010);
+
+process.env.E2E_MODE = e2eMode;
+
 // Load E2E test env vars
 dotenv.config({ path: ".env.e2e.test" });
+
+if (isMocked) {
+  process.env.NEXT_PUBLIC_DDS_URL = `http://localhost:${mockApiPort}`;
+  process.env.NEXT_PUBLIC_DAAM_URL = `http://localhost:${mockApiPort}`;
+}
+
+const serverEnv = {
+  ...process.env,
+  MOCK_API_PORT: String(mockApiPort),
+};
+
+const webServers = [
+  ...(isMocked
+    ? [
+        {
+          command: "node tests/mocks/mock-api-server.js",
+          url: `http://localhost:${mockApiPort}/health`,
+          timeout: 120 * 1000,
+          reuseExistingServer: !process.env.CI,
+          env: serverEnv,
+        },
+      ]
+    : []),
+  {
+    command: "npm run dev",
+    url: "http://localhost:3000",
+    timeout: 120 * 1000,
+    reuseExistingServer: true,
+    env: serverEnv,
+  },
+];
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -36,12 +74,7 @@ export default defineConfig({
     },
   ],
 
-  webServer: {
-    command: "npm run dev",
-    url: "http://localhost:3000",
-    timeout: 120 * 1000, // wait up to 120 seconds for server to start
-    reuseExistingServer: true, // don't re-launch if already running
-  },
+  webServer: webServers,
   use: {
     baseURL: "http://localhost:3000",
   },

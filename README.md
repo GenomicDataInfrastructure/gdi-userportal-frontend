@@ -59,7 +59,17 @@ TODO
 
 ## Running end-to-end tests
 
-TODO
+Playwright E2E tests support two modes:
+
+- Mocked mode (recommended for local dev and PRs): uses a local mock API server.
+  - `E2E_MODE=mocked npx playwright test`
+  - Optional: set `MOCK_API_PORT` to change the mock server port (default: 4010).
+- Real backend mode (release pipeline): uses `.env.e2e.test` and hits DEV services.
+  - `E2E_MODE=real npx playwright test`
+
+If this is your first time running Playwright, install the browsers:
+
+`npx playwright install --with-deps`
 
 ## Further help
 

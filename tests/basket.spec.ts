@@ -17,10 +17,9 @@ const shouldIgnoreConsoleError = (text: string) => {
   return ignoredPatterns.some((pattern) => pattern.test(text));
 };
 
-test("Dataset list renders filters and results", async ({ page }) => {
+test("Basket flow adds dataset and shows it", async ({ page }) => {
   test.skip(!isMocked, "Mocked-only test");
 
-  // Listen for unexpected errors
   const consoleErrors: string[] = [];
   page.on("console", (msg) => {
     if (msg.type() === "error") {
@@ -31,28 +30,25 @@ test("Dataset list renders filters and results", async ({ page }) => {
     }
   });
 
-  await page.goto("/datasets?page=1");
+  await page.goto("/datasets/ds-001");
 
-  // Search bar
-  await expect(page.getByRole("textbox")).toBeVisible();
+  const addButton = page.locator("a:visible", {
+    hasText: /add to basket/i,
+  });
+  await expect(addButton).toBeVisible();
+  await expect(addButton).toHaveAttribute("aria-disabled", "false");
+  await addButton.click();
 
-  // Filters
-  const themeFilterButton = page.getByRole("button", { name: /theme/i });
-  await expect(themeFilterButton).toBeVisible({ timeout: 15000 });
-  await themeFilterButton.click();
-  await page.getByLabel("Oncology").check();
+  await page.goto("/basket");
 
   await expect(
-    page.getByRole("heading", { name: /active filters/i })
+    page.getByRole("heading", { name: /your basket/i })
   ).toBeVisible();
-  await expect(page.getByText(/theme\s*:\s*oncology/i)).toBeVisible();
-
-  // Dataset list
+  await expect(page.getByText(/your basket\s*\(1\)/i)).toBeVisible();
+  await expect(page.getByText(/cancer cohort study/i)).toBeVisible();
   await expect(
-    page.getByRole("link", { name: /cancer cohort study/i })
+    page.locator("a", { hasText: /login to request/i })
   ).toBeVisible();
-  await expect(page.getByText(/externally governed/i)).toBeVisible();
 
-  // 6. Ensure there are no console errors
   expect(consoleErrors).toHaveLength(0);
 });

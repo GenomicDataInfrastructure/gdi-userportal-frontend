@@ -2,17 +2,48 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { RetrievedApplicationData } from "@/app/api/access-management-v1";
-import React, { useState } from "react";
+import { UpdateApplicationSection8Request } from "@/app/api/access-management-v1";
+import React, { useState, useEffect } from "react";
 import { SectionProps } from "../ApplicationFormContent";
 
-const Section8: React.FC<SectionProps> = ({ applicationData }) => {
+const Section8: React.FC<SectionProps> = ({
+  applicationData,
+  sectionDataRef,
+}) => {
   const [confirmations, setConfirmations] = useState({
     statistics: false,
     processingFee: false,
     holderFee: false,
     informationCorrect: false,
   });
+
+  // Initialize confirmations from applicationData
+  useEffect(() => {
+    if (applicationData?.form?.section8) {
+      setConfirmations({
+        statistics: applicationData.form.section8.acceptHealthDataBody ?? false,
+        processingFee:
+          applicationData.form.section8.awareProcessingFee ?? false,
+        holderFee: applicationData.form.section8.awareChargeFee ?? false,
+        informationCorrect:
+          applicationData.form.section8.awareInformationCorrect ?? false,
+      });
+    }
+  }, [applicationData?.form?.section8]);
+
+  // Update sectionDataRef whenever confirmations change
+  useEffect(() => {
+    if (sectionDataRef) {
+      const section8Data: UpdateApplicationSection8Request = {
+        sectionNumber: 8,
+        acceptHealthDataBody: confirmations.statistics,
+        awareProcessingFee: confirmations.processingFee,
+        awareChargeFee: confirmations.holderFee,
+        awareInformationCorrect: confirmations.informationCorrect,
+      };
+      sectionDataRef.current = section8Data;
+    }
+  }, [sectionDataRef, confirmations]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });

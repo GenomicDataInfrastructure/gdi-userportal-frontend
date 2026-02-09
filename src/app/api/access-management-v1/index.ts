@@ -83,6 +83,60 @@ interface PhoneNumber {
   isoCode: string;
 }
 
+interface IndicateTheSizeOfTheStudyCohortEstimationOrExact {
+  key: string;
+  value: string;
+}
+
+interface TabulationPlanArray {
+  tabulationRegisteredToBeUsed: string;
+  tabulationPossibleStudyCohort: string;
+  tabulationInformationOfRequiredVariables: string;
+  tabulationFormationVariables: string;
+  tabulationDesiredDirection: string;
+  tabulationOrderInWhichTable: string;
+  tabulationAnyOtherRelevant: string;
+  tabulationPlan: TabulationPlan; // Fixed: was "tabularPln"
+}
+
+interface TabulationPlan {
+  name: string;
+  size: number;
+  id: string;
+}
+
+interface VariableAttachment {
+  size: number;
+  name: string;
+  id: string;
+}
+
+interface ExtractionMethod {
+  key: string;
+  value: string;
+}
+
+interface HowOftenDataExtracted {
+  key: string;
+  value: string;
+}
+
+interface DataExtractionFrequency {
+  key: string;
+  value: string;
+}
+
+interface OptOutMechanism {
+  key: string;
+  value: string;
+}
+
+interface AdditionalAttachment {
+  size: number;
+  name: string;
+  id: string;
+}
+
 interface LegalPersonOption {
   key: string;
   value: string;
@@ -227,6 +281,47 @@ export interface UpdateApplicationSection4Request {
   invoiceAddress?: string;
   peppolCode?: string;
   rangeOfAmountOfFinancing?: LegalPersonOption;
+}
+
+export interface UpdateApplicationSection6Item {
+  country_id: string; // REQUIRED
+  catalog_ids: string[]; // REQUIRED (must not be empty)
+  hdabContacts?: string; // Optional
+  howWillTheDataFromDifferentSourcesBeLinked: string; // REQUIRED
+  indicateTheSizeOfTheStudyCohort: string; // REQUIRED
+  indicateTheSizeOfTheStudyCohortEstimationOrExact: IndicateTheSizeOfTheStudyCohortEstimationOrExact; // REQUIRED
+  whyNeedStudyCohortOfThisSize: string; // REQUIRED
+  variablesToBeUsedInDataExtractionAttachment?: VariableAttachment[]; // Optional
+  timePeriodOfDataExtraction: string; // REQUIRED
+  extractionMethod: ExtractionMethod; // REQUIRED
+  samplingMethod?: string; // Optional (REQUIRED if extractionMethod = "other sample")
+  sampleSize?: string; // Optional (REQUIRED if extractionMethod = "random-sample" or "other sample")
+  inclusionCriteria: string; // REQUIRED
+  potentialExclusionCriteria?: string; // Optional
+  howOftenDoesTheDataNeedToBeExtractedOnceOrMultiple: HowOftenDataExtracted; // REQUIRED
+  needForDataExtractionEvery?: DataExtractionFrequency; // Optional (REQUIRED if extraction = "multiple")
+  needForDataExtractionEveryOther?: string; // Optional
+  needForDataExtractionEveryDescription: string; // REQUIRED (ALWAYS!)
+  optOutOfTheMechanismProvidedInTheNationalLaw: OptOutMechanism; // REQUIRED
+  providedJustificationException?: string; // Optional (REQUIRED if optOut = "yes")
+  whatIsTheFrequencyOfUpdates?: string; // Optional
+  tabulationPlanArray?: TabulationPlanArray[]; // Optional
+}
+
+export type UpdateApplicationSection6Request = UpdateApplicationSection6Item[];
+
+export interface UpdateApplicationSection7Request {
+  sectionNumber: number;
+  additionalAttachment: AdditionalAttachment[];
+  additionalInformation: string;
+}
+
+export interface UpdateApplicationSection8Request {
+  sectionNumber: number;
+  acceptHealthDataBody: boolean;
+  awareProcessingFee: boolean;
+  awareChargeFee: boolean;
+  awareInformationCorrect: boolean;
 }
 
 export interface RetrievedApplicationData {
@@ -528,11 +623,14 @@ export const updateApplicationSection3Api = async (
     return response.data;
   } catch (error) {
     if (isAxiosError(error)) {
-      console.error("❌ AMS Section 3 update failed", JSON.stringify({
-        status: error.response?.status,
-        message: error.message,
-        responseData: error.response?.data,
-      }));
+      console.error(
+        "❌ AMS Section 3 update failed",
+        JSON.stringify({
+          status: error.response?.status,
+          message: error.message,
+          responseData: error.response?.data,
+        })
+      );
       throw error;
     } else {
       console.error("❌ Non-Axios error", error);
@@ -563,6 +661,115 @@ export const updateApplicationSection4Api = async (
   } catch (error) {
     if (isAxiosError(error)) {
       console.error("❌ AMS Section 4 update failed", {
+        status: error.response?.status,
+        message: error.message,
+        responseData: error.response?.data,
+      });
+      throw error;
+    } else {
+      console.error("❌ Non-Axios error", error);
+      throw error;
+    }
+  }
+};
+
+export const updateApplicationSection6Api = async (
+  applicationId: string,
+  section6Data: UpdateApplicationSection6Request
+) => {
+  const headers = await createHeaders();
+  try {
+    const client = accessManagementClient;
+    const requestPath = `data-request/application/${encodeURIComponent(applicationId)}/section/6`;
+    const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
+    console.log("AMS Section 6 Update URL:", fullUrl);
+
+    // Backend expects { countries: [...] } not just [...]
+    const payload = { countries: section6Data };
+    console.log(
+      "AMS Section 6 Data being sent:",
+      JSON.stringify(payload, null, 2)
+    );
+
+    const response = await client.put(requestPath, payload, {
+      headers,
+    });
+
+    console.debug("✅ AMS Section 6 update succeeded", {
+      status: response.status,
+    });
+    return response.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.error("❌ AMS Section 6 update failed", {
+        status: error.response?.status,
+        message: error.message,
+        responseData: error.response?.data,
+      });
+      throw error;
+    } else {
+      console.error("❌ Non-Axios error", error);
+      throw error;
+    }
+  }
+};
+
+export const updateApplicationSection7Api = async (
+  applicationId: string,
+  section7Data: UpdateApplicationSection7Request
+) => {
+  const headers = await createHeaders();
+  try {
+    const client = accessManagementClient;
+    const requestPath = `data-request/application/${encodeURIComponent(applicationId)}/section/7`;
+    const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
+    console.log("AMS Section 7 Update URL:", fullUrl);
+
+    const response = await client.put(requestPath, section7Data, {
+      headers,
+    });
+
+    console.debug("✅ AMS Section 7 update succeeded", {
+      status: response.status,
+    });
+    return response.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.error("❌ AMS Section 7 update failed", {
+        status: error.response?.status,
+        message: error.message,
+        responseData: error.response?.data,
+      });
+      throw error;
+    } else {
+      console.error("❌ Non-Axios error", error);
+      throw error;
+    }
+  }
+};
+
+export const updateApplicationSection8Api = async (
+  applicationId: string,
+  section8Data: UpdateApplicationSection8Request
+) => {
+  const headers = await createHeaders();
+  try {
+    const client = accessManagementClient;
+    const requestPath = `data-request/application/${encodeURIComponent(applicationId)}/section/8`;
+    const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
+    console.log("AMS Section 8 Update URL:", fullUrl);
+
+    const response = await client.put(requestPath, section8Data, {
+      headers,
+    });
+
+    console.debug("✅ AMS Section 8 update succeeded", {
+      status: response.status,
+    });
+    return response.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.error("❌ AMS Section 8 update failed", {
         status: error.response?.status,
         message: error.message,
         responseData: error.response?.data,

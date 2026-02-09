@@ -17,6 +17,9 @@ import {
   updateApplicationSection2Api,
   updateApplicationSection3Api,
   updateApplicationSection4Api,
+  updateApplicationSection6Api,
+  updateApplicationSection7Api,
+  updateApplicationSection8Api,
 } from "@/app/api/access-management-v1";
 
 interface FormSection {
@@ -51,7 +54,9 @@ export default function Page() {
       }
 
       const sectionData = sectionDataRef.current;
-      const sectionNumber = sectionData.sectionNumber;
+      const sectionNumber = currentSection;
+      console.log(`Section Number: ${sectionNumber}`);
+      console.log(`Section Data:`, sectionData);
 
       switch (sectionNumber) {
         case 1:
@@ -86,7 +91,30 @@ export default function Page() {
           );
           console.log("✅ Section 4 saved successfully");
           break;
-        // Add more cases for other sections as needed
+        case 6:
+          console.log("Saving Section 6 data:", sectionData);
+          await updateApplicationSection6Api(
+            String(applicationId),
+            sectionData
+          );
+          console.log("✅ Section 6 saved successfully");
+          break;
+        case 7:
+          console.log("Saving Section 7 data:", sectionData);
+          await updateApplicationSection7Api(
+            String(applicationId),
+            sectionData
+          );
+          console.log("✅ Section 7 saved successfully");
+          break;
+        case 8:
+          console.log("Saving Section 8 data:", sectionData);
+          await updateApplicationSection8Api(
+            String(applicationId),
+            sectionData
+          );
+          console.log("✅ Section 8 saved successfully");
+          break;
         default:
           console.warn(`No save handler for section ${sectionNumber}`);
       }

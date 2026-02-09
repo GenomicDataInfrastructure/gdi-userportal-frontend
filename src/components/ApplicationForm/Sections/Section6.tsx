@@ -2,24 +2,34 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlus,
   faTrash,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { RetrievedApplicationData } from "@/app/api/access-management-v1";
+import { UpdateApplicationSection6Request } from "@/app/api/access-management-v1";
 import { SectionProps } from "../ApplicationFormContent";
 
 type TabType = "section6" | "section6.1";
 
+interface UploadedFile {
+  id: string;
+  name: string;
+  size: number;
+}
+
 interface TabulationPlan {
   id: string;
   data?: string;
+  uploadedFile?: UploadedFile;
 }
 
-const Section6: React.FC<SectionProps> = ({ applicationData }) => {
+const Section6: React.FC<SectionProps> = ({
+  applicationData,
+  sectionDataRef,
+}) => {
   const [activeTab, setActiveTab] = useState<TabType>("section6");
   const [cohortSize, setCohortSize] = useState<string>("12");
   const [cohortSizeType, setCohortSizeType] = useState<string>("estimation");
@@ -27,6 +37,138 @@ const Section6: React.FC<SectionProps> = ({ applicationData }) => {
     useState<string>("random-sample");
   const [tabulationPlans, setTabulationPlans] = useState<TabulationPlan[]>([
     { id: "1" },
+  ]);
+
+  // File upload refs
+  const metadataFileInputRef = useRef<HTMLInputElement>(null);
+  const tabulationFileInputRefs = useRef<{
+    [key: string]: HTMLInputElement | null;
+  }>({});
+
+  // Additional state for Section 6 fields
+  const [countryId, setCountryId] = useState<string>("");
+  const [catalogIds, setCatalogIds] = useState<string[]>([]);
+  const [hdabContacts, setHdabContacts] = useState<string>("");
+  const [dataLinkageMethod, setDataLinkageMethod] = useState<string>("");
+  const [whyNeedCohortSize, setWhyNeedCohortSize] = useState<string>("Reason");
+  const [timePeriod, setTimePeriod] = useState<string>("AAAAAA");
+  const [sampleSize, setSampleSize] = useState<string>("10001");
+  const [inclusionCriteria, setInclusionCriteria] =
+    useState<string>("Description");
+  const [exclusionCriteria, setExclusionCriteria] =
+    useState<string>("Description");
+  const [dataExtractionFrequency, setDataExtractionFrequency] =
+    useState<string>("once");
+  const [extractionFrequencyDetails, setExtractionFrequencyDetails] =
+    useState<string>("Data will be extracted once");
+  const [optOutMechanism, setOptOutMechanism] = useState<string>("no");
+  const [optOutJustification, setOptOutJustification] = useState<string>("");
+  const [updateFrequency, setUpdateFrequency] = useState<string>("");
+
+  // File upload state
+  const [metadataFile, setMetadataFile] = useState<UploadedFile | null>(null);
+
+  // Initialize from applicationData
+  useEffect(() => {
+    if (applicationData?.form?.section6) {
+      const section6 = applicationData.form.section6;
+      // Initialize all fields from saved data
+      // Note: You'll need to map these according to your actual data structure
+    }
+  }, [applicationData?.form?.section6]);
+
+  // Update sectionDataRef whenever any field changes
+  useEffect(() => {
+    if (sectionDataRef && applicationData) {
+      // Section 6 is an ARRAY of country-specific data
+      const section6Data: UpdateApplicationSection6Request = [
+        {
+          country_id: countryId, // REQUIRED - must not be empty
+          catalog_ids: catalogIds, // REQUIRED - must not be empty array
+          tabulationPlanArray: tabulationPlans.map((plan) => ({
+            tabulationRegisteredToBeUsed: "",
+            tabulationPossibleStudyCohort: "",
+            tabulationInformationOfRequiredVariables: "",
+            tabulationFormationVariables: "",
+            tabulationDesiredDirection: "",
+            tabulationOrderInWhichTable: "",
+            tabulationAnyOtherRelevant: "",
+            tabulationPlan: {
+              // Use uploaded file data if available, otherwise dummy data
+              name: plan.uploadedFile?.name || "",
+              size: plan.uploadedFile?.size || 0,
+              id: plan.uploadedFile?.id || plan.id,
+            },
+          })),
+          hdabContacts: hdabContacts || undefined,
+          howWillTheDataFromDifferentSourcesBeLinked: dataLinkageMethod, // REQUIRED - must not be empty
+          indicateTheSizeOfTheStudyCohortEstimationOrExact: {
+            key: cohortSizeType,
+            value:
+              cohortSizeType === "estimation"
+                ? "This is an estimation"
+                : "This is exact",
+          },
+          indicateTheSizeOfTheStudyCohort: cohortSize,
+          whyNeedStudyCohortOfThisSize: whyNeedCohortSize,
+          variablesToBeUsedInDataExtractionAttachment: metadataFile
+            ? [
+                {
+                  id: metadataFile.id,
+                  name: metadataFile.name,
+                  size: metadataFile.size,
+                },
+              ]
+            : [],
+          timePeriodOfDataExtraction: timePeriod,
+          extractionMethod: {
+            key: extractionMethod,
+            value: extractionMethod,
+          },
+          sampleSize: sampleSize,
+          inclusionCriteria: inclusionCriteria,
+          potentialExclusionCriteria: exclusionCriteria,
+          howOftenDoesTheDataNeedToBeExtractedOnceOrMultiple: {
+            key: dataExtractionFrequency,
+            value: dataExtractionFrequency,
+          },
+          needForDataExtractionEvery: {
+            key: extractionFrequencyDetails,
+            value: extractionFrequencyDetails,
+          },
+          optOutOfTheMechanismProvidedInTheNationalLaw: {
+            key: optOutMechanism,
+            value: optOutMechanism,
+          },
+          providedJustificationException: optOutJustification,
+          whatIsTheFrequencyOfUpdates: updateFrequency,
+          needForDataExtractionEveryDescription: extractionFrequencyDetails,
+        },
+      ];
+      sectionDataRef.current = section6Data;
+    }
+  }, [
+    sectionDataRef,
+    applicationData,
+    countryId,
+    catalogIds,
+    hdabContacts,
+    dataLinkageMethod,
+    cohortSize,
+    cohortSizeType,
+    whyNeedCohortSize,
+    timePeriod,
+    extractionMethod,
+    sampleSize,
+    inclusionCriteria,
+    exclusionCriteria,
+    dataExtractionFrequency,
+    extractionFrequencyDetails,
+    optOutMechanism,
+    optOutJustification,
+    updateFrequency,
+    metadataFile?.id, // Only depend on the file ID, not the whole object
+    JSON.stringify(tabulationPlans), // Serialize to detect changes
   ]);
 
   const scrollToTop = () => {
@@ -43,6 +185,63 @@ const Section6: React.FC<SectionProps> = ({ applicationData }) => {
     if (tabulationPlans.length > 1) {
       setTabulationPlans(tabulationPlans.filter((p) => p.id !== id));
     }
+  };
+
+  // File upload handlers
+  const handleMetadataFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // TODO: Upload file to server and get file ID
+      // For now, create a mock uploaded file object
+      const uploadedFile: UploadedFile = {
+        id: Date.now().toString(), // Temporary ID
+        name: file.name,
+        size: file.size,
+      };
+      setMetadataFile(uploadedFile);
+      console.log("Metadata file uploaded:", uploadedFile);
+      // Reset input
+      e.target.value = "";
+    }
+  };
+
+  const handleTabulationFileUpload =
+    (planId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        // TODO: Upload file to server and get file ID
+        // For now, create a mock uploaded file object
+        const uploadedFile: UploadedFile = {
+          id: Date.now().toString(), // Temporary ID
+          name: file.name,
+          size: file.size,
+        };
+
+        // Update the tabulation plan with the uploaded file
+        setTabulationPlans((plans) =>
+          plans.map((plan) =>
+            plan.id === planId ? { ...plan, uploadedFile } : plan
+          )
+        );
+        console.log(
+          `Tabulation file uploaded for plan ${planId}:`,
+          uploadedFile
+        );
+        // Reset input
+        e.target.value = "";
+      }
+    };
+
+  const removeMetadataFile = () => {
+    setMetadataFile(null);
+  };
+
+  const removeTabulationFile = (planId: string) => {
+    setTabulationPlans((plans) =>
+      plans.map((plan) =>
+        plan.id === planId ? { ...plan, uploadedFile: undefined } : plan
+      )
+    );
   };
 
   return (
@@ -107,11 +306,13 @@ const Section6: React.FC<SectionProps> = ({ applicationData }) => {
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-2">
               To which health data access body do you want to submit the
-              application?
+              application? <span className="text-red-600">*</span>
             </label>
             <input
               type="text"
-              defaultValue="European Health Data Agency"
+              value={countryId}
+              onChange={(e) => setCountryId(e.target.value)}
+              placeholder="European Health Data Agency"
               className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
             />
           </div>
@@ -119,14 +320,38 @@ const Section6: React.FC<SectionProps> = ({ applicationData }) => {
           {/* Respective Dataset Record(s) */}
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-3">
-              Respective Dataset Record(s) and Distributions
+              Respective Dataset Record(s) and Distributions{" "}
+              <span className="text-red-600">*</span>
             </label>
-            <div className="border border-gray-300 rounded-lg p-4 flex items-center justify-between bg-surface">
-              <span className="text-sm text-gray-700">
-                Linking of registers for COVID-19 vaccine surveillance
-              </span>
-              <button className="text-primary hover:text-secondary">
-                <FontAwesomeIcon icon={faPlus} />
+            <div className="border border-gray-300 rounded-lg p-4 bg-surface">
+              {catalogIds.length > 0 ? (
+                catalogIds.map((catalogId, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between mb-2"
+                  >
+                    <span className="text-sm text-gray-700">{catalogId}</span>
+                    <button
+                      onClick={() =>
+                        setCatalogIds(catalogIds.filter((_, i) => i !== index))
+                      }
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500">No datasets selected</p>
+              )}
+              <button
+                onClick={() => {
+                  const newCatalog = prompt("Enter dataset catalog ID:");
+                  if (newCatalog) setCatalogIds([...catalogIds, newCatalog]);
+                }}
+                className="mt-2 text-primary hover:text-secondary"
+              >
+                <FontAwesomeIcon icon={faPlus} /> Add Dataset
               </button>
             </div>
           </div>
@@ -140,6 +365,8 @@ const Section6: React.FC<SectionProps> = ({ applicationData }) => {
             </label>
             <textarea
               rows={4}
+              value={hdabContacts}
+              onChange={(e) => setHdabContacts(e.target.value)}
               className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
             />
           </div>
@@ -154,6 +381,8 @@ const Section6: React.FC<SectionProps> = ({ applicationData }) => {
             </label>
             <textarea
               rows={4}
+              value={dataLinkageMethod}
+              onChange={(e) => setDataLinkageMethod(e.target.value)}
               className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
             />
           </div>
@@ -221,7 +450,8 @@ const Section6: React.FC<SectionProps> = ({ applicationData }) => {
             </label>
             <textarea
               rows={4}
-              defaultValue="Reason"
+              value={whyNeedCohortSize}
+              onChange={(e) => setWhyNeedCohortSize(e.target.value)}
               className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
             />
           </div>
@@ -277,19 +507,40 @@ const Section6: React.FC<SectionProps> = ({ applicationData }) => {
             <p className="text-xs text-gray-600 mb-3">
               Only pdf, doc, docx, xls, xlsx, odt files. Maximum size is 5 MB.
             </p>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex items-center justify-between">
-              <span className="text-sm text-gray-700">
-                HDEU - Health Data EU - DAMs Analysis.xf
-              </span>
-              <div className="flex gap-2">
-                <button className="text-gray-400 hover:text-gray-600">
-                  📎
-                </button>
-                <button className="text-gray-400 hover:text-gray-600">↓</button>
+
+            {/* Display uploaded file if exists */}
+            {metadataFile && (
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex items-center justify-between mb-3">
+                <span className="text-sm text-gray-700">
+                  {metadataFile.name}
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    onClick={removeMetadataFile}
+                    className="text-red-400 hover:text-red-600"
+                    title="Remove file"
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </div>
               </div>
-            </div>
-            <button className="mt-3 rounded bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-secondary">
-              Add Files
+            )}
+
+            {/* Hidden file input */}
+            <input
+              ref={metadataFileInputRef}
+              type="file"
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.odt"
+              onChange={handleMetadataFileUpload}
+              className="hidden"
+            />
+
+            {/* Upload button */}
+            <button
+              onClick={() => metadataFileInputRef.current?.click()}
+              className="mt-3 rounded bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-secondary"
+            >
+              {metadataFile ? "Replace File" : "Add Files"}
             </button>
           </div>
 
@@ -302,7 +553,8 @@ const Section6: React.FC<SectionProps> = ({ applicationData }) => {
             </label>
             <input
               type="text"
-              defaultValue="AAAAAA"
+              value={timePeriod}
+              onChange={(e) => setTimePeriod(e.target.value)}
               className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
             />
           </div>
@@ -370,7 +622,8 @@ const Section6: React.FC<SectionProps> = ({ applicationData }) => {
               </label>
               <input
                 type="text"
-                defaultValue="10001"
+                value={sampleSize}
+                onChange={(e) => setSampleSize(e.target.value)}
                 className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
               />
             </div>
@@ -391,7 +644,8 @@ const Section6: React.FC<SectionProps> = ({ applicationData }) => {
             </p>
             <textarea
               rows={4}
-              defaultValue="Description"
+              value={inclusionCriteria}
+              onChange={(e) => setInclusionCriteria(e.target.value)}
               className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
             />
           </div>
@@ -405,7 +659,8 @@ const Section6: React.FC<SectionProps> = ({ applicationData }) => {
             </label>
             <textarea
               rows={4}
-              defaultValue="Description"
+              value={exclusionCriteria}
+              onChange={(e) => setExclusionCriteria(e.target.value)}
               className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
             />
           </div>
@@ -555,21 +810,44 @@ const Section6: React.FC<SectionProps> = ({ applicationData }) => {
                       Only pdf, doc, docx, xls, xlsx, odt files. Maximum size is
                       5 MB.
                     </p>
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex items-center justify-between mb-2">
-                      <span className="text-sm text-gray-700">
-                        HDEU - Health Data EU - DAMs Analysis.xf
-                      </span>
-                      <div className="flex gap-2">
-                        <button className="text-gray-400 hover:text-gray-600">
-                          📎
-                        </button>
-                        <button className="text-gray-400 hover:text-gray-600">
-                          ↓
-                        </button>
+
+                    {/* Display uploaded file if exists */}
+                    {plan.uploadedFile && (
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex items-center justify-between mb-2">
+                        <span className="text-sm text-gray-700">
+                          {plan.uploadedFile.name}
+                        </span>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => removeTabulationFile(plan.id)}
+                            className="text-red-400 hover:text-red-600"
+                            title="Remove file"
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                    <button className="rounded bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-secondary">
-                      Select File
+                    )}
+
+                    {/* Hidden file input */}
+                    <input
+                      ref={(el) => {
+                        tabulationFileInputRefs.current[plan.id] = el;
+                      }}
+                      type="file"
+                      accept=".pdf,.doc,.docx,.xls,.xlsx,.odt"
+                      onChange={handleTabulationFileUpload(plan.id)}
+                      className="hidden"
+                    />
+
+                    {/* Upload button */}
+                    <button
+                      onClick={() =>
+                        tabulationFileInputRefs.current[plan.id]?.click()
+                      }
+                      className="rounded bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-secondary"
+                    >
+                      {plan.uploadedFile ? "Replace File" : "Select File"}
                     </button>
                   </div>
                 </div>

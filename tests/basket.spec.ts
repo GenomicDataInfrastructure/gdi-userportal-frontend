@@ -13,6 +13,11 @@ const shouldIgnoreConsoleError = (text: string) => {
     /style-src-elem/i,
     /style-src 'self'/i,
     /fonts\.googleapis\.com/i,
+    /dep0169/i,
+    /url\.parse\(\)/i,
+    /next-auth/i,
+    /client_fetch_error/i,
+    /api\/auth\/session/i,
   ];
   return ignoredPatterns.some((pattern) => pattern.test(text));
 };

@@ -6,7 +6,7 @@ sidebar_position: 4
 
 # Delete datasets
 
-Peramanently remove datasets that are obsolete or no longer needed. Before you proceed, ensure there are no dependencies on the dataset or consider changing visibility from public to private.
+Permanently remove datasets that are obsolete or no longer needed. Before you proceed, ensure there are no dependencies on the dataset or consider changing visibility from public to private.
 
 In this guide  
 > [Delete a dataset](#delete-a-dataset)  

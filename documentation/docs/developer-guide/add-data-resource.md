@@ -38,7 +38,7 @@ To add a data resource to your dataset:
 
 4. Fill out the data resource form. For guidance on filling out the form, see the definition of properties in the [DCAT-AP Vocabulary](https://semiceu.github.io/DCAT-AP/r5r/releases/3.0.0/).
 
-5. Select **Update Dataset** to save the data resource. Once the data resources is added, it appears in the list of data resources for the dataset. Repeat the steps to add more data resources as needed.
+5. Select **Update Dataset** to save the data resource. Once the data resource is added, it appears in the list of data resources for the dataset. Repeat the steps to add more data resources as needed.
 
 
 ## Reorder data resources

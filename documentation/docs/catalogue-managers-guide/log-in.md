@@ -8,7 +8,7 @@ sidebar_position: 2
 
 Access the GDI Dataset Catalogue to manage your organisation's genomic datasets. You need an active account with appropriate permissions to perform catalogue management tasks.
 
-To sigin in:
+To log in:
 
 1. Open the Dataset Catalogue at [https://catalogue.portal.gdi.lu](https://catalogue.portal.gdi.lu)
 

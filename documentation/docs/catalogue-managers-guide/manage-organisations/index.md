@@ -21,7 +21,7 @@ Control access to your institution's datasets by setting up organisations and ma
 - Assign role-based permissions to team members
 - Maintain institutional branding and identity
 
-Select an task to get started:
+Select a task to get started:
 
 - **[Create organisation](/catalogue-managers-guide/manage-organisations/create):** Set up a new organisation for your institution
 - **[Manage members](/catalogue-managers-guide/manage-organisations/manage-members):** Add members, assign roles, or remove members

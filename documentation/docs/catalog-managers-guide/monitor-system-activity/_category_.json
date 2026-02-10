@@ -1,8 +1,0 @@
-{
-  "label": "Monitor system activity",
-  "position": 7,
-  "link": {
-    "type": "generated-index",
-    "description": "Track activity streams and monitor user activity"
-  }
-}

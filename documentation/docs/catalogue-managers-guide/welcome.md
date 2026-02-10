@@ -4,42 +4,25 @@ sidebar_label: "Welcome"
 sidebar_position: 1
 ---
 
-# Welcome, catalogue managers
+# Welcome to the GDI Data Catalogue
 
-:::info content in progress
+Welcome to the GDI Data Catalogue user guide!
 
-We are working on this catalogue manager guide.
+The **GDI Data Catalogue** is the central management system for Europe's genomic dataset network. As part of the 1+ Million Genomes Initiative, this catalogue serves as the source for dataset information that users can access through the public-facing [GDI Data Portal](https://portal.gdi.lu/)<sup>↗</sup>.
 
-:::
+This guide is for **catalogue managers**—data stewards, repository administrators, and data managers—who are responsible for publishing, curating, and managing genomic datasets within the GDI ecosystem. 
 
-Welcome to the **GDI Dataset Catalogue Portal Guide**! This comprehensive documentation is designed for business users responsible for managing and curating data catalogues within the GDI ecosystem.
+Learn more about Genomic Data Infrastructure (GDI) and its founding initiatives.
 
-## Your role in the GDI ecosystem
+## Manage datasets in two ways
 
-As a catalogue manager, you're a business user who plays a crucial role in ensuring high-quality, discoverable genomic datasets are available to the European research community. Your day-to-day responsibilities include:
+- **[Harvest datasets automatically](./overview):** Set up automated harvesting from external sources like FAIR Data Points, DCAT-AP endpoints, or other CKAN catalogues to synchronise datasets continuously.
+- **Manage datasets manually:** Create and update individual datasets through the catalogue interface—add detailed metadata, upload resources, and ensure data quality standards are met.
 
-- **Publishing datasets** - Adding new research data to the catalogue
-- **Managing organisations** - Overseeing your institution's data presence
-- **Ensuring quality** - Maintaining high standards for data descriptions
-- **Team collaboration** - Working with colleagues on data publishing
-- **Supporting users** - Helping researchers find relevant datasets
 
-## Available guides
+   :::info Datasets flow to the Data Portal
 
-This documentation covers everything you need to manage datasets effectively:
+   All datasets you manage in this Data Catalogue are displayed in the public-facing **[GDI Data Portal](https://portal.gdi.lu/)**<sup>↗</sup>, making them discoverable to researchers across Europe. Your work ensures high-quality genomic data is available for research and clinical purposes.
 
-- **[Manage datasets](/manage-datasets)** - Learn to publish and update datasets
-- **[Manage organisations](/manage-organisations)** - Oversee your institution's data presence
-- **[Ensure data quality](./ensure-quality)** - Maintain high-quality data descriptions
-- **[Work with advanced features](./work-with-extensions)** - Explore enhanced portal capabilities
+   :::
 
-## Getting started
-
-Choose your starting point based on your immediate needs:
-
-- **New to the portal?** Start with [Manage datasets](/manage-datasets)
-- **Setting up your team?** Begin with [Manage organisations](/manage-organisations)
-- **Focus on quality?** Go to [Ensure data quality](./ensure-quality)
-- **Exploring features?** Check out [Work with advanced features](./work-with-extensions)
-
-Your work in managing datasets helps ensure that Europe's genomic data infrastructure serves the research community effectively.

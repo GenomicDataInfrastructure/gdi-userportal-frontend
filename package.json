@@ -16,7 +16,7 @@
     "build:script": "next build",
     "start": "npm-run-all prebuild start:script",
     "start:script": "next start",
-    "lint": "eslint . --ignore-pattern coverage --ignore-pattern documentation/.docusaurus",
+    "lint": "eslint .",
     "test:script": "jest --coverage",
     "test": "npm-run-all prebuild test:script",
     "type-check": "tsc --noEmit",
@@ -83,7 +83,7 @@
     "@tailwindcss/postcss": "^4.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.10.4",
-    "@types/react": "19.2.13",
+    "@types/react": "19.2.11",
     "@types/react-dom": "19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.18.2",
     "dotenv": "^17.1.0",
@@ -100,7 +100,7 @@
     "typescript": "^5.7.2"
   },
   "overrides": {
-    "@types/react": "19.2.13",
+    "@types/react": "19.2.11",
     "@types/react-dom": "19.2.3"
   }
 }

@@ -33,13 +33,11 @@ export default function Home() {
             <div className="row">
               <div className="col col--3">
                 <div className={styles.homeCard}>
-                  {
-                    <img
-                      src="img/im-a-user-people-1.svg"
-                      alt="User icon"
-                      style={{ width: 100, height: 100, marginBottom: 12 }}
-                    />
-                  }
+                  {<img
+                    src="img/im-a-user-people-1.svg"
+                    alt="User icon"
+                    style={{ width: 100, height: 100, marginBottom: 12 }}
+                  />}
                   <h3>
                     <Link to="/welcome-data-users">Data users</Link>
                   </h3>
@@ -53,13 +51,11 @@ export default function Home() {
 
               <div className="col col--3">
                 <div className={styles.homeCard}>
-                  {
-                    <img
-                      src="img/im-a-catalogue-manager-1.svg"
-                      alt="System Admin icon"
-                      style={{ width: 100, height: 100, marginBottom: 12 }}
-                    />
-                  }
+                  {<img
+                    src="img/im-a-catalogue-manager-1.svg"
+                    alt="System Admin icon"
+                    style={{ width: 100, height: 100, marginBottom: 12 }}
+                  />}
                   <h3>
                     <Link to="/catalogue-managers-guide/welcome">
                       Catalogue managers
@@ -75,13 +71,11 @@ export default function Home() {
 
               <div className="col col--3">
                 <div className={styles.homeCard}>
-                  {
-                    <img
-                      src="img/im-a-dev-1.svg"
-                      alt="User icon"
-                      style={{ width: 100, height: 100, marginBottom: 12 }}
-                    />
-                  }
+                  {<img
+                    src="img/im-a-dev-1.svg"
+                    alt="User icon"
+                    style={{ width: 100, height: 100, marginBottom: 12 }}
+                  />}
                   <h3>
                     <Link to="/welcome-developers">Developers</Link>
                   </h3>
@@ -95,13 +89,11 @@ export default function Home() {
 
               <div className="col col--3">
                 <div className={styles.homeCard}>
-                  {
-                    <img
-                      src="img/im-a-sys-admin-1.svg"
-                      alt="System Admin icon"
-                      style={{ width: 110, height: 110, marginBottom: 2 }}
-                    />
-                  }
+                  {<img
+                    src="img/im-a-sys-admin-1.svg"
+                    alt="System Admin icon"
+                    style={{ width: 110, height: 110, marginBottom: 2 }}
+                  />}
                   <h3>
                     <Link to="/welcome-system-admins">System admins</Link>
                   </h3>

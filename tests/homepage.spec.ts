@@ -2,34 +2,16 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { test, expect } from "./fixtures/mockApi";
-
-const isMocked = process.env.E2E_MODE === "mocked";
-
-const shouldIgnoreConsoleError = (text: string) => {
-  const ignoredPatterns = [
-    /content security policy/i,
-    /content-security-policy/i,
-    /style-src-elem/i,
-    /style-src 'self'/i,
-    /fonts\.googleapis\.com/i,
-  ];
-  return ignoredPatterns.some((pattern) => pattern.test(text));
-};
+import { test, expect } from "@playwright/test";
 
 test("Homepage renders correctly and loads dynamic content", async ({
   page,
 }) => {
-  test.skip(!isMocked, "Mocked-only test");
-
   // Capture console errors (useful for backend/data fetch failures)
   const consoleErrors: string[] = [];
   page.on("console", (msg) => {
     if (msg.type() === "error") {
-      const message = msg.text();
-      if (!shouldIgnoreConsoleError(message)) {
-        consoleErrors.push(message);
-      }
+      consoleErrors.push(msg.text());
     }
   });
 
@@ -45,14 +27,14 @@ test("Homepage renders correctly and loads dynamic content", async ({
   await expect(page.getByRole("textbox")).toBeVisible();
 
   // "About the data portal" section should be visible
-  const aboutHeading = page.getByRole("heading", {
-    name: /about the data portal/i,
-  });
-  await expect(aboutHeading).toBeVisible();
-  const aboutSection = aboutHeading.locator("..");
   await expect(
-    aboutSection.getByRole("link", { name: /read more/i })
-  ).toHaveAttribute("href", "/about");
+    page.getByRole("heading", { name: /about the data portal/i })
+  ).toBeVisible();
+  await expect(page.getByText("Read more")).toBeVisible();
+  await expect(page.getByRole("link", { name: /read more/i })).toHaveAttribute(
+    "href",
+    "/about"
+  );
 
   // ValueList renders with "Themes"
   const themesTitle = page.locator("h3", { hasText: "Themes" });

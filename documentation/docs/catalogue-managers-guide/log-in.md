@@ -4,7 +4,7 @@ sidebar_label: "Log in"
 sidebar_position: 2
 ---
 
-# Login to the GDI Data Catalogue
+# Log in to the GDI Data Catalogue
 
 Access the GDI Dataset Catalogue to manage your organisation's genomic datasets. You need an active account with appropriate permissions to perform catalogue management tasks.
 

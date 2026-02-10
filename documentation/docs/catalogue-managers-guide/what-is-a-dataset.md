@@ -26,7 +26,7 @@ When you add a dataset to the GDI Data Catalogue, you provide two types of infor
     - **VCF (Variant Call Format):** For storing gene sequence variations
     - **FASTA/FASTQ:** For storing raw sequence reads
     - **BAM/CRAM:** For storing aligned sequence data
-    - **CSV/TSV:** For storing tabular data such as phenotypic
+    - **CSV/TSV:** For storing tabular data such as phenotypic data
 
 <!-- TODO: verify supported file types -->
 

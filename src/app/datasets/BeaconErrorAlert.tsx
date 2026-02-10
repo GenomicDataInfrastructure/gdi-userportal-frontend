@@ -12,6 +12,9 @@ type BeaconErrorAlertProps = {
 };
 
 export default function BeaconErrorAlert({ error }: BeaconErrorAlertProps) {
+  const formattedError = error.trim();
+  const needsPeriod = !/[.!?]$/.test(formattedError);
+  
   return (
     <div className="mb-6 shadow-lg rounded-lg border-l-4 border-l-warning bg-warning/5 p-4">
       <div className="flex items-start gap-3">
@@ -24,7 +27,9 @@ export default function BeaconErrorAlert({ error }: BeaconErrorAlertProps) {
             Beacon Network Unavailable
           </div>
           <p className="text-sm text-gray-700">
-            {error}. Results shown are from the main catalog only.
+            {formattedError}
+            {needsPeriod && "."}
+            {" Results shown are from the main catalog only."}
           </p>
         </div>
       </div>

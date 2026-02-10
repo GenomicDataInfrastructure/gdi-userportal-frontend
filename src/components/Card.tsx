@@ -8,6 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
+import { useMemo } from "react";
 import Chips from "./Chips";
 import contentConfig from "@/config/contentConfig";
 
@@ -42,6 +43,11 @@ export default function Card({
   externalLabel,
 }: CardProps) {
   const isExternal = isExternalProp ?? !!externalUrl;
+  const beaconRecordItem = useMemo(
+    () => cardItems.find((item) => item.text && item.text.includes("Record")),
+    [cardItems]
+  );
+  
   return (
     <Link
       href={url}
@@ -109,9 +115,7 @@ export default function Card({
                 )
             )}
           </div>
-          {cardItems.some(
-            (item) => item.text && item.text.includes("Record")
-          ) && (
+          {beaconRecordItem && (
             <div className="mt-4 bg-info/5 rounded-md p-3 border-l-4 border-info w-full">
               <div className="flex items-center gap-x-2 mb-2">
                 <span className="text-sm font-semibold text-black">
@@ -121,22 +125,19 @@ export default function Card({
               <div className="flex gap-x-2.5 text-xs sm:text-[15px]">
                 <div className="my-auto">
                   <FontAwesomeIcon
-                    icon={
-                      cardItems.find((item) => item.text.includes("Record"))!
-                        .icon
-                    }
+                    icon={beaconRecordItem.icon}
                     className="text-info"
                   />
                 </div>
                 <span className="text-info font-medium">
-                  {cardItems.find((item) => item.text.includes("Record"))?.text}
+                  {beaconRecordItem.text}
                 </span>
               </div>
             </div>
           )}
         </div>
       </div>
-      {cardItems.some((item) => item.text && item.text.includes("Record")) && (
+      {beaconRecordItem && (
         <div className="mt-4 bg-info/5 rounded-md p-3 border-l-4 border-info w-full">
           <div className="flex items-center gap-x-2 mb-2">
             <span className="text-sm font-semibold text-black">
@@ -146,14 +147,12 @@ export default function Card({
           <div className="flex gap-x-2.5 text-xs sm:text-[15px]">
             <div className="my-auto">
               <FontAwesomeIcon
-                icon={
-                  cardItems.find((item) => item.text.includes("Record"))!.icon
-                }
+                icon={beaconRecordItem.icon}
                 className="text-info"
               />
             </div>
             <span className="text-info font-medium">
-              {cardItems.find((item) => item.text.includes("Record"))?.text}
+              {beaconRecordItem.text}
             </span>
           </div>
         </div>

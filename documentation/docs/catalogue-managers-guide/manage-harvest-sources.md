@@ -47,16 +47,16 @@ Permanently remove a harvest source configuration when you no longer need automa
 2. Select the harvest source you want to delete.
 3. Select **Admin**, and then **Edit**. 
 4. Select **Delete** at the bottom of the form.
-5. Select **Delete source** or **Delete and clear source**, and then confirm the deletion. <!-- (To Reviwer: clarify the difference between these options in the UI and documentation - Does clearing mean it will clear the datasets it harvested?)  -->
+5. Select **Delete source** or **Delete and clear source**, and then confirm the deletion. <!-- (To Reviewer: clarify the difference between these options in the UI and documentation - Does clearing mean it will clear the datasets it harvested?)  -->
  
 
 :::info HARVESTED DATASETS REMAIN
 
-Deleting a harvest source does **not** delete the harvested datasets. They remain in your catalogue but will no longer synchronise automatically with the source.  <!-- (To Reviwer: pls verify the accuracy of this statement  -->
+Deleting a harvest source does **not** delete the harvested datasets. They remain in your catalogue but will no longer synchronise automatically with the source.  <!-- (To Reviewer: pls verify the accuracy of this statement  -->
 
 :::
 
-  <!-- (To Reviwer: pls verify the accuracy of these statements  -->
+  <!-- (To Reviewer: pls verify the accuracy of these statements  -->
 **What happens after deletion:**
 - The harvest source configuration is permanently removed
 - Scheduled harvests stop
@@ -75,7 +75,7 @@ If deletion fails during the `import_stage`, the dataset becomes permanently hid
 
 :::
 
-<!-- to Reviewer: pls verify the accuracy of the knowne Deletion Behvaiour statement above. This is based on the original statement: "If a dataset is set for deletion and something goes wrong during the `import_stage` a dataset stays forever as no more current one." -->
+<!-- to Reviewer: pls verify the accuracy of the Known Deletion Behaviour statement above. This is based on the original statement: "If a dataset is set for deletion and something goes wrong during the `import_stage` a dataset stays forever as no more current one." -->
 
 :::tip Editing harvested datasets
 
@@ -83,5 +83,5 @@ Manual edits to harvested datasets are overwritten during the next harvest run. 
 
 :::
 
-<!-- To reviwer: pls check accuracy here -->
+<!-- To reviewer: pls check accuracy here -->
 

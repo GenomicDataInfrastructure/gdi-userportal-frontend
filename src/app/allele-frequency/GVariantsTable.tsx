@@ -6,6 +6,7 @@
 import { GVariantsSearchResponse } from "@/app/api/discovery/open-api/schemas";
 import VariantAddToBasketButton from "./components/VariantAddToBasketButton";
 import { findDatasetByIdentifier } from "@/utils/datasetEntitlements";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 type GVariantsTableProps = {
@@ -20,6 +21,8 @@ const renderCell = (value: any) =>
   );
 
 export default function GVariantsTable({ results }: GVariantsTableProps) {
+  const router = useRouter();
+
   const groupedByBeacon = results.reduce(
     (acc, variant) => {
       if (!variant.beacon) {
@@ -37,7 +40,7 @@ export default function GVariantsTable({ results }: GVariantsTableProps) {
   const handleDatasetClick = async (identifier: string) => {
     const dataset = await findDatasetByIdentifier(identifier);
     if (dataset?.id) {
-      window.open(`/datasets/${dataset.id}`, "_blank");
+      router.push(`/datasets/${dataset.id}`);
     } else {
       console.warn(`Dataset not found for identifier: ${identifier}`);
     }

@@ -109,6 +109,31 @@ export default function Card({
                 )
             )}
           </div>
+          {cardItems.some(
+            (item) => item.text && item.text.includes("Record")
+          ) && (
+            <div className="mt-4 bg-info/5 rounded-md p-3 border-l-4 border-info w-full">
+              <div className="flex items-center gap-x-2 mb-2">
+                <span className="text-sm font-semibold text-black">
+                  Beacon Network
+                </span>
+              </div>
+              <div className="flex gap-x-2.5 text-xs sm:text-[15px]">
+                <div className="my-auto">
+                  <FontAwesomeIcon
+                    icon={
+                      cardItems.find((item) => item.text.includes("Record"))!
+                        .icon
+                    }
+                    className="text-info"
+                  />
+                </div>
+                <span className="text-info font-medium">
+                  {cardItems.find((item) => item.text.includes("Record"))?.text}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       {cardItems.some((item) => item.text && item.text.includes("Record")) && (

@@ -13,6 +13,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "./shadcn/pagination";
+import { useSearchParams } from "next/navigation";
 
 type PaginationProps = {
   datasetCount: number;
@@ -27,10 +28,11 @@ function PaginationContainer({
   pathname,
   currentPage,
 }: Readonly<PaginationProps>) {
+  const searchParams = useSearchParams();
   const lastPageNb = Math.ceil(datasetCount / datasetPerPage) || 1;
 
   function createHref(page: number) {
-    const params = new URLSearchParams({ page: currentPage.toString() });
+    const params = new URLSearchParams(searchParams.toString());
     params.set("page", page.toString());
     return `${pathname}?${params}`;
   }

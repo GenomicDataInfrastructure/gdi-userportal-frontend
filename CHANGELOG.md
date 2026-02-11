@@ -12,15 +12,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+
 ## [v1.6.1] - 2026-02-09
 
 ### Added
+
 - feat: Reduce dependency of E2E tests to backend components during development (#787) by @Kacem Bechka in 369e3c1
 - feat: make favicon configurable by @Rania Hamdani in 02ef2e3
 - feat: add Beacon Network toggle for optional dataset search (#717) by @Inderpal Singh in 9bf6730
 
-
 ### Changed
+
 - chore(deps): update dependency @types/react to v19.2.13 by @Renovate Bot in 863e2d9
 - refactor: remove continue-on-error from Trivy scanner in workflows and clean up documentation formatting (#784) by @Kacem Bechka in 9f49fe1
 - chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v9.7-1770222364 by @Renovate Bot in 25c911f
@@ -38,8 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - replaced screenshots-batch1 by @Rose Pasigna in 6fdce93
 - aligned color theme with new branding by @Rose Pasigna in 3f6d244
 
-
 ### Fixed
+
 - fix: update version increment logic in release workflow (#788) by @Kacem Bechka in d608f06
 - fix alt text by @Rose Pasigna in 69c2486
 - fix for sonar review: suggestion: Reduce duplication of hard-coded brand colors by reusing the CSS custom properties. by @Rose Pasigna in 3832514
@@ -50,8 +52,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - chore(deps): update react monorepo (patch) (#778) by @LNDS-Sysadmins in f2ff14d
 - fix(deps): update opentelemetry-js monorepo (minor) (#769) by @LNDS-Sysadmins in 6206faf
 - fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.69.0 (#768) by @LNDS-Sysadmins in 5b70787
-
-
 
 ## [v1.6.0] - 2026-01-26
 

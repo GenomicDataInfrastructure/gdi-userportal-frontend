@@ -170,11 +170,6 @@ export default function GVariantsSearchBar({
       return;
     }
 
-    if (!searchFilterInput.variant) {
-      setErrorMessage("Variant cannot be empty");
-      return;
-    }
-
     onSearchAction(searchFilterInput);
   };
   return (

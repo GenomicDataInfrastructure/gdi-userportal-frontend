@@ -38,6 +38,13 @@ export default function AlleleFrequencyPage({
     setError(null);
 
     try {
+      if (!props.variant || props.variant.trim() === "") {
+        setResults([]);
+        setTriedSearching(true);
+        setLoading(false);
+        return;
+      }
+
       const parts = props.variant.split("-");
       if (parts.length !== 4) throw new Error("Invalid variant format");
       const [referenceName, start, referenceBases, alternateBases] = parts;

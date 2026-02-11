@@ -16,7 +16,7 @@ You can export metadata in the following formats:
 
 To export metadata:
 
-1.  [Browse or search](/category/explore-datasets-1) for datasets you want to export metadata from.
+1.  [Browse or search](/category/explore-datasets) for datasets you want to export metadata from.
 
 2.  Select a dataset to view its details.
 

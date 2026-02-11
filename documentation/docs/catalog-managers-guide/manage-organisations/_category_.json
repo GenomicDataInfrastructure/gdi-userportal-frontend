@@ -1,8 +1,0 @@
-{
-  "label": "Manage organisations",
-  "position": 4,
-  "link": {
-    "type": "generated-index",
-    "description": "Create organisations and manage user roles and permissions"
-  }
-}

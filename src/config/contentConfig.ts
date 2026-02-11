@@ -21,7 +21,6 @@ interface ContentConfig {
   addParticipantsEnabled: boolean;
   showAlleleFrequency: boolean;
   footerLogos?: Array<{ src: string; alt: string }>;
-  favicon: string;
 }
 
 const contentConfig: ContentConfig = {
@@ -53,7 +52,6 @@ const contentConfig: ContentConfig = {
   footerLogos: env("NEXT_PUBLIC_FOOTER_LOGOS")
     ? JSON.parse(env("NEXT_PUBLIC_FOOTER_LOGOS") || "[]")
     : undefined,
-  favicon: env("NEXT_PUBLIC_FAVICON") || "/favicon.ico",
 };
 
 export default contentConfig;

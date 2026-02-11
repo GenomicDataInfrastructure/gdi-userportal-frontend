@@ -13,46 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.3.9] - 2025-04-04
 
-## [v1.6.1] - 2026-02-09
-
-### Added
-
-- feat: Reduce dependency of E2E tests to backend components during development (#787) by @Kacem Bechka in 369e3c1
-- feat: make favicon configurable by @Rania Hamdani in 02ef2e3
-- feat: add Beacon Network toggle for optional dataset search (#717) by @Inderpal Singh in 9bf6730
-
-### Changed
-
-- chore(deps): update dependency @types/react to v19.2.13 by @Renovate Bot in 863e2d9
-- refactor: remove continue-on-error from Trivy scanner in workflows and clean up documentation formatting (#784) by @Kacem Bechka in 9f49fe1
-- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v9.7-1770222364 by @Renovate Bot in 25c911f
-- chore(deps): update dependency @types/react to v19.2.11 by @Renovate Bot in 0d3d4b1
-- replace homepage icons by @Rose Pasigna in 06a75f0
-- Regenerate search index after merging main by @Rose Pasigna in 9985c9c
-- refine signin and welcome pages by @Rose Pasigna in 33d29f9
-- add external dataset howto by @Rose Pasigna in b9487b3
-- chore: update Trivy vulnerability scanner to continue on error for base image vulnerabilities for 1 week (#783) by @Kacem Bechka in 7acb943
-- chore(deps): update docker/login-action action to v3.7.0 (#780) by @LNDS-Sysadmins in 605385d
-- chore(deps): update dependency eslint-config-next to v16.1.6 by @Renovate Bot in 22052cd
-- chore(deps): bump next from 16.1.4 to 16.1.5 (#779) by @dependabot[bot] in 08ef140
-- doc: update CHANGELOG.md for v1.6.0 (#776) by @github-actions[bot] in 0d29b08
-- update how to export metadata by @Rose Pasigna in 55f797e
-- replaced screenshots-batch1 by @Rose Pasigna in 6fdce93
-- aligned color theme with new branding by @Rose Pasigna in 3f6d244
-
-### Fixed
-
-- fix: update version increment logic in release workflow (#788) by @Kacem Bechka in d608f06
-- fix alt text by @Rose Pasigna in 69c2486
-- fix for sonar review: suggestion: Reduce duplication of hard-coded brand colors by reusing the CSS custom properties. by @Rose Pasigna in 3832514
-- fix icon size by @Rose Pasigna in 6bbbe9d
-- fix home page links and banner by @Rose Pasigna in 4906939
-- fix: Dataset Pages is throwing an unexpected exception (#782) by @Kacem Bechka in 54df9ae
-- fix(deps): update dependency next to v16.1.5 [security] by @Renovate Bot in 6a5bc26
-- chore(deps): update react monorepo (patch) (#778) by @LNDS-Sysadmins in f2ff14d
-- fix(deps): update opentelemetry-js monorepo (minor) (#769) by @LNDS-Sysadmins in 6206faf
-- fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.69.0 (#768) by @LNDS-Sysadmins in 5b70787
-
 ## [v1.6.0] - 2026-01-26
 
 ### Added

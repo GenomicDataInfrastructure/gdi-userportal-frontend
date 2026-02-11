@@ -36,7 +36,7 @@ const FormField: React.FC<FormFieldProps> = ({
       <div className="flex flex-col">
         {tooltip && (
           <>
-            <Tooltip message="Example value: 3-45864731-T-C" />
+            <Tooltip message="Example value: 21-9411448-G-T" />
           </>
         )}
 
@@ -104,7 +104,7 @@ const formFields = [
     type: "text",
     placeholder: "Search for a variant",
     tooltip:
-      "The genomic variant in format: chromosome:position:reference:alternate (e.g., 11:87202:G:T)",
+      "The genomic variant in format: chromosome-position-reference-alternate (e.g., 21-9411448-G-T)",
   },
   {
     label: "Ref Genome",
@@ -220,8 +220,8 @@ export default function GVariantsSearchBar({
         <span className="text-black text-md">Variant Example: </span>
         <Button
           className="text-info hover:underline p-0 m-0"
-          text="3-45864731-T-C"
-          onClick={() => updateData("variant", "3-45864731-T-C")}
+          text="21-9411448-G-T"
+          onClick={() => updateData("variant", "21-9411448-G-T")}
         />
       </div>
 

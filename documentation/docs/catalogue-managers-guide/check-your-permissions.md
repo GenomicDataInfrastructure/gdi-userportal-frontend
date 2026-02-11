@@ -73,7 +73,6 @@ Organisation Admins can manage other Admins, including changing their roles or r
 
 :::
 
-
 :::tip Full documentation
 
 For detailed technical information about how permissions work, see the [CKAN authorisation documentation](https://docs.ckan.org/en/2.9/maintaining/authorization.html)<sup>↗</sup>. CKAN is the system that powers the GDI Catalogue Portal.

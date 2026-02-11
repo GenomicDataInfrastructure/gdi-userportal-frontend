@@ -58,7 +58,7 @@ export default function BeaconToggle() {
           />
           <div className="flex-1">
             <div className="flex items-center gap-2 font-semibold text-base mb-1">
-              <span>Include Beacon Network</span>
+              <span>Include Individual-level data discovery</span>
               {includeBeacon && (
                 <span className="text-xs bg-warning text-black px-2 py-0.5 rounded-full font-normal">
                   Active
@@ -69,7 +69,7 @@ export default function BeaconToggle() {
               {includeBeacon ? (
                 <>
                   Showing datasets with individual-level data and record counts
-                  from Beacon Network{" "}
+                  from Individual-level data discovery{" "}
                   <span className="text-secondary font-medium">
                     (searches may be slower)
                   </span>

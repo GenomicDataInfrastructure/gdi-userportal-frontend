@@ -110,7 +110,10 @@ const formFields = [
     label: "Ref Genome",
     fieldKey: "refGenome",
     type: "select",
-    options: [{ value: "GRCh37", label: "GRCh37" }],
+    options: [
+      { value: "All", label: "All" },
+      { value: "GRCh37", label: "GRCh37" },
+    ],
   },
   {
     label: "Sex",
@@ -136,7 +139,7 @@ export default function GVariantsSearchBar({
 }: GVariantsSearchBarProps) {
   const [searchFilterInput, setSearchFilterInput] = useState<SearchInputData>({
     variant: "",
-    refGenome: "GRCh37",
+    refGenome: "All",
     sex: "All",
     countryOfBirth: "All",
   });
@@ -167,11 +170,6 @@ export default function GVariantsSearchBar({
 
   const search = () => {
     if (errorMessage) {
-      return;
-    }
-
-    if (!searchFilterInput.variant) {
-      setErrorMessage("Variant cannot be empty");
       return;
     }
 

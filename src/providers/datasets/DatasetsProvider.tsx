@@ -62,13 +62,14 @@ const DatasetsContext = createContext<DatasetsState | undefined>(undefined);
 function reducer(state: DatasetsState, action: DatasetsAction): DatasetsState {
   switch (action.type) {
     case DatasetsActionType.LOADING:
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: true, beaconError: undefined };
     case DatasetsActionType.DATASETS_LOADED:
       return {
         ...state,
         isLoading: false,
         datasets: action.payload?.datasets,
         datasetCount: action.payload?.datasetCount,
+        beaconError: action.payload?.beaconError,
       };
     case DatasetsActionType.REJECTED:
       return {
@@ -88,6 +89,7 @@ const initialState = {
   datasetCount: undefined,
   isLoading: false,
   errorCode: undefined,
+  beaconError: undefined,
 };
 
 type DatasetsProviderProps = {
@@ -100,8 +102,10 @@ export default function DatasetsProvider({
   searchParams,
 }: DatasetsProviderProps) {
   const { activeFilters } = useFilters();
-  const [{ datasets, datasetCount, isLoading, errorCode }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { datasets, datasetCount, isLoading, errorCode, beaconError },
+    dispatch,
+  ] = useReducer(reducer, initialState);
   const { page, q, sort, beacon } = searchParams;
 
   const fetchDatasets = useCallback(async () => {
@@ -121,11 +125,13 @@ export default function DatasetsProvider({
 
     try {
       const data = await searchDatasetsApi(options);
+
       dispatch({
         type: DatasetsActionType.DATASETS_LOADED,
         payload: {
           datasets: data.results,
           datasetCount: data.count,
+          beaconError: data.beaconError,
         },
       });
     } catch (error) {
@@ -150,6 +156,7 @@ export default function DatasetsProvider({
         datasetCount,
         isLoading,
         errorCode,
+        beaconError,
       }}
     >
       {children}

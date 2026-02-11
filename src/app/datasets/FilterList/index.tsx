@@ -62,7 +62,7 @@ export default function FilterList() {
         <section>
           <div className="border-t pt-6">
             <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2 tracking-wide">
-              Beacon Network Filters
+              Individual-level data discovery Filters
             </h3>
             <p className="text-xs text-gray-600 mb-4">
               Filter by individual-level data characteristics

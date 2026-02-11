@@ -13,14 +13,26 @@ import { use } from "react";
 import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
 import ActiveFilters from "@/app/datasets/ActiveFilters";
-import DatasetsProvider from "@/providers/datasets/DatasetsProvider";
+import DatasetsProvider, {
+  useDatasets,
+} from "@/providers/datasets/DatasetsProvider";
 import Error from "@/app/error";
 import { UrlSearchParams } from "@/app/params";
 import BeaconToggle from "./BeaconToggle";
+import BeaconErrorAlert from "./BeaconErrorAlert";
 
 type DatasetsPageProps = {
   searchParams: Promise<UrlSearchParams>;
 };
+
+function BeaconErrorWrapper() {
+  const { beaconError } = useDatasets();
+  return beaconError ? (
+    <div className="col-start-0 col-span-12 xl:col-span-10 xl:col-start-2">
+      <BeaconErrorAlert error={beaconError} />
+    </div>
+  ) : null;
+}
 
 export default function DatasetsPage({ searchParams }: DatasetsPageProps) {
   const _searchParams = use(searchParams);
@@ -50,6 +62,7 @@ export default function DatasetsPage({ searchParams }: DatasetsPageProps) {
         </div>
 
         <DatasetsProvider searchParams={_searchParams}>
+          <BeaconErrorWrapper />
           <DatasetCount />
           <div className="col-start-0 col-span-12 flex flex-col gap-4 sm:block xl:hidden">
             <div className="my-4 h-fit">

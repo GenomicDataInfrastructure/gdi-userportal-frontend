@@ -15,6 +15,7 @@ export type DatasetsState = {
   datasetCount?: number;
   datasets?: SearchedDataset[];
   errorCode?: number;
+  beaconError?: string;
 };
 
 export type DatasetsAction = {
@@ -23,5 +24,6 @@ export type DatasetsAction = {
     datasets?: SearchedDataset[];
     datasetCount?: number;
     errorCode?: number;
+    beaconError?: string;
   };
 };

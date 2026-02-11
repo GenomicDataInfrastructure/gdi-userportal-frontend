@@ -93,7 +93,6 @@ type GVariantsSearchBarProps = {
 export type SearchInputData = {
   variant: string;
   refGenome: string;
-  cohort: string;
   sex: string;
   countryOfBirth: string;
 };
@@ -112,16 +111,6 @@ const formFields = [
     fieldKey: "refGenome",
     type: "select",
     options: [{ value: "GRCh37", label: "GRCh37" }],
-  },
-  {
-    label: "Cohort",
-    fieldKey: "cohort",
-    type: "select",
-    options: [
-      { value: "All", label: "All" },
-      { value: "COVID", label: "COVID" },
-    ],
-    tooltip: "A group of people with a shared characteristic",
   },
   {
     label: "Sex",
@@ -148,7 +137,6 @@ export default function GVariantsSearchBar({
   const [searchFilterInput, setSearchFilterInput] = useState<SearchInputData>({
     variant: "",
     refGenome: "GRCh37",
-    cohort: "All",
     sex: "All",
     countryOfBirth: "All",
   });
@@ -192,7 +180,7 @@ export default function GVariantsSearchBar({
   return (
     <div className="mb-6">
       <h2 className="text-lg font-semibold mb-2">Search for your variant:</h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 items-end">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-end">
         {formFields.map(
           ({
             label,

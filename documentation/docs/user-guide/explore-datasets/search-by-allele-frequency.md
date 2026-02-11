@@ -32,7 +32,6 @@ This search tool allows you to:
 2. Enter your search criteria:
    - **Variant:** The full form of the genomic variant, usually represented in the format `chr-position-ref-alt`. Example: `3-45864731-T-C`
    - **Ref Genome:** Select the reference genome assembly to use for the search.
-   - **Cohort:** Select the cohort of interest. Cohorts are groups of individuals sharing common characteristics, for example, those with a specific condition such as COVID.
    - **Sex (optional):** Filter results by biological sex (Male or Female).
    - **Country of Birth (optional):** Filter results by country of birth using 2-letter ISO country codes.
 

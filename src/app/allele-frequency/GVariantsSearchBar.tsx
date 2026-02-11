@@ -162,7 +162,7 @@ export default function GVariantsSearchBar({
       setErrorMessage(() =>
         isVariantValid(updatedState.variant)
           ? ""
-          : "Incorrect variant format. Please use: chromosome-position-reference-alternate (e.g., 3-45864731-T-C)"
+          : "Incorrect variant information"
       );
       return updatedState;
     });

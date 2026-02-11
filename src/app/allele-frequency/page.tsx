@@ -38,31 +38,36 @@ export default function AlleleFrequencyPage({
     setError(null);
 
     try {
-      const parts = props.variant.split("-");
-      if (parts.length !== 4) throw new Error("Invalid variant format");
-      const [referenceName, start, referenceBases, alternateBases] = parts;
-      const startNum = parseInt(start, 10);
-      if (isNaN(startNum)) throw new Error("Invalid start position");
-      const startPosition = [startNum];
-
       const params: {
-        referenceName: string;
-        start: number[];
+        referenceName?: string;
+        start?: number[];
         end?: number[] | null;
-        referenceBases: string;
-        alternateBases: string;
-        assemblyId: string;
+        referenceBases?: string;
+        alternateBases?: string;
+        assemblyId?: string;
         sex?: string;
         countryOfBirth?: string;
-      } = {
-        referenceName,
-        start: startPosition,
-        end: null,
-        referenceBases,
-        alternateBases,
-        assemblyId: props.refGenome,
-      };
+      } = {};
 
+      // Only include variant fields if variant is provided
+      if (props.variant && props.variant.trim() !== "") {
+        const parts = props.variant.split("-");
+        if (parts.length !== 4) throw new Error("Invalid variant format");
+        const [referenceName, start, referenceBases, alternateBases] = parts;
+        const startNum = parseInt(start, 10);
+        if (isNaN(startNum)) throw new Error("Invalid start position");
+        const startPosition = [startNum];
+
+        params.referenceName = referenceName;
+        params.start = startPosition;
+        params.end = null;
+        params.referenceBases = referenceBases;
+        params.alternateBases = alternateBases;
+      }
+
+      if (props.refGenome && props.refGenome !== "All") {
+        params.assemblyId = props.refGenome;
+      }
       if (props.sex && props.sex !== "All") {
         params.sex = props.sex;
       }

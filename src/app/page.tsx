@@ -8,7 +8,7 @@ import SearchBar from "@/components/Searchbar";
 import { use, useEffect, useState } from "react";
 import RecentDatasets from "@/components/RecentDatasets";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { useAlert } from "@/providers/AlertProvider";
 import { AxiosError } from "axios";
 import contentConfig from "@/config/contentConfig";
@@ -92,6 +92,28 @@ const HomePage = ({ searchParams }: HomePageProps) => {
           {contentConfig.homepageSubtitle}
         </h2>
       </div>
+      {contentConfig.homeNoticeEnabled && contentConfig.homeNoticeMessage && (
+        <div
+          className="mx-auto mb-10 w-full max-w-4xl rounded-lg border-l-4 border-l-warning bg-warning/10 p-4 text-left shadow-lg"
+          role="status"
+          aria-live="polite"
+        >
+          <div className="flex items-start gap-3">
+            <FontAwesomeIcon
+              icon={faTriangleExclamation}
+              className="mt-1 h-5 w-5 shrink-0 text-warning"
+            />
+            <div>
+              <h3 className="mb-1 text-lg font-semibold">
+                {contentConfig.homeNoticeTitle}
+              </h3>
+              <p className="text-sm leading-6 md:text-base">
+                {contentConfig.homeNoticeMessage}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="flex justify-center mb-24">
         <div className="w-full lg:w-4/5 xl:w-3/4">
           <SearchBar searchParams={_searchParams} size="large" />

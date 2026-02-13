@@ -13,6 +13,9 @@ interface ContentConfig {
   footerText: string;
   homepageTitle: string;
   homepageSubtitle: string;
+  homeNoticeEnabled: boolean;
+  homeNoticeTitle?: string;
+  homeNoticeMessage?: string;
   aboutContent: string;
   bannerLink: string;
   siteTitle: string;
@@ -37,6 +40,13 @@ const contentConfig: ContentConfig = {
   homepageSubtitle:
     env("NEXT_PUBLIC_HOMEPAGE_SUBTITLE") ||
     "The Genomic Data Infrastructure (GDI) project is enabling access to genomic and related phenotypic and clinical data across Europe.",
+  homeNoticeEnabled:
+    env("NEXT_PUBLIC_HOME_NOTICE_ENABLED")?.toLowerCase() === "true",
+  homeNoticeTitle:
+    env("NEXT_PUBLIC_HOME_NOTICE_TITLE") || "Planned maintenance notice",
+  homeNoticeMessage:
+    env("NEXT_PUBLIC_HOME_NOTICE_MESSAGE") ||
+    "Because of scheduled migration in our provider, the User portal could get service disruption on 19 February between 11:00 and 14:00.",
   aboutContent:
     env("NEXT_PUBLIC_HOMEPAGE_ABOUT_CONTENT") ||
     "The Genomic Data Infrastructure (GDI) homepage is your gateway to an extensive network of genomic data designed to revolutionize research, policymaking, and healthcare in Europe. The GDI project aims to provide seamless access to over one million genome sequences, facilitating groundbreaking advancements in personalized medicine for various diseases, including cancer and rare conditions. By integrating genomic, phenotypic, and clinical data, GDI supports precise diagnostics, treatments, and clinical decision-making. Explore our user-friendly platform to connect with crucial datasets, and join our mission to enhance healthcare outcomes and foster innovation across Europe. Visit the GDI website for more information.",

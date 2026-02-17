@@ -8,7 +8,7 @@ sidebar_position: 3
 
 In GDI, a **dataset** is a structured collection of genomic information pertaining to human health, diseases, and research studies. A dataset can be a single file or a collection of files that provide comprehensive information about a specific research topic, disease area, or study cohort. For example, a genomic data for _COVID-19 Viral Sequences_ can include dataset records describing _patient data_, _virus samples_, and _sequencing results_.
 
-When you add a dataset to the GDI Data Catalogue, you provide two types of information that together give a complete picture of the genomic subject: **metadata** describes the dataset itself, and **data resources** are the actual genomic data files associated with the dataset. 
+When you add a dataset to the GDI Data Catalogue, you provide two types of information that together give a complete picture of the genomic subject: **metadata** describes the dataset itself, and **data resources** are the actual genomic data files associated with the dataset.
 
 ## Metadata
 

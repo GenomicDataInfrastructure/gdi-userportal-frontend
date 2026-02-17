@@ -8,17 +8,17 @@ sidebar_position: 8
 
 Edit, trigger, and delete harvest sources to maintain accurate synchronisation with external data repositories.
 
-In this guide  
+In this guide
+
 > [Edit a harvest source](#edit-a-harvest-source)  
 > [Trigger a manual harvest](#trigger-a-manual-harvest)  
-> [Delete a harvest source](#delete-a-harvest-source)    
-
+> [Delete a harvest source](#delete-a-harvest-source)
 
 ## Edit a harvest source
 
 Update your harvest source configuration when URLs change, credentials expire, or harvest settings need adjustment.
 
-1. Go to **Harvest Sources**.  
+1. Go to **Harvest Sources**.
 2. Select the harvest source you want to edit.
 3. Select **Admin**, and then **Edit**.
 4. Update the configuration, and select **Save**.
@@ -37,27 +37,28 @@ Run a harvest immediately without waiting for the scheduled time.
 1. Go to **Harvest Sources**.
 2. Select your harvest source.
 3. Select **Admin**, and then **Reharvest**.
-4. Monitor progress in the **Jobs** tab.  
- 
+4. Monitor progress in the **Jobs** tab.
+
 ## Delete a harvest source
 
 Permanently remove a harvest source configuration when you no longer need automatic synchronisation.
 
 1. Go to **Harvest Sources**.
 2. Select the harvest source you want to delete.
-3. Select **Admin**, and then **Edit**. 
+3. Select **Admin**, and then **Edit**.
 4. Select **Delete** at the bottom of the form.
 5. Select **Delete source** or **Delete and clear source**, and then confirm the deletion. <!-- (To Reviewer: clarify the difference between these options in the UI and documentation - Does clearing mean it will clear the datasets it harvested?)  -->
- 
 
 :::info HARVESTED DATASETS REMAIN
 
-Deleting a harvest source does **not** delete the harvested datasets. They remain in your catalogue but will no longer synchronise automatically with the source.  <!-- (To Reviewer: pls verify the accuracy of this statement  -->
+Deleting a harvest source does **not** delete the harvested datasets. They remain in your catalogue but will no longer synchronise automatically with the source. <!-- (To Reviewer: pls verify the accuracy of this statement  -->
 
 :::
 
   <!-- (To Reviewer: pls verify the accuracy of these statements  -->
+
 **What happens after deletion:**
+
 - The harvest source configuration is permanently removed
 - Scheduled harvests stop
 - Harvested datasets remain in your catalogue as regular datasets
@@ -84,4 +85,3 @@ Manual edits to harvested datasets are overwritten during the next harvest run. 
 :::
 
 <!-- To reviewer: pls check accuracy here -->
-

@@ -31,4 +31,3 @@ Select a task to get started:
 For a complete guide to organisations and advanced features, see the [CKAN documentation](https://docs.ckan.org/en/2.11/user-guide.html#managing-an-organization)<sup>↗</sup>. CKAN is the system that powers the GDI Catalogue Portal.
 
 :::
-

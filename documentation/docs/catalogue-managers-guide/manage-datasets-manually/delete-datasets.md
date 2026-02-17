@@ -8,15 +8,15 @@ sidebar_position: 4
 
 Permanently remove datasets that are obsolete or no longer needed. Before you proceed, ensure there are no dependencies on the dataset or consider changing visibility from public to private.
 
-In this guide  
+In this guide
+
 > [Delete a dataset](#delete-a-dataset)  
 > [What happens when you delete a dataset](#what-happens-when-you-delete-a-dataset)
-
 
 <br/>
 :::tip Full documentation
 
-This guide covers the common tasks for managing datasets. For a complete guide to all dataset operations, see the [**CKAN documentation**](https://docs.ckan.org/en/2.11/user-guide.html#datasets-and-resources)<sup>↗</sup>. CKAN is the system that powers the GDI Catalogue Portal. 
+This guide covers the common tasks for managing datasets. For a complete guide to all dataset operations, see the [**CKAN documentation**](https://docs.ckan.org/en/2.11/user-guide.html#datasets-and-resources)<sup>↗</sup>. CKAN is the system that powers the GDI Catalogue Portal.
 
 :::
 
@@ -30,9 +30,9 @@ To delete a dataset from the catalogue:
 
 3. Scroll to the bottom panel and select **Delete**.
 
-4. Select **Confirm** to permanently delete the dataset. 
+4. Select **Confirm** to permanently delete the dataset.
 
-:::danger Permanent action 
+:::danger Permanent action
 
 Deleting a dataset cannot be undone. The dataset record and all associated data resources are permanently removed from the catalogue with no recovery option.
 

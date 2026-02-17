@@ -10,21 +10,20 @@ SPDX-FileCopyrightText: 2024 PNED G.I.E.
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
-
 # Monitor harvesting
 
 Track harvesting health at both system and job levels.
 
-In this guide  
-> [Monitor background processes](#monitor-background-processes)  
-> [Monitor harvest jobs](#monitor-harvest-jobs)  
+In this guide
 
+> [Monitor background processes](#monitor-background-processes)  
+> [Monitor harvest jobs](#monitor-harvest-jobs)
 
 ## Monitor background processes
 
 **When to check:** If harvests aren't running as expected.
 
-<!-- Note to reviewers: Source documentation refers to both "run" and "crond" interchangeably. 
+<!-- Note to reviewers: Source documentation refers to both "run" and "crond" interchangeably.
      Supervisorctl output shows "run" as the process name, so we use that here. -->
 
 Three background processes must run continuously for harvesting to work:
@@ -36,11 +35,13 @@ Three background processes must run continuously for harvesting to work:
 To check process status:
 
 1. Access the CKAN container:
+
    ```bash
    docker compose exec -it ckan-dev bash
    ```
 
 2. Check all processes:
+
    ```bash
    supervisorctl status
    ```
@@ -56,7 +57,7 @@ All three processes should show `RUNNING` status. If any process is not running 
 
 ## Monitor harvest jobs
 
-**When to check:** If you want to  review harvest history and results.
+**When to check:** If you want to review harvest history and results.
 
 1. Go to **Harvest Sources** and select your source.
 2. Select the **Jobs** tab to view:
@@ -65,4 +66,3 @@ All three processes should show `RUNNING` status. If any process is not running 
    - Number of datasets added, updated, deleted, and not modified
    - Error messages and logs
 3. Select a specific job to view detailed logs and troubleshooting information.
-

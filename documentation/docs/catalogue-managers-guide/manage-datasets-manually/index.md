@@ -27,8 +27,6 @@ Manual dataset management is for exceptions. For regular updates, bulk imports, 
 
 :::
 
-
-
 Select an operation to get started:
 
 - **[Add datasets](/catalogue-managers-guide/manage-datasets-manually/add)** - Create new dataset records with metadata

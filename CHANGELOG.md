@@ -12,9 +12,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+
 ## [v1.6.2] - 2026-02-13
 
 ### Added
+
 - feat: add home notice feature with configurable title and message (#804) by @Kacem Bechka in 8c75b8d
 - feat: revert the message by @Rania Hamdani in 8b96964
 - feat: make variant and ref genome optional by @Rania Hamdani in 7fb3acb
@@ -23,8 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - feat: sourcery comments by @Rania Hamdani in 92187ea
 - feat: add beacon safe fail by @Rania Hamdani in 20e95e6
 
-
 ### Changed
+
 - chore(deps): update aquasecurity/trivy-action action to v0.34.0 (#801) by @LNDS-Sysadmins in 6cbb367
 - chore(deps): bump qs from 6.14.1 to 6.14.2 (#803) by @dependabot[bot] in 56f399c
 - chore(deps): update docker/build-push-action action to v6.19.2 by @Renovate Bot in 5ff9fc0
@@ -37,19 +39,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - docs: complete catalogue managers guide content by @Rose Pasigna in 7047c95
 - doc: update CHANGELOG.md for v1.6.1 (#789) by @github-actions[bot] in 0f8a7c9
 
-
 ### Fixed
+
 - fix(deps): update opentelemetry-js monorepo to ^0.212.0 (#802) by @LNDS-Sysadmins in 0dd1265
 - fix; replace variant example by @Rania Hamdani in b2accbe
 - fix: load dataset in the same tab by @Rania Hamdani in 1de0d1c
 - fix typos by @Rose Pasigna in 4169bd3
 - fix typos caught by copilot by @Rose Pasigna in 3a21d55
 
-
 ### Removed
+
 - remove output txt file by @Rose Pasigna in 7a4b3e9
-
-
 
 ## [v1.6.0] - 2026-01-26
 

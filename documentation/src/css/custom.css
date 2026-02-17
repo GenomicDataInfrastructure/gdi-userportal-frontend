@@ -276,7 +276,11 @@ table th {
 [data-route="/"] .hero,
 [data-route="/"] [class*="heroBanner"],
 [data-route="/"] .heroBanner_src-pages-index-module {
-  background: linear-gradient(135deg, var(--gdi-primary) 0%, var(--ifm-color-primary-dark) 100%) !important;
+  background: linear-gradient(
+    135deg,
+    var(--gdi-primary) 0%,
+    var(--ifm-color-primary-dark) 100%
+  ) !important;
   background-color: var(--gdi-primary) !important;
 }
 
@@ -284,17 +288,25 @@ table th {
 [data-theme="dark"] .hero,
 [data-theme="dark"] [class*="heroBanner"],
 [data-theme="dark"] .heroBanner_src-pages-index-module {
-  background: linear-gradient(135deg, var(--ifm-color-primary-dark) 0%, var(--ifm-color-primary-darker) 100%) !important;
+  background: linear-gradient(
+    135deg,
+    var(--ifm-color-primary-dark) 0%,
+    var(--ifm-color-primary-darker) 100%
+  ) !important;
   background-color: var(--ifm-color-primary-dark) !important;
 }
 
 /* Dark mode link colors - brighter teal for better readability */
 [data-theme="dark"] a {
-  color: var(--ifm-color-primary-lightest); /* Brighter teal for dark mode links */
+  color: var(
+    --ifm-color-primary-lightest
+  ); /* Brighter teal for dark mode links */
 }
 
 [data-theme="dark"] .markdown a {
-  color: var(--ifm-color-primary-lightest); /* Ensure markdown links are also brighter */
+  color: var(
+    --ifm-color-primary-lightest
+  ); /* Ensure markdown links are also brighter */
 }
 
 [data-theme="dark"] .menu__link {

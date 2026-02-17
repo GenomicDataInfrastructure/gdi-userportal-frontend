@@ -12,7 +12,7 @@ To log in:
 
 1. Open the Dataset Catalogue at [https://catalogue.portal.gdi.lu](https://catalogue.portal.gdi.lu)
 
-2. Select **Log in** in the top-right corner of the page. 
+2. Select **Log in** in the top-right corner of the page.
 
 3. Select LSAAI as your sign-in method.
 

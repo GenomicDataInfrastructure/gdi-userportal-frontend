@@ -32,24 +32,22 @@ For a complete guide to organisation management, see the [CKAN documentation](ht
 
 Invite team members to your organisation and assign roles to control their access permissions.
 
-1. Go to **Organizations** and select your organization from the list.  
+1. Go to **Organizations** and select your organization from the list.
 
-2. Select **Manage** and then **Members**.  
+2. Select **Manage** and then **Members**.
 
-3. Select **Add Member**.  
+3. Select **Add Member**.
 
 4. The next steps depend on whether the member already has an account in the GDI Data Catalogue:
+   - **For existing users:** Select their username under **Existing User**.
+   - **For new users:** Enter their email address under **New User** to send them an invitation. Then, come back to this step after they create their account.
 
-    - **For existing users:** Select their username under **Existing User**. 
-    - **For new users:** Enter their email address under **New User** to send them an invitation. Then, come back to this step after they create their account. 
-
-5. Enter the member's username and select their role:  
-
+5. Enter the member's username and select their role:
    - **Admin:** Full control over organization and all datasets
    - **Editor:** Can add and edit datasets
    - **Member:** Can view private datasets
 
-6. Select **Add** to save the member. Repeat the steps above to add more team members as needed. 
+6. Select **Add** to save the member. Repeat the steps above to add more team members as needed.
 
 ## Edit member role
 
@@ -63,7 +61,7 @@ Change a team member's role to adjust their access permissions.
 
 4. Select the **Role** dropdown next to their name and choose the new role:
    - **Admin:** Full control over organization and all datasets
-   - **Editor:** Can add and edit datasets  
+   - **Editor:** Can add and edit datasets
    - **Member:** Can view private datasets
 
 5. The role change takes effect immediately.

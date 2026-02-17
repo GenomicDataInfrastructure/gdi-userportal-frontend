@@ -27,13 +27,19 @@
 }
 .heroBanner .button--primary:hover,
 .heroBanner .button--primary:focus {
-  background: color-mix(in srgb, var(--gdi-secondary) 85%, black); /* Slightly darker cyan on hover */
+  background: color-mix(
+    in srgb,
+    var(--gdi-secondary) 85%,
+    black
+  ); /* Slightly darker cyan on hover */
   color: #fff;
 }
 
 /* Dark theme overrides */
 html[data-theme="dark"] .heroBanner {
-  background: var(--ifm-color-primary-dark); /* Slightly darker teal for dark mode */
+  background: var(
+    --ifm-color-primary-dark
+  ); /* Slightly darker teal for dark mode */
   color: #fff;
 }
 html[data-theme="dark"] .heroBanner .button--primary {

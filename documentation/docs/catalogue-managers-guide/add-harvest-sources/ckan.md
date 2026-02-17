@@ -12,7 +12,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Harvest from CKAN catalogues
 
-Synchronise datasets from other CKAN catalogues to enable cross-institutional collaboration and maintain distributed dataset collections.  
+Synchronise datasets from other CKAN catalogues to enable cross-institutional collaboration and maintain distributed dataset collections.
 
 :::tip CKAN-to-CKAN harvesting
 The GDI Data Catalogue is powered by CKAN. CKAN-to-CKAN harvesting is implemented in the core system, making it straightforward to harvest from other CKAN instances.
@@ -22,14 +22,14 @@ The GDI Data Catalogue is powered by CKAN. CKAN-to-CKAN harvesting is implemente
 
 When [adding a harvest source](./index.md), use these settings for CKAN catalogues:
 
-| Field | Description |
-|-------|-------------|
-| **Source type** | Select **CKAN** from the dropdown |
-| **URL** | Enter the CKAN instance API endpoint URL |
+| Field             | Description                                      |
+| ----------------- | ------------------------------------------------ |
+| **Source type**   | Select **CKAN** from the dropdown                |
+| **URL**           | Enter the CKAN instance API endpoint URL         |
 | **Configuration** | Leave empty unless specific filters are required |
 
 ## Next steps
 
-- [Test harvest sources](../test-harvest-sources.md) 
-- [Monitor harvest sources](../monitor-harvest-sources.md)  
-- [Manage harvest sources](../manage-harvest-sources.md)  
+- [Test harvest sources](../test-harvest-sources.md)
+- [Monitor harvest sources](../monitor-harvest-sources.md)
+- [Manage harvest sources](../manage-harvest-sources.md)

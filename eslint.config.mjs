@@ -2,11 +2,24 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 import { defineConfig, globalIgnores } from "eslint/config";
+import { fixupConfigRules } from "@eslint/compat";
+import * as espree from "espree";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import prettier from "eslint-config-prettier/flat";
 
 const eslintConfig = defineConfig([
-  ...nextVitals,
+  ...fixupConfigRules(nextVitals),
+  {
+    files: ["**/*.{js,jsx,mjs,cjs}"],
+    languageOptions: {
+      parser: espree,
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+  },
   prettier,
   {
     rules: {

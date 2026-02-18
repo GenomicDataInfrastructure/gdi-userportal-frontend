@@ -2,48 +2,126 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { RetrievedApplicationData } from "@/app/api/access-management-v1";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { UpdateApplicationSection5Request } from "@/app/api/access-management-v1";
 import { SectionProps } from "../ApplicationFormContent";
 
-const Section5: React.FC<SectionProps> = ({ applicationData }) => {
-  const [showAllPurposes, setShowAllPurposes] = useState(false);
-  const [sameAsDataUse, setSameAsDataUse] = useState(false);
-  const [sameAsResearch, setSameAsResearch] = useState(false);
+const Section5: React.FC<SectionProps> = ({
+  applicationData,
+  sectionDataRef,
+}) => {
+  // Responsible person fields
+  const [
+    personResponsibleSameAsContactPerson,
+    setPersonResponsibleSameAsContactPerson,
+  ] = useState<boolean>(false);
+  const [personResponsibleName, setPersonResponsibleName] =
+    useState<string>("");
+
+  // Research person fields
+  const [
+    personResearchSameAsContactPerson,
+    setPersonResearchSameAsContactPerson,
+  ] = useState<boolean>(false);
+  const [personResearchName, setPersonResearchName] = useState<string>("");
+
+  // Project details fields
+  const [whyAreTheDataRequested, setWhyAreTheDataRequested] =
+    useState<string>("");
+  const [
+    whatIsTheAimAndTopicOfTheProject,
+    setWhatIsTheAimAndTopicOfTheProject,
+  ] = useState<string>("");
+  const [whichAreTheExpectedBenefits, setWhichAreTheExpectedBenefits] =
+    useState<string>("");
+  const [describeApplicantsQualification, setDescribeApplicantsQualification] =
+    useState<string>("");
+
+  // Legal basis fields
+  const [legalBasis, setLegalBasis] = useState<string>("");
+  const [linkToTheSupportingLegalBasis, setLinkToTheSupportingLegalBasis] =
+    useState<string>("");
+
+  // Initialize from applicationData
+  useEffect(() => {
+    if (applicationData?.form?.section5) {
+      console.log(
+        "📋 Section5 Data from applicationData:",
+        applicationData.form.section5
+      );
+
+      setPersonResponsibleSameAsContactPerson(
+        applicationData.form.section5.personResponsibleSameAsContactPerson ??
+          false
+      );
+      setPersonResponsibleName(
+        applicationData.form.section5.personResponsibleName ?? ""
+      );
+      setPersonResearchSameAsContactPerson(
+        applicationData.form.section5.personResearchSameAsContactPerson ?? false
+      );
+      setPersonResearchName(
+        applicationData.form.section5.personResearchName ?? ""
+      );
+      setWhyAreTheDataRequested(
+        applicationData.form.section5.whyAreTheDataRequested ?? ""
+      );
+      setWhatIsTheAimAndTopicOfTheProject(
+        applicationData.form.section5.whatIsTheAimAndTopicOfTheProject ?? ""
+      );
+      setWhichAreTheExpectedBenefits(
+        applicationData.form.section5.whichAreTheExpectedBenefits ?? ""
+      );
+      setDescribeApplicantsQualification(
+        applicationData.form.section5.describeApplicantsQualification ?? ""
+      );
+      setLegalBasis(applicationData.form.section5.legalBasis ?? "");
+      setLinkToTheSupportingLegalBasis(
+        applicationData.form.section5.linkToTheSupportingLegalBasis ?? ""
+      );
+    } else {
+      console.log("⚠️ No section5 data found in applicationData");
+    }
+  }, [applicationData?.form?.section5]);
+
+  // Update sectionDataRef whenever data changes
+  useEffect(() => {
+    if (sectionDataRef) {
+      const section5Data: UpdateApplicationSection5Request = {
+        sectionNumber: 5,
+        personResponsibleSameAsContactPerson,
+        personResponsibleName,
+        personResearchSameAsContactPerson,
+        personResearchName,
+        whyAreTheDataRequested,
+        whatIsTheAimAndTopicOfTheProject,
+        whichAreTheExpectedBenefits,
+        describeApplicantsQualification,
+        legalBasis,
+        linkToTheSupportingLegalBasis,
+      };
+      console.log("📝 Updated Section5 Data:", section5Data);
+      sectionDataRef.current = section5Data;
+    }
+  }, [
+    sectionDataRef,
+    personResponsibleSameAsContactPerson,
+    personResponsibleName,
+    personResearchSameAsContactPerson,
+    personResearchName,
+    whyAreTheDataRequested,
+    whatIsTheAimAndTopicOfTheProject,
+    whichAreTheExpectedBenefits,
+    describeApplicantsQualification,
+    legalBasis,
+    linkToTheSupportingLegalBasis,
+  ]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
-  const purposes = [
-    {
-      id: "a",
-      title:
-        "a. The public interest in the areas of public or occupational health, such as activities to protect against serious cross-border threats to health, public health surveillance or activities ensuring high levels of quality and safety of healthcare, including patient safety, and of medicinal products or medical devices.",
-    },
-    {
-      id: "b",
-      title:
-        "b. Policy making and regulatory activities to support public sector bodies or Union institutions, bodies, offices and agencies, including regulatory authorities, in the health or care sector to carry out their tasks defined in their mandates.",
-    },
-    {
-      id: "c",
-      title:
-        "c. Statistics as defined in Article 3, point (1), of Regulation (EU) No 223/2009, such as national, multi-national and Union level official statistics, related to health or care sectors.",
-    },
-    {
-      id: "d",
-      title:
-        "d. Education or teaching activities in health or care sectors at vocational or higher education level.",
-    },
-    {
-      id: "e",
-      title:
-        "e. Scientific research related to health or care sectors that contributes to public health or health technology assessment, or ensures high levels of quality and safety of healthcare, of medicinal products or of medical devices, with the aim of benefitting end-users, such as patients, health professionals and health administrators, including:\n(i) development and innovation activities for products or services;\n(ii) training, testing and evaluation of algorithms, including in medical devices, in vitro diagnostic medical devices, AI systems and digital health applications.",
-    },
-  ];
 
   return (
     <>
@@ -65,44 +143,38 @@ const Section5: React.FC<SectionProps> = ({ applicationData }) => {
         </p>
       </div>
 
-      {/* Purpose of data use section */}
+      {/* Purpose of data use section - READ ONLY from Section 2 */}
       <div className="mb-8">
         <h3 className="text-base font-semibold text-gray-900 mb-4">
-          Purpose of data use. Health data access bodies shall only provide
-          access to electronic health data referred to in Article 51 where the
-          intended purpose of processing pursued by the applicant complies with
-          the following purposes listed hereafter:
+          Purpose of data use (from Section 2)
         </h3>
+        <p className="text-sm text-gray-600 mb-4 flex items-start">
+          <FontAwesomeIcon
+            icon={faInfoCircle}
+            className="mr-2 text-blue-500 mt-0.5 flex-shrink-0"
+          />
+          The purposes selected in Section 2 are displayed below. To change
+          these, please go back to Section 2.
+        </p>
 
-        <div className="space-y-3">
-          {purposes
-            .slice(0, showAllPurposes ? purposes.length : 3)
-            .map((purpose) => (
-              <div key={purpose.id} className="flex items-start">
-                <input
-                  type="checkbox"
-                  id={`purpose-${purpose.id}`}
-                  className="mt-1 mr-3 h-4 w-4"
-                />
-                <label
-                  htmlFor={`purpose-${purpose.id}`}
-                  className="text-sm text-gray-700 leading-relaxed whitespace-pre-line"
-                >
-                  {purpose.title}
-                </label>
-              </div>
-            ))}
+        <div className="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          {applicationData?.form?.section2?.purposeForWhichDataWillBeUsed &&
+          applicationData.form.section2.purposeForWhichDataWillBeUsed.length >
+            0 ? (
+            applicationData.form.section2.purposeForWhichDataWillBeUsed.map(
+              (purpose, idx) => (
+                <div key={idx} className="flex items-start">
+                  <span className="mr-3 text-primary">✓</span>
+                  <span className="text-sm text-gray-700">{purpose.title}</span>
+                </div>
+              )
+            )
+          ) : (
+            <p className="text-sm text-gray-500 italic">
+              No purposes selected in Section 2
+            </p>
+          )}
         </div>
-
-        {!showAllPurposes && (
-          <button
-            onClick={() => setShowAllPurposes(true)}
-            className="mt-4 flex items-center gap-2 text-sm text-primary hover:text-secondary"
-          >
-            <span>Show More</span>
-            <FontAwesomeIcon icon={faChevronDown} className="text-xs" />
-          </button>
-        )}
       </div>
 
       {/* Person responsible for data use */}
@@ -115,30 +187,39 @@ const Section5: React.FC<SectionProps> = ({ applicationData }) => {
           <input
             type="checkbox"
             id="same-contact-data"
-            checked={sameAsDataUse}
-            onChange={(e) => setSameAsDataUse(e.target.checked)}
+            checked={personResponsibleSameAsContactPerson}
+            onChange={(e) => {
+              setPersonResponsibleSameAsContactPerson(e.target.checked);
+              if (
+                e.target.checked &&
+                applicationData?.form?.section3?.contactPersonName
+              ) {
+                setPersonResponsibleName(
+                  applicationData.form.section3.contactPersonName
+                );
+              }
+            }}
             className="mt-1 mr-3 h-4 w-4"
           />
           <label htmlFor="same-contact-data" className="text-sm text-gray-700">
-            Same as contact person mentioned in the section 3 (Applicant and
-            contact person information)?
+            Same as contact person mentioned in section 3 (Applicant and contact
+            person information)?
           </label>
         </div>
 
-        <button className="flex items-center gap-2 rounded bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-secondary mb-4">
-          <span>⇄</span>
-          <span>Fill from user profile</span>
-        </button>
-
-        <div>
-          <label className="block text-sm font-semibold text-gray-900 mb-2">
-            Full name <span className="text-red-600">*</span>
-          </label>
-          <input
-            type="text"
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
-          />
-        </div>
+        {!personResponsibleSameAsContactPerson && (
+          <div>
+            <label className="block text-sm font-semibold text-gray-900 mb-2">
+              Full name <span className="text-red-600">*</span>
+            </label>
+            <input
+              type="text"
+              value={personResponsibleName}
+              onChange={(e) => setPersonResponsibleName(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
+            />
+          </div>
+        )}
       </div>
 
       {/* Person responsible for the research */}
@@ -151,33 +232,42 @@ const Section5: React.FC<SectionProps> = ({ applicationData }) => {
           <input
             type="checkbox"
             id="same-contact-research"
-            checked={sameAsResearch}
-            onChange={(e) => setSameAsResearch(e.target.checked)}
+            checked={personResearchSameAsContactPerson}
+            onChange={(e) => {
+              setPersonResearchSameAsContactPerson(e.target.checked);
+              if (
+                e.target.checked &&
+                applicationData?.form?.section3?.contactPersonName
+              ) {
+                setPersonResearchName(
+                  applicationData.form.section3.contactPersonName
+                );
+              }
+            }}
             className="mt-1 mr-3 h-4 w-4"
           />
           <label
             htmlFor="same-contact-research"
             className="text-sm text-gray-700"
           >
-            Same as contact person mentioned in the section 3 (Applicant and
-            contact person information)?
+            Same as contact person mentioned in section 3 (Applicant and contact
+            person information)?
           </label>
         </div>
 
-        <button className="flex items-center gap-2 rounded bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-secondary mb-4">
-          <span>⇄</span>
-          <span>Fill from user profile</span>
-        </button>
-
-        <div>
-          <label className="block text-sm font-semibold text-gray-900 mb-2">
-            Full name
-          </label>
-          <input
-            type="text"
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
-          />
-        </div>
+        {!personResearchSameAsContactPerson && (
+          <div>
+            <label className="block text-sm font-semibold text-gray-900 mb-2">
+              Full name
+            </label>
+            <input
+              type="text"
+              value={personResearchName}
+              onChange={(e) => setPersonResearchName(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
+            />
+          </div>
+        )}
       </div>
 
       {/* Why are the data requested */}
@@ -188,6 +278,8 @@ const Section5: React.FC<SectionProps> = ({ applicationData }) => {
         </label>
         <textarea
           rows={4}
+          value={whyAreTheDataRequested}
+          onChange={(e) => setWhyAreTheDataRequested(e.target.value)}
           className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
         />
       </div>
@@ -198,8 +290,10 @@ const Section5: React.FC<SectionProps> = ({ applicationData }) => {
           What is the aim and topic of your project?{" "}
           <span className="text-red-600">*</span>
         </label>
-        <input
-          type="text"
+        <textarea
+          rows={4}
+          value={whatIsTheAimAndTopicOfTheProject}
+          onChange={(e) => setWhatIsTheAimAndTopicOfTheProject(e.target.value)}
           className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
         />
       </div>
@@ -213,6 +307,8 @@ const Section5: React.FC<SectionProps> = ({ applicationData }) => {
         </label>
         <textarea
           rows={4}
+          value={whichAreTheExpectedBenefits}
+          onChange={(e) => setWhichAreTheExpectedBenefits(e.target.value)}
           className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
         />
       </div>
@@ -226,6 +322,8 @@ const Section5: React.FC<SectionProps> = ({ applicationData }) => {
         </label>
         <textarea
           rows={4}
+          value={describeApplicantsQualification}
+          onChange={(e) => setDescribeApplicantsQualification(e.target.value)}
           className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
         />
       </div>
@@ -252,6 +350,8 @@ const Section5: React.FC<SectionProps> = ({ applicationData }) => {
         </div>
         <textarea
           rows={4}
+          value={legalBasis}
+          onChange={(e) => setLegalBasis(e.target.value)}
           className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
         />
       </div>
@@ -264,64 +364,10 @@ const Section5: React.FC<SectionProps> = ({ applicationData }) => {
         </label>
         <input
           type="text"
+          value={linkToTheSupportingLegalBasis}
+          onChange={(e) => setLinkToTheSupportingLegalBasis(e.target.value)}
           className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
         />
-      </div>
-
-      {/* Summary of plan for using data */}
-      <div className="mb-6">
-        <label className="block text-sm font-semibold text-gray-900 mb-1">
-          Provide a summary of your plan for using the data. The summary must be
-          written in one of the official EU languages{" "}
-          <span className="text-red-600">*</span>
-        </label>
-        <div className="flex items-center gap-2 mb-2">
-          <FontAwesomeIcon
-            icon={faInfoCircle}
-            className="text-gray-500 text-xs"
-          />
-          <span className="text-xs italic text-gray-600">
-            Uploaded files are automatically translated by the system. The
-            applicant is responsible for the quality, legibility, and formatting
-            of the uploaded files. Only pdf, doc, docx, xls, xlsx, odt files.
-            Maximum size is 5 MB.
-          </span>
-        </div>
-        <textarea
-          rows={4}
-          className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary mb-2"
-        />
-        <button className="rounded bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-secondary">
-          Select Files
-        </button>
-      </div>
-
-      {/* Summary of research plan */}
-      <div className="mb-6">
-        <label className="block text-sm font-semibold text-gray-900 mb-1">
-          Provide a summary of your research plan. The summary must be written
-          in one of the official EU languages{" "}
-          <span className="text-red-600">*</span>
-        </label>
-        <div className="flex items-center gap-2 mb-2">
-          <FontAwesomeIcon
-            icon={faInfoCircle}
-            className="text-gray-500 text-xs"
-          />
-          <span className="text-xs italic text-gray-600">
-            Uploaded files are automatically translated by the system. The
-            applicant is responsible for the quality, legibility, and formatting
-            of the uploaded files. Only pdf, doc, docx, xls, xlsx, odt files.
-            Maximum size is 5 MB.
-          </span>
-        </div>
-        <textarea
-          rows={4}
-          className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary mb-2"
-        />
-        <button className="rounded bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-secondary">
-          Select Files
-        </button>
       </div>
 
       {/* Go To Top Button */}

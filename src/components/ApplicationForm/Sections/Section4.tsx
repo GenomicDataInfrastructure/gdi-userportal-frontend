@@ -7,6 +7,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { UpdateApplicationSection4Request } from "@/app/api/access-management-v1";
 import { SectionProps } from "../ApplicationFormContent";
+import CountryDropdown, { Country } from "../CountryDropdown";
+import {
+  createPhoneCountrySelectHandler,
+  getDefaultCountries,
+} from "@/utils/countryUtils";
 
 const Section4: React.FC<SectionProps> = ({
   applicationData,
@@ -18,6 +23,8 @@ const Section4: React.FC<SectionProps> = ({
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
+  const [countries] = useState<Country[]>(getDefaultCountries());
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [phone, setPhone] = useState({
     countryCode: "",
     number: "",
@@ -45,6 +52,18 @@ const Section4: React.FC<SectionProps> = ({
       setEmail(section4.email ?? "");
       setAddress(section4.address ?? "");
       setPhone(section4.phone ?? { countryCode: "", number: "", isoCode: "" });
+
+      // Set selected country from stored data
+      if (section4.phone?.isoCode && countries.length > 0) {
+        const country = countries.find(
+          (c) =>
+            c.iso2?.toUpperCase() === section4.phone?.isoCode?.toUpperCase()
+        );
+        if (country) {
+          setSelectedCountry(country);
+        }
+      }
+
       setOperatorIdentifier(section4.operatorIdentifier ?? "");
       setNameOfTheOrganisation(section4.nameOfTheOrganisation ?? "");
       setBusinessIdentifierOrganization(
@@ -64,7 +83,7 @@ const Section4: React.FC<SectionProps> = ({
       setPeppolCode(section4.peppolCode ?? "");
       setRangeOfAmountOfFinancing(section4.rangeOfAmountOfFinancing ?? null);
     }
-  }, [applicationData?.form?.section4]);
+  }, [applicationData?.form?.section4, countries]);
 
   // Update sectionDataRef when form data changes
   useEffect(() => {
@@ -116,6 +135,12 @@ const Section4: React.FC<SectionProps> = ({
     peppolCode,
     rangeOfAmountOfFinancing,
   ]);
+
+  const handleCountrySelect = createPhoneCountrySelectHandler(
+    setSelectedCountry,
+    setPhone,
+    phone
+  );
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -185,34 +210,28 @@ const Section4: React.FC<SectionProps> = ({
         />
       </div>
 
-      {/* Phone */}
+      {/* Phone with Country Dropdown */}
       <div className="mb-6">
         <label className="block text-sm font-semibold text-gray-900 mb-2">
           Phone <span className="text-red-600">*</span>
         </label>
         <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="Country Code"
-            value={phone.countryCode}
-            onChange={(e) =>
-              setPhone({ ...phone, countryCode: e.target.value })
-            }
-            className="w-16 border border-gray-300 rounded px-2 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
-          />
+          <div className="w-40">
+            <CountryDropdown
+              countries={countries}
+              selectedCountry={selectedCountry}
+              onSelect={handleCountrySelect}
+              placeholder="Select country"
+              showFlags={true}
+              showDialCode={true}
+            />
+          </div>
           <input
             type="tel"
             placeholder="Phone number"
             value={phone.number}
             onChange={(e) => setPhone({ ...phone, number: e.target.value })}
             className="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
-          />
-          <input
-            type="text"
-            placeholder="ISO Code"
-            value={phone.isoCode}
-            onChange={(e) => setPhone({ ...phone, isoCode: e.target.value })}
-            className="w-16 border border-gray-300 rounded px-2 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
           />
         </div>
       </div>

@@ -25,6 +25,7 @@ interface FormSection {
 export interface SectionProps {
   applicationData?: RetrievedApplicationData | null;
   sectionDataRef?: React.MutableRefObject<any>;
+  uploadRef?: React.RefObject<any>;
 }
 
 interface ApplicationFormContentProps {
@@ -32,6 +33,7 @@ interface ApplicationFormContentProps {
   progressPercentage: number;
   applicationData?: RetrievedApplicationData | null;
   sectionDataRef?: React.MutableRefObject<any>;
+  uploadRef?: React.RefObject<any>;
   onSave?: () => Promise<void>;
   isSaving?: boolean;
 }
@@ -52,6 +54,7 @@ const ApplicationFormContent: React.FC<ApplicationFormContentProps> = ({
   progressPercentage,
   applicationData,
   sectionDataRef,
+  uploadRef,
 }) => {
   if (!section) {
     return (
@@ -89,6 +92,7 @@ const ApplicationFormContent: React.FC<ApplicationFormContentProps> = ({
           <SectionComponent
             applicationData={applicationData}
             sectionDataRef={sectionDataRef}
+            uploadRef={uploadRef}
           />
         ) : (
           <div>Section not found</div>

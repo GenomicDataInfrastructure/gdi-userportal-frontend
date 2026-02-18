@@ -6,7 +6,10 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { UpdateApplicationSection2Request } from "@/app/api/access-management-v1";
+import { listCountriesApi } from "@/app/api/access-management-v1/index";
+import { CountryOption } from "@/app/api/access-management-v1/index";
 import { SectionProps } from "../ApplicationFormContent";
+import { PURPOSE_LIST } from "@/constants/purposes";
 
 const Section2: React.FC<SectionProps> = ({
   applicationData,
@@ -15,10 +18,11 @@ const Section2: React.FC<SectionProps> = ({
   const [showAllPurposes, setShowAllPurposes] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [projectLeader, setProjectLeader] = useState("");
-  const [countryOfProjectLeader, setCountryOfProjectLeader] = useState<{
-    key: string;
-    value: string;
-  } | null>(null);
+  const [countryOfProjectLeader, setCountryOfProjectLeader] =
+    useState<CountryOption | null>(null);
+  const [countries, setCountries] = useState<CountryOption[]>([]);
+  const [countriesLoading, setCountriesLoading] = useState(false);
+  const [countriesError, setCountriesError] = useState<string | null>(null);
   const [selectedPurposes, setSelectedPurposes] = useState<Set<string>>(
     new Set()
   );
@@ -26,52 +30,38 @@ const Section2: React.FC<SectionProps> = ({
   const [noSummary, setNoSummary] = useState(false);
   const [noSummaryReason, setNoSummaryReason] = useState("");
 
-  const purposeList = [
-    {
-      key: "a",
-      value:
-        "a. The public interest in the areas of public or occupational health, such as activities to protect against serious cross-border threats to health, public health surveillance or activities ensuring high levels of quality and safety of healthcare, including patient safety, and of medicinal products or medical devices.",
-    },
-    {
-      key: "b",
-      value:
-        "b. Policy making and regulatory activities to support public sector bodies or Union institutions, bodies, offices and agencies, including regulatory authorities, in the health or care sector to carry out their tasks defined in their mandates.",
-    },
-    {
-      key: "c",
-      value:
-        "c. Statistics as defined in Article 3, point (1), of Regulation (EU) No 223/2009, such as national, multi-national and Union level official statistics, related to health or care sectors.",
-    },
-    {
-      key: "d",
-      value:
-        "d. Education or teaching activities in health or care sectors at vocational or higher education level.",
-    },
-    {
-      key: "e",
-      value:
-        "e. Scientific research related to health or care sectors that contributes to public health or health technology assessment, or ensures high levels of quality and safety of healthcare, of medicinal products or of medical devices, with the aim of benefitting end-users, such as patients, health professionals and health administrators, including:\n(i) development and innovation activities for products or services;\n(ii) training, testing and evaluation of algorithms, including in medical devices, in vitro diagnostic medical devices, AI systems and digital health applications.",
-    },
-  ];
+  useEffect(() => {
+    let isMounted = true;
+    const fetchCountries = async () => {
+      setCountriesLoading(true);
+      setCountriesError(null);
+      try {
+        const mapped = await listCountriesApi();
+        if (isMounted) {
+          setCountries(mapped);
+          if (!mapped.length) {
+            console.warn("⚠️ Countries list is empty after mapping");
+          }
+        }
+      } catch (error) {
+        console.error("❌ Countries request failed", error);
+        if (isMounted) {
+          setCountriesError("Failed to load countries");
+          setCountries([]);
+        }
+      } finally {
+        if (isMounted) {
+          setCountriesLoading(false);
+        }
+      }
+    };
 
-  const countries = [
-    {
-      key: "http://publications.europa.eu/resource/authority/country/NLD",
-      value: "Netherlands",
-    },
-    {
-      key: "http://publications.europa.eu/resource/authority/country/DEU",
-      value: "Germany",
-    },
-    {
-      key: "http://publications.europa.eu/resource/authority/country/FRA",
-      value: "France",
-    },
-    {
-      key: "http://publications.europa.eu/resource/authority/country/ESP",
-      value: "Spain",
-    },
-  ];
+    fetchCountries();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Initialize form data from applicationData
   useEffect(() => {
@@ -111,8 +101,8 @@ const Section2: React.FC<SectionProps> = ({
         },
         purposeForWhichDataWillBeUsed: Array.from(selectedPurposes).map(
           (key) => {
-            const purpose = purposeList.find((p) => p.key === key);
-            return { key, value: purpose?.value ?? "" };
+            const purpose = PURPOSE_LIST.find((p) => p.id === key);
+            return { key, value: purpose?.title ?? "" };
           }
         ),
         summaryOfTheProject: noSummary ? undefined : summaryOfTheProject,
@@ -144,7 +134,7 @@ const Section2: React.FC<SectionProps> = ({
     setSelectedPurposes(newPurposes);
   };
 
-  const purposes = purposeList.map((p) => p.value);
+  const purposes = PURPOSE_LIST.map((p) => p.title);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -225,9 +215,16 @@ const Section2: React.FC<SectionProps> = ({
               const country = countries.find((c) => c.key === e.target.value);
               setCountryOfProjectLeader(country ?? null);
             }}
+            disabled={countriesLoading}
             className="w-full border border-gray-300 rounded px-3 py-2 text-sm appearance-none focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
           >
-            <option value="">Select a country</option>
+            <option value="">
+              {countriesLoading
+                ? "Loading countries..."
+                : countriesError
+                  ? "Failed to load countries"
+                  : "Select a country"}
+            </option>
             {countries.map((country) => (
               <option key={country.key} value={country.key}>
                 {country.value}
@@ -260,7 +257,7 @@ const Section2: React.FC<SectionProps> = ({
           {purposes
             .slice(0, showAllPurposes ? purposes.length : 3)
             .map((purpose, index) => {
-              const purposeKey = purposeList[index]?.key;
+              const purposeKey = PURPOSE_LIST[index]?.id;
               return (
                 <div key={index} className="flex items-start">
                   <input

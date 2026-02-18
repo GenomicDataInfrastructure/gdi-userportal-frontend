@@ -10,6 +10,7 @@ import LoadingContainer from "@/components/LoadingContainer";
 import ApplicationFormSidebar from "@/components/ApplicationForm/ApplicationFormSidebar";
 import ApplicationFormTopBar from "@/components/ApplicationForm/ApplicationFormTopBar";
 import ApplicationFormContent from "@/components/ApplicationForm/ApplicationFormContent";
+import { Section7Methods } from "@/components/ApplicationForm/Sections/Section7";
 import {
   getApplicationApi,
   RetrievedApplicationData,
@@ -17,6 +18,7 @@ import {
   updateApplicationSection2Api,
   updateApplicationSection3Api,
   updateApplicationSection4Api,
+  updateApplicationSection5Api,
   updateApplicationSection6Api,
   updateApplicationSection7Api,
   updateApplicationSection8Api,
@@ -42,6 +44,7 @@ export default function Page() {
   const [isLoadingApplication, setIsLoadingApplication] =
     useState<boolean>(true);
   const sectionDataRef = useRef<any>(null);
+  const section7UploadRef = useRef<Section7Methods>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
   const handleSaveSection = async () => {
@@ -55,41 +58,37 @@ export default function Page() {
 
       const sectionData = sectionDataRef.current;
       const sectionNumber = currentSection;
-      console.log(`Section Number: ${sectionNumber}`);
-      console.log(`Section Data:`, sectionData);
 
       switch (sectionNumber) {
         case 1:
-          console.log("Saving Section 1 data:", sectionData);
           await updateApplicationSection1Api(
             String(applicationId),
             sectionData
           );
-          console.log("✅ Section 1 saved successfully");
           break;
         case 2:
-          console.log("Saving Section 2 data:", sectionData);
           await updateApplicationSection2Api(
             String(applicationId),
             sectionData
           );
-          console.log("✅ Section 2 saved successfully");
           break;
         case 3:
-          console.log("Saving Section 3 data:", sectionData);
           await updateApplicationSection3Api(
             String(applicationId),
             sectionData
           );
-          console.log("✅ Section 3 saved successfully");
           break;
         case 4:
-          console.log("Saving Section 4 data:", sectionData);
           await updateApplicationSection4Api(
             String(applicationId),
             sectionData
           );
-          console.log("✅ Section 4 saved successfully");
+          break;
+        case 5:
+          await updateApplicationSection5Api(
+            String(applicationId),
+            sectionData
+          );
           break;
         case 6:
           console.log("Saving Section 6 data:", sectionData);
@@ -100,20 +99,30 @@ export default function Page() {
           console.log("✅ Section 6 saved successfully");
           break;
         case 7:
-          console.log("Saving Section 7 data:", sectionData);
-          await updateApplicationSection7Api(
-            String(applicationId),
-            sectionData
-          );
-          console.log("✅ Section 7 saved successfully");
+          console.log("Saving Section 7 - Initial data:", sectionData);
+          // First upload files if any
+          if (section7UploadRef.current) {
+            await section7UploadRef.current.uploadFiles();
+            // Get the updated section data after upload
+            const updatedSectionData = sectionDataRef.current;
+            // Save with the updated data that includes uploaded files
+            await updateApplicationSection7Api(
+              String(applicationId),
+              updatedSectionData
+            );
+          } else {
+            // No files to upload, just save the section data
+            await updateApplicationSection7Api(
+              String(applicationId),
+              sectionData
+            );
+          }
           break;
         case 8:
-          console.log("Saving Section 8 data:", sectionData);
           await updateApplicationSection8Api(
             String(applicationId),
             sectionData
           );
-          console.log("✅ Section 8 saved successfully");
           break;
         default:
           console.warn(`No save handler for section ${sectionNumber}`);
@@ -255,6 +264,7 @@ export default function Page() {
             progressPercentage={progressPercentage}
             applicationData={applicationData}
             sectionDataRef={sectionDataRef}
+            uploadRef={section7UploadRef}
           />
         </div>
       </div>

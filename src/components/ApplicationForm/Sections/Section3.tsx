@@ -7,6 +7,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { UpdateApplicationSection3Request } from "@/app/api/access-management-v1";
 import { SectionProps } from "../ApplicationFormContent";
+import CountryDropdown, { Country } from "../CountryDropdown";
+import {
+  fetchCountriesFromAPI,
+  createPhoneCountrySelectHandler,
+  getDefaultCountries,
+} from "@/utils/countryUtils";
 
 const Section3: React.FC<SectionProps> = ({
   applicationData,
@@ -51,29 +57,34 @@ const Section3: React.FC<SectionProps> = ({
     key: string;
     value: string;
   } | null>(null);
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [phoneCountries] = useState<Country[]>(getDefaultCountries());
+  const [naturalPersonPhoneCountry, setNaturalPersonPhoneCountry] =
+    useState<Country | null>(null);
+  const [contactPersonPhoneCountry, setContactPersonPhoneCountry] =
+    useState<Country | null>(null);
 
-  const countries = [
-    {
-      key: "http://publications.europa.eu/resource/authority/country/NLD",
-      value: "Netherlands",
-    },
-    {
-      key: "http://publications.europa.eu/resource/authority/country/DEU",
-      value: "Germany",
-    },
-    {
-      key: "http://publications.europa.eu/resource/authority/country/FRA",
-      value: "France",
-    },
-    {
-      key: "http://publications.europa.eu/resource/authority/country/ESP",
-      value: "Spain",
-    },
-    {
-      key: "http://publications.europa.eu/resource/authority/country/LUX",
-      value: "Luxembourg",
-    },
-  ];
+  // Fetch countries from API
+  useEffect(() => {
+    const loadCountries = async () => {
+      const countries = await fetchCountriesFromAPI(true);
+      setCountries(countries);
+    };
+
+    loadCountries();
+  }, []);
+
+  const handleNaturalPersonPhoneCountrySelect = createPhoneCountrySelectHandler(
+    setNaturalPersonPhoneCountry,
+    setNaturalPersonPhone,
+    naturalPersonPhone
+  );
+
+  const handleContactPersonPhoneCountrySelect = createPhoneCountrySelectHandler(
+    setContactPersonPhoneCountry,
+    setContactPersonPhone,
+    contactPersonPhone
+  );
 
   // Initialize form data from applicationData
   useEffect(() => {
@@ -451,29 +462,12 @@ const Section3: React.FC<SectionProps> = ({
               <label className="block text-sm font-semibold text-gray-900 mb-2">
                 Country <span className="text-red-600">*</span>
               </label>
-              <div className="relative">
-                <select
-                  value={naturalPersonCountry?.key ?? ""}
-                  onChange={(e) => {
-                    const country = countries.find(
-                      (c) => c.key === e.target.value
-                    );
-                    setNaturalPersonCountry(country ?? null);
-                  }}
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm appearance-none focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
-                >
-                  <option value="">Select a country</option>
-                  {countries.map((country) => (
-                    <option key={country.key} value={country.key}>
-                      {country.value}
-                    </option>
-                  ))}
-                </select>
-                <FontAwesomeIcon
-                  icon={faChevronDown}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm"
-                />
-              </div>
+              <CountryDropdown
+                countries={countries}
+                selectedCountry={naturalPersonCountry}
+                onSelect={(country) => setNaturalPersonCountry(country)}
+                showFlags={true}
+              />
             </div>
           </div>
 
@@ -493,22 +487,28 @@ const Section3: React.FC<SectionProps> = ({
 
           {/* Phone */}
           <div className="mb-6">
-            <label className="block text-sm font-semibold text-gray-900 mb-1">
+            <label className="block text-sm font-semibold text-gray-900 mb-2">
               Phone <span className="text-red-600">*</span>
             </label>
             <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Country Code"
-                value={naturalPersonPhone.countryCode}
-                onChange={(e) =>
-                  setNaturalPersonPhone({
-                    ...naturalPersonPhone,
-                    countryCode: e.target.value,
-                  })
-                }
-                className="w-16 border border-gray-300 rounded px-2 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
-              />
+              <div className="w-40">
+                <CountryDropdown
+                  countries={phoneCountries}
+                  selectedCountry={naturalPersonPhoneCountry}
+                  onSelect={handleNaturalPersonPhoneCountrySelect}
+                  placeholder="Select country"
+                  showFlags={true}
+                  showDialCode={true}
+                />
+              </div>
+              {naturalPersonPhoneCountry &&
+                naturalPersonPhoneCountry.dialCode && (
+                  <div className="flex items-center px-3 border border-gray-300 rounded bg-gray-50">
+                    <span className="text-sm font-medium text-gray-700">
+                      +{naturalPersonPhoneCountry.dialCode}
+                    </span>
+                  </div>
+                )}
               <input
                 type="tel"
                 placeholder="Phone number"
@@ -520,18 +520,6 @@ const Section3: React.FC<SectionProps> = ({
                   })
                 }
                 className="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
-              />
-              <input
-                type="text"
-                placeholder="ISO Code"
-                value={naturalPersonPhone.isoCode}
-                onChange={(e) =>
-                  setNaturalPersonPhone({
-                    ...naturalPersonPhone,
-                    isoCode: e.target.value,
-                  })
-                }
-                className="w-16 border border-gray-300 rounded px-2 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
               />
             </div>
           </div>
@@ -638,29 +626,12 @@ const Section3: React.FC<SectionProps> = ({
               <label className="block text-sm font-semibold text-gray-900 mb-2">
                 Country <span className="text-red-600">*</span>
               </label>
-              <div className="relative">
-                <select
-                  value={legalPersonCountry?.key ?? ""}
-                  onChange={(e) => {
-                    const country = countries.find(
-                      (c) => c.key === e.target.value
-                    );
-                    setLegalPersonCountry(country ?? null);
-                  }}
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm appearance-none focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
-                >
-                  <option value="">Select a country</option>
-                  {countries.map((country) => (
-                    <option key={country.key} value={country.key}>
-                      {country.value}
-                    </option>
-                  ))}
-                </select>
-                <FontAwesomeIcon
-                  icon={faChevronDown}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm"
-                />
-              </div>
+              <CountryDropdown
+                countries={countries}
+                selectedCountry={legalPersonCountry}
+                onSelect={(country) => setLegalPersonCountry(country)}
+                showFlags={true}
+              />
             </div>
           </div>
 
@@ -705,22 +676,20 @@ const Section3: React.FC<SectionProps> = ({
 
             {/* Phone */}
             <div className="mb-6">
-              <label className="block text-sm font-semibold text-gray-900 mb-1">
+              <label className="block text-sm font-semibold text-gray-900 mb-2">
                 Phone <span className="text-red-600">*</span>
               </label>
               <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Country Code"
-                  value={contactPersonPhone.countryCode}
-                  onChange={(e) =>
-                    setContactPersonPhone({
-                      ...contactPersonPhone,
-                      countryCode: e.target.value,
-                    })
-                  }
-                  className="w-16 border border-gray-300 rounded px-2 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
-                />
+                <div className="w-40">
+                  <CountryDropdown
+                    countries={phoneCountries}
+                    selectedCountry={contactPersonPhoneCountry}
+                    onSelect={handleContactPersonPhoneCountrySelect}
+                    placeholder="Select country"
+                    showFlags={true}
+                    showDialCode={true}
+                  />
+                </div>
                 <input
                   type="tel"
                   placeholder="Phone number"
@@ -732,18 +701,6 @@ const Section3: React.FC<SectionProps> = ({
                     })
                   }
                   className="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
-                />
-                <input
-                  type="text"
-                  placeholder="ISO Code"
-                  value={contactPersonPhone.isoCode}
-                  onChange={(e) =>
-                    setContactPersonPhone({
-                      ...contactPersonPhone,
-                      isoCode: e.target.value,
-                    })
-                  }
-                  className="w-16 border border-gray-300 rounded px-2 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
                 />
               </div>
             </div>

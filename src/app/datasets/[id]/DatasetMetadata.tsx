@@ -278,9 +278,9 @@ const DatasetMetadata = ({
               {dataset.keywords.map((keyword) => (
                 <span
                   className="bg-warning bg-opacity-50 px-4 py-1 rounded-full text-gray font-medium text-[14px] inline-block"
-                  key={keyword}
+                  key={typeof keyword === "string" ? keyword : keyword.value}
                 >
-                  {keyword}
+                  {typeof keyword === "string" ? keyword : keyword.label}
                 </span>
               ))}
             </div>

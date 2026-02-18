@@ -364,10 +364,33 @@ const ApplicationCreationModal: React.FC<ApplicationCreationModalProps> = ({
                 className="w-full border border-gray-300 rounded px-3 py-2 pr-10 text-sm appearance-none focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
               >
                 <option value="">Select language</option>
+                <option value="bg">Bulgarian</option>
+                <option value="hr">Croatian</option>
+                <option value="cs">Czech</option>
+                <option value="da">Danish</option>
+                <option value="nl">Dutch</option>
                 <option value="en">English</option>
+                <option value="et">Estonian</option>
+                <option value="fi">Finnish</option>
                 <option value="fr">French</option>
                 <option value="de">German</option>
+                <option value="el">Greek</option>
+                <option value="hu">Hungarian</option>
+                <option value="ga">Irish</option>
+                <option value="it">Italian</option>
+                <option value="lv">Latvian</option>
+                <option value="lt">Lithuanian</option>
+                <option value="mt">Maltese</option>
+                <option value="pl">Polish</option>
+                <option value="pt">Portuguese</option>
+                <option value="ro">Romanian</option>
+                <option value="sk">Slovak</option>
+                <option value="sl">Slovenian</option>
                 <option value="es">Spanish</option>
+                <option value="sv">Swedish</option>
+                <option value="is">Icelandic</option>
+                <option value="nb">Norwegian Bokmål</option>
+                <option value="nn">Norwegian Nynorsk</option>
               </select>
               <FontAwesomeIcon
                 icon={faChevronDown}

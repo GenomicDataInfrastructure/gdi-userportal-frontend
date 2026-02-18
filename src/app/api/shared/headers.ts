@@ -29,7 +29,7 @@ export const createHeaders = async (): Promise<Record<string, string>> => {
 
 export const createAuthHeaders = async (): Promise<Record<string, string>> => {
   const headers: Record<string, string> = {
-    "Content-Type": "application/json",
+    // "Content-Type": "application/json",
   };
   const session: ExtendedSession | null = await getServerSession(authOptions);
 

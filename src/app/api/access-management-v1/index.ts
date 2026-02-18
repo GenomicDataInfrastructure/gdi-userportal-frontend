@@ -67,7 +67,7 @@ interface ApplicationStatus {
   userId: string;
 }
 
-interface CountryOption {
+export interface CountryOption {
   key: string;
   value: string;
 }
@@ -211,11 +211,45 @@ interface FormSection4 {
   rangeOfAmountOfFinancing?: LegalPersonOption;
 }
 
+interface FormSection5 {
+  sectionNumber?: number;
+  personResponsibleSameAsContactPerson?: boolean;
+  personResponsibleName?: string;
+  personResearchSameAsContactPerson?: boolean;
+  personResearchName?: string;
+  whyAreTheDataRequested?: string;
+  whatIsTheAimAndTopicOfTheProject?: string;
+  whichAreTheExpectedBenefits?: string;
+  describeApplicantsQualification?: string;
+  legalBasis?: string;
+  linkToTheSupportingLegalBasis?: string;
+}
+
+interface FormSection6 {}
+
+interface FormSection7 {
+  sectionNumber?: number;
+  additionalAttachment?: AdditionalAttachment[];
+  additionalInformation?: string;
+}
+
+interface FormSection8 {
+  sectionNumber?: number;
+  acceptHealthDataBody?: boolean;
+  awareProcessingFee?: boolean;
+  awareChargeFee?: boolean;
+  awareInformationCorrect?: boolean;
+}
+
 interface ApplicationForm {
   section1?: FormSection1;
   section2?: FormSection2;
   section3?: FormSection3;
   section4?: FormSection4;
+  section5?: FormSection5;
+  section6?: FormSection6;
+  section7?: FormSection7;
+  section8?: FormSection8;
   [key: string]: any;
 }
 
@@ -281,6 +315,20 @@ export interface UpdateApplicationSection4Request {
   invoiceAddress?: string;
   peppolCode?: string;
   rangeOfAmountOfFinancing?: LegalPersonOption;
+}
+
+export interface UpdateApplicationSection5Request {
+  sectionNumber: number;
+  personResponsibleSameAsContactPerson: boolean;
+  personResponsibleName: string;
+  personResearchSameAsContactPerson: boolean;
+  personResearchName: string;
+  whyAreTheDataRequested: string;
+  whatIsTheAimAndTopicOfTheProject: string;
+  whichAreTheExpectedBenefits: string;
+  describeApplicantsQualification: string;
+  legalBasis: string;
+  linkToTheSupportingLegalBasis: string;
 }
 
 export interface UpdateApplicationSection6Item {
@@ -469,13 +517,12 @@ function mapToRetrievedApplicationData(data: any): RetrievedApplicationData {
 }
 export const listApplicationsApi = async () => {
   const headers = await createHeaders();
+  const requestPath = "data-request/applications?page=1&limit=5";
   try {
     const client = accessManagementClient;
-    const requestPath =
-      "data-request/application?page=1&limit=5&status=DRAFT,SUBMITTED";
     const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
     console.log("AMS Request URL:", fullUrl);
-    const response = await client.get(requestPath, {
+    const response = await client.post(requestPath, {
       headers,
     });
 
@@ -490,6 +537,8 @@ export const listApplicationsApi = async () => {
   } catch (error) {
     if (isAxiosError(error)) {
       console.error("❌ AMS request failed", {
+        requestPath,
+        baseUrl: accessManagementClient.defaults.baseURL,
         status: error.response?.status,
         message: error.message,
         responseData: error.response?.data,
@@ -673,6 +722,40 @@ export const updateApplicationSection4Api = async (
   }
 };
 
+export const updateApplicationSection5Api = async (
+  applicationId: string,
+  section5Data: UpdateApplicationSection5Request
+) => {
+  const headers = await createHeaders();
+  try {
+    const client = accessManagementClient;
+    const requestPath = `data-request/application/${encodeURIComponent(applicationId)}/section/5`;
+    const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
+    console.log("AMS Section 5 Update URL:", fullUrl);
+
+    const response = await client.put(requestPath, section5Data, {
+      headers,
+    });
+
+    console.debug("✅ AMS Section 5 update succeeded", {
+      status: response.status,
+    });
+    return response.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.error("❌ AMS Section 5 update failed", {
+        status: error.response?.status,
+        message: error.message,
+        responseData: error.response?.data,
+      });
+      throw error;
+    } else {
+      console.error("❌ Non-Axios error", error);
+      throw error;
+    }
+  }
+};
+
 export const updateApplicationSection6Api = async (
   applicationId: string,
   section6Data: UpdateApplicationSection6Request
@@ -725,6 +808,8 @@ export const updateApplicationSection7Api = async (
     const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
     console.log("AMS Section 7 Update URL:", fullUrl);
 
+    console.log("JSON Field - ", JSON.stringify(section7Data));
+
     const response = await client.put(requestPath, section7Data, {
       headers,
     });
@@ -770,6 +855,90 @@ export const updateApplicationSection8Api = async (
   } catch (error) {
     if (isAxiosError(error)) {
       console.error("❌ AMS Section 8 update failed", {
+        status: error.response?.status,
+        message: error.message,
+        responseData: error.response?.data,
+      });
+      throw error;
+    } else {
+      console.error("❌ Non-Axios error", error);
+      throw error;
+    }
+  }
+};
+
+export const listCountriesApi = async (): Promise<CountryOption[]> => {
+  const client = accessManagementClient;
+
+  const requestPath = `countries/en/all`;
+  const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
+  console.log("AMS Countries List URL:", fullUrl);
+  const response = await fetch(
+    `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`,
+    {
+      headers: {
+        accept: "application/json",
+      },
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to load countries (${response.status})`);
+  }
+
+  const data = await response.json();
+
+  const rawCountries = Array.isArray(data)
+    ? data
+    : Array.isArray(data?.data)
+      ? data.data
+      : Array.isArray(data?.countries)
+        ? data.countries
+        : [];
+
+  return rawCountries
+    .map((country: any) => ({
+      key: String(country?.isoCode ?? ""),
+      value: String(country?.name ?? ""),
+    }))
+    .filter((country: CountryOption) => Boolean(country.key && country.value));
+};
+
+export const uploadApplicationDataApi = async (
+  applicationId: string,
+  file: File
+) => {
+  const headers = await createHeaders();
+
+  try {
+    const client = accessManagementClient;
+    const requestPath = `data-request/application/${encodeURIComponent(applicationId)}/data`;
+    const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
+    console.log("AMS Upload Application Data URL:", fullUrl);
+
+    const formData = new FormData();
+    formData.append("data", file);
+
+    // 🔴 CRITICAL FIX: Override Content-Type header for FormData uploads
+    // axios client has default "application/json" headers that must be overridden
+    // Setting to undefined lets the browser set the correct multipart/form-data boundary
+    const uploadHeaders = {
+      ...headers,
+      "Content-Type": undefined as any, // Override axios instance default
+    };
+
+    const response = await client.post(requestPath, formData, {
+      headers: uploadHeaders,
+    });
+
+    console.debug("✅ AMS upload data succeeded", {
+      status: response.status,
+    });
+    return response.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.error("❌ AMS upload data failed", {
         status: error.response?.status,
         message: error.message,
         responseData: error.response?.data,

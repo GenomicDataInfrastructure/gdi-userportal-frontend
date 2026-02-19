@@ -60,7 +60,7 @@ const ApplicationFormSidebar: React.FC<ApplicationFormSidebarProps> = ({
                     {section.label}
                   </p>
                   <div className="mt-1 text-xs font-medium text-gray-600">
-                    {section.completed}/{section.total}
+                    {section.completed}/{section.total} filled
                   </div>
                 </div>
               </div>

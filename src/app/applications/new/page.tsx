@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import LoadingContainer from "@/components/LoadingContainer";
 import ApplicationFormSidebar from "@/components/ApplicationForm/ApplicationFormSidebar";
 import ApplicationFormTopBar from "@/components/ApplicationForm/ApplicationFormTopBar";
@@ -33,11 +33,28 @@ interface FormSection {
   isActive: boolean;
 }
 
+const MIN_SECTION = 1;
+const MAX_SECTION = 8;
+
+const getValidSection = (sectionParam: string | null): number => {
+  const parsedSection = Number(sectionParam);
+
+  if (!Number.isInteger(parsedSection)) {
+    return MIN_SECTION;
+  }
+
+  return Math.min(MAX_SECTION, Math.max(MIN_SECTION, parsedSection));
+};
+
 export default function Page() {
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const applicationId = searchParams.get("id");
   const { data: session, status } = useSession();
-  const [currentSection, setCurrentSection] = useState<number>(1);
+  const [currentSection, setCurrentSection] = useState<number>(
+    getValidSection(searchParams.get("section"))
+  );
   const [language, setLanguage] = useState<string>("English");
   const [applicationData, setApplicationData] =
     useState<RetrievedApplicationData | null>(null);
@@ -47,7 +64,32 @@ export default function Page() {
   const section7UploadRef = useRef<Section7Methods>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
+  const fetchApplication = async () => {
+    try {
+      if (!applicationId) {
+        return;
+      }
+
+      setIsLoadingApplication(true);
+      const data = await getApplicationApi(String(applicationId));
+      console.log("Fetched Application Data:", data);
+      setApplicationData(data);
+    } catch (error) {
+      console.error("Failed to fetch application:", error);
+    } finally {
+      setIsLoadingApplication(false);
+    }
+  };
+
+  const updateSectionInUrl = (sectionId: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("section", String(sectionId));
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
   const handleSaveSection = async () => {
+    let wasSaved = false;
+
     try {
       setIsSaving(true);
 
@@ -127,6 +169,12 @@ export default function Page() {
         default:
           console.warn(`No save handler for section ${sectionNumber}`);
       }
+
+      wasSaved = true;
+
+      if (wasSaved) {
+        await fetchApplication();
+      }
     } catch (error) {
       console.error("Failed to save section:", error);
     } finally {
@@ -135,23 +183,23 @@ export default function Page() {
   };
 
   useEffect(() => {
-    const fetchApplication = async () => {
-      try {
-        setIsLoadingApplication(true);
-        const data = await getApplicationApi(String(applicationId));
-        console.log("Fetched Application Data:", data);
-        setApplicationData(data);
-      } catch (error) {
-        console.error("Failed to fetch application:", error);
-      } finally {
-        setIsLoadingApplication(false);
-      }
-    };
-
     if (applicationId) {
       fetchApplication();
     }
   }, [applicationId]);
+
+  useEffect(() => {
+    const sectionFromUrl = getValidSection(searchParams.get("section"));
+    if (sectionFromUrl !== currentSection) {
+      setCurrentSection(sectionFromUrl);
+      setSections((prevSections) =>
+        prevSections.map((section) => ({
+          ...section,
+          isActive: section.id === sectionFromUrl,
+        }))
+      );
+    }
+  }, [searchParams]);
 
   const [sections, setSections] = useState<FormSection[]>([
     {
@@ -225,19 +273,24 @@ export default function Page() {
   }
 
   const handleSectionChange = (sectionId: number) => {
-    setSections(
-      sections.map((section) => ({
+    const normalizedSectionId = getValidSection(String(sectionId));
+
+    setSections((prevSections) =>
+      prevSections.map((section) => ({
         ...section,
-        isActive: section.id === sectionId,
+        isActive: section.id === normalizedSectionId,
       }))
     );
-    setCurrentSection(sectionId);
+    setCurrentSection(normalizedSectionId);
+    updateSectionInUrl(normalizedSectionId);
   };
 
   const currentSectionData = sections.find((s) => s.id === currentSection);
-  const progressPercentage = currentSectionData
-    ? (currentSectionData.completed / currentSectionData.total) * 100
-    : 0;
+  
+  // Calculate overall progress across ALL sections
+  const totalCompleted = sections.reduce((sum, s) => sum + s.completed, 0);
+  const totalFields = sections.reduce((sum, s) => sum + s.total, 0);
+  const progressPercentage = totalFields > 0 ? (totalCompleted / totalFields) * 100 : 0;
 
   return (
     <>
@@ -265,6 +318,10 @@ export default function Page() {
             applicationData={applicationData}
             sectionDataRef={sectionDataRef}
             uploadRef={section7UploadRef}
+            onPreviousSection={() => handleSectionChange(currentSection - 1)}
+            onNextSection={() => handleSectionChange(currentSection + 1)}
+            canGoPrevious={currentSection > MIN_SECTION}
+            canGoNext={currentSection < sections.length}
           />
         </div>
       </div>

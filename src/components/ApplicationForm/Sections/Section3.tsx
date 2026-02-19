@@ -37,10 +37,8 @@ const Section3: React.FC<SectionProps> = ({
   const [naturalPersonAddress, setNaturalPersonAddress] = useState("");
   const [naturalPersonZipCode, setNaturalPersonZipCode] = useState("");
   const [naturalPersonCity, setNaturalPersonCity] = useState("");
-  const [naturalPersonCountry, setNaturalPersonCountry] = useState<{
-    key: string;
-    value: string;
-  } | null>(null);
+  const [naturalPersonCountry, setNaturalPersonCountry] =
+    useState<Country | null>(null);
   const [naturalPersonEmail, setNaturalPersonEmail] = useState("");
   const [naturalPersonPhone, setNaturalPersonPhone] = useState({
     countryCode: "",
@@ -53,10 +51,8 @@ const Section3: React.FC<SectionProps> = ({
   const [legalPersonAddress, setLegalPersonAddress] = useState("");
   const [legalPersonZipCode, setLegalPersonZipCode] = useState("");
   const [legalPersonCity, setLegalPersonCity] = useState("");
-  const [legalPersonCountry, setLegalPersonCountry] = useState<{
-    key: string;
-    value: string;
-  } | null>(null);
+  const [legalPersonCountry, setLegalPersonCountry] =
+    useState<Country | null>(null);
   const [countries, setCountries] = useState<Country[]>([]);
   const [phoneCountries] = useState<Country[]>(getDefaultCountries());
   const [naturalPersonPhoneCountry, setNaturalPersonPhoneCountry] =
@@ -85,6 +81,62 @@ const Section3: React.FC<SectionProps> = ({
     setContactPersonPhone,
     contactPersonPhone
   );
+
+  const findPhoneCountryFromPhoneData = (phone?: {
+    countryCode?: string;
+    isoCode?: string;
+  }): Country | null => {
+    if (!phone) {
+      return null;
+    }
+
+    const normalizedIsoCode = phone.isoCode?.toUpperCase();
+    if (normalizedIsoCode) {
+      const byIsoCode = phoneCountries.find((country) => {
+        const countryIso = (country.iso2 || country.key).toUpperCase();
+        return countryIso === normalizedIsoCode;
+      });
+
+      if (byIsoCode) {
+        return byIsoCode;
+      }
+    }
+
+    const normalizedDialCode = (phone.countryCode || "").replace("+", "");
+    if (normalizedDialCode) {
+      const byDialCode = phoneCountries.find(
+        (country) => country.dialCode === normalizedDialCode
+      );
+
+      if (byDialCode) {
+        return byDialCode;
+      }
+    }
+
+    return null;
+  };
+
+  const findCountryFromOptions = (
+    countryValue: { key?: string; value?: string } | null | undefined
+  ): Country | null => {
+    if (!countryValue) {
+      return null;
+    }
+
+    const byKey = countryValue.key
+      ? countries.find((country) => country.key === countryValue.key)
+      : null;
+
+    if (byKey) {
+      return byKey;
+    }
+
+    const byValue = countryValue.value
+      ? countries.find((country) => country.value === countryValue.value)
+      : null;
+
+    return byValue || (countryValue as Country);
+  };
 
   // Initialize form data from applicationData
   useEffect(() => {
@@ -124,7 +176,9 @@ const Section3: React.FC<SectionProps> = ({
       setNaturalPersonAddress(section3.naturalPersonAddress ?? "");
       setNaturalPersonZipCode(section3.naturalPersonZipCode ?? "");
       setNaturalPersonCity(section3.naturalPersonCity ?? "");
-      setNaturalPersonCountry(section3.naturalPersonCountry ?? null);
+      setNaturalPersonCountry(
+        findCountryFromOptions(section3.naturalPersonCountry)
+      );
       setNaturalPersonEmail(section3.naturalPersonEmail ?? "");
       setNaturalPersonPhone(
         section3.naturalPersonPhone ?? {
@@ -133,15 +187,21 @@ const Section3: React.FC<SectionProps> = ({
           isoCode: "",
         }
       );
+      setNaturalPersonPhoneCountry(
+        findPhoneCountryFromPhoneData(section3.naturalPersonPhone)
+      );
       setNaturalPersonJobTitle(section3.naturalPersonJobTitle ?? "");
       setNaturalPersonAffiliation(section3.naturalPersonAffiliation ?? "");
       setLegalPersonName(section3.legalPersonName ?? "");
       setLegalPersonAddress(section3.legalPersonAddress ?? "");
       setLegalPersonZipCode(section3.legalPersonZipCode ?? "");
       setLegalPersonCity(section3.legalPersonCity ?? "");
-      setLegalPersonCountry(section3.legalPersonCountry ?? null);
+      setLegalPersonCountry(findCountryFromOptions(section3.legalPersonCountry));
+      setContactPersonPhoneCountry(
+        findPhoneCountryFromPhoneData(section3.contactPersonPhone)
+      );
     }
-  }, [applicationData?.form?.section3]);
+  }, [applicationData?.form?.section3, countries]);
 
   // Update sectionDataRef when form data changes
   useEffect(() => {
@@ -501,14 +561,6 @@ const Section3: React.FC<SectionProps> = ({
                   showDialCode={true}
                 />
               </div>
-              {naturalPersonPhoneCountry &&
-                naturalPersonPhoneCountry.dialCode && (
-                  <div className="flex items-center px-3 border border-gray-300 rounded bg-gray-50">
-                    <span className="text-sm font-medium text-gray-700">
-                      +{naturalPersonPhoneCountry.dialCode}
-                    </span>
-                  </div>
-                )}
               <input
                 type="tel"
                 placeholder="Phone number"

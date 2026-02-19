@@ -36,6 +36,10 @@ interface ApplicationFormContentProps {
   uploadRef?: React.RefObject<any>;
   onSave?: () => Promise<void>;
   isSaving?: boolean;
+  onPreviousSection?: () => void;
+  onNextSection?: () => void;
+  canGoPrevious?: boolean;
+  canGoNext?: boolean;
 }
 
 const sectionComponents: { [key: number]: React.FC<SectionProps> } = {
@@ -55,6 +59,10 @@ const ApplicationFormContent: React.FC<ApplicationFormContentProps> = ({
   applicationData,
   sectionDataRef,
   uploadRef,
+  onPreviousSection,
+  onNextSection,
+  canGoPrevious = true,
+  canGoNext = true,
 }) => {
   if (!section) {
     return (
@@ -100,10 +108,18 @@ const ApplicationFormContent: React.FC<ApplicationFormContentProps> = ({
 
         {/* Navigation Buttons */}
         <div className="mt-8 flex gap-4 pb-8">
-          <button className="rounded bg-gray-300 px-6 py-2 font-medium text-gray-700 hover:bg-gray-400">
+          <button
+            onClick={onPreviousSection}
+            disabled={!canGoPrevious}
+            className="rounded bg-gray-300 px-6 py-2 font-medium text-gray-700 hover:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50"
+          >
             Previous Section
           </button>
-          <button className="rounded bg-primary px-6 py-2 font-medium text-white hover:bg-secondary">
+          <button
+            onClick={onNextSection}
+            disabled={!canGoNext}
+            className="rounded bg-primary px-6 py-2 font-medium text-white hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-50"
+          >
             Next Section
           </button>
         </div>

@@ -178,7 +178,7 @@ const Section8: React.FC<SectionProps> = ({
                   htmlFor="confirm-accept-health-data-body"
                   className="text-base font-semibold text-gray-900 cursor-pointer block mb-2"
                 >
-                  ✅ Accept Health Data Body Terms
+                  Accept Health Data Body Terms
                 </label>
                 <p className="text-sm text-gray-600 leading-relaxed">
                   I accept that the Health Data Access Body will process this
@@ -221,7 +221,7 @@ const Section8: React.FC<SectionProps> = ({
                   htmlFor="confirm-processing-fee"
                   className="text-base font-semibold text-gray-900 cursor-pointer block mb-2"
                 >
-                  💰 Processing Fee Acknowledgement
+                  Processing Fee Acknowledgement
                 </label>
                 <p className="text-sm text-gray-600 leading-relaxed">
                   I acknowledge that a processing fee will be charged for
@@ -264,7 +264,7 @@ const Section8: React.FC<SectionProps> = ({
                   htmlFor="confirm-charge-fee"
                   className="text-base font-semibold text-gray-900 cursor-pointer block mb-2"
                 >
-                  💳 Data Holder Charge Fee Awareness
+                  Data Holder Charge Fee Awareness
                 </label>
                 <p className="text-sm text-gray-600 leading-relaxed">
                   I am aware that individual data holders may charge additional
@@ -309,7 +309,7 @@ const Section8: React.FC<SectionProps> = ({
                   htmlFor="confirm-information-correct"
                   className="text-base font-semibold text-gray-900 cursor-pointer block mb-2"
                 >
-                  📋 Information Correctness Confirmation
+                  Information Correctness Confirmation
                 </label>
                 <p className="text-sm text-gray-600 leading-relaxed">
                   I confirm that all information provided in this application is
@@ -343,7 +343,7 @@ const Section8: React.FC<SectionProps> = ({
           />
           <div>
             <p className="text-sm font-bold text-green-900">
-              ✅ All Confirmations Complete!
+              All Confirmations Complete!
             </p>
             <p className="text-xs text-green-800 mt-1">
               Your application is ready to be submitted. Click Save when you are
@@ -359,7 +359,7 @@ const Section8: React.FC<SectionProps> = ({
           />
           <div>
             <p className="text-sm font-bold text-amber-900">
-              ⚠️ Incomplete Confirmations
+              Incomplete Confirmations
             </p>
             <p className="text-xs text-amber-800 mt-1">
               Please review and confirm all {totalCount} statements before

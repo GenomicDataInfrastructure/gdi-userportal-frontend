@@ -30,18 +30,11 @@ const ApplicationFormTopBar: React.FC<ApplicationFormTopBarProps> = ({
             Home
           </a>
           <span className="text-gray-400">/</span>
-          <a href="/data-requests" className="text-primary hover:underline">
-            Data Request applications
-          </a>
-          <span className="text-gray-400">/</span>
           <span className="text-gray-900">Application Form</span>
         </div>
 
         {/* Right Section - Buttons */}
         <div className="flex items-center gap-3">
-          <button className="rounded bg-gray-700 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800">
-            Input
-          </button>
 
           {/* Language Dropdown */}
           <div className="relative group">

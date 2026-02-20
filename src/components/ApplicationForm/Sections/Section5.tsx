@@ -44,6 +44,58 @@ const Section5: React.FC<SectionProps> = ({
   const [linkToTheSupportingLegalBasis, setLinkToTheSupportingLegalBasis] =
     useState<string>("");
 
+  // Validation errors
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  // Validation function
+  const validateField = (fieldName: string, value: string): string => {
+    console.log(`validating ${fieldName} and value ${value}`);
+    switch (fieldName) {
+      case "personResponsibleName":
+        if (!personResponsibleSameAsContactPerson && !value.trim()) {
+          return "Person responsible name is required";
+        }
+        return "";
+      case "whyAreTheDataRequested":
+        if (!value.trim()) {
+          return "This field is required";
+        }
+        return "";
+      case "whatIsTheAimAndTopicOfTheProject":
+        if (!value.trim()) {
+          return "This field is required";
+        }
+        return "";
+      case "whichAreTheExpectedBenefits":
+        if (!value.trim()) {
+          return "This field is required";
+        }
+        return "";
+      case "describeApplicantsQualification":
+        if (!value.trim()) {
+          return "This field is required";
+        }
+        return "";
+      case "legalBasis":
+        if (!value.trim()) {
+          return "This field is required";
+        }
+        return "";
+      case "linkToTheSupportingLegalBasis":
+        if (!value.trim()) {
+          return "This field is required";
+        }
+        return "";
+      default:
+        return "";
+    }
+  };
+
+  const handleBlur = (fieldName: string) => {
+    setTouched((prev) => ({ ...prev, [fieldName]: true }));
+  };
+
   // Initialize from applicationData
   useEffect(() => {
     if (applicationData?.form?.section5) {
@@ -105,6 +157,35 @@ const Section5: React.FC<SectionProps> = ({
       console.log("📝 Updated Section5 Data:", section5Data);
       sectionDataRef.current = section5Data;
     }
+
+    // Update validation errors
+    const newErrors: Record<string, string> = {};
+    newErrors.personResponsibleName = validateField(
+      "personResponsibleName",
+      personResponsibleName
+    );
+    newErrors.whyAreTheDataRequested = validateField(
+      "whyAreTheDataRequested",
+      whyAreTheDataRequested
+    );
+    newErrors.whatIsTheAimAndTopicOfTheProject = validateField(
+      "whatIsTheAimAndTopicOfTheProject",
+      whatIsTheAimAndTopicOfTheProject
+    );
+    newErrors.whichAreTheExpectedBenefits = validateField(
+      "whichAreTheExpectedBenefits",
+      whichAreTheExpectedBenefits
+    );
+    newErrors.describeApplicantsQualification = validateField(
+      "describeApplicantsQualification",
+      describeApplicantsQualification
+    );
+    newErrors.legalBasis = validateField("legalBasis", legalBasis);
+    newErrors.linkToTheSupportingLegalBasis = validateField(
+      "linkToTheSupportingLegalBasis",
+      linkToTheSupportingLegalBasis
+    );
+    setErrors(newErrors);
   }, [
     sectionDataRef,
     personResponsibleSameAsContactPerson,
@@ -165,7 +246,7 @@ const Section5: React.FC<SectionProps> = ({
               (purpose, idx) => (
                 <div key={idx} className="flex items-start">
                   <span className="mr-3 text-primary">✓</span>
-                  <span className="text-sm text-gray-700">{purpose.title}</span>
+                  <span className="text-sm text-gray-700">{purpose.value}</span>
                 </div>
               )
             )
@@ -216,8 +297,18 @@ const Section5: React.FC<SectionProps> = ({
               type="text"
               value={personResponsibleName}
               onChange={(e) => setPersonResponsibleName(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
+              onBlur={() => handleBlur("personResponsibleName")}
+              className={`w-full border rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary ${
+                touched.personResponsibleName && errors.personResponsibleName
+                  ? "border-red-500 focus:border-red-500"
+                  : "border-gray-300 focus:border-primary"
+              }`}
             />
+            {touched.personResponsibleName && errors.personResponsibleName && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.personResponsibleName}
+              </p>
+            )}
           </div>
         )}
       </div>
@@ -280,8 +371,18 @@ const Section5: React.FC<SectionProps> = ({
           rows={4}
           value={whyAreTheDataRequested}
           onChange={(e) => setWhyAreTheDataRequested(e.target.value)}
-          className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
+          onBlur={() => handleBlur("whyAreTheDataRequested")}
+          className={`w-full border rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 ${
+            touched.whyAreTheDataRequested && errors.whyAreTheDataRequested
+              ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+              : "border-gray-300 focus:ring-primary focus:border-primary"
+          }`}
         />
+        {touched.whyAreTheDataRequested && errors.whyAreTheDataRequested && (
+          <p className="mt-1 text-sm text-red-600">
+            {errors.whyAreTheDataRequested}
+          </p>
+        )}
       </div>
 
       {/* Aim and topic of project */}
@@ -294,8 +395,20 @@ const Section5: React.FC<SectionProps> = ({
           rows={4}
           value={whatIsTheAimAndTopicOfTheProject}
           onChange={(e) => setWhatIsTheAimAndTopicOfTheProject(e.target.value)}
-          className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
+          onBlur={() => handleBlur("whatIsTheAimAndTopicOfTheProject")}
+          className={`w-full border rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 ${
+            touched.whatIsTheAimAndTopicOfTheProject &&
+            errors.whatIsTheAimAndTopicOfTheProject
+              ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+              : "border-gray-300 focus:ring-primary focus:border-primary"
+          }`}
         />
+        {touched.whatIsTheAimAndTopicOfTheProject &&
+          errors.whatIsTheAimAndTopicOfTheProject && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.whatIsTheAimAndTopicOfTheProject}
+            </p>
+          )}
       </div>
 
       {/* Expected benefit */}
@@ -309,8 +422,20 @@ const Section5: React.FC<SectionProps> = ({
           rows={4}
           value={whichAreTheExpectedBenefits}
           onChange={(e) => setWhichAreTheExpectedBenefits(e.target.value)}
-          className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
+          onBlur={() => handleBlur("whichAreTheExpectedBenefits")}
+          className={`w-full border rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 ${
+            touched.whichAreTheExpectedBenefits &&
+            errors.whichAreTheExpectedBenefits
+              ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+              : "border-gray-300 focus:ring-primary focus:border-primary"
+          }`}
         />
+        {touched.whichAreTheExpectedBenefits &&
+          errors.whichAreTheExpectedBenefits && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.whichAreTheExpectedBenefits}
+            </p>
+          )}
       </div>
 
       {/* Applicant qualifications */}
@@ -324,8 +449,20 @@ const Section5: React.FC<SectionProps> = ({
           rows={4}
           value={describeApplicantsQualification}
           onChange={(e) => setDescribeApplicantsQualification(e.target.value)}
-          className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
+          onBlur={() => handleBlur("describeApplicantsQualification")}
+          className={`w-full border rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 ${
+            touched.describeApplicantsQualification &&
+            errors.describeApplicantsQualification
+              ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+              : "border-gray-300 focus:ring-primary focus:border-primary"
+          }`}
         />
+        {touched.describeApplicantsQualification &&
+          errors.describeApplicantsQualification && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.describeApplicantsQualification}
+            </p>
+          )}
       </div>
 
       {/* Legal basis */}
@@ -352,8 +489,16 @@ const Section5: React.FC<SectionProps> = ({
           rows={4}
           value={legalBasis}
           onChange={(e) => setLegalBasis(e.target.value)}
-          className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
+          onBlur={() => handleBlur("legalBasis")}
+          className={`w-full border rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 ${
+            touched.legalBasis && errors.legalBasis
+              ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+              : "border-gray-300 focus:ring-primary focus:border-primary"
+          }`}
         />
+        {touched.legalBasis && errors.legalBasis && (
+          <p className="mt-1 text-sm text-red-600">{errors.legalBasis}</p>
+        )}
       </div>
 
       {/* Link to supporting documentation */}
@@ -366,8 +511,20 @@ const Section5: React.FC<SectionProps> = ({
           type="text"
           value={linkToTheSupportingLegalBasis}
           onChange={(e) => setLinkToTheSupportingLegalBasis(e.target.value)}
-          className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
+          onBlur={() => handleBlur("linkToTheSupportingLegalBasis")}
+          className={`w-full border rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 ${
+            touched.linkToTheSupportingLegalBasis &&
+            errors.linkToTheSupportingLegalBasis
+              ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+              : "border-gray-300 focus:ring-primary focus:border-primary"
+          }`}
         />
+        {touched.linkToTheSupportingLegalBasis &&
+          errors.linkToTheSupportingLegalBasis && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.linkToTheSupportingLegalBasis}
+            </p>
+          )}
       </div>
 
       {/* Go To Top Button */}
@@ -381,6 +538,40 @@ const Section5: React.FC<SectionProps> = ({
       </div>
     </>
   );
+};
+
+// Export validation function for use in parent component
+export const validateSection5Data = (
+  data: UpdateApplicationSection5Request
+): string[] => {
+  const missingFields: string[] = [];
+
+  if (
+    !data.personResponsibleSameAsContactPerson &&
+    !data.personResponsibleName?.trim()
+  ) {
+    missingFields.push("Person responsible name");
+  }
+  if (!data.whyAreTheDataRequested?.trim()) {
+    missingFields.push("Reason");
+  }
+  if (!data.whatIsTheAimAndTopicOfTheProject?.trim()) {
+    missingFields.push("Aim and topic of the project");
+  }
+  if (!data.whichAreTheExpectedBenefits?.trim()) {
+    missingFields.push("Expected benefits");
+  }
+  if (!data.describeApplicantsQualification?.trim()) {
+    missingFields.push("Applicant qualifications");
+  }
+  if (!data.legalBasis?.trim()) {
+    missingFields.push("Legal basis");
+  }
+  if (!data.linkToTheSupportingLegalBasis?.trim()) {
+    missingFields.push("Link to supporting documentation");
+  }
+
+  return missingFields;
 };
 
 export default Section5;

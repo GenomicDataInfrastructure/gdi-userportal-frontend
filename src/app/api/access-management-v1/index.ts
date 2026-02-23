@@ -484,11 +484,11 @@ export const removeDatasetFromBasketApi = async (datasetId: string) => {
 function mapApplicationResponseToListed(data: any): ListedApplication {
   // Map raw application response to ListedApplication format
   const mongoId = String(data?._id ?? "");
-  // Convert MongoDB ObjectId to number-like representation
-  const id = mongoId;
+  // Convert MongoDB ObjectId string to a number (hash-like value)
+  const id = parseInt(mongoId.replace(/\D/g, ""), 10) || Date.now();
 
   return {
-    id,
+    id: id,
     title: String(data?.title ?? ""),
     description: "", // No direct mapping in response
     currentState: String(data?.status?.status ?? ""),

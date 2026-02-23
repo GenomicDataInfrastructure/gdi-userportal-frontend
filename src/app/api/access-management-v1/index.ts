@@ -950,3 +950,40 @@ export const uploadApplicationDataApi = async (
     }
   }
 };
+
+export const exportApplicationToWordApi = async (
+  applicationId: string,
+  language: string = "en",
+  translatedLang: string = "en",
+  version: number = 1
+): Promise<Blob> => {
+  const headers = await createHeaders();
+  try {
+    const client = accessManagementClient;
+    const requestPath = `data-request/application/${encodeURIComponent(applicationId)}/export/docx/${language}/${translatedLang}/${version}`;
+    const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
+    console.log("AMS Export to Word URL:", fullUrl);
+
+    const response = await client.get(requestPath, {
+      headers,
+      responseType: "blob",
+    });
+
+    console.debug("✅ AMS export to Word succeeded", {
+      status: response.status,
+    });
+    return response.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.error("❌ AMS export to Word failed", {
+        status: error.response?.status,
+        message: error.message,
+        responseData: error.response?.data,
+      });
+      throw error;
+    } else {
+      console.error("❌ Non-Axios error", error);
+      throw error;
+    }
+  }
+};

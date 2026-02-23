@@ -11,6 +11,8 @@ interface ApplicationFormTopBarProps {
   setLanguage: (language: string) => void;
   onSave?: () => Promise<void>;
   isSaving?: boolean;
+  onExportToWord?: () => Promise<void>;
+  isExporting?: boolean;
 }
 
 const ApplicationFormTopBar: React.FC<ApplicationFormTopBarProps> = ({
@@ -18,6 +20,8 @@ const ApplicationFormTopBar: React.FC<ApplicationFormTopBarProps> = ({
   setLanguage,
   onSave,
   isSaving = false,
+  onExportToWord,
+  isExporting = false,
 }) => {
   const languages = ["English", "French", "German", "Spanish"];
 
@@ -35,7 +39,6 @@ const ApplicationFormTopBar: React.FC<ApplicationFormTopBarProps> = ({
 
         {/* Right Section - Buttons */}
         <div className="flex items-center gap-3">
-
           {/* Language Dropdown */}
           <div className="relative group">
             <button className="flex items-center gap-2 rounded bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-secondary">
@@ -59,9 +62,32 @@ const ApplicationFormTopBar: React.FC<ApplicationFormTopBarProps> = ({
             </div>
           </div>
 
-          <button className="rounded bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-secondary">
-            Options
-          </button>
+          <div className="relative group">
+            <button className="flex items-center gap-2 rounded bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-secondary">
+              Options
+              <FontAwesomeIcon icon={faChevronDown} size="sm" />
+            </button>
+            <div className="absolute right-0 hidden pt-2 group-hover:block">
+              <div className="min-w-[180px] rounded border border-gray-200 bg-white shadow-lg">
+                <button
+                  onClick={onExportToWord}
+                  disabled={isExporting}
+                  className="block w-full px-4 py-2 text-left text-sm text-gray-900 hover:bg-surface disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isExporting ? "Exporting..." : "Export to Word"}
+                </button>
+                <button className="block w-full px-4 py-2 text-left text-sm text-gray-900 hover:bg-surface">
+                  Withdraw
+                </button>
+                <button className="block w-full px-4 py-2 text-left text-sm text-gray-900 hover:bg-surface">
+                  Discard changes
+                </button>
+                <button className="block w-full px-4 py-2 text-left text-sm text-gray-900 hover:bg-surface">
+                  Discard application
+                </button>
+              </div>
+            </div>
+          </div>
 
           <button
             onClick={onSave}

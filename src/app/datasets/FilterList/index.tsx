@@ -19,8 +19,7 @@ export default function FilterList() {
 
   // Check if user is logged in
   // TODO: Add role check later - only show for users with BEACON_USER role
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // const hasBeaconAccess = (session?.user as any)?.roles?.includes("BEACON_USER");
+  // const hasBeaconAccess = session?.user?.roles?.includes("BEACON_USER");
   const hasBeaconAccess = !!session?.user; // Show for all logged-in users for now
 
   // Filter what to show based on beacon toggle and user access

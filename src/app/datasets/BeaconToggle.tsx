@@ -14,8 +14,7 @@ export default function BeaconToggle() {
 
   // Check if user is logged in
   // TODO: Add role check later - only show for users with BEACON_USER role
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // const userRoles = (session?.user as any)?.roles;
+  // const userRoles = session?.user?.roles;
   // const hasBeaconAccess = userRoles?.includes("BEACON_USER");
   const hasBeaconAccess = !!session?.user; // Show for all logged-in users for now
 

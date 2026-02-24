@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2024 PNED G.I.E.
+#
+# SPDX-License-Identifier: Apache-2.0
+# - build-and-push
+
+stages:
+  - dummy
+
+
+dummy:
+  stage: dummy
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  script:
+    - echo "REGISTRY=$REGISTRY"
+    - echo "This is a dummy job to satisfy GitLab's merge request pipeline requirement."

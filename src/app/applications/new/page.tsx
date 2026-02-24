@@ -10,7 +10,9 @@ import LoadingContainer from "@/components/LoadingContainer";
 import ApplicationFormSidebar from "@/components/ApplicationForm/ApplicationFormSidebar";
 import ApplicationFormTopBar from "@/components/ApplicationForm/ApplicationFormTopBar";
 import ApplicationFormContent from "@/components/ApplicationForm/ApplicationFormContent";
+import ValidationAlert from "@/components/ValidationAlert";
 import { Section7Methods } from "@/components/ApplicationForm/Sections/Section7";
+import { validateSection5Data } from "@/components/ApplicationForm/Sections/Section5";
 import {
   getApplicationApi,
   RetrievedApplicationData,
@@ -63,6 +65,9 @@ export default function Page() {
   const sectionDataRef = useRef<any>(null);
   const section7UploadRef = useRef<Section7Methods>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [showValidationAlert, setShowValidationAlert] =
+    useState<boolean>(false);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   const fetchApplication = async () => {
     try {
@@ -100,6 +105,17 @@ export default function Page() {
 
       const sectionData = sectionDataRef.current;
       const sectionNumber = currentSection;
+
+      // Validate Section 5 before saving
+      if (sectionNumber === 5) {
+        const missingFields = validateSection5Data(sectionData);
+        if (missingFields.length > 0) {
+          setValidationErrors(missingFields);
+          setShowValidationAlert(true);
+          setIsSaving(false);
+          return;
+        }
+      }
 
       switch (sectionNumber) {
         case 1:
@@ -286,14 +302,22 @@ export default function Page() {
   };
 
   const currentSectionData = sections.find((s) => s.id === currentSection);
-  
+
   // Calculate overall progress across ALL sections
   const totalCompleted = sections.reduce((sum, s) => sum + s.completed, 0);
   const totalFields = sections.reduce((sum, s) => sum + s.total, 0);
-  const progressPercentage = totalFields > 0 ? (totalCompleted / totalFields) * 100 : 0;
+  const progressPercentage =
+    totalFields > 0 ? (totalCompleted / totalFields) * 100 : 0;
 
   return (
     <>
+      {/* Validation Alert Modal */}
+      <ValidationAlert
+        isOpen={showValidationAlert}
+        onClose={() => setShowValidationAlert(false)}
+        missingFields={validationErrors}
+      />
+
       {/* Fixed Top Bar */}
       <ApplicationFormTopBar
         language={language}

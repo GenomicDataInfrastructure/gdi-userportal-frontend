@@ -51,8 +51,9 @@ const Section3: React.FC<SectionProps> = ({
   const [legalPersonAddress, setLegalPersonAddress] = useState("");
   const [legalPersonZipCode, setLegalPersonZipCode] = useState("");
   const [legalPersonCity, setLegalPersonCity] = useState("");
-  const [legalPersonCountry, setLegalPersonCountry] =
-    useState<Country | null>(null);
+  const [legalPersonCountry, setLegalPersonCountry] = useState<Country | null>(
+    null
+  );
   const [countries, setCountries] = useState<Country[]>([]);
   const [phoneCountries] = useState<Country[]>(getDefaultCountries());
   const [naturalPersonPhoneCountry, setNaturalPersonPhoneCountry] =
@@ -196,7 +197,9 @@ const Section3: React.FC<SectionProps> = ({
       setLegalPersonAddress(section3.legalPersonAddress ?? "");
       setLegalPersonZipCode(section3.legalPersonZipCode ?? "");
       setLegalPersonCity(section3.legalPersonCity ?? "");
-      setLegalPersonCountry(findCountryFromOptions(section3.legalPersonCountry));
+      setLegalPersonCountry(
+        findCountryFromOptions(section3.legalPersonCountry)
+      );
       setContactPersonPhoneCountry(
         findPhoneCountryFromPhoneData(section3.contactPersonPhone)
       );

@@ -44,7 +44,7 @@ export default function FilterList() {
       {ckanFilters.length > 0 && (
         <section>
           <h3 className="text-sm font-semibold text-gray-500 uppercase mb-4 tracking-wide">
-            Catalog Filters
+            Catalogue Filters
           </h3>
           <ul className="flex flex-col gap-y-6">
             {ckanFilters.map((filter) => (

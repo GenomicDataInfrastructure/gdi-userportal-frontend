@@ -286,11 +286,12 @@ export default function Page() {
   };
 
   const currentSectionData = sections.find((s) => s.id === currentSection);
-  
+
   // Calculate overall progress across ALL sections
   const totalCompleted = sections.reduce((sum, s) => sum + s.completed, 0);
   const totalFields = sections.reduce((sum, s) => sum + s.total, 0);
-  const progressPercentage = totalFields > 0 ? (totalCompleted / totalFields) * 100 : 0;
+  const progressPercentage =
+    totalFields > 0 ? (totalCompleted / totalFields) * 100 : 0;
 
   return (
     <>

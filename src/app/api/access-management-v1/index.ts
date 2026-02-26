@@ -767,14 +767,13 @@ export const updateApplicationSection6Api = async (
     const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
     console.log("AMS Section 6 Update URL:", fullUrl);
 
-    // Backend expects { countries: [...] } not just [...]
-    const payload = { countries: section6Data };
+    // Backend expects a raw JSON array (context.body().asJsonArray())
     console.log(
       "AMS Section 6 Data being sent:",
-      JSON.stringify(payload, null, 2)
+      JSON.stringify(section6Data, null, 2)
     );
 
-    const response = await client.put(requestPath, payload, {
+    const response = await client.put(requestPath, section6Data, {
       headers,
     });
 

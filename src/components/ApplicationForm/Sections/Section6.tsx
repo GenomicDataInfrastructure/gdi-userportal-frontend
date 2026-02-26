@@ -32,9 +32,8 @@ const Section6: React.FC<SectionProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>("section6");
   const [cohortSize, setCohortSize] = useState<string>("12");
-  const [cohortSizeType, setCohortSizeType] = useState<string>("estimation");
-  const [extractionMethod, setExtractionMethod] =
-    useState<string>("random-sample");
+  const [cohortSizeType, setCohortSizeType] = useState<string>("a"); // "a" = estimation
+  const [extractionMethod, setExtractionMethod] = useState<string>("a"); // "a" = random sample
   const [tabulationPlans, setTabulationPlans] = useState<TabulationPlan[]>([
     { id: "1" },
   ]);
@@ -51,17 +50,18 @@ const Section6: React.FC<SectionProps> = ({
   const [hdabContacts, setHdabContacts] = useState<string>("");
   const [dataLinkageMethod, setDataLinkageMethod] = useState<string>("");
   const [whyNeedCohortSize, setWhyNeedCohortSize] = useState<string>("Reason");
-  const [timePeriod, setTimePeriod] = useState<string>("AAAAAA");
+  const [timePeriod, setTimePeriod] = useState<string>("");
   const [sampleSize, setSampleSize] = useState<string>("10001");
   const [inclusionCriteria, setInclusionCriteria] =
     useState<string>("Description");
   const [exclusionCriteria, setExclusionCriteria] =
     useState<string>("Description");
   const [dataExtractionFrequency, setDataExtractionFrequency] =
-    useState<string>("once");
+    useState<string>("a"); // "a" = Once, "b" = Multiple times
+  const [extractionEveryWhen, setExtractionEveryWhen] = useState<string>("a"); // "a"=year,"b"=half year,"c"=quarter,"d"=other
   const [extractionFrequencyDetails, setExtractionFrequencyDetails] =
-    useState<string>("Data will be extracted once");
-  const [optOutMechanism, setOptOutMechanism] = useState<string>("no");
+    useState<string>("");
+  const [optOutMechanism, setOptOutMechanism] = useState<string>("b"); // "a" = Yes, "b" = No
   const [optOutJustification, setOptOutJustification] = useState<string>("");
   const [updateFrequency, setUpdateFrequency] = useState<string>("");
 
@@ -85,29 +85,30 @@ const Section6: React.FC<SectionProps> = ({
         {
           country_id: countryId, // REQUIRED - must not be empty
           catalog_ids: catalogIds, // REQUIRED - must not be empty array
-          tabulationPlanArray: tabulationPlans.map((plan) => ({
-            tabulationRegisteredToBeUsed: "",
-            tabulationPossibleStudyCohort: "",
-            tabulationInformationOfRequiredVariables: "",
-            tabulationFormationVariables: "",
-            tabulationDesiredDirection: "",
-            tabulationOrderInWhichTable: "",
-            tabulationAnyOtherRelevant: "",
-            tabulationPlan: {
-              // Use uploaded file data if available, otherwise dummy data
-              name: plan.uploadedFile?.name || "",
-              size: plan.uploadedFile?.size || 0,
-              id: plan.uploadedFile?.id || plan.id,
-            },
-          })),
+          tabulationPlanArray: tabulationPlans
+            .filter((plan) => plan.uploadedFile !== undefined)
+            .map((plan) => ({
+              tabulationRegisteredToBeUsed: "",
+              tabulationPossibleStudyCohort: "",
+              tabulationInformationOfRequiredVariables: "",
+              tabulationFormationVariables: "",
+              tabulationDesiredDirection: "",
+              tabulationOrderInWhichTable: "",
+              tabulationAnyOtherRelevant: "",
+              tabulationPlan: {
+                name: plan.uploadedFile!.name,
+                size: plan.uploadedFile!.size,
+                id: plan.uploadedFile!.id,
+              },
+            })),
           hdabContacts: hdabContacts || undefined,
           howWillTheDataFromDifferentSourcesBeLinked: dataLinkageMethod, // REQUIRED - must not be empty
           indicateTheSizeOfTheStudyCohortEstimationOrExact: {
             key: cohortSizeType,
             value:
-              cohortSizeType === "estimation"
-                ? "This is an estimation"
-                : "This is exact",
+              cohortSizeType === "a"
+                ? "This is an estimation of the size of the cohort."
+                : "This is the exact size of the cohort.",
           },
           indicateTheSizeOfTheStudyCohort: cohortSize,
           whyNeedStudyCohortOfThisSize: whyNeedCohortSize,
@@ -119,26 +120,37 @@ const Section6: React.FC<SectionProps> = ({
                   size: metadataFile.size,
                 },
               ]
-            : [],
+            : undefined,
           timePeriodOfDataExtraction: timePeriod,
           extractionMethod: {
             key: extractionMethod,
-            value: extractionMethod,
+            value:
+              extractionMethod === "a"
+                ? "random sample"
+                : extractionMethod === "b"
+                  ? "all the people fulfilling the criteria"
+                  : "other sample",
           },
           sampleSize: sampleSize,
           inclusionCriteria: inclusionCriteria,
           potentialExclusionCriteria: exclusionCriteria,
           howOftenDoesTheDataNeedToBeExtractedOnceOrMultiple: {
             key: dataExtractionFrequency,
-            value: dataExtractionFrequency,
+            value: dataExtractionFrequency === "a" ? "Once" : "Multiple times",
           },
-          needForDataExtractionEvery: {
-            key: extractionFrequencyDetails,
-            value: extractionFrequencyDetails,
-          },
+          needForDataExtractionEvery:
+            dataExtractionFrequency === "b"
+              ? {
+                  key: extractionEveryWhen,
+                  value:
+                    extractionEveryWhen === "a" ? "Every year" :
+                    extractionEveryWhen === "b" ? "Half a year" :
+                    extractionEveryWhen === "c" ? "Quarter" : "Other",
+                }
+              : undefined,
           optOutOfTheMechanismProvidedInTheNationalLaw: {
             key: optOutMechanism,
-            value: optOutMechanism,
+            value: optOutMechanism === "a" ? "Yes" : "No",
           },
           providedJustificationException: optOutJustification,
           whatIsTheFrequencyOfUpdates: updateFrequency,
@@ -163,6 +175,7 @@ const Section6: React.FC<SectionProps> = ({
     inclusionCriteria,
     exclusionCriteria,
     dataExtractionFrequency,
+    extractionEveryWhen,
     extractionFrequencyDetails,
     optOutMechanism,
     optOutJustification,
@@ -415,8 +428,8 @@ const Section6: React.FC<SectionProps> = ({
                   type="radio"
                   id="estimation"
                   name="cohortSizeType"
-                  value="estimation"
-                  checked={cohortSizeType === "estimation"}
+                  value="a"
+                  checked={cohortSizeType === "a"}
                   onChange={(e) => setCohortSizeType(e.target.value)}
                   className="mr-2 h-4 w-4"
                 />
@@ -429,8 +442,8 @@ const Section6: React.FC<SectionProps> = ({
                   type="radio"
                   id="exact"
                   name="cohortSizeType"
-                  value="exact"
-                  checked={cohortSizeType === "exact"}
+                  value="b"
+                  checked={cohortSizeType === "b"}
                   onChange={(e) => setCohortSizeType(e.target.value)}
                   className="mr-2 h-4 w-4"
                 />
@@ -570,8 +583,8 @@ const Section6: React.FC<SectionProps> = ({
                   type="radio"
                   id="random-sample"
                   name="extractionMethod"
-                  value="random-sample"
-                  checked={extractionMethod === "random-sample"}
+                  value="a"
+                  checked={extractionMethod === "a"}
                   onChange={(e) => setExtractionMethod(e.target.value)}
                   className="mr-2 h-4 w-4"
                 />
@@ -587,8 +600,8 @@ const Section6: React.FC<SectionProps> = ({
                   type="radio"
                   id="all-people"
                   name="extractionMethod"
-                  value="all-people"
-                  checked={extractionMethod === "all-people"}
+                  value="b"
+                  checked={extractionMethod === "b"}
                   onChange={(e) => setExtractionMethod(e.target.value)}
                   className="mr-2 h-4 w-4"
                 />
@@ -601,8 +614,8 @@ const Section6: React.FC<SectionProps> = ({
                   type="radio"
                   id="other-sample"
                   name="extractionMethod"
-                  value="other-sample"
-                  checked={extractionMethod === "other-sample"}
+                  value="c"
+                  checked={extractionMethod === "c"}
                   onChange={(e) => setExtractionMethod(e.target.value)}
                   className="mr-2 h-4 w-4"
                 />
@@ -614,7 +627,7 @@ const Section6: React.FC<SectionProps> = ({
           </div>
 
           {/* Sample size */}
-          {extractionMethod === "random-sample" && (
+          {(extractionMethod === "a" || extractionMethod === "c") && (
             <div>
               <label className="block text-sm font-semibold text-gray-900 mb-2">
                 Sample size <span className="text-red-600">*</span>
@@ -892,7 +905,9 @@ const Section6: React.FC<SectionProps> = ({
                   type="radio"
                   id="once"
                   name="extractionFrequency"
-                  value="once"
+                  value="a"
+                  checked={dataExtractionFrequency === "a"}
+                  onChange={(e) => setDataExtractionFrequency(e.target.value)}
                   className="mr-2 h-4 w-4"
                 />
                 <label htmlFor="once" className="text-sm text-gray-700">
@@ -904,7 +919,9 @@ const Section6: React.FC<SectionProps> = ({
                   type="radio"
                   id="multiple"
                   name="extractionFrequency"
-                  value="multiple"
+                  value="b"
+                  checked={dataExtractionFrequency === "b"}
+                  onChange={(e) => setDataExtractionFrequency(e.target.value)}
                   className="mr-2 h-4 w-4"
                 />
                 <label htmlFor="multiple" className="text-sm text-gray-700">
@@ -938,16 +955,32 @@ const Section6: React.FC<SectionProps> = ({
                 cases.
               </span>
             </div>
+
+            {/* everyWhen dropdown — only required when "Multiple times" */}
+            {dataExtractionFrequency === "b" && (
+              <div className="mb-3">
+                <label className="block text-sm font-semibold text-gray-900 mb-1">
+                  How often? <span className="text-red-600">*</span>
+                </label>
+                <select
+                  value={extractionEveryWhen}
+                  onChange={(e) => setExtractionEveryWhen(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
+                >
+                  <option value="a">Every year</option>
+                  <option value="b">Half a year</option>
+                  <option value="c">Quarter</option>
+                  <option value="d">Other</option>
+                </select>
+              </div>
+            )}
+
             <textarea
               rows={4}
-              className="w-full border border-red-600 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
+              value={extractionFrequencyDetails}
+              onChange={(e) => setExtractionFrequencyDetails(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary focus:border-primary"
             />
-            <div className="mt-2 flex items-center gap-2 text-xs text-red-600">
-              <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-red-600 text-white">
-                ✕
-              </span>
-              <span>This field is required.</span>
-            </div>
           </div>
 
           {/* Do you intend to make use of an exception */}
@@ -978,7 +1011,9 @@ const Section6: React.FC<SectionProps> = ({
                   type="radio"
                   id="opt-out-yes"
                   name="optOutException"
-                  value="yes"
+                  value="a"
+                  checked={optOutMechanism === "a"}
+                  onChange={(e) => setOptOutMechanism(e.target.value)}
                   className="mr-2 h-4 w-4"
                 />
                 <label htmlFor="opt-out-yes" className="text-sm text-gray-700">
@@ -990,7 +1025,9 @@ const Section6: React.FC<SectionProps> = ({
                   type="radio"
                   id="opt-out-no"
                   name="optOutException"
-                  value="no"
+                  value="b"
+                  checked={optOutMechanism === "b"}
+                  onChange={(e) => setOptOutMechanism(e.target.value)}
                   className="mr-2 h-4 w-4"
                 />
                 <label htmlFor="opt-out-no" className="text-sm text-gray-700">

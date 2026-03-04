@@ -12,6 +12,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+## [v1.6.4] - 2026-03-04
+
+### Changed
+- chore: add new genome ref by @Bruno Pacheco in fac841e
+- chore(deps): update actions/setup-node action to v6.3.0 (#815) by @LNDS-Sysadmins in 7cac003
+- chore(deps): update docker/login-action action to v4 by @Renovate Bot in d711092
+- chore(deps): update aquasecurity/trivy-action action to v0.34.2 by @Renovate Bot in 8fddd4f
+- chore(deps): update actions/upload-artifact action to v7 by @Renovate Bot in 17f8c6a
+- chore(deps): update azure/webapps-deploy action to v3.0.7 by @Renovate Bot in 902ffcd
+- doc: update CHANGELOG.md for v1.6.3 by @LNDS-Sysadmins in ca7e43e
+
+
+### Fixed
+- fix typo by @Rania Hamdani in 22fddcc
+
+
 ## [v1.6.3] - 2026-02-25
 
 ### Changed

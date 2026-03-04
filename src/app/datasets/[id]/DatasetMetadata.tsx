@@ -701,72 +701,55 @@ const DatasetMetadata = ({
         </MetadataSection>
       )}
 
-      {(isHealthDcatApCompatible(dataset) ||
-        dataset.homepage ||
-        dataset.uri ||
-        (dataset.documentation && dataset.documentation.length > 0) ||
-        (dataset.isReferencedBy && dataset.isReferencedBy.length > 0)) && (
-        <MetadataSection title="Links & References" icon={faLink}>
-          <div className="flex flex-col gap-2 text-sm">
-            {dataset.homepage && (
-              <div className="flex items-center gap-2 flex-wrap relative group">
-                <span className="font-medium shrink-0">Homepage:</span>
-                <a
-                  href={dataset.homepage}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-info hover:text-hover-color hover:underline break-all"
-                >
-                  {dataset.homepage}
-                </a>
-                <Tooltip message="Homepage URL for more information about this dataset." />
-              </div>
-            )}
-            <div className="flex items-center gap-2 flex-wrap relative group">
-              <span className="font-medium shrink-0">URI:</span>
-              {dataset.uri ? (
-                <a
-                  href={dataset.uri}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-info hover:text-hover-color hover:underline break-all"
-                >
-                  {dataset.uri}
-                </a>
-              ) : (
-                <NotProvided />
-              )}
-              <Tooltip message="Unique Resource Identifier for this dataset." />
-            </div>
-            {dataset.documentation && dataset.documentation.length > 0 && (
-              <div className="flex items-center gap-2 flex-wrap relative group">
-                <span className="font-medium shrink-0">Documentation:</span>
-                {dataset.documentation.map((doc, index) => (
+      {isHealthDcatApCompatible(dataset) &&
+        (!!dataset.homepage ||
+          (!!dataset.documentation && dataset.documentation.length > 0) ||
+          (!!dataset.isReferencedBy && dataset.isReferencedBy.length > 0)) && (
+          <MetadataSection title="Links & References" icon={faLink}>
+            <div className="flex flex-col gap-2 text-sm">
+              {dataset.homepage && (
+                <div className="flex items-center gap-2 flex-wrap relative group">
+                  <span className="font-medium shrink-0">Homepage:</span>
                   <a
-                    key={index}
-                    href={doc}
+                    href={dataset.homepage}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-info hover:text-hover-color hover:underline"
+                    className="text-info hover:text-hover-color hover:underline break-all"
                   >
-                    {doc}
+                    {dataset.homepage}
                   </a>
-                ))}
-                <Tooltip message="Links to documentation about this dataset." />
-              </div>
-            )}
-            {dataset.isReferencedBy && dataset.isReferencedBy.length > 0 && (
-              <div className="flex items-center gap-2 flex-wrap relative group">
-                <span className="font-medium shrink-0">Referenced By:</span>
-                {dataset.isReferencedBy.map((ref, index) => (
-                  <span key={index}>{ref}</span>
-                ))}
-                <Tooltip message="Resources that reference this dataset." />
-              </div>
-            )}
-          </div>
-        </MetadataSection>
-      )}
+                  <Tooltip message="Homepage URL for more information about this dataset." />
+                </div>
+              )}
+              {dataset.documentation && dataset.documentation.length > 0 && (
+                <div className="flex items-center gap-2 flex-wrap relative group">
+                  <span className="font-medium shrink-0">Documentation:</span>
+                  {dataset.documentation.map((doc, index) => (
+                    <a
+                      key={index}
+                      href={doc}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-info hover:text-hover-color hover:underline"
+                    >
+                      {doc}
+                    </a>
+                  ))}
+                  <Tooltip message="Links to documentation about this dataset." />
+                </div>
+              )}
+              {dataset.isReferencedBy && dataset.isReferencedBy.length > 0 && (
+                <div className="flex items-center gap-2 flex-wrap relative group">
+                  <span className="font-medium shrink-0">Referenced By:</span>
+                  {dataset.isReferencedBy.map((ref, index) => (
+                    <span key={index}>{ref}</span>
+                  ))}
+                  <Tooltip message="Resources that reference this dataset." />
+                </div>
+              )}
+            </div>
+          </MetadataSection>
+        )}
 
       {(isHealthDcatApCompatible(dataset) ||
         dataset.version ||

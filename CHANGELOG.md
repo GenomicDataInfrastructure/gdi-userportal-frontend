@@ -12,6 +12,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+## [v1.6.6] - 2026-03-04
+
+### Changed
+- chore: remove URI from Links & References by @Bruno Pacheco in 94c7a6d
+- doc: update CHANGELOG.md for v1.6.5 by @LNDS-Sysadmins in 2d6e816
+
+
+### Fixed
+- fix(deps): update opentelemetry-js monorepo by @Renovate Bot in 335c61b
+
+
 ## [v1.6.5] - 2026-03-04
 
 ### Changed

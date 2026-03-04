@@ -12,9 +12,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+
 ## [v1.6.4] - 2026-03-04
 
 ### Changed
+
 - chore: add new genome ref by @Bruno Pacheco in fac841e
 - chore(deps): update actions/setup-node action to v6.3.0 (#815) by @LNDS-Sysadmins in 7cac003
 - chore(deps): update docker/login-action action to v4 by @Renovate Bot in d711092
@@ -23,14 +25,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - chore(deps): update azure/webapps-deploy action to v3.0.7 by @Renovate Bot in 902ffcd
 - doc: update CHANGELOG.md for v1.6.3 by @LNDS-Sysadmins in ca7e43e
 
-
 ### Fixed
-- fix typo by @Rania Hamdani in 22fddcc
 
+- fix typo by @Rania Hamdani in 22fddcc
 
 ## [v1.6.3] - 2026-02-25
 
 ### Changed
+
 - chore(deps): bump ajv (#810) by @dependabot[bot] in 1018494
 - chore(deps): update aquasecurity/trivy-action action to v0.34.1 by @Renovate Bot in 79e972a
 - chore(deps): bump lodash-es and mermaid in /documentation (#809) by @dependabot[bot] in 837dc77
@@ -41,13 +43,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - chore(deps): bump qs from 6.14.1 to 6.14.2 in /documentation (#806) by @dependabot[bot] in 6e88a58
 - doc: update CHANGELOG.md for v1.6.2 (#805) by @github-actions[bot] in 4ab04c5
 
-
 ### Fixed
+
 - fix: put back 02ef2e3e8260974e28a6db83a28e40c6e9f2e08a (#811) by @Inderpal Singh in 1782cd4
 - fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.70.0 (#807) by @LNDS-Sysadmins in cf8d170
 - fix(deps): update opentelemetry-js monorepo to v2.5.1 by @Renovate Bot in 9d1a711
-
-
 
 ## [v1.6.1] - 2026-02-09
 

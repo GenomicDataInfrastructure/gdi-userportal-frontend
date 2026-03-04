@@ -113,7 +113,7 @@ const formFields = [
     options: [
       { value: "All", label: "All" },
       { value: "GRCh37", label: "GRCh37" },
-      { value: "GRCh38", label: "GRCh38" }
+      { value: "GRCh38", label: "GRCh38" },
     ],
   },
   {

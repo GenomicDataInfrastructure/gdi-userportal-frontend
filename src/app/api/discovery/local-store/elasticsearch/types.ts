@@ -6,8 +6,10 @@ export interface ElasticsearchSearchHit {
   _id: string;
   _source?: {
     id?: string;
+    identifier?: string;
     title?: string;
     description?: string;
+    catalogue?: string;
   };
 }
 
@@ -24,7 +26,9 @@ export interface ElasticsearchGetDocumentResponse {
   _id: string;
   _source?: {
     id?: string;
+    identifier?: string;
     title?: string;
     description?: string;
+    catalogue?: string;
   };
 }

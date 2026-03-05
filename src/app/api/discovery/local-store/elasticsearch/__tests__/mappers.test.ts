@@ -15,7 +15,13 @@ describe("elasticsearch/mappers", () => {
         hits: [
           {
             _id: "a",
-            _source: { id: "id-a", title: "A", description: "desc-a" },
+            _source: {
+              id: "id-a",
+              identifier: "identifier-a",
+              title: "A",
+              description: "desc-a",
+              catalogue: "catalogue-a",
+            },
           },
           { _id: "b", _source: { title: "B" } },
         ],
@@ -25,8 +31,20 @@ describe("elasticsearch/mappers", () => {
     expect(result).toEqual({
       count: 2,
       results: [
-        { id: "id-a", title: "A", description: "desc-a" },
-        { id: "b", title: "B", description: undefined },
+        {
+          id: "id-a",
+          identifier: "identifier-a",
+          title: "A",
+          description: "desc-a",
+          catalogue: "catalogue-a",
+        },
+        {
+          id: "b",
+          identifier: undefined,
+          title: "B",
+          description: undefined,
+          catalogue: undefined,
+        },
       ],
     });
   });
@@ -40,12 +58,20 @@ describe("elasticsearch/mappers", () => {
     expect(
       mapGetDocumentResponse({
         _id: "doc-1",
-        _source: { id: "id-1", title: "Title", description: "Desc" },
+        _source: {
+          id: "id-1",
+          identifier: "identifier-1",
+          title: "Title",
+          description: "Desc",
+          catalogue: "main-catalogue",
+        },
       })
     ).toEqual({
       id: "id-1",
+      identifier: "identifier-1",
       title: "Title",
       description: "Desc",
+      catalogue: "main-catalogue",
     });
 
     expect(
@@ -55,8 +81,10 @@ describe("elasticsearch/mappers", () => {
       })
     ).toEqual({
       id: "doc-2",
+      identifier: undefined,
       title: "Only title",
       description: undefined,
+      catalogue: undefined,
     });
   });
 });

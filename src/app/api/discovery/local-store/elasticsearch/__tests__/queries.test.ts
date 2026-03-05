@@ -15,8 +15,10 @@ describe("elasticsearch/queries", () => {
       mappings: {
         properties: {
           id: { type: "keyword" },
+          identifier: { type: "keyword" },
           title: { type: "text" },
           description: { type: "text" },
+          catalogue: { type: "keyword" },
         },
       },
     });
@@ -49,12 +51,20 @@ describe("elasticsearch/queries", () => {
 
   test("buildBulkUpsertBody builds ndjson payload", () => {
     const body = buildBulkUpsertBody("idx", [
-      { id: "1", title: "A", description: "D1" },
-      { id: "2", title: "B" },
+      {
+        id: "1",
+        identifier: "IDENT-1",
+        title: "A",
+        description: "D1",
+        catalogue: "catalogue-1",
+      },
+      { id: "2", title: "B", catalogue: "catalogue-2" },
     ]);
 
     expect(body).toContain('"index":{"_index":"idx","_id":"1"}');
-    expect(body).toContain('"id":"1","title":"A","description":"D1"');
+    expect(body).toContain(
+      '"id":"1","identifier":"IDENT-1","title":"A","description":"D1","catalogue":"catalogue-1"'
+    );
     expect(body).toContain('"index":{"_index":"idx","_id":"2"}');
     expect(body.endsWith("\n")).toBe(true);
   });

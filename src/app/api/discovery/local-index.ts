@@ -13,6 +13,7 @@ import {
 } from "@/app/api/discovery/local-store/factory";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import { dcatHarvesterService } from "@/app/api/discovery/harvester/dcat-harvester-service";
+import { oidcAuthService } from "@/app/api/discovery/harvester/oidc-auth.service";
 
 export const upsertLocalIndexDatasetsApi = async (
   datasets: LocalDiscoveryDataset[]
@@ -42,7 +43,11 @@ export const seedLocalIndexFromDdsApi = async (
 export const harvestLocalIndexFromDcatUrlApi = async (
   catalogueRdfUrl: string
 ): Promise<number> => {
-  const datasets = await dcatHarvesterService.harvestFromUrl(catalogueRdfUrl);
+  const authHeaders =
+    await oidcAuthService.getAuthorizationHeaderIfConfigured();
+  const datasets = await dcatHarvesterService.harvestFromUrl(catalogueRdfUrl, {
+    headers: authHeaders,
+  });
   await clearLocalDiscoveryDatasets();
   await upsertLocalDiscoveryDatasets(datasets);
   return datasets.length;

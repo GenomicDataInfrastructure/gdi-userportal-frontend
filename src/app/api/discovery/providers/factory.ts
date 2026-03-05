@@ -2,17 +2,17 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { CustomDiscoveryProvider } from "@/app/api/discovery/providers/custom-discovery-provider";
 import { DdsDiscoveryProvider } from "@/app/api/discovery/providers/dds-discovery-provider";
+import { LocalIndexDiscoveryProvider } from "@/app/api/discovery/providers/local-index-discovery-provider";
 import { DiscoveryProvider } from "@/app/api/discovery/providers/types";
 
-export type DiscoveryProviderKey = "dds" | "custom";
+export type DiscoveryProviderKey = "dds" | "local-index";
 
 const defaultProviderKey: DiscoveryProviderKey = "dds";
 
 const providersByKey: Record<DiscoveryProviderKey, DiscoveryProvider> = {
   dds: new DdsDiscoveryProvider(),
-  custom: new CustomDiscoveryProvider(),
+  "local-index": new LocalIndexDiscoveryProvider(),
 };
 
 export const resolveDiscoveryProviderKey = (

@@ -7,8 +7,12 @@
 import { createHeaders } from "@/app/api/shared/headers";
 import { DatasetSearchQuery } from "@/app/api/discovery/open-api/schemas";
 import { DdsDiscoveryProvider } from "@/app/api/discovery/providers/dds-discovery-provider";
-import { upsertLocalDiscoveryDatasets } from "@/app/api/discovery/local-store/factory";
+import {
+  clearLocalDiscoveryDatasets,
+  upsertLocalDiscoveryDatasets,
+} from "@/app/api/discovery/local-store/factory";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
+import { dcatHarvesterService } from "@/app/api/discovery/harvester/dcat-harvester-service";
 
 export const upsertLocalIndexDatasetsApi = async (
   datasets: LocalDiscoveryDataset[]
@@ -31,6 +35,15 @@ export const seedLocalIndexFromDdsApi = async (
         title: dataset.title,
       })) ?? [];
 
+  await upsertLocalDiscoveryDatasets(datasets);
+  return datasets.length;
+};
+
+export const harvestLocalIndexFromDcatUrlApi = async (
+  catalogueRdfUrl: string
+): Promise<number> => {
+  const datasets = await dcatHarvesterService.harvestFromUrl(catalogueRdfUrl);
+  await clearLocalDiscoveryDatasets();
   await upsertLocalDiscoveryDatasets(datasets);
   return datasets.length;
 };

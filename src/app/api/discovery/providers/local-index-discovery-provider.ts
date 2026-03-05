@@ -45,7 +45,10 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       results: response.results.map((dataset) => ({
         id: dataset.id,
         title: dataset.title,
-        description: "",
+        description: dataset.description ?? "",
+        publishers: [],
+        themes: [],
+        keywords: [],
       })),
     };
   }
@@ -60,7 +63,10 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     return {
       id: dataset.id,
       title: dataset.title,
-      description: "",
+      description: dataset.description ?? "",
+      publishers: [],
+      themes: [],
+      keywords: [],
     };
   }
 }

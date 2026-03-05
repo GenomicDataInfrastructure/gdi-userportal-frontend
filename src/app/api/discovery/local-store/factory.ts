@@ -2,15 +2,15 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { InMemoryDiscoveryStore } from "@/app/api/discovery/local-store/in-memory-store";
+import { ElasticsearchDiscoveryStore } from "@/app/api/discovery/local-store/elasticsearch-store";
 import {
   LocalDiscoveryDataset,
   LocalDiscoveryStore,
 } from "@/app/api/discovery/local-store/types";
 
-export type LocalDiscoveryStoreKey = "memory";
+export type LocalDiscoveryStoreKey = "elasticsearch";
 
-const defaultStoreKey: LocalDiscoveryStoreKey = "memory";
+const defaultStoreKey: LocalDiscoveryStoreKey = "elasticsearch";
 
 export const resolveLocalDiscoveryStoreKey = (
   keyFromEnv: string | undefined
@@ -18,20 +18,34 @@ export const resolveLocalDiscoveryStoreKey = (
   if (!keyFromEnv) return defaultStoreKey;
 
   const normalized = keyFromEnv.toLowerCase();
-  if (normalized === "memory") {
+  if (normalized === "elasticsearch") {
     return normalized;
   }
 
   throw new Error(
-    `Unsupported LOCAL_DISCOVERY_STORE "${keyFromEnv}". Supported values: memory`
+    `Unsupported LOCAL_DISCOVERY_STORE "${keyFromEnv}". Supported values: elasticsearch`
   );
 };
 
 const createStoreByKey = (key: LocalDiscoveryStoreKey): LocalDiscoveryStore => {
-  if (key !== "memory") {
-    throw new Error(`Unsupported local discovery store key: ${key}`);
+  if (key === "elasticsearch") {
+    const baseUrl = process.env.ELASTICSEARCH_URL ?? "http://localhost:9200";
+    const indexName =
+      process.env.ELASTICSEARCH_DISCOVERY_INDEX ?? "discovery_datasets";
+    const insecureTls =
+      process.env.ELASTICSEARCH_TLS_INSECURE === "true" ||
+      process.env.ELASTICSEARCH_TLS_INSECURE === "1";
+    return new ElasticsearchDiscoveryStore({
+      baseUrl,
+      indexName,
+      username: process.env.ELASTICSEARCH_USERNAME,
+      password: process.env.ELASTICSEARCH_PASSWORD,
+      apiKey: process.env.ELASTICSEARCH_API_KEY,
+      insecureTls,
+    });
   }
-  return new InMemoryDiscoveryStore();
+
+  throw new Error(`Unsupported local discovery store key: ${key}`);
 };
 
 let cachedStore: LocalDiscoveryStore | null = null;
@@ -48,4 +62,9 @@ export const upsertLocalDiscoveryDatasets = async (
 ): Promise<void> => {
   const store = getLocalDiscoveryStore();
   await store.upsertDatasets(datasets);
+};
+
+export const clearLocalDiscoveryDatasets = async (): Promise<void> => {
+  const store = getLocalDiscoveryStore();
+  await store.clearDatasets();
 };

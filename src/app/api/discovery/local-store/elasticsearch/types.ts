@@ -1,0 +1,30 @@
+// SPDX-FileCopyrightText: 2026 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
+export interface ElasticsearchSearchHit {
+  _id: string;
+  _source?: {
+    id?: string;
+    title?: string;
+    description?: string;
+  };
+}
+
+export interface ElasticsearchSearchResponse {
+  hits?: {
+    total?: {
+      value?: number;
+    };
+    hits?: ElasticsearchSearchHit[];
+  };
+}
+
+export interface ElasticsearchGetDocumentResponse {
+  _id: string;
+  _source?: {
+    id?: string;
+    title?: string;
+    description?: string;
+  };
+}

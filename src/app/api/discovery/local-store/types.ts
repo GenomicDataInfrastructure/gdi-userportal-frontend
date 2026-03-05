@@ -22,6 +22,7 @@ export interface LocalDiscoverySearchResult {
 export interface LocalDiscoveryStore {
   readonly key: string;
   ensureInitialized: () => Promise<void>;
+  clearDatasets: () => Promise<void>;
   searchDatasets: (
     options: LocalDiscoverySearchOptions
   ) => Promise<LocalDiscoverySearchResult>;

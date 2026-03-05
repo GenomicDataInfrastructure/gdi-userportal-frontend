@@ -44,4 +44,22 @@ describe("datasetCardItems", () => {
     expect(items[3].text).toBe("1 Distribution");
     expect(items[4].text).toBe("21 Records");
   });
+
+  it("should handle missing optional fields without crashing", () => {
+    const dataset: SearchedDataset = {
+      id: "2",
+      title: "",
+      description: "",
+      publishers: [],
+      distributionsCount: 2,
+      recordsCount: 1,
+    };
+
+    const items = createDatasetCardItems(dataset);
+    expect(items[0].text).toBe("");
+    expect(items[1].text).toBe("");
+    expect(items[2].text).toBe("");
+    expect(items[3].text).toBe("2 Distributions");
+    expect(items[4].text).toBe("1 Record");
+  });
 });

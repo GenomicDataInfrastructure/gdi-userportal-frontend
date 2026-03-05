@@ -113,4 +113,20 @@ describe("LocalIndexDiscoveryProvider", () => {
       "Dataset not found in local index: missing"
     );
   });
+
+  test("retrieveDataset defaults description to empty string when not present", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce({
+      id: "b",
+      title: "Dataset B",
+    });
+
+    await expect(provider.retrieveDataset("b")).resolves.toEqual({
+      id: "b",
+      title: "Dataset B",
+      description: "",
+      publishers: [],
+      themes: [],
+      keywords: [],
+    });
+  });
 });

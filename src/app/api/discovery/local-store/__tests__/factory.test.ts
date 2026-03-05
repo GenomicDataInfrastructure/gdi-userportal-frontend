@@ -61,4 +61,17 @@ describe("local-store factory", () => {
 
     expect(spy).toHaveBeenCalledWith(datasets);
   });
+
+  test("clearLocalDiscoveryDatasets forwards to underlying store", async () => {
+    process.env.LOCAL_DISCOVERY_STORE = "elasticsearch";
+    const { getLocalDiscoveryStore, clearLocalDiscoveryDatasets } =
+      await import("@/app/api/discovery/local-store/factory");
+
+    const store = getLocalDiscoveryStore();
+    const spy = jest.spyOn(store, "clearDatasets").mockResolvedValueOnce();
+
+    await clearLocalDiscoveryDatasets();
+
+    expect(spy).toHaveBeenCalled();
+  });
 });

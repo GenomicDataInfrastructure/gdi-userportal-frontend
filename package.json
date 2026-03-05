@@ -19,6 +19,7 @@
     "lint": "eslint . --ignore-pattern coverage --ignore-pattern documentation/.docusaurus",
     "test:script": "jest --coverage",
     "test": "npm-run-all prebuild test:script",
+    "harvest:dcat": "node scripts/run-harvester.js",
     "type-check": "tsc --noEmit",
     "format": "prettier --check .",
     "format:fix": "prettier --write --list-different .",

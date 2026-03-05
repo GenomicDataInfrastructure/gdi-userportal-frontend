@@ -9,6 +9,7 @@ import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 const mockCreateHeaders = jest.fn<() => Promise<Record<string, string>>>();
 const mockUpsertLocalDiscoveryDatasets =
   jest.fn<(datasets: LocalDiscoveryDataset[]) => Promise<void>>();
+const mockClearLocalDiscoveryDatasets = jest.fn<() => Promise<void>>();
 const mockSearchDatasets =
   jest.fn<
     (
@@ -16,12 +17,15 @@ const mockSearchDatasets =
       _headers: Record<string, string>
     ) => Promise<DiscoveryDatasetsSearchResponse>
   >();
+const mockHarvestFromUrl =
+  jest.fn<(url: string) => Promise<LocalDiscoveryDataset[]>>();
 
 jest.mock("@/app/api/shared/headers", () => ({
   createHeaders: mockCreateHeaders,
 }));
 
 jest.mock("@/app/api/discovery/local-store/factory", () => ({
+  clearLocalDiscoveryDatasets: mockClearLocalDiscoveryDatasets,
   upsertLocalDiscoveryDatasets: mockUpsertLocalDiscoveryDatasets,
 }));
 
@@ -31,7 +35,14 @@ jest.mock("@/app/api/discovery/providers/dds-discovery-provider", () => ({
   })),
 }));
 
+jest.mock("@/app/api/discovery/harvester/dcat-harvester-service", () => ({
+  dcatHarvesterService: {
+    harvestFromUrl: mockHarvestFromUrl,
+  },
+}));
+
 import {
+  harvestLocalIndexFromDcatUrlApi,
   seedLocalIndexFromDdsApi,
   upsertLocalIndexDatasetsApi,
 } from "@/app/api/discovery/local-index";
@@ -82,5 +93,29 @@ describe("local-index APIs", () => {
 
     expect(mockUpsertLocalDiscoveryDatasets).toHaveBeenCalledWith([]);
     expect(count).toBe(0);
+  });
+
+  test("harvestLocalIndexFromDcatUrlApi harvests and upserts datasets", async () => {
+    const harvested = [
+      { id: "d1", title: "Dataset 1", description: "Desc 1" },
+      { id: "d2", title: "Dataset 2", description: "Desc 2" },
+    ];
+    mockHarvestFromUrl.mockResolvedValueOnce(harvested);
+
+    const count = await harvestLocalIndexFromDcatUrlApi(
+      "https://example.org/catalogue.rdf"
+    );
+
+    expect(mockHarvestFromUrl).toHaveBeenCalledWith(
+      "https://example.org/catalogue.rdf"
+    );
+    expect(mockClearLocalDiscoveryDatasets).toHaveBeenCalled();
+    expect(
+      mockClearLocalDiscoveryDatasets.mock.invocationCallOrder[0]
+    ).toBeLessThan(
+      mockUpsertLocalDiscoveryDatasets.mock.invocationCallOrder[0]
+    );
+    expect(mockUpsertLocalDiscoveryDatasets).toHaveBeenCalledWith(harvested);
+    expect(count).toBe(2);
   });
 });

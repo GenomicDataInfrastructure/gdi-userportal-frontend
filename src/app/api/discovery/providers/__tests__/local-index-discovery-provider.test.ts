@@ -9,7 +9,7 @@ import {
 } from "@/app/api/discovery/local-store/types";
 
 const mockStore = {
-  key: "memory",
+  key: "elasticsearch",
   ensureInitialized: jest.fn<() => Promise<void>>(),
   searchDatasets:
     jest.fn<(_options: unknown) => Promise<LocalDiscoverySearchResult>>(),
@@ -72,8 +72,22 @@ describe("LocalIndexDiscoveryProvider", () => {
     expect(response).toEqual({
       count: 2,
       results: [
-        { id: "a", title: "Dataset A", description: "" },
-        { id: "b", title: "Dataset B", description: "" },
+        {
+          id: "a",
+          title: "Dataset A",
+          description: "desc-a",
+          publishers: [],
+          themes: [],
+          keywords: [],
+        },
+        {
+          id: "b",
+          title: "Dataset B",
+          description: "",
+          publishers: [],
+          themes: [],
+          keywords: [],
+        },
       ],
     });
   });
@@ -88,7 +102,10 @@ describe("LocalIndexDiscoveryProvider", () => {
     await expect(provider.retrieveDataset("a")).resolves.toEqual({
       id: "a",
       title: "Dataset A",
-      description: "",
+      description: "desc-a",
+      publishers: [],
+      themes: [],
+      keywords: [],
     });
 
     mockStore.retrieveDataset.mockResolvedValueOnce(null);

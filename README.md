@@ -43,6 +43,38 @@ Alternatively, you can run the docker-compose file that provides a running insta
 
 Run `npm run dev` for a dev server. Navigate to `http://localhost:3000/`. The application will automatically reload if you change any of the source files.
 
+## Discovery Adapter Setup (Development)
+
+You can switch the server-side discovery adapter via environment variables in `.env.local`.
+
+- `DISCOVERY_PROVIDER=dds` uses the current DDS backend behavior.
+- `DISCOVERY_PROVIDER=local-index` uses the local index adapter.
+
+If you choose the local index adapter with Elasticsearch, set:
+
+```bash
+DISCOVERY_PROVIDER=local-index
+LOCAL_DISCOVERY_STORE=elasticsearch
+ELASTICSEARCH_URL=https://localhost:9200
+ELASTICSEARCH_DISCOVERY_INDEX=discovery_datasets
+ELASTICSEARCH_USERNAME=elastic
+ELASTICSEARCH_PASSWORD=<your-password>
+ELASTICSEARCH_TLS_INSECURE=true
+```
+
+To run Elasticsearch locally:
+
+```bash
+docker network create elastic
+docker run --name es01 --net elastic -p 9200:9200 -it -m 1GB docker.elastic.co/elasticsearch/elasticsearch:9.3.1
+```
+
+Then start the dev server:
+
+```bash
+npm run dev
+```
+
 ## Modifying Open API Specifications
 
 In case of changes in the OpenAPI specifications, you must upgrade the client and schemas by running `npm run prebuild:service` where service is either `discovery` or `access-management`. The schemas will be automatically generated in `src/app/api/{service}/open-api/schemas.ts`.

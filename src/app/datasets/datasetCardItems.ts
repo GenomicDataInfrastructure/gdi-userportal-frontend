@@ -14,6 +14,10 @@ import {
 import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 
 export function createDatasetCardItems(dataset: SearchedDataset): CardItem[] {
+  const publisherNames = dataset.publishers
+    ?.map((publisher) => publisher.name)
+    .filter((name): name is string => Boolean(name));
+
   return [
     {
       text:
@@ -30,8 +34,8 @@ export function createDatasetCardItems(dataset: SearchedDataset): CardItem[] {
     },
     {
       text:
-        (dataset.publishers!.length > 0 &&
-          `Published by ${dataset.publishers!.map((p) => p.name).join(", ")}`) ||
+        ((publisherNames?.length ?? 0) > 0 &&
+          `Published by ${(publisherNames ?? []).join(", ")}`) ||
         "",
       icon: faUser,
     },

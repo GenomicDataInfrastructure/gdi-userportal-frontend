@@ -49,6 +49,7 @@ export const COUNTRY_OPTIONS = [
   { value: "LU", label: "Luxembourg" },
   { value: "MT", label: "Malta" },
   { value: "NL", label: "Netherlands" },
+  { value: "NO", label: "Norway" },
   { value: "PL", label: "Poland" },
   { value: "PT", label: "Portugal" },
   { value: "RO", label: "Romania" },

@@ -10,6 +10,9 @@ import {
 } from "@/app/api/discovery/harvester/dcat-harvester-utils";
 
 type FetchLike = (input: string | URL, init?: RequestInit) => Promise<Response>;
+type HarvestOptions = {
+  headers?: Record<string, string>;
+};
 
 export class DcatHarvesterService {
   private readonly fetcher: FetchLike;
@@ -63,8 +66,13 @@ export class DcatHarvesterService {
       .filter((dataset) => Boolean(dataset.title || dataset.description));
   }
 
-  async harvestFromUrl(url: string): Promise<LocalDiscoveryDataset[]> {
-    const response = await this.fetcher(url);
+  async harvestFromUrl(
+    url: string,
+    options: HarvestOptions = {}
+  ): Promise<LocalDiscoveryDataset[]> {
+    const response = await this.fetcher(url, {
+      headers: options.headers,
+    });
     if (!response.ok) {
       throw new Error(
         `Failed to fetch DCAT catalogue (${response.status} ${response.statusText})`

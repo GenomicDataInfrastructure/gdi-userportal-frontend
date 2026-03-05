@@ -18,7 +18,14 @@ const mockSearchDatasets =
     ) => Promise<DiscoveryDatasetsSearchResponse>
   >();
 const mockHarvestFromUrl =
-  jest.fn<(url: string) => Promise<LocalDiscoveryDataset[]>>();
+  jest.fn<
+    (
+      url: string,
+      options?: { headers?: Record<string, string> }
+    ) => Promise<LocalDiscoveryDataset[]>
+  >();
+const mockGetAuthorizationHeaderIfConfigured =
+  jest.fn<() => Promise<Record<string, string>>>();
 
 jest.mock("@/app/api/shared/headers", () => ({
   createHeaders: mockCreateHeaders,
@@ -38,6 +45,12 @@ jest.mock("@/app/api/discovery/providers/dds-discovery-provider", () => ({
 jest.mock("@/app/api/discovery/harvester/dcat-harvester-service", () => ({
   dcatHarvesterService: {
     harvestFromUrl: mockHarvestFromUrl,
+  },
+}));
+
+jest.mock("@/app/api/discovery/harvester/oidc-auth.service", () => ({
+  oidcAuthService: {
+    getAuthorizationHeaderIfConfigured: mockGetAuthorizationHeaderIfConfigured,
   },
 }));
 
@@ -100,6 +113,7 @@ describe("local-index APIs", () => {
       { id: "d1", title: "Dataset 1", description: "Desc 1" },
       { id: "d2", title: "Dataset 2", description: "Desc 2" },
     ];
+    mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
     mockHarvestFromUrl.mockResolvedValueOnce(harvested);
 
     const count = await harvestLocalIndexFromDcatUrlApi(
@@ -107,7 +121,8 @@ describe("local-index APIs", () => {
     );
 
     expect(mockHarvestFromUrl).toHaveBeenCalledWith(
-      "https://example.org/catalogue.rdf"
+      "https://example.org/catalogue.rdf",
+      { headers: {} }
     );
     expect(mockClearLocalDiscoveryDatasets).toHaveBeenCalled();
     expect(

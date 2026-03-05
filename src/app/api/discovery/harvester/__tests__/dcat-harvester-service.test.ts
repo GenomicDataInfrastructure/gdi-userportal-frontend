@@ -111,7 +111,9 @@ describe("DcatHarvesterService", () => {
       "https://example.org/catalogue.rdf"
     );
 
-    expect(fetcher).toHaveBeenCalledWith("https://example.org/catalogue.rdf");
+    expect(fetcher).toHaveBeenCalledWith("https://example.org/catalogue.rdf", {
+      headers: undefined,
+    });
     expect(datasets).toEqual([{ id: "x", title: "T", description: "D" }]);
   });
 

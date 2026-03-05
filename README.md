@@ -75,6 +75,20 @@ Then start the dev server:
 npm run dev
 ```
 
+To trigger a DCAT harvest from CLI:
+
+```bash
+npm run harvest:dcat -- --url https://letzdata.public.lu/content/dam/dga/ctie/c/catalogue.rdf
+```
+
+If the DCAT URL is protected by OIDC client-credentials, set:
+
+```bash
+HARVEST_OIDC_TOKEN_URL=<oidc-token-endpoint>
+HARVEST_OIDC_CLIENT_ID=<client-id>
+HARVEST_OIDC_CLIENT_SECRET=<client-secret>
+```
+
 ## Modifying Open API Specifications
 
 In case of changes in the OpenAPI specifications, you must upgrade the client and schemas by running `npm run prebuild:service` where service is either `discovery` or `access-management`. The schemas will be automatically generated in `src/app/api/{service}/open-api/schemas.ts`.

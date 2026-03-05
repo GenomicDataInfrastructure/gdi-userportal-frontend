@@ -5,6 +5,7 @@
 export interface LocalDiscoveryDataset {
   id: string;
   title: string;
+  description?: string;
 }
 
 export interface LocalDiscoverySearchOptions {

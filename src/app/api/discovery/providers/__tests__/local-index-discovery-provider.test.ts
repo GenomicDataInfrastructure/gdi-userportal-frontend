@@ -143,4 +143,25 @@ describe("LocalIndexDiscoveryProvider", () => {
       keywords: [],
     });
   });
+
+  test("retrieveDataset preserves identifier and catalogue when present", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce({
+      id: "c",
+      identifier: "IDENT-C",
+      title: "Dataset C",
+      description: "desc-c",
+      catalogue: "catalogue-c",
+    });
+
+    await expect(provider.retrieveDataset("c")).resolves.toEqual({
+      id: "c",
+      identifier: "IDENT-C",
+      title: "Dataset C",
+      description: "desc-c",
+      catalogue: "catalogue-c",
+      publishers: [],
+      themes: [],
+      keywords: [],
+    });
+  });
 });

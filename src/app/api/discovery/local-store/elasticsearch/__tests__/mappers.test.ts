@@ -54,6 +54,27 @@ describe("elasticsearch/mappers", () => {
     expect(result).toEqual({ count: 0, results: [] });
   });
 
+  test("mapSearchResponse falls back when hit has no _source", () => {
+    const result = mapSearchResponse({
+      hits: {
+        hits: [{ _id: "only-id" }],
+      },
+    });
+
+    expect(result).toEqual({
+      count: 1,
+      results: [
+        {
+          id: "only-id",
+          identifier: undefined,
+          title: "",
+          description: undefined,
+          catalogue: undefined,
+        },
+      ],
+    });
+  });
+
   test("mapGetDocumentResponse maps document and falls back to _id", () => {
     expect(
       mapGetDocumentResponse({
@@ -83,6 +104,20 @@ describe("elasticsearch/mappers", () => {
       id: "doc-2",
       identifier: undefined,
       title: "Only title",
+      description: undefined,
+      catalogue: undefined,
+    });
+  });
+
+  test("mapGetDocumentResponse falls back when _source is missing", () => {
+    expect(
+      mapGetDocumentResponse({
+        _id: "doc-3",
+      })
+    ).toEqual({
+      id: "doc-3",
+      identifier: undefined,
+      title: "",
       description: undefined,
       catalogue: undefined,
     });

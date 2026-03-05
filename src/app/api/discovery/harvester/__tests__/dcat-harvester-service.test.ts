@@ -149,6 +149,70 @@ describe("DcatHarvesterService", () => {
     );
   });
 
+  test("falls back to catalog rdf:about when catalog has no title", () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Catalog rdf:about="https://example.org/catalogues/about-only">
+          <dct:description>About-only catalogue</dct:description>
+        </dcat:Catalog>
+        <dcat:Dataset rdf:about="d1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].catalogue).toBe(
+      "https://example.org/catalogues/about-only"
+    );
+  });
+
+  test("extracts dataset catalogue from inline dcat:inCatalog title block", () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Catalog rdf:about="https://example.org/catalogues/main">
+          <dct:title>Main Catalogue</dct:title>
+        </dcat:Catalog>
+        <dcat:Dataset rdf:about="d1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:inCatalog>
+            <dcat:Catalog>
+              <dct:title>Inline Catalogue</dct:title>
+            </dcat:Catalog>
+          </dcat:inCatalog>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].catalogue).toBe("Inline Catalogue");
+  });
+
+  test("falls back to generated dataset id when identifier/about are missing", () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset>
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].id).toBe("dataset-1");
+  });
+
   test("extracts identifier independently from id fallback", () => {
     const service = new DcatHarvesterService();
     const rdf = `

@@ -706,7 +706,9 @@ components:
           items:
             $ref: "#/components/schemas/ValueLabel"
         mediaType:
-          $ref: "#/components/schemas/ValueLabel"
+          oneOf:
+            - type: string
+            - $ref: "#/components/schemas/ValueLabel"
         modifiedAt:
           type: string
           format: date-time

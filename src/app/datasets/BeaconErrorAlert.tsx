@@ -24,7 +24,7 @@ export default function BeaconErrorAlert({ error }: BeaconErrorAlertProps) {
         />
         <div className="flex-1">
           <div className="font-semibold text-base mb-1">
-            Individual-level data discovery unavailable
+            Deep data search unavailable
           </div>
           <p className="text-sm text-gray-700">
             {formattedError}

@@ -58,7 +58,7 @@ export default function BeaconToggle() {
           />
           <div className="flex-1">
             <div className="flex items-center gap-2 font-semibold text-base mb-1">
-              <span>Include Individual-level data discovery</span>
+              <span>Deep data search</span>
               {includeBeacon && (
                 <span className="text-xs bg-warning text-black px-2 py-0.5 rounded-full font-normal">
                   Active
@@ -68,16 +68,15 @@ export default function BeaconToggle() {
             <div className="text-sm text-gray-600 font-normal">
               {includeBeacon ? (
                 <>
-                  Showing datasets with individual-level data and record counts
-                  from Individual-level data discovery{" "}
+                  Showing patient-level data and record counts{" "}
                   <span className="text-secondary font-medium">
                     (searches may be slower)
                   </span>
                 </>
               ) : (
                 <>
-                  Enable to filter by individual-level data characteristics and
-                  see record counts
+                  Search patient-level information and record counts (may be
+                  slower)
                 </>
               )}
             </div>

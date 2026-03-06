@@ -115,7 +115,7 @@ export default function Card({
         <div className="mt-4 bg-info/5 rounded-md p-3 border-l-4 border-info w-full">
           <div className="flex items-center gap-x-2 mb-2">
             <span className="text-sm font-semibold text-black">
-              Individual-level data discovery
+              Patient-level data
             </span>
           </div>
           <div className="flex gap-x-2.5 text-xs sm:text-[15px]">

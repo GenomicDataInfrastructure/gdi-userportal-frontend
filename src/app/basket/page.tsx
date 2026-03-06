@@ -15,11 +15,11 @@ import { signIn, useSession } from "next-auth/react";
 import DatasetList from "../datasets/DatasetList";
 import { AxiosError } from "axios";
 import { createApplicationApi } from "../api/access-management-v1";
+import { retrieveDatasetRawApi } from "../api/discovery-v1";
 import { useRouter } from "next/navigation";
 import { UrlSearchParams } from "@/app/params";
 import { use, useState } from "react";
 import ApplicationCreationModal from "@/components/ApplicationForm/ApplicationCreationModal";
-import { VariableDefinition } from "../api/access-management-v1/additional-types";
 
 type BasketPageProps = {
   searchParams: Promise<UrlSearchParams>;
@@ -42,17 +42,178 @@ export default function Page({ searchParams }: BasketPageProps) {
     return <LoadingContainer text="Loading your basket..." />;
   }
 
-  const requestNow = async () => {
-    const identifiers = basket
-      .map((dataset) => dataset.identifier)
-      .filter((identifier): identifier is string => identifier !== undefined);
+  type ApplicationDatasetPayload = {
+    dataset_id: string;
+    catalog_id: string;
+    distributions: Array<{
+      distribution_id: string;
+      title?: Record<string, string>;
+    }>;
+    distributions_sample: Array<{
+      datasetId: string;
+      variables: Array<{
+        name: string;
+        titles: Record<string, string>;
+        datatype: string;
+        description: Record<string, string>;
+        propertyUrl: string;
+      }>;
+    }>;
+    country?: {
+      label?: string;
+      resource?: string;
+      country_id?: string;
+    };
+    hdab?: {
+      type?: string;
+      name?: string;
+      email?: string;
+      homepage?: string;
+    };
+    publisher?: {
+      type?: string;
+      name?: string;
+      email?: string;
+      homepage?: string;
+    };
+    title?: Record<string, string>;
+    provenance?: Record<string, string>;
+  };
 
+  const buildValidDatasetsForSubmission = async (): Promise<
+    ApplicationDatasetPayload[]
+  > => {
+    const datasetIds = basket
+      .map((dataset) => dataset.id)
+      .filter((datasetId): datasetId is string => Boolean(datasetId));
+
+    const fetchedDatasets = await Promise.all(
+      datasetIds.map(async (datasetId) => {
+        try {
+          const dataset = await retrieveDatasetRawApi(datasetId);
+
+          const toLocalizedObject = (
+            value: unknown,
+            fallbackValue = ""
+          ): Record<string, string> => {
+            if (value && typeof value === "object" && !Array.isArray(value)) {
+              return value as Record<string, string>;
+            }
+
+            const textValue = String(value ?? fallbackValue).trim();
+            return textValue ? { en: textValue } : {};
+          };
+
+          const distributions = (dataset?.distributions ?? [])
+            .map((distribution: any) => ({
+              distribution_id: String(distribution?.id ?? "").trim(),
+              title: toLocalizedObject(distribution?.title, distribution?.id),
+            }))
+            .filter(
+              (distribution: any) => distribution.distribution_id.length > 0
+            );
+
+          if (distributions.length === 0) {
+            return null;
+          }
+
+          const distributionsSample = (dataset?.distributions_sample ?? [])
+            .map((distributionSample: any) => ({
+              datasetId: String(distributionSample?.datasetId ?? datasetId),
+              variables: Array.isArray(distributionSample?.variables)
+                ? distributionSample.variables.map((variable: any) => ({
+                    name: String(variable?.name ?? ""),
+                    titles: toLocalizedObject(variable?.titles, variable?.name),
+                    datatype: String(variable?.datatype ?? ""),
+                    description: toLocalizedObject(
+                      variable?.description,
+                      variable?.name
+                    ),
+                    propertyUrl: String(variable?.propertyUrl ?? ""),
+                  }))
+                : [],
+            }))
+            .filter((distributionSample: any) =>
+              Boolean(distributionSample.datasetId)
+            );
+
+          const country = dataset?.country
+            ? {
+                label: String(dataset.country?.label ?? ""),
+                resource: String(dataset.country?.resource ?? ""),
+                country_id: String(
+                  dataset.country?.id ?? dataset.country?.country_id ?? ""
+                ),
+              }
+            : undefined;
+
+          const mapAgent = (agent: any) =>
+            agent
+              ? {
+                  name: String(agent?.name ?? ""),
+                  email: String(agent?.email ?? "").replace(/^mailto:/, ""),
+                  homepage: String(agent?.homepage ?? ""),
+                }
+              : undefined;
+
+          return {
+            dataset_id: datasetId,
+            catalog_id: String(
+              dataset?.catalog?.id ?? dataset?.catalogue ?? ""
+            ).trim(),
+            distributions,
+            distributions_sample: distributionsSample,
+            country,
+            hdab: mapAgent(dataset?.hdab),
+            publisher: mapAgent(dataset?.publisher),
+            title: toLocalizedObject(dataset?.title, datasetId),
+            provenance: toLocalizedObject(dataset?.provenance),
+          };
+        } catch (error) {
+          console.error(
+            `Failed retrieving dataset details from hub-search for dataset ${datasetId}`,
+            error
+          );
+          return null;
+        }
+      })
+    );
+
+    return fetchedDatasets.reduce<ApplicationDatasetPayload[]>(
+      (accumulator, dataset) => {
+        if (dataset && dataset.dataset_id && dataset.distributions.length > 0) {
+          accumulator.push(dataset);
+        }
+
+        return accumulator;
+      },
+      []
+    );
+  };
+
+  const requestNow = async () => {
     try {
-      const applicationId = await createApplicationApi({
-        datasetIds: identifiers,
-      });
+      const datasets = await buildValidDatasetsForSubmission();
+
+      if (datasets.length === 0) {
+        setAlert({
+          type: "error",
+          message:
+            "Your basket does not contain valid dataset/distribution pairs. Please remove and re-add the datasets.",
+        });
+        return;
+      }
+
+      const application = await createApplicationApi(
+        {
+          title: "New application",
+          inputLanguage: "en",
+          datasets,
+        },
+        "ACCESS"
+      );
       emptyBasket();
-      router.push(`/applications/${applicationId}`);
+      router.push(`/applications/${application.id}`);
     } catch (error) {
       if (error instanceof AxiosError) {
         setAlert({
@@ -75,38 +236,25 @@ export default function Page({ searchParams }: BasketPageProps) {
     language: string;
     name: string;
   }) => {
-    const identifiers = basket
-      .map((dataset) => dataset.identifier)
-      .filter((identifier): identifier is string => identifier !== undefined);
-
-    console.log("Datasets: in BASKET ", basket);
     try {
-      const application = await createApplicationApi({
-        title: data.name,
-        datasets: basket.map((dataset) => ({
-          dataset_id: dataset.id,
-          catalog_id: dataset.catalogue || "",
-          distributions:
-            dataset.distributions?.map((distribution) => ({
-              distribution_id: distribution.id,
-            })) || [],
-          distributions_sample: [
-            {
-              datasetId: dataset.id,
-              variables: dataset.dataDictionary.map(
-                (variable: VariableDefinition) => ({
-                  name: variable.name,
-                  titles: { en: variable.titles },
-                  datatype: variable.datatype,
-                  description: { en: variable.description },
-                  propertyUrl: variable.propertyUrl || "",
-                })
-              ),
-            },
-          ],
-        })),
-        inputLanguage: "en",
-      });
+      const datasets = await buildValidDatasetsForSubmission();
+
+      if (datasets.length === 0) {
+        setAlert({
+          type: "error",
+          message:
+            "Your basket does not contain valid dataset/distribution pairs. Please remove and re-add the datasets.",
+        });
+        return;
+      }
+      const application = await createApplicationApi(
+        {
+          title: data.name,
+          datasets,
+          inputLanguage: "en",
+        },
+        data.applicationType === "ACCESS" ? "ACCESS" : "REQUEST"
+      );
       emptyBasket();
       setIsModalOpen(false);
       console.log("Redirecting to application ID:", application.id);

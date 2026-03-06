@@ -17,10 +17,17 @@ export interface Dataset {
   catalog_id: string;
   distributions: Distribution[];
   distributions_sample: DistributionSample[];
+  date_added?: string;
+  publisher?: Publisher;
+  title?: Record<string, string>;
+  country?: Country;
+  hdab?: Publisher;
+  provenance?: Record<string, string>;
 }
 
 export interface Distribution {
   distribution_id: string;
+  title?: Record<string, string>;
 }
 
 export interface DistributionSample {
@@ -34,4 +41,17 @@ export interface VariableDefinition {
   datatype: string;
   description: Record<string, string>;
   propertyUrl: string;
+}
+
+export interface Publisher {
+  type?: string;
+  name?: string;
+  email?: string;
+  homepage?: string;
+}
+
+export interface Country {
+  label?: string;
+  resource?: string;
+  country_id?: string;
 }

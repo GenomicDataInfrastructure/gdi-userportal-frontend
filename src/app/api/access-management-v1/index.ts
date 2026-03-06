@@ -36,7 +36,6 @@ interface Distribution {
 }
 
 interface Publisher {
-  type: string;
   name: string;
   email: string;
   homepage: string;
@@ -386,14 +385,17 @@ export interface RetrievedApplicationData {
 }
 
 export const createApplicationApi = async (
-  datasetSubmissionApplication: DatasetSubmission
+  datasetSubmissionApplication: DatasetSubmission,
+  applicationType: "ACCESS" | "REQUEST" = "REQUEST"
 ) => {
   const headers = await createHeaders();
   try {
     const client = accessManagementClient;
-    const requestPath = "data-request/application"; // avoid leading slash so baseURL path is preserved
+    const routePrefix =
+      applicationType === "ACCESS" ? "data-access" : "data-request";
+    const requestPath = `${routePrefix}/application`; // avoid leading slash so baseURL path is preserved
     const fullUrl = `${client.defaults.baseURL?.replace(/\/$/, "")}/${requestPath}`;
-
+    console.log("APLICATION DATA SET SUBMISSION", JSON.stringify(datasetSubmissionApplication));
     const response = await client.post(
       requestPath,
       datasetSubmissionApplication,
@@ -401,7 +403,6 @@ export const createApplicationApi = async (
         headers,
       }
     );
-
     console.debug("✅ AMS request succeeded", { status: response.status });
     return response.data;
   } catch (error) {
@@ -453,6 +454,106 @@ export const createAddDatasetToBasketApi = async (
   }
 };
 
+export interface BasketDatasetItem {
+  dataset_id: string;
+  catalog_id?: string;
+  distributions?: Array<{ distribution_id?: string; id?: string } | string>;
+}
+
+const normalizeBasketDatasetItems = (items: unknown): BasketDatasetItem[] => {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+
+  return items.reduce<BasketDatasetItem[]>((accumulator, item) => {
+    if (!item || typeof item !== "object") {
+      return accumulator;
+    }
+
+    const raw = item as Record<string, unknown>;
+    const datasetId = String(raw.dataset_id ?? "").trim();
+    if (!datasetId) {
+      return accumulator;
+    }
+
+    const rawDistributions = Array.isArray(raw.distributions)
+      ? raw.distributions
+      : [];
+
+    const distributions = rawDistributions
+      .map((distribution) => {
+        if (typeof distribution === "string") {
+          const distributionId = distribution.trim();
+          return distributionId ? { distribution_id: distributionId } : null;
+        }
+
+        if (distribution && typeof distribution === "object") {
+          const distributionRecord = distribution as Record<string, unknown>;
+          const distributionId = String(
+            distributionRecord.distribution_id ?? distributionRecord.id ?? ""
+          ).trim();
+          return distributionId ? { distribution_id: distributionId } : null;
+        }
+
+        return null;
+      })
+      .filter((distribution): distribution is { distribution_id: string } =>
+        Boolean(distribution?.distribution_id)
+      );
+
+    accumulator.push({
+      dataset_id: datasetId,
+      catalog_id: String(raw.catalog_id ?? "").trim(),
+      distributions,
+    });
+
+    return accumulator;
+  }, []);
+};
+
+export const getBasketDatasetsApi = async (): Promise<BasketDatasetItem[]> => {
+  const headers = await createHeaders();
+  try {
+    const client = accessManagementClient;
+    const requestPath = "basket";
+
+    const response = await client.get(requestPath, {
+      headers,
+    });
+
+    console.log("====================================");
+    console.log(response.data);
+    console.log("====================================");
+
+    const responseData = response.data;
+    if (Array.isArray(responseData)) {
+      return normalizeBasketDatasetItems(responseData);
+    }
+
+    if (Array.isArray(responseData?.data)) {
+      return normalizeBasketDatasetItems(responseData.data);
+    }
+
+    if (Array.isArray(responseData?.results)) {
+      return normalizeBasketDatasetItems(responseData.results);
+    }
+
+    return normalizeBasketDatasetItems([]);
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.error("❌ AMS request failed", {
+        status: error.response?.status,
+        message: error.message,
+        responseData: error.response?.data,
+      });
+      throw error;
+    } else {
+      console.error("❌ Non-Axios error", error);
+      throw error;
+    }
+  }
+};
+
 export const removeDatasetFromBasketApi = async (datasetId: string) => {
   const headers = await createHeaders();
   try {
@@ -483,9 +584,25 @@ export const removeDatasetFromBasketApi = async (datasetId: string) => {
 
 function mapApplicationResponseToListed(data: any): ListedApplication {
   // Map raw application response to ListedApplication format
+  const rawId = data?.id;
   const mongoId = String(data?._id ?? "");
-  // Convert MongoDB ObjectId to number-like representation
-  const id = mongoId;
+
+  let id = 0;
+  if (typeof rawId === "number" && Number.isFinite(rawId)) {
+    id = rawId;
+  } else if (typeof rawId === "string") {
+    const parsedId = Number(rawId);
+    if (Number.isFinite(parsedId)) {
+      id = parsedId;
+    }
+  }
+
+  if (id === 0 && /^[a-fA-F0-9]{24}$/.test(mongoId)) {
+    const mongoAsNumber = parseInt(mongoId.slice(0, 12), 16);
+    if (Number.isFinite(mongoAsNumber)) {
+      id = mongoAsNumber;
+    }
+  }
 
   return {
     id,

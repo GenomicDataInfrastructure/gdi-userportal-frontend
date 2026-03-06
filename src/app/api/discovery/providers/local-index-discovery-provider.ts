@@ -44,8 +44,10 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       count: response.count,
       results: response.results.map((dataset) => ({
         id: dataset.id,
+        identifier: dataset.identifier ?? "",
         title: dataset.title,
         description: dataset.description ?? "",
+        catalogue: dataset.catalogue ?? "",
         publishers: [],
         themes: [],
         keywords: [],
@@ -62,8 +64,10 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
 
     return {
       id: dataset.id,
+      identifier: dataset.identifier ?? "",
       title: dataset.title,
       description: dataset.description ?? "",
+      catalogue: dataset.catalogue ?? "",
       publishers: [],
       themes: [],
       keywords: [],

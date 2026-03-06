@@ -33,7 +33,10 @@ export const seedLocalIndexFromDdsApi = async (
       ?.filter((dataset) => Boolean(dataset.id && dataset.title))
       .map((dataset) => ({
         id: dataset.id,
+        identifier: dataset.identifier,
         title: dataset.title,
+        description: dataset.description,
+        catalogue: dataset.catalogue,
       })) ?? [];
 
   await upsertLocalDiscoveryDatasets(datasets);

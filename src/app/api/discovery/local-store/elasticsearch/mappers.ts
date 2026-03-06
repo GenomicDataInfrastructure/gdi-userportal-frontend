@@ -17,8 +17,10 @@ export const mapSearchResponse = (
   const hits = response.hits?.hits ?? [];
   const results: LocalDiscoveryDataset[] = hits.map((hit) => ({
     id: hit._source?.id ?? hit._id,
+    identifier: hit._source?.identifier,
     title: hit._source?.title ?? "",
     description: hit._source?.description,
+    catalogue: hit._source?.catalogue,
   }));
 
   return {
@@ -31,6 +33,8 @@ export const mapGetDocumentResponse = (
   response: ElasticsearchGetDocumentResponse
 ): LocalDiscoveryDataset => ({
   id: response._source?.id ?? response._id,
+  identifier: response._source?.identifier,
   title: response._source?.title ?? "",
   description: response._source?.description,
+  catalogue: response._source?.catalogue,
 });

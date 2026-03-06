@@ -53,7 +53,13 @@ describe("LocalIndexDiscoveryProvider", () => {
     mockStore.searchDatasets.mockResolvedValueOnce({
       count: 2,
       results: [
-        { id: "a", title: "Dataset A", description: "desc-a" },
+        {
+          id: "a",
+          identifier: "IDENT-A",
+          title: "Dataset A",
+          description: "desc-a",
+          catalogue: "catalogue-a",
+        },
         { id: "b", title: "Dataset B" },
       ],
     });
@@ -74,16 +80,20 @@ describe("LocalIndexDiscoveryProvider", () => {
       results: [
         {
           id: "a",
+          identifier: "IDENT-A",
           title: "Dataset A",
           description: "desc-a",
+          catalogue: "catalogue-a",
           publishers: [],
           themes: [],
           keywords: [],
         },
         {
           id: "b",
+          identifier: "",
           title: "Dataset B",
           description: "",
+          catalogue: "",
           publishers: [],
           themes: [],
           keywords: [],
@@ -101,8 +111,10 @@ describe("LocalIndexDiscoveryProvider", () => {
 
     await expect(provider.retrieveDataset("a")).resolves.toEqual({
       id: "a",
+      identifier: "",
       title: "Dataset A",
       description: "desc-a",
+      catalogue: "",
       publishers: [],
       themes: [],
       keywords: [],
@@ -122,8 +134,31 @@ describe("LocalIndexDiscoveryProvider", () => {
 
     await expect(provider.retrieveDataset("b")).resolves.toEqual({
       id: "b",
+      identifier: "",
       title: "Dataset B",
       description: "",
+      catalogue: "",
+      publishers: [],
+      themes: [],
+      keywords: [],
+    });
+  });
+
+  test("retrieveDataset preserves identifier and catalogue when present", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce({
+      id: "c",
+      identifier: "IDENT-C",
+      title: "Dataset C",
+      description: "desc-c",
+      catalogue: "catalogue-c",
+    });
+
+    await expect(provider.retrieveDataset("c")).resolves.toEqual({
+      id: "c",
+      identifier: "IDENT-C",
+      title: "Dataset C",
+      description: "desc-c",
+      catalogue: "catalogue-c",
       publishers: [],
       themes: [],
       keywords: [],

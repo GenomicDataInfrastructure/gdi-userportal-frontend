@@ -11,8 +11,10 @@ export const createIndexMappings = () => ({
   mappings: {
     properties: {
       id: { type: "keyword" },
+      identifier: { type: "keyword" },
       title: { type: "text" },
       description: { type: "text" },
+      catalogue: { type: "keyword" },
     },
   },
 });
@@ -29,14 +31,20 @@ export const buildSearchBody = (options: LocalDiscoverySearchOptions) => {
             {
               multi_match: {
                 query,
-                fields: ["title^3", "description", "id"],
+                fields: [
+                  "title^3",
+                  "description",
+                  "id",
+                  "identifier",
+                  "catalogue",
+                ],
                 fuzziness: "AUTO",
               },
             },
             {
               multi_match: {
                 query,
-                fields: ["title^4", "description"],
+                fields: ["title^4", "description", "identifier", "catalogue"],
                 type: "phrase_prefix",
               },
             },

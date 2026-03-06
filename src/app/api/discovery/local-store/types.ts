@@ -4,8 +4,10 @@
 
 export interface LocalDiscoveryDataset {
   id: string;
+  identifier?: string;
   title: string;
   description?: string;
+  catalogue?: string;
 }
 
 export interface LocalDiscoverySearchOptions {

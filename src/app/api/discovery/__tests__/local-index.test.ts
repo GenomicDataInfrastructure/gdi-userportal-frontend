@@ -92,8 +92,20 @@ describe("local-index APIs", () => {
       { Authorization: "Bearer token" }
     );
     expect(mockUpsertLocalDiscoveryDatasets).toHaveBeenCalledWith([
-      { id: "d1", title: "Dataset 1" },
-      { id: "d2", title: "Dataset 2" },
+      {
+        id: "d1",
+        identifier: undefined,
+        title: "Dataset 1",
+        description: "A",
+        catalogue: undefined,
+      },
+      {
+        id: "d2",
+        identifier: undefined,
+        title: "Dataset 2",
+        description: "B",
+        catalogue: undefined,
+      },
     ]);
     expect(count).toBe(2);
   });

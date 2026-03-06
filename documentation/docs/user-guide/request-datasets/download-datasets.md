@@ -33,8 +33,8 @@ To view your approved datasets:
 2. Select the **Entitlements** tab to see the list of your approved datasets.
 
 <figure>
-    <img src="img/download-datasets/view-approved-datasets.png" alt="Screenshot of the View Approved Datasets page" width="900" />
-    <figcaption></figcaption>
+<img src="img/download-datasets/view-approved-datasets.png" alt="Screenshot of the View Approved Datasets page" width="900" />
+<figcaption></figcaption>
 </figure>
 
 3. Select the dataset to view its details. This view only displays the metadata of your approved datasets. To download and work with the datasets, use the Secure Processing Environment (SPE) as instructed in your approval email.

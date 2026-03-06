@@ -6,7 +6,6 @@
 stages:
   - dummy
 
-
 dummy:
   stage: dummy
   rules:

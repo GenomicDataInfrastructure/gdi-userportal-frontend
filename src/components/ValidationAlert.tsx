@@ -3,7 +3,10 @@
 
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamationTriangle, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faExclamationTriangle,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface ValidationAlertProps {
   isOpen: boolean;

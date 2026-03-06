@@ -87,17 +87,32 @@ function DatasetCard({
   const isInBasket = basket.some((ds) => ds.id === dataset.id);
   const externalAccessUrl = getFirstAccessUrl(distributions);
 
-  const toggleDatasetInBasket = (e: React.MouseEvent) => {
+  const toggleDatasetInBasket = async (e: React.MouseEvent) => {
     e.preventDefault();
     if (isInBasket) {
+      await removeDatasetFromBasketApi(dataset.id);
       removeDatasetFromBasket(dataset);
-      removeDatasetFromBasketApi(dataset.id);
     } else {
-      addDatasetToBasket(dataset);
-      createAddDatasetToBasketApi({
+      let distributionId = distributions?.[0]?.id ?? "";
+
+      if (!distributionId) {
+        const fullDataset = await retrieveDatasetApi(dataset.id);
+        setDistributions(fullDataset?.distributions || []);
+        distributionId = fullDataset?.distributions?.[0]?.id ?? "";
+      }
+
+      if (!distributionId) {
+        console.error(
+          "Failed to add dataset to basket: no distribution found for dataset",
+          dataset.id
+        );
+        return;
+      }
+      await createAddDatasetToBasketApi({
         dataset_id: dataset.id,
-        distribution_id: dataset.distributions?.[0]?.id ?? "",
+        distribution_id: distributionId,
       });
+      addDatasetToBasket(dataset);
     }
   };
 
@@ -144,7 +159,7 @@ function DatasetCard({
           e.stopPropagation();
           return;
         }
-        toggleDatasetInBasket(e);
+        void toggleDatasetInBasket(e);
       }}
       disabled={buttonDisabled}
       className={`text-xs sm:text-base rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide cursor-pointer shrink-0 ${buttonDisabled ? "opacity-60 cursor-not-allowed" : ""} ${isInBasket ? "bg-warning text-black hover:bg-secondary hover:text-white" : "bg-primary text-white hover:bg-secondary"}`}

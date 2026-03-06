@@ -99,8 +99,6 @@ function mapDiscoveryDatasetToSearched(dataset: any): SearchedDataset {
   const id = String(dataset?.id ?? "");
   const title = normalizeTitle(dataset?.title, id);
   const description = normalizeTitle(dataset?.description, "");
-  const rawVariables = dataset?.distributions_sample?.[0]?.variables;
-  const variables = rawVariables ? normalizeVariables(rawVariables) : [];
 
   // Map categories to themes
   const themes: ValueLabel[] = (dataset?.categories ?? []).map((cat: any) => ({
@@ -130,30 +128,6 @@ function mapDiscoveryDatasetToSearched(dataset: any): SearchedDataset {
         }
   );
 
-  // Map distributions
-  const distributions: RetrievedDistribution[] = (
-    dataset?.distributions ?? []
-  ).map((dist: any) => ({
-    id: String(dist?.id ?? ""),
-    title: normalizeTitle(dist?.title, dist?.id),
-    description: normalizeTitle(dist?.description, ""),
-    format: dist?.format
-      ? {
-          value: String(dist.format.id ?? ""),
-          label: String(dist.format.label ?? ""),
-        }
-      : undefined,
-    uri: dist?.resource,
-    accessUrl: dist?.access_url?.[0],
-    downloadUrl: dist?.download_url?.[0],
-    createdAt: dist?.issued,
-    modifiedAt: dist?.modified,
-    languages: (dist?.language ?? []).map((lang: any) => ({
-      value: String(lang?.id ?? ""),
-      label: String(lang?.label ?? ""),
-    })),
-  }));
-
   return {
     id,
     identifier: dataset?.id,
@@ -162,14 +136,11 @@ function mapDiscoveryDatasetToSearched(dataset: any): SearchedDataset {
     themes,
     publishers,
     keywords,
-    distributions,
-    dataDictionary: variables,
     catalogue: dataset?.catalog?.id,
     createdAt: dataset?.issued,
     modifiedAt: dataset?.modified,
     recordsCount: dataset?.number_of_records,
     distributionsCount: (dataset?.distributions ?? []).length,
-    url: dataset?.resource,
   };
 }
 
@@ -367,11 +338,11 @@ export const searchDatasetsApi = async (
     if (options.query) {
       params.append("q", options.query);
     }
-    if (options.limit) {
-      params.append("limit", String(options.limit));
+    if (typeof options.rows === "number") {
+      params.append("rows", String(options.rows));
     }
-    if (options.offset) {
-      params.append("offset", String(options.offset));
+    if (typeof options.start === "number") {
+      params.append("start", String(options.start));
     }
 
     const requestPath = `search?${params.toString()}`; // avoid leading slash so baseURL path is preserved
@@ -439,6 +410,32 @@ export const retrieveDatasetApi = async (id: string) => {
       console.error("❌ Non-Axios error", error);
       throw error;
     }
+  }
+};
+
+export const retrieveDatasetRawApi = async (id: string) => {
+  const headers = await createHeaders();
+  try {
+    const client = discoveryHdEuClient;
+
+    const requestPath = `datasets/${id}`;
+    const response = await client.get(requestPath, {
+      headers,
+    });
+
+    return response.data?.result;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.error("❌ Discovery request failed", {
+        status: error.response?.status,
+        message: error.message,
+        responseData: error.response?.data,
+      });
+      throw error;
+    }
+
+    console.error("❌ Non-Axios error", error);
+    throw error;
   }
 };
 

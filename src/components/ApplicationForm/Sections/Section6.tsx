@@ -143,9 +143,13 @@ const Section6: React.FC<SectionProps> = ({
               ? {
                   key: extractionEveryWhen,
                   value:
-                    extractionEveryWhen === "a" ? "Every year" :
-                    extractionEveryWhen === "b" ? "Half a year" :
-                    extractionEveryWhen === "c" ? "Quarter" : "Other",
+                    extractionEveryWhen === "a"
+                      ? "Every year"
+                      : extractionEveryWhen === "b"
+                        ? "Half a year"
+                        : extractionEveryWhen === "c"
+                          ? "Quarter"
+                          : "Other",
                 }
               : undefined,
           optOutOfTheMechanismProvidedInTheNationalLaw: {

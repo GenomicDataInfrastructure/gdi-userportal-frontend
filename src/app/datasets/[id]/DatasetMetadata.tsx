@@ -385,14 +385,14 @@ const DatasetMetadata = ({
         <MetadataSection title="Population & Demographics" icon={faUsers}>
           <div className="flex flex-col gap-3 text-sm">
             <MetadataField
-              label="Population Coverage"
+              label="Population coverage"
               tooltip="Description of the population covered by this dataset."
             >
               {dataset.populationCoverage || <NotProvided />}
             </MetadataField>
             <div className="flex items-center gap-4 flex-wrap">
               <MetadataField
-                label="Number of Records"
+                label="Number of records"
                 icon={faChartBar}
                 tooltip="Total number of records in the dataset."
               >
@@ -403,7 +403,7 @@ const DatasetMetadata = ({
                 )}
               </MetadataField>
               <MetadataField
-                label="Unique Individuals"
+                label="Unique individuals"
                 icon={faUsers}
                 tooltip="Number of unique individuals represented in the dataset."
               >
@@ -414,7 +414,7 @@ const DatasetMetadata = ({
                 )}
               </MetadataField>
               <MetadataField
-                label="Age Range"
+                label="Age range"
                 icon={faCalendarAlt}
                 tooltip="Typical age range of individuals in the dataset."
               >
@@ -457,7 +457,7 @@ const DatasetMetadata = ({
               <Tooltip message="Geographic regions covered by this dataset." />
             </div>
             <MetadataField
-              label="Temporal Coverage"
+              label="Temporal coverage"
               tooltip="Time period covered by the data in this dataset."
             >
               {dataset.temporalCoverage &&
@@ -477,13 +477,13 @@ const DatasetMetadata = ({
               )}
             </MetadataField>
             <MetadataField
-              label="Temporal Resolution"
+              label="Temporal resolution"
               tooltip="Minimum time period resolvable in the dataset."
             >
               {dataset.temporalResolution || <NotProvided />}
             </MetadataField>
             <MetadataField
-              label="Spatial Resolution"
+              label="Spatial resolution"
               tooltip="Minimum spatial separation resolvable in the dataset, measured in meters."
             >
               {dataset.spatialResolutionInMeters !== undefined ? (
@@ -505,7 +505,7 @@ const DatasetMetadata = ({
         <MetadataSection title="Legal & Compliance" icon={faGavel}>
           <div className="flex flex-col gap-3 text-sm">
             <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">Legal Basis:</span>
+              <span className="font-medium shrink-0">Legal basis:</span>
               {dataset.legalBasis && dataset.legalBasis.length > 0 ? (
                 <Chips
                   chips={dataset.legalBasis.map((item) => item.label)}
@@ -518,7 +518,7 @@ const DatasetMetadata = ({
             </div>
             <div className="flex flex-wrap gap-2 items-center relative group">
               <span className="font-medium shrink-0">
-                Applicable Legislation:
+                Applicable legislation:
               </span>
               {dataset.applicableLegislation &&
               dataset.applicableLegislation.length > 0 ? (
@@ -546,7 +546,7 @@ const DatasetMetadata = ({
               <Tooltip message="Purpose for which the data was collected or is being processed." />
             </div>
             <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">Personal Data Types:</span>
+              <span className="font-medium shrink-0">Personal data types:</span>
               {dataset.personalData && dataset.personalData.length > 0 ? (
                 <Chips
                   chips={dataset.personalData.map((item) => item.label)}
@@ -576,13 +576,13 @@ const DatasetMetadata = ({
                 icon={faNoteSticky}
                 className="text-primary text-xs"
               />
-              <span className="font-medium shrink-0">Publisher Note:</span>
+              <span className="font-medium shrink-0">Publisher note:</span>
               <span>{dataset.publisherNote || <NotProvided />}</span>
               <Tooltip message="Additional notes from the data publisher." />
             </div>
             <div className="flex items-center gap-2 flex-wrap relative group">
               <FontAwesomeIcon icon={faUser} className="text-primary text-xs" />
-              <span className="font-medium shrink-0">Publisher Type:</span>
+              <span className="font-medium shrink-0">Publisher type:</span>
               {dataset.publisherType && dataset.publisherType.length > 0 ? (
                 <Chips
                   chips={dataset.publisherType.map((item) => item.label)}
@@ -600,7 +600,7 @@ const DatasetMetadata = ({
                   dataset.trustedDataHolder ? "text-info" : "text-gray-400"
                 }
               />
-              <span className="font-medium">Trusted Data Holder:</span>
+              <span className="font-medium">Trusted data holder:</span>
               <span
                 className={
                   dataset.trustedDataHolder ? "text-info font-medium" : ""
@@ -624,7 +624,7 @@ const DatasetMetadata = ({
                 className="text-primary text-xs"
               />
               <span className="font-medium shrink-0">
-                Health Data Access Body (HDAB):
+                Health data access body (HDAB):
               </span>
               {dataset.hdab && dataset.hdab.length > 0 ? (
                 dataset.hdab.map((agent, index) => (
@@ -653,7 +653,7 @@ const DatasetMetadata = ({
         <MetadataSection title="Coding & Standards" icon={faCode}>
           <div className="flex flex-col gap-3 text-sm">
             <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">Coding Systems:</span>
+              <span className="font-medium shrink-0">Coding systems:</span>
               {dataset.codingSystem && dataset.codingSystem.length > 0 ? (
                 <Chips
                   chips={dataset.codingSystem.map((item) => item.label)}
@@ -665,7 +665,7 @@ const DatasetMetadata = ({
               <Tooltip message="Coding systems or standards used in this dataset (e.g., ICD-10, SNOMED CT)." />
             </div>
             <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">Code Values:</span>
+              <span className="font-medium shrink-0">Code values:</span>
               {dataset.codeValues && dataset.codeValues.length > 0 ? (
                 <Chips
                   chips={dataset.codeValues.map((item) => item.label)}
@@ -740,7 +740,7 @@ const DatasetMetadata = ({
               )}
               {dataset.isReferencedBy && dataset.isReferencedBy.length > 0 && (
                 <div className="flex items-center gap-2 flex-wrap relative group">
-                  <span className="font-medium shrink-0">Referenced By:</span>
+                  <span className="font-medium shrink-0">Referenced by:</span>
                   {dataset.isReferencedBy.map((ref, index) => (
                     <span key={index}>{ref}</span>
                   ))}
@@ -764,13 +764,13 @@ const DatasetMetadata = ({
               {dataset.version || <NotProvided />}
             </MetadataField>
             <MetadataField
-              label="Update Frequency"
+              label="Update frequency"
               tooltip="How often the dataset is updated."
             >
               {dataset.frequency?.label || <NotProvided />}
             </MetadataField>
             <div className="flex items-center gap-2 flex-wrap relative group">
-              <span className="font-medium shrink-0">Version Notes:</span>
+              <span className="font-medium shrink-0">Version notes:</span>
               <span>{dataset.versionNotes || <NotProvided />}</span>
               <Tooltip message="Notes about this version of the dataset." />
             </div>

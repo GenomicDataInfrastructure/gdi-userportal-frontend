@@ -48,7 +48,7 @@ function Header() {
     },
     {
       icon: faLineChart,
-      label: "Allele Frequency",
+      label: "Allele frequency",
       href: "/allele-frequency",
       isActive: (activePath: string) =>
         activePath.includes("/allele-frequency"),

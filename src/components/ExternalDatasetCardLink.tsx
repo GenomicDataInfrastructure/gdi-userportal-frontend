@@ -69,7 +69,7 @@ export function ExternalDatasetConfirmationDialog({
               className="mt-2"
             />
             <Button
-              text="Continue to External Site"
+              text="Continue to external site"
               onClick={handleConfirm}
               type="primary"
               icon={faExternalLinkAlt}

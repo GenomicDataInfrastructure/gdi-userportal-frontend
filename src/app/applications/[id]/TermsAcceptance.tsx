@@ -111,7 +111,7 @@ export default function TermsAcceptance() {
         <div className="flex justify-end mt-4">
           <Button
             type="primary"
-            text="Accept All"
+            text="Accept all"
             icon={faCheckCircle}
             onClick={handleAcceptTerms}
           />

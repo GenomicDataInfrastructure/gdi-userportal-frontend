@@ -13,7 +13,7 @@ export default function ClearFilterButton() {
   return (
     <div className="flex justify-end">
       <Button
-        text="Clear Filters"
+        text="Clear filters"
         type="warning"
         onClick={clearActiveFilters}
       />

@@ -81,7 +81,7 @@ export function createApplicationSidebarItems(
       ),
     },
     {
-      label: "Terms & Conditions",
+      label: "Terms and conditions",
       value: <TermsAcceptance />,
     },
   ];

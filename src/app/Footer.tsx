@@ -91,13 +91,13 @@ function Footer() {
           <div className="flex flex-col gap-2 text-left w-full md:w-1/6">
             <h3 className="text-lg font-bold">Legal</h3>
             <a href="/legal#website-terms" className="hover:text-info">
-              Terms & Conditions
+              Terms and conditions
             </a>
             <a href="/legal#privacy-notice" className="hover:text-info">
-              Privacy Notice
+              Privacy notice
             </a>
             <a href="/legal#cookies" className="hover:text-info">
-              Cookie Policy
+              Cookie policy
             </a>
           </div>
           {/* Third column: Portal links */}

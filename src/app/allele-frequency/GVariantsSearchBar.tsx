@@ -107,7 +107,7 @@ const formFields = [
       "The genomic variant in format: chromosome-position-reference-alternate (e.g., 21-9411448-G-T)",
   },
   {
-    label: "Ref Genome",
+    label: "Ref genome",
     fieldKey: "refGenome",
     type: "select",
     options: [
@@ -127,7 +127,7 @@ const formFields = [
     ],
   },
   {
-    label: "Country of Birth",
+    label: "Country of birth",
     fieldKey: "countryOfBirth",
     type: "select",
     options: [{ value: "All", label: "All" }, ...COUNTRY_OPTIONS],

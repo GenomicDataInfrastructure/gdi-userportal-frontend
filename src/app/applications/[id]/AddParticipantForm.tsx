@@ -73,7 +73,7 @@ const AddParticipantForm = ({
       {!isAddParticipantFormShown && (
         <Button
           type="primary"
-          text="Add Participant"
+          text="Add participant"
           icon={faUserPlus}
           onClick={() => toggleShowParticipantForm()}
         />

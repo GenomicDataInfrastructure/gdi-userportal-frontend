@@ -57,7 +57,7 @@ function DatasetLink({
       <h3 className="text-lg font-title mb-2 line-clamp-2">{title}</h3>
       <p className="mb-4 line-clamp-3 text-heading-secondary">{description}</p>
       <div className="mt-auto text-primary text-sm font-title link-arrow">
-        Read More
+        Read more
       </div>
     </div>
   );

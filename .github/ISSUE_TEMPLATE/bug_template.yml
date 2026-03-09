@@ -43,7 +43,7 @@ body:
       description: "Detail the steps to replicate the problem."
       placeholder: |
         1. Go to '...'
-        2. Click on '...'
+        2. Select '...'
         3. Scroll down to '...'
         4. Notice the error
 

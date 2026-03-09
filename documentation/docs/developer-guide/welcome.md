@@ -1,41 +1,59 @@
 ---
-slug: /welcome-developers
+slug: /developer-guide/welcome
 sidebar_label: "Welcome"
 sidebar_position: 1
 ---
 
-# Welcome, developers
+<!--
+SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
-:::info content in progress
+SPDX-License-Identifier: CC-BY-4.0
+-->
 
-We are working on this developer guide.
+# Welcome to the GDI developer guide
 
-:::
+***NEW CONTENT NEEDED***
 
-Welcome to the **GDI User Portal Developer Guide**! This comprehensive documentation will help you contribute to the Genomic Data Infrastructure (GDI) User Portal platform, whether you're developing new features, fixing bugs, or extending functionality.
+Welcome to the GDI Developer Guide!
 
-## Development overview
+Use this guide if you are a **developer, extension developer, or platform operator** who wants to contribute to, extend, or deploy the GDI User Portal and its associated services.
 
-The GDI User Portal is built with modern web technologies and follows best practices for scalability, security, and maintainability:
+## Who this guide is for
 
-- **Frontend:** Next.js with TypeScript
-- **Backend Services:** Java/Spring Boot microservices
-- **Data Catalogue:** CKAN with custom extensions
-- **Authentication:** Keycloak with LS-AAI integration
-- **Containerisation:** Docker and Docker Compose
+This documentation serves multiple developer personas:
 
-## Getting started
+- **Contributing Developers**: Frontend and backend developers contributing to the User Portal, Dataset Discovery Service, or Access Management Service
+- **Extension Developers**: Developers creating or modifying CKAN extensions for custom functionality
+- **Metadata Specialists**: Data engineers working with metadata schemas, DCAT-AP profiles, and harvesting configurations
+- **Platform Operators**: DevOps engineers and system administrators deploying and maintaining GDI infrastructure
 
-Choose your development focus:
+## What you can accomplish
 
-- **New to the project?** Start with [Get started](/developer-guide/get-started)
-- **Frontend development?** Go to [Develop frontend features](/developer-guide/develop-frontend)
-- **Backend integration?** Check out [Work with backend services](/developer-guide/work-with-backend)
-- **CKAN extensions?** Explore [Develop CKAN extensions](/developer-guide/develop-ckan-extensions)
-- **Feature development?** See [Add and modify features](/developer-guide/add-modify-features)
+Based on your role, navigate to the relevant sections:
 
-## Contributing
+### For Contributing Developers
+1. [Set up your development environment](/category/setup-environment/)
+2. Understand the system architecture
+3. Deploy and test your changes
 
-Before contributing, review our coding standards and follow the established Git workflow. Ensure comprehensive testing coverage and update documentation for new features.
+### For Extension Developers
+1. [Set up local CKAN development](/developer-guide/setup-environment/install-locally)
+2. [Develop and test extensions](/category/develop-extensions/)
+3. Understand CKAN schemas and validation
 
-**GitHub Repository:** [GenomicDataInfrastructure/gdi-userportal-frontend](https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend)
+### For Metadata Specialists
+1. [Understand metadata structure](/category/work-with-metadata/)
+2. [Configure harvesting](/category/configure-harvesting/)
+3. Add and modify metadata fields
+
+### For Platform Operators
+1. [Understand the architecture](/developer-guide/architecture-overview)
+2. [Set up environments](/category/setup-environment/)
+3. [Customise the platform](/category/customize-platform/)
+4. [Deploy to production](/category/deploy-production/)
+
+## Quick links
+
+- [Architecture Overview](./architecture-overview.md)
+- [Get Started](./get-started.md)
+- [Component Repositories](./reference/component-repositories.md)

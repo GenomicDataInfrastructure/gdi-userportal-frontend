@@ -1,157 +1,178 @@
 ---
-slug: /developer-guide/get-started
-sidebar_label: "Get started"
-sidebar_position: 2
+title: Get started
+sidebar_position: 3
 ---
 
-# Get started
+<!--
+SPDX-FileCopyrightText: 2024 Stichting Health-RI
+SPDX-FileContributor: PNED G.I.E.
 
-:::info content in progress
+SPDX-License-Identifier: CC-BY-4.0
+-->
 
-We are working on this guide.
+# Get started with development
 
-:::
-
-This guide helps you set up a complete development environment for the GDI User Portal platform, including all necessary tools and dependencies.
+Follow these quick setup instructions to begin developing with the GDI User Portal.
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
+Before beginning, ensure you have:
 
-- **Node.js** (version 18 or higher)
-- **npm** or **yarn** package manager
+- **Node.js and npm** installed
+- **Docker** (for containerised development)
 - **Git** for version control
-- **Docker** and **Docker Compose** for containerised services
-- **Java 11+** (for backend services)
-- **PostgreSQL** (for local database development)
+- Basic understanding of Next.js (for frontend development)
 
-## Development environment setup
+## Quick setup options
 
-### 1. Clone the repository
+Choose the setup option that best suits your development needs:
 
-```bash
-git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend.git
-cd gdi-userportal-frontend
-```
+### Option 1: Local Development
 
-### 2. Install dependencies
+For active frontend development with hot-reloading:
 
-```bash
-npm install
-# or
-yarn install
-```
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-### 3. Environment configuration
+2. **Configure environment:**
+   Create a `.env.local` file in the root directory and copy the content of `.env.local.example` into the new file. Modify the environment variables as needed.
 
-Copy the example environment file and configure for local development:
+3. **Run development server:**
+   ```bash
+   npm run dev
+   ```
+   Navigate to `http://localhost:3000/`. The application will automatically reload when you change source files.
 
-```bash
-cp .env.example .env.local
-```
+### Option 2: Docker Development
 
-Edit `.env.local` with your local configuration settings:
-
-```env
-# API Configuration
-NEXT_PUBLIC_DDS_API_URL=http://localhost:8080
-NEXT_PUBLIC_AMS_API_URL=http://localhost:8081
-
-# Authentication
-NEXT_PUBLIC_KEYCLOAK_URL=http://localhost:8443
-NEXT_PUBLIC_KEYCLOAK_REALM=your-realm
-NEXT_PUBLIC_KEYCLOAK_CLIENT_ID=your-client-id
-
-# Feature Flags
-NEXT_PUBLIC_SHOW_BASKET_AND_LOGIN=true
-```
-
-### 4. Start development services
-
-Use Docker Compose to start the required backend services:
+For a complete containerised instance:
 
 ```bash
-docker-compose -f docker-compose.dev.yml up -d
+docker compose up
 ```
 
-This starts:
+Or depending on your Docker Compose version:
 
-- CKAN instance with GDI extensions
-- PostgreSQL database
-- Keycloak authentication server
-- Dataset Discovery Service
-- Access Management Service
+```bash
+docker-compose up
+```
 
-### 5. Start the development server
+## Discovery adapter setup (development)
+
+You can switch the server-side discovery adapter via environment variables in `.env.local`:
+
+- `DISCOVERY_PROVIDER=dds` uses the current DDS backend behaviour
+- `DISCOVERY_PROVIDER=local-index` uses the local index adapter
+
+### Using Local Index with Elasticsearch
+
+If you choose the local index adapter with Elasticsearch, configure:
+
+```bash
+DISCOVERY_PROVIDER=local-index
+LOCAL_DISCOVERY_STORE=elasticsearch
+ELASTICSEARCH_URL=https://localhost:9200
+ELASTICSEARCH_DISCOVERY_INDEX=discovery_datasets
+ELASTICSEARCH_USERNAME=elastic
+ELASTICSEARCH_PASSWORD=<your-password>
+ELASTICSEARCH_TLS_INSECURE=true
+```
+
+**Run Elasticsearch locally:**
+
+```bash
+docker network create elastic
+docker run --name es01 --net elastic -p 9200:9200 -it -m 1GB docker.elastic.co/elasticsearch/elasticsearch:9.3.1
+```
+
+Then start the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
-The application will be available at `http://localhost:3000`.
+## DCAT harvest from CLI
 
-## Project structure
-
-Understanding the codebase organisation:
-
-```
-src/
-├── app/                 # Next.js 13+ app directory
-│   ├── (pages)/        # Page components
-│   ├── api/            # API route handlers
-│   └── globals.css     # Global styles
-├── components/          # Reusable React components
-│   ├── ui/             # UI components (buttons, forms, etc.)
-│   └── features/       # Feature-specific components
-├── config/             # Configuration files
-├── hooks/              # Custom React hooks
-├── providers/          # Context providers
-└── utils/              # Utility functions
-```
-
-## Local development workflow
-
-### 1. Feature development
-
-- Create feature branches from `main`
-- Use descriptive commit messages
-- Follow the established coding conventions
-- Write tests for new functionality
-
-### 2. Testing
-
-Run the test suite before committing:
+To trigger a DCAT harvest from command line:
 
 ```bash
-npm test           # Unit tests
-npm run test:e2e   # End-to-end tests
-npm run lint       # Linting
-npm run type-check # TypeScript checking
+npm run harvest:dcat -- --url https://letzdata.public.lu/content/dam/dga/ctie/c/catalogue.rdf
 ```
 
-### 3. Code quality
-
-Maintain code quality with automated tools:
+**For OIDC-protected DCAT URLs**, set:
 
 ```bash
-npm run prettier  # Format code
-npm run eslint    # Check for linting issues
+HARVEST_OIDC_TOKEN_URL=<oidc-token-endpoint>
+HARVEST_OIDC_CLIENT_ID=<client-id>
+HARVEST_OIDC_CLIENT_SECRET=<client-secret>
 ```
 
-## Backend services integration
+## Working with OpenAPI specifications
 
-### Dataset Discovery Service
+When OpenAPI specifications change, upgrade the client and schemas:
 
-The DDS provides abstraction over CKAN APIs. For local development:
+```bash
+npm run prebuild:service
+```
 
-- Repository: [gdi-userportal-dataset-discovery-service](https://github.com/GenomicDataInfrastructure/gdi-userportal-dataset-discovery-service)
-- Local URL: `http://localhost:8080`
+Replace `service` with either `discovery` or `access-management`. The schemas will be automatically generated in `src/app/api/{service}/open-api/schemas.ts`.
 
-### Access Management Service
+**Note**: You must manually export all the types defined in `schemas.ts` (this cannot be done automatically).
 
-The AMS handles access requests and user permissions:
+## Build for production
 
-- Repository: [gdi-userportal-access-management-service](https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service)
-- Local URL: `http://localhost:8081`
+To build the project:
+
+```bash
+npm run build
+```
+
+Build artefacts will be stored in the `.next/` directory.
+
+## Running tests
+
+### End-to-End Tests (Playwright)
+
+Playwright E2E tests support two modes:
+
+**Mocked mode** (recommended for local dev and PRs): uses a local mock API server.
+```bash
+E2E_MODE=mocked npx playwright test
+```
+Optional: set `MOCK_API_PORT` to change the mock server port (default: 4010).
+
+**Real backend mode** (release pipeline): uses `.env.e2e.test` and hits DEV services.
+```bash
+E2E_MODE=real npx playwright test
+```
+
+**First time setup**: Install Playwright browsers:
+```bash
+npx playwright install --with-deps
+```
+
+## Next steps by role
+
+### Frontend Developers
+- Review the [customisation guide](../customize-platform/customize-frontend-theming.md)
+- Explore the component structure in `src/components/`
+
+### Backend Developers
+- [Set up local CKAN development](../setup-environment/install-locally.md)
+- Review the [DDS](https://github.com/GenomicDataInfrastructure/gdi-userportal-dataset-discovery-service) and [AMS](https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service) repositories
+
+### Extension Developers
+- [Set up CKAN extension development](../develop-extensions/setup-local-development.md)
+- [Understand CKAN schemas](../develop-extensions/understand-ckan-schemas.md)
+
+### Platform Operators
+- Review [deployment options](../deploy-production/index.md)
+- Configure [authentication](../setup-environment/configure-authentication.md)
+
+## Getting help
+
+- **Next.js Documentation**: [Next JS API Reference](https://nextjs.org/docs/pages/api-reference)
+- **CKAN Resources**: [CKAN documentation and community links](../develop-extensions/ckan-resources.md)
+- **Component Repositories**: [View all GDI repositories](../reference/component-repositories.md)

@@ -47,10 +47,10 @@ To apply for access to datasets:
 
 4. Review your list of datasets and select **Request now** to create an application. The application form opens.
 
-   <figure>
+<figure>
    <img src="img/request-access/request-now.png" alt="Screenshot of the Request now button on the Basket page" width="900" />
    <figcaption></figcaption>
-   </figure>
+</figure>
 
 5. Submit the requirements to access the dataset. This can include filling out forms and uploading documents, depending on the dataset. Here's an example of requirements including document uploads:
 
@@ -61,9 +61,14 @@ To apply for access to datasets:
 
 <br/>
 
-6. (Optional) Need help with your application? Select **Add Participant** for collaborators to access your application, submit requirements, and continue your application.
+6. (Optional) Need help with your application? Select **Add Participant** for collaborators to access your application, submit requirements, and continue your application. For a detailed guide, see: [Add participants](/add-participants).
 
 7. Review the **Terms & Conditions** and select **Accept All** to agree to the terms.
+
+<figure>
+    <img src="img/request-access/accept-tc.png" alt="Screenshot of Terms and Conditions section with Accept All button" width="450" />
+    <figcaption></figcaption>
+</figure>
 
 8. Select **Submit** to complete your application. You will receive email notifications for status updates and if additional documentation is required.
 

@@ -66,7 +66,7 @@ To run Elasticsearch locally:
 
 ```bash
 docker network create elastic
-docker run --name es01 --net elastic -p 9200:9200 -it -m 1GB docker.elastic.co/elasticsearch/elasticsearch:9.3.1
+docker run --name es01 --net elastic -p 9200:9200 -it -m 1GB -e "ELASTIC_PASSWORD=myStrongPassword123" docker.elastic.co/elasticsearch/elasticsearch:9.3.1
 ```
 
 Then start the dev server:

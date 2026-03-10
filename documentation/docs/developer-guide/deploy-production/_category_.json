@@ -1,9 +1,0 @@
-{
-  "label": "Deploy production",
-  "position": 9,
-  "link": {
-    "type": "generated-index",
-    "title": "Deploy production",
-    "description": "Learn how to deploy the GDI User Portal in production environments."
-  } 
-}

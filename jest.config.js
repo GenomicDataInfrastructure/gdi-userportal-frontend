@@ -5,6 +5,16 @@ module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
   setupFiles: ["<rootDir>/dotenv-config.js"],
+  transform: {
+    "^.+\\.[tj]sx?$": [
+      "ts-jest",
+      {
+        tsconfig: {
+          allowJs: true,
+        },
+      },
+    ],
+  },
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },

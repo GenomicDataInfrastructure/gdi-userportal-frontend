@@ -6,19 +6,6 @@ import type * as RDF from "@rdfjs/types";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 
-const normalizeDate = (value: string): string => {
-  if (!value) return "";
-  const trimmed = value.trim();
-  if (!trimmed) return "";
-  try {
-    const date = new Date(trimmed);
-    if (isNaN(date.getTime())) return trimmed;
-    return date.toISOString();
-  } catch {
-    return trimmed;
-  }
-};
-
 export const DCAT_DATASET = "http://www.w3.org/ns/dcat#Dataset";
 export const DCAT_CATALOG = "http://www.w3.org/ns/dcat#Catalog";
 
@@ -138,6 +125,19 @@ const getDatasetId = (
   }
 
   return `dataset-${index + 1}`;
+};
+
+const normalizeDate = (value: string): string => {
+  if (!value) return "";
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+  try {
+    const date = new Date(trimmed);
+    if (isNaN(date.getTime())) return "";
+    return date.toISOString();
+  } catch {
+    return "";
+  }
 };
 
 const extractPopulationCoverage = (

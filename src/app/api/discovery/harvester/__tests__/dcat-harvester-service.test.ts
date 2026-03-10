@@ -372,9 +372,28 @@ describe("DcatHarvesterService", () => {
     `;
 
     const datasets = await service.parseDatasetsFromRdf(rdf);
-    // Invalid dates should be returned as-is
-    expect(datasets[0].createdAt).toBe("not-a-valid-date");
-    expect(datasets[0].modifiedAt).toBe("also-invalid");
+    expect(datasets[0].createdAt).toBe("");
+    expect(datasets[0].modifiedAt).toBe("");
+  });
+
+  test("parses dcterms:issued and dcterms:modified as valid ISO dates", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dcterms="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dcterms:title>Dataset A</dcterms:title>
+          <dcterms:description>Description A</dcterms:description>
+          <dcterms:issued>2020-01-02T03:04:05Z</dcterms:issued>
+          <dcterms:modified>2021-02-03T04:05:06Z</dcterms:modified>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].createdAt).toBe("2020-01-02T03:04:05.000Z");
+    expect(datasets[0].modifiedAt).toBe("2021-02-03T04:05:06.000Z");
   });
 
   test("hasVersions is false when only adms:versionNotes is present", async () => {

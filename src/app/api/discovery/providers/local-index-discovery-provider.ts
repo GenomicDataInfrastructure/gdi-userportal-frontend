@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { getLocalDiscoveryStore } from "@/app/api/discovery/local-store/factory";
+import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import { BasePlaceholderDiscoveryProvider } from "@/app/api/discovery/providers/base-placeholder-provider";
 import {
   DiscoveryDatasetSearchQuery,
@@ -35,55 +36,9 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     );
   }
 
-  async retrieveFilters(_headers: Record<string, string>) {
-    return [];
-  }
-
-  async retrieveFilterValues(_key: string, _headers: Record<string, string>) {
-    return [];
-  }
-
-  async searchDatasets(
-    options: DiscoveryDatasetSearchQuery,
-    _headers: Record<string, string>
-  ): Promise<DiscoveryDatasetsSearchResponse> {
-    await this.store.ensureInitialized();
-    const response = await this.store.searchDatasets({
-      query: options.query,
-      start: options.start,
-      rows: options.rows,
-    });
-
-    return {
-      count: response.count,
-      results: response.results.map((dataset) => ({
-        id: dataset.id,
-        identifier: dataset.identifier ?? "",
-        title: dataset.title,
-        description: dataset.description ?? "",
-        catalogue: dataset.catalogue ?? "",
-        languages: this.mapDatasetLanguages(dataset.languages),
-        createdAt: dataset.createdAt,
-        modifiedAt: dataset.modifiedAt,
-        version: dataset.version,
-        hasVersions: dataset.hasVersions
-          ? [{ value: "true", label: "Has versions" }]
-          : undefined,
-        versionNotes: dataset.versionNotes,
-        publishers: [],
-        themes: [],
-        keywords: [],
-      })),
-    };
-  }
-
-  async retrieveDataset(id: string): Promise<DiscoveryRetrievedDataset> {
-    await this.store.ensureInitialized();
-    const dataset = await this.store.retrieveDataset(id);
-    if (!dataset) {
-      throw new Error(`Dataset not found in local index: ${id}`);
-    }
-
+  private mapLocalDataset(
+    dataset: LocalDiscoveryDataset
+  ): DiscoveryRetrievedDataset {
     return {
       id: dataset.id,
       identifier: dataset.identifier ?? "",
@@ -105,5 +60,40 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       spatialResolutionInMeters: dataset.spatialResolutionInMeters,
       spatialCoverage: dataset.spatialCoverage,
     };
+  }
+
+  async retrieveFilters(_headers: Record<string, string>) {
+    return [];
+  }
+
+  async retrieveFilterValues(_key: string, _headers: Record<string, string>) {
+    return [];
+  }
+
+  async searchDatasets(
+    options: DiscoveryDatasetSearchQuery,
+    _headers: Record<string, string>
+  ): Promise<DiscoveryDatasetsSearchResponse> {
+    await this.store.ensureInitialized();
+    const response = await this.store.searchDatasets({
+      query: options.query,
+      start: options.start,
+      rows: options.rows,
+    });
+
+    return {
+      count: response.count,
+      results: response.results.map((dataset) => this.mapLocalDataset(dataset)),
+    };
+  }
+
+  async retrieveDataset(id: string): Promise<DiscoveryRetrievedDataset> {
+    await this.store.ensureInitialized();
+    const dataset = await this.store.retrieveDataset(id);
+    if (!dataset) {
+      throw new Error(`Dataset not found in local index: ${id}`);
+    }
+
+    return this.mapLocalDataset(dataset);
   }
 }

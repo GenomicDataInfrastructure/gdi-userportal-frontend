@@ -63,6 +63,13 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
         description: dataset.description ?? "",
         catalogue: dataset.catalogue ?? "",
         languages: this.mapDatasetLanguages(dataset.languages),
+        createdAt: dataset.createdAt,
+        modifiedAt: dataset.modifiedAt,
+        version: dataset.version,
+        hasVersions: dataset.hasVersions
+          ? [{ value: "true", label: "Has versions" }]
+          : undefined,
+        versionNotes: dataset.versionNotes,
         publishers: [],
         themes: [],
         keywords: [],
@@ -84,6 +91,13 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       description: dataset.description ?? "",
       catalogue: dataset.catalogue ?? "",
       languages: this.mapDatasetLanguages(dataset.languages),
+      createdAt: dataset.createdAt,
+      modifiedAt: dataset.modifiedAt,
+      version: dataset.version,
+      hasVersions: dataset.hasVersions
+        ? [{ value: "true", label: "Has versions" }]
+        : undefined,
+      versionNotes: dataset.versionNotes,
       publishers: [],
       themes: [],
       keywords: [],

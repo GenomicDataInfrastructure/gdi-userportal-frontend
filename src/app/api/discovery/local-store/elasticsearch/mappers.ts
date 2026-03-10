@@ -22,6 +22,11 @@ export const mapSearchResponse = (
     description: hit._source?.description,
     catalogue: hit._source?.catalogue,
     languages: hit._source?.languages,
+    createdAt: hit._source?.createdAt,
+    modifiedAt: hit._source?.modifiedAt,
+    version: hit._source?.version,
+    hasVersions: hit._source?.hasVersions,
+    versionNotes: hit._source?.versionNotes,
     populationCoverage: hit._source?.populationCoverage,
   }));
 
@@ -40,5 +45,10 @@ export const mapGetDocumentResponse = (
   description: response._source?.description,
   catalogue: response._source?.catalogue,
   languages: response._source?.languages,
+  createdAt: response._source?.createdAt,
+  modifiedAt: response._source?.modifiedAt,
+  version: response._source?.version,
+  hasVersions: response._source?.hasVersions,
+  versionNotes: response._source?.versionNotes,
   populationCoverage: response._source?.populationCoverage,
 });

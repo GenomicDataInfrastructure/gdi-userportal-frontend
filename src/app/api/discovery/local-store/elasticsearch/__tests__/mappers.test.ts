@@ -22,6 +22,11 @@ describe("elasticsearch/mappers", () => {
               description: "desc-a",
               catalogue: "catalogue-a",
               languages: ["ENG"],
+              createdAt: "2024-01-01T00:00:00.000Z",
+              modifiedAt: "2024-03-10T00:00:00.000Z",
+              version: "1.0.0",
+              hasVersions: true,
+              versionNotes: "Initial release",
             },
           },
           { _id: "b", _source: { title: "B" } },
@@ -39,6 +44,11 @@ describe("elasticsearch/mappers", () => {
           description: "desc-a",
           catalogue: "catalogue-a",
           languages: ["ENG"],
+          createdAt: "2024-01-01T00:00:00.000Z",
+          modifiedAt: "2024-03-10T00:00:00.000Z",
+          version: "1.0.0",
+          hasVersions: true,
+          versionNotes: "Initial release",
         },
         {
           id: "b",
@@ -47,6 +57,11 @@ describe("elasticsearch/mappers", () => {
           description: undefined,
           catalogue: undefined,
           languages: undefined,
+          createdAt: undefined,
+          modifiedAt: undefined,
+          version: undefined,
+          hasVersions: undefined,
+          versionNotes: undefined,
         },
       ],
     });
@@ -74,6 +89,11 @@ describe("elasticsearch/mappers", () => {
           description: undefined,
           catalogue: undefined,
           languages: undefined,
+          createdAt: undefined,
+          modifiedAt: undefined,
+          version: undefined,
+          hasVersions: undefined,
+          versionNotes: undefined,
         },
       ],
     });
@@ -90,6 +110,11 @@ describe("elasticsearch/mappers", () => {
           description: "Desc",
           catalogue: "main-catalogue",
           languages: ["ENG", "FRA"],
+          createdAt: "2024-01-01T00:00:00.000Z",
+          modifiedAt: "2024-03-10T00:00:00.000Z",
+          version: "1.0.0",
+          hasVersions: true,
+          versionNotes: "Initial release",
         },
       })
     ).toEqual({
@@ -99,6 +124,11 @@ describe("elasticsearch/mappers", () => {
       description: "Desc",
       catalogue: "main-catalogue",
       languages: ["ENG", "FRA"],
+      createdAt: "2024-01-01T00:00:00.000Z",
+      modifiedAt: "2024-03-10T00:00:00.000Z",
+      version: "1.0.0",
+      hasVersions: true,
+      versionNotes: "Initial release",
     });
 
     expect(
@@ -113,6 +143,11 @@ describe("elasticsearch/mappers", () => {
       description: undefined,
       catalogue: undefined,
       languages: undefined,
+      createdAt: undefined,
+      modifiedAt: undefined,
+      version: undefined,
+      hasVersions: undefined,
+      versionNotes: undefined,
     });
   });
 
@@ -128,6 +163,11 @@ describe("elasticsearch/mappers", () => {
       description: undefined,
       catalogue: undefined,
       languages: undefined,
+      createdAt: undefined,
+      modifiedAt: undefined,
+      version: undefined,
+      hasVersions: undefined,
+      versionNotes: undefined,
     });
   });
 });

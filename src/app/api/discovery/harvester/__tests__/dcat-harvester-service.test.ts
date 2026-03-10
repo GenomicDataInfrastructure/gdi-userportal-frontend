@@ -13,7 +13,8 @@ describe("DcatHarvesterService", () => {
                xmlns:dcat="http://www.w3.org/ns/dcat#"
                xmlns:dct="http://purl.org/dc/terms/"
                xmlns:dc="http://purl.org/dc/elements/1.1/"
-               xmlns:foaf="http://xmlns.com/foaf/0.1/">
+               xmlns:foaf="http://xmlns.com/foaf/0.1/"
+               xmlns:adms="http://www.w3.org/ns/adms#">
         <dcat:Catalog rdf:about="https://example.org/catalogues/main">
           <dct:title>Main Catalogue</dct:title>
         </dcat:Catalog>
@@ -21,6 +22,11 @@ describe("DcatHarvesterService", () => {
           <dct:identifier>dataset-1</dct:identifier>
           <dct:title xml:lang="en">Population Registry</dct:title>
           <dct:description xml:lang="en">National &amp; regional data</dct:description>
+          <dct:issued>2023-06-15</dct:issued>
+          <dct:modified>2024-02-20T14:30:00Z</dct:modified>
+          <dcat:version>1.2.0</dcat:version>
+          <dcat:hasVersion rdf:resource="https://example.org/datasets/1/v1"/>
+          <adms:versionNotes>Updated with 2024 data</adms:versionNotes>
           <foaf:homepage rdf:resource="https://example.org/page/1" />
         </dcat:Dataset>
         <dcat:Dataset>
@@ -45,6 +51,11 @@ describe("DcatHarvesterService", () => {
         description: "National & regional data",
         catalogue: "Main Catalogue",
         languages: [],
+        createdAt: "2023-06-15T00:00:00.000Z",
+        modifiedAt: "2024-02-20T14:30:00.000Z",
+        version: "1.2.0",
+        hasVersions: true,
+        versionNotes: "Updated with 2024 data",
         populationCoverage: "",
         spatialResolutionInMeters: undefined,
       },
@@ -55,6 +66,11 @@ describe("DcatHarvesterService", () => {
         description: "Bed occupancy",
         catalogue: "Main Catalogue",
         languages: [],
+        createdAt: "",
+        modifiedAt: "",
+        version: "",
+        hasVersions: false,
+        versionNotes: "",
         populationCoverage: "",
         spatialResolutionInMeters: undefined,
       },
@@ -159,6 +175,11 @@ describe("DcatHarvesterService", () => {
         description: "D",
         catalogue: "",
         languages: [],
+        createdAt: "",
+        modifiedAt: "",
+        version: "",
+        hasVersions: false,
+        versionNotes: "",
         populationCoverage: "",
         spatialResolutionInMeters: undefined,
       },
@@ -325,9 +346,54 @@ describe("DcatHarvesterService", () => {
       description: "Description A",
       catalogue: "",
       languages: [],
+      createdAt: "",
+      modifiedAt: "",
+      version: "",
+      hasVersions: false,
+      versionNotes: "",
       populationCoverage: "",
       spatialResolutionInMeters: undefined,
     });
+  });
+
+  test("handles invalid dates gracefully", () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="d1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:issued>not-a-valid-date</dct:issued>
+          <dct:modified>also-invalid</dct:modified>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = service.parseDatasetsFromRdf(rdf);
+    // Invalid dates should be returned as-is
+    expect(datasets[0].createdAt).toBe("not-a-valid-date");
+    expect(datasets[0].modifiedAt).toBe("also-invalid");
+  });
+
+  test("hasVersions is false when only adms:versionNotes is present", () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:adms="http://www.w3.org/ns/adms#">
+        <dcat:Dataset rdf:about="d1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <adms:versionNotes>Fixed data quality issues</adms:versionNotes>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].hasVersions).toBe(false);
   });
 
   test("harvestFromUrl throws on non-ok response", async () => {

@@ -1,0 +1,8 @@
+{
+  "label": "Advanced development",
+  "position": 8,
+  "link": {
+    "type": "generated-index",
+    "description": "Explore advanced topics like performance optimization, security, and observability."
+  }
+}

@@ -23,6 +23,23 @@ jest.mock("@/app/api/discovery/local-store/factory", () => ({
   getLocalDiscoveryStore: () => mockStore,
 }));
 
+jest.mock("@/utils/formatDatasetLanguage", () => ({
+  __esModule: true,
+  default: (language: string) => {
+    const code = language.split("/").pop();
+
+    if (code === "ENG") {
+      return "English";
+    }
+
+    if (code === "FRA") {
+      return "French";
+    }
+
+    return undefined;
+  },
+}));
+
 import { LocalIndexDiscoveryProvider } from "@/app/api/discovery/providers/local-index-discovery-provider";
 
 describe("LocalIndexDiscoveryProvider", () => {
@@ -59,6 +76,9 @@ describe("LocalIndexDiscoveryProvider", () => {
           title: "Dataset A",
           description: "desc-a",
           catalogue: "catalogue-a",
+          languages: [
+            "http://publications.europa.eu/resource/authority/language/ENG",
+          ],
         },
         { id: "b", title: "Dataset B" },
       ],
@@ -84,6 +104,13 @@ describe("LocalIndexDiscoveryProvider", () => {
           title: "Dataset A",
           description: "desc-a",
           catalogue: "catalogue-a",
+          languages: [
+            {
+              value:
+                "http://publications.europa.eu/resource/authority/language/ENG",
+              label: "English",
+            },
+          ],
           publishers: [],
           themes: [],
           keywords: [],
@@ -94,6 +121,7 @@ describe("LocalIndexDiscoveryProvider", () => {
           title: "Dataset B",
           description: "",
           catalogue: "",
+          languages: [],
           publishers: [],
           themes: [],
           keywords: [],
@@ -107,6 +135,9 @@ describe("LocalIndexDiscoveryProvider", () => {
       id: "a",
       title: "Dataset A",
       description: "desc-a",
+      languages: [
+        "http://publications.europa.eu/resource/authority/language/FRA",
+      ],
     });
 
     await expect(provider.retrieveDataset("a")).resolves.toEqual({
@@ -115,6 +146,13 @@ describe("LocalIndexDiscoveryProvider", () => {
       title: "Dataset A",
       description: "desc-a",
       catalogue: "",
+      languages: [
+        {
+          value:
+            "http://publications.europa.eu/resource/authority/language/FRA",
+          label: "French",
+        },
+      ],
       publishers: [],
       themes: [],
       keywords: [],
@@ -138,6 +176,7 @@ describe("LocalIndexDiscoveryProvider", () => {
       title: "Dataset B",
       description: "",
       catalogue: "",
+      languages: [],
       publishers: [],
       themes: [],
       keywords: [],
@@ -151,6 +190,7 @@ describe("LocalIndexDiscoveryProvider", () => {
       title: "Dataset C",
       description: "desc-c",
       catalogue: "catalogue-c",
+      languages: ["custom-language-code"],
     });
 
     await expect(provider.retrieveDataset("c")).resolves.toEqual({
@@ -159,6 +199,9 @@ describe("LocalIndexDiscoveryProvider", () => {
       title: "Dataset C",
       description: "desc-c",
       catalogue: "catalogue-c",
+      languages: [
+        { value: "custom-language-code", label: "custom-language-code" },
+      ],
       publishers: [],
       themes: [],
       keywords: [],

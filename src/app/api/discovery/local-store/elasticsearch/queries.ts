@@ -15,6 +15,7 @@ export const createIndexMappings = () => ({
       title: { type: "text" },
       description: { type: "text" },
       catalogue: { type: "keyword" },
+      languages: { type: "keyword" },
     },
   },
 });

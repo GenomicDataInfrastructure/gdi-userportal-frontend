@@ -6,7 +6,7 @@ import { jest } from "@jest/globals";
 import { DcatHarvesterService } from "@/app/api/discovery/harvester/dcat-harvester-service";
 
 describe("DcatHarvesterService", () => {
-  test("parses a whole catalogue with basic fields", () => {
+  test("parses a whole catalogue with basic fields", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -35,7 +35,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
+    const datasets = await service.parseDatasetsFromRdf(rdf);
 
     expect(datasets).toEqual([
       {
@@ -44,6 +44,7 @@ describe("DcatHarvesterService", () => {
         title: "Population Registry",
         description: "National & regional data",
         catalogue: "Main Catalogue",
+        languages: [],
       },
       {
         id: "ID-2",
@@ -51,48 +52,73 @@ describe("DcatHarvesterService", () => {
         title: "Hospital Capacity",
         description: "Bed occupancy",
         catalogue: "Main Catalogue",
+        languages: [],
       },
     ]);
   });
 
-  test("extracts title from dct:title and dc:title", () => {
+  test("extracts dataset languages from dct:language entries", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
-      <rdf:RDF xmlns:dcat="http://www.w3.org/ns/dcat#" xmlns:dct="http://purl.org/dc/terms/" xmlns:dc="http://purl.org/dc/elements/1.1/">
-        <dcat:Dataset rdf:about="d1">
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG" />
+          <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/FRA" />
+          <dct:language> DEU </dct:language>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].languages).toEqual([
+      "http://publications.europa.eu/resource/authority/language/ENG",
+      "http://publications.europa.eu/resource/authority/language/FRA",
+      "DEU",
+    ]);
+  });
+
+  test("extracts title from dct:title and dc:title", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcat="http://www.w3.org/ns/dcat#" xmlns:dct="http://purl.org/dc/terms/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
           <dct:title>  Dataset A  </dct:title>
           <dct:description>x</dct:description>
         </dcat:Dataset>
-        <dcat:Dataset rdf:about="d2">
+        <dcat:Dataset rdf:about="https://example.org/datasets/2">
           <dc:title>Dataset B</dc:title>
           <dct:description>y</dct:description>
         </dcat:Dataset>
       </rdf:RDF>
     `;
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
+    const datasets = await service.parseDatasetsFromRdf(rdf);
     expect(datasets.map((dataset) => dataset.title)).toEqual([
       "Dataset A",
       "Dataset B",
     ]);
   });
 
-  test("extracts description from dct:description and dc:description", () => {
+  test("extracts description from dct:description and dc:description", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
-      <rdf:RDF xmlns:dcat="http://www.w3.org/ns/dcat#" xmlns:dct="http://purl.org/dc/terms/" xmlns:dc="http://purl.org/dc/elements/1.1/">
-        <dcat:Dataset rdf:about="d1">
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcat="http://www.w3.org/ns/dcat#" xmlns:dct="http://purl.org/dc/terms/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
           <dct:title>A</dct:title>
           <dct:description>  Foo &amp; Bar  </dct:description>
         </dcat:Dataset>
-        <dcat:Dataset rdf:about="d2">
+        <dcat:Dataset rdf:about="https://example.org/datasets/2">
           <dct:title>B</dct:title>
           <dc:description><![CDATA[  CDATA text  ]]></dc:description>
         </dcat:Dataset>
       </rdf:RDF>
     `;
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
+    const datasets = await service.parseDatasetsFromRdf(rdf);
     expect(datasets.map((dataset) => dataset.description)).toEqual([
       "Foo & Bar",
       "CDATA text",
@@ -107,8 +133,8 @@ describe("DcatHarvesterService", () => {
       status: 200,
       statusText: "OK",
       text: async () => `
-        <rdf:RDF xmlns:dcat="http://www.w3.org/ns/dcat#" xmlns:dct="http://purl.org/dc/terms/">
-          <dcat:Dataset rdf:about="x"><dct:title>T</dct:title><dct:description>D</dct:description></dcat:Dataset>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcat="http://www.w3.org/ns/dcat#" xmlns:dct="http://purl.org/dc/terms/">
+          <dcat:Dataset rdf:about="https://example.org/datasets/x"><dct:title>T</dct:title><dct:description>D</dct:description></dcat:Dataset>
         </rdf:RDF>
       `,
     } as Response);
@@ -122,11 +148,39 @@ describe("DcatHarvesterService", () => {
       headers: undefined,
     });
     expect(datasets).toEqual([
-      { id: "x", identifier: "", title: "T", description: "D", catalogue: "" },
+      {
+        id: "https://example.org/datasets/x",
+        identifier: "",
+        title: "T",
+        description: "D",
+        catalogue: "",
+        languages: [],
+      },
     ]);
   });
 
-  test("extracts dataset catalogue from dcat:inCatalog rdf:resource", () => {
+  test("deduplicates repeated dataset languages", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG" />
+          <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG" />
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].languages).toEqual([
+      "http://publications.europa.eu/resource/authority/language/ENG",
+    ]);
+  });
+
+  test("extracts dataset catalogue from dcat:inCatalog rdf:resource", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -135,7 +189,10 @@ describe("DcatHarvesterService", () => {
         <dcat:Catalog rdf:about="https://example.org/catalogues/main">
           <dct:title>Main Catalogue</dct:title>
         </dcat:Catalog>
-        <dcat:Dataset rdf:about="d1">
+        <dcat:Catalog rdf:about="https://example.org/catalogues/special">
+          <dct:title>Special Catalogue</dct:title>
+        </dcat:Catalog>
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
           <dct:title>Dataset A</dct:title>
           <dct:description>Description A</dct:description>
           <dcat:inCatalog rdf:resource="https://example.org/catalogues/special" />
@@ -143,13 +200,11 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
-    expect(datasets[0].catalogue).toBe(
-      "https://example.org/catalogues/special"
-    );
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].catalogue).toBe("Special Catalogue");
   });
 
-  test("falls back to catalog rdf:about when catalog has no title", () => {
+  test("falls back to catalog rdf:about when catalog has no title", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -158,20 +213,20 @@ describe("DcatHarvesterService", () => {
         <dcat:Catalog rdf:about="https://example.org/catalogues/about-only">
           <dct:description>About-only catalogue</dct:description>
         </dcat:Catalog>
-        <dcat:Dataset rdf:about="d1">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
           <dct:title>Dataset A</dct:title>
           <dct:description>Description A</dct:description>
         </dcat:Dataset>
       </rdf:RDF>
     `;
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
+    const datasets = await service.parseDatasetsFromRdf(rdf);
     expect(datasets[0].catalogue).toBe(
       "https://example.org/catalogues/about-only"
     );
   });
 
-  test("extracts dataset catalogue from inline dcat:inCatalog title block", () => {
+  test("extracts dataset catalogue from inline dcat:inCatalog title block", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -180,7 +235,7 @@ describe("DcatHarvesterService", () => {
         <dcat:Catalog rdf:about="https://example.org/catalogues/main">
           <dct:title>Main Catalogue</dct:title>
         </dcat:Catalog>
-        <dcat:Dataset rdf:about="d1">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
           <dct:title>Dataset A</dct:title>
           <dct:description>Description A</dct:description>
           <dcat:inCatalog>
@@ -192,11 +247,41 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
+    const datasets = await service.parseDatasetsFromRdf(rdf);
     expect(datasets[0].catalogue).toBe("Inline Catalogue");
   });
 
-  test("falls back to generated dataset id when identifier/about are missing", () => {
+  test("uses the single top-level catalog as fallback, not a nested inline catalog", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:inCatalog>
+            <dcat:Catalog>
+              <dct:title>Inline Catalogue</dct:title>
+            </dcat:Catalog>
+          </dcat:inCatalog>
+        </dcat:Dataset>
+        <dcat:Catalog rdf:about="https://example.org/catalogues/main">
+          <dct:title>Main Catalogue</dct:title>
+        </dcat:Catalog>
+        <dcat:Dataset rdf:about="https://example.org/datasets/2">
+          <dct:title>Dataset B</dct:title>
+          <dct:description>Description B</dct:description>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].catalogue).toBe("Inline Catalogue");
+    expect(datasets[1].catalogue).toBe("Main Catalogue");
+  });
+
+  test("falls back to generated dataset id when identifier/about are missing", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -209,11 +294,11 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
+    const datasets = await service.parseDatasetsFromRdf(rdf);
     expect(datasets[0].id).toBe("dataset-1");
   });
 
-  test("extracts identifier independently from id fallback", () => {
+  test("extracts identifier independently from id fallback", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -226,13 +311,14 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
+    const datasets = await service.parseDatasetsFromRdf(rdf);
     expect(datasets[0]).toEqual({
       id: "https://example.org/datasets/1",
       identifier: "",
       title: "Dataset A",
       description: "Description A",
       catalogue: "",
+      languages: [],
     });
   });
 

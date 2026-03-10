@@ -10,6 +10,7 @@ export interface ElasticsearchSearchHit {
     title?: string;
     description?: string;
     catalogue?: string;
+    languages?: string[];
   };
 }
 
@@ -30,5 +31,6 @@ export interface ElasticsearchGetDocumentResponse {
     title?: string;
     description?: string;
     catalogue?: string;
+    languages?: string[];
   };
 }

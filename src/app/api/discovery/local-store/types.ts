@@ -8,6 +8,7 @@ export interface LocalDiscoveryDataset {
   title: string;
   description?: string;
   catalogue?: string;
+  languages?: string[];
 }
 
 export interface LocalDiscoverySearchOptions {

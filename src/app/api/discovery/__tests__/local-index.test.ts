@@ -98,6 +98,7 @@ describe("local-index APIs", () => {
         title: "Dataset 1",
         description: "A",
         catalogue: undefined,
+        languages: undefined,
       },
       {
         id: "d2",
@@ -105,6 +106,7 @@ describe("local-index APIs", () => {
         title: "Dataset 2",
         description: "B",
         catalogue: undefined,
+        languages: undefined,
       },
     ]);
     expect(count).toBe(2);

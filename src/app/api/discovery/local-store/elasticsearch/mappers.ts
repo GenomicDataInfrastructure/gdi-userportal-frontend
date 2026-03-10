@@ -21,6 +21,7 @@ export const mapSearchResponse = (
     title: hit._source?.title ?? "",
     description: hit._source?.description,
     catalogue: hit._source?.catalogue,
+    languages: hit._source?.languages,
   }));
 
   return {
@@ -37,4 +38,5 @@ export const mapGetDocumentResponse = (
   title: response._source?.title ?? "",
   description: response._source?.description,
   catalogue: response._source?.catalogue,
+  languages: response._source?.languages,
 });

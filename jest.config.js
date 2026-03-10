@@ -9,6 +9,7 @@ module.exports = {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
   testPathIgnorePatterns: [
+    "/.next/",
     "/node_modules/",
     "/tests/", // Ignore Playwright tests
     "/playwright-report/", // Just in case

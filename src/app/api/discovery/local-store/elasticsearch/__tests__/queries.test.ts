@@ -19,6 +19,7 @@ describe("elasticsearch/queries", () => {
           title: { type: "text" },
           description: { type: "text" },
           catalogue: { type: "keyword" },
+          languages: { type: "keyword" },
         },
       },
     });
@@ -57,13 +58,14 @@ describe("elasticsearch/queries", () => {
         title: "A",
         description: "D1",
         catalogue: "catalogue-1",
+        languages: ["ENG", "FRA"],
       },
       { id: "2", title: "B", catalogue: "catalogue-2" },
     ]);
 
     expect(body).toContain('"index":{"_index":"idx","_id":"1"}');
     expect(body).toContain(
-      '"id":"1","identifier":"IDENT-1","title":"A","description":"D1","catalogue":"catalogue-1"'
+      '"id":"1","identifier":"IDENT-1","title":"A","description":"D1","catalogue":"catalogue-1","languages":["ENG","FRA"]'
     );
     expect(body).toContain('"index":{"_index":"idx","_id":"2"}');
     expect(body.endsWith("\n")).toBe(true);

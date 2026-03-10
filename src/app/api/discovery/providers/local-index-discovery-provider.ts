@@ -8,7 +8,9 @@ import {
   DiscoveryDatasetSearchQuery,
   DiscoveryDatasetsSearchResponse,
   DiscoveryRetrievedDataset,
+  DiscoveryValueLabel,
 } from "@/app/api/discovery/providers/types";
+import formatDatasetLanguage from "@/utils/formatDatasetLanguage";
 
 export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvider {
   readonly key = "local-index";
@@ -20,6 +22,18 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
   } as const;
 
   private readonly store = getLocalDiscoveryStore();
+
+  private mapDatasetLanguages(languages?: string[]): DiscoveryValueLabel[] {
+    return (
+      languages?.map((language) => ({
+        value: language,
+        label:
+          formatDatasetLanguage(language) ??
+          language.split("/").pop() ??
+          language,
+      })) ?? []
+    );
+  }
 
   async retrieveFilters(_headers: Record<string, string>) {
     return [];
@@ -48,6 +62,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
         title: dataset.title,
         description: dataset.description ?? "",
         catalogue: dataset.catalogue ?? "",
+        languages: this.mapDatasetLanguages(dataset.languages),
         publishers: [],
         themes: [],
         keywords: [],
@@ -68,6 +83,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       title: dataset.title,
       description: dataset.description ?? "",
       catalogue: dataset.catalogue ?? "",
+      languages: this.mapDatasetLanguages(dataset.languages),
       publishers: [],
       themes: [],
       keywords: [],

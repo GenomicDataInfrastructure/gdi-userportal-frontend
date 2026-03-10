@@ -68,6 +68,7 @@ export interface DiscoverySearchedDataset {
   identifier?: string;
   title: string;
   description: string;
+  languages?: DiscoveryValueLabel[];
   publishers?: DiscoveryAgent[];
   themes?: DiscoveryValueLabel[];
   keywords?: string[];

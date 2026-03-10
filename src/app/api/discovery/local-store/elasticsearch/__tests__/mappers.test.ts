@@ -21,6 +21,7 @@ describe("elasticsearch/mappers", () => {
               title: "A",
               description: "desc-a",
               catalogue: "catalogue-a",
+              languages: ["ENG"],
             },
           },
           { _id: "b", _source: { title: "B" } },
@@ -37,6 +38,7 @@ describe("elasticsearch/mappers", () => {
           title: "A",
           description: "desc-a",
           catalogue: "catalogue-a",
+          languages: ["ENG"],
         },
         {
           id: "b",
@@ -44,6 +46,7 @@ describe("elasticsearch/mappers", () => {
           title: "B",
           description: undefined,
           catalogue: undefined,
+          languages: undefined,
         },
       ],
     });
@@ -70,6 +73,7 @@ describe("elasticsearch/mappers", () => {
           title: "",
           description: undefined,
           catalogue: undefined,
+          languages: undefined,
         },
       ],
     });
@@ -85,6 +89,7 @@ describe("elasticsearch/mappers", () => {
           title: "Title",
           description: "Desc",
           catalogue: "main-catalogue",
+          languages: ["ENG", "FRA"],
         },
       })
     ).toEqual({
@@ -93,6 +98,7 @@ describe("elasticsearch/mappers", () => {
       title: "Title",
       description: "Desc",
       catalogue: "main-catalogue",
+      languages: ["ENG", "FRA"],
     });
 
     expect(
@@ -106,6 +112,7 @@ describe("elasticsearch/mappers", () => {
       title: "Only title",
       description: undefined,
       catalogue: undefined,
+      languages: undefined,
     });
   });
 
@@ -120,6 +127,7 @@ describe("elasticsearch/mappers", () => {
       title: "",
       description: undefined,
       catalogue: undefined,
+      languages: undefined,
     });
   });
 });

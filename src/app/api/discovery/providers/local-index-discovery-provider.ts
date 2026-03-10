@@ -87,6 +87,9 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       publishers: [],
       themes: [],
       keywords: [],
+      populationCoverage: dataset.populationCoverage,
+      spatialResolutionInMeters: dataset.spatialResolutionInMeters,
+      spatialCoverage: dataset.spatialCoverage,
     };
   }
 }

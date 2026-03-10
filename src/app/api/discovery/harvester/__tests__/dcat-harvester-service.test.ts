@@ -45,6 +45,8 @@ describe("DcatHarvesterService", () => {
         description: "National & regional data",
         catalogue: "Main Catalogue",
         languages: [],
+        populationCoverage: "",
+        spatialResolutionInMeters: undefined,
       },
       {
         id: "ID-2",
@@ -53,6 +55,8 @@ describe("DcatHarvesterService", () => {
         description: "Bed occupancy",
         catalogue: "Main Catalogue",
         languages: [],
+        populationCoverage: "",
+        spatialResolutionInMeters: undefined,
       },
     ]);
   });
@@ -155,6 +159,8 @@ describe("DcatHarvesterService", () => {
         description: "D",
         catalogue: "",
         languages: [],
+        populationCoverage: "",
+        spatialResolutionInMeters: undefined,
       },
     ]);
   });
@@ -319,6 +325,8 @@ describe("DcatHarvesterService", () => {
       description: "Description A",
       catalogue: "",
       languages: [],
+      populationCoverage: "",
+      spatialResolutionInMeters: undefined,
     });
   });
 
@@ -339,5 +347,42 @@ describe("DcatHarvesterService", () => {
     ).rejects.toThrow(
       "Failed to fetch DCAT catalogue (500 Internal Server Error)"
     );
+  });
+
+  test("extracts populationCoverage from healthdcatap:populationCoverage", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:healthdcatap="http://data.europa.eu/r5r/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <healthdcatap:populationCoverage xml:lang="eng">People of LNDS.</healthdcatap:populationCoverage>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].populationCoverage).toBe("People of LNDS.");
+  });
+
+  test("extracts spatialResolutionInMeters from dcat:spatialResolutionInMeters", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:spatialResolutionInMeters rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4</dcat:spatialResolutionInMeters>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].spatialResolutionInMeters).toBe(4);
   });
 });

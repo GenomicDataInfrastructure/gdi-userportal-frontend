@@ -156,6 +156,9 @@ describe("LocalIndexDiscoveryProvider", () => {
       publishers: [],
       themes: [],
       keywords: [],
+      populationCoverage: undefined,
+      spatialResolutionInMeters: undefined,
+      spatialCoverage: undefined,
     });
 
     mockStore.retrieveDataset.mockResolvedValueOnce(null);
@@ -180,6 +183,9 @@ describe("LocalIndexDiscoveryProvider", () => {
       publishers: [],
       themes: [],
       keywords: [],
+      populationCoverage: undefined,
+      spatialResolutionInMeters: undefined,
+      spatialCoverage: undefined,
     });
   });
 
@@ -205,6 +211,33 @@ describe("LocalIndexDiscoveryProvider", () => {
       publishers: [],
       themes: [],
       keywords: [],
+      populationCoverage: undefined,
+      spatialResolutionInMeters: undefined,
+      spatialCoverage: undefined,
+    });
+  });
+
+  test("retrieveDataset maps new fields when present", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce({
+      id: "d",
+      title: "Dataset D",
+      description: "desc-d",
+      populationCoverage: "People of LNDS.",
+    });
+
+    await expect(provider.retrieveDataset("d")).resolves.toEqual({
+      id: "d",
+      identifier: "",
+      title: "Dataset D",
+      description: "desc-d",
+      catalogue: "",
+      languages: [],
+      publishers: [],
+      themes: [],
+      keywords: [],
+      populationCoverage: "People of LNDS.",
+      spatialResolutionInMeters: undefined,
+      spatialCoverage: undefined,
     });
   });
 });

@@ -8,12 +8,11 @@ sidebar_position: 1
 
 Use the **search bar** and **filters** to find datasets relevant to your research. Both search and filters are available on all pages where browsing datasets is possible. This includes the **Home** page and the **Datasets** page.
 
-In this guide  
+In this guide
 
 > [Standard search](#standard-search)  
 > [Filter your results](#filter-your-results)  
-> [Individual-level data discovery](#individual-level-data-discovery)  
-
+> [Individual-level data discovery](#individual-level-data-discovery)
 
 <br/>
 
@@ -22,7 +21,6 @@ In this guide
 [**Sign in**](/sign-in) to get comprehensive search results. While you can search datasets without an account, signing in allows you to filter and view more details in the search results, such as `record counts` and other metadata.
 
 :::
-
 
 ## Standard search
 
@@ -57,12 +55,10 @@ By default, [standard searches](#standard-search) use catalog metadata only. Whe
   - Population-specific characteristics
 - **Make informed decisions**: Understand dataset contents before requesting access
 
-
 :::info Note
 
 - You must [sign in](/sign-in) to access individual-level data discovery.
 - Searches may be slower when individual-level data discovery is enabled, as the system queries actual data records across multiple sources.
-
 
 :::
 
@@ -86,7 +82,6 @@ When Individual-level data discovery is active, you'll see:
 - **Individual counts**: The number of unique individuals represented
 - **Individual-level data discovery filters**: Additional filters appear in the left sidebar for refining by individual-level data characteristics
 - **Active indicator**: An "Active" badge appears next to the toggle showing the feature is enabled
-
 
 ### Individual-level data discovery filters
 

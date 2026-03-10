@@ -9,6 +9,9 @@ export interface LocalDiscoveryDataset {
   description?: string;
   catalogue?: string;
   languages?: string[];
+  populationCoverage?: string;
+  spatialResolutionInMeters?: number;
+  spatialCoverage?: number;
 }
 
 export interface LocalDiscoverySearchOptions {

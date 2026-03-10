@@ -6,6 +6,19 @@ import type * as RDF from "@rdfjs/types";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 
+const normalizeDate = (value: string): string => {
+  if (!value) return "";
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+  try {
+    const date = new Date(trimmed);
+    if (isNaN(date.getTime())) return trimmed;
+    return date.toISOString();
+  } catch {
+    return trimmed;
+  }
+};
+
 export const DCAT_DATASET = "http://www.w3.org/ns/dcat#Dataset";
 export const DCAT_CATALOG = "http://www.w3.org/ns/dcat#Catalog";
 
@@ -18,6 +31,11 @@ const DC_TITLE = "http://purl.org/dc/elements/1.1/title"; // NOSONAR
 const DCT_DESCRIPTION = "http://purl.org/dc/terms/description"; // NOSONAR
 const DC_DESCRIPTION = "http://purl.org/dc/elements/1.1/description"; // NOSONAR
 const DCT_LANGUAGE = "http://purl.org/dc/terms/language"; // NOSONAR
+const DCT_ISSUED = "http://purl.org/dc/terms/issued"; // NOSONAR
+const DCT_MODIFIED = "http://purl.org/dc/terms/modified"; // NOSONAR
+const DCAT_VERSION = "http://www.w3.org/ns/dcat#version"; // NOSONAR
+const DCAT_HAS_VERSION = "http://www.w3.org/ns/dcat#hasVersion"; // NOSONAR
+const ADMS_VERSION_NOTES = "http://www.w3.org/ns/adms#versionNotes"; // NOSONAR
 const HEALTHDCATAP_POPULATION_COVERAGE = "http://data.europa.eu/r5r/populationCoverage"; // NOSONAR
 const DCAT_SPATIAL_COVERAGE = "http://publications.europa.eu/resource/authority/country/LUX"; // NOSONAR
 const DCAT_SPATIAL_RESOLUTION_IN_METERS = "http://www.w3.org/ns/dcat#spatialResolutionInMeters"; // NOSONAR
@@ -49,6 +67,11 @@ export const mapDataset = (
     description: getDatasetDescription(datasetSubject, graph),
     catalogue: getDatasetCatalogue(datasetSubject, graph, fallbackCatalogue),
     languages: getDatasetLanguages(datasetSubject, graph),
+    createdAt: normalizeDate(graph.getLiteral(datasetSubject, DCT_ISSUED)),
+    modifiedAt: normalizeDate(graph.getLiteral(datasetSubject, DCT_MODIFIED)),
+    version: graph.getLiteral(datasetSubject, DCAT_VERSION),
+    hasVersions: graph.getObjects(datasetSubject, DCAT_HAS_VERSION).length > 0,
+    versionNotes: graph.getLiteral(datasetSubject, ADMS_VERSION_NOTES),
     spatialCoverage: extractSpatialCoverage(datasetSubject, graph),
     populationCoverage: extractPopulationCoverage(datasetSubject, graph),
     spatialResolutionInMeters: extractSpatialResolutionInMeters(

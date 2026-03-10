@@ -356,13 +356,13 @@ describe("DcatHarvesterService", () => {
     });
   });
 
-  test("handles invalid dates gracefully", () => {
+  test("handles invalid dates gracefully", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                xmlns:dcat="http://www.w3.org/ns/dcat#"
                xmlns:dct="http://purl.org/dc/terms/">
-        <dcat:Dataset rdf:about="d1">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
           <dct:title>Dataset A</dct:title>
           <dct:description>Description A</dct:description>
           <dct:issued>not-a-valid-date</dct:issued>
@@ -371,20 +371,20 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
+    const datasets = await service.parseDatasetsFromRdf(rdf);
     // Invalid dates should be returned as-is
     expect(datasets[0].createdAt).toBe("not-a-valid-date");
     expect(datasets[0].modifiedAt).toBe("also-invalid");
   });
 
-  test("hasVersions is false when only adms:versionNotes is present", () => {
+  test("hasVersions is false when only adms:versionNotes is present", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                xmlns:dcat="http://www.w3.org/ns/dcat#"
                xmlns:dct="http://purl.org/dc/terms/"
                xmlns:adms="http://www.w3.org/ns/adms#">
-        <dcat:Dataset rdf:about="d1">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
           <dct:title>Dataset A</dct:title>
           <dct:description>Description A</dct:description>
           <adms:versionNotes>Fixed data quality issues</adms:versionNotes>
@@ -392,7 +392,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
+    const datasets = await service.parseDatasetsFromRdf(rdf);
     expect(datasets[0].hasVersions).toBe(false);
   });
 

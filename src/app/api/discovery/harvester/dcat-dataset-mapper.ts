@@ -23,9 +23,12 @@ const DCT_MODIFIED = "http://purl.org/dc/terms/modified"; // NOSONAR
 const DCAT_VERSION = "http://www.w3.org/ns/dcat#version"; // NOSONAR
 const DCAT_HAS_VERSION = "http://www.w3.org/ns/dcat#hasVersion"; // NOSONAR
 const ADMS_VERSION_NOTES = "http://www.w3.org/ns/adms#versionNotes"; // NOSONAR
-const HEALTHDCATAP_POPULATION_COVERAGE = "http://data.europa.eu/r5r/populationCoverage"; // NOSONAR
-const DCAT_SPATIAL_COVERAGE = "http://publications.europa.eu/resource/authority/country/LUX"; // NOSONAR
-const DCAT_SPATIAL_RESOLUTION_IN_METERS = "http://www.w3.org/ns/dcat#spatialResolutionInMeters"; // NOSONAR
+const HEALTHDCATAP_POPULATION_COVERAGE =
+  "http://data.europa.eu/r5r/populationCoverage"; // NOSONAR
+const DCAT_SPATIAL_COVERAGE =
+  "http://publications.europa.eu/resource/authority/country/LUX"; // NOSONAR
+const DCAT_SPATIAL_RESOLUTION_IN_METERS =
+  "http://www.w3.org/ns/dcat#spatialResolutionInMeters"; // NOSONAR
 
 export const getFallbackCatalogue = (graph: RdfGraph): string => {
   const namedCatalogs = graph

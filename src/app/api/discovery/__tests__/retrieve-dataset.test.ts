@@ -25,4 +25,34 @@ describe("Retrieving a specific dataset", () => {
     expect(response).toBeDefined();
     expect(response.id).toEqual("99");
   });
+
+  test("accepts null data service fields returned by discovery backend", async () => {
+    mockDiscoveryAdapter.onGet("/api/v1/datasets/100").reply(200, {
+      id: "100",
+      title: "Dataset 100",
+      description: "This is dataset 100",
+      distributions: [
+        {
+          description: "Distribution description",
+          title: "Distribution title",
+          id: "distribution-1",
+          accessService: [
+            {
+              description: null,
+              id: null,
+              title: "",
+              endpoint_url: [],
+            },
+          ],
+        },
+      ],
+    });
+
+    const response = await retrieveDatasetApi("100");
+
+    expect(response.distributions?.[0]?.accessService?.[0]).toMatchObject({
+      description: null,
+      id: null,
+    });
+  });
 });

@@ -14,7 +14,7 @@ export interface ElasticsearchSearchHit {
     createdAt?: string;
     modifiedAt?: string;
     version?: string;
-    hasVersions?: boolean;
+    hasVersions?: Array<{ value: string; label: string }>;
     versionNotes?: string;
     populationCoverage?: string;
   };
@@ -41,7 +41,7 @@ export interface ElasticsearchGetDocumentResponse {
     createdAt?: string;
     modifiedAt?: string;
     version?: string;
-    hasVersions?: boolean;
+    hasVersions?: Array<{ value: string; label: string }>;
     versionNotes?: string;
     populationCoverage?: string;
   };

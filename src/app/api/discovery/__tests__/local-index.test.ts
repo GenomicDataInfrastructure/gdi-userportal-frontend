@@ -110,7 +110,7 @@ describe("local-index APIs", () => {
         createdAt: "2024-01-15T00:00:00.000Z",
         modifiedAt: "2024-03-10T00:00:00.000Z",
         version: "1.0.0",
-        hasVersions: true,
+        hasVersions: [{ value: "v1", label: "Version 1" }],
         versionNotes: undefined,
       },
       {

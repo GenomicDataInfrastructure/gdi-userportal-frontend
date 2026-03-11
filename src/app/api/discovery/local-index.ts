@@ -40,9 +40,8 @@ export const seedLocalIndexFromDdsApi = async (
         createdAt: dataset.createdAt,
         modifiedAt: dataset.modifiedAt,
         version: dataset.version,
-        hasVersions: dataset.hasVersions
-          ? dataset.hasVersions.length > 0
-          : undefined,
+        hasVersions: dataset.hasVersions,
+        versionNotes: dataset.versionNotes,
       })) ?? [];
 
   await upsertLocalDiscoveryDatasets(datasets);

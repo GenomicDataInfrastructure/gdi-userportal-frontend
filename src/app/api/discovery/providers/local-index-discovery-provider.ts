@@ -49,9 +49,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       createdAt: dataset.createdAt,
       modifiedAt: dataset.modifiedAt,
       version: dataset.version,
-      hasVersions: dataset.hasVersions
-        ? [{ value: "true", label: "Has versions" }]
-        : undefined,
+      hasVersions: dataset.hasVersions,
       versionNotes: dataset.versionNotes,
       publishers: [],
       themes: [],

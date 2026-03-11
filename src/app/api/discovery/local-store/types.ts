@@ -12,7 +12,7 @@ export interface LocalDiscoveryDataset {
   createdAt?: string;
   modifiedAt?: string;
   version?: string;
-  hasVersions?: boolean;
+  hasVersions?: Array<{ value: string; label: string }>;
   versionNotes?: string;
   populationCoverage?: string;
   spatialResolutionInMeters?: number;

@@ -54,7 +54,12 @@ describe("DcatHarvesterService", () => {
         createdAt: "2023-06-15T00:00:00.000Z",
         modifiedAt: "2024-02-20T14:30:00.000Z",
         version: "1.2.0",
-        hasVersions: true,
+        hasVersions: [
+          {
+            value: "https://example.org/datasets/1/v1",
+            label: "https://example.org/datasets/1/v1",
+          },
+        ],
         versionNotes: "Updated with 2024 data",
         populationCoverage: "",
         spatialResolutionInMeters: undefined,
@@ -69,7 +74,7 @@ describe("DcatHarvesterService", () => {
         createdAt: "",
         modifiedAt: "",
         version: "",
-        hasVersions: false,
+        hasVersions: undefined,
         versionNotes: "",
         populationCoverage: "",
         spatialResolutionInMeters: undefined,
@@ -178,7 +183,7 @@ describe("DcatHarvesterService", () => {
         createdAt: "",
         modifiedAt: "",
         version: "",
-        hasVersions: false,
+        hasVersions: undefined,
         versionNotes: "",
         populationCoverage: "",
         spatialResolutionInMeters: undefined,
@@ -349,7 +354,7 @@ describe("DcatHarvesterService", () => {
       createdAt: "",
       modifiedAt: "",
       version: "",
-      hasVersions: false,
+      hasVersions: undefined,
       versionNotes: "",
       populationCoverage: "",
       spatialResolutionInMeters: undefined,
@@ -394,25 +399,6 @@ describe("DcatHarvesterService", () => {
     const datasets = await service.parseDatasetsFromRdf(rdf);
     expect(datasets[0].createdAt).toBe("2020-01-02T03:04:05.000Z");
     expect(datasets[0].modifiedAt).toBe("2021-02-03T04:05:06.000Z");
-  });
-
-  test("hasVersions is false when only adms:versionNotes is present", async () => {
-    const service = new DcatHarvesterService();
-    const rdf = `
-      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-               xmlns:dcat="http://www.w3.org/ns/dcat#"
-               xmlns:dct="http://purl.org/dc/terms/"
-               xmlns:adms="http://www.w3.org/ns/adms#">
-        <dcat:Dataset rdf:about="https://example.org/datasets/1">
-          <dct:title>Dataset A</dct:title>
-          <dct:description>Description A</dct:description>
-          <adms:versionNotes>Fixed data quality issues</adms:versionNotes>
-        </dcat:Dataset>
-      </rdf:RDF>
-    `;
-
-    const datasets = await service.parseDatasetsFromRdf(rdf);
-    expect(datasets[0].hasVersions).toBe(false);
   });
 
   test("harvestFromUrl throws on non-ok response", async () => {

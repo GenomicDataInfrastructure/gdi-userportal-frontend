@@ -23,7 +23,12 @@ describe("elasticsearch/queries", () => {
           createdAt: { type: "date" },
           modifiedAt: { type: "date" },
           version: { type: "keyword" },
-          hasVersions: { type: "boolean" },
+          hasVersions: {
+            properties: {
+              value: { type: "keyword" },
+              label: { type: "keyword" },
+            },
+          },
           versionNotes: { type: "text" },
           populationCoverage: { type: "text" },
           spatialResolutionInMeters: { type: "keyword" },
@@ -70,7 +75,7 @@ describe("elasticsearch/queries", () => {
         createdAt: "2024-01-01T00:00:00.000Z",
         modifiedAt: "2024-03-10T00:00:00.000Z",
         version: "1.0.0",
-        hasVersions: true,
+        hasVersions: [{ value: "v1", label: "Version 1" }],
         versionNotes: "Initial release",
       },
       { id: "2", title: "B", catalogue: "catalogue-2" },
@@ -84,7 +89,9 @@ describe("elasticsearch/queries", () => {
     expect(body).toContain('"languages":["ENG","FRA"]');
     expect(body).toContain('"createdAt":"2024-01-01T00:00:00.000Z"');
     expect(body).toContain('"version":"1.0.0"');
-    expect(body).toContain('"hasVersions":true');
+    expect(body).toContain(
+      '"hasVersions":[{"value":"v1","label":"Version 1"}]'
+    );
     expect(body).toContain('"index":{"_index":"idx","_id":"2"}');
     expect(body.endsWith("\n")).toBe(true);
   });

@@ -19,7 +19,9 @@ export const createIndexMappings = () => ({
       createdAt: { type: "date" },
       modifiedAt: { type: "date" },
       version: { type: "keyword" },
-      hasVersions: { type: "boolean" },
+      hasVersions: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
       versionNotes: { type: "text" },
       populationCoverage: { type: "text" },
       spatialResolutionInMeters: { type: "keyword" },

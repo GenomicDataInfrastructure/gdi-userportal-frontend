@@ -57,7 +57,9 @@ export const mapDataset = (
     createdAt: normalizeDate(graph.getLiteral(datasetSubject, DCT_ISSUED)),
     modifiedAt: normalizeDate(graph.getLiteral(datasetSubject, DCT_MODIFIED)),
     version: graph.getLiteral(datasetSubject, DCAT_VERSION),
-    hasVersions: graph.getObjects(datasetSubject, DCAT_HAS_VERSION).length > 0,
+    hasVersions: objectsToValueLabel(
+      graph.getObjects(datasetSubject, DCAT_HAS_VERSION)
+    ),
     versionNotes: graph.getLiteral(datasetSubject, ADMS_VERSION_NOTES),
     spatialCoverage: extractSpatialCoverage(datasetSubject, graph),
     populationCoverage: extractPopulationCoverage(datasetSubject, graph),
@@ -66,6 +68,13 @@ export const mapDataset = (
       graph
     ),
   };
+};
+
+const objectsToValueLabel = (
+  objects: RDF.Term[]
+): Array<{ value: string; label: string }> | undefined => {
+  if (objects.length === 0) return undefined;
+  return objects.map((obj) => ({ value: obj.value, label: obj.value }));
 };
 
 const getDatasetIdentifier = (

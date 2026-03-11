@@ -10,11 +10,10 @@ SPDX-FileCopyrightText: 2024 PNED G.I.E.
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
-This guide explains how to run all GDI platform services together using Docker Compose for full-stack local development.
+Run all GDI platform services together using Docker Compose for full-stack local development.  
 
 ## Prerequisites
 
-Ensure you have installed:
 - Docker (v20.10+)
 - Docker Compose (v2.0+)
 - At least 16GB RAM and 4+ CPU cores
@@ -26,7 +25,7 @@ Full stack requires significant resources:
 
 | Component | Memory | CPU |
 |-----------|--------|-----|
-| Frontend | 512MB | 0.5 cores |
+| Frontend  | 512MB | 0.5 cores |
 | DDS | 1GB | 1 core |
 | AMS | 1GB | 1 core |
 | CKAN | 2GB | 1 core |
@@ -37,7 +36,7 @@ Full stack requires significant resources:
 | Kong | 512MB | 0.5 cores |
 | **Total** | **~10GB** | **8 cores** |
 
-##Clone the orchestration repository
+## Clone the orchestration repository
 
 ```bash
 git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-docker.git
@@ -85,7 +84,7 @@ CKAN_SYSADMIN_EMAIL=admin@example.com
 docker compose up -d
 ```
 
-This will start all services in the background. Initial startup may take 5-10 minutes as Docker pulls images and initialises databases.
+This starts all services in the background. Initial startup may take 5-10 minutes as Docker pulls images and initialises databases.
 
 ## Monitor startup progress
 
@@ -144,13 +143,15 @@ curl http://localhost:5000/api/3/action/status_show
 
 ## Development workflow
 
-### Making code changes
+Make code changes and see them reflected in the running services. Use Docker Compose commands to restart specific services or view logs.
+
+### Make code changes
 
 When developing with full stack:
 
-1. **Frontend changes**: Use `docker compose watch frontend` for live reload
-2. **Backend changes**: Restart specific service: `docker compose restart dds`
-3. **CKAN changes**: Rebuild CKAN image if modifying extensions
+1. **Frontend changes**: Use `docker compose watch frontend` for live reload.
+2. **Backend changes**: Restart specific service: `docker compose restart dds`.
+3. **CKAN changes**: Rebuild CKAN image if modifying extensions.
 
 ### Restart a specific service
 
@@ -177,22 +178,37 @@ docker compose exec ckan ckan --help
 
 ## Stop services
 
-### Stop all services (keep data)
+Stop all services (keep data):
+
 ```bash
 docker compose stop
 ```
 
-### Stop and remove containers (keep data)
+Stop and remove containers (keep data):
+
 ```bash
 docker compose down
 ```
 
-### Stop and remove everything (including data)
+Stop and remove everything (including data):
+
 ```bash
 docker compose down -v
 ```
 
+## Clean up
+
+Remove all containers, networks, and volumes:
+
+```bash
+docker compose down -v
+docker system prune -a
+```
+
+
 ## Troubleshooting
+
+Here are common issues and solutions when running the full stack:
 
 ### Services fail to start
 
@@ -228,19 +244,3 @@ Force rebuild if code changes aren't reflected:
 docker compose build --no-cache
 docker compose up -d
 ```
-
-## Clean up
-
-Remove all containers, networks, and volumes:
-
-```bash
-docker compose down -v
-docker system prune -a
-```
-
-## Next steps
-
-With the full stack running:
-- Explore the platform through the [frontend](http://localhost:3000)
-- Review [API contracts](../../../3-understand-the-codebase/review-api-contracts/) to understand service communication
-- Make your first change following [Build features](../../../4-build-features/)

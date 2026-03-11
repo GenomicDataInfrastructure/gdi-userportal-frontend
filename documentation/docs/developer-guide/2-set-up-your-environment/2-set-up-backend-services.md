@@ -10,29 +10,24 @@ SPDX-FileCopyrightText: 2024 PNED G.I.E.
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
-This guide covers setting up the Java/Quarkus backend services (Dataset Discovery Service and Access Management Service) for local development.
+Set up the Java/Quarkus backend services (Dataset Discovery Service and Access Management Service) for local development.  
 
 ## Prerequisites
 
-Ensure you have installed:
 - Java Development Kit (JDK) 17 or 21
 - Maven 3.8+
 - Docker (for running PostgreSQL and other dependencies)
 - Git
 
-## Choose your service
-
-### Dataset Discovery Service (DDS)
-Mediates requests between frontend and CKAN for dataset search and retrieval.
-
-### Access Management Service (AMS)
-Manages access request workflows and integrates with REMS.
-
-Both services follow similar setup procedures.
-
 ## Clone the repository
 
+Choose the service you want to set up and clone the corresponding repository:
+- **Dataset Discovery Service (DDS):** Mediates requests between frontend and CKAN for dataset search and retrieval.
+- **Access Management Service (AMS):** Manages access request workflows and integrates with REMS.
+
+
 ### For DDS
+
 ```bash
 git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-dataset-discovery-service.git
 cd gdi-userportal-dataset-discovery-service
@@ -46,7 +41,7 @@ cd gdi-userportal-access-management-service
 
 ## Install dependencies
 
-Maven will download dependencies automatically when you first build:
+Maven downloads dependencies automatically when you first build the project. To do this, run:
 
 ```bash
 ./mvnw clean install
@@ -121,52 +116,51 @@ The service will start with:
 
 ## Verify the setup
 
-### Check health endpoint
-```bash
-curl http://localhost:8080/q/health
-```
+1. Check health endpoint:
+    ```bash
+    curl http://localhost:8080/q/health
+    ```
 
-Expected response:
-```json
-{
-  "status": "UP",
-  "checks": [...]
-}
-```
+    Expected response:
+    ```json
+    {
+      "status": "UP",
+      "checks": [...]
+    }
+    ```
 
-### View OpenAPI documentation
-Open `http://localhost:8080/q/swagger-ui/` in your browser to see API endpoints.
+2. View OpenAPI documentation: Open `http://localhost:8080/q/swagger-ui/` in your browser to see API endpoints.
 
-### Test an endpoint
-```bash
-curl http://localhost:8080/api/datasets
-```
+3. Test an endpoint:
+
+    ```bash
+    curl http://localhost:8080/api/datasets
+    ```
 
 ## Development workflow
 
-### Running tests
+Run tests:
 ```bash
 ./mvnw test
 ```
 
-### Running integration tests
+Run integration tests:
 ```bash
 ./mvnw verify
 ```
 
-### Code formatting
-The project uses Spotless for code formatting:
+Code formatting:  
 
 ```bash
 ./mvnw spotless:apply
 ```
 
-### Building for production
+Build for production:
 ```bash
 ./mvnw package
 ```
 
-The executable JAR will be in `target/quarkus-app/`.
+The executable JAR is in `target/quarkus-app/`.
 
 ## IDE configuration
 
@@ -183,28 +177,20 @@ Install extensions:
 
 ## Common issues
 
-### Port already in use
-Change the port in `application.properties`:
+- **Port already in use:** Change the port in `application.properties`.
 
-```properties
-quarkus.http.port=8081
-```
+  ```properties
+  quarkus.http.port=8081
+  ```
 
-### Database connection failed
-Ensure PostgreSQL is running:
+- **Database connection failed:** Ensure PostgreSQL is running.
 
-```bash
-docker ps | grep postgres
-```
+  ```bash
+  docker ps | grep postgres
+  ```
 
-### Maven build fails
-Clear Maven cache and rebuild:
+- **Maven build fails:** Clear Maven cache and rebuild.
 
-```bash
-./mvnw clean install -U
-```
-
-## Next steps
-
-- Review [Explore backend architecture](../../../3-understand-the-codebase/explore-backend-architecture/) to understand the code structure
-- Try [Add a new API endpoint](../../../4-build-features/add-a-new-api-endpoint/) to extend the service
+  ```bash
+  ./mvnw clean install -U
+  ```

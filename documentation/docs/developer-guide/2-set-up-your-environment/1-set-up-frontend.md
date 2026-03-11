@@ -16,7 +16,6 @@ Set up the Next.js frontend for local development. This guide covers prerequisit
 
 ## Prerequisites
 
-Ensure you have installed:
 - Node.js (v18 LTS or v20 LTS)
 - npm (v9+) or pnpm (v8+)
 - Git
@@ -30,12 +29,12 @@ cd gdi-userportal-frontend
 
 ## Install dependencies
 
-### Using npm
+Using npm:
 ```bash
 npm install
 ```
 
-### Using pnpm (recommended)
+Using pnpm (recommended):
 ```bash
 pnpm install
 ```
@@ -75,11 +74,6 @@ pnpm dev
 
 The application will start at `http://localhost:3000`.
 
-## Verify the setup
-
-1. Open `http://localhost:3000` in your browser
-2. You should see the GDI homepage
-3. Navigation and UI components should render correctly
 
 ## Development workflow
 
@@ -109,25 +103,18 @@ npm run format
 
 ## Common issues
 
-### Port 3000 already in use
-Change the port:
+- **Port 3000 already in use:** Change the port.
 
-```bash
-PORT=3001 npm run dev
-```
+    ```bash
+    PORT=3001 npm run dev
+    ```
 
-### Module not found errors
-Clear node_modules and reinstall:
+- **Module not found errors:** Clear node_modules and reinstall.
 
-```bash
-rm -rf node_modules package-lock.json
-npm install
-```
+    ```bash
+    rm -rf node_modules package-lock.json
+    npm install
+    ```
 
-### Environment variables not loading
-Ensure `.env.local` exists and restart the development server.
-
-## Next steps
-
-- Review [Explore frontend architecture](../../../3-understand-the-codebase/explore-frontend-architecture/) to understand the codebase
-- Try [Add a new UI component](../../../4-build-features/add-a-new-ui-component/) to make your first change
+- **Environment variables not loading:** Ensure `.env.local` exists and restart the development server.
+ 

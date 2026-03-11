@@ -56,7 +56,10 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       keywords: [],
       populationCoverage: dataset.populationCoverage,
       spatialResolutionInMeters: dataset.spatialResolutionInMeters,
-      spatialCoverage: dataset.spatialCoverage,
+      spatialCoverage: dataset.spatialCoverage?.map((sc) => ({
+        uri: sc.uri ? { value: sc.uri, label: sc.uri } : undefined,
+        text: sc.text,
+      })),
     };
   }
 

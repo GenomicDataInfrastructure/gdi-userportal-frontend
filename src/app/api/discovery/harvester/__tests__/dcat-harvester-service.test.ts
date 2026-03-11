@@ -439,6 +439,85 @@ describe("DcatHarvesterService", () => {
     expect(datasets[0].populationCoverage).toBe("People of LNDS.");
   });
 
+  test("extracts spatialCoverage from dct:spatial with skos:prefLabel", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:spatial>
+            <dct:Location rdf:about="http://publications.europa.eu/resource/authority/country/LUX">
+              <skos:prefLabel xml:lang="eng">Luxembourg</skos:prefLabel>
+            </dct:Location>
+          </dct:spatial>
+          <dct:spatial>
+            <dct:Location rdf:about="http://publications.europa.eu/resource/authority/country/ITA">
+              <skos:prefLabel xml:lang="eng">Italy</skos:prefLabel>
+            </dct:Location>
+          </dct:spatial>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].spatialCoverage).toEqual([
+      {
+        uri: "http://publications.europa.eu/resource/authority/country/LUX",
+        text: "Luxembourg",
+      },
+      {
+        uri: "http://publications.europa.eu/resource/authority/country/ITA",
+        text: "Italy",
+      },
+    ]);
+  });
+
+  test("returns undefined spatialCoverage when dct:spatial is absent", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].spatialCoverage).toBeUndefined();
+  });
+
+  test("extracts spatialCoverage with uri only when skos:prefLabel is absent", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:spatial>
+            <dct:Location rdf:about="http://publications.europa.eu/resource/authority/country/LUX"/>
+          </dct:spatial>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].spatialCoverage).toEqual([
+      {
+        uri: "http://publications.europa.eu/resource/authority/country/LUX",
+        text: undefined,
+      },
+    ]);
+  });
+
   test("extracts spatialResolutionInMeters from dcat:spatialResolutionInMeters", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
@@ -455,5 +534,23 @@ describe("DcatHarvesterService", () => {
 
     const datasets = await service.parseDatasetsFromRdf(rdf);
     expect(datasets[0].spatialResolutionInMeters).toBe(4);
+  });
+
+  test("returns undefined spatialResolutionInMeters when value is not a valid number", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:spatialResolutionInMeters>not-a-number</dcat:spatialResolutionInMeters>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].spatialResolutionInMeters).toBeUndefined();
   });
 });

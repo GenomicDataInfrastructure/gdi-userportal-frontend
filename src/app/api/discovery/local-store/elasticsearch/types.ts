@@ -17,6 +17,7 @@ export interface ElasticsearchSearchHit {
     hasVersions?: Array<{ value: string; label: string }>;
     versionNotes?: string;
     populationCoverage?: string;
+    spatialCoverage?: Array<{ uri?: string; text?: string }>;
   };
 }
 
@@ -44,5 +45,6 @@ export interface ElasticsearchGetDocumentResponse {
     hasVersions?: Array<{ value: string; label: string }>;
     versionNotes?: string;
     populationCoverage?: string;
+    spatialCoverage?: Array<{ text?: string }>;
   };
 }

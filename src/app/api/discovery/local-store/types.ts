@@ -2,6 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+export interface SpatialCoverage {
+  uri?: string;
+  text?: string;
+}
+
 export interface LocalDiscoveryDataset {
   id: string;
   identifier?: string;
@@ -15,8 +20,8 @@ export interface LocalDiscoveryDataset {
   hasVersions?: Array<{ value: string; label: string }>;
   versionNotes?: string;
   populationCoverage?: string;
+  spatialCoverage?: SpatialCoverage[];
   spatialResolutionInMeters?: number;
-  spatialCoverage?: number;
 }
 
 export interface LocalDiscoverySearchOptions {

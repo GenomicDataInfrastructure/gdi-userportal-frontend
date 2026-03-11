@@ -31,8 +31,8 @@ describe("elasticsearch/queries", () => {
           },
           versionNotes: { type: "text" },
           populationCoverage: { type: "text" },
+          spatialCoverage: { type: "object" },
           spatialResolutionInMeters: { type: "keyword" },
-          spatialCoverage: { type: "keyword" },
         },
       },
     });

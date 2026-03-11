@@ -273,4 +273,101 @@ describe("LocalIndexDiscoveryProvider", () => {
       spatialCoverage: undefined,
     });
   });
+
+  test("retrieveDataset maps spatialCoverage with uri and text", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce({
+      id: "e",
+      title: "Dataset E",
+      spatialCoverage: [
+        {
+          uri: "http://publications.europa.eu/resource/authority/country/LUX",
+          text: "Luxembourg",
+        },
+        {
+          uri: "http://publications.europa.eu/resource/authority/country/ITA",
+          text: "Italy",
+        },
+      ],
+    });
+
+    await expect(provider.retrieveDataset("e")).resolves.toEqual({
+      id: "e",
+      identifier: "",
+      title: "Dataset E",
+      description: "",
+      catalogue: "",
+      languages: [],
+      publishers: [],
+      themes: [],
+      keywords: [],
+      populationCoverage: undefined,
+      spatialResolutionInMeters: undefined,
+      spatialCoverage: [
+        {
+          uri: {
+            value:
+              "http://publications.europa.eu/resource/authority/country/LUX",
+            label:
+              "http://publications.europa.eu/resource/authority/country/LUX",
+          },
+          text: "Luxembourg",
+        },
+        {
+          uri: {
+            value:
+              "http://publications.europa.eu/resource/authority/country/ITA",
+            label:
+              "http://publications.europa.eu/resource/authority/country/ITA",
+          },
+          text: "Italy",
+        },
+      ],
+    });
+  });
+
+  test("retrieveDataset maps spatialCoverage with text only (no uri)", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce({
+      id: "f",
+      title: "Dataset F",
+      spatialCoverage: [{ text: "Luxembourg" }],
+    });
+
+    await expect(provider.retrieveDataset("f")).resolves.toEqual({
+      id: "f",
+      identifier: "",
+      title: "Dataset F",
+      description: "",
+      catalogue: "",
+      languages: [],
+      publishers: [],
+      themes: [],
+      keywords: [],
+      populationCoverage: undefined,
+      spatialResolutionInMeters: undefined,
+      spatialCoverage: [{ uri: undefined, text: "Luxembourg" }],
+    });
+  });
+
+  test("retrieveDataset maps spatialResolutionInMeters when present", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce({
+      id: "g",
+      title: "Dataset G",
+      spatialResolutionInMeters: 4,
+    });
+
+    await expect(provider.retrieveDataset("g")).resolves.toEqual({
+      id: "g",
+      identifier: "",
+      title: "Dataset G",
+      description: "",
+      catalogue: "",
+      languages: [],
+      publishers: [],
+      themes: [],
+      keywords: [],
+      populationCoverage: undefined,
+      spatialResolutionInMeters: 4,
+      spatialCoverage: undefined,
+    });
+  });
 });

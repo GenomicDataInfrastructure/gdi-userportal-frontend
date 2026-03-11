@@ -185,8 +185,8 @@ export interface DiscoveryRetrievedDataset {
   numberOfRecords?: number;
   numberOfUniqueIndividuals?: number;
   populationCoverage?: string;
+  spatialCoverage?: DiscoverySpatialCoverage[];
   spatialResolutionInMeters?: number;
-  spatialCoverage?: number;
 }
 
 export interface DiscoveryFilterRange {

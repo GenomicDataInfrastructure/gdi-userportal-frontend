@@ -28,6 +28,7 @@ export const mapSearchResponse = (
     hasVersions: hit._source?.hasVersions,
     versionNotes: hit._source?.versionNotes,
     populationCoverage: hit._source?.populationCoverage,
+    spatialCoverage: hit._source?.spatialCoverage,
   }));
 
   return {
@@ -51,4 +52,5 @@ export const mapGetDocumentResponse = (
   hasVersions: response._source?.hasVersions,
   versionNotes: response._source?.versionNotes,
   populationCoverage: response._source?.populationCoverage,
+  spatialCoverage: response._source?.spatialCoverage,
 });

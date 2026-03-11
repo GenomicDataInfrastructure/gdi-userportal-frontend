@@ -3,7 +3,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type * as RDF from "@rdfjs/types";
-import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
+import {
+  LocalDiscoveryDataset,
+  SpatialCoverage,
+} from "@/app/api/discovery/local-store/types";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 
 export const DCAT_DATASET = "http://www.w3.org/ns/dcat#Dataset";
@@ -23,10 +26,10 @@ const DCT_MODIFIED = "http://purl.org/dc/terms/modified"; // NOSONAR
 const DCAT_VERSION = "http://www.w3.org/ns/dcat#version"; // NOSONAR
 const DCAT_HAS_VERSION = "http://www.w3.org/ns/dcat#hasVersion"; // NOSONAR
 const ADMS_VERSION_NOTES = "http://www.w3.org/ns/adms#versionNotes"; // NOSONAR
+const DCT_SPATIAL = "http://purl.org/dc/terms/spatial"; // NOSONAR
+const SKOS_PREF_LABEL = "http://www.w3.org/2004/02/skos/core#prefLabel"; // NOSONAR
 const HEALTHDCATAP_POPULATION_COVERAGE =
   "http://data.europa.eu/r5r/populationCoverage"; // NOSONAR
-const DCAT_SPATIAL_COVERAGE =
-  "http://publications.europa.eu/resource/authority/country/LUX"; // NOSONAR
 const DCAT_SPATIAL_RESOLUTION_IN_METERS =
   "http://www.w3.org/ns/dcat#spatialResolutionInMeters"; // NOSONAR
 
@@ -173,12 +176,12 @@ const extractSpatialResolutionInMeters = (
 const extractSpatialCoverage = (
   datasetSubject: RDF.Term,
   graph: RdfGraph
-): number | undefined => {
-  const extractedField = graph.getLiteral(
-    datasetSubject,
-    DCAT_SPATIAL_COVERAGE
-  );
-  if (!extractedField) return undefined;
-  const spatialCoverage = Number.parseFloat(extractedField);
-  return Number.isNaN(spatialCoverage) ? undefined : spatialCoverage;
+): SpatialCoverage[] | undefined => {
+  const locations = graph.getObjects(datasetSubject, DCT_SPATIAL);
+  if (!locations.length) return undefined;
+  return locations.map((location) => {
+    const uri = graph.getNamedNodeValue(location) || undefined;
+    const text = graph.getLiteral(location, SKOS_PREF_LABEL) || undefined;
+    return { uri, text };
+  });
 };

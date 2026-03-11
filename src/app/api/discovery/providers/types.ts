@@ -137,6 +137,14 @@ export interface DiscoveryRetrievedDistribution {
   uri?: string;
 }
 
+export interface DiscoverySpatialCoverage {
+  uri?: DiscoveryValueLabel;
+  text?: string;
+  geom?: string;
+  bbox?: string;
+  centroid?: string;
+}
+
 export interface DiscoveryRetrievedDataset {
   id: string;
   identifier?: string;
@@ -172,6 +180,9 @@ export interface DiscoveryRetrievedDataset {
   temporalCoverage?: DiscoveryTimeWindow;
   numberOfRecords?: number;
   numberOfUniqueIndividuals?: number;
+  populationCoverage?: string;
+  spatialResolutionInMeters?: number;
+  spatialCoverage?: number;
 }
 
 export interface DiscoveryFilterRange {

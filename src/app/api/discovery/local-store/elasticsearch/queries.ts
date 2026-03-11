@@ -16,6 +16,9 @@ export const createIndexMappings = () => ({
       description: { type: "text" },
       catalogue: { type: "keyword" },
       languages: { type: "keyword" },
+      populationCoverage: { type: "text" },
+      spatialResolutionInMeters: { type: "keyword" },
+      spatialCoverage: { type: "keyword" },
     },
   },
 });

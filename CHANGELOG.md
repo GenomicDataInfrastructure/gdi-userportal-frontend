@@ -12,55 +12,55 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+
 ## [v1.6.8] - 2026-03-06
 
 ### Added
+
 - feat(discovery local-index): harvest/index id, identifier, catalogue (#832) by @Inderpal Singh in a4122a0
 - feat(discovery-harvest): add OIDC-protected DCAT harvesting with generic client-credentials config (#831) by @Inderpal Singh in 542a846
 - feat(discovery): add DCAT local-index harvesting with Elasticsearch adapter and (dev harvest endpoint (#830) by @Inderpal Singh in b8534d1
 
-
 ### Changed
+
 - chore(deps): update docker/metadata-action action to v6 by @Renovate Bot in e321c69
 - chore(deps): update docker/build-push-action action to v7 by @Renovate Bot in bdb8cd6
 - refactor(discovery): introduce configurable provider layer, keep DDS default (#829) by @Inderpal Singh in b454ba5
 - doc: update CHANGELOG.md for v1.6.7 by @LNDS-Sysadmins in dd6084c
 
-
 ## [v1.6.7] - 2026-03-05
 
 ### Changed
+
 - chore: add norway to allele frequency browser by @Bruno Pacheco in 49bcdd2
 - chore(deps): bump svgo from 3.3.2 to 3.3.3 by @dependabot[bot] in 2819e49
 - chore(deps): bump svgo from 3.3.2 to 3.3.3 in /documentation by @dependabot[bot] in 39aac02
 - doc: update CHANGELOG.md for v1.6.6 by @LNDS-Sysadmins in 3c853ce
 
-
 ### Fixed
-- fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.71.0 by @Renovate Bot in 2e8f6f6
 
+- fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.71.0 by @Renovate Bot in 2e8f6f6
 
 ## [v1.6.6] - 2026-03-04
 
 ### Changed
+
 - chore: remove URI from Links & References by @Bruno Pacheco in 94c7a6d
 - doc: update CHANGELOG.md for v1.6.5 by @LNDS-Sysadmins in 2d6e816
 
-
 ### Fixed
-- fix(deps): update opentelemetry-js monorepo by @Renovate Bot in 335c61b
 
+- fix(deps): update opentelemetry-js monorepo by @Renovate Bot in 335c61b
 
 ## [v1.6.5] - 2026-03-04
 
 ### Changed
+
 - doc: update CHANGELOG.md for v1.6.4 by @LNDS-Sysadmins in 00e4e53
 
-
 ### Fixed
+
 - fix: map media type to key-label type by @Bruno Pacheco in f4e1673
-
-
 
 ## [v1.6.4] - 2026-03-04
 

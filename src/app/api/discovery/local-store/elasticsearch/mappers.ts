@@ -22,6 +22,7 @@ export const mapSearchResponse = (
     description: hit._source?.description,
     catalogue: hit._source?.catalogue,
     languages: hit._source?.languages,
+    populationCoverage: hit._source?.populationCoverage,
   }));
 
   return {
@@ -39,4 +40,5 @@ export const mapGetDocumentResponse = (
   description: response._source?.description,
   catalogue: response._source?.catalogue,
   languages: response._source?.languages,
+  populationCoverage: response._source?.populationCoverage,
 });

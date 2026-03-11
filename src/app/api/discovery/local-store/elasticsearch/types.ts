@@ -11,6 +11,7 @@ export interface ElasticsearchSearchHit {
     description?: string;
     catalogue?: string;
     languages?: string[];
+    populationCoverage?: string;
   };
 }
 
@@ -32,5 +33,6 @@ export interface ElasticsearchGetDocumentResponse {
     description?: string;
     catalogue?: string;
     languages?: string[];
+    populationCoverage?: string;
   };
 }

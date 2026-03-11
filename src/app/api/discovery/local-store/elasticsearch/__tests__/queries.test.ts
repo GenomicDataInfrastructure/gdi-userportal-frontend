@@ -20,6 +20,9 @@ describe("elasticsearch/queries", () => {
           description: { type: "text" },
           catalogue: { type: "keyword" },
           languages: { type: "keyword" },
+          populationCoverage: { type: "text" },
+          spatialResolutionInMeters: { type: "keyword" },
+          spatialCoverage: { type: "keyword" },
         },
       },
     });

@@ -77,7 +77,15 @@ describe("local-index APIs", () => {
     mockCreateHeaders.mockResolvedValueOnce({ Authorization: "Bearer token" });
     mockSearchDatasets.mockResolvedValueOnce({
       results: [
-        { id: "d1", title: "Dataset 1", description: "A" },
+        {
+          id: "d1",
+          title: "Dataset 1",
+          description: "A",
+          createdAt: "2024-01-15T00:00:00.000Z",
+          modifiedAt: "2024-03-10T00:00:00.000Z",
+          version: "1.0.0",
+          hasVersions: [{ value: "v1", label: "Version 1" }],
+        },
         { id: "d2", title: "Dataset 2", description: "B" },
         { id: "", title: "Missing id", description: "C" },
         { id: "d4", title: "", description: "D" },
@@ -99,6 +107,11 @@ describe("local-index APIs", () => {
         description: "A",
         catalogue: undefined,
         languages: undefined,
+        createdAt: "2024-01-15T00:00:00.000Z",
+        modifiedAt: "2024-03-10T00:00:00.000Z",
+        version: "1.0.0",
+        hasVersions: [{ value: "v1", label: "Version 1" }],
+        versionNotes: undefined,
       },
       {
         id: "d2",
@@ -107,6 +120,11 @@ describe("local-index APIs", () => {
         description: "B",
         catalogue: undefined,
         languages: undefined,
+        createdAt: undefined,
+        modifiedAt: undefined,
+        version: undefined,
+        hasVersions: undefined,
+        versionNotes: undefined,
       },
     ]);
     expect(count).toBe(2);

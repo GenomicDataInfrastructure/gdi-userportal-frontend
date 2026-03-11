@@ -79,6 +79,11 @@ describe("LocalIndexDiscoveryProvider", () => {
           languages: [
             "http://publications.europa.eu/resource/authority/language/ENG",
           ],
+          createdAt: "2024-01-01T00:00:00.000Z",
+          modifiedAt: "2024-03-10T00:00:00.000Z",
+          version: "1.0.0",
+          hasVersions: [{ value: "v1", label: "Version 1" }],
+          versionNotes: "Initial release",
         },
         { id: "b", title: "Dataset B" },
       ],
@@ -111,6 +116,11 @@ describe("LocalIndexDiscoveryProvider", () => {
               label: "English",
             },
           ],
+          createdAt: "2024-01-01T00:00:00.000Z",
+          modifiedAt: "2024-03-10T00:00:00.000Z",
+          version: "1.0.0",
+          hasVersions: [{ value: "v1", label: "Version 1" }],
+          versionNotes: "Initial release",
           publishers: [],
           themes: [],
           keywords: [],
@@ -122,6 +132,11 @@ describe("LocalIndexDiscoveryProvider", () => {
           description: "",
           catalogue: "",
           languages: [],
+          createdAt: undefined,
+          modifiedAt: undefined,
+          version: undefined,
+          hasVersions: undefined,
+          versionNotes: undefined,
           publishers: [],
           themes: [],
           keywords: [],
@@ -138,6 +153,11 @@ describe("LocalIndexDiscoveryProvider", () => {
       languages: [
         "http://publications.europa.eu/resource/authority/language/FRA",
       ],
+      createdAt: "2024-01-01T00:00:00.000Z",
+      modifiedAt: "2024-03-10T00:00:00.000Z",
+      version: "1.0.0",
+      hasVersions: [{ value: "v1", label: "Version 1" }],
+      versionNotes: "Initial release",
     });
 
     await expect(provider.retrieveDataset("a")).resolves.toEqual({
@@ -153,6 +173,11 @@ describe("LocalIndexDiscoveryProvider", () => {
           label: "French",
         },
       ],
+      createdAt: "2024-01-01T00:00:00.000Z",
+      modifiedAt: "2024-03-10T00:00:00.000Z",
+      version: "1.0.0",
+      hasVersions: [{ value: "v1", label: "Version 1" }],
+      versionNotes: "Initial release",
       publishers: [],
       themes: [],
       keywords: [],
@@ -180,6 +205,10 @@ describe("LocalIndexDiscoveryProvider", () => {
       description: "",
       catalogue: "",
       languages: [],
+      createdAt: undefined,
+      modifiedAt: undefined,
+      version: undefined,
+      hasVersions: undefined,
       publishers: [],
       themes: [],
       keywords: [],
@@ -197,6 +226,8 @@ describe("LocalIndexDiscoveryProvider", () => {
       description: "desc-c",
       catalogue: "catalogue-c",
       languages: ["custom-language-code"],
+      createdAt: "2024-02-15T00:00:00.000Z",
+      version: "2.0.0",
     });
 
     await expect(provider.retrieveDataset("c")).resolves.toEqual({
@@ -208,6 +239,8 @@ describe("LocalIndexDiscoveryProvider", () => {
       languages: [
         { value: "custom-language-code", label: "custom-language-code" },
       ],
+      createdAt: "2024-02-15T00:00:00.000Z",
+      version: "2.0.0",
       publishers: [],
       themes: [],
       keywords: [],

@@ -20,6 +20,16 @@ describe("elasticsearch/queries", () => {
           description: { type: "text" },
           catalogue: { type: "keyword" },
           languages: { type: "keyword" },
+          createdAt: { type: "date" },
+          modifiedAt: { type: "date" },
+          version: { type: "keyword" },
+          hasVersions: {
+            properties: {
+              value: { type: "keyword" },
+              label: { type: "keyword" },
+            },
+          },
+          versionNotes: { type: "text" },
           populationCoverage: { type: "text" },
           spatialResolutionInMeters: { type: "keyword" },
           spatialCoverage: { type: "keyword" },
@@ -62,13 +72,25 @@ describe("elasticsearch/queries", () => {
         description: "D1",
         catalogue: "catalogue-1",
         languages: ["ENG", "FRA"],
+        createdAt: "2024-01-01T00:00:00.000Z",
+        modifiedAt: "2024-03-10T00:00:00.000Z",
+        version: "1.0.0",
+        hasVersions: [{ value: "v1", label: "Version 1" }],
+        versionNotes: "Initial release",
       },
       { id: "2", title: "B", catalogue: "catalogue-2" },
     ]);
 
     expect(body).toContain('"index":{"_index":"idx","_id":"1"}');
+    expect(body).toContain('"id":"1"');
+    expect(body).toContain('"identifier":"IDENT-1"');
+    expect(body).toContain('"title":"A"');
+    expect(body).toContain('"catalogue":"catalogue-1"');
+    expect(body).toContain('"languages":["ENG","FRA"]');
+    expect(body).toContain('"createdAt":"2024-01-01T00:00:00.000Z"');
+    expect(body).toContain('"version":"1.0.0"');
     expect(body).toContain(
-      '"id":"1","identifier":"IDENT-1","title":"A","description":"D1","catalogue":"catalogue-1","languages":["ENG","FRA"]'
+      '"hasVersions":[{"value":"v1","label":"Version 1"}]'
     );
     expect(body).toContain('"index":{"_index":"idx","_id":"2"}');
     expect(body.endsWith("\n")).toBe(true);

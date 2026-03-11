@@ -75,6 +75,9 @@ export interface DiscoverySearchedDataset {
   catalogue?: string;
   modifiedAt?: string;
   createdAt?: string;
+  version?: string;
+  hasVersions?: DiscoveryValueLabel[];
+  versionNotes?: string;
   accessRights?: DiscoveryValueLabel;
   conformsTo?: DiscoveryValueLabel[];
   numberOfUniqueIndividuals?: number;
@@ -165,6 +168,7 @@ export interface DiscoveryRetrievedDataset {
   creators?: DiscoveryAgent[];
   publishers?: DiscoveryAgent[];
   hasVersions?: DiscoveryValueLabel[];
+  versionNotes?: string;
   accessRights?: DiscoveryValueLabel;
   conformsTo?: DiscoveryValueLabel[];
   keywords?: string[];

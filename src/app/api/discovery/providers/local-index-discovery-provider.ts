@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { getLocalDiscoveryStore } from "@/app/api/discovery/local-store/factory";
+import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import { BasePlaceholderDiscoveryProvider } from "@/app/api/discovery/providers/base-placeholder-provider";
 import {
   DiscoveryDatasetSearchQuery,
@@ -35,6 +36,30 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     );
   }
 
+  private mapLocalDataset(
+    dataset: LocalDiscoveryDataset
+  ): DiscoveryRetrievedDataset {
+    return {
+      id: dataset.id,
+      identifier: dataset.identifier ?? "",
+      title: dataset.title,
+      description: dataset.description ?? "",
+      catalogue: dataset.catalogue ?? "",
+      languages: this.mapDatasetLanguages(dataset.languages),
+      createdAt: dataset.createdAt,
+      modifiedAt: dataset.modifiedAt,
+      version: dataset.version,
+      hasVersions: dataset.hasVersions,
+      versionNotes: dataset.versionNotes,
+      publishers: [],
+      themes: [],
+      keywords: [],
+      populationCoverage: dataset.populationCoverage,
+      spatialResolutionInMeters: dataset.spatialResolutionInMeters,
+      spatialCoverage: dataset.spatialCoverage,
+    };
+  }
+
   async retrieveFilters(_headers: Record<string, string>) {
     return [];
   }
@@ -56,17 +81,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
 
     return {
       count: response.count,
-      results: response.results.map((dataset) => ({
-        id: dataset.id,
-        identifier: dataset.identifier ?? "",
-        title: dataset.title,
-        description: dataset.description ?? "",
-        catalogue: dataset.catalogue ?? "",
-        languages: this.mapDatasetLanguages(dataset.languages),
-        publishers: [],
-        themes: [],
-        keywords: [],
-      })),
+      results: response.results.map((dataset) => this.mapLocalDataset(dataset)),
     };
   }
 
@@ -77,19 +92,6 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       throw new Error(`Dataset not found in local index: ${id}`);
     }
 
-    return {
-      id: dataset.id,
-      identifier: dataset.identifier ?? "",
-      title: dataset.title,
-      description: dataset.description ?? "",
-      catalogue: dataset.catalogue ?? "",
-      languages: this.mapDatasetLanguages(dataset.languages),
-      publishers: [],
-      themes: [],
-      keywords: [],
-      populationCoverage: dataset.populationCoverage,
-      spatialResolutionInMeters: dataset.spatialResolutionInMeters,
-      spatialCoverage: dataset.spatialCoverage,
-    };
+    return this.mapLocalDataset(dataset);
   }
 }

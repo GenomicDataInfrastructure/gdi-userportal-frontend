@@ -11,6 +11,11 @@ export interface ElasticsearchSearchHit {
     description?: string;
     catalogue?: string;
     languages?: string[];
+    createdAt?: string;
+    modifiedAt?: string;
+    version?: string;
+    hasVersions?: Array<{ value: string; label: string }>;
+    versionNotes?: string;
     populationCoverage?: string;
   };
 }
@@ -33,6 +38,11 @@ export interface ElasticsearchGetDocumentResponse {
     description?: string;
     catalogue?: string;
     languages?: string[];
+    createdAt?: string;
+    modifiedAt?: string;
+    version?: string;
+    hasVersions?: Array<{ value: string; label: string }>;
+    versionNotes?: string;
     populationCoverage?: string;
   };
 }

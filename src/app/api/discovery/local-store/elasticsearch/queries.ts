@@ -16,6 +16,13 @@ export const createIndexMappings = () => ({
       description: { type: "text" },
       catalogue: { type: "keyword" },
       languages: { type: "keyword" },
+      createdAt: { type: "date" },
+      modifiedAt: { type: "date" },
+      version: { type: "keyword" },
+      hasVersions: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
+      versionNotes: { type: "text" },
       populationCoverage: { type: "text" },
       spatialResolutionInMeters: { type: "keyword" },
       spatialCoverage: { type: "keyword" },
@@ -41,6 +48,8 @@ export const buildSearchBody = (options: LocalDiscoverySearchOptions) => {
                   "id",
                   "identifier",
                   "catalogue",
+                  "version",
+                  "versionNotes",
                 ],
                 fuzziness: "AUTO",
               },
@@ -48,7 +57,13 @@ export const buildSearchBody = (options: LocalDiscoverySearchOptions) => {
             {
               multi_match: {
                 query,
-                fields: ["title^4", "description", "identifier", "catalogue"],
+                fields: [
+                  "title^4",
+                  "description",
+                  "identifier",
+                  "catalogue",
+                  "versionNotes",
+                ],
                 type: "phrase_prefix",
               },
             },

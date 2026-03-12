@@ -7,6 +7,7 @@ import {
   LocalDiscoveryDataset,
   LocalDiscoverySearchResult,
 } from "@/app/api/discovery/local-store/types";
+import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtures";
 
 const mockStore = {
   key: "elasticsearch",
@@ -27,15 +28,8 @@ jest.mock("@/utils/formatDatasetLanguage", () => ({
   __esModule: true,
   default: (language: string) => {
     const code = language.split("/").pop();
-
-    if (code === "ENG") {
-      return "English";
-    }
-
-    if (code === "FRA") {
-      return "French";
-    }
-
+    if (code === "ENG") return "English";
+    if (code === "FRA") return "French";
     return undefined;
   },
 }));
@@ -50,57 +44,32 @@ describe("LocalIndexDiscoveryProvider", () => {
     provider = new LocalIndexDiscoveryProvider();
   });
 
-  test("exposes expected key and capabilities", () => {
+  test("exposes expected key, capabilities, and empty filters", async () => {
     expect(provider.key).toBe("local-index");
     expect(provider.capabilities).toEqual({
       supportsBeaconEnrichment: false,
       supportsGVariants: false,
       supportsFilterEntries: false,
     });
-  });
 
-  test("returns empty filters and filter values", async () => {
     await expect(provider.retrieveFilters({})).resolves.toEqual([]);
     await expect(provider.retrieveFilterValues("theme", {})).resolves.toEqual(
       []
     );
   });
 
-  test("searchDatasets initializes store and maps local datasets", async () => {
+  test("searchDatasets maps a canonical dataset fixture and applies defaults", async () => {
     mockStore.searchDatasets.mockResolvedValueOnce({
       count: 2,
       results: [
-        {
-          id: "a",
-          identifier: "IDENT-A",
-          title: "Dataset A",
-          description: "desc-a",
-          catalogue: "catalogue-a",
-          languages: [
-            "http://publications.europa.eu/resource/authority/language/ENG",
-          ],
-          createdAt: "2024-01-01T00:00:00.000Z",
-          modifiedAt: "2024-03-10T00:00:00.000Z",
-          version: "1.0.0",
-          hasVersions: [{ value: "v1", label: "Version 1" }],
-          versionNotes: "Initial release",
-        },
+        buildLocalDiscoveryDataset({ identifier: "IDENT-A" }),
         { id: "b", title: "Dataset B" },
       ],
     });
 
-    const response = await provider.searchDatasets(
-      { query: "Dataset", start: 5, rows: 10 },
-      {}
-    );
-
-    expect(mockStore.ensureInitialized).toHaveBeenCalled();
-    expect(mockStore.searchDatasets).toHaveBeenCalledWith({
-      query: "Dataset",
-      start: 5,
-      rows: 10,
-    });
-    expect(response).toEqual({
+    await expect(
+      provider.searchDatasets({ query: "Dataset", start: 5, rows: 10 }, {})
+    ).resolves.toEqual({
       count: 2,
       results: [
         {
@@ -124,6 +93,19 @@ describe("LocalIndexDiscoveryProvider", () => {
           publishers: [],
           themes: [],
           keywords: [],
+          populationCoverage: "People of LNDS.",
+          spatialResolutionInMeters: 4,
+          spatialCoverage: [
+            {
+              uri: {
+                value:
+                  "http://publications.europa.eu/resource/authority/country/LUX",
+                label:
+                  "http://publications.europa.eu/resource/authority/country/LUX",
+              },
+              text: "Luxembourg",
+            },
+          ],
         },
         {
           id: "b",
@@ -140,32 +122,47 @@ describe("LocalIndexDiscoveryProvider", () => {
           publishers: [],
           themes: [],
           keywords: [],
+          populationCoverage: undefined,
+          spatialResolutionInMeters: undefined,
+          spatialCoverage: undefined,
         },
       ],
     });
+
+    expect(mockStore.ensureInitialized).toHaveBeenCalled();
+    expect(mockStore.searchDatasets).toHaveBeenCalledWith({
+      query: "Dataset",
+      start: 5,
+      rows: 10,
+    });
   });
 
-  test("retrieveDataset maps dataset and throws when missing", async () => {
-    mockStore.retrieveDataset.mockResolvedValueOnce({
-      id: "a",
-      title: "Dataset A",
-      description: "desc-a",
-      languages: [
-        "http://publications.europa.eu/resource/authority/language/FRA",
-      ],
-      createdAt: "2024-01-01T00:00:00.000Z",
-      modifiedAt: "2024-03-10T00:00:00.000Z",
-      version: "1.0.0",
-      hasVersions: [{ value: "v1", label: "Version 1" }],
-      versionNotes: "Initial release",
-    });
+  test("retrieveDataset maps the canonical fixture for API consumers", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce(
+      buildLocalDiscoveryDataset({
+        id: "retrieve-id",
+        identifier: "IDENT-R",
+        languages: [
+          "http://publications.europa.eu/resource/authority/language/FRA",
+        ],
+        spatialCoverage: [
+          {
+            uri: "http://publications.europa.eu/resource/authority/country/ITA",
+            text: "Italy",
+            geom: "POLYGON((...))",
+            bbox: "5,45,15,48",
+            centroid: "POINT(10 46)",
+          },
+        ],
+      })
+    );
 
-    await expect(provider.retrieveDataset("a")).resolves.toEqual({
-      id: "a",
-      identifier: "",
+    await expect(provider.retrieveDataset("retrieve-id")).resolves.toEqual({
+      id: "retrieve-id",
+      identifier: "IDENT-R",
       title: "Dataset A",
       description: "desc-a",
-      catalogue: "",
+      catalogue: "catalogue-a",
       languages: [
         {
           value:
@@ -181,164 +178,53 @@ describe("LocalIndexDiscoveryProvider", () => {
       publishers: [],
       themes: [],
       keywords: [],
-      populationCoverage: undefined,
-      spatialResolutionInMeters: undefined,
-      spatialCoverage: undefined,
+      populationCoverage: "People of LNDS.",
+      spatialResolutionInMeters: 4,
+      spatialCoverage: [
+        {
+          uri: {
+            value:
+              "http://publications.europa.eu/resource/authority/country/ITA",
+            label:
+              "http://publications.europa.eu/resource/authority/country/ITA",
+          },
+          text: "Italy",
+          geom: "POLYGON((...))",
+          bbox: "5,45,15,48",
+          centroid: "POINT(10 46)",
+        },
+      ],
     });
-
-    mockStore.retrieveDataset.mockResolvedValueOnce(null);
-    await expect(provider.retrieveDataset("missing")).rejects.toThrow(
-      "Dataset not found in local index: missing"
-    );
   });
 
-  test("retrieveDataset defaults description to empty string when not present", async () => {
-    mockStore.retrieveDataset.mockResolvedValueOnce({
-      id: "b",
-      title: "Dataset B",
-    });
+  test("retrieveDataset preserves unknown languages and text-only spatial coverage", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce(
+      buildLocalDiscoveryDataset({
+        id: "custom",
+        identifier: undefined,
+        description: undefined,
+        catalogue: undefined,
+        languages: ["custom-language-code"],
+        spatialCoverage: [{ text: "Luxembourg" }],
+        populationCoverage: undefined,
+        spatialResolutionInMeters: undefined,
+      })
+    );
 
-    await expect(provider.retrieveDataset("b")).resolves.toEqual({
-      id: "b",
+    await expect(provider.retrieveDataset("custom")).resolves.toEqual({
+      id: "custom",
       identifier: "",
-      title: "Dataset B",
+      title: "Dataset A",
       description: "",
       catalogue: "",
-      languages: [],
-      createdAt: undefined,
-      modifiedAt: undefined,
-      version: undefined,
-      hasVersions: undefined,
-      publishers: [],
-      themes: [],
-      keywords: [],
-      populationCoverage: undefined,
-      spatialResolutionInMeters: undefined,
-      spatialCoverage: undefined,
-    });
-  });
-
-  test("retrieveDataset preserves identifier and catalogue when present", async () => {
-    mockStore.retrieveDataset.mockResolvedValueOnce({
-      id: "c",
-      identifier: "IDENT-C",
-      title: "Dataset C",
-      description: "desc-c",
-      catalogue: "catalogue-c",
-      languages: ["custom-language-code"],
-      createdAt: "2024-02-15T00:00:00.000Z",
-      version: "2.0.0",
-    });
-
-    await expect(provider.retrieveDataset("c")).resolves.toEqual({
-      id: "c",
-      identifier: "IDENT-C",
-      title: "Dataset C",
-      description: "desc-c",
-      catalogue: "catalogue-c",
       languages: [
         { value: "custom-language-code", label: "custom-language-code" },
       ],
-      createdAt: "2024-02-15T00:00:00.000Z",
-      version: "2.0.0",
-      publishers: [],
-      themes: [],
-      keywords: [],
-      populationCoverage: undefined,
-      spatialResolutionInMeters: undefined,
-      spatialCoverage: undefined,
-    });
-  });
-
-  test("retrieveDataset maps new fields when present", async () => {
-    mockStore.retrieveDataset.mockResolvedValueOnce({
-      id: "d",
-      title: "Dataset D",
-      description: "desc-d",
-      populationCoverage: "People of LNDS.",
-    });
-
-    await expect(provider.retrieveDataset("d")).resolves.toEqual({
-      id: "d",
-      identifier: "",
-      title: "Dataset D",
-      description: "desc-d",
-      catalogue: "",
-      languages: [],
-      publishers: [],
-      themes: [],
-      keywords: [],
-      populationCoverage: "People of LNDS.",
-      spatialResolutionInMeters: undefined,
-      spatialCoverage: undefined,
-    });
-  });
-
-  test("retrieveDataset maps spatialCoverage with uri and text", async () => {
-    mockStore.retrieveDataset.mockResolvedValueOnce({
-      id: "e",
-      title: "Dataset E",
-      spatialCoverage: [
-        {
-          uri: "http://publications.europa.eu/resource/authority/country/LUX",
-          text: "Luxembourg",
-        },
-        {
-          uri: "http://publications.europa.eu/resource/authority/country/ITA",
-          text: "Italy",
-        },
-      ],
-    });
-
-    await expect(provider.retrieveDataset("e")).resolves.toEqual({
-      id: "e",
-      identifier: "",
-      title: "Dataset E",
-      description: "",
-      catalogue: "",
-      languages: [],
-      publishers: [],
-      themes: [],
-      keywords: [],
-      populationCoverage: undefined,
-      spatialResolutionInMeters: undefined,
-      spatialCoverage: [
-        {
-          uri: {
-            value:
-              "http://publications.europa.eu/resource/authority/country/LUX",
-            label:
-              "http://publications.europa.eu/resource/authority/country/LUX",
-          },
-          text: "Luxembourg",
-        },
-        {
-          uri: {
-            value:
-              "http://publications.europa.eu/resource/authority/country/ITA",
-            label:
-              "http://publications.europa.eu/resource/authority/country/ITA",
-          },
-          text: "Italy",
-        },
-      ],
-    });
-  });
-
-  test("retrieveDataset maps spatialCoverage with text only (no uri)", async () => {
-    mockStore.retrieveDataset.mockResolvedValueOnce({
-      id: "f",
-      title: "Dataset F",
-      spatialCoverage: [{ text: "Luxembourg" }],
-    });
-
-    await expect(provider.retrieveDataset("f")).resolves.toEqual({
-      id: "f",
-      identifier: "",
-      title: "Dataset F",
-      description: "",
-      catalogue: "",
-      languages: [],
+      createdAt: "2024-01-01T00:00:00.000Z",
+      modifiedAt: "2024-03-10T00:00:00.000Z",
+      version: "1.0.0",
+      hasVersions: [{ value: "v1", label: "Version 1" }],
+      versionNotes: "Initial release",
       publishers: [],
       themes: [],
       keywords: [],
@@ -348,26 +234,11 @@ describe("LocalIndexDiscoveryProvider", () => {
     });
   });
 
-  test("retrieveDataset maps spatialResolutionInMeters when present", async () => {
-    mockStore.retrieveDataset.mockResolvedValueOnce({
-      id: "g",
-      title: "Dataset G",
-      spatialResolutionInMeters: 4,
-    });
+  test("retrieveDataset throws when the dataset is missing", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce(null);
 
-    await expect(provider.retrieveDataset("g")).resolves.toEqual({
-      id: "g",
-      identifier: "",
-      title: "Dataset G",
-      description: "",
-      catalogue: "",
-      languages: [],
-      publishers: [],
-      themes: [],
-      keywords: [],
-      populationCoverage: undefined,
-      spatialResolutionInMeters: 4,
-      spatialCoverage: undefined,
-    });
+    await expect(provider.retrieveDataset("missing")).rejects.toThrow(
+      "Dataset not found in local index: missing"
+    );
   });
 });

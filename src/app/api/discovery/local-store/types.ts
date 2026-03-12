@@ -5,6 +5,9 @@
 export interface SpatialCoverage {
   uri?: string;
   text?: string;
+  geom?: string;
+  bbox?: string;
+  centroid?: string;
 }
 
 export interface LocalDiscoveryDataset {
@@ -18,10 +21,29 @@ export interface LocalDiscoveryDataset {
   modifiedAt?: string;
   version?: string;
   hasVersions?: Array<{ value: string; label: string }>;
-  versionNotes?: string;
+  versionNotes?: string[];
   populationCoverage?: string;
   spatialCoverage?: SpatialCoverage[];
-  spatialResolutionInMeters?: number;
+  spatialResolutionInMeters?: number[];
+}
+
+export interface StoredDocumentHit<TDocument> {
+  _id: string;
+  _source?: TDocument;
+}
+
+export interface StoredDocumentSearchResponse<TDocument> {
+  hits?: {
+    total?: {
+      value?: number;
+    };
+    hits?: StoredDocumentHit<TDocument>[];
+  };
+}
+
+export interface StoredDocumentResponse<TDocument> {
+  _id: string;
+  _source?: TDocument;
 }
 
 export interface LocalDiscoverySearchOptions {

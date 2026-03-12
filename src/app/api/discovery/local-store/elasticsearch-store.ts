@@ -11,8 +11,8 @@ import {
   LocalDiscoveryStore,
 } from "@/app/api/discovery/local-store/types";
 import {
-  ElasticsearchGetDocumentResponse,
-  ElasticsearchSearchResponse,
+  SearchBackendDocumentResponse,
+  SearchBackendSearchResponse,
 } from "@/app/api/discovery/local-store/elasticsearch/types";
 import {
   buildBulkUpsertBody,
@@ -89,7 +89,7 @@ export class ElasticsearchDiscoveryStore implements LocalDiscoveryStore {
     await this.ensureInitialized();
     const requestBody = buildSearchBody(options);
 
-    const response = await this.client.post<ElasticsearchSearchResponse>(
+    const response = await this.client.post<SearchBackendSearchResponse>(
       `/${this.indexName}/_search`,
       requestBody
     );
@@ -101,7 +101,7 @@ export class ElasticsearchDiscoveryStore implements LocalDiscoveryStore {
     await this.ensureInitialized();
 
     try {
-      const response = await this.client.get<ElasticsearchGetDocumentResponse>(
+      const response = await this.client.get<SearchBackendDocumentResponse>(
         `/${this.indexName}/_doc/${encodeURIComponent(id)}`
       );
 

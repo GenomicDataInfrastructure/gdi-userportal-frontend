@@ -6,6 +6,7 @@ import { getLocalDiscoveryStore } from "@/app/api/discovery/local-store/factory"
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import { BasePlaceholderDiscoveryProvider } from "@/app/api/discovery/providers/base-placeholder-provider";
 import {
+  DiscoveryDatasetBase,
   DiscoveryDatasetSearchQuery,
   DiscoveryDatasetsSearchResponse,
   DiscoveryRetrievedDataset,
@@ -38,7 +39,14 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
 
   private mapLocalDataset(
     dataset: LocalDiscoveryDataset
-  ): DiscoveryRetrievedDataset {
+  ): DiscoveryDatasetBase {
+    // HealthDCAT-AP can expose multiple spatial resolution values, but the
+    // current UI and DDS-facing contract only support a single number.
+    const spatialResolutionInMeters = dataset.spatialResolutionInMeters?.[0];
+    // HealthDCAT-AP can expose multiple version notes, but the current UI and
+    // DDS-facing contract only support a single string.
+    const versionNotes = dataset.versionNotes?.[0];
+
     return {
       id: dataset.id,
       identifier: dataset.identifier ?? "",
@@ -50,15 +58,18 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       modifiedAt: dataset.modifiedAt,
       version: dataset.version,
       hasVersions: dataset.hasVersions,
-      versionNotes: dataset.versionNotes,
+      versionNotes,
       publishers: [],
       themes: [],
       keywords: [],
       populationCoverage: dataset.populationCoverage,
-      spatialResolutionInMeters: dataset.spatialResolutionInMeters,
+      spatialResolutionInMeters,
       spatialCoverage: dataset.spatialCoverage?.map((sc) => ({
         uri: sc.uri ? { value: sc.uri, label: sc.uri } : undefined,
         text: sc.text,
+        geom: sc.geom,
+        bbox: sc.bbox,
+        centroid: sc.centroid,
       })),
     };
   }
@@ -95,6 +106,8 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       throw new Error(`Dataset not found in local index: ${id}`);
     }
 
-    return this.mapLocalDataset(dataset);
+    return {
+      ...this.mapLocalDataset(dataset),
+    };
   }
 }

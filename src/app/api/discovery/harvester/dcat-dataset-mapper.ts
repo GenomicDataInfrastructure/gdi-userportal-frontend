@@ -29,7 +29,7 @@ const ADMS_VERSION_NOTES = "http://www.w3.org/ns/adms#versionNotes"; // NOSONAR
 const DCT_SPATIAL = "http://purl.org/dc/terms/spatial"; // NOSONAR
 const SKOS_PREF_LABEL = "http://www.w3.org/2004/02/skos/core#prefLabel"; // NOSONAR
 const HEALTHDCATAP_POPULATION_COVERAGE =
-  "http://data.europa.eu/r5r/populationCoverage"; // NOSONAR
+  "http://healthdataportal.eu/ns/health#populationCoverage"; // NOSONAR
 const DCAT_SPATIAL_RESOLUTION_IN_METERS =
   "http://www.w3.org/ns/dcat#spatialResolutionInMeters"; // NOSONAR
 
@@ -66,7 +66,7 @@ export const mapDataset = (
     hasVersions: objectsToValueLabel(
       graph.getObjects(datasetSubject, DCAT_HAS_VERSION)
     ),
-    versionNotes: graph.getLiteral(datasetSubject, ADMS_VERSION_NOTES),
+    versionNotes: extractVersionNotes(datasetSubject, graph),
     spatialCoverage: extractSpatialCoverage(datasetSubject, graph),
     populationCoverage: extractPopulationCoverage(datasetSubject, graph),
     spatialResolutionInMeters: extractSpatialResolutionInMeters(
@@ -160,17 +160,33 @@ const extractPopulationCoverage = (
   graph: RdfGraph
 ): string => graph.getLiteral(datasetSubject, HEALTHDCATAP_POPULATION_COVERAGE);
 
+const extractVersionNotes = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): string[] | undefined => {
+  const values = graph
+    .getObjectValues(datasetSubject, ADMS_VERSION_NOTES)
+    .filter(Boolean);
+  return values.length > 0 ? values : undefined;
+};
+
 const extractSpatialResolutionInMeters = (
   datasetSubject: RDF.Term,
   graph: RdfGraph
-): number | undefined => {
-  const literal = graph.getLiteral(
+): number[] | undefined => {
+  const values: number[] = [];
+
+  for (const value of graph.getObjectValues(
     datasetSubject,
     DCAT_SPATIAL_RESOLUTION_IN_METERS
-  );
-  if (!literal) return undefined;
-  const parsed = Number.parseFloat(literal);
-  return Number.isNaN(parsed) ? undefined : parsed;
+  )) {
+    const parsed = Number.parseFloat(value);
+    if (!Number.isNaN(parsed)) {
+      values.push(parsed);
+    }
+  }
+
+  return values.length > 0 ? values : undefined;
 };
 
 const extractSpatialCoverage = (

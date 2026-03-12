@@ -63,7 +63,15 @@ export interface DiscoveryTimeWindow {
   end?: string;
 }
 
-export interface DiscoverySearchedDataset {
+export interface DiscoverySpatialCoverage {
+  uri?: DiscoveryValueLabel;
+  text?: string;
+  geom?: string;
+  bbox?: string;
+  centroid?: string;
+}
+
+export interface DiscoveryDatasetBase {
   id: string;
   identifier?: string;
   title: string;
@@ -82,6 +90,12 @@ export interface DiscoverySearchedDataset {
   conformsTo?: DiscoveryValueLabel[];
   numberOfUniqueIndividuals?: number;
   temporalCoverage?: DiscoveryTimeWindow;
+  populationCoverage?: string;
+  spatialCoverage?: DiscoverySpatialCoverage[];
+  spatialResolutionInMeters?: number;
+}
+
+export interface DiscoverySearchedDataset extends DiscoveryDatasetBase {
   recordsCount?: number;
   distributionsCount?: number;
 }
@@ -140,38 +154,14 @@ export interface DiscoveryRetrievedDistribution {
   uri?: string;
 }
 
-export interface DiscoverySpatialCoverage {
-  uri?: DiscoveryValueLabel;
-  text?: string;
-  geom?: string;
-  bbox?: string;
-  centroid?: string;
-}
-
-export interface DiscoveryRetrievedDataset {
-  id: string;
-  identifier?: string;
-  title: string;
-  description: string;
-  version?: string;
+export interface DiscoveryRetrievedDataset extends DiscoveryDatasetBase {
   license?: string;
   ownerOrg?: string;
-  themes?: DiscoveryValueLabel[];
   contacts?: DiscoveryContactPoint[];
   datasetRelationships?: DiscoveryDatasetRelationEntry[];
   dataDictionary?: DiscoveryDatasetDictionaryEntry[];
-  catalogue?: string;
-  createdAt?: string;
-  modifiedAt?: string;
   url?: string;
-  languages?: DiscoveryValueLabel[];
   creators?: DiscoveryAgent[];
-  publishers?: DiscoveryAgent[];
-  hasVersions?: DiscoveryValueLabel[];
-  versionNotes?: string;
-  accessRights?: DiscoveryValueLabel;
-  conformsTo?: DiscoveryValueLabel[];
-  keywords?: string[];
   provenance?: string;
   spatial?: DiscoveryValueLabel;
   distributions?: DiscoveryRetrievedDistribution[];
@@ -181,12 +171,7 @@ export interface DiscoveryRetrievedDataset {
   publisherType?: DiscoveryValueLabel[];
   trustedDataHolder?: boolean;
   hdab?: DiscoveryAgent[];
-  temporalCoverage?: DiscoveryTimeWindow;
   numberOfRecords?: number;
-  numberOfUniqueIndividuals?: number;
-  populationCoverage?: string;
-  spatialCoverage?: DiscoverySpatialCoverage[];
-  spatialResolutionInMeters?: number;
 }
 
 export interface DiscoveryFilterRange {

@@ -8,6 +8,19 @@ import {
   buildSearchBody,
   createIndexMappings,
 } from "@/app/api/discovery/local-store/elasticsearch/queries";
+import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtures";
+
+const canonicalDataset = buildLocalDiscoveryDataset({
+  id: "1",
+  identifier: "IDENT-1",
+  title: "A",
+  description: "D1",
+  catalogue: "catalogue-1",
+  languages: ["ENG", "FRA"],
+  populationCoverage: undefined,
+  spatialCoverage: undefined,
+  spatialResolutionInMeters: undefined,
+});
 
 describe("elasticsearch/queries", () => {
   test("createIndexMappings returns expected mapping structure", () => {
@@ -49,12 +62,16 @@ describe("elasticsearch/queries", () => {
 
   test("buildSearchBody uses fuzzy + phrase_prefix when query is provided", () => {
     const body = buildSearchBody({ query: "regis" });
+    const shouldClauses = (body.query as any).bool.should;
 
     expect(body.from).toBe(0);
     expect(body.size).toBe(20);
     expect(body.query).toHaveProperty("bool");
     expect((body.query as any).bool.minimum_should_match).toBe(1);
-    expect((body.query as any).bool.should).toHaveLength(2);
+    expect(shouldClauses).toHaveLength(2);
+    expect(shouldClauses[0].multi_match.fields).toContain("version");
+    expect(shouldClauses[0].multi_match.fields).toContain("versionNotes");
+    expect(shouldClauses[1].multi_match.fields).toContain("versionNotes");
   });
 
   test("buildClearBody returns delete-all query", () => {
@@ -65,19 +82,7 @@ describe("elasticsearch/queries", () => {
 
   test("buildBulkUpsertBody builds ndjson payload", () => {
     const body = buildBulkUpsertBody("idx", [
-      {
-        id: "1",
-        identifier: "IDENT-1",
-        title: "A",
-        description: "D1",
-        catalogue: "catalogue-1",
-        languages: ["ENG", "FRA"],
-        createdAt: "2024-01-01T00:00:00.000Z",
-        modifiedAt: "2024-03-10T00:00:00.000Z",
-        version: "1.0.0",
-        hasVersions: [{ value: "v1", label: "Version 1" }],
-        versionNotes: "Initial release",
-      },
+      canonicalDataset,
       { id: "2", title: "B", catalogue: "catalogue-2" },
     ]);
 

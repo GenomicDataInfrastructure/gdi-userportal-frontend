@@ -6,32 +6,34 @@ import {
   mapGetDocumentResponse,
   mapSearchResponse,
 } from "@/app/api/discovery/local-store/elasticsearch/mappers";
+import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtures";
+
+const canonicalSource = buildLocalDiscoveryDataset({
+  id: "id-a",
+  identifier: "identifier-a",
+  title: "A",
+  description: "desc-a",
+  catalogue: "catalogue-a",
+  languages: ["ENG"],
+  populationCoverage: undefined,
+  spatialCoverage: undefined,
+  spatialResolutionInMeters: undefined,
+});
 
 describe("elasticsearch/mappers", () => {
-  test("maps all fields correctly", () => {
-    const source = {
-      id: "id-a",
-      identifier: "identifier-a",
-      title: "A",
-      description: "desc-a",
-      catalogue: "catalogue-a",
-      languages: ["ENG"],
-      createdAt: "2024-01-01T00:00:00.000Z",
-      modifiedAt: "2024-03-10T00:00:00.000Z",
-      version: "1.0.0",
-      hasVersions: [{ value: "v1", label: "Version 1" }],
-      versionNotes: "Initial release",
-    };
-
+  test("maps a canonical stored document fixture for search and retrieval", () => {
     expect(
       mapSearchResponse({
-        hits: { total: { value: 1 }, hits: [{ _id: "a", _source: source }] },
+        hits: {
+          total: { value: 1 },
+          hits: [{ _id: "a", _source: canonicalSource }],
+        },
       })
-    ).toEqual({ count: 1, results: [source] });
+    ).toEqual({ count: 1, results: [canonicalSource] });
 
-    expect(mapGetDocumentResponse({ _id: "a", _source: source })).toEqual(
-      source
-    );
+    expect(
+      mapGetDocumentResponse({ _id: "a", _source: canonicalSource })
+    ).toEqual(canonicalSource);
   });
 
   test("falls back gracefully when fields are missing", () => {

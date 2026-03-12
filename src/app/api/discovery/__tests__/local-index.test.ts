@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { jest } from "@jest/globals";
-import { DiscoveryDatasetsSearchResponse } from "@/app/api/discovery/providers/types";
+import { buildDdsSearchedDataset } from "@/app/api/discovery/test-utils/fixtures";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 
 const mockCreateHeaders = jest.fn<() => Promise<Record<string, string>>>();
@@ -15,7 +15,7 @@ const mockSearchDatasets =
     (
       _options: unknown,
       _headers: Record<string, string>
-    ) => Promise<DiscoveryDatasetsSearchResponse>
+    ) => Promise<{ results?: Record<string, unknown>[] }>
   >();
 const mockHarvestFromUrl =
   jest.fn<
@@ -77,16 +77,16 @@ describe("local-index APIs", () => {
     mockCreateHeaders.mockResolvedValueOnce({ Authorization: "Bearer token" });
     mockSearchDatasets.mockResolvedValueOnce({
       results: [
-        {
-          id: "d1",
-          title: "Dataset 1",
-          description: "A",
-          createdAt: "2024-01-15T00:00:00.000Z",
-          modifiedAt: "2024-03-10T00:00:00.000Z",
-          version: "1.0.0",
-          hasVersions: [{ value: "v1", label: "Version 1" }],
-        },
-        { id: "d2", title: "Dataset 2", description: "B" },
+        buildDdsSearchedDataset(),
+        buildDdsSearchedDataset({
+          id: "d2",
+          title: "Dataset 2",
+          description: "B",
+          createdAt: undefined,
+          modifiedAt: undefined,
+          version: undefined,
+          hasVersions: undefined,
+        }),
         { id: "", title: "Missing id", description: "C" },
         { id: "d4", title: "", description: "D" },
       ],

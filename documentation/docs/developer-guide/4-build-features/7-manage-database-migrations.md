@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/build-features/manage-database-migrations
+slug: /developer-guide/manage-database-migrations
 sidebar_label: "Manage database migrations"
 sidebar_position: 7
 description: "Create and apply database schema changes"

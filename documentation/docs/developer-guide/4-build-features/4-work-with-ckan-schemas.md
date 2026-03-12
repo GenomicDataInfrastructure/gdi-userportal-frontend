@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/build-features/work-with-ckan-schemas
+slug: /developer-guide/work-with-ckan-schemas
 sidebar_label: "Work with CKAN schemas"
 sidebar_position: 4
 description: "Create and modify dataset schemas in CKAN"

@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/build-features/add-ui-component
+slug: /developer-guides/add-ui-component
 sidebar_label: "Add a new UI component"
 sidebar_position: 1
 description: "Create React components for the frontend"
@@ -14,23 +14,33 @@ SPDX-License-Identifier: CC-BY-4.0
 
 Create new React components in the Next.js frontend. GDI uses Next.js 14 with server and client components.
 
+In this guide  
+
+> [Component types in Next.js 14](#component-types-in-nextjs-14)  
+> [Create the component file](#create-the-component-file)  
+> [Add interactivity](#add-interactivity-if-needed)  
+> [Use the component](#use-the-component)  
+> [Styling with TailwindCSS](#styling-with-tailwindcss)  
+> [Test your component](#test-your-component)
+
+
 ## Component types in Next.js 14
 
-### Server components (default)
-- Render on the server
-- Can directly access databases and APIs
-- Better performance, smaller bundle sizes
-- Cannot use browser APIs or React hooks like useState
+Next.js 14 supports two types of components:
 
-### Client components
-- Marked with `'use client'` directive
-- Can use interactivity and React hooks
-- Access to browser APIs
-- Run in both server and client
+- **Server components (default)**
+    - Render on the server
+    - Can directly access databases and APIs
+    - Better performance, smaller bundle sizes
+    - Cannot use browser APIs or React hooks like useState
 
-## Creating a component
+- **Client components**
+    - Marked with `'use client'` directive
+    - Can use interactivity and React hooks
+    - Access to browser APIs
+    - Run in both server and client
 
-### Step 1: Create the component file
+## Create the component file
 
 Create a new file in `/components`:
 
@@ -53,7 +63,7 @@ export function DatasetCard({ title, description, publisher }: DatasetCardProps)
 }
 ```
 
-### Step 2: Add interactivity (if needed)
+## Add interactivity (if needed)
 
 For interactive features, use `'use client'`:
 
@@ -74,7 +84,7 @@ export function DatasetCard({ title, description }: DatasetCardProps) {
 }
 ```
 
-### Step 3: Use the component
+## Use the component
 
 Import and use in a page or other component:
 
@@ -109,7 +119,7 @@ GDI uses Tailwind for styling. Common patterns:
 <button className={\`btn \${isActive ? 'bg-blue-500' : 'bg-gray-300'}\`}>
 ```
 
-## Testing your component
+## Test your component
 
 Create a test file:
 
@@ -131,9 +141,3 @@ Run tests:
 ```bash
 npm test
 ```
-
-## Next steps
-
-- Review existing components in `/components` for patterns
-- Check the design system in Storybook (if available)
-- See [Test frontend](../../5-test-your-changes/test-frontend/) for comprehensive testing

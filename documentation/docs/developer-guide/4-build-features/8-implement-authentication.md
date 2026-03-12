@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/build-features/implement-authentication
+slug: /developer-guide/implement-authentication
 sidebar_label: "Implement authentication"
 sidebar_position: 8
 description: "Work with OIDC flows and Keycloak integration"

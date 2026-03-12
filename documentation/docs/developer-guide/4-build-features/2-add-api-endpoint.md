@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/build-features/add-api-endpoint
+slug: /developer-guide/add-api-endpoint
 sidebar_label: "Add a new API endpoint"
 sidebar_position: 2
 description: "Extend backend services with new REST endpoints"
@@ -14,7 +14,13 @@ SPDX-License-Identifier: CC-BY-4.0
 
 Build REST endpoints in Quarkus backend services (DDS or AMS) using JAX-RS patterns.  
 
-## Step 1: Create the resource class
+In this guide  
+> [Create the resource class](#create-the-resource-class)  
+> [Implement the service](#implement-the-service)  
+> [Add OpenAPI documentation](#add-openapi-documentation)  
+> [Write tests](#write-tests)  
+
+## Create the resource class
 
 ```java
 @Path("/api/v1/example")
@@ -39,7 +45,7 @@ public class ExampleResource {
 }
 ```
 
-## Step 2: Implement the service
+## Implement the service
 
 ```java
 @ApplicationScoped
@@ -58,7 +64,7 @@ public class ExampleService {
 }
 ```
 
-## Step 3: Add OpenAPI documentation
+## Add OpenAPI documentation
 
 ```java
 @Tag(name = "Example", description = "Example operations")
@@ -74,7 +80,7 @@ public class ExampleResource {
 }
 ```
 
-## Step 4: Write tests
+## Write tests
 
 ```java
 @QuarkusTest

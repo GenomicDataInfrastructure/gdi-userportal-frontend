@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/build-features/add-metadata-fields
+slug: /developer-guide/add-metadata-fields
 sidebar_label: "Add metadata fields"
 sidebar_position: 3
 description: "Add new fields across CKAN, Solr, and services"
@@ -15,174 +15,182 @@ SPDX-License-Identifier: CC-BY-4.0
 
 Add, modify, or delete metadata fields across the CKAN ecosystem, including DCAT-AP schema updates, Solr search configuration, SeMPyRO, Discovery Service, and FAIR Data Point (FDP).
 
-## Table of Contents
-1. [CKAN DCAT Model](#ckan-dcat-model)
-2. [Solr Search Integration](#solr-search-integration)
-3. [FAIR Data Point](#fair-data-point)
-4. [SeMPyRO](#sempyro)
-5. [Discovery Service](#discovery-service)
-6. [General Improvements](#general-improvements)
+In this guide
 
-
----
+> [CKAN DCAT Model](#ckan-dcat-model)  
+> [Solr search integration](#solr-search-integration)  
+> [SeMPyRO](#sempyro)  
+> [FAIR Data Point (FDP)](#fair-data-point-fdp)  
+> [Discovery Service](#discovery-service)  
 
 ## CKAN DCAT Model
 
-When a schema change falls under DCAT-AP 3 or an earlier version of DCAT-AP but is not yet present, follow these steps:
+To add DCAT-AP fields missing from the upstream CKAN DCAT extension:
 
-
-1. **Fork and clone the repository:**
+1. Fork and clone the repository:
    ```bash
    git clone https://github.com/ckan/ckanext-dcat
    ```
-2. **Add the new field to the schema:**
-- Modify the schema file: `ckanext/dcat/schemas/dcat_ap_full.yaml`
-- Use appropriate field types (e.g., text, repeating subfield, URI).
-- Follow examples from other fields for consistency.
-For more information about scheming can be found [here](../ckan/scheming/_index.md)
 
-3. **Extend the existing mapping depending on the DCAT-AP version:**
-Modify the mapping files located in the directory: `ckanext/dcat/profiles`
-4. **Fix the corresponding unit tests:**
-5. **Create a pull request to the CKAN DCAT extension repository.**
-Ensure that you follow the contributing guidelines for CKAN:
-- Include unit tests for the new fields.
-- Ensure compatibility across different DCAT-AP versions.
-6. **Update the following repositories after a new release:**
-Update development and production Dockerfiles in these repositories( order is important):
-- https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-fairdatapoint
-- https://github.com/GenomicDataInfrastructure/gdi-userportal-ckan-docker
-Check if ckan locally works with the new added fields by harvesting an example FDP 
+2. Add the new field to the schema:
 
-### Example of new field ### 
-An example of a missing mapping in CKAN DCAT can be found here:  
-[Multi-valued field creator in CKAN DCAT](https://github.com/ckan/ckanext-dcat/pull/302).
+    - Modify the schema file: `ckanext/dcat/schemas/dcat_ap_full.yaml`
+    - Use appropriate field types (e.g., text, repeating subfield, URI).
+    - Follow examples from other fields for consistency.
 
-> **Note:** Always take into account the mapping from CKAN → DCAT in addition to DCAT → CKAN.
+    For more information about scheming, see: [here](../ckan/scheming/_index.md)
 
----
+3. Extend the existing mapping depending on the DCAT-AP version. Modify the mapping files located in the directory: `ckanext/dcat/profiles`.
 
-## Solr Search Integration
-If you're adding a new field in CKAN and you want it to be searchable via Solr, follow these steps to modify the `schema.xml` file.
+   :::tip Example
+   See [PR #302](https://github.com/ckan/ckanext-dcat/pull/302) for a practical example of how to implement mapping for multi-valued fields like `creator` in CKAN DCAT profiles.
+   :::
 
-### Steps to Add and Configure a Searchable Field
+4. Fix the corresponding unit tests.
 
-1. **Defining the Field Type and Name**  
-   In the top part of the `schema.xml` file, define the type and name of the new field. The type specifies how Solr will handle the data in the field (e.g., as `text`, `integers`, `dates`, etc.).
+5. Create a pull request to the CKAN DCAT extension repository. Ensure that you follow the contributing guidelines for CKAN:
+    - Include unit tests for the new fields.
+    - Ensure compatibility across different DCAT-AP versions.
 
-   - Navigate to the section in `schema.xml` where other fields are defined.
-   - Add your new field with its corresponding type.
+6. Update the following repositories after a new release. Update development and production Dockerfiles in these repositories( order is important):
 
-   Example:
+    - https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-fairdatapoint
+    - https://github.com/GenomicDataInfrastructure/gdi-userportal-ckan-docker
+    
+    Check if CKAN locally works with the new added fields by harvesting an example FDP. 
+
+
+:::info Note
+
+Always take into account the mapping from CKAN → DCAT in addition to DCAT → CKAN.
+
+:::
+
+## Solr search integration
+
+To make new CKAN fields searchable via Solr, modify the `schema.xml` file.
+
+To add and configure a searchable field:
+
+1. **Define the field type and name.** In the top part of the `schema.xml` file, define the type and name of the new field. The type specifies how Solr will handle the data in the field (e.g., as `text`, `integers`, `dates`, etc.).
+
+    Find the section in `schema.xml` where other fields are defined, and then add your new field with its corresponding type.
+
+    Example:
      ```xml
      <field name="custom_field" type="string" indexed="true" stored="true" />
      ```
-    Here, custom_field is the name of the field, and it's set as a string type. It is also indexed (which makes it searchable) and stored (so it can be returned in search results).
 
-2. **Adding the Field to Search**
-    In the lower part of the schema.xml file, you'll need to add this field to the list of fields that are searchable by Solr. This is typically done in a section that defines which fields are indexed for searches.
+    In this example, `custom_field` is the field name with `string` type. The `indexed="true"` attribute enables searching, while `stored="true"` allows retrieval in results.
+
+    :::note Indexing vs Storing
+
+    - **indexed="true"**: The field can be used in searches.
+    - **stored="true"**: The field can be retrieved in search results.
+
+    :::
+
+
+2. **Add the field to search.** Alternative text: In the lower part of the `schema.xml` file, add a `copyField` directive to include the new field in the search index. This allows Solr to use the contents of the new field when performing searches.
+
     Example:
      ```xml
      <copyField source="custom_field" dest="text" />
      ```
-    This example maps the custom_field to the text field, which Solr uses for full-text searches. By adding the copyField directive, you're instructing Solr to include the contents of custom_field in the search index
-3. **When finished. Release a new version and update**
-    When finished. Release a new version and update GitHub - GenomicDataInfrastructure/gdi-userportal-ckan-docker: Scripts and images to run CKAN using Docker Compose  in the development and production dockerfile 
+    This example maps the `custom_field` to the text field, which Solr uses for full-text searches. By adding the `copyField` directive, you're instructing Solr to include the contents of `custom_field` in the search index.
 
-#### Notes
+3. **Release a new version and update.** After modifying the `schema.xml` file, release a new version of the Solr configuration. Then, update the GenomicDataInfrastructure/gdi-userportal-ckan-docker repository to ensure that the new Solr configuration is used in both development and production environments when running CKAN with Docker Compose.
 
-##### Indexing vs Storing:
-- **indexed="true"**: The field can be used in searches.
-- **stored="true"**: The field can be retrieved in search results.
+4. **Test your configuration.** After making these changes, restart your Solr instance and reindex your CKAN data to ensure that the new field is indexed and searchable with the command: 
+    ```
+    ckan -c /etc/ckan/default/ckan.ini search-index rebuild
+    ```
 
-##### Testing the Configuration:
-After making these changes, you should restart your Solr instance and reindex your CKAN data to ensure that the new field is indexed and searchable with the command:
 
-```bash
-ckan -c /etc/ckan/default/ckan.ini search-index rebuild
-```
+## SeMPyRO
 
-## [SeMPyRO](https://github.com/Health-RI/SeMPyRO)
+[SeMPyRO](https://github.com/Health-RI/SeMPyRO) validates and transforms metadata between different semantic formats. To extend SeMPyRO with new fields, define the field's RDF properties in the appropriate Python class.
 
-### Prerequisites
-Fields are easy to add to SeMPyRO. You'll need to know a few things:
-- The **predicate** of the field
-- **Cardinality** (single or multiple-valued)
-- **Range** or datatype
+1. **Define field properties.** Before adding a field, identify these required properties:
+    - **Predicate** - The RDF term for the field
+    - **Cardinality** - Single or multiple-valued
+    - **Range** - The datatype or class
 
-### Adding a Field
-Once that's identified, go to the relevant class and add a property as follows. Here's an example of the `type` property of `HRI_Dataset`:
+2. **Add the field to the class.** Go to the relevant class and add a property definition. Example for the `type` property in `HRI_Dataset`:
 
-```python
-type: List[AnyHttpUrl] = Field(
-    default=None,
-    description="The nature or genre of the resource. HRI recommended",
-    rdf_term=DCTERMS.type,
-    rdf_type="uri")
-```
+    ```python
+    type: List[AnyHttpUrl] = Field(
+        default=None,
+        description="The nature or genre of the resource. HRI recommended",
+        rdf_term=DCTERMS.type,
+        rdf_type="uri")
+    ```
 
-At **Line 1**, we see `type`, which is the name of the property. Its range is an `AnyHttpUrl`, which is a helper for any URL. Other examples of this are `LiteralField` or sometimes even classes like `Agent` or `VCard`. It is multi-valued because it's in a `List`. If the maximum cardinality is one, it should not be in a `List`.
+    Each field is defined as a class property with the following structure: 
 
-At **Line 2**, `default=None` indicates the field is optional and by default undefined. Leave this line out for mandatory fields.
+    - **Line 1**: Property name and range. Use `List[]` for multi-valued fields (cardinality > 1). Common range types include `AnyHttpUrl`, `LiteralField`, or classes like `Agent` or `VCard`.
+    - **Line 2**: Set `default=None` for optional fields. Omit this line for mandatory fields.
+    - **Line 3**: Human-readable description of the field.
+    - **Line 4**: RDF predicate (e.g., `DCTERMS.type`). Common namespaces like `DCTERMS` and `DCAT` are imported by default. Define custom predicates with `URIRef("http://example.com/range#property")`.
+    - **Line 5**: RDF type such as `rdfs_literal`, `xsd:string`, or `uri`. Review other properties in the class for guidance.
 
-At **Line 3**, we have a human-readable description of the field.
+3. **Regenerate schemas.** Regenerate the JSON and YAML schemas. For the `HRIDataset` class:
 
-At **Line 4**, we define the predicate. In this case, it's `dcterms:type`. Some common namespaces, like `DCTERMS` and `DCAT`, are imported by default. A full URI can also be defined, for example with `URIRef("http://example.com/range#property")`.
+    ```bash
+    hatch run python sempyro/hri_dcat/hri_dataset
+    ```
 
-At **Line 5**, we define the RDF type. There are many possible values here, such as `rdfs_literal`, `xsd:string`, or `uri`. It's recommended to take a look at other properties to understand what is necessary here.
-
-Once this is done, the JSON and YAML schemas need to be re-generated. For the `HRIDataset` class, this can be done by running the following command:
-
-```bash
-hatch run python sempyro/hri_dcat/hri_dataset
-```
-
-## FAIR Data Point
+## FAIR Data Point (FDP)
 
 For the technical point of view, updating the appropriate **SHACL shapes** allows for adding of fields.
 
-### Steps to Add a Field in FDP:
+To add a field in FDP:
 
 1. In the FDP, log in as an admin user and go to the **Metadata schemas** option.
 2. Select the resource to update (e.g. **Catalog**).
 3. In the **Form Definition** textarea, add a new entry in the list of `sh:property` values. For example:
 
-```bash
-[
-  sh:path my:new-property ;      # the predicate IRI
-  sh:nodeKind sh:Literal ;       # the value type
-  sh:minCount 1 ;                # cardinality
-  dash:viewer dash:LiteralViewer ;  # UI hint for displaying
-  dash:editor dash:TextFieldEditor ; # UI hint for editing
-]
-```
+    ```bash
+    [
+    sh:path my:new-property ;      # the predicate IRI
+    sh:nodeKind sh:Literal ;       # the value type
+    sh:minCount 1 ;                # cardinality
+    dash:viewer dash:LiteralViewer ;  # UI hint for displaying
+    dash:editor dash:TextFieldEditor ; # UI hint for editing
+    ]
+    ```
+
 4. Click **Save** if this is a draft and needs further work, or **Save and release** if the work is done.
 5. Add a description and select a version number.
 6. Click **Release**.
 
 ## Discovery Service
 
-The **Dataset Discovery** service requires two parts to be updated: the **OpenAPI definitions** and the **mapping**.
+Update the Discovery Service to include the new field in both the OpenAPI definitions and the mapping between CKAN and the Discovery Service.
 
-### OpenAPI Definition
+1. **Update OpenAPI definition.** Include the new field in both the CKAN API and the Discovery Service API. Both files are located in the `src/main/openapi` folder:
 
-Two definitions need to be updated, both located in the `src/main/openapi` folder: 
-- **ckan.yaml**: This file contains the API returned by CKAN. Based on this YAML, Java classes are automatically generated corresponding to the API definition. For adding a field to a **Dataset**, the primary change will likely be in the **CkanPackage** definition. See the examples there on how to add a property.
-- **discovery.yaml**: This file defines what the Discovery service should return. You can make this definition whatever you want it to be—it does not have to correspond one-to-one with CKAN. To add a property here, modify the **RetrievedDataset** definition. Again, see the examples in the file.
+    - **`ckan.yaml`:** Contains the API returned by CKAN. Based on this YAML, Java classes are automatically generated corresponding to the API definition. For adding a field to a **Dataset**, the primary change will likely be in the **CkanPackage** definition. See the examples there on how to add a property.
+    - **`discovery.yaml`:** Defines what the Discovery service should return. You can make this definition whatever you want it to be—it does not have to correspond one-to-one with CKAN. To add a property here, modify the **RetrievedDataset** definition. Again, see the examples in the file.
 
-### Mapping
+2. **Update the mapping**. Run the following command to regenerate the Java classes based on the OpenAPI definitions:
 
+    ```bash
+    mvn clean compile
+    ```
 
+    :::info Expected errors
+    This command regenerates the classes reflecting the OpenAPI objects. Compilation errors are expected until the mapping is completed in the next step.
+    :::
 
-Once you have changed the definitions, follow these steps:
-1. Run the following command:
+3. **Add the mapping between the CKAN and Discovery service fields.** 
 
-```bash
-mvn clean compile
-```
+    - Modify the `RetrievedDatasetBuilder` in `src/main/java/io/github/genomicdatainfrastructure/discovery/utils/PackageShowMapper.java`. 
+    - Review existing field mappings in this file for implementation patterns.
 
-The command will probably generate a bunch of errors, but will regenerate the classes reflecting the OpenAPI objects
+4. **Update test cases.** 
 
-2. Add the mapping between the CKAN and Discovery service fields. The main place you want to look is most likely `src/main/java/io/github/genomicdatainfrastructure/discovery/utils/PackageShowMapper.java`, and modify the `RetrievedDatasetBuilder` See the code there on examples on how to map fields.
-3. Update test cases, they are found in `src/test/java/io/github/genomicdatainfrastructure/discovery/services/PackageShowMapperTest.java`. Make sure to update 1. empty dataset examples 2. filled examples. You'll need to update both the `CkanPackage` objects (which reflects the CKAN API output) as well as the expected output, which is in the form of a `RetrievedDataset`.
-4. Finally, test using both automatic testing `mvn test`, as well as run the package (`mvn compile quarkus:dev`) and check with Postman if mapping and output is as expected.
+    - Update the test cases in `src/test/java/io/github/genomicdatainfrastructure/discovery/services/PackageShowMapperTest.java`. 
+    - Update both empty and filled dataset examples, ensuring that both the `CkanPackage` objects (representing CKAN API output) and the expected `RetrievedDataset` output reflect the new fields.
+
+5. **Verify the implementation** with automated testing (`mvn test`) and manual testing. Run the application (`mvn compile quarkus:dev`) and use Postman to confirm that the mapping and output match expectations.

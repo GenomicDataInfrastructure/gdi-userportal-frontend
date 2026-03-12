@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { jest } from "@jest/globals";
-import { canonicalDiscoveryRdf } from "@/app/api/discovery/__tests__/fixtures";
+import { canonicalDiscoveryRdf } from "@/app/api/discovery/test-utils/fixtures";
 import { DcatHarvesterService } from "@/app/api/discovery/harvester/dcat-harvester-service";
 
 describe("DcatHarvesterService", () => {

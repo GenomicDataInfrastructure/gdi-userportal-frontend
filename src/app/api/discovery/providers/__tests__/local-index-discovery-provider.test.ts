@@ -7,7 +7,7 @@ import {
   LocalDiscoveryDataset,
   LocalDiscoverySearchResult,
 } from "@/app/api/discovery/local-store/types";
-import { buildLocalDiscoveryDataset } from "@/app/api/discovery/__tests__/fixtures";
+import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtures";
 
 const mockStore = {
   key: "elasticsearch",

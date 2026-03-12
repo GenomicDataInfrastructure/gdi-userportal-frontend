@@ -8,7 +8,7 @@ import {
   buildSearchBody,
   createIndexMappings,
 } from "@/app/api/discovery/local-store/elasticsearch/queries";
-import { buildLocalDiscoveryDataset } from "@/app/api/discovery/__tests__/fixtures";
+import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtures";
 
 const canonicalDataset = buildLocalDiscoveryDataset({
   id: "1",

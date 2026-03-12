@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { jest } from "@jest/globals";
-import { buildDdsSearchedDataset } from "@/app/api/discovery/__tests__/fixtures";
+import { buildDdsSearchedDataset } from "@/app/api/discovery/test-utils/fixtures";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 
 const mockCreateHeaders = jest.fn<() => Promise<Record<string, string>>>();

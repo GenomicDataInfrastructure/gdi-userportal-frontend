@@ -6,7 +6,7 @@ import {
   mapGetDocumentResponse,
   mapSearchResponse,
 } from "@/app/api/discovery/local-store/elasticsearch/mappers";
-import { buildLocalDiscoveryDataset } from "@/app/api/discovery/__tests__/fixtures";
+import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtures";
 
 const canonicalSource = buildLocalDiscoveryDataset({
   id: "id-a",

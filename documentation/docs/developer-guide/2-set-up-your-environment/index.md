@@ -12,7 +12,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Set up your environment
 
-Configure your local development environment for the GDI platform components
+Configure your local development environment for the GDI platform components. If you're new to GDI, start with [Platform overview](../1-get-started/platform-overview/), then return here to set up the services you want to work on.
 
 ## Quick start options
 

@@ -1,8 +1,0 @@
-{
-  "label": "Understand the codebase",
-  "position": 4,
-  "link": {
-    "type": "generated-index",
-    "description": "Explore the architecture and structure of the GDI platform components."
-  }
-}

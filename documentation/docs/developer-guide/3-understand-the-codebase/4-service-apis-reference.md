@@ -1,13 +1,16 @@
 ---
-slug: /developer-guide/understand-the-codebase/review-api-contracts
-sidebar_label: "Review API contracts"
+slug: /developer-guide/service-apis-reference
+sidebar_label: "Service APIs reference"
 sidebar_position: 4
+description: "Reference REST endpoints, authentication, and response formats"
 ---
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
 SPDX-License-Identifier: CC-BY-4.0
 -->
+
+# Service APIs reference
 
 The GDI platform services communicate via REST APIs. Each service exposes OpenAPI specifications documenting available endpoints.
 
@@ -85,5 +88,5 @@ curl "http://localhost:8080/api/v1/datasets/123"
 ## Next steps
 
 - Browse OpenAPI documentation for detailed schemas
-- Try [Add a new API endpoint](../../4-build-features/add-a-new-api-endpoint/)
-- Review [integrate external APIs](../../4-build-features/integrate-external-apis/)
+- Try [Add a new API endpoint](../4-build-features/add-a-new-api-endpoint/)
+- Review [integrate external APIs](../4-build-features/integrate-external-apis/)

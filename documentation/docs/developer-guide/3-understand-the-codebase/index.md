@@ -9,29 +9,20 @@ SPDX-FileCopyrightText: 2024 PNED G.I.E.
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
-This section helps you navigate the GDI codebase and understand architectural patterns used across different components.
+# Understand the codebase
 
-## What's in this section
+Learn how each component is architected internally—from folder structures to design patterns—so you can navigate the code confidently and make changes effectively.
 
-- **[Explore frontend architecture](./explore-frontend-architecture/)**: Next.js structure, routing, components, and state management
-- **[Explore backend architecture](./explore-backend-architecture/)**: Quarkus patterns, REST APIs, and data access
-- **[Explore CKAN architecture](./explore-ckan-architecture/)**: CKAN plugins, extensions, and database structure
-- **[Review API contracts](./review-api-contracts/)**: OpenAPI specifications and service communication
+If you're new to GDI, start with [Platform overview](../1-get-started/platform-overview/), then return here to dive into individual components.
 
-## Understanding architectural patterns
+Each guide in this section explains:
+- **Project structure**: Where different types of code live
+- **Architectural patterns**: Design principles and conventions used
+- **Key concepts**: Important abstractions and workflows
+- **Integration points**: How the component interacts with others
 
-The GDI platform follows modern architectural principles:
+## What would you like to do?
 
-- **Microservices**: Each service has a single responsibility
-- **REST APIs**: Services communicate via HTTP/JSON
-- **Authentication**: Centralized through Keycloak (OIDC/PKCE)
-- **Data persistence**: PostgreSQL for structured data, Solr for search
-- **Containerization**: All services run in Docker containers
+import DocCardList from '@theme/DocCardList';
 
-## Code organisation principles
-
-Across all repositories:
-- **Test-driven development**: Unit and integration tests
-- **Type safety**: TypeScript (frontend), Java strong typing (backend), Python type hints (CKAN)
-- **Code style**: Enforced via linters and formatters
-- **Documentation**: Inline comments and OpenAPI specs
+<DocCardList />

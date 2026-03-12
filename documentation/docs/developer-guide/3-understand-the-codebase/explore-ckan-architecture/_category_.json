@@ -1,8 +1,0 @@
-{
-  "label": "Explore CKAN architecture",
-  "position": 3,
-  "link": {
-    "type": "generated-index",
-    "description": "Understand the CKAN data catalogue architecture and database structure."
-  }
-}

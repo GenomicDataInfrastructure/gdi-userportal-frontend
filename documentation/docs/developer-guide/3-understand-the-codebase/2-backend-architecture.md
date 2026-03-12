@@ -1,13 +1,16 @@
 ---
-slug: /developer-guide/understand-the-codebase/explore-backend-architecture
-sidebar_label: "Explore backend architecture"
+slug: /developer-guide/backend-architecture
+sidebar_label: "Backend architecture"
 sidebar_position: 2
+description: "Explore Quarkus, hexagonal architecture, and REST API design"
 ---
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
 SPDX-License-Identifier: CC-BY-4.0
 -->
+
+# Backend architecture
 
 The backend services (DDS and AMS) are built with Quarkus, a Kubernetes-native Java framework optimised for fast startup and low memory usage.
 
@@ -52,8 +55,3 @@ gdi-userportal-{service}/
 - Flyway for database migrations
 - Transactional boundaries with `@Transactional`
 
-## Next steps
-
-- Study REST endpoints in `/api` package
-- Review service layer patterns
-- Try [Add a new API endpoint](../../4-build-features/add-a-new-api-endpoint/)

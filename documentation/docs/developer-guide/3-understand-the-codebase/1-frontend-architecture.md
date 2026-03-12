@@ -1,13 +1,16 @@
 ---
-slug: /developer-guide/understand-the-codebase/explore-frontend-architecture
-sidebar_label: "Explore frontend architecture"
+slug: /developer-guide/frontend-architecture
+sidebar_label: "Frontend architecture"
 sidebar_position: 1
+description: "Explore Next.js architecture, routing, and state management"
 ---
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
 SPDX-License-Identifier: CC-BY-4.0
 -->
+
+# Frontend architecture
 
 The GDI frontend is built with Next.js 14 using the App Router pattern and TypeScript for type safety.
 
@@ -37,6 +40,8 @@ gdi-userportal-frontend/
 
 ## Key patterns
 
+Intro sentence: The frontend codebase 
+
 ### Server and client components
 - Server components (default): Render on server, better performance
 - Client components (`'use client'`): For interactivity, state, browser APIs
@@ -59,9 +64,3 @@ gdi-userportal-frontend/
 - OIDC flow with Keycloak
 - PKCE implementation for security
 - Protected routes with middleware
-
-## Next steps
-
-- Review component library in `/components`
-- Study API client patterns in `/lib/api`
-- Try [Add a new UI component](../../4-build-features/add-a-new-ui-component/)

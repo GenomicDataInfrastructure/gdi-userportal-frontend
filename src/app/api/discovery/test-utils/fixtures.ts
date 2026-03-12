@@ -51,7 +51,9 @@ export const buildLocalDiscoveryDataset = (
   title: "Dataset A",
   description: "desc-a",
   catalogue: "catalogue-a",
-  languages: ["http://publications.europa.eu/resource/authority/language/ENG"],
+  languages: [
+    "http://publications.europa.eu/resource/authority/language/ENG", // NOSONAR
+  ],
   createdAt: "2024-01-01T00:00:00.000Z",
   modifiedAt: "2024-03-10T00:00:00.000Z",
   version: "1.0.0",
@@ -61,7 +63,7 @@ export const buildLocalDiscoveryDataset = (
   spatialResolutionInMeters: [4],
   spatialCoverage: [
     {
-      uri: "http://publications.europa.eu/resource/authority/country/LUX",
+      uri: "http://publications.europa.eu/resource/authority/country/LUX", // NOSONAR
       text: "Luxembourg",
     },
   ],

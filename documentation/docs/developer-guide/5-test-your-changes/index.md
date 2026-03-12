@@ -2,6 +2,7 @@
 slug: /developer-guide/test-your-changes
 sidebar_label: "Test your changes"
 sidebar_position: 6
+description: Test all code across frontend, backend, CKAN, and integration layers
 ---
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.

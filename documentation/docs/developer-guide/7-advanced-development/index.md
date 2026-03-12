@@ -2,6 +2,7 @@
 slug: /developer-guide/advanced-development
 sidebar_label: "Advanced development"
 sidebar_position: 8
+description: Optimize performance, apply security, add observability, create plugins
 ---
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.

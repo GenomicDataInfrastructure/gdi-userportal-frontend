@@ -2,6 +2,7 @@
 slug: /developer-guide/contribute-your-code
 sidebar_label: "Contribute your code"
 sidebar_position: 7
+description: Contribute code with Git workflow, code review, and release processes
 ---
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.

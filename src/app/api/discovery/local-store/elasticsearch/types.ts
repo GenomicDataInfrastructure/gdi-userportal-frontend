@@ -2,49 +2,16 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-export interface ElasticsearchSearchHit {
-  _id: string;
-  _source?: {
-    id?: string;
-    identifier?: string;
-    title?: string;
-    description?: string;
-    catalogue?: string;
-    languages?: string[];
-    createdAt?: string;
-    modifiedAt?: string;
-    version?: string;
-    hasVersions?: Array<{ value: string; label: string }>;
-    versionNotes?: string;
-    populationCoverage?: string;
-    spatialCoverage?: Array<{ uri?: string; text?: string }>;
-  };
-}
+import {
+  LocalDiscoveryDataset,
+  StoredDocumentResponse,
+  StoredDocumentSearchResponse,
+} from "@/app/api/discovery/local-store/types";
 
-export interface ElasticsearchSearchResponse {
-  hits?: {
-    total?: {
-      value?: number;
-    };
-    hits?: ElasticsearchSearchHit[];
-  };
-}
+export type SearchBackendSearchResponse = StoredDocumentSearchResponse<
+  Partial<LocalDiscoveryDataset>
+>;
 
-export interface ElasticsearchGetDocumentResponse {
-  _id: string;
-  _source?: {
-    id?: string;
-    identifier?: string;
-    title?: string;
-    description?: string;
-    catalogue?: string;
-    languages?: string[];
-    createdAt?: string;
-    modifiedAt?: string;
-    version?: string;
-    hasVersions?: Array<{ value: string; label: string }>;
-    versionNotes?: string;
-    populationCoverage?: string;
-    spatialCoverage?: Array<{ text?: string }>;
-  };
-}
+export type SearchBackendDocumentResponse = StoredDocumentResponse<
+  Partial<LocalDiscoveryDataset>
+>;

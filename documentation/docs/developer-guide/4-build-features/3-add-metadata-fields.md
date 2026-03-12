@@ -27,12 +27,12 @@ In this guide
 
 To add DCAT-AP fields missing from the upstream CKAN DCAT extension:
 
-1. Fork and clone the repository:
+1. **Fork and clone the repository:**
    ```bash
    git clone https://github.com/ckan/ckanext-dcat
    ```
 
-2. Add the new field to the schema:
+2. **Add the new field to the schema:**
 
     - Modify the schema file: `ckanext/dcat/schemas/dcat_ap_full.yaml`
     - Use appropriate field types (e.g., text, repeating subfield, URI).
@@ -40,19 +40,19 @@ To add DCAT-AP fields missing from the upstream CKAN DCAT extension:
 
     For more information about scheming, see: [here](../ckan/scheming/_index.md)
 
-3. Extend the existing mapping depending on the DCAT-AP version. Modify the mapping files located in the directory: `ckanext/dcat/profiles`.
+3. **Extend the existing mapping depending on the DCAT-AP version.** Modify the mapping files located in the directory: `ckanext/dcat/profiles`.
 
    :::tip Example
    See [PR #302](https://github.com/ckan/ckanext-dcat/pull/302) for a practical example of how to implement mapping for multi-valued fields like `creator` in CKAN DCAT profiles.
    :::
 
-4. Fix the corresponding unit tests.
+4. **Fix the corresponding unit tests.**
 
-5. Create a pull request to the CKAN DCAT extension repository. Ensure that you follow the contributing guidelines for CKAN:
+5. **Create a pull request to the CKAN DCAT extension repository.** Ensure that you follow the contributing guidelines for CKAN:
     - Include unit tests for the new fields.
     - Ensure compatibility across different DCAT-AP versions.
 
-6. Update the following repositories after a new release. Update development and production Dockerfiles in these repositories( order is important):
+6. **Update the following repositories after a new release.** Update development and production Dockerfiles in these repositories( order is important):
 
     - https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-fairdatapoint
     - https://github.com/GenomicDataInfrastructure/gdi-userportal-ckan-docker

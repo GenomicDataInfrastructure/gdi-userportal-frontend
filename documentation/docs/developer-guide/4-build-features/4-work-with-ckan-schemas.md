@@ -15,11 +15,19 @@ SPDX-License-Identifier: CC-BY-4.0
 
 Configure, replace, and maintain dataset schemas in CKAN with JSON or YAML format. 
 
-### Schema format and fields definitions
+In this guide  
 
-A CKAN schema can be difined either as JSON or YAML file. Civity keeps using .json schemas but in the official documentation there are a lot of yaml references as well.
+> [Schema format and fields](#schema-format-and-fields)  
+> [Change schema in a running CKAN instance](#change-schema-in-a-running-ckan-instance)  
+> [Declare multiple schemas](#declare-multiple-schemas)
 
-A field in CKAN schema .json file can be of the following format:
+
+
+## Schema format and fields 
+
+Define CKAN schemas as JSON or YAML files. Civity continues to use .json schemas, while the official documentation includes many YAML references.
+
+A field in a CKAN schema .json file uses the following format:
 
 ```java
 {
@@ -33,37 +41,53 @@ A field in CKAN schema .json file can be of the following format:
 }
 ```
 
-where
+where:
 
 * `field_name` is CKAN field id
 * `label` is UI field representation
-* `help_text` is a text appearing under a field in the UI next to `i` icon, square brackets are omitted and in this particular example contain information about how this field maps to DCAT-AP. More about these mapping and custom fields read [CKAN DB Structure and Fields Mapping Strategy](https://health-ri.atlassian.net/wiki/spaces/HD/pages/184811642/WIP+CKAN+DB+Structure+and+Fields+Mapping+Strategy).
+* `help_text` is text that appears beneath a field in the UI next to the `i` icon. Square brackets are omitted and in this particular example contain information about how this field maps to DCAT-AP. Read more about these mappings and custom fields in [CKAN DB Structure and Fields Mapping Strategy](https://health-ri.atlassian.net/wiki/spaces/HD/pages/184811642/WIP+CKAN+DB+Structure+and+Fields+Mapping+Strategy).
 
-Documentation on field keys and other schemas specifications can be found in the [CKAN GitHub official repository.](https://github.com/ckan/ckanext-scheming/tree/release-3.0.0#field-keys)
+    :::tip Schema documentation
 
-Other possible fields keys are:
+    Refer to the documentation for field keys and schema specifications: [CKAN GitHub official repository.](https://github.com/ckan/ckanext-scheming/tree/release-3.0.0#field-keys).
 
-* `repeating_subfields` - maybe useful to solve cardinality issue, not used by Civity.
-* `start_form_page` - not used by Civity, added recently, refers to stages on create dataset page and manages which field will appear on which stage.
-* `choices` - for a drop-down - a list of dictionaries with a value and label.
-* `choices_helper` - to form a drop-down dynamically or from an API. It is possible for example to point to another schema and take a field from there.
-* `presets` - values like `radio`, `multiple_checkbox`, `date` - to enable automatic checks and not to define snippets.
-* `form_snippet` - interacts with CKAN UI, defines a field representation (related to data input), if do not want to use presets or want to have more control. jinja2-based format.
-* `display_snippet` - also interacts with CKAN UI, defines how data are shown in the UI, e.g. showing an e-mail as "mail to" link etc.
-* `display_property` - useful if you need to override representation, e.g. in case you have mapping to DCAT, then:
+    :::
 
-```java
-- field_name: author
-  label: Author
-  display_property: dc:creator
-```
+Additional field keys include:
 
-* `validators` - to validate data. Available functions are listed in the [official documentation](https://docs.ckan.org/en/2.9/extensions/validators.html) and it is possible to add custom ones. By default there is almost no validation (ignore_missing (accepts if a value is missing) and unicode), if you are specifying a custom one - these two basic needs to be added explicitly. It is possible to write and configure a validation function of your own. To do so one needs to implement an extension where extend a `IValidators` interface so `get_validators()` method returns a custom validation function. See [validation functions documentation](https://docs.ckan.org/en/2.9/extensions/validators.html) for the reference.
-* `output_validators` - complex data structures if assigned to a field are converted to a string in the DB, this field defines a validator on extracting the field from the DB and re-converting to an object.
+* `repeating_subfields`: Defines repeating field groups within a dataset schema. May be useful for handling cardinality issues. Not currently used by Civity.
 
-### Changing schema in a running CKAN instance
+* `start_form_page`: Controls which multi-page form stage displays the field (recently added feature). Determines field placement across the dataset creation workflow stages. Not currently used by Civity.
 
-Schema used is defined in `setup_scheming.sh` by setting
+* `choices`: Defines static dropdown options as a list of dictionaries with `value` and `label` keys.
+
+* `choices_helper`: Generates dropdown options dynamically from an API or another schema field. For example, you can reference another schema and retrieve field values from it.
+
+* `presets`: Applies predefined field configurations such as `radio`, `multiple_checkbox`, or `date`. Enables automatic validation and rendering without defining custom snippets.
+
+* `form_snippet`: Defines custom field input rendering using Jinja2 templates. Interacts with CKAN UI to customize field representation for data input. Use when presets don't provide sufficient control.
+
+* `display_snippet`: Defines custom field display rendering using Jinja2 templates. Interacts with CKAN UI to control how stored values appear (e.g., rendering email addresses as clickable `mailto:` links).
+
+* `display_property`: Overrides the RDF property representation for the field. Useful when mapping CKAN fields to specific DCAT vocabulary terms. For example, mapping to DCAT:
+
+    ```java
+    - field_name: author
+    label: Author
+    display_property: dc:creator
+    ```
+
+* `validators`: Validates field data using CKAN's built-in validation functions (see the [complete list of available functions](https://docs.ckan.org/en/2.9/extensions/validators.html)). Custom validators can also be added. By default, minimal validation is applied: `ignore_missing` (accepts missing values) and `unicode` (text encoding). 
+    - **When defining custom validators**, explicitly include these default validators if needed. 
+    - **To create custom validation functions**, implement an extension with the `IValidators` interface that returns your validation function from the `get_validators()` method. 
+    
+    See the [validation functions documentation](https://docs.ckan.org/en/2.9/extensions/validators.html) for implementation details.
+
+* `output_validators`: Handles deserialization when retrieving fields from the database. Complex data structures assigned to a field are converted to strings when stored in the database. This property defines validators for extracting the field from the database and converting it back to its object representation.
+
+## Change schema in a running CKAN instance
+
+Define the schema in `setup_scheming.sh` by setting
 
 ```bash
 ckan config-tool $CKAN_INI -s app:main \
@@ -72,40 +96,40 @@ ckan config-tool $CKAN_INI -s app:main \
     "scheming.dataset_fallback = false"
 ```
 
-where `ckan config-tool` is a part of [CKAN Command Line Interface](https://docs.ckan.org/en/2.9/maintaining/cli.html#). For more info on usage `config-tool` review [documentation](https://docs.ckan.org/en/2.9/maintaining/cli.html#config-tool-tool-for-editing-options-in-a-ckan-config-file).
+where `ckan config-tool` forms part of the [CKAN Command Line Interface](https://docs.ckan.org/en/2.9/maintaining/cli.html#). Review the [documentation](https://docs.ckan.org/en/2.9/maintaining/cli.html#config-tool-tool-for-editing-options-in-a-ckan-config-file) for more information on `config-tool` usage.
 
-Therefore in a running docker container it is defined in a configuration file `srv/app/ckan.ini` in parameter `scheming.dataset_schemas` It should refer to an extension under `/src/` directory of `ckan-docker` repository.
+In a running Docker container, the configuration file `srv/app/ckan.ini` defines this in the `scheming.dataset_schemas` parameter. This should reference an extension under the `/src/` directory of the `ckan-docker` repository.
 
-To replace the schema run
+To replace the schema, run:
 
 ```bash
 docker exec -it ckan /bin/sh
 vi /srv/app/ckan.ini # change the schema
 ```
 
-A change of `ckan.ini` file triggers ckan update so changes will be applied almost immediately.
+Changing the `ckan.ini` file triggers a CKAN update, applying changes almost immediately.
 
-A schema should be defined in the following format: `<extension name with dashes replaced with dots>`:`<path to shema .json file>` the extension is expected to be cloned under `/ckan-docker/src`
+Define schemas in the following format: `<extension name with dashes replaced with dots>`:`<path to shema .json file>`. Clone the extension under `/ckan-docker/src`.
 
-e.g. the path from the example above (`ckanext.healthri:scheming/schemas/gdi_userportal.json`) resolves to the following:
+The path from the example above (`ckanext.healthri:scheming/schemas/gdi_userportal.json`) resolves to the following:
 
 ![Scheming](./scheming.png)
 
-### Multischeming declaration
+## Declare multiple schemas
 
-[IDatasetForm](https://docs.ckan.org/en/2.9/extensions/adding-custom-fields.html#) is an interface scheming is taking charge of to override schemas.
+Scheming uses the [IDatasetForm](https://docs.ckan.org/en/2.9/extensions/adding-custom-fields.html#) interface to override schemas.
 
-#### 1. In CKAN.ini file
+### In CKAN.ini file
 
-In `scheming.dataset_schemas` multiple (space-separated) values can be defined. Behaviour for CKAN core and CKAN Civity-extended differs in a way that for core CKAN if two schemas have the same `dataset_type` field, the system will pick up the latest. Civity improved this so two schemas of the same type are merged, the order of schemas specified in `scheming.dataset_schemas` will be reflected in order of fields in the CKAN UI.
+Define multiple (space-separated) values in `scheming.dataset_schemas`. CKAN core and Civity-extended CKAN differ in behaviour: core CKAN picks the latest schema when two share the same `dataset_type` field. Civity improves this by merging schemas of the same type, reflecting the order specified in `scheming.dataset_schemas` in the CKAN UI field order.
 
-Another ckan.ini parameter is `ckanext.scheming.overwrite_fields` defines rules for merging. If set to `true` and if schemas to merge have the same fields, definitions from the latest one will be prioritized. Fields are never deleted though, only can be added or modified. To delete a field you need to undeclared a field or set to empty explicitly. This behaviour is implemented as part of `ckanext-scheming/ckanext/scheming/plugins.py` (`_combine_schemas`)and documented on code level only.
+The `ckanext.scheming.overwrite_fields` parameter defines rules for merging. When set to `true`, and schemas to merge share fields, the system prioritises definitions from the latest schema. Fields are never deleted; they can only be added or modified. To delete a field, undeclare it or explicitly set it to empty. The system implements this behaviour in `ckanext-scheming/ckanext/scheming/plugins.py` (`_combine_schemas`) and documents it only at code level.
 
-#### 2. In a Multischeming declaration .json file
+### In a multischeming declaration .json file
 
-Initially it was implemented by Civity to allow an extension to have it's own schema which is merged into core schema.
+Civity initially implemented this to allow extensions to have their own schema merged into the core schema.
 
-For maintenance purposes instead of managing schemas in ckan.ini file it is possible to provide a .json config file under `ckanext-healthri/ckanext/healthri/scheming/schemas/` with a content like the following:
+For maintenance purposes, provide a .json config file under `ckanext-healthri/ckanext/healthri/scheming/schemas/` instead of managing schemas in the ckan.ini file, with content like the following:
 
 ```java
 [
@@ -121,7 +145,7 @@ For maintenance purposes instead of managing schemas in ckan.ini file it is poss
 ]
 ```
 
-This also allows to have several schemas at the same time, e.g.:
+This also allows several schemas simultaneously, e.g.:
 
 ```java
 [
@@ -145,7 +169,7 @@ This also allows to have several schemas at the same time, e.g.:
 ]
 ```
 
-In ckan.ini file a property `scheming.dataset_multi_schemas` with a path to the file with schemas should be added, e.g.:
+Add the `scheming.dataset_multi_schemas` property to the ckan.ini file with a path to the schemas file, e.g.:
 
 ```
 scheming.dataset_multi_schemas = ckanext.healthri:scheming/schemas/multi_schemas.json
@@ -153,7 +177,7 @@ scheming.dataset_multi_schemas = ckanext.healthri:scheming/schemas/multi_schemas
 
 [Civity documentation on multiple schemas configuration.](https://github.com/CivityNL/ckanext-scheming/tree/release-3.0.0-civity#configuration)
 
-It is possible to control which datasets are declared via API:
+Control which datasets are declared via the API:
 
 ```java
 GET http(s)://<ckan-host>/api/action/scheming_dataset_schema_list

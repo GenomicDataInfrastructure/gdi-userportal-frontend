@@ -72,7 +72,7 @@ export const mapDataset = (
       graph.getObjects(datasetSubject, DCAT_HAS_VERSION)
     ),
     versionNotes: extractVersionNotes(datasetSubject, graph),
-    recordsCount: extractNumericLiteral(
+    numberOfRecords: extractNumericLiteral(
       datasetSubject,
       graph,
       HEALTHDCATAP_NUMBER_OF_RECORDS
@@ -182,7 +182,7 @@ const extractNumericLiteral = (
 ): number | undefined => {
   const value = graph.getLiteral(datasetSubject, predicate);
   if (!value) return undefined;
-  const parsed = Number.parseFloat(value);
+  const parsed = Number.parseInt(value, 10);
   return Number.isNaN(parsed) ? undefined : parsed;
 };
 

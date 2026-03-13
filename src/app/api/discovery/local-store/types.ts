@@ -22,7 +22,7 @@ export interface LocalDiscoveryDataset {
   version?: string;
   hasVersions?: Array<{ value: string; label: string }>;
   versionNotes?: string[];
-  recordsCount?: number;
+  numberOfRecords?: number;
   numberOfUniqueIndividuals?: number;
   maxTypicalAge?: number;
   populationCoverage?: string;

@@ -43,7 +43,7 @@ describe("opensearch/queries", () => {
             },
           },
           versionNotes: { type: "text" },
-          recordsCount: { type: "integer" },
+          numberOfRecords: { type: "integer" },
           numberOfUniqueIndividuals: { type: "integer" },
           maxTypicalAge: { type: "integer" },
           populationCoverage: { type: "text" },

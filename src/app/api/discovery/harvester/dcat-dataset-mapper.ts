@@ -142,16 +142,16 @@ const getDatasetId = (
   return `dataset-${index + 1}`;
 };
 
-const normalizeDate = (value: string): string => {
-  if (!value) return "";
+const normalizeDate = (value: string): string | undefined => {
+  if (!value) return undefined;
   const trimmed = value.trim();
-  if (!trimmed) return "";
+  if (!trimmed) return undefined;
   try {
     const date = new Date(trimmed);
-    if (isNaN(date.getTime())) return "";
+    if (isNaN(date.getTime())) return undefined;
     return date.toISOString();
   } catch {
-    return "";
+    return undefined;
   }
 };
 

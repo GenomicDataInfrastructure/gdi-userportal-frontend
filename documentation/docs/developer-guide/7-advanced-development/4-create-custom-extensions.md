@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/advanced-development/create-custom-extensions
+slug: /developer-guide/create-custom-extensions
 sidebar_label: "Create custom extensions"
 sidebar_position: 4
 description: Create reusable CKAN extensions with plugin interfaces for custom logic

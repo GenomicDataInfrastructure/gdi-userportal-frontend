@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/contribute-your-code/request-code-review
+slug: /developer-guide/request-code-review
 sidebar_label: "Request code review"
 sidebar_position: 2
 description: Submit pull requests for review with description and testing checklist

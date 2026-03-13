@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/set-up-your-environment/run-full-stack
+slug: /developer-guide/run-full-stack
 sidebar_label: "Run full stack"
 sidebar_position: 4
 description: "Run all GDI platform services for full-stack local development"

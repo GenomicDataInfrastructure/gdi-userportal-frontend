@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/set-up-your-environment/set-up-ckan
+slug: /developer-guide/set-up-ckan
 sidebar_label: "Set up CKAN"
 sidebar_position: 3
 description: "Set up CKAN and extensions for local development"

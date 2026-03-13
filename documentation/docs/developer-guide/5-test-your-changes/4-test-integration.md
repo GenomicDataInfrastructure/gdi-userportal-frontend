@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/test-your-changes/test-integration
+slug: /developer-guide/test-integration
 sidebar_label: "Test integration"
 sidebar_position: 4
 description: Test workflows with Testcontainers and API contract tests cross-service

@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/test-your-changes/test-frontend
+slug: /developer-guide/test-frontend
 sidebar_label: "Test frontend"
 sidebar_position: 1
 description: Test React components with Jest, React Testing Library, and Playwright

@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/test-your-changes/test-backend
+slug: /developer-guide/test-backend
 sidebar_label: "Test backend"
 sidebar_position: 2
 description: Test Java services with JUnit 5, Quarkus extensions, and RestAssured

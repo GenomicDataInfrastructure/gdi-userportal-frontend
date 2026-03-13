@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/contribute-your-code/publish-a-release
+slug: /developer-guide/publish-a-release
 sidebar_label: "Publish a release"
 sidebar_position: 4
 description: Publish releases following version tags and GitHub release workflow steps

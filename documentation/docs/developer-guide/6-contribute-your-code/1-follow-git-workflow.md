@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/contribute-your-code/follow-git-workflow
+slug: /developer-guide/follow-git-workflow
 sidebar_label: "Follow Git workflow"
 sidebar_position: 1
 description: Follow Git branching strategy and commit conventions for contributions

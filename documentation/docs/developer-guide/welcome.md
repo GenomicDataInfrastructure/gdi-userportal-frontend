@@ -1,5 +1,5 @@
 ---
-slug: /welcome-developers
+slug: /developer-guide/welcome-developers
 sidebar_label: "Welcome"
 sidebar_position: 1
 description: "Welcome to GDI development!"

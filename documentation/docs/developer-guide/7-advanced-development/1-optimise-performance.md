@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/advanced-development/optimise-performance
+slug: /developer-guide/optimise-performance
 sidebar_label: "Optimise performance"
 sidebar_position: 1
 description: Profile and optimize frontend, backend, and CKAN application performance

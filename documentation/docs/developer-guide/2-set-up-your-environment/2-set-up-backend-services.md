@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/set-up-your-environment/set-up-backend-services
+slug: /developer-guide/set-up-backend-services
 sidebar_label: "Set up backend services"
 sidebar_position: 2
 description: "Set up Java/Quarkus services for local development"

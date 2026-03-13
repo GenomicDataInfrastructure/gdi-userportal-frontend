@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/advanced-development/apply-security-practices
+slug: /developer-guide/apply-security-practices
 sidebar_label: "Apply security practices"
 sidebar_position: 2
 description: Implement security best practices with OWASP guidelines and scanners

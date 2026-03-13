@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/test-your-changes/test-ckan
+slug: /developer-guide/test-ckan
 sidebar_label: "Test CKAN"
 sidebar_position: 3
 description: Test CKAN extensions with pytest framework and test helpers utilities

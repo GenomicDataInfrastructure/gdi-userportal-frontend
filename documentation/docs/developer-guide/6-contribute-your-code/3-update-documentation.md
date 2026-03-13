@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/contribute-your-code/update-documentation
+slug: /developer-guide/update-documentation
 sidebar_label: "Update documentation"
 sidebar_position: 3
 description: Keep documentation synchronized with code changes in comments and guides

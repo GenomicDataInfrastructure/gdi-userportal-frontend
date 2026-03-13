@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/advanced-development/implement-observability
+slug: /developer-guide/implement-observability
 sidebar_label: "Implement observability"
 sidebar_position: 3
 description: Add logging, metrics, and tracing to monitor application health in prod

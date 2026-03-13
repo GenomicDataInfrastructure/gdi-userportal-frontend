@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/get-started/explore-repository-structure
+slug: /developer-guide/repository-structure
 sidebar_label: "Repository structure"
 sidebar_position: 3
 description: "Navigate the GDI codebase effectively" 

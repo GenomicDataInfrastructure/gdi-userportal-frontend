@@ -1,5 +1,5 @@
 ---
-slug: /developer-guides/add-ui-component
+slug: /developer-guide/add-ui-component
 sidebar_label: "Add a new UI component"
 sidebar_position: 1
 description: "Create React components for the frontend"

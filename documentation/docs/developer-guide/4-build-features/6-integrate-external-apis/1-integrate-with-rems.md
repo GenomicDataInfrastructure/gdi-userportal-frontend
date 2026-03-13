@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/build-features/integrate-external-apis/integrate-with-rems
+slug: /developer-guide/integrate-with-rems
 sidebar_label: "Integrate with REMS"
 sidebar_position: 1
 description: Integrate Resource Entitlement Management System via API and OIDC auth

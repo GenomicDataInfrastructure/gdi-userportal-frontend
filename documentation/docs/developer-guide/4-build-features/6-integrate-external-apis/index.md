@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/build-features/integrate-external-apis
+slug: /developer-guide/integrate-external-apis
 sidebar_label: "Integrate external APIs"
 sidebar_position: 6
 description: Connect the GDI platform with external services and APIs

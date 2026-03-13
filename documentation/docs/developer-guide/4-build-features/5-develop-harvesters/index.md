@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/build-features/develop-harvesters
+slug: /developer-guide/develop-harvesters
 sidebar_label: "Develop harvesters"
 sidebar_position: 5
 description: Collect datasets from external sources with custom harvesters
@@ -14,7 +14,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 This section covers building custom harvesters to collect datasets from external sources into the CKAN catalogue.
 
-Harvesters automatically fetch metadata from remote sources and create/update datasets in CKAN. GDI uses harvesters for:
+Harvesters automatically fetch metadata from remote sources and create/update datasets in CKAN. GDI uses harvesters to collect datasets from:
 - DCAT-AP endpoints
 - FAIR Data Point instances
 - Other metadata repositories

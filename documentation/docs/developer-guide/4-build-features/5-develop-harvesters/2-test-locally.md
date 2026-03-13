@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/build-features/develop-harvesters/test-locally
+slug: /developer-guide/test-locally
 sidebar_label: "Test locally"
 sidebar_position: 2
 description: Set up local testing environment for DCAT harvesting
@@ -13,7 +13,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Test locally
 
-To test harvesting of DCAT in CKAN, it's easiest to set up a simple web server. If CKAN is run using the previously set-up docker-compose, it can be done with a few commands.
+To test harvesting of DCAT in CKAN, set up a simple web server. If CKAN is run using the previously set-up docker-compose, this can be done with a few commands.
 
 First load an nginx container to use as webserver. Replace `~/Development/xnatdcat/` by the folder you want to expose.
 
@@ -29,7 +29,7 @@ In ckan, as harvest source you can then set http://rdf:80/the_file.ttl
 
 To harvest data sources, CKAN looks at MIME types. Unfortunately nginx by default does not have the correct ones built-in. In Docker Desktop, go to the container, files, and add the following to /etc/nginx/conf.d/default.conf
 
-```java
+```nginx
    types {
       text/turtle ttl;
       application/rdf+xml rdf;

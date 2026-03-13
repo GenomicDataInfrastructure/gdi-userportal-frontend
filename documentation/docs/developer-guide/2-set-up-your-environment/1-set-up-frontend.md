@@ -1,5 +1,5 @@
 ---
-slug: /developer-guide/set-up-your-environment/set-up-frontend
+slug: /developer-guide/set-up-frontend
 sidebar_label: "Set up frontend"
 sidebar_position: 1
 description: "Set up the Next.js frontend for local development"

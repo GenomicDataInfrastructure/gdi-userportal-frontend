@@ -93,6 +93,9 @@ export interface DiscoveryDatasetBase {
   populationCoverage?: string;
   spatialCoverage?: DiscoverySpatialCoverage[];
   spatialResolutionInMeters?: number;
+  retentionPeriod?: DiscoveryTimeWindow[];
+  temporalResolution?: string;
+  frequency?: DiscoveryValueLabel;
 }
 
 export interface DiscoverySearchedDataset extends DiscoveryDatasetBase {

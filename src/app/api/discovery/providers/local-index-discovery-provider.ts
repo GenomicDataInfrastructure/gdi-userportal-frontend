@@ -71,6 +71,10 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
         bbox: sc.bbox,
         centroid: sc.centroid,
       })),
+      temporalCoverage: dataset.temporalCoverage,
+      retentionPeriod: dataset.retentionPeriod,
+      temporalResolution: dataset.temporalResolution,
+      frequency: dataset.frequency,
     };
   }
 

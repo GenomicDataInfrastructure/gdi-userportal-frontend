@@ -25,6 +25,10 @@ export interface LocalDiscoveryDataset {
   populationCoverage?: string;
   spatialCoverage?: SpatialCoverage[];
   spatialResolutionInMeters?: number[];
+  temporalCoverage?: { start?: string; end?: string };
+  retentionPeriod?: Array<{ start?: string; end?: string }>;
+  temporalResolution?: string;
+  frequency?: { value: string; label: string };
 }
 
 export interface StoredDocumentHit<TDocument> {

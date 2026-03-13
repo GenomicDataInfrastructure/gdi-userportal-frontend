@@ -131,7 +131,7 @@ export interface DiscoveryRetrievedDistribution {
   byteSize?: number;
   checksum?: string;
   checksumAlgorithm?: DiscoveryValueLabel;
-  compressionFormat?: string;
+  compressionFormat?: DiscoveryValueLabel;
   description: string;
   documentation?: string[];
   downloadUrl?: string;
@@ -141,7 +141,7 @@ export interface DiscoveryRetrievedDistribution {
   conformsTo?: DiscoveryValueLabel[];
   mediaType?: string;
   modifiedAt?: string;
-  packagingFormat?: string;
+  packagingFormat?: DiscoveryValueLabel;
   createdAt?: string;
   retentionPeriod?: DiscoveryTimeWindow[];
   rights?: string;

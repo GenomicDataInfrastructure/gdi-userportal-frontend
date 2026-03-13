@@ -4,7 +4,7 @@
 
 import axios from "axios";
 import { jest } from "@jest/globals";
-import { ElasticsearchDiscoveryStore } from "@/app/api/discovery/local-store/elasticsearch-store";
+import { OpenSearchDiscoveryStore } from "@/app/api/discovery/local-store/opensearch-store";
 
 const mockClient = {
   put: jest.fn<(_url: string, _body: unknown) => Promise<unknown>>(),
@@ -22,7 +22,7 @@ jest.mock("axios", () => ({
   },
 }));
 
-describe("ElasticsearchDiscoveryStore", () => {
+describe("OpenSearchDiscoveryStore", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockClient.put.mockResolvedValue({});
@@ -31,7 +31,7 @@ describe("ElasticsearchDiscoveryStore", () => {
   });
 
   const createStore = () =>
-    new ElasticsearchDiscoveryStore({
+    new OpenSearchDiscoveryStore({
       baseUrl: "https://localhost:9200",
       indexName: "discovery_datasets",
       username: "elastic",
@@ -108,6 +108,49 @@ describe("ElasticsearchDiscoveryStore", () => {
     expect(result.results[0].id).toBe("x");
   });
 
+  test("searchDatasets surfaces OpenSearch error details", async () => {
+    const store = createStore();
+    mockClient.post.mockRejectedValueOnce({
+      isAxiosError: true,
+      message: "Request failed with status code 400",
+      response: {
+        status: 400,
+        data: {
+          error: {
+            type: "query_shard_exception",
+            reason: "phrase prefix requires text field",
+          },
+        },
+      },
+    });
+
+    await expect(store.searchDatasets({ query: "adminis" })).rejects.toThrow(
+      'OpenSearch search request failed (400): {"type":"query_shard_exception","reason":"phrase prefix requires text field"}'
+    );
+  });
+
+  test("searchDatasets falls back to axios message when no response reason exists", async () => {
+    const store = createStore();
+    mockClient.post.mockRejectedValueOnce({
+      isAxiosError: true,
+      message: "Request failed with status code 429",
+      response: { status: 429, data: "too many requests" },
+    });
+
+    await expect(store.searchDatasets({ query: "adminis" })).rejects.toThrow(
+      "OpenSearch search request failed (429): Request failed with status code 429"
+    );
+  });
+
+  test("searchDatasets falls back to non-axios error messages", async () => {
+    const store = createStore();
+    mockClient.post.mockRejectedValueOnce(new Error("socket closed"));
+
+    await expect(store.searchDatasets({ query: "adminis" })).rejects.toThrow(
+      "socket closed"
+    );
+  });
+
   test("retrieveDataset returns null on 404", async () => {
     const store = createStore();
     mockClient.get.mockRejectedValueOnce({
@@ -131,6 +174,22 @@ describe("ElasticsearchDiscoveryStore", () => {
     });
   });
 
+  test("retrieveDataset returns mapped document", async () => {
+    const store = createStore();
+    mockClient.get.mockResolvedValueOnce({
+      data: {
+        _id: "dataset-1",
+        _source: { title: "Dataset 1", description: "Desc" },
+      },
+    });
+
+    await expect(store.retrieveDataset("dataset-1")).resolves.toEqual({
+      id: "dataset-1",
+      title: "Dataset 1",
+      description: "Desc",
+    });
+  });
+
   test("upsertDatasets no-op on empty input", async () => {
     const store = createStore();
     await store.upsertDatasets([]);
@@ -142,7 +201,7 @@ describe("ElasticsearchDiscoveryStore", () => {
     );
   });
 
-  test("upsertDatasets sends bulk request and throws when ES reports errors", async () => {
+  test("upsertDatasets sends bulk request and throws when OpenSearch reports errors", async () => {
     const store = createStore();
     mockClient.post.mockResolvedValueOnce({ data: { errors: false } });
 
@@ -153,7 +212,7 @@ describe("ElasticsearchDiscoveryStore", () => {
     mockClient.post.mockResolvedValueOnce({ data: { errors: true } });
     await expect(
       store.upsertDatasets([{ id: "2", title: "B", description: "E" }])
-    ).rejects.toThrow("Elasticsearch bulk upsert reported item-level errors");
+    ).rejects.toThrow("OpenSearch bulk upsert reported item-level errors");
   });
 
   test("constructor passes auth and tls options to axios.create", () => {
@@ -163,6 +222,21 @@ describe("ElasticsearchDiscoveryStore", () => {
       expect.objectContaining({
         baseURL: "https://localhost:9200",
         auth: { username: "elastic", password: "secret" },
+      })
+    );
+  });
+
+  test("constructor sets ApiKey header when provided", () => {
+    new OpenSearchDiscoveryStore({
+      baseUrl: "https://localhost:9200",
+      indexName: "discovery_datasets",
+      apiKey: "abc123",
+    });
+
+    expect((axios as any).create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        headers: { Authorization: "ApiKey abc123" },
+        auth: undefined,
       })
     );
   });

@@ -2,6 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import {
+  formatErrorDetails,
+  wrapError,
+} from "@/app/api/discovery/harvester/error-utils";
+
 type OidcTokenResponse = {
   access_token: string;
   expires_in?: number;
@@ -49,17 +54,25 @@ export class OidcAuthService {
     body.set("client_id", clientId);
     body.set("client_secret", clientSecret);
 
-    const response = await fetch(tokenUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: body.toString(),
-    });
+    let response: Response;
+    try {
+      response = await fetch(tokenUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: body.toString(),
+      });
+    } catch (error) {
+      throw wrapError(
+        `Failed to retrieve OIDC access token from ${tokenUrl}: ${formatErrorDetails(error)}`,
+        error
+      );
+    }
 
     if (!response.ok) {
       throw new Error(
-        `Failed to retrieve OIDC access token (${response.status} ${response.statusText})`
+        `Failed to retrieve OIDC access token from ${tokenUrl} (${response.status} ${response.statusText})`
       );
     }
 

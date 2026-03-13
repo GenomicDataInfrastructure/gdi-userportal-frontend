@@ -399,7 +399,104 @@ describe("DcatHarvesterService", () => {
     await expect(
       service.harvestFromUrl("https://example.org/catalogue.rdf")
     ).rejects.toThrow(
-      "Failed to fetch DCAT catalogue (500 Internal Server Error)"
+      "Failed to fetch DCAT catalogue from https://example.org/catalogue.rdf (500 Internal Server Error)"
     );
+  });
+
+  test("harvestFromUrl includes non-Error failure details", async () => {
+    const fetcher =
+      jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
+    fetcher.mockRejectedValueOnce("socket closed");
+
+    const service = new DcatHarvesterService(fetcher);
+
+    await expect(
+      service.harvestFromUrl("https://example.org/catalogue.rdf")
+    ).rejects.toThrow(
+      "Failed to download DCAT catalogue from https://example.org/catalogue.rdf: socket closed"
+    );
+  });
+
+  test("harvestFromUrl includes response body read failures", async () => {
+    const fetcher =
+      jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
+    const cause = Object.assign(new Error("socket hang up"), {
+      code: "ECONNRESET",
+      host: "example.org",
+      port: 443,
+    });
+    const error = new Error("failed to consume response body");
+    (error as Error & { cause?: Error }).cause = cause;
+    fetcher.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      statusText: "OK",
+      text: async () => {
+        throw error;
+      },
+    } as unknown as Response);
+
+    const service = new DcatHarvesterService(fetcher);
+
+    await expect(
+      service.harvestFromUrl("https://example.org/catalogue.rdf")
+    ).rejects.toThrow(
+      "Failed to read DCAT catalogue response body from https://example.org/catalogue.rdf: failed to consume response body | cause: socket hang up (code=ECONNRESET, host=example.org, port=443)"
+    );
+  });
+
+  test("harvestFromUrl includes RDF parse failures", async () => {
+    const fetcher =
+      jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
+    fetcher.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      statusText: "OK",
+      text: async () => "<rdf />",
+    } as Response);
+
+    const service = new DcatHarvesterService(fetcher);
+    jest
+      .spyOn(service, "parseDatasetsFromRdf")
+      .mockRejectedValueOnce(new Error("invalid RDF payload"));
+
+    await expect(
+      service.harvestFromUrl("https://example.org/catalogue.rdf")
+    ).rejects.toThrow(
+      "Failed to parse RDF/XML from https://example.org/catalogue.rdf: invalid RDF payload"
+    );
+  });
+
+  test("normalizes dates to empty strings when Date construction throws", async () => {
+    const service = new DcatHarvesterService();
+    const RealDate = Date;
+    const throwingDate = class extends RealDate {
+      constructor(value?: string | number | Date) {
+        if (value === "2020-01-02") {
+          throw new Error("date constructor failed");
+        }
+        super(value as never);
+      }
+    } as DateConstructor;
+    global.Date = throwingDate;
+
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:issued>2020-01-02</dct:issued>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    try {
+      const datasets = await service.parseDatasetsFromRdf(rdf);
+      expect(datasets[0]).toMatchObject({ createdAt: "" });
+    } finally {
+      global.Date = RealDate;
+    }
   });
 });

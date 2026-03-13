@@ -165,4 +165,60 @@ describe("local-index APIs", () => {
     expect(mockUpsertLocalDiscoveryDatasets).toHaveBeenCalledWith(harvested);
     expect(count).toBe(2);
   });
+
+  test("harvestLocalIndexFromDcatUrlApi wraps authorization failures", async () => {
+    mockGetAuthorizationHeaderIfConfigured.mockRejectedValueOnce(
+      new Error("token lookup failed")
+    );
+
+    await expect(
+      harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf")
+    ).rejects.toThrow(
+      "Failed to prepare authorization for harvesting https://example.org/catalogue.rdf: token lookup failed"
+    );
+  });
+
+  test("harvestLocalIndexFromDcatUrlApi wraps harvest failures", async () => {
+    mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
+    mockHarvestFromUrl.mockRejectedValueOnce(new Error("download failed"));
+
+    await expect(
+      harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf")
+    ).rejects.toThrow(
+      "Failed to harvest datasets from https://example.org/catalogue.rdf: download failed"
+    );
+  });
+
+  test("harvestLocalIndexFromDcatUrlApi wraps clear failures", async () => {
+    mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
+    mockHarvestFromUrl.mockResolvedValueOnce([
+      { id: "d1", title: "Dataset 1" },
+    ]);
+    mockClearLocalDiscoveryDatasets.mockRejectedValueOnce(
+      new Error("clear failed")
+    );
+
+    await expect(
+      harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf")
+    ).rejects.toThrow(
+      "Failed to clear the local discovery index before importing https://example.org/catalogue.rdf: clear failed"
+    );
+  });
+
+  test("harvestLocalIndexFromDcatUrlApi wraps indexing failures", async () => {
+    mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
+    mockHarvestFromUrl.mockResolvedValueOnce([
+      { id: "d1", title: "Dataset 1" },
+      { id: "d2", title: "Dataset 2" },
+    ]);
+    mockUpsertLocalDiscoveryDatasets.mockRejectedValueOnce(
+      new Error("bulk failed")
+    );
+
+    await expect(
+      harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf")
+    ).rejects.toThrow(
+      "Failed to index 2 harvested datasets from https://example.org/catalogue.rdf: bulk failed"
+    );
+  });
 });

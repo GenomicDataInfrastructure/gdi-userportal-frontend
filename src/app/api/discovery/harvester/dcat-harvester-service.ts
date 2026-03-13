@@ -8,6 +8,10 @@ import {
   getFallbackCatalogue,
   mapDataset,
 } from "@/app/api/discovery/harvester/dcat-dataset-mapper";
+import {
+  formatErrorDetails,
+  wrapError,
+} from "@/app/api/discovery/harvester/error-utils";
 import { parseRdfXmlToQuads } from "@/app/api/discovery/harvester/rdf-quad-loader";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 
@@ -43,17 +47,42 @@ export class DcatHarvesterService {
     url: string,
     options: HarvestOptions = {}
   ): Promise<LocalDiscoveryDataset[]> {
-    const response = await this.fetcher(url, {
-      headers: options.headers,
-    });
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch DCAT catalogue (${response.status} ${response.statusText})`
+    let response: Response;
+    try {
+      response = await this.fetcher(url, {
+        headers: options.headers,
+      });
+    } catch (error) {
+      throw wrapError(
+        `Failed to download DCAT catalogue from ${url}: ${formatErrorDetails(error)}`,
+        error
       );
     }
 
-    const xmlText = await response.text();
-    return this.parseDatasetsFromRdf(xmlText, url);
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch DCAT catalogue from ${url} (${response.status} ${response.statusText})`
+      );
+    }
+
+    let xmlText: string;
+    try {
+      xmlText = await response.text();
+    } catch (error) {
+      throw wrapError(
+        `Failed to read DCAT catalogue response body from ${url}: ${formatErrorDetails(error)}`,
+        error
+      );
+    }
+
+    try {
+      return await this.parseDatasetsFromRdf(xmlText, url);
+    } catch (error) {
+      throw wrapError(
+        `Failed to parse RDF/XML from ${url}: ${formatErrorDetails(error)}`,
+        error
+      );
+    }
   }
 }
 

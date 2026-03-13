@@ -13,6 +13,7 @@ import {
 } from "@/app/api/discovery/local-store/factory";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import { dcatHarvesterService } from "@/app/api/discovery/harvester/dcat-harvester-service";
+import { wrapError } from "@/app/api/discovery/harvester/error-utils";
 import { oidcAuthService } from "@/app/api/discovery/harvester/oidc-auth.service";
 
 export const upsertLocalIndexDatasetsApi = async (
@@ -51,12 +52,45 @@ export const seedLocalIndexFromDdsApi = async (
 export const harvestLocalIndexFromDcatUrlApi = async (
   catalogueRdfUrl: string
 ): Promise<number> => {
-  const authHeaders =
-    await oidcAuthService.getAuthorizationHeaderIfConfigured();
-  const datasets = await dcatHarvesterService.harvestFromUrl(catalogueRdfUrl, {
-    headers: authHeaders,
-  });
-  await clearLocalDiscoveryDatasets();
-  await upsertLocalDiscoveryDatasets(datasets);
+  let authHeaders: Record<string, string>;
+  try {
+    authHeaders = await oidcAuthService.getAuthorizationHeaderIfConfigured();
+  } catch (error) {
+    throw wrapError(
+      `Failed to prepare authorization for harvesting ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`,
+      error
+    );
+  }
+
+  let datasets: LocalDiscoveryDataset[];
+  try {
+    datasets = await dcatHarvesterService.harvestFromUrl(catalogueRdfUrl, {
+      headers: authHeaders,
+    });
+  } catch (error) {
+    throw wrapError(
+      `Failed to harvest datasets from ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`,
+      error
+    );
+  }
+
+  try {
+    await clearLocalDiscoveryDatasets();
+  } catch (error) {
+    throw wrapError(
+      `Failed to clear the local discovery index before importing ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`,
+      error
+    );
+  }
+
+  try {
+    await upsertLocalDiscoveryDatasets(datasets);
+  } catch (error) {
+    throw wrapError(
+      `Failed to index ${datasets.length} harvested datasets from ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`,
+      error
+    );
+  }
+
   return datasets.length;
 };

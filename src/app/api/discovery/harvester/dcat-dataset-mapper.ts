@@ -12,7 +12,6 @@ import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 export const DCAT_DATASET = "http://www.w3.org/ns/dcat#Dataset";
 export const DCAT_CATALOG = "http://www.w3.org/ns/dcat#Catalog";
 
-/* eslint-disable @typescript-eslint/no-inferrable-types */
 // NOSONAR: These are RDF vocabulary URIs (identifiers, not network endpoints) and must use http as defined by their specifications.
 const DCAT_IN_CATALOG = "http://www.w3.org/ns/dcat#inCatalog"; // NOSONAR
 const DCT_IDENTIFIER = "http://purl.org/dc/terms/identifier"; // NOSONAR

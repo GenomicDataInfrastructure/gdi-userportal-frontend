@@ -13,6 +13,7 @@ import {
 } from "@/app/api/discovery/local-store/factory";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import { dcatHarvesterService } from "@/app/api/discovery/harvester/dcat-harvester-service";
+import { wrapError } from "@/app/api/discovery/harvester/error-utils";
 import { oidcAuthService } from "@/app/api/discovery/harvester/oidc-auth.service";
 
 export const upsertLocalIndexDatasetsApi = async (
@@ -55,8 +56,9 @@ export const harvestLocalIndexFromDcatUrlApi = async (
   try {
     authHeaders = await oidcAuthService.getAuthorizationHeaderIfConfigured();
   } catch (error) {
-    throw new Error(
-      `Failed to prepare authorization for harvesting ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`
+    throw wrapError(
+      `Failed to prepare authorization for harvesting ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`,
+      error
     );
   }
 
@@ -66,24 +68,27 @@ export const harvestLocalIndexFromDcatUrlApi = async (
       headers: authHeaders,
     });
   } catch (error) {
-    throw new Error(
-      `Failed to harvest datasets from ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`
+    throw wrapError(
+      `Failed to harvest datasets from ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`,
+      error
     );
   }
 
   try {
     await clearLocalDiscoveryDatasets();
   } catch (error) {
-    throw new Error(
-      `Failed to clear the local discovery index before importing ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`
+    throw wrapError(
+      `Failed to clear the local discovery index before importing ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`,
+      error
     );
   }
 
   try {
     await upsertLocalDiscoveryDatasets(datasets);
   } catch (error) {
-    throw new Error(
-      `Failed to index ${datasets.length} harvested datasets from ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`
+    throw wrapError(
+      `Failed to index ${datasets.length} harvested datasets from ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`,
+      error
     );
   }
 

@@ -129,6 +129,28 @@ describe("OpenSearchDiscoveryStore", () => {
     );
   });
 
+  test("searchDatasets falls back to axios message when no response reason exists", async () => {
+    const store = createStore();
+    mockClient.post.mockRejectedValueOnce({
+      isAxiosError: true,
+      message: "Request failed with status code 429",
+      response: { status: 429, data: "too many requests" },
+    });
+
+    await expect(store.searchDatasets({ query: "adminis" })).rejects.toThrow(
+      "OpenSearch search request failed (429): Request failed with status code 429"
+    );
+  });
+
+  test("searchDatasets falls back to non-axios error messages", async () => {
+    const store = createStore();
+    mockClient.post.mockRejectedValueOnce(new Error("socket closed"));
+
+    await expect(store.searchDatasets({ query: "adminis" })).rejects.toThrow(
+      "socket closed"
+    );
+  });
+
   test("retrieveDataset returns null on 404", async () => {
     const store = createStore();
     mockClient.get.mockRejectedValueOnce({
@@ -149,6 +171,22 @@ describe("OpenSearchDiscoveryStore", () => {
     await expect(store.retrieveDataset("boom")).rejects.toEqual({
       isAxiosError: true,
       response: { status: 500 },
+    });
+  });
+
+  test("retrieveDataset returns mapped document", async () => {
+    const store = createStore();
+    mockClient.get.mockResolvedValueOnce({
+      data: {
+        _id: "dataset-1",
+        _source: { title: "Dataset 1", description: "Desc" },
+      },
+    });
+
+    await expect(store.retrieveDataset("dataset-1")).resolves.toEqual({
+      id: "dataset-1",
+      title: "Dataset 1",
+      description: "Desc",
     });
   });
 
@@ -184,6 +222,21 @@ describe("OpenSearchDiscoveryStore", () => {
       expect.objectContaining({
         baseURL: "https://localhost:9200",
         auth: { username: "elastic", password: "secret" },
+      })
+    );
+  });
+
+  test("constructor sets ApiKey header when provided", () => {
+    new OpenSearchDiscoveryStore({
+      baseUrl: "https://localhost:9200",
+      indexName: "discovery_datasets",
+      apiKey: "abc123",
+    });
+
+    expect((axios as any).create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        headers: { Authorization: "ApiKey abc123" },
+        auth: undefined,
       })
     );
   });

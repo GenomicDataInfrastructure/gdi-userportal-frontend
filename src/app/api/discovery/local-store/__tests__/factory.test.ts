@@ -5,7 +5,32 @@
 import { jest } from "@jest/globals";
 
 describe("local-store factory", () => {
+  const originalEnv = {
+    url: process.env.OPENSEARCH_URL,
+    index: process.env.OPENSEARCH_DISCOVERY_INDEX,
+    username: process.env.OPENSEARCH_USERNAME,
+    password: process.env.OPENSEARCH_PASSWORD,
+    apiKey: process.env.OPENSEARCH_API_KEY,
+    insecure: process.env.OPENSEARCH_TLS_INSECURE,
+  };
+
   afterEach(() => {
+    if (originalEnv.url === undefined) delete process.env.OPENSEARCH_URL;
+    else process.env.OPENSEARCH_URL = originalEnv.url;
+    if (originalEnv.index === undefined)
+      delete process.env.OPENSEARCH_DISCOVERY_INDEX;
+    else process.env.OPENSEARCH_DISCOVERY_INDEX = originalEnv.index;
+    if (originalEnv.username === undefined)
+      delete process.env.OPENSEARCH_USERNAME;
+    else process.env.OPENSEARCH_USERNAME = originalEnv.username;
+    if (originalEnv.password === undefined)
+      delete process.env.OPENSEARCH_PASSWORD;
+    else process.env.OPENSEARCH_PASSWORD = originalEnv.password;
+    if (originalEnv.apiKey === undefined) delete process.env.OPENSEARCH_API_KEY;
+    else process.env.OPENSEARCH_API_KEY = originalEnv.apiKey;
+    if (originalEnv.insecure === undefined)
+      delete process.env.OPENSEARCH_TLS_INSECURE;
+    else process.env.OPENSEARCH_TLS_INSECURE = originalEnv.insecure;
     jest.resetModules();
   });
 
@@ -43,5 +68,14 @@ describe("local-store factory", () => {
     await clearLocalDiscoveryDatasets();
 
     expect(spy).toHaveBeenCalled();
+  });
+
+  test("getLocalDiscoveryStore handles explicit tls-insecure flag value 1", async () => {
+    process.env.OPENSEARCH_TLS_INSECURE = "1";
+
+    const { getLocalDiscoveryStore } =
+      await import("@/app/api/discovery/local-store/factory");
+
+    expect(getLocalDiscoveryStore().key).toBe("opensearch");
   });
 });

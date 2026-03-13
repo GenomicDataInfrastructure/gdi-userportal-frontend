@@ -77,6 +77,14 @@ describe("opensearch/queries", () => {
     expect(shouldClauses[1].multi_match.fields).toContain("versionNotes");
   });
 
+  test("buildSearchBody trims query before building clauses", () => {
+    const body = buildSearchBody({ query: "  adminis  " });
+    const shouldClauses = (body.query as any).bool.should;
+
+    expect(shouldClauses[0].multi_match.query).toBe("adminis");
+    expect(shouldClauses[1].multi_match.query).toBe("adminis");
+  });
+
   test("buildClearBody returns delete-all query", () => {
     expect(buildClearBody()).toEqual({
       query: { match_all: {} },

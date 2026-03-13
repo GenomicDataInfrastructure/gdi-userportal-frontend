@@ -8,36 +8,29 @@ import {
   LocalDiscoveryStore,
 } from "@/app/api/discovery/local-store/types";
 
-export type LocalDiscoveryStoreKey = "opensearch";
+const createOpenSearchStore = (): LocalDiscoveryStore => {
+  const baseUrl = process.env.OPENSEARCH_URL ?? "http://localhost:9200";
+  const indexName =
+    process.env.OPENSEARCH_DISCOVERY_INDEX ?? "discovery_datasets";
+  const insecureTls =
+    process.env.OPENSEARCH_TLS_INSECURE === "true" ||
+    process.env.OPENSEARCH_TLS_INSECURE === "1";
 
-const defaultStoreKey: LocalDiscoveryStoreKey = "opensearch";
-
-const createStoreByKey = (key: LocalDiscoveryStoreKey): LocalDiscoveryStore => {
-  if (key === "opensearch") {
-    const baseUrl = process.env.OPENSEARCH_URL ?? "http://localhost:9200";
-    const indexName =
-      process.env.OPENSEARCH_DISCOVERY_INDEX ?? "discovery_datasets";
-    const insecureTls =
-      process.env.OPENSEARCH_TLS_INSECURE === "true" ||
-      process.env.OPENSEARCH_TLS_INSECURE === "1";
-    return new OpenSearchDiscoveryStore({
-      baseUrl,
-      indexName,
-      username: process.env.OPENSEARCH_USERNAME,
-      password: process.env.OPENSEARCH_PASSWORD,
-      apiKey: process.env.OPENSEARCH_API_KEY,
-      insecureTls,
-    });
-  }
-
-  throw new Error(`Unsupported local discovery store key: ${key}`);
+  return new OpenSearchDiscoveryStore({
+    baseUrl,
+    indexName,
+    username: process.env.OPENSEARCH_USERNAME,
+    password: process.env.OPENSEARCH_PASSWORD,
+    apiKey: process.env.OPENSEARCH_API_KEY,
+    insecureTls,
+  });
 };
 
 let cachedStore: LocalDiscoveryStore | null = null;
 
 export const getLocalDiscoveryStore = (): LocalDiscoveryStore => {
   if (cachedStore) return cachedStore;
-  cachedStore = createStoreByKey(defaultStoreKey);
+  cachedStore = createOpenSearchStore();
   return cachedStore;
 };
 

@@ -165,4 +165,17 @@ describe("OidcAuthService", () => {
       "Failed to retrieve OIDC access token from https://id.example/token: fetch failed | cause: connect ECONNREFUSED 127.0.0.1:8443"
     );
   });
+
+  test("keeps plain fetch failure message when cause is missing", async () => {
+    process.env.HARVEST_OIDC_TOKEN_URL = "https://id.example/token";
+    process.env.HARVEST_OIDC_CLIENT_ID = "client-id";
+    process.env.HARVEST_OIDC_CLIENT_SECRET = "client-secret";
+
+    fetchMock.mockRejectedValueOnce(new Error("fetch failed"));
+
+    const service = new OidcAuthService();
+    await expect(service.getAuthorizationHeaderIfConfigured()).rejects.toThrow(
+      "Failed to retrieve OIDC access token from https://id.example/token: fetch failed"
+    );
+  });
 });

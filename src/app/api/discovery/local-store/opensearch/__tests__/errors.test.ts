@@ -27,4 +27,16 @@ describe("opensearch/errors", () => {
 
     expect(isIndexAlreadyExistsError(new Error("boom"))).toBe(false);
   });
+
+  test("returns false when status matches but error type does not", () => {
+    expect(
+      isIndexAlreadyExistsError({
+        isAxiosError: true,
+        response: {
+          status: 400,
+          data: { error: { type: "illegal_argument_exception" } },
+        },
+      })
+    ).toBe(false);
+  });
 });

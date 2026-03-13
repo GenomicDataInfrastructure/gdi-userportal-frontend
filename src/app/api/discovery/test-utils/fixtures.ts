@@ -34,6 +34,25 @@ export const canonicalDiscoveryRdf = `
         </dct:Location>
       </dct:spatial>
       <dcat:spatialResolutionInMeters>4</dcat:spatialResolutionInMeters>
+      <dct:temporal>
+        <dct:PeriodOfTime rdf:nodeID="Ne1ae7e791f824885a7927c6865d17cbc">
+          <dcat:startDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2022-01-01</dcat:startDate>
+          <dcat:endDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2023-01-01</dcat:endDate>
+          <dct:title xml:lang="eng">Dataset Coverage Period</dct:title>
+        </dct:PeriodOfTime>
+      </dct:temporal>
+      <healthdcatap:retentionPeriod>
+        <dct:PeriodOfTime rdf:nodeID="Nad4e3883f20c42498933a861b94d96e8">
+          <dcat:startDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-03-13</dcat:startDate>
+          <dcat:endDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-03-20</dcat:endDate>
+        </dct:PeriodOfTime>
+      </healthdcatap:retentionPeriod>
+      <dcat:temporalResolution rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">P1D</dcat:temporalResolution>
+      <dct:accrualPeriodicity>
+        <dct:Frequency rdf:about="http://publications.europa.eu/resource/authority/frequency/ANNUAL">
+          <skos:prefLabel xml:lang="eng">Annual</skos:prefLabel>
+        </dct:Frequency>
+      </dct:accrualPeriodicity>
     </dcat:Dataset>
 
     <dcat:Dataset>

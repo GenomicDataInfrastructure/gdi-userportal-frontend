@@ -93,6 +93,10 @@ export class OpenSearchDiscoveryStore implements LocalDiscoveryStore {
       if (!isIndexAlreadyExistsError(error)) {
         throw error;
       }
+      await this.client.put(
+        `/${this.indexName}/_mapping`,
+        createIndexMappings().mappings
+      );
     }
 
     this.initialized = true;

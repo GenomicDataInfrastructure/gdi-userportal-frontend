@@ -31,6 +31,13 @@ const HEALTHDCATAP_POPULATION_COVERAGE =
   "http://healthdataportal.eu/ns/health#populationCoverage"; // NOSONAR
 const DCAT_SPATIAL_RESOLUTION_IN_METERS =
   "http://www.w3.org/ns/dcat#spatialResolutionInMeters"; // NOSONAR
+const DCT_TEMPORAL = "http://purl.org/dc/terms/temporal"; // NOSONAR
+const HEALTHDCATAP_RETENTION_PERIOD =
+  "http://healthdataportal.eu/ns/health#retentionPeriod"; // NOSONAR
+const DCAT_START_DATE = "http://www.w3.org/ns/dcat#startDate"; // NOSONAR
+const DCAT_END_DATE = "http://www.w3.org/ns/dcat#endDate"; // NOSONAR
+const DCAT_TEMPORAL_RESOLUTION = "http://www.w3.org/ns/dcat#temporalResolution"; // NOSONAR
+const DCT_ACCRUAL_PERIODICITY = "http://purl.org/dc/terms/accrualPeriodicity"; // NOSONAR
 
 export const getFallbackCatalogue = (graph: RdfGraph): string => {
   const namedCatalogs = graph
@@ -72,6 +79,11 @@ export const mapDataset = (
       datasetSubject,
       graph
     ),
+    temporalCoverage: extractPeriodOfTime(datasetSubject, graph, DCT_TEMPORAL),
+    retentionPeriod: extractRetentionPeriod(datasetSubject, graph),
+    temporalResolution:
+      graph.getLiteral(datasetSubject, DCAT_TEMPORAL_RESOLUTION) || undefined,
+    frequency: extractFrequency(datasetSubject, graph),
   };
 };
 
@@ -199,4 +211,53 @@ const extractSpatialCoverage = (
     const text = graph.getLiteral(location, SKOS_PREF_LABEL) || undefined;
     return { uri, text };
   });
+};
+
+const extractPeriodOfTime = (
+  subject: RDF.Term,
+  graph: RdfGraph,
+  predicate: string
+): { start?: string; end?: string } | undefined => {
+  const periods = graph.getObjects(subject, predicate);
+  if (!periods.length) return undefined;
+  const period = periods[0];
+  const start =
+    normalizeDate(graph.getLiteral(period, DCAT_START_DATE)) || undefined;
+  const end =
+    normalizeDate(graph.getLiteral(period, DCAT_END_DATE)) || undefined;
+  if (!start && !end) return undefined;
+  return { start, end };
+};
+
+const extractRetentionPeriod = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): Array<{ start?: string; end?: string }> | undefined => {
+  const periods = graph.getObjects(
+    datasetSubject,
+    HEALTHDCATAP_RETENTION_PERIOD
+  );
+  if (!periods.length) return undefined;
+  const result = periods
+    .map((period) => ({
+      start:
+        normalizeDate(graph.getLiteral(period, DCAT_START_DATE)) || undefined,
+      end: normalizeDate(graph.getLiteral(period, DCAT_END_DATE)) || undefined,
+    }))
+    .filter((p) => p.start || p.end);
+  return result.length > 0 ? result : undefined;
+};
+
+const extractFrequency = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): { value: string; label: string } | undefined => {
+  const frequencies = graph.getObjects(datasetSubject, DCT_ACCRUAL_PERIODICITY);
+  if (!frequencies.length) return undefined;
+  const freq = frequencies[0];
+  const value = graph.getNamedNodeValue(freq);
+  if (!value) return undefined;
+  const label =
+    graph.getLiteral(freq, SKOS_PREF_LABEL) || value.split("/").pop() || value;
+  return { value, label };
 };

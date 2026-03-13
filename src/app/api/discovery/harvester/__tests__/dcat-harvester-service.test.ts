@@ -40,6 +40,22 @@ describe("DcatHarvesterService", () => {
           },
         ],
         spatialResolutionInMeters: [4],
+        temporalCoverage: {
+          start: "2022-01-01T00:00:00.000Z",
+          end: "2023-01-01T00:00:00.000Z",
+        },
+        retentionPeriod: [
+          {
+            start: "2026-03-13T00:00:00.000Z",
+            end: "2026-03-20T00:00:00.000Z",
+          },
+        ],
+        temporalResolution: "P1D",
+        frequency: {
+          value:
+            "http://publications.europa.eu/resource/authority/frequency/ANNUAL",
+          label: "Annual",
+        },
       },
       {
         id: "ID-2",
@@ -56,6 +72,10 @@ describe("DcatHarvesterService", () => {
         populationCoverage: "",
         spatialCoverage: undefined,
         spatialResolutionInMeters: undefined,
+        temporalCoverage: undefined,
+        retentionPeriod: undefined,
+        temporalResolution: undefined,
+        frequency: undefined,
       },
     ]);
   });
@@ -208,6 +228,26 @@ describe("DcatHarvesterService", () => {
     expect(datasets[1]).toMatchObject({
       id: "https://example.org/datasets/2",
       identifier: "",
+    });
+    expect(datasets[0]).toEqual({
+      id: "dataset-1",
+      identifier: "",
+      title: "Dataset A",
+      description: "Description A",
+      catalogue: "",
+      languages: [],
+      createdAt: undefined,
+      modifiedAt: undefined,
+      version: "",
+      hasVersions: undefined,
+      versionNotes: undefined,
+      populationCoverage: "",
+      spatialCoverage: undefined,
+      spatialResolutionInMeters: undefined,
+      temporalCoverage: undefined,
+      retentionPeriod: undefined,
+      temporalResolution: undefined,
+      frequency: undefined,
     });
   });
 
@@ -376,6 +416,10 @@ describe("DcatHarvesterService", () => {
         populationCoverage: "",
         spatialCoverage: undefined,
         spatialResolutionInMeters: undefined,
+        temporalCoverage: undefined,
+        retentionPeriod: undefined,
+        temporalResolution: undefined,
+        frequency: undefined,
       },
     ]);
 
@@ -465,6 +509,178 @@ describe("DcatHarvesterService", () => {
     ).rejects.toThrow(
       "Failed to parse RDF/XML from https://example.org/catalogue.rdf: invalid RDF payload"
     );
+  });
+
+  test("extracts frequency with skos:prefLabel as label", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:accrualPeriodicity>
+            <dct:Frequency rdf:about="http://publications.europa.eu/resource/authority/frequency/ANNUAL">
+              <skos:prefLabel xml:lang="eng">Annual</skos:prefLabel>
+            </dct:Frequency>
+          </dct:accrualPeriodicity>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].frequency).toEqual({
+      value:
+        "http://publications.europa.eu/resource/authority/frequency/ANNUAL",
+      label: "Annual",
+    });
+  });
+
+  test("extracts frequency falling back to URI tail when skos:prefLabel is absent", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:accrualPeriodicity rdf:resource="http://publications.europa.eu/resource/authority/frequency/MONTHLY"/>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].frequency).toEqual({
+      value:
+        "http://publications.europa.eu/resource/authority/frequency/MONTHLY",
+      label: "MONTHLY",
+    });
+  });
+
+  test("extracts temporalCoverage with start and end dates", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:temporal>
+            <dct:PeriodOfTime>
+              <dcat:startDate>2020-01-01</dcat:startDate>
+              <dcat:endDate>2023-12-31</dcat:endDate>
+            </dct:PeriodOfTime>
+          </dct:temporal>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].temporalCoverage).toEqual({
+      start: "2020-01-01T00:00:00.000Z",
+      end: "2023-12-31T00:00:00.000Z",
+    });
+  });
+
+  test("extracts retentionPeriod with multiple periods", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:healthdcatap="http://healthdataportal.eu/ns/health#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <healthdcatap:retentionPeriod>
+            <dct:PeriodOfTime>
+              <dcat:startDate>2020-01-01</dcat:startDate>
+              <dcat:endDate>2022-12-31</dcat:endDate>
+            </dct:PeriodOfTime>
+          </healthdcatap:retentionPeriod>
+          <healthdcatap:retentionPeriod>
+            <dct:PeriodOfTime>
+              <dcat:startDate>2023-01-01</dcat:startDate>
+            </dct:PeriodOfTime>
+          </healthdcatap:retentionPeriod>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].retentionPeriod).toEqual([
+      { start: "2020-01-01T00:00:00.000Z", end: "2022-12-31T00:00:00.000Z" },
+      { start: "2023-01-01T00:00:00.000Z", end: undefined },
+    ]);
+  });
+
+  test("returns undefined for temporalCoverage when period has no valid dates", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:temporal>
+            <dct:PeriodOfTime>
+              <dcat:startDate>not-a-date</dcat:startDate>
+              <dcat:endDate>also-invalid</dcat:endDate>
+            </dct:PeriodOfTime>
+          </dct:temporal>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].temporalCoverage).toBeUndefined();
+  });
+
+  test("returns undefined for retentionPeriod when all periods have no valid dates", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:healthdcatap="http://healthdataportal.eu/ns/health#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <healthdcatap:retentionPeriod>
+            <dct:PeriodOfTime>
+              <dcat:startDate>not-a-date</dcat:startDate>
+              <dcat:endDate>also-invalid</dcat:endDate>
+            </dct:PeriodOfTime>
+          </healthdcatap:retentionPeriod>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].retentionPeriod).toBeUndefined();
+  });
+
+  test("extracts temporalResolution as ISO duration string", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:temporalResolution rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">P1M</dcat:temporalResolution>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].temporalResolution).toBe("P1M");
   });
 
   test("returns undefined for dates when getTime throws", async () => {

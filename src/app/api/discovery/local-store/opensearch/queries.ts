@@ -42,6 +42,12 @@ export const createIndexMappings = () => ({
       populationCoverage: { type: "text" },
       spatialCoverage: { type: "object" },
       spatialResolutionInMeters: { type: "keyword" },
+      temporalCoverage: { type: "object" },
+      retentionPeriod: { type: "object" },
+      temporalResolution: { type: "keyword" },
+      frequency: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
     },
   },
 });

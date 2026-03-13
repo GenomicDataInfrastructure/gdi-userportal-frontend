@@ -5,7 +5,7 @@
 import {
   mapGetDocumentResponse,
   mapSearchResponse,
-} from "@/app/api/discovery/local-store/elasticsearch/mappers";
+} from "@/app/api/discovery/local-store/opensearch/mappers";
 import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtures";
 
 const canonicalSource = buildLocalDiscoveryDataset({
@@ -20,7 +20,7 @@ const canonicalSource = buildLocalDiscoveryDataset({
   spatialResolutionInMeters: undefined,
 });
 
-describe("elasticsearch/mappers", () => {
+describe("opensearch/mappers", () => {
   test("maps a canonical stored document fixture for search and retrieval", () => {
     expect(
       mapSearchResponse({

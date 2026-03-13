@@ -7,6 +7,22 @@ import {
   LocalDiscoverySearchOptions,
 } from "@/app/api/discovery/local-store/types";
 
+const fullTextSearchFields = [
+  "title^3",
+  "description",
+  "populationCoverage",
+  "versionNotes",
+];
+
+const keywordSearchFields = ["id", "identifier", "catalogue", "version"];
+
+const phrasePrefixFields = [
+  "title^4",
+  "description",
+  "populationCoverage",
+  "versionNotes",
+];
+
 export const createIndexMappings = () => ({
   mappings: {
     properties: {
@@ -42,28 +58,14 @@ export const buildSearchBody = (options: LocalDiscoverySearchOptions) => {
             {
               multi_match: {
                 query,
-                fields: [
-                  "title^3",
-                  "description",
-                  "id",
-                  "identifier",
-                  "catalogue",
-                  "version",
-                  "versionNotes",
-                ],
+                fields: [...fullTextSearchFields, ...keywordSearchFields],
                 fuzziness: "AUTO",
               },
             },
             {
               multi_match: {
                 query,
-                fields: [
-                  "title^4",
-                  "description",
-                  "identifier",
-                  "catalogue",
-                  "versionNotes",
-                ],
+                fields: phrasePrefixFields,
                 type: "phrase_prefix",
               },
             },

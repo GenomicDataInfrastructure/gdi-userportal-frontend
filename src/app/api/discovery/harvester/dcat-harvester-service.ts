@@ -16,6 +16,50 @@ type HarvestOptions = {
   headers?: Record<string, string>;
 };
 
+const formatErrorDetails = (error: unknown): string => {
+  if (!(error instanceof Error)) {
+    return String(error);
+  }
+
+  const details = [error.message];
+  const cause = error.cause;
+
+  if (cause instanceof Error) {
+    const context = [
+      "code" in cause && typeof cause.code === "string"
+        ? `code=${cause.code}`
+        : null,
+      "errno" in cause &&
+      (typeof cause.errno === "string" || typeof cause.errno === "number")
+        ? `errno=${cause.errno}`
+        : null,
+      "syscall" in cause && typeof cause.syscall === "string"
+        ? `syscall=${cause.syscall}`
+        : null,
+      "hostname" in cause && typeof cause.hostname === "string"
+        ? `hostname=${cause.hostname}`
+        : null,
+      "host" in cause && typeof cause.host === "string"
+        ? `host=${cause.host}`
+        : null,
+      "port" in cause &&
+      (typeof cause.port === "string" || typeof cause.port === "number")
+        ? `port=${cause.port}`
+        : null,
+    ].filter(Boolean);
+
+    const causeText = context.length
+      ? `${cause.message} (${context.join(", ")})`
+      : cause.message;
+
+    if (causeText && causeText !== error.message) {
+      details.push(`cause: ${causeText}`);
+    }
+  }
+
+  return details.join(" | ");
+};
+
 export class DcatHarvesterService {
   private readonly fetcher: FetchLike;
 
@@ -43,17 +87,39 @@ export class DcatHarvesterService {
     url: string,
     options: HarvestOptions = {}
   ): Promise<LocalDiscoveryDataset[]> {
-    const response = await this.fetcher(url, {
-      headers: options.headers,
-    });
-    if (!response.ok) {
+    let response: Response;
+    try {
+      response = await this.fetcher(url, {
+        headers: options.headers,
+      });
+    } catch (error) {
       throw new Error(
-        `Failed to fetch DCAT catalogue (${response.status} ${response.statusText})`
+        `Failed to download DCAT catalogue from ${url}: ${formatErrorDetails(error)}`
       );
     }
 
-    const xmlText = await response.text();
-    return this.parseDatasetsFromRdf(xmlText, url);
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch DCAT catalogue from ${url} (${response.status} ${response.statusText})`
+      );
+    }
+
+    let xmlText: string;
+    try {
+      xmlText = await response.text();
+    } catch (error) {
+      throw new Error(
+        `Failed to read DCAT catalogue response body from ${url}: ${formatErrorDetails(error)}`
+      );
+    }
+
+    try {
+      return await this.parseDatasetsFromRdf(xmlText, url);
+    } catch (error) {
+      throw new Error(
+        `Failed to parse RDF/XML from ${url}: ${formatErrorDetails(error)}`
+      );
+    }
   }
 }
 

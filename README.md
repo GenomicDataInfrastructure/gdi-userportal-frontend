@@ -50,24 +50,24 @@ You can switch the server-side discovery adapter via environment variables in `.
 - `DISCOVERY_PROVIDER=dds` uses the current DDS backend behavior.
 - `DISCOVERY_PROVIDER=local-index` uses the local index adapter.
 
-If you choose the local index adapter with Elasticsearch, set:
+If you choose the local index adapter with OpenSearch, set:
 
 ```bash
 DISCOVERY_PROVIDER=local-index
-LOCAL_DISCOVERY_STORE=elasticsearch
-ELASTICSEARCH_URL=https://localhost:9200
-ELASTICSEARCH_DISCOVERY_INDEX=discovery_datasets
-ELASTICSEARCH_USERNAME=elastic
-ELASTICSEARCH_PASSWORD=<your-password>
-ELASTICSEARCH_TLS_INSECURE=true
+OPENSEARCH_URL=https://localhost:9200
+OPENSEARCH_DISCOVERY_INDEX=discovery_datasets
+OPENSEARCH_USERNAME=admin
+OPENSEARCH_PASSWORD=<your-password>
+OPENSEARCH_TLS_INSECURE=true
 ```
 
-To run Elasticsearch locally:
+To run OpenSearch locally:
 
 ```bash
-docker network create elastic
-docker run --name es01 --net elastic -p 9200:9200 -it -m 1GB -e "ELASTIC_PASSWORD=myStrongPassword123" docker.elastic.co/elasticsearch/elasticsearch:9.3.1
+docker run -d -p 9200:9200 -p 9600:9600 -e "discovery.type=single-node" -e "OPENSEARCH_INITIAL_ADMIN_PASSWORD=myStrongPassword123" opensearchproject/opensearch:latest
 ```
+
+The default username is `admin`. `OPENSEARCH_INITIAL_ADMIN_PASSWORD` sets the password for that user.
 
 Then start the dev server:
 

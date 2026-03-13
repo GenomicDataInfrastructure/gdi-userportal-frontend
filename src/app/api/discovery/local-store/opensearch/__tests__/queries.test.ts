@@ -7,7 +7,7 @@ import {
   buildClearBody,
   buildSearchBody,
   createIndexMappings,
-} from "@/app/api/discovery/local-store/elasticsearch/queries";
+} from "@/app/api/discovery/local-store/opensearch/queries";
 import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtures";
 
 const canonicalDataset = buildLocalDiscoveryDataset({
@@ -22,7 +22,7 @@ const canonicalDataset = buildLocalDiscoveryDataset({
   spatialResolutionInMeters: undefined,
 });
 
-describe("elasticsearch/queries", () => {
+describe("opensearch/queries", () => {
   test("createIndexMappings returns expected mapping structure", () => {
     expect(createIndexMappings()).toEqual({
       mappings: {
@@ -69,8 +69,11 @@ describe("elasticsearch/queries", () => {
     expect(body.query).toHaveProperty("bool");
     expect((body.query as any).bool.minimum_should_match).toBe(1);
     expect(shouldClauses).toHaveLength(2);
+    expect(shouldClauses[0].multi_match.fields).toContain("identifier");
     expect(shouldClauses[0].multi_match.fields).toContain("version");
     expect(shouldClauses[0].multi_match.fields).toContain("versionNotes");
+    expect(shouldClauses[1].multi_match.fields).not.toContain("identifier");
+    expect(shouldClauses[1].multi_match.fields).not.toContain("catalogue");
     expect(shouldClauses[1].multi_match.fields).toContain("versionNotes");
   });
 

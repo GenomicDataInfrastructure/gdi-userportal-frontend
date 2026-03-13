@@ -10,7 +10,7 @@ import {
 import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtures";
 
 const mockStore = {
-  key: "elasticsearch",
+  key: "opensearch",
   ensureInitialized: jest.fn<() => Promise<void>>(),
   searchDatasets:
     jest.fn<(_options: unknown) => Promise<LocalDiscoverySearchResult>>(),

@@ -51,12 +51,41 @@ export const seedLocalIndexFromDdsApi = async (
 export const harvestLocalIndexFromDcatUrlApi = async (
   catalogueRdfUrl: string
 ): Promise<number> => {
-  const authHeaders =
-    await oidcAuthService.getAuthorizationHeaderIfConfigured();
-  const datasets = await dcatHarvesterService.harvestFromUrl(catalogueRdfUrl, {
-    headers: authHeaders,
-  });
-  await clearLocalDiscoveryDatasets();
-  await upsertLocalDiscoveryDatasets(datasets);
+  let authHeaders: Record<string, string>;
+  try {
+    authHeaders = await oidcAuthService.getAuthorizationHeaderIfConfigured();
+  } catch (error) {
+    throw new Error(
+      `Failed to prepare authorization for harvesting ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
+
+  let datasets: LocalDiscoveryDataset[];
+  try {
+    datasets = await dcatHarvesterService.harvestFromUrl(catalogueRdfUrl, {
+      headers: authHeaders,
+    });
+  } catch (error) {
+    throw new Error(
+      `Failed to harvest datasets from ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
+
+  try {
+    await clearLocalDiscoveryDatasets();
+  } catch (error) {
+    throw new Error(
+      `Failed to clear the local discovery index before importing ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
+
+  try {
+    await upsertLocalDiscoveryDatasets(datasets);
+  } catch (error) {
+    throw new Error(
+      `Failed to index ${datasets.length} harvested datasets from ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
+
   return datasets.length;
 };

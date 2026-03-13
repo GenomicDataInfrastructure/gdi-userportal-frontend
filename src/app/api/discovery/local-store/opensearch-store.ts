@@ -13,21 +13,45 @@ import {
 import {
   SearchBackendDocumentResponse,
   SearchBackendSearchResponse,
-} from "@/app/api/discovery/local-store/elasticsearch/types";
+} from "@/app/api/discovery/local-store/opensearch/types";
 import {
   buildBulkUpsertBody,
   buildClearBody,
   buildSearchBody,
   createIndexMappings,
-} from "@/app/api/discovery/local-store/elasticsearch/queries";
+} from "@/app/api/discovery/local-store/opensearch/queries";
 import {
   mapGetDocumentResponse,
   mapSearchResponse,
-} from "@/app/api/discovery/local-store/elasticsearch/mappers";
-import { isIndexAlreadyExistsError } from "@/app/api/discovery/local-store/elasticsearch/errors";
+} from "@/app/api/discovery/local-store/opensearch/mappers";
+import { isIndexAlreadyExistsError } from "@/app/api/discovery/local-store/opensearch/errors";
 
-export class ElasticsearchDiscoveryStore implements LocalDiscoveryStore {
-  readonly key = "elasticsearch";
+const formatSearchBackendError = (error: unknown): string => {
+  if (!axios.isAxiosError(error)) {
+    return error instanceof Error ? error.message : String(error);
+  }
+
+  const status = error.response?.status;
+  const reason =
+    error.response?.data &&
+    typeof error.response.data === "object" &&
+    "error" in error.response.data
+      ? JSON.stringify((error.response.data as { error?: unknown }).error)
+      : null;
+
+  if (status && reason) {
+    return `OpenSearch search request failed (${status}): ${reason}`;
+  }
+
+  if (status) {
+    return `OpenSearch search request failed (${status}): ${error.message}`;
+  }
+
+  return error.message;
+};
+
+export class OpenSearchDiscoveryStore implements LocalDiscoveryStore {
+  readonly key = "opensearch";
 
   private readonly client: AxiosInstance;
   private readonly indexName: string;
@@ -89,10 +113,15 @@ export class ElasticsearchDiscoveryStore implements LocalDiscoveryStore {
     await this.ensureInitialized();
     const requestBody = buildSearchBody(options);
 
-    const response = await this.client.post<SearchBackendSearchResponse>(
-      `/${this.indexName}/_search`,
-      requestBody
-    );
+    let response;
+    try {
+      response = await this.client.post<SearchBackendSearchResponse>(
+        `/${this.indexName}/_search`,
+        requestBody
+      );
+    } catch (error) {
+      throw new Error(formatSearchBackendError(error));
+    }
 
     return mapSearchResponse(response.data);
   }
@@ -129,7 +158,7 @@ export class ElasticsearchDiscoveryStore implements LocalDiscoveryStore {
     );
 
     if (response.data.errors) {
-      throw new Error("Elasticsearch bulk upsert reported item-level errors");
+      throw new Error("OpenSearch bulk upsert reported item-level errors");
     }
   }
 }

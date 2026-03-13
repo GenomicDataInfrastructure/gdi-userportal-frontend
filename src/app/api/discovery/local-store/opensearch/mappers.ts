@@ -10,7 +10,7 @@ import {
 import {
   SearchBackendDocumentResponse,
   SearchBackendSearchResponse,
-} from "@/app/api/discovery/local-store/elasticsearch/types";
+} from "@/app/api/discovery/local-store/opensearch/types";
 
 const mapStoredDocument = (
   response: StoredDocumentResponse<Partial<LocalDiscoveryDataset>>

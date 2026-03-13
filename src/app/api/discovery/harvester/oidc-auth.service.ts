@@ -8,6 +8,25 @@ type OidcTokenResponse = {
   token_type?: string;
 };
 
+const formatErrorDetails = (error: unknown): string => {
+  if (!(error instanceof Error)) {
+    return String(error);
+  }
+
+  const details = [error.message];
+  const cause = error.cause;
+
+  if (
+    cause instanceof Error &&
+    cause.message &&
+    cause.message !== error.message
+  ) {
+    details.push(`cause: ${cause.message}`);
+  }
+
+  return details.join(" | ");
+};
+
 export class OidcAuthService {
   private accessToken: string | null = null;
   private tokenExpiryEpochMs: number | null = null;
@@ -49,17 +68,24 @@ export class OidcAuthService {
     body.set("client_id", clientId);
     body.set("client_secret", clientSecret);
 
-    const response = await fetch(tokenUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: body.toString(),
-    });
+    let response: Response;
+    try {
+      response = await fetch(tokenUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: body.toString(),
+      });
+    } catch (error) {
+      throw new Error(
+        `Failed to retrieve OIDC access token from ${tokenUrl}: ${formatErrorDetails(error)}`
+      );
+    }
 
     if (!response.ok) {
       throw new Error(
-        `Failed to retrieve OIDC access token (${response.status} ${response.statusText})`
+        `Failed to retrieve OIDC access token from ${tokenUrl} (${response.status} ${response.statusText})`
       );
     }
 

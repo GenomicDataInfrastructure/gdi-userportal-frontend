@@ -146,7 +146,23 @@ describe("OidcAuthService", () => {
 
     const service = new OidcAuthService();
     await expect(service.getAuthorizationHeaderIfConfigured()).rejects.toThrow(
-      "Failed to retrieve OIDC access token (401 Unauthorized)"
+      "Failed to retrieve OIDC access token from https://id.example/token (401 Unauthorized)"
+    );
+  });
+
+  test("throws detailed message when token fetch itself fails", async () => {
+    process.env.HARVEST_OIDC_TOKEN_URL = "https://id.example/token";
+    process.env.HARVEST_OIDC_CLIENT_ID = "client-id";
+    process.env.HARVEST_OIDC_CLIENT_SECRET = "client-secret";
+
+    const cause = new Error("connect ECONNREFUSED 127.0.0.1:8443");
+    const error = new Error("fetch failed");
+    (error as Error & { cause?: Error }).cause = cause;
+    fetchMock.mockRejectedValueOnce(error);
+
+    const service = new OidcAuthService();
+    await expect(service.getAuthorizationHeaderIfConfigured()).rejects.toThrow(
+      "Failed to retrieve OIDC access token from https://id.example/token: fetch failed | cause: connect ECONNREFUSED 127.0.0.1:8443"
     );
   });
 });

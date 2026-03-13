@@ -396,7 +396,7 @@ describe("DcatHarvesterService", () => {
     await expect(
       service.harvestFromUrl("https://example.org/catalogue.rdf")
     ).rejects.toThrow(
-      "Failed to fetch DCAT catalogue (500 Internal Server Error)"
+      "Failed to fetch DCAT catalogue from https://example.org/catalogue.rdf (500 Internal Server Error)"
     );
   });
 });

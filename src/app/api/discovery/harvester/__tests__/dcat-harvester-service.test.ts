@@ -48,8 +48,8 @@ describe("DcatHarvesterService", () => {
         description: "Bed occupancy",
         catalogue: "Main Catalogue",
         languages: [],
-        createdAt: "",
-        modifiedAt: "",
+        createdAt: undefined,
+        modifiedAt: undefined,
         version: "",
         hasVersions: undefined,
         versionNotes: undefined,
@@ -227,7 +227,10 @@ describe("DcatHarvesterService", () => {
     `;
 
     const datasets = await service.parseDatasetsFromRdf(rdf);
-    expect(datasets[0]).toMatchObject({ createdAt: "", modifiedAt: "" });
+    expect(datasets[0]).toMatchObject({
+      createdAt: undefined,
+      modifiedAt: undefined,
+    });
   });
 
   test("parses dcterms issued and modified dates as ISO strings", async () => {
@@ -365,8 +368,8 @@ describe("DcatHarvesterService", () => {
         description: "D",
         catalogue: "",
         languages: [],
-        createdAt: "",
-        modifiedAt: "",
+        createdAt: undefined,
+        modifiedAt: undefined,
         version: "",
         hasVersions: undefined,
         versionNotes: undefined,

@@ -28,6 +28,9 @@ export const canonicalDiscoveryRdf = `
       <dcat:hasVersion rdf:resource="https://example.org/datasets/1/v1"/>
       <adms:versionNotes>Updated with 2024 data</adms:versionNotes>
       <healthdcatap:populationCoverage xml:lang="eng">People of LNDS.</healthdcatap:populationCoverage>
+      <healthdcatap:numberOfRecords>50000</healthdcatap:numberOfRecords>
+      <healthdcatap:numberOfUniqueIndividuals>25000</healthdcatap:numberOfUniqueIndividuals>
+      <healthdcatap:maxTypicalAge>95</healthdcatap:maxTypicalAge>
       <dct:spatial>
         <dct:Location rdf:about="http://publications.europa.eu/resource/authority/country/LUX">
           <skos:prefLabel xml:lang="eng">Luxembourg</skos:prefLabel>
@@ -59,6 +62,9 @@ export const buildLocalDiscoveryDataset = (
   version: "1.0.0",
   hasVersions: [{ value: "v1", label: "Version 1" }],
   versionNotes: ["Initial release"],
+  numberOfRecords: 50000,
+  numberOfUniqueIndividuals: 25000,
+  maxTypicalAge: 95,
   populationCoverage: "People of LNDS.",
   spatialResolutionInMeters: [4],
   spatialCoverage: [
@@ -80,5 +86,7 @@ export const buildDdsSearchedDataset = (
   modifiedAt: "2024-03-10T00:00:00.000Z",
   version: "1.0.0",
   hasVersions: [{ value: "v1", label: "Version 1" }],
+  numberOfUniqueIndividuals: 25000,
+  maxTypicalAge: 95,
   ...overrides,
 });

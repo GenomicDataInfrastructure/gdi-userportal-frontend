@@ -59,6 +59,8 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       version: dataset.version,
       hasVersions: dataset.hasVersions,
       versionNotes,
+      numberOfUniqueIndividuals: dataset.numberOfUniqueIndividuals,
+      maxTypicalAge: dataset.maxTypicalAge,
       publishers: [],
       themes: [],
       keywords: [],
@@ -95,7 +97,10 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
 
     return {
       count: response.count,
-      results: response.results.map((dataset) => this.mapLocalDataset(dataset)),
+      results: response.results.map((dataset) => ({
+        ...this.mapLocalDataset(dataset),
+        recordsCount: response.count,
+      })),
     };
   }
 
@@ -108,6 +113,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
 
     return {
       ...this.mapLocalDataset(dataset),
+      numberOfRecords: dataset.numberOfRecords,
     };
   }
 }

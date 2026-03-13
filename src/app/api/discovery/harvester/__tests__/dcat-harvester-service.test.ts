@@ -467,18 +467,13 @@ describe("DcatHarvesterService", () => {
     );
   });
 
-  test("normalizes dates to empty strings when Date construction throws", async () => {
+  test("returns undefined for dates when getTime throws", async () => {
     const service = new DcatHarvesterService();
-    const RealDate = Date;
-    const throwingDate = class extends RealDate {
-      constructor(value?: string | number | Date) {
-        if (value === "2020-01-02") {
-          throw new Error("date constructor failed");
-        }
-        super(value as never);
-      }
-    } as DateConstructor;
-    global.Date = throwingDate;
+    const getTimeSpy = jest
+      .spyOn(Date.prototype, "getTime")
+      .mockImplementationOnce(() => {
+        throw new Error("date getTime failed");
+      });
 
     const rdf = `
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -494,9 +489,9 @@ describe("DcatHarvesterService", () => {
 
     try {
       const datasets = await service.parseDatasetsFromRdf(rdf);
-      expect(datasets[0]).toMatchObject({ createdAt: "" });
+      expect(datasets[0]).toMatchObject({ createdAt: undefined });
     } finally {
-      global.Date = RealDate;
+      getTimeSpy.mockRestore();
     }
   });
 });

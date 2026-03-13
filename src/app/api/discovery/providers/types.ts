@@ -89,6 +89,7 @@ export interface DiscoveryDatasetBase {
   accessRights?: DiscoveryValueLabel;
   conformsTo?: DiscoveryValueLabel[];
   numberOfUniqueIndividuals?: number;
+  maxTypicalAge?: number;
   temporalCoverage?: DiscoveryTimeWindow;
   populationCoverage?: string;
   spatialCoverage?: DiscoverySpatialCoverage[];

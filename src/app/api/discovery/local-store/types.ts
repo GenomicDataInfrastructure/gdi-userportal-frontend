@@ -22,6 +22,9 @@ export interface LocalDiscoveryDataset {
   version?: string;
   hasVersions?: Array<{ value: string; label: string }>;
   versionNotes?: string[];
+  recordsCount?: number;
+  numberOfUniqueIndividuals?: number;
+  maxTypicalAge?: number;
   populationCoverage?: string;
   spatialCoverage?: SpatialCoverage[];
   spatialResolutionInMeters?: number[];

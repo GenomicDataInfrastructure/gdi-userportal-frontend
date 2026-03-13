@@ -16,6 +16,8 @@ The GDI frontend is built with Next.js 14 using the App Router pattern and TypeS
 
 ## Project structure
 
+Key directories of the frontend codebase include:
+
 ```
 gdi-userportal-frontend/
 ├── app/                    # Next.js app directory (routes)
@@ -40,7 +42,7 @@ gdi-userportal-frontend/
 
 ## Key patterns
 
-Intro sentence: The frontend codebase 
+The frontend architecture follows modern React and Next.js best practices:
 
 ### Server and client components
 - Server components (default): Render on server, better performance

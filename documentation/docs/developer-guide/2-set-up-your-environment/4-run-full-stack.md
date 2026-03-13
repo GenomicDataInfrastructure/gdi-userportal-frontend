@@ -171,7 +171,7 @@ docker compose logs -f <service-name>
 docker compose exec <service-name> /bin/bash
 ```
 
-Example - access CKAN shell:
+For example, access CKAN shell:
 ```bash
 docker compose exec ckan ckan --help
 ```
@@ -210,37 +210,32 @@ docker system prune -a
 
 Here are common issues and solutions when running the full stack:
 
-### Services fail to start
+- **Services fail to start.** Check logs for errors:
 
-Check logs for errors:
-```bash
-docker compose logs <service-name>
-```
+    ```bash
+    docker compose logs <service-name>
+    ```
 
-### Port conflicts
+- **Port conflicts.** If ports are already in use, change them in `.env` file and restart:
 
-If ports are already in use, change them in `.env` file and restart:
-```bash
-docker compose down
-docker compose up -d
-```
+    ```bash
+    docker compose down
+    docker compose up -d
+    ```
 
-### Out of memory errors
+- **Out of memory errors.** Increase Docker memory limit: 
 
-Increase Docker memory limit:
-- Docker Desktop: Settings → Resources → Memory (set to 8GB minimum)
+    In your Docker Desktop, go to **Settings** > **Resources** > **Memory** and set it to 8GB (minimum).
 
-### Database connection errors
+- **Database connection errors.** Ensure PostgreSQL is fully initialised:
 
-Ensure PostgreSQL is fully initialised:
-```bash
-docker compose logs postgres | grep "database system is ready"
-```
+    ```bash
+    docker compose logs postgres | grep "database system is ready"
+    ```
 
-### Rebuild all images
+- **Rebuild all images.** Force rebuild if code changes aren't reflected:
 
-Force rebuild if code changes aren't reflected:
-```bash
-docker compose build --no-cache
-docker compose up -d
-```
+    ```bash
+    docker compose build --no-cache
+    docker compose up -d
+    ```

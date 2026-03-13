@@ -18,7 +18,6 @@ Install CKAN and its extensions for local development and testing.
 
 ## Prerequisites
 
-Before you begin, ensure you have:
 - Python 3 installed
 - PostgreSQL installed and running
 - Git installed
@@ -27,7 +26,7 @@ Before you begin, ensure you have:
 ## Install CKAN locally
 
 
-1. Set up virtual environment:
+1. **Set up virtual environment:**
 
     ```commandline
     sudo mkdir -p /etc/ckan/default/  # or other directory of choice
@@ -42,7 +41,7 @@ Before you begin, ensure you have:
     Keep your virtual environment activated throughout the entire installation process.
     :::
 
-2. Install CKAN as a package into your virtual environment: 
+2. **Install CKAN as a package into your virtual environment:**
 
     ```commandline
     pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.10.5#egg=ckan[requirements]'
@@ -54,48 +53,48 @@ Before you begin, ensure you have:
     If you encounter dependency installation issues, see: [Troubleshooting installation](#troubleshooting-installation).
     :::
 
-3. Install the required CKAN extensions. You can install extensions from a local repository or directly from GitHub.
+3. **Install the required CKAN extensions.** You can install extensions from a local repository or directly from GitHub.
     
-    **From a local repository:**
+    From a local repository:
 
     ```commandline
     pip install -e file:///<path to local extension repo>/ckan-fairdatapoint#egg=ckanext-fairdatapoint
     ```
     
-    **Example on macOS:**
+    Example on macOS:
 
     ```commandline
     pip install -e file:///Users/<username>/Github/gdi-userportal-ckanext-fairdatapoint#egg=ckanext-fairdatapoint  
     ```
 
-    **Directly from GitHub:**
+    Directly from GitHub:
     
     ```commandline
     pip install -e git+https://github.com/ckan/ckanext-dcat.git@v2.1.0#egg=ckanext-dcat 
     ```
 
- 4. After installing the extension, install its dependencies:
+ 4. **Install the dependencies for the CKAN extensions:**
     
-    **From local repository:**
+    From local repository:
+
     ```commandline
     pip install -r <path to local extension repo>/requirements.txt
     pip install -r <path to local extension repo>/dev-requirements.txt
     ```
     
-    **From GitHub (example for ckanext-harvest):**
+    From GitHub (example for ckanext-harvest):
+
     ```commandline
     pip install -r https://raw.githubusercontent.com/ckan/ckanext-harvest/master/requirements.txt 
     pip install -r https://raw.githubusercontent.com/ckan/ckanext-harvest/master/dev-requirements.txt  
     ```
 
-5. Configure your database connection. Set up a PostgreSQL database and specify the connection string in both `ckan.ini` and `test-core.ini`.
+5. **Configure your database connection.** Set up a PostgreSQL database and specify the connection string in both `ckan.ini` and `test-core.ini`.
 
 
 ## Configure testing
 
-Your testing strategy depends on your plugin's functionality. CKAN provides helper functions to generate dummy data and clean up databases after tests.
-
-For detailed information, review the [official CKAN documentation](https://docs.ckan.org/en/2.10/extensions/testing-extensions.html).
+Your testing strategy depends on your plugin's functionality. CKAN provides helper functions to generate dummy data and clean up databases after tests. For detailed information, review the [official CKAN documentation](https://docs.ckan.org/en/2.10/extensions/testing-extensions.html).
 
 To set up your test environment, configure plugin testing:
 
@@ -153,11 +152,9 @@ Add this environment variable in PyCharm by navigating to **Run** > **Edit Confi
 
 ## Troubleshooting installation
 
-Here are some common issues and solutions during CKAN installation and how to resolve them:
+Here are some common issues when installing CKAN and how to resolve them:
 
-### psycopg2 build failures
-
-If `psycopg2` installation fails, update the CKAN requirements file:
+- **psycopg2 build failures.** If `psycopg2` installation fails, update the CKAN requirements file:
 
 1. Navigate to `<venv directory>/src/ckan/requirements.txt`
 2. Change `psycopg2==2.9.7` to `psycopg2-binary==2.9.9`
@@ -168,9 +165,7 @@ If `psycopg2` installation fails, update the CKAN requirements file:
     pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.10.5#egg=ckan'
     ```
 
-### PyYAML compatibility Issues (CKAN v2.9.10)
-
-If you encounter the error `TypeError: load() missing 1 required positional argument: 'Loader'`, downgrade PyYAML:
+- **PyYAML compatibility Issues (CKAN v2.9.10).** If you encounter the error `TypeError: load() missing 1 required positional argument: 'Loader'`, downgrade PyYAML:
 
 1. Open `requirements.txt` in your CKAN installation.
 2. Change `pyyaml==5.4.1` or `pyyaml==6.0.1` to `pyyaml==5.3.1`

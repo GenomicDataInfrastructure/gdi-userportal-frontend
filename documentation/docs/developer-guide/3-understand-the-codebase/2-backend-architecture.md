@@ -16,6 +16,8 @@ The backend services (DDS and AMS) are built with Quarkus, a Kubernetes-native J
 
 ## Project structure
 
+Key directories of the backend codebase include:
+
 ```
 gdi-userportal-{service}/
 ├── src/main/java/
@@ -34,6 +36,8 @@ gdi-userportal-{service}/
 ```
 
 ## Key patterns
+
+The backend architecture follows established patterns for building maintainable and scalable Java applications:
 
 ### Hexagonal architecture
 - **Ports**: Interfaces defining business capabilities

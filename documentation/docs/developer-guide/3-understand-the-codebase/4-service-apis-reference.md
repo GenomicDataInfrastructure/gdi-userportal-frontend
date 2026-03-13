@@ -14,7 +14,9 @@ SPDX-License-Identifier: CC-BY-4.0
 
 The GDI platform services communicate via REST APIs. Each service exposes OpenAPI specifications documenting available endpoints.
 
-## Service APIs
+## Service 
+
+Explore the APIs of the different services in the GDI platform for dataset management:
 
 ### Dataset Discovery Service (DDS)
 - **Base URL**: `http://localhost:8080`
@@ -42,7 +44,7 @@ The GDI platform services communicate via REST APIs. Each service exposes OpenAP
 
 ## Authentication
 
-All endpoints except public dataset search require authentication:
+All endpoints require authentication except public dataset search:
 - **Frontend ↔ Services**: Bearer token from Keycloak OIDC flow
 - **Service ↔ CKAN**: API key or user token
 - **Service ↔ REMS**: API key with user impersonation

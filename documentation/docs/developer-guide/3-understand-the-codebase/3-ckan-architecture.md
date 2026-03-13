@@ -12,9 +12,11 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # CKAN architecture
 
-CKAN is an open-source data catalogue platform. The GDI platform extends CKAN with custom plugins for DCAT-AP 3 support, OIDC authentication, and harvesting.
+The GDI platform extends CKAN, an open-source data catalogue platform, with custom plugins for DCAT-AP 3 support, OIDC authentication, and harvesting.
 
 ## CKAN extension structure
+
+Key components of the `ckanext-gdi-userportal` extension include:
 
 ```
 ckanext-gdi-userportal/
@@ -41,25 +43,26 @@ ckanext-gdi-userportal/
 
 ## Database structure
 
-Understand CKAN's PostgreSQL database schema to develop extensions that interact with dataset metadata and harvesters.  
-
+Understand CKAN's PostgreSQL database schema to develop extensions that interact with dataset metadata and harvesters.
 
 ### Dataset tables
 
-Every field which extends the core schema lands in the extra table.
+In demo schema `ckan_ckan_dataplatform_nl` table `package`, columns are core fields of CKAN, and `package_extra` for every other field. Every field which extends the core schema lands in the extra table.
 
-In demo schema `ckan_ckan_dataplatform_nl` table `package`, columns are core fields of CKAN, and `package_extra` for every other field. The Scheming extension of Civity allows more flexibility for managing extra fields than CKAN core default functionality, but still such a field is converted to a string and lands in the extra table. It is possible to write a mapper to and map all the extra fields. For DCAT there is an official extension:  
+The Scheming extension of Civity allows more flexibility for managing extra fields than CKAN core default functionality, but still such a field is converted to a string and lands in the extra table. 
+
+It is possible to write a mapper to and map all the extra fields. For DCAT there is an official extension:  
 [https://github.com/ckan/ckanext-dcat#json-dcat-harvester](https://github.com/ckan/ckanext-dcat#json-dcat-harvester) It is compatible with DCAT-AP v1.1 and 2.1
 
 ![Database mapping](./mapping.png)
 
 ### Harvester tables
 
-In the database, there are several tables dedicated to store harvester-related information:
+In the database, the following tables are dedicated to store harvester-related information: 
 
 * `harvest_source` - harvested sources are defined
 * `harvest_object` - the table where all the objects from a source are saved. Data from a source are stored in `harvest_object.content` and from there will be converted to a CKAN dataset.
 
 Harvesters are also saved to the `package` table of `type` harvest.
 
-Once you changed something in the database directly, you must trigger re-indexing in Solr via search-index rebuild of [CLI](https://docs.ckan.org/en/2.9/maintaining/cli.html).
+After changing something in the database directly, trigger re-indexing in Solr via search-index rebuild of [CLI](https://docs.ckan.org/en/2.9/maintaining/cli.html).

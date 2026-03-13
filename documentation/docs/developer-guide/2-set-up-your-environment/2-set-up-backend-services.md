@@ -2,7 +2,7 @@
 slug: /developer-guide/set-up-your-environment/set-up-backend-services
 sidebar_label: "Set up backend services"
 sidebar_position: 2
-description: "Setting up the Java/Quarkus backend services for local development"
+description: "Set up Java/Quarkus services for local development"
 ---
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
@@ -10,7 +10,9 @@ SPDX-FileCopyrightText: 2024 PNED G.I.E.
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
-Set up the Java/Quarkus backend services (Dataset Discovery Service and Access Management Service) for local development.  
+# Set up backend services
+
+Set up the Java/Quarkus backend services (Dataset Discovery Service and Access Management Service) for local development and testing.  
 
 ## Prerequisites
 
@@ -21,23 +23,25 @@ Set up the Java/Quarkus backend services (Dataset Discovery Service and Access M
 
 ## Clone the repository
 
-Choose the service you want to set up and clone the corresponding repository:
-- **Dataset Discovery Service (DDS):** Mediates requests between frontend and CKAN for dataset search and retrieval.
-- **Access Management Service (AMS):** Manages access request workflows and integrates with REMS.
+Choose the service you want to set up and clone the corresponding repository—DDS or AMS:
 
+- ### Dataset Discovery Service (DDS)
 
-### For DDS
+    DDS mediates requests between frontend and CKAN for dataset search and retrieval.
 
-```bash
-git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-dataset-discovery-service.git
-cd gdi-userportal-dataset-discovery-service
-```
+    ```bash
+    git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-dataset-discovery-service.git
+    cd gdi-userportal-dataset-discovery-service
+    ```
 
-### For AMS
-```bash
-git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service.git
-cd gdi-userportal-access-management-service
-```
+- ### Access Management Service (AMS)
+
+    AMS manages access request workflows and integrates with REMS.
+
+    ```bash
+    git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service.git
+    cd gdi-userportal-access-management-service
+    ```
 
 ## Install dependencies
 
@@ -162,15 +166,14 @@ Build for production:
 
 The executable JAR is in `target/quarkus-app/`.
 
-## IDE configuration
+## Configure your IDE
 
-### IntelliJ IDEA
+**IntelliJ IDEA:**
 1. Open the project (File → Open → select pom.xml)
 2. Maven dependencies will import automatically
 3. Enable annotation processing (Settings → Build → Compiler → Annotation Processors)
 
-### VS Code
-Install extensions:
+**Install VS code extensions:**
 - Extension Pack for Java
 - Quarkus
 - Lombok Annotations Support for VS Code

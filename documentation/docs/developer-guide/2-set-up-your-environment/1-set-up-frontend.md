@@ -12,7 +12,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Set up frontend
 
-Set up the Next.js frontend for local development. This guide covers prerequisites, installation, configuration, and common issues.
+Set up the Next.js frontend for local development and testing. 
 
 ## Prerequisites
 

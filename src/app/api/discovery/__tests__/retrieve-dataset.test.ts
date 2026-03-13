@@ -55,4 +55,38 @@ describe("Retrieving a specific dataset", () => {
       id: null,
     });
   });
+
+  test("accepts value-label compression and packaging formats", async () => {
+    mockDiscoveryAdapter.onGet("/api/v1/datasets/101").reply(200, {
+      id: "101",
+      title: "Dataset 101",
+      description: "This is dataset 101",
+      distributions: [
+        {
+          description: "Distribution description",
+          title: "Distribution title",
+          id: "distribution-1",
+          compressionFormat: {
+            value: "gzip",
+            label: "gzip",
+          },
+          packagingFormat: {
+            value: "tar",
+            label: "TAR archive",
+          },
+        },
+      ],
+    });
+
+    const response = await retrieveDatasetApi("101");
+
+    expect(response.distributions?.[0]?.compressionFormat).toEqual({
+      value: "gzip",
+      label: "gzip",
+    });
+    expect(response.distributions?.[0]?.packagingFormat).toEqual({
+      value: "tar",
+      label: "TAR archive",
+    });
+  });
 });

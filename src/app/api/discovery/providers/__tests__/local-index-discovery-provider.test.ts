@@ -154,6 +154,30 @@ describe("LocalIndexDiscoveryProvider", () => {
             centroid: "POINT(10 46)",
           },
         ],
+        themes: [
+          { value: "http://example.org/theme/health", label: "Health" },
+          { value: "http://example.org/theme/science", label: "Science" },
+        ],
+        keywords: ["oncology", "genomics"],
+        healthTheme: [
+          { value: "http://example.org/health-theme/cancer", label: "Cancer" },
+        ],
+        healthCategory: [
+          {
+            value: "http://example.org/health-category/registries",
+            label: "Registries",
+          },
+        ],
+        dcatType: [
+          {
+            value: "http://example.org/dataset-type/STATISTICAL",
+            label: "STATISTICAL",
+          },
+          {
+            value: "http://example.org/dataset-type/CODE_LIST",
+            label: "CODE_LIST",
+          },
+        ],
       })
     );
 
@@ -176,8 +200,11 @@ describe("LocalIndexDiscoveryProvider", () => {
       hasVersions: [{ value: "v1", label: "Version 1" }],
       versionNotes: "Initial release",
       publishers: [],
-      themes: [],
-      keywords: [],
+      themes: [
+        { value: "http://example.org/theme/health", label: "Health" },
+        { value: "http://example.org/theme/science", label: "Science" },
+      ],
+      keywords: ["oncology", "genomics"],
       populationCoverage: "People of LNDS.",
       spatialResolutionInMeters: 4,
       spatialCoverage: [
@@ -194,9 +221,19 @@ describe("LocalIndexDiscoveryProvider", () => {
           centroid: "POINT(10 46)",
         },
       ],
-      healthTheme: [],
-      healthCategory: [],
-      dcatType: undefined,
+      healthTheme: [
+        { value: "http://example.org/health-theme/cancer", label: "Cancer" },
+      ],
+      healthCategory: [
+        {
+          value: "http://example.org/health-category/registries",
+          label: "Registries",
+        },
+      ],
+      dcatType: {
+        value: "http://example.org/dataset-type/STATISTICAL",
+        label: "STATISTICAL",
+      },
     });
   });
 

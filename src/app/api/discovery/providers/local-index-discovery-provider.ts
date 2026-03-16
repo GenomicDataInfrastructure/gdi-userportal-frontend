@@ -111,7 +111,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     }
     // DCAT can expose multiple dataset types, but the current UI and
     // DDS-facing contract only support a single value.
-    const dcatType = dataset.dcatType?.[0]
+    const dcatType = dataset.dcatType?.[0];
 
     return {
       ...this.mapLocalDataset(dataset),

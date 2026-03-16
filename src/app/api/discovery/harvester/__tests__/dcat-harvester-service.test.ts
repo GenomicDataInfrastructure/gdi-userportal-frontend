@@ -66,15 +66,13 @@ describe("DcatHarvesterService", () => {
         keywords: ["oncology", "genomics"],
         healthTheme: [
           {
-            value:
-              "http://healthdataportal.eu/ns/health-theme/cancer",
+            value: "http://healthdataportal.eu/ns/health-theme/cancer",
             label: "cancer",
           },
         ],
         healthCategory: [
           {
-            value:
-              "http://healthdataportal.eu/ns/health-category/registries",
+            value: "http://healthdataportal.eu/ns/health-category/registries",
             label: "registries",
           },
         ],
@@ -96,7 +94,7 @@ describe("DcatHarvesterService", () => {
         createdAt: undefined,
         modifiedAt: undefined,
         version: "",
-        hasVersions: undefined,
+        hasVersions: [],
         versionNotes: undefined,
         populationCoverage: "",
         spatialCoverage: undefined,
@@ -273,7 +271,7 @@ describe("DcatHarvesterService", () => {
       createdAt: undefined,
       modifiedAt: undefined,
       version: "",
-      hasVersions: undefined,
+      hasVersions: [],
       versionNotes: undefined,
       populationCoverage: "",
       spatialCoverage: undefined,
@@ -450,7 +448,7 @@ describe("DcatHarvesterService", () => {
         createdAt: undefined,
         modifiedAt: undefined,
         version: "",
-        hasVersions: undefined,
+        hasVersions: [],
         versionNotes: undefined,
         populationCoverage: "",
         spatialCoverage: undefined,

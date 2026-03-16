@@ -66,11 +66,6 @@ export const mapDataset = (
 ): LocalDiscoveryDataset => {
   const identifier = getDatasetIdentifier(datasetSubject, graph);
 
-  const versions = resolveValueLabels(
-    graph.getObjects(datasetSubject, DCAT_HAS_VERSION),
-    graph
-  );
-
   return {
     id: getDatasetId(datasetSubject, identifier, graph, index),
     identifier,
@@ -81,7 +76,10 @@ export const mapDataset = (
     createdAt: normalizeDate(graph.getLiteral(datasetSubject, DCT_ISSUED)),
     modifiedAt: normalizeDate(graph.getLiteral(datasetSubject, DCT_MODIFIED)),
     version: graph.getLiteral(datasetSubject, DCAT_VERSION),
-    hasVersions: versions.length > 0 ? versions : undefined,
+    hasVersions: resolveValueLabels(
+      graph.getObjects(datasetSubject, DCAT_HAS_VERSION),
+      graph
+    ),
     versionNotes: extractVersionNotes(datasetSubject, graph),
     spatialCoverage: extractSpatialCoverage(datasetSubject, graph),
     populationCoverage: extractPopulationCoverage(datasetSubject, graph),
@@ -298,7 +296,3 @@ const extractFrequency = (
     graph.getLiteral(freq, SKOS_PREF_LABEL) || value.split("/").pop() || value;
   return { value, label };
 };
-
-
-
-

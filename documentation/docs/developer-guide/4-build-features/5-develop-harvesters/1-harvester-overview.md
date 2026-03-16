@@ -2,7 +2,7 @@
 slug: /developer-guide/harvester-overview
 sidebar_label: "Harvester overview"
 sidebar_position: 1
-description: Fair Data Point harvester stages and guid handling
+description: Fair Data Point harvester stages and GUID handling
 ---
 
 <!--

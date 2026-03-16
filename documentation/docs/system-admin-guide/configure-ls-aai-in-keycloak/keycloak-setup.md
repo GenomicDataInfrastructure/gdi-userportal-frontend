@@ -111,6 +111,6 @@ This guide will help you set up OAuth 2.0 authorization for a request in Postman
    - **Client Authentication**: Select 'Send as Basic Auth header' from the dropdown menu.
 
 8. **Obtain Access Token**
-   - Click on the 'Get New Access Token' button to initiate the OAuth 2.0 authorization flow.
+   - Select the 'Get New Access Token' button to initiate the OAuth 2.0 authorization flow.
 
 After completing these steps, you should be able to receive an access token that can be used to authorize your requests within Postman, which is containing also an Elixer Id

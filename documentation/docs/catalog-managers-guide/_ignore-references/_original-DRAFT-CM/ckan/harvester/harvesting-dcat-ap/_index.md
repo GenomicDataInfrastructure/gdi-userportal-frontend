@@ -20,7 +20,7 @@ More about profiles and compatibility modes can be found in [CKAN + DCAT documen
 
 Rebuild the containers.
 
-Go to CKAN harvest page (e.g. [http://localhost:5500/harvest](http://localhost:5500/harvest)). Click “Add Harvest Source”.
+Go to CKAN harvest page (e.g. [http://localhost:5500/harvest](http://localhost:5500/harvest)). Select“Add Harvest Source”.
 
 At URL, enter URL of dataset you want to harvest. Select harvester type and fill in the configuration. Save.
 
@@ -35,7 +35,7 @@ In the image below you can see example configuration for the last example file. 
 is different from CKAN default one.
 
 After a harvester job is configured, it can be triggered manually by clicking Reharvest in the job's Admin section. If you select the manual time interval, you need to do this each time you want to run the job. However, if you set the Update frequency to e.g. daily, a background process will automatically trigger the harvester at the end of each day.
-To test harvesting in Docker Desktop go to the container then click Terminal. Enter the command `ckan --config=/srv/app/ckan.ini harvester run-test <id of harvester>`, the <id of harvester> is the part of the URL of the harvest source.
+To test harvesting in Docker Desktop go to the container then select Terminal. Enter the command `ckan --config=/srv/app/ckan.ini harvester run-test <id of harvester>`, the <id of harvester> is the part of the URL of the harvest source.
 
 If successful you'll see datasets uploaded in CKAN.
 

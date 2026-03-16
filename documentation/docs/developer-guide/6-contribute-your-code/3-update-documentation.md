@@ -70,9 +70,10 @@ The documentation site uses [Docusaurus](https://docusaurus.io/), a modern stati
 
 Update the appropriate guide based on your changes:
 
-- **`docs/user-guide/`** - End-user documentation for data requesters and catalogue managers
-- **`docs/developer-guide/`** - Developer onboarding, setup, and contribution guides (you're here!)
-- **`docs/system-admin-guide/`** - Deployment and operations documentation
+- **`docs/user-guide/`:** End-user documentation for data requesters and catalogue managers
+- **`docs/catalog-managers-guide/`:** End-user documentation for catalogue managers (users of CKAN admin interface)
+- **`docs/developer-guide/`:** Developer onboarding, setup, and contribution guides (you're here!)
+- **`docs/system-admin-guide/`:** Deployment and operations documentation
 
 ### Run documentation locally
 

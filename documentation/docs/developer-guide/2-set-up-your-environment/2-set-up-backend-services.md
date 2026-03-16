@@ -173,7 +173,7 @@ The executable JAR is in `target/quarkus-app/`.
 2. Maven dependencies will import automatically
 3. Enable annotation processing (Settings → Build → Compiler → Annotation Processors)
 
-**Install VS code extensions:**
+**Install VS Code extensions:**
 - Extension Pack for Java
 - Quarkus
 - Lombok Annotations Support for VS Code

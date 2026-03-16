@@ -142,7 +142,7 @@ To add and configure a searchable field:
 
 ## FAIR Data Point (FDP)
 
-For the technical point of view, updating the appropriate **SHACL shapes** allows for adding of fields.
+From a technical point of view, updating the appropriate **SHACL shapes** allows for adding of fields.
 
 To add a field in FDP:
 

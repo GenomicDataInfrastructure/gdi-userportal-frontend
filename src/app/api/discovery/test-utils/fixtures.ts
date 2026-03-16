@@ -14,7 +14,8 @@ export const canonicalDiscoveryRdf = `
            xmlns:dcatap="http://data.europa.eu/r5r/"
            xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
            xmlns:skos="http://www.w3.org/2004/02/skos/core#"
-           xmlns:dpv="http://www.w3.org/ns/dpv#">
+           xmlns:dpv="http://www.w3.org/ns/dpv#"
+           xmlns:foaf="http://xmlns.com/foaf/0.1/">
     <dcat:Catalog rdf:about="https://example.org/catalogues/main">
       <dct:title>Main Catalogue</dct:title>
     </dcat:Catalog>
@@ -99,6 +100,28 @@ export const canonicalDiscoveryRdf = `
       <dcatap:applicableLegislation>
         <rdf:Description rdf:about="http://example.com/law/99"/>
       </dcatap:applicableLegislation>
+      <dct:publisher>
+        <foaf:Agent rdf:nodeID="Npublisher1">
+          <foaf:name xml:lang="eng">org</foaf:name>
+          <dct:type>
+            <skos:Concept rdf:about="http://purl.org/adms/publishertype/Company">
+              <skos:prefLabel xml:lang="eng">Company</skos:prefLabel>
+            </skos:Concept>
+          </dct:type>
+          <foaf:mbox rdf:resource="mailto:a@mail.com"/>
+        </foaf:Agent>
+      </dct:publisher>
+      <healthdcatap:hdab>
+        <foaf:Agent rdf:about="https://health.data.lu/hdab/luxembourg">
+          <foaf:name xml:lang="eng">Health Data Access Body Luxembourg</foaf:name>
+          <foaf:mbox rdf:resource="mailto:hdab@health.lu"/>
+        </foaf:Agent>
+      </healthdcatap:hdab>
+      <dct:creator>
+        <foaf:Agent rdf:nodeID="Ncreator1">
+          <foaf:name xml:lang="eng">org</foaf:name>
+        </foaf:Agent>
+      </dct:creator>
     </dcat:Dataset>
 
     <dcat:Dataset>
@@ -163,6 +186,49 @@ export const buildLocalDiscoveryDataset = (
     {
       value: "http://example.com/law/99", // NOSONAR
       label: "99",
+    },
+  ],
+  temporalCoverage: {
+    start: "2022-01-01T00:00:00.000Z",
+    end: "2023-01-01T00:00:00.000Z",
+  },
+  retentionPeriod: [
+    {
+      start: "2026-03-13T00:00:00.000Z",
+      end: "2026-03-20T00:00:00.000Z",
+    },
+  ],
+  temporalResolution: "P1D",
+  frequency: {
+    value: "http://publications.europa.eu/resource/authority/frequency/ANNUAL", // NOSONAR
+    label: "Annual",
+  },
+  publishers: [
+    {
+      name: "org",
+      email: "a@mail.com",
+      type: {
+        value: "http://purl.org/adms/publishertype/Company", // NOSONAR
+        label: "Company",
+      },
+    },
+  ],
+  hdab: [
+    {
+      name: "Health Data Access Body Luxembourg",
+      email: "hdab@health.lu",
+      uri: "https://health.data.lu/hdab/luxembourg", // NOSONAR
+    },
+  ],
+  creators: [
+    {
+      name: "org",
+    },
+  ],
+  publisherType: [
+    {
+      value: "http://purl.org/adms/publishertype/Company", // NOSONAR
+      label: "Company",
     },
   ],
   ...overrides,

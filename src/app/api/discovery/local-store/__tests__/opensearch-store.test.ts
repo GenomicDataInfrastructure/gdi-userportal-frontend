@@ -187,6 +187,9 @@ describe("OpenSearchDiscoveryStore", () => {
       id: "dataset-1",
       title: "Dataset 1",
       description: "Desc",
+      publishers: [],
+      hdab: [],
+      creators: [],
     });
   });
 
@@ -206,12 +209,30 @@ describe("OpenSearchDiscoveryStore", () => {
     mockClient.post.mockResolvedValueOnce({ data: { errors: false } });
 
     await expect(
-      store.upsertDatasets([{ id: "1", title: "A", description: "D" }])
+      store.upsertDatasets([
+        {
+          id: "1",
+          title: "A",
+          description: "D",
+          publishers: [],
+          hdab: [],
+          creators: [],
+        },
+      ])
     ).resolves.toBeUndefined();
 
     mockClient.post.mockResolvedValueOnce({ data: { errors: true } });
     await expect(
-      store.upsertDatasets([{ id: "2", title: "B", description: "E" }])
+      store.upsertDatasets([
+        {
+          id: "2",
+          title: "B",
+          description: "E",
+          publishers: [],
+          hdab: [],
+          creators: [],
+        },
+      ])
     ).rejects.toThrow("OpenSearch bulk upsert reported item-level errors");
   });
 

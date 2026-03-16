@@ -84,6 +84,64 @@ describe("opensearch/queries", () => {
               label: { type: "keyword" },
             },
           },
+          publishers: {
+            type: "object",
+            properties: {
+              name: { type: "text" },
+              email: { type: "keyword" },
+              url: { type: "keyword" },
+              uri: { type: "keyword" },
+              homepage: { type: "keyword" },
+              identifier: { type: "keyword" },
+              type: {
+                properties: {
+                  value: { type: "keyword" },
+                  label: { type: "keyword" },
+                },
+              },
+            },
+          },
+          hdab: {
+            type: "object",
+            properties: {
+              name: { type: "text" },
+              email: { type: "keyword" },
+              url: { type: "keyword" },
+              uri: { type: "keyword" },
+              homepage: { type: "keyword" },
+              identifier: { type: "keyword" },
+              type: {
+                properties: {
+                  value: { type: "keyword" },
+                  label: { type: "keyword" },
+                },
+              },
+            },
+          },
+          creators: {
+            type: "object",
+            properties: {
+              name: { type: "text" },
+              email: { type: "keyword" },
+              url: { type: "keyword" },
+              uri: { type: "keyword" },
+              homepage: { type: "keyword" },
+              identifier: { type: "keyword" },
+              type: {
+                properties: {
+                  value: { type: "keyword" },
+                  label: { type: "keyword" },
+                },
+              },
+            },
+          },
+          publisherType: {
+            type: "object",
+            properties: {
+              value: { type: "keyword" },
+              label: { type: "keyword" },
+            },
+          },
           accessRights: {
             properties: {
               value: { type: "keyword" },
@@ -150,7 +208,14 @@ describe("opensearch/queries", () => {
   test("buildBulkUpsertBody builds ndjson payload", () => {
     const body = buildBulkUpsertBody("idx", [
       canonicalDataset,
-      { id: "2", title: "B", catalogue: "catalogue-2" },
+      {
+        id: "2",
+        title: "B",
+        catalogue: "catalogue-2",
+        publishers: [],
+        hdab: [],
+        creators: [],
+      },
     ]);
 
     expect(body).toContain('"index":{"_index":"idx","_id":"1"}');

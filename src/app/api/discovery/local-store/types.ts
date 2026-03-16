@@ -10,6 +10,17 @@ export interface SpatialCoverage {
   centroid?: string;
 }
 
+export interface LocalAgent {
+  name: string;
+  email?: string;
+  url?: string;
+  uri?: string;
+  homepage?: string;
+  type?: { value: string; label: string };
+  identifier?: string;
+  actedOnBehalfOf?: LocalAgent[];
+}
+
 export interface LocalDiscoveryDataset {
   id: string;
   identifier?: string;
@@ -41,6 +52,10 @@ export interface LocalDiscoveryDataset {
   accessRights?: { value: string; label: string };
   legalBasis?: Array<{ value: string; label: string }>;
   applicableLegislation?: Array<{ value: string; label: string }>;
+  publishers: LocalAgent[];
+  hdab: LocalAgent[];
+  creators: LocalAgent[];
+  publisherType?: Array<{ value: string; label: string }>;
 }
 
 export interface StoredDocumentHit<TDocument> {

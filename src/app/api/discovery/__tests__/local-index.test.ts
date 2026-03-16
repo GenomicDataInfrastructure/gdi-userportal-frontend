@@ -66,7 +66,9 @@ describe("local-index APIs", () => {
   });
 
   test("upsertLocalIndexDatasetsApi forwards datasets to local store", async () => {
-    const datasets = [{ id: "d1", title: "Dataset 1" }];
+    const datasets = [
+      { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
+    ];
 
     await upsertLocalIndexDatasetsApi(datasets);
 
@@ -117,6 +119,9 @@ describe("local-index APIs", () => {
         versionNotes: undefined,
         numberOfUniqueIndividuals: 25000,
         maxTypicalAge: 95,
+        publishers: [],
+        hdab: [],
+        creators: [],
       },
       {
         id: "d2",
@@ -132,6 +137,9 @@ describe("local-index APIs", () => {
         versionNotes: undefined,
         numberOfUniqueIndividuals: undefined,
         maxTypicalAge: undefined,
+        publishers: [],
+        hdab: [],
+        creators: [],
       },
     ]);
     expect(count).toBe(2);
@@ -149,8 +157,22 @@ describe("local-index APIs", () => {
 
   test("harvestLocalIndexFromDcatUrlApi harvests and upserts datasets", async () => {
     const harvested = [
-      { id: "d1", title: "Dataset 1", description: "Desc 1" },
-      { id: "d2", title: "Dataset 2", description: "Desc 2" },
+      {
+        id: "d1",
+        title: "Dataset 1",
+        description: "Desc 1",
+        publishers: [],
+        hdab: [],
+        creators: [],
+      },
+      {
+        id: "d2",
+        title: "Dataset 2",
+        description: "Desc 2",
+        publishers: [],
+        hdab: [],
+        creators: [],
+      },
     ];
     mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
     mockHarvestFromUrl.mockResolvedValueOnce(harvested);
@@ -199,7 +221,7 @@ describe("local-index APIs", () => {
   test("harvestLocalIndexFromDcatUrlApi wraps clear failures", async () => {
     mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
     mockHarvestFromUrl.mockResolvedValueOnce([
-      { id: "d1", title: "Dataset 1" },
+      { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
     ]);
     mockClearLocalDiscoveryDatasets.mockRejectedValueOnce(
       new Error("clear failed")
@@ -215,8 +237,8 @@ describe("local-index APIs", () => {
   test("harvestLocalIndexFromDcatUrlApi wraps indexing failures", async () => {
     mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
     mockHarvestFromUrl.mockResolvedValueOnce([
-      { id: "d1", title: "Dataset 1" },
-      { id: "d2", title: "Dataset 2" },
+      { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
+      { id: "d2", title: "Dataset 2", publishers: [], hdab: [], creators: [] },
     ]);
     mockUpsertLocalDiscoveryDatasets.mockRejectedValueOnce(
       new Error("bulk failed")

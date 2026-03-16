@@ -6,6 +6,7 @@ import { getLocalDiscoveryStore } from "@/app/api/discovery/local-store/factory"
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import { BasePlaceholderDiscoveryProvider } from "@/app/api/discovery/providers/base-placeholder-provider";
 import {
+  DiscoveryAgent,
   DiscoveryDatasetBase,
   DiscoveryDatasetSearchQuery,
   DiscoveryDatasetsSearchResponse,
@@ -37,6 +38,20 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     );
   }
 
+  private mapAgent(
+    agent: LocalDiscoveryDataset["publishers"][number]
+  ): DiscoveryAgent {
+    return {
+      name: agent.name,
+      email: agent.email,
+      url: agent.url,
+      uri: agent.uri,
+      homepage: agent.homepage,
+      type: agent.type,
+      identifier: agent.identifier,
+    };
+  }
+
   private mapLocalDataset(
     dataset: LocalDiscoveryDataset
   ): DiscoveryDatasetBase {
@@ -62,9 +77,12 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       numberOfUniqueIndividuals: dataset.numberOfUniqueIndividuals,
       maxTypicalAge: dataset.maxTypicalAge,
       minTypicalAge: dataset.minTypicalAge,
-      publishers: [],
       themes: dataset.themes ?? [],
       keywords: dataset.keywords ?? [],
+      publishers: dataset.publishers.map((a) => this.mapAgent(a)),
+      hdab: dataset.hdab.map((a) => this.mapAgent(a)),
+      creators: dataset.creators.map((a) => this.mapAgent(a)),
+      publisherType: dataset.publisherType,
       populationCoverage: dataset.populationCoverage,
       spatialResolutionInMeters,
       spatialCoverage: dataset.spatialCoverage?.map((sc) => ({

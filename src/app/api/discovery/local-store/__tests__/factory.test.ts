@@ -51,7 +51,9 @@ describe("local-store factory", () => {
 
     const store = getLocalDiscoveryStore();
     const spy = jest.spyOn(store, "upsertDatasets").mockResolvedValueOnce();
-    const datasets = [{ id: "d1", title: "Dataset 1" }];
+    const datasets = [
+      { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
+    ];
 
     await upsertLocalDiscoveryDatasets(datasets);
 

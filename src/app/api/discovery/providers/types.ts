@@ -63,21 +63,42 @@ export interface DiscoveryTimeWindow {
   end?: string;
 }
 
-export interface DiscoverySearchedDataset {
+export interface DiscoverySpatialCoverage {
+  uri?: DiscoveryValueLabel;
+  text?: string;
+  geom?: string;
+  bbox?: string;
+  centroid?: string;
+}
+
+export interface DiscoveryDatasetBase {
   id: string;
   identifier?: string;
   title: string;
   description: string;
+  languages?: DiscoveryValueLabel[];
   publishers?: DiscoveryAgent[];
   themes?: DiscoveryValueLabel[];
   keywords?: string[];
   catalogue?: string;
   modifiedAt?: string;
   createdAt?: string;
+  version?: string;
+  hasVersions?: DiscoveryValueLabel[];
+  versionNotes?: string;
   accessRights?: DiscoveryValueLabel;
   conformsTo?: DiscoveryValueLabel[];
   numberOfUniqueIndividuals?: number;
   temporalCoverage?: DiscoveryTimeWindow;
+  populationCoverage?: string;
+  spatialCoverage?: DiscoverySpatialCoverage[];
+  spatialResolutionInMeters?: number;
+  retentionPeriod?: DiscoveryTimeWindow[];
+  temporalResolution?: string;
+  frequency?: DiscoveryValueLabel;
+}
+
+export interface DiscoverySearchedDataset extends DiscoveryDatasetBase {
   recordsCount?: number;
   distributionsCount?: number;
 }
@@ -113,7 +134,7 @@ export interface DiscoveryRetrievedDistribution {
   byteSize?: number;
   checksum?: string;
   checksumAlgorithm?: DiscoveryValueLabel;
-  compressionFormat?: string;
+  compressionFormat?: DiscoveryValueLabel;
   description: string;
   documentation?: string[];
   downloadUrl?: string;
@@ -123,7 +144,7 @@ export interface DiscoveryRetrievedDistribution {
   conformsTo?: DiscoveryValueLabel[];
   mediaType?: string;
   modifiedAt?: string;
-  packagingFormat?: string;
+  packagingFormat?: DiscoveryValueLabel;
   createdAt?: string;
   retentionPeriod?: DiscoveryTimeWindow[];
   rights?: string;
@@ -136,29 +157,14 @@ export interface DiscoveryRetrievedDistribution {
   uri?: string;
 }
 
-export interface DiscoveryRetrievedDataset {
-  id: string;
-  identifier?: string;
-  title: string;
-  description: string;
-  version?: string;
+export interface DiscoveryRetrievedDataset extends DiscoveryDatasetBase {
   license?: string;
   ownerOrg?: string;
-  themes?: DiscoveryValueLabel[];
   contacts?: DiscoveryContactPoint[];
   datasetRelationships?: DiscoveryDatasetRelationEntry[];
   dataDictionary?: DiscoveryDatasetDictionaryEntry[];
-  catalogue?: string;
-  createdAt?: string;
-  modifiedAt?: string;
   url?: string;
-  languages?: DiscoveryValueLabel[];
   creators?: DiscoveryAgent[];
-  publishers?: DiscoveryAgent[];
-  hasVersions?: DiscoveryValueLabel[];
-  accessRights?: DiscoveryValueLabel;
-  conformsTo?: DiscoveryValueLabel[];
-  keywords?: string[];
   provenance?: string;
   spatial?: DiscoveryValueLabel;
   distributions?: DiscoveryRetrievedDistribution[];
@@ -168,9 +174,7 @@ export interface DiscoveryRetrievedDataset {
   publisherType?: DiscoveryValueLabel[];
   trustedDataHolder?: boolean;
   hdab?: DiscoveryAgent[];
-  temporalCoverage?: DiscoveryTimeWindow;
   numberOfRecords?: number;
-  numberOfUniqueIndividuals?: number;
 }
 
 export interface DiscoveryFilterRange {

@@ -7,6 +7,22 @@ import {
   LocalDiscoverySearchOptions,
 } from "@/app/api/discovery/local-store/types";
 
+const fullTextSearchFields = [
+  "title^3",
+  "description",
+  "populationCoverage",
+  "versionNotes",
+];
+
+const keywordSearchFields = ["id", "identifier", "catalogue", "version"];
+
+const phrasePrefixFields = [
+  "title^4",
+  "description",
+  "populationCoverage",
+  "versionNotes",
+];
+
 export const createIndexMappings = () => ({
   mappings: {
     properties: {
@@ -15,6 +31,23 @@ export const createIndexMappings = () => ({
       title: { type: "text" },
       description: { type: "text" },
       catalogue: { type: "keyword" },
+      languages: { type: "keyword" },
+      createdAt: { type: "date" },
+      modifiedAt: { type: "date" },
+      version: { type: "keyword" },
+      hasVersions: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
+      versionNotes: { type: "text" },
+      populationCoverage: { type: "text" },
+      spatialCoverage: { type: "object" },
+      spatialResolutionInMeters: { type: "keyword" },
+      temporalCoverage: { type: "object" },
+      retentionPeriod: { type: "object" },
+      temporalResolution: { type: "keyword" },
+      frequency: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
     },
   },
 });
@@ -31,20 +64,14 @@ export const buildSearchBody = (options: LocalDiscoverySearchOptions) => {
             {
               multi_match: {
                 query,
-                fields: [
-                  "title^3",
-                  "description",
-                  "id",
-                  "identifier",
-                  "catalogue",
-                ],
+                fields: [...fullTextSearchFields, ...keywordSearchFields],
                 fuzziness: "AUTO",
               },
             },
             {
               multi_match: {
                 query,
-                fields: ["title^4", "description", "identifier", "catalogue"],
+                fields: phrasePrefixFields,
                 type: "phrase_prefix",
               },
             },

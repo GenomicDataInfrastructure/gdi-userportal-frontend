@@ -67,6 +67,7 @@
     "node-mocks-http": "^1.17.2",
     "npm-run-all2": "^8.0.4",
     "prism-react-renderer": "^2.4.1",
+    "rdf-parse": "^5.0.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-markdown": "^10.0.0",

@@ -25,4 +25,68 @@ describe("Retrieving a specific dataset", () => {
     expect(response).toBeDefined();
     expect(response.id).toEqual("99");
   });
+
+  test("accepts null data service fields returned by discovery backend", async () => {
+    mockDiscoveryAdapter.onGet("/api/v1/datasets/100").reply(200, {
+      id: "100",
+      title: "Dataset 100",
+      description: "This is dataset 100",
+      distributions: [
+        {
+          description: "Distribution description",
+          title: "Distribution title",
+          id: "distribution-1",
+          accessService: [
+            {
+              description: null,
+              id: null,
+              title: "",
+              endpoint_url: [],
+            },
+          ],
+        },
+      ],
+    });
+
+    const response = await retrieveDatasetApi("100");
+
+    expect(response.distributions?.[0]?.accessService?.[0]).toMatchObject({
+      description: null,
+      id: null,
+    });
+  });
+
+  test("accepts value-label compression and packaging formats", async () => {
+    mockDiscoveryAdapter.onGet("/api/v1/datasets/101").reply(200, {
+      id: "101",
+      title: "Dataset 101",
+      description: "This is dataset 101",
+      distributions: [
+        {
+          description: "Distribution description",
+          title: "Distribution title",
+          id: "distribution-1",
+          compressionFormat: {
+            value: "gzip",
+            label: "gzip",
+          },
+          packagingFormat: {
+            value: "tar",
+            label: "TAR archive",
+          },
+        },
+      ],
+    });
+
+    const response = await retrieveDatasetApi("101");
+
+    expect(response.distributions?.[0]?.compressionFormat).toEqual({
+      value: "gzip",
+      label: "gzip",
+    });
+    expect(response.distributions?.[0]?.packagingFormat).toEqual({
+      value: "tar",
+      label: "TAR archive",
+    });
+  });
 });

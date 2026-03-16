@@ -194,6 +194,9 @@ describe("LocalIndexDiscoveryProvider", () => {
           centroid: "POINT(10 46)",
         },
       ],
+      healthTheme: [],
+      healthCategory: [],
+      dcatType: undefined,
     });
   });
 
@@ -231,6 +234,9 @@ describe("LocalIndexDiscoveryProvider", () => {
       populationCoverage: undefined,
       spatialResolutionInMeters: undefined,
       spatialCoverage: [{ uri: undefined, text: "Luxembourg" }],
+      healthTheme: [],
+      healthCategory: [],
+      dcatType: undefined,
     });
   });
 

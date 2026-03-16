@@ -38,6 +38,13 @@ const DCAT_START_DATE = "http://www.w3.org/ns/dcat#startDate"; // NOSONAR
 const DCAT_END_DATE = "http://www.w3.org/ns/dcat#endDate"; // NOSONAR
 const DCAT_TEMPORAL_RESOLUTION = "http://www.w3.org/ns/dcat#temporalResolution"; // NOSONAR
 const DCT_ACCRUAL_PERIODICITY = "http://purl.org/dc/terms/accrualPeriodicity"; // NOSONAR
+const DCAT_THEME = "http://www.w3.org/ns/dcat#theme"; // NOSONAR
+const DCAT_KEYWORD = "http://www.w3.org/ns/dcat#keyword"; // NOSONAR
+const HEALTHDCATAP_HEALTH_THEME =
+  "http://healthdataportal.eu/ns/health#healthTheme"; // NOSONAR
+const HEALTHDCATAP_HEALTH_CATEGORY =
+  "http://healthdataportal.eu/ns/health#healthCategory"; // NOSONAR
+const DCT_TYPE = "http://purl.org/dc/terms/type"; // NOSONAR
 
 export const getFallbackCatalogue = (graph: RdfGraph): string => {
   const namedCatalogs = graph
@@ -59,6 +66,11 @@ export const mapDataset = (
 ): LocalDiscoveryDataset => {
   const identifier = getDatasetIdentifier(datasetSubject, graph);
 
+  const versions = resolveValueLabels(
+    graph.getObjects(datasetSubject, DCAT_HAS_VERSION),
+    graph
+  );
+
   return {
     id: getDatasetId(datasetSubject, identifier, graph, index),
     identifier,
@@ -69,9 +81,7 @@ export const mapDataset = (
     createdAt: normalizeDate(graph.getLiteral(datasetSubject, DCT_ISSUED)),
     modifiedAt: normalizeDate(graph.getLiteral(datasetSubject, DCT_MODIFIED)),
     version: graph.getLiteral(datasetSubject, DCAT_VERSION),
-    hasVersions: objectsToValueLabel(
-      graph.getObjects(datasetSubject, DCAT_HAS_VERSION)
-    ),
+    hasVersions: versions.length > 0 ? versions : undefined,
     versionNotes: extractVersionNotes(datasetSubject, graph),
     spatialCoverage: extractSpatialCoverage(datasetSubject, graph),
     populationCoverage: extractPopulationCoverage(datasetSubject, graph),
@@ -84,14 +94,41 @@ export const mapDataset = (
     temporalResolution:
       graph.getLiteral(datasetSubject, DCAT_TEMPORAL_RESOLUTION) || undefined,
     frequency: extractFrequency(datasetSubject, graph),
+    themes: resolveValueLabels(
+      graph.getObjects(datasetSubject, DCAT_THEME),
+      graph
+    ),
+    keywords: graph.getObjectValues(datasetSubject, DCAT_KEYWORD),
+    healthTheme: resolveValueLabels(
+      graph.getObjects(datasetSubject, HEALTHDCATAP_HEALTH_THEME),
+      graph
+    ),
+    healthCategory: resolveValueLabels(
+      graph.getObjects(datasetSubject, HEALTHDCATAP_HEALTH_CATEGORY),
+      graph
+    ),
+    dcatType: resolveValueLabels(
+      graph.getObjects(datasetSubject, DCT_TYPE),
+      graph
+    ),
   };
 };
 
-const objectsToValueLabel = (
-  objects: RDF.Term[]
-): Array<{ value: string; label: string }> | undefined => {
-  if (objects.length === 0) return undefined;
-  return objects.map((obj) => ({ value: obj.value, label: obj.value }));
+const resolveValueLabels = (
+  objects: RDF.Term[],
+  graph: RdfGraph
+): Array<{ value: string; label: string }> => {
+  return objects
+    .map((obj) => {
+      const value = graph.getNamedNodeValue(obj) || obj.value.trim();
+      if (!value) return null;
+      const label =
+        graph.getLiteral(obj, SKOS_PREF_LABEL) ||
+        value.split("/").pop() ||
+        value;
+      return { value, label };
+    })
+    .filter((item): item is { value: string; label: string } => item !== null);
 };
 
 const getDatasetIdentifier = (
@@ -261,3 +298,7 @@ const extractFrequency = (
     graph.getLiteral(freq, SKOS_PREF_LABEL) || value.split("/").pop() || value;
   return { value, label };
 };
+
+
+
+

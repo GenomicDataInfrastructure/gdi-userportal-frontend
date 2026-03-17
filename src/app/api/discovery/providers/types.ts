@@ -176,6 +176,8 @@ export interface DiscoveryRetrievedDataset extends DiscoveryDatasetBase {
   publisherCoverage?: string[];
   publisherType?: DiscoveryValueLabel[];
   trustedDataHolder?: boolean;
+  legalBasis?: DiscoveryValueLabel[];
+  applicableLegislation?: DiscoveryValueLabel[];
   hdab?: DiscoveryAgent[];
   numberOfRecords?: number;
 }

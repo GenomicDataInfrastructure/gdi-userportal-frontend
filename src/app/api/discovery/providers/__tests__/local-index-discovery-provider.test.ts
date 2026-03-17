@@ -109,6 +109,11 @@ describe("LocalIndexDiscoveryProvider", () => {
               text: "Luxembourg",
             },
           ],
+          accessRights: {
+            value:
+              "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
+            label: "Public",
+          },
         },
         {
           id: "b",
@@ -131,6 +136,7 @@ describe("LocalIndexDiscoveryProvider", () => {
           populationCoverage: undefined,
           spatialResolutionInMeters: undefined,
           spatialCoverage: undefined,
+          accessRights: undefined,
         },
       ],
     });
@@ -243,6 +249,23 @@ describe("LocalIndexDiscoveryProvider", () => {
         value: "http://example.org/dataset-type/STATISTICAL",
         label: "STATISTICAL",
       },
+      accessRights: {
+        value:
+          "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
+        label: "Public",
+      },
+      legalBasis: [
+        {
+          value: "GDPR Art. 6(1)(e)",
+          label: "GDPR Art. 6(1)(e)",
+        },
+      ],
+      applicableLegislation: [
+        {
+          value: "http://data.europa.eu/eli/reg/2016/679",
+          label: "GDPR",
+        },
+      ],
     });
   });
 
@@ -286,6 +309,23 @@ describe("LocalIndexDiscoveryProvider", () => {
       healthTheme: [],
       healthCategory: [],
       dcatType: undefined,
+      accessRights: {
+        value:
+          "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
+        label: "Public",
+      },
+      legalBasis: [
+        {
+          value: "GDPR Art. 6(1)(e)",
+          label: "GDPR Art. 6(1)(e)",
+        },
+      ],
+      applicableLegislation: [
+        {
+          value: "http://data.europa.eu/eli/reg/2016/679",
+          label: "GDPR",
+        },
+      ],
     });
   });
 

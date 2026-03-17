@@ -86,6 +86,23 @@ describe("DcatHarvesterService", () => {
             label: "STATISTICAL",
           },
         ],
+        accessRights: {
+          value:
+            "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
+          label: "Public",
+        },
+        legalBasis: [
+          {
+            value: "GDPR Art. 6(1)(e)",
+            label: "GDPR Art. 6(1)(e)",
+          },
+        ],
+        applicableLegislation: [
+          {
+            value: "http://data.europa.eu/eli/reg/2016/679",
+            label: "GDPR",
+          },
+        ],
       },
       {
         id: "ID-2",
@@ -114,6 +131,9 @@ describe("DcatHarvesterService", () => {
         healthTheme: [],
         healthCategory: [],
         dcatType: [],
+        accessRights: undefined,
+        legalBasis: undefined,
+        applicableLegislation: undefined,
       },
     ]);
   });

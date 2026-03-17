@@ -43,6 +43,7 @@ export const seedLocalIndexFromDdsApi = async (
         version: dataset.version,
         hasVersions: dataset.hasVersions,
         versionNotes: dataset.versionNotes ? [dataset.versionNotes] : undefined,
+        accessRights: dataset.accessRights,
         numberOfUniqueIndividuals: dataset.numberOfUniqueIndividuals,
         maxTypicalAge: dataset.maxTypicalAge,
       })) ?? [];

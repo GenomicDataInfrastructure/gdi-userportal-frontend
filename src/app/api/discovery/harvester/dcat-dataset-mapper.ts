@@ -27,6 +27,7 @@ const DCAT_HAS_VERSION = "http://www.w3.org/ns/dcat#hasVersion"; // NOSONAR
 const ADMS_VERSION_NOTES = "http://www.w3.org/ns/adms#versionNotes"; // NOSONAR
 const DCT_SPATIAL = "http://purl.org/dc/terms/spatial"; // NOSONAR
 const SKOS_PREF_LABEL = "http://www.w3.org/2004/02/skos/core#prefLabel"; // NOSONAR
+const RDFS_LABEL = "http://www.w3.org/2000/01/rdf-schema#label"; // NOSONAR
 const HEALTHDCATAP_NUMBER_OF_RECORDS =
   "http://healthdataportal.eu/ns/health#numberOfRecords"; // NOSONAR
 const HEALTHDCATAP_NUMBER_OF_UNIQUE_INDIVIDUALS =
@@ -51,6 +52,10 @@ const HEALTHDCATAP_HEALTH_THEME =
 const HEALTHDCATAP_HEALTH_CATEGORY =
   "http://healthdataportal.eu/ns/health#healthCategory"; // NOSONAR
 const DCT_TYPE = "http://purl.org/dc/terms/type"; // NOSONAR
+const DCT_ACCESS_RIGHTS = "http://purl.org/dc/terms/accessRights"; // NOSONAR
+const DPV_HAS_LEGAL_BASIS = "http://www.w3.org/ns/dpv#hasLegalBasis"; // NOSONAR
+const DCATAP_APPLICABLE_LEGISLATION =
+  "http://data.europa.eu/r5r/applicableLegislation"; // NOSONAR
 
 export const getFallbackCatalogue = (graph: RdfGraph): string => {
   const namedCatalogs = graph
@@ -113,6 +118,9 @@ export const mapDataset = (
     temporalResolution:
       graph.getLiteral(datasetSubject, DCAT_TEMPORAL_RESOLUTION) || undefined,
     frequency: extractFrequency(datasetSubject, graph),
+    accessRights: extractAccessRights(datasetSubject, graph),
+    legalBasis: extractLegalBasis(datasetSubject, graph),
+    applicableLegislation: extractApplicableLegislation(datasetSubject, graph),
     themes: resolveValueLabels(
       graph.getObjects(datasetSubject, DCAT_THEME),
       graph
@@ -327,4 +335,58 @@ const extractFrequency = (
   const label =
     graph.getLiteral(freq, SKOS_PREF_LABEL) || value.split("/").pop() || value;
   return { value, label };
+};
+
+const extractAccessRights = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): { value: string; label: string } | undefined => {
+  const objects = graph.getObjects(datasetSubject, DCT_ACCESS_RIGHTS);
+  if (!objects.length) return undefined;
+  const obj = objects[0];
+  const value = graph.getNamedNodeValue(obj) || obj.value;
+  if (!value) return undefined;
+  const label =
+    graph.getLiteral(obj, SKOS_PREF_LABEL) || value.split("/").pop() || value;
+  return { value, label };
+};
+
+const extractLegalBasis = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): Array<{ value: string; label: string }> | undefined => {
+  const objects = graph.getObjects(datasetSubject, DPV_HAS_LEGAL_BASIS);
+  if (!objects.length) return undefined;
+  const result = objects
+    .map((obj) => {
+      const label = graph.getLiteral(obj, DCT_DESCRIPTION);
+      if (!label) return null;
+      const value = graph.getNamedNodeValue(obj) || label;
+      return { value, label };
+    })
+    .filter((item): item is { value: string; label: string } => item !== null);
+  return result.length > 0 ? result : undefined;
+};
+
+const extractApplicableLegislation = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): Array<{ value: string; label: string }> | undefined => {
+  const objects = graph.getObjects(
+    datasetSubject,
+    DCATAP_APPLICABLE_LEGISLATION
+  );
+  if (!objects.length) return undefined;
+  const result = objects
+    .map((obj) => {
+      const value = graph.getNamedNodeValue(obj) || obj.value;
+      if (!value) return null;
+      const label =
+        graph.getFirstLiteral(obj, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
+        value.split("/").pop() ||
+        value;
+      return { value, label };
+    })
+    .filter((item): item is { value: string; label: string } => item !== null);
+  return result.length > 0 ? result : undefined;
 };

@@ -167,10 +167,10 @@ describe("opensearch/queries", () => {
       '"accessRights":{"value":"http://publications.europa.eu/resource/authority/access-right/PUBLIC","label":"Public"}'
     );
     expect(body).toContain(
-      '"legalBasis":[{"value":"GDPR Art. 6(1)(e)","label":"GDPR Art. 6(1)(e)"}]'
+      '"legalBasis":[{"value":"GDPR Art. 6(1)(e)","label":"GDPR Art. 6(1)(e)"},{"value":"GDPR Art. 6(1)(c)","label":"GDPR Art. 6(1)(c)"}]'
     );
     expect(body).toContain(
-      '"applicableLegislation":[{"value":"http://data.europa.eu/eli/reg/2016/679","label":"GDPR"}]'
+      '"applicableLegislation":[{"value":"http://data.europa.eu/eli/reg/2016/679","label":"GDPR"},{"value":"http://example.com/law/42","label":"Example Law 42"},{"value":"http://example.com/law/99","label":"99"}]'
     );
     expect(body).toContain('"index":{"_index":"idx","_id":"2"}');
     expect(body.endsWith("\n")).toBe(true);

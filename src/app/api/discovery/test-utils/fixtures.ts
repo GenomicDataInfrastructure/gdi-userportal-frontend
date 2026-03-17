@@ -75,10 +75,28 @@ export const canonicalDiscoveryRdf = `
           <dct:description xml:lang="eng">GDPR Art. 6(1)(e)</dct:description>
         </dpv:LegalBasis>
       </dpv:hasLegalBasis>
+      <dpv:hasLegalBasis>
+        <dpv:LegalBasis rdf:nodeID="Nlegalbasis2">
+          <!-- intentionally missing dct:description — should be dropped by mapper -->
+        </dpv:LegalBasis>
+      </dpv:hasLegalBasis>
+      <dpv:hasLegalBasis>
+        <dpv:LegalBasis rdf:nodeID="Nlegalbasis3">
+          <dct:description xml:lang="eng">GDPR Art. 6(1)(c)</dct:description>
+        </dpv:LegalBasis>
+      </dpv:hasLegalBasis>
       <dcatap:applicableLegislation>
         <rdf:Description rdf:about="http://data.europa.eu/eli/reg/2016/679">
           <rdfs:label xml:lang="eng">GDPR</rdfs:label>
         </rdf:Description>
+      </dcatap:applicableLegislation>
+      <dcatap:applicableLegislation>
+        <rdf:Description rdf:about="http://example.com/law/42">
+          <skos:prefLabel xml:lang="eng">Example Law 42</skos:prefLabel>
+        </rdf:Description>
+      </dcatap:applicableLegislation>
+      <dcatap:applicableLegislation>
+        <rdf:Description rdf:about="http://example.com/law/99"/>
       </dcatap:applicableLegislation>
     </dcat:Dataset>
 
@@ -126,11 +144,23 @@ export const buildLocalDiscoveryDataset = (
       value: "GDPR Art. 6(1)(e)",
       label: "GDPR Art. 6(1)(e)",
     },
+    {
+      value: "GDPR Art. 6(1)(c)",
+      label: "GDPR Art. 6(1)(c)",
+    },
   ],
   applicableLegislation: [
     {
       value: "http://data.europa.eu/eli/reg/2016/679", // NOSONAR
       label: "GDPR",
+    },
+    {
+      value: "http://example.com/law/42", // NOSONAR
+      label: "Example Law 42",
+    },
+    {
+      value: "http://example.com/law/99", // NOSONAR
+      label: "99",
     },
   ],
   ...overrides,

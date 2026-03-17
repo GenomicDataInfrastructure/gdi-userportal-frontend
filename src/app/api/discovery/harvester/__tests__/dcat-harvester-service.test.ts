@@ -96,11 +96,23 @@ describe("DcatHarvesterService", () => {
             value: "GDPR Art. 6(1)(e)",
             label: "GDPR Art. 6(1)(e)",
           },
+          {
+            value: "GDPR Art. 6(1)(c)",
+            label: "GDPR Art. 6(1)(c)",
+          },
         ],
         applicableLegislation: [
           {
             value: "http://data.europa.eu/eli/reg/2016/679",
             label: "GDPR",
+          },
+          {
+            value: "http://example.com/law/42",
+            label: "Example Law 42",
+          },
+          {
+            value: "http://example.com/law/99",
+            label: "99",
           },
         ],
       },

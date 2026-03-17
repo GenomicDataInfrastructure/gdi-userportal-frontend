@@ -32,6 +32,11 @@ export interface LocalDiscoveryDataset {
   retentionPeriod?: Array<{ start?: string; end?: string }>;
   temporalResolution?: string;
   frequency?: { value: string; label: string };
+  themes?: Array<{ value: string; label: string }>;
+  keywords?: string[];
+  healthTheme?: Array<{ value: string; label: string }>;
+  healthCategory?: Array<{ value: string; label: string }>;
+  dcatType?: Array<{ value: string; label: string }>;
 }
 
 export interface StoredDocumentHit<TDocument> {

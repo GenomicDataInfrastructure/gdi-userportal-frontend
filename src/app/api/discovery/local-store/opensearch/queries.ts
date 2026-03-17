@@ -51,6 +51,19 @@ export const createIndexMappings = () => ({
       frequency: {
         properties: { value: { type: "keyword" }, label: { type: "keyword" } },
       },
+      themes: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
+      keywords: { type: "keyword" },
+      healthTheme: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
+      healthCategory: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
+      dcatType: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
     },
   },
 });

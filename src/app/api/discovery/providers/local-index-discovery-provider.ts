@@ -62,8 +62,8 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       numberOfUniqueIndividuals: dataset.numberOfUniqueIndividuals,
       maxTypicalAge: dataset.maxTypicalAge,
       publishers: [],
-      themes: [],
-      keywords: [],
+      themes: dataset.themes ?? [],
+      keywords: dataset.keywords ?? [],
       populationCoverage: dataset.populationCoverage,
       spatialResolutionInMeters,
       spatialCoverage: dataset.spatialCoverage?.map((sc) => ({
@@ -114,9 +114,15 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     if (!dataset) {
       throw new Error(`Dataset not found in local index: ${id}`);
     }
+    // DCAT can expose multiple dataset types, but the current UI and
+    // DDS-facing contract only support a single value.
+    const dcatType = dataset.dcatType?.[0];
 
     return {
       ...this.mapLocalDataset(dataset),
+      healthTheme: dataset.healthTheme ?? [],
+      healthCategory: dataset.healthCategory ?? [],
+      dcatType,
       numberOfRecords: dataset.numberOfRecords,
     };
   }

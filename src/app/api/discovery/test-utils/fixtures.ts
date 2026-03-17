@@ -56,6 +56,12 @@ export const canonicalDiscoveryRdf = `
           <skos:prefLabel xml:lang="eng">Annual</skos:prefLabel>
         </dct:Frequency>
       </dct:accrualPeriodicity>
+      <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/HEAL"/>
+      <dcat:keyword>oncology</dcat:keyword>
+      <dcat:keyword>genomics</dcat:keyword>
+      <healthdcatap:healthTheme rdf:resource="http://healthdataportal.eu/ns/health-theme/cancer"/>
+      <healthdcatap:healthCategory rdf:resource="http://healthdataportal.eu/ns/health-category/registries"/>
+      <dct:type rdf:resource="http://publications.europa.eu/resource/authority/dataset-type/STATISTICAL"/>
     </dcat:Dataset>
 
     <dcat:Dataset>

@@ -28,7 +28,7 @@ describe("DcatHarvesterService", () => {
         hasVersions: [
           {
             value: "https://example.org/datasets/1/v1",
-            label: "https://example.org/datasets/1/v1",
+            label: "v1",
           },
         ],
         versionNotes: ["Updated with 2024 data"],
@@ -59,6 +59,33 @@ describe("DcatHarvesterService", () => {
             "http://publications.europa.eu/resource/authority/frequency/ANNUAL",
           label: "Annual",
         },
+        themes: [
+          {
+            value:
+              "http://publications.europa.eu/resource/authority/data-theme/HEAL",
+            label: "HEAL",
+          },
+        ],
+        keywords: ["oncology", "genomics"],
+        healthTheme: [
+          {
+            value: "http://healthdataportal.eu/ns/health-theme/cancer",
+            label: "cancer",
+          },
+        ],
+        healthCategory: [
+          {
+            value: "http://healthdataportal.eu/ns/health-category/registries",
+            label: "registries",
+          },
+        ],
+        dcatType: [
+          {
+            value:
+              "http://publications.europa.eu/resource/authority/dataset-type/STATISTICAL",
+            label: "STATISTICAL",
+          },
+        ],
       },
       {
         id: "ID-2",
@@ -70,7 +97,7 @@ describe("DcatHarvesterService", () => {
         createdAt: undefined,
         modifiedAt: undefined,
         version: "",
-        hasVersions: undefined,
+        hasVersions: [],
         versionNotes: undefined,
         numberOfRecords: undefined,
         numberOfUniqueIndividuals: undefined,
@@ -82,6 +109,11 @@ describe("DcatHarvesterService", () => {
         retentionPeriod: undefined,
         temporalResolution: undefined,
         frequency: undefined,
+        themes: [],
+        keywords: [],
+        healthTheme: [],
+        healthCategory: [],
+        dcatType: [],
       },
     ]);
   });
@@ -245,7 +277,7 @@ describe("DcatHarvesterService", () => {
       createdAt: undefined,
       modifiedAt: undefined,
       version: "",
-      hasVersions: undefined,
+      hasVersions: [],
       versionNotes: undefined,
       populationCoverage: "",
       spatialCoverage: undefined,
@@ -254,6 +286,11 @@ describe("DcatHarvesterService", () => {
       retentionPeriod: undefined,
       temporalResolution: undefined,
       frequency: undefined,
+      themes: [],
+      keywords: [],
+      healthTheme: [],
+      healthCategory: [],
+      dcatType: [],
     });
   });
 
@@ -417,7 +454,7 @@ describe("DcatHarvesterService", () => {
         createdAt: undefined,
         modifiedAt: undefined,
         version: "",
-        hasVersions: undefined,
+        hasVersions: [],
         versionNotes: undefined,
         numberOfRecords: undefined,
         numberOfUniqueIndividuals: undefined,
@@ -429,6 +466,11 @@ describe("DcatHarvesterService", () => {
         retentionPeriod: undefined,
         temporalResolution: undefined,
         frequency: undefined,
+        themes: [],
+        keywords: [],
+        healthTheme: [],
+        healthCategory: [],
+        dcatType: [],
       },
     ]);
 

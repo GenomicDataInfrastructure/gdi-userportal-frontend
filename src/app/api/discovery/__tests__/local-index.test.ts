@@ -86,6 +86,9 @@ describe("local-index APIs", () => {
           modifiedAt: undefined,
           version: undefined,
           hasVersions: undefined,
+          numberOfRecords: undefined,
+          numberOfUniqueIndividuals: undefined,
+          maxTypicalAge: undefined,
         }),
         { id: "", title: "Missing id", description: "C" },
         { id: "d4", title: "", description: "D" },
@@ -112,6 +115,8 @@ describe("local-index APIs", () => {
         version: "1.0.0",
         hasVersions: [{ value: "v1", label: "Version 1" }],
         versionNotes: undefined,
+        numberOfUniqueIndividuals: 25000,
+        maxTypicalAge: 95,
       },
       {
         id: "d2",
@@ -125,6 +130,8 @@ describe("local-index APIs", () => {
         version: undefined,
         hasVersions: undefined,
         versionNotes: undefined,
+        numberOfUniqueIndividuals: undefined,
+        maxTypicalAge: undefined,
       },
     ]);
     expect(count).toBe(2);

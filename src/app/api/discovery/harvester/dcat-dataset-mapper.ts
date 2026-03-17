@@ -27,6 +27,12 @@ const DCAT_HAS_VERSION = "http://www.w3.org/ns/dcat#hasVersion"; // NOSONAR
 const ADMS_VERSION_NOTES = "http://www.w3.org/ns/adms#versionNotes"; // NOSONAR
 const DCT_SPATIAL = "http://purl.org/dc/terms/spatial"; // NOSONAR
 const SKOS_PREF_LABEL = "http://www.w3.org/2004/02/skos/core#prefLabel"; // NOSONAR
+const HEALTHDCATAP_NUMBER_OF_RECORDS =
+  "http://healthdataportal.eu/ns/health#numberOfRecords"; // NOSONAR
+const HEALTHDCATAP_NUMBER_OF_UNIQUE_INDIVIDUALS =
+  "http://healthdataportal.eu/ns/health#numberOfUniqueIndividuals"; // NOSONAR
+const HEALTHDCATAP_MAX_TYPICAL_AGE =
+  "http://healthdataportal.eu/ns/health#maxTypicalAge"; // NOSONAR
 const HEALTHDCATAP_POPULATION_COVERAGE =
   "http://healthdataportal.eu/ns/health#populationCoverage"; // NOSONAR
 const DCAT_SPATIAL_RESOLUTION_IN_METERS =
@@ -73,6 +79,21 @@ export const mapDataset = (
       graph.getObjects(datasetSubject, DCAT_HAS_VERSION)
     ),
     versionNotes: extractVersionNotes(datasetSubject, graph),
+    numberOfRecords: extractNumericLiteral(
+      datasetSubject,
+      graph,
+      HEALTHDCATAP_NUMBER_OF_RECORDS
+    ),
+    numberOfUniqueIndividuals: extractNumericLiteral(
+      datasetSubject,
+      graph,
+      HEALTHDCATAP_NUMBER_OF_UNIQUE_INDIVIDUALS
+    ),
+    maxTypicalAge: extractNumericLiteral(
+      datasetSubject,
+      graph,
+      HEALTHDCATAP_MAX_TYPICAL_AGE
+    ),
     spatialCoverage: extractSpatialCoverage(datasetSubject, graph),
     populationCoverage: extractPopulationCoverage(datasetSubject, graph),
     spatialResolutionInMeters: extractSpatialResolutionInMeters(
@@ -164,6 +185,17 @@ const normalizeDate = (value: string): string | undefined => {
   } catch {
     return undefined;
   }
+};
+
+const extractNumericLiteral = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph,
+  predicate: string
+): number | undefined => {
+  const value = graph.getLiteral(datasetSubject, predicate);
+  if (!value) return undefined;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isNaN(parsed) ? undefined : parsed;
 };
 
 const extractPopulationCoverage = (

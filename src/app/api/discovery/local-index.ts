@@ -46,6 +46,10 @@ export const seedLocalIndexFromDdsApi = async (
         accessRights: dataset.accessRights,
         numberOfUniqueIndividuals: dataset.numberOfUniqueIndividuals,
         maxTypicalAge: dataset.maxTypicalAge,
+        publishers: [],
+        hdab: [],
+        creators: [],
+        publisherType: dataset.publisherType,
       })) ?? [];
 
   await upsertLocalDiscoveryDatasets(datasets);

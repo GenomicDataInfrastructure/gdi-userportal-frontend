@@ -77,7 +77,7 @@ export interface DiscoveryDatasetBase {
   title: string;
   description: string;
   languages?: DiscoveryValueLabel[];
-  publishers?: DiscoveryAgent[];
+  publishers: DiscoveryAgent[];
   themes?: DiscoveryValueLabel[];
   keywords?: string[];
   catalogue?: string;
@@ -98,6 +98,9 @@ export interface DiscoveryDatasetBase {
   retentionPeriod?: DiscoveryTimeWindow[];
   temporalResolution?: string;
   frequency?: DiscoveryValueLabel;
+  hdab: DiscoveryAgent[];
+  creators: DiscoveryAgent[];
+  publisherType?: DiscoveryValueLabel[];
 }
 
 export interface DiscoverySearchedDataset extends DiscoveryDatasetBase {
@@ -166,7 +169,6 @@ export interface DiscoveryRetrievedDataset extends DiscoveryDatasetBase {
   datasetRelationships?: DiscoveryDatasetRelationEntry[];
   dataDictionary?: DiscoveryDatasetDictionaryEntry[];
   url?: string;
-  creators?: DiscoveryAgent[];
   provenance?: string;
   spatial?: DiscoveryValueLabel;
   distributions?: DiscoveryRetrievedDistribution[];
@@ -175,11 +177,9 @@ export interface DiscoveryRetrievedDataset extends DiscoveryDatasetBase {
   healthCategory?: DiscoveryValueLabel[];
   publisherNote?: string;
   publisherCoverage?: string[];
-  publisherType?: DiscoveryValueLabel[];
   trustedDataHolder?: boolean;
   legalBasis?: DiscoveryValueLabel[];
   applicableLegislation?: DiscoveryValueLabel[];
-  hdab?: DiscoveryAgent[];
   numberOfRecords?: number;
 }
 

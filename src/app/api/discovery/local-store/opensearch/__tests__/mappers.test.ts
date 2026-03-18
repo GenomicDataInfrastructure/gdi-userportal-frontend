@@ -49,6 +49,9 @@ describe("opensearch/mappers", () => {
       version: undefined,
       hasVersions: undefined,
       versionNotes: undefined,
+      publishers: [],
+      hdab: [],
+      creators: [],
     };
 
     expect(
@@ -82,6 +85,9 @@ describe("opensearch/mappers", () => {
           version: undefined,
           hasVersions: undefined,
           versionNotes: undefined,
+          publishers: [],
+          hdab: [],
+          creators: [],
         },
       ],
     });

@@ -4,6 +4,7 @@
 
 import type * as RDF from "@rdfjs/types";
 import {
+  LocalAgent,
   LocalDiscoveryDataset,
   SpatialCoverage,
 } from "@/app/api/discovery/local-store/types";
@@ -58,6 +59,14 @@ const DCT_ACCESS_RIGHTS = "http://purl.org/dc/terms/accessRights"; // NOSONAR
 const DPV_HAS_LEGAL_BASIS = "http://www.w3.org/ns/dpv#hasLegalBasis"; // NOSONAR
 const DCATAP_APPLICABLE_LEGISLATION =
   "http://data.europa.eu/r5r/applicableLegislation"; // NOSONAR
+const DCT_PUBLISHER = "http://purl.org/dc/terms/publisher"; // NOSONAR
+const DCT_CREATOR = "http://purl.org/dc/terms/creator"; // NOSONAR
+const FOAF_NAME = "http://xmlns.com/foaf/0.1/name"; // NOSONAR
+const FOAF_MBOX = "http://xmlns.com/foaf/0.1/mbox"; // NOSONAR
+const FOAF_HOMEPAGE = "http://xmlns.com/foaf/0.1/homepage"; // NOSONAR
+const FOAF_URL = "http://xmlns.com/foaf/0.1/workInfoHomepage"; // NOSONAR
+const PROV_ACTED_ON_BEHALF_OF = "http://www.w3.org/ns/prov#actedOnBehalfOf"; // NOSONAR
+const HEALTHDCATAP_HDAB = "http://healthdataportal.eu/ns/health#hdab"; // NOSONAR
 
 export const getFallbackCatalogue = (graph: RdfGraph): string => {
   const namedCatalogs = graph
@@ -78,6 +87,10 @@ export const mapDataset = (
   index: number
 ): LocalDiscoveryDataset => {
   const identifier = getDatasetIdentifier(datasetSubject, graph);
+  const publishers = extractAgents(datasetSubject, graph, DCT_PUBLISHER);
+  const publisherTypes = publishers
+    .map((p) => p.type)
+    .filter((t): t is { value: string; label: string } => t !== undefined);
 
   return {
     id: getDatasetId(datasetSubject, identifier, graph, index),
@@ -145,6 +158,10 @@ export const mapDataset = (
       graph.getObjects(datasetSubject, DCT_TYPE),
       graph
     ),
+    publishers,
+    publisherType: publisherTypes.length > 0 ? publisherTypes : undefined,
+    hdab: extractAgents(datasetSubject, graph, HEALTHDCATAP_HDAB),
+    creators: extractAgents(datasetSubject, graph, DCT_CREATOR),
   };
 };
 
@@ -396,4 +413,74 @@ const extractApplicableLegislation = (
     })
     .filter((item): item is { value: string; label: string } => item !== null);
   return result.length > 0 ? result : undefined;
+};
+
+const extractAgent = (
+  agentSubject: RDF.Term,
+  graph: RdfGraph
+): LocalAgent | undefined => {
+  const name = graph.getLiteral(agentSubject, FOAF_NAME);
+  if (!name) return undefined;
+
+  // foaf:mbox is typically a NamedNode like mailto:a@mail.com
+  const mboxObjects = graph.getObjects(agentSubject, FOAF_MBOX);
+  const rawMbox = mboxObjects[0]?.value?.trim() ?? "";
+  const email = rawMbox.startsWith("mailto:")
+    ? rawMbox.slice("mailto:".length)
+    : rawMbox || undefined;
+
+  // foaf:homepage is a NamedNode resource
+  const homepageObjects = graph.getObjects(agentSubject, FOAF_HOMEPAGE);
+  const homepage =
+    homepageObjects.length > 0
+      ? graph.getNamedNodeValue(homepageObjects[0]) || undefined
+      : undefined;
+
+  // foaf:workInfoHomepage as url fallback
+  const urlObjects = graph.getObjects(agentSubject, FOAF_URL);
+  const url =
+    urlObjects.length > 0
+      ? graph.getNamedNodeValue(urlObjects[0]) || undefined
+      : undefined;
+
+  const uri = graph.getNamedNodeValue(agentSubject) || undefined;
+
+  const identifier =
+    graph.getLiteral(agentSubject, DCT_IDENTIFIER) || undefined;
+
+  // dct:type → skos:Concept with skos:prefLabel
+  let type: { value: string; label: string } | undefined;
+  const typeObjects = graph.getObjects(agentSubject, DCT_TYPE);
+  if (typeObjects.length) {
+    const typeSubject = typeObjects[0];
+    const typeValue = graph.getNamedNodeValue(typeSubject);
+    if (typeValue) {
+      const typeLabel =
+        graph.getLiteral(typeSubject, SKOS_PREF_LABEL) ||
+        typeValue.split("/").pop() ||
+        typeValue;
+      type = { value: typeValue, label: typeLabel };
+    }
+  }
+
+  return {
+    name,
+    ...(email && { email }),
+    ...(url && { url }),
+    ...(uri && { uri }),
+    ...(homepage && { homepage }),
+    ...(type && { type }),
+    ...(identifier && { identifier }),
+  };
+};
+
+const extractAgents = (
+  subject: RDF.Term,
+  graph: RdfGraph,
+  predicate: string
+): LocalAgent[] => {
+  const objects = graph.getObjects(subject, predicate);
+  return objects
+    .map((obj) => extractAgent(obj, graph))
+    .filter((a): a is LocalAgent => a !== undefined);
 };

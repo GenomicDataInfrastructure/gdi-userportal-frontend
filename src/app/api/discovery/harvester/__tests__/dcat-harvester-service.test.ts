@@ -60,6 +60,34 @@ describe("DcatHarvesterService", () => {
             "http://publications.europa.eu/resource/authority/frequency/ANNUAL",
           label: "Annual",
         },
+        publishers: [
+          {
+            name: "org",
+            email: "a@mail.com",
+            type: {
+              value: "http://purl.org/adms/publishertype/Company",
+              label: "Company",
+            },
+          },
+        ],
+        hdab: [
+          {
+            name: "Health Data Access Body Luxembourg",
+            email: "hdab@health.lu",
+            uri: "https://health.data.lu/hdab/luxembourg",
+          },
+        ],
+        creators: [
+          {
+            name: "org",
+          },
+        ],
+        publisherType: [
+          {
+            value: "http://purl.org/adms/publishertype/Company",
+            label: "Company",
+          },
+        ],
         themes: [
           {
             value:
@@ -140,6 +168,10 @@ describe("DcatHarvesterService", () => {
         retentionPeriod: undefined,
         temporalResolution: undefined,
         frequency: undefined,
+        publishers: [],
+        hdab: [],
+        creators: [],
+        publisherType: undefined,
         themes: [],
         keywords: [],
         healthTheme: [],
@@ -320,6 +352,10 @@ describe("DcatHarvesterService", () => {
       retentionPeriod: undefined,
       temporalResolution: undefined,
       frequency: undefined,
+      publishers: [],
+      hdab: [],
+      creators: [],
+      publisherType: undefined,
       themes: [],
       keywords: [],
       healthTheme: [],
@@ -501,6 +537,10 @@ describe("DcatHarvesterService", () => {
         retentionPeriod: undefined,
         temporalResolution: undefined,
         frequency: undefined,
+        publishers: [],
+        hdab: [],
+        creators: [],
+        publisherType: undefined,
         themes: [],
         keywords: [],
         healthTheme: [],

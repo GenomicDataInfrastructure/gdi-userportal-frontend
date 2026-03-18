@@ -565,6 +565,7 @@ const DatasetMetadata = ({
         dataset.publisherNote ||
         (dataset.publisherType && dataset.publisherType.length > 0) ||
         (dataset.hdab && dataset.hdab.length > 0) ||
+        (dataset.creators && dataset.creators.length > 0) ||
         dataset.trustedDataHolder !== undefined) && (
         <MetadataSection
           title="Publisher & Data Governance"
@@ -592,6 +593,29 @@ const DatasetMetadata = ({
                 <NotProvided />
               )}
               <Tooltip message="Type of organization publishing this dataset." />
+            </div>
+            <div className="flex items-center gap-2 flex-wrap relative group">
+              <FontAwesomeIcon
+                icon={faBuilding}
+                className="text-primary text-xs"
+              />
+              <span className="font-medium shrink-0">Creators:</span>
+              {dataset.creators && dataset.creators.length > 0 ? (
+                dataset.creators.map((agent, index) => (
+                  <span key={index} className="flex items-center gap-1">
+                    <span>
+                      {agent.name}
+                      {agent.email && (
+                        <span className="ml-1 text-info">({agent.email})</span>
+                      )}
+                    </span>
+                    {index < dataset.creators!.length - 1 && ","}
+                  </span>
+                ))
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Entities responsible for creating this dataset." />
             </div>
             <div className="flex items-center gap-2 relative group">
               <FontAwesomeIcon

@@ -18,6 +18,9 @@ const mapStoredDocument = (
   ...response._source,
   id: response._source?.id ?? response._id,
   title: response._source?.title ?? "",
+  publishers: response._source?.publishers ?? [],
+  hdab: response._source?.hdab ?? [],
+  creators: response._source?.creators ?? [],
 });
 
 export const mapSearchResponse = (

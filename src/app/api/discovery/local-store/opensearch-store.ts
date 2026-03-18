@@ -93,10 +93,18 @@ export class OpenSearchDiscoveryStore implements LocalDiscoveryStore {
       if (!isIndexAlreadyExistsError(error)) {
         throw error;
       }
-      await this.client.put(
-        `/${this.indexName}/_mapping`,
-        createIndexMappings().mappings
-      );
+      try {
+        await this.client.put(
+          `/${this.indexName}/_mapping`,
+          createIndexMappings().mappings
+        );
+      } catch (mappingError) {
+        console.warn(
+          `[OpenSearch] Could not update mapping for index "${this.indexName}" — ` +
+            `one or more field types may have changed. Delete and recreate the index to apply the new schema. ` +
+            `Error: ${formatSearchBackendError(mappingError)}`
+        );
+      }
     }
 
     this.initialized = true;

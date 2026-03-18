@@ -63,7 +63,7 @@ describe("LocalIndexDiscoveryProvider", () => {
       count: 2,
       results: [
         buildLocalDiscoveryDataset({ identifier: "IDENT-A" }),
-        { id: "b", title: "Dataset B" },
+        { id: "b", title: "Dataset B", publishers: [], hdab: [], creators: [] },
       ],
     });
 
@@ -94,7 +94,21 @@ describe("LocalIndexDiscoveryProvider", () => {
           maxTypicalAge: 95,
           minTypicalAge: 18,
           recordsCount: 2,
-          publishers: [],
+          publishers: [
+            {
+              name: "org",
+              email: "a@mail.com",
+              type: {
+                value: "http://purl.org/adms/publishertype/Company",
+                label: "Company",
+              },
+              url: undefined,
+              uri: undefined,
+              homepage: undefined,
+              identifier: undefined,
+              actedOnBehalfOf: undefined,
+            },
+          ],
           themes: [],
           keywords: [],
           populationCoverage: "People of LNDS.",
@@ -108,6 +122,55 @@ describe("LocalIndexDiscoveryProvider", () => {
                   "http://publications.europa.eu/resource/authority/country/LUX",
               },
               text: "Luxembourg",
+              geom: undefined,
+              bbox: undefined,
+              centroid: undefined,
+            },
+          ],
+          temporalCoverage: {
+            start: "2022-01-01T00:00:00.000Z",
+            end: "2023-01-01T00:00:00.000Z",
+          },
+          retentionPeriod: [
+            {
+              start: "2026-03-13T00:00:00.000Z",
+              end: "2026-03-20T00:00:00.000Z",
+            },
+          ],
+          temporalResolution: "P1D",
+          frequency: {
+            value:
+              "http://publications.europa.eu/resource/authority/frequency/ANNUAL",
+            label: "Annual",
+          },
+          hdab: [
+            {
+              name: "Health Data Access Body Luxembourg",
+              email: "hdab@health.lu",
+              uri: "https://health.data.lu/hdab/luxembourg",
+              url: undefined,
+              homepage: undefined,
+              identifier: undefined,
+              type: undefined,
+              actedOnBehalfOf: undefined,
+            },
+          ],
+          creators: [
+            {
+              name: "org",
+              email: undefined,
+              url: undefined,
+              uri: undefined,
+              homepage: undefined,
+              identifier: undefined,
+              type: undefined,
+              actedOnBehalfOf: undefined,
+            },
+          ],
+          publisherType: [
+            {
+              value: "http://purl.org/adms/publishertype/Company",
+              label: "Company",
             },
           ],
           accessRights: {
@@ -133,12 +196,19 @@ describe("LocalIndexDiscoveryProvider", () => {
           minTypicalAge: undefined,
           recordsCount: 2,
           publishers: [],
+          hdab: [],
           themes: [],
           keywords: [],
           populationCoverage: undefined,
           spatialResolutionInMeters: undefined,
           spatialCoverage: undefined,
           accessRights: undefined,
+          temporalCoverage: undefined,
+          retentionPeriod: undefined,
+          temporalResolution: undefined,
+          frequency: undefined,
+          creators: [],
+          publisherType: undefined,
         },
       ],
     });
@@ -217,12 +287,26 @@ describe("LocalIndexDiscoveryProvider", () => {
       maxTypicalAge: 95,
       minTypicalAge: 18,
       numberOfRecords: 50000,
-      publishers: [],
       themes: [
         { value: "http://example.org/theme/health", label: "Health" },
         { value: "http://example.org/theme/science", label: "Science" },
       ],
       keywords: ["oncology", "genomics"],
+      publishers: [
+        {
+          name: "org",
+          email: "a@mail.com",
+          type: {
+            value: "http://purl.org/adms/publishertype/Company",
+            label: "Company",
+          },
+          url: undefined,
+          uri: undefined,
+          homepage: undefined,
+          identifier: undefined,
+          actedOnBehalfOf: undefined,
+        },
+      ],
       populationCoverage: "People of LNDS.",
       spatialResolutionInMeters: 4,
       spatialCoverage: [
@@ -281,6 +365,52 @@ describe("LocalIndexDiscoveryProvider", () => {
           label: "99",
         },
       ],
+      temporalCoverage: {
+        start: "2022-01-01T00:00:00.000Z",
+        end: "2023-01-01T00:00:00.000Z",
+      },
+      retentionPeriod: [
+        {
+          start: "2026-03-13T00:00:00.000Z",
+          end: "2026-03-20T00:00:00.000Z",
+        },
+      ],
+      temporalResolution: "P1D",
+      frequency: {
+        value:
+          "http://publications.europa.eu/resource/authority/frequency/ANNUAL",
+        label: "Annual",
+      },
+      hdab: [
+        {
+          name: "Health Data Access Body Luxembourg",
+          email: "hdab@health.lu",
+          uri: "https://health.data.lu/hdab/luxembourg",
+          url: undefined,
+          homepage: undefined,
+          identifier: undefined,
+          type: undefined,
+          actedOnBehalfOf: undefined,
+        },
+      ],
+      creators: [
+        {
+          name: "org",
+          email: undefined,
+          url: undefined,
+          uri: undefined,
+          homepage: undefined,
+          identifier: undefined,
+          type: undefined,
+          actedOnBehalfOf: undefined,
+        },
+      ],
+      publisherType: [
+        {
+          value: "http://purl.org/adms/publishertype/Company",
+          label: "Company",
+        },
+      ],
     });
   });
 
@@ -316,12 +446,25 @@ describe("LocalIndexDiscoveryProvider", () => {
       maxTypicalAge: 95,
       minTypicalAge: 18,
       numberOfRecords: 50000,
-      publishers: [],
+      publishers: [
+        {
+          name: "org",
+          email: "a@mail.com",
+          type: {
+            value: "http://purl.org/adms/publishertype/Company",
+            label: "Company",
+          },
+          url: undefined,
+          uri: undefined,
+          homepage: undefined,
+          identifier: undefined,
+          actedOnBehalfOf: undefined,
+        },
+      ],
       themes: [],
       keywords: [],
       populationCoverage: undefined,
       spatialResolutionInMeters: undefined,
-      spatialCoverage: [{ uri: undefined, text: "Luxembourg" }],
       healthTheme: [],
       healthCategory: [],
       dcatType: undefined,
@@ -352,6 +495,61 @@ describe("LocalIndexDiscoveryProvider", () => {
         {
           value: "http://example.com/law/99",
           label: "99",
+        },
+      ],
+      spatialCoverage: [
+        {
+          uri: undefined,
+          text: "Luxembourg",
+          geom: undefined,
+          bbox: undefined,
+          centroid: undefined,
+        },
+      ],
+      temporalCoverage: {
+        start: "2022-01-01T00:00:00.000Z",
+        end: "2023-01-01T00:00:00.000Z",
+      },
+      retentionPeriod: [
+        {
+          start: "2026-03-13T00:00:00.000Z",
+          end: "2026-03-20T00:00:00.000Z",
+        },
+      ],
+      temporalResolution: "P1D",
+      frequency: {
+        value:
+          "http://publications.europa.eu/resource/authority/frequency/ANNUAL",
+        label: "Annual",
+      },
+      hdab: [
+        {
+          name: "Health Data Access Body Luxembourg",
+          email: "hdab@health.lu",
+          uri: "https://health.data.lu/hdab/luxembourg",
+          url: undefined,
+          homepage: undefined,
+          identifier: undefined,
+          type: undefined,
+          actedOnBehalfOf: undefined,
+        },
+      ],
+      creators: [
+        {
+          name: "org",
+          email: undefined,
+          url: undefined,
+          uri: undefined,
+          homepage: undefined,
+          identifier: undefined,
+          type: undefined,
+          actedOnBehalfOf: undefined,
+        },
+      ],
+      publisherType: [
+        {
+          value: "http://purl.org/adms/publishertype/Company",
+          label: "Company",
         },
       ],
     });

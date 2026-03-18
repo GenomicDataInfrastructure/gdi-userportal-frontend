@@ -25,6 +25,7 @@ export interface LocalDiscoveryDataset {
   numberOfRecords?: number;
   numberOfUniqueIndividuals?: number;
   maxTypicalAge?: number;
+  minTypicalAge?: number;
   populationCoverage?: string;
   spatialCoverage?: SpatialCoverage[];
   spatialResolutionInMeters?: number[];
@@ -37,6 +38,9 @@ export interface LocalDiscoveryDataset {
   healthTheme?: Array<{ value: string; label: string }>;
   healthCategory?: Array<{ value: string; label: string }>;
   dcatType?: Array<{ value: string; label: string }>;
+  accessRights?: { value: string; label: string };
+  legalBasis?: Array<{ value: string; label: string }>;
+  applicableLegislation?: Array<{ value: string; label: string }>;
 }
 
 export interface StoredDocumentHit<TDocument> {

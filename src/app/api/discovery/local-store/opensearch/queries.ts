@@ -42,6 +42,7 @@ export const createIndexMappings = () => ({
       numberOfRecords: { type: "integer" },
       numberOfUniqueIndividuals: { type: "integer" },
       maxTypicalAge: { type: "integer" },
+      minTypicalAge: { type: "integer" },
       populationCoverage: { type: "text" },
       spatialCoverage: { type: "object" },
       spatialResolutionInMeters: { type: "keyword" },
@@ -62,6 +63,15 @@ export const createIndexMappings = () => ({
         properties: { value: { type: "keyword" }, label: { type: "keyword" } },
       },
       dcatType: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
+      accessRights: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
+      legalBasis: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
+      applicableLegislation: {
         properties: { value: { type: "keyword" }, label: { type: "keyword" } },
       },
     },

@@ -35,6 +35,7 @@ describe("DcatHarvesterService", () => {
         numberOfRecords: 50000,
         numberOfUniqueIndividuals: 25000,
         maxTypicalAge: 95,
+        minTypicalAge: 18,
         populationCoverage: "People of LNDS.",
         spatialCoverage: [
           {
@@ -86,6 +87,35 @@ describe("DcatHarvesterService", () => {
             label: "STATISTICAL",
           },
         ],
+        accessRights: {
+          value:
+            "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
+          label: "Public",
+        },
+        legalBasis: [
+          {
+            value: "GDPR Art. 6(1)(e)",
+            label: "GDPR Art. 6(1)(e)",
+          },
+          {
+            value: "GDPR Art. 6(1)(c)",
+            label: "GDPR Art. 6(1)(c)",
+          },
+        ],
+        applicableLegislation: [
+          {
+            value: "http://data.europa.eu/eli/reg/2016/679",
+            label: "GDPR",
+          },
+          {
+            value: "http://example.com/law/42",
+            label: "Example Law 42",
+          },
+          {
+            value: "http://example.com/law/99",
+            label: "99",
+          },
+        ],
       },
       {
         id: "ID-2",
@@ -102,6 +132,7 @@ describe("DcatHarvesterService", () => {
         numberOfRecords: undefined,
         numberOfUniqueIndividuals: undefined,
         maxTypicalAge: undefined,
+        minTypicalAge: undefined,
         populationCoverage: "",
         spatialCoverage: undefined,
         spatialResolutionInMeters: undefined,
@@ -114,6 +145,9 @@ describe("DcatHarvesterService", () => {
         healthTheme: [],
         healthCategory: [],
         dcatType: [],
+        accessRights: undefined,
+        legalBasis: undefined,
+        applicableLegislation: undefined,
       },
     ]);
   });
@@ -459,6 +493,7 @@ describe("DcatHarvesterService", () => {
         numberOfRecords: undefined,
         numberOfUniqueIndividuals: undefined,
         maxTypicalAge: undefined,
+        minTypicalAge: undefined,
         populationCoverage: "",
         spatialCoverage: undefined,
         spatialResolutionInMeters: undefined,

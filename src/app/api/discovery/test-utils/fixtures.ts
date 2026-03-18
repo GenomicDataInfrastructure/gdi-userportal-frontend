@@ -11,7 +11,10 @@ export const canonicalDiscoveryRdf = `
            xmlns:dc="http://purl.org/dc/elements/1.1/"
            xmlns:adms="http://www.w3.org/ns/adms#"
            xmlns:healthdcatap="http://healthdataportal.eu/ns/health#"
-           xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+           xmlns:dcatap="http://data.europa.eu/r5r/"
+           xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+           xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+           xmlns:dpv="http://www.w3.org/ns/dpv#">
     <dcat:Catalog rdf:about="https://example.org/catalogues/main">
       <dct:title>Main Catalogue</dct:title>
     </dcat:Catalog>
@@ -31,6 +34,7 @@ export const canonicalDiscoveryRdf = `
       <healthdcatap:numberOfRecords>50000</healthdcatap:numberOfRecords>
       <healthdcatap:numberOfUniqueIndividuals>25000</healthdcatap:numberOfUniqueIndividuals>
       <healthdcatap:maxTypicalAge>95</healthdcatap:maxTypicalAge>
+      <healthdcatap:minTypicalAge>18</healthdcatap:minTypicalAge>
       <dct:spatial>
         <dct:Location rdf:about="http://publications.europa.eu/resource/authority/country/LUX">
           <skos:prefLabel xml:lang="eng">Luxembourg</skos:prefLabel>
@@ -62,6 +66,39 @@ export const canonicalDiscoveryRdf = `
       <healthdcatap:healthTheme rdf:resource="http://healthdataportal.eu/ns/health-theme/cancer"/>
       <healthdcatap:healthCategory rdf:resource="http://healthdataportal.eu/ns/health-category/registries"/>
       <dct:type rdf:resource="http://publications.europa.eu/resource/authority/dataset-type/STATISTICAL"/>
+      <dct:accessRights>
+        <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/access-right/PUBLIC">
+          <skos:prefLabel xml:lang="eng">Public</skos:prefLabel>
+        </skos:Concept>
+      </dct:accessRights>
+      <dpv:hasLegalBasis>
+        <dpv:LegalBasis rdf:nodeID="Nlegalbasis1">
+          <dct:description xml:lang="eng">GDPR Art. 6(1)(e)</dct:description>
+        </dpv:LegalBasis>
+      </dpv:hasLegalBasis>
+      <dpv:hasLegalBasis>
+        <dpv:LegalBasis rdf:nodeID="Nlegalbasis2">
+          <!-- intentionally missing dct:description — should be dropped by mapper -->
+        </dpv:LegalBasis>
+      </dpv:hasLegalBasis>
+      <dpv:hasLegalBasis>
+        <dpv:LegalBasis rdf:nodeID="Nlegalbasis3">
+          <dct:description xml:lang="eng">GDPR Art. 6(1)(c)</dct:description>
+        </dpv:LegalBasis>
+      </dpv:hasLegalBasis>
+      <dcatap:applicableLegislation>
+        <rdf:Description rdf:about="http://data.europa.eu/eli/reg/2016/679">
+          <rdfs:label xml:lang="eng">GDPR</rdfs:label>
+        </rdf:Description>
+      </dcatap:applicableLegislation>
+      <dcatap:applicableLegislation>
+        <rdf:Description rdf:about="http://example.com/law/42">
+          <skos:prefLabel xml:lang="eng">Example Law 42</skos:prefLabel>
+        </rdf:Description>
+      </dcatap:applicableLegislation>
+      <dcatap:applicableLegislation>
+        <rdf:Description rdf:about="http://example.com/law/99"/>
+      </dcatap:applicableLegislation>
     </dcat:Dataset>
 
     <dcat:Dataset>
@@ -90,12 +127,42 @@ export const buildLocalDiscoveryDataset = (
   numberOfRecords: 50000,
   numberOfUniqueIndividuals: 25000,
   maxTypicalAge: 95,
+  minTypicalAge: 18,
   populationCoverage: "People of LNDS.",
   spatialResolutionInMeters: [4],
   spatialCoverage: [
     {
       uri: "http://publications.europa.eu/resource/authority/country/LUX", // NOSONAR
       text: "Luxembourg",
+    },
+  ],
+  accessRights: {
+    value:
+      "http://publications.europa.eu/resource/authority/access-right/PUBLIC", // NOSONAR
+    label: "Public",
+  },
+  legalBasis: [
+    {
+      value: "GDPR Art. 6(1)(e)",
+      label: "GDPR Art. 6(1)(e)",
+    },
+    {
+      value: "GDPR Art. 6(1)(c)",
+      label: "GDPR Art. 6(1)(c)",
+    },
+  ],
+  applicableLegislation: [
+    {
+      value: "http://data.europa.eu/eli/reg/2016/679", // NOSONAR
+      label: "GDPR",
+    },
+    {
+      value: "http://example.com/law/42", // NOSONAR
+      label: "Example Law 42",
+    },
+    {
+      value: "http://example.com/law/99", // NOSONAR
+      label: "99",
     },
   ],
   ...overrides,
@@ -113,5 +180,6 @@ export const buildDdsSearchedDataset = (
   hasVersions: [{ value: "v1", label: "Version 1" }],
   numberOfUniqueIndividuals: 25000,
   maxTypicalAge: 95,
+  minTypicalAge: 18,
   ...overrides,
 });

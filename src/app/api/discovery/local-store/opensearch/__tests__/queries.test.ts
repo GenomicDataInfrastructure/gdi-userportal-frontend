@@ -46,6 +46,7 @@ describe("opensearch/queries", () => {
           numberOfRecords: { type: "integer" },
           numberOfUniqueIndividuals: { type: "integer" },
           maxTypicalAge: { type: "integer" },
+          minTypicalAge: { type: "integer" },
           populationCoverage: { type: "text" },
           spatialCoverage: { type: "object" },
           spatialResolutionInMeters: { type: "keyword" },
@@ -78,6 +79,24 @@ describe("opensearch/queries", () => {
             },
           },
           dcatType: {
+            properties: {
+              value: { type: "keyword" },
+              label: { type: "keyword" },
+            },
+          },
+          accessRights: {
+            properties: {
+              value: { type: "keyword" },
+              label: { type: "keyword" },
+            },
+          },
+          legalBasis: {
+            properties: {
+              value: { type: "keyword" },
+              label: { type: "keyword" },
+            },
+          },
+          applicableLegislation: {
             properties: {
               value: { type: "keyword" },
               label: { type: "keyword" },
@@ -144,6 +163,15 @@ describe("opensearch/queries", () => {
     expect(body).toContain('"version":"1.0.0"');
     expect(body).toContain(
       '"hasVersions":[{"value":"v1","label":"Version 1"}]'
+    );
+    expect(body).toContain(
+      '"accessRights":{"value":"http://publications.europa.eu/resource/authority/access-right/PUBLIC","label":"Public"}'
+    );
+    expect(body).toContain(
+      '"legalBasis":[{"value":"GDPR Art. 6(1)(e)","label":"GDPR Art. 6(1)(e)"},{"value":"GDPR Art. 6(1)(c)","label":"GDPR Art. 6(1)(c)"}]'
+    );
+    expect(body).toContain(
+      '"applicableLegislation":[{"value":"http://data.europa.eu/eli/reg/2016/679","label":"GDPR"},{"value":"http://example.com/law/42","label":"Example Law 42"},{"value":"http://example.com/law/99","label":"99"}]'
     );
     expect(body).toContain('"index":{"_index":"idx","_id":"2"}');
     expect(body.endsWith("\n")).toBe(true);

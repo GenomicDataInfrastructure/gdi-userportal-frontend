@@ -61,6 +61,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       versionNotes,
       numberOfUniqueIndividuals: dataset.numberOfUniqueIndividuals,
       maxTypicalAge: dataset.maxTypicalAge,
+      minTypicalAge: dataset.minTypicalAge,
       publishers: [],
       themes: dataset.themes ?? [],
       keywords: dataset.keywords ?? [],
@@ -77,6 +78,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       retentionPeriod: dataset.retentionPeriod,
       temporalResolution: dataset.temporalResolution,
       frequency: dataset.frequency,
+      accessRights: dataset.accessRights,
     };
   }
 
@@ -124,6 +126,8 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       healthCategory: dataset.healthCategory ?? [],
       dcatType,
       numberOfRecords: dataset.numberOfRecords,
+      legalBasis: dataset.legalBasis,
+      applicableLegislation: dataset.applicableLegislation,
     };
   }
 }

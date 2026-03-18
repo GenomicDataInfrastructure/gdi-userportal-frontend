@@ -90,6 +90,7 @@ export interface DiscoveryDatasetBase {
   conformsTo?: DiscoveryValueLabel[];
   numberOfUniqueIndividuals?: number;
   maxTypicalAge?: number;
+  minTypicalAge?: number;
   temporalCoverage?: DiscoveryTimeWindow;
   populationCoverage?: string;
   spatialCoverage?: DiscoverySpatialCoverage[];
@@ -176,6 +177,8 @@ export interface DiscoveryRetrievedDataset extends DiscoveryDatasetBase {
   publisherCoverage?: string[];
   publisherType?: DiscoveryValueLabel[];
   trustedDataHolder?: boolean;
+  legalBasis?: DiscoveryValueLabel[];
+  applicableLegislation?: DiscoveryValueLabel[];
   hdab?: DiscoveryAgent[];
   numberOfRecords?: number;
 }

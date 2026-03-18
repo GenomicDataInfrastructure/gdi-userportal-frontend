@@ -92,6 +92,7 @@ describe("LocalIndexDiscoveryProvider", () => {
           versionNotes: "Initial release",
           numberOfUniqueIndividuals: 25000,
           maxTypicalAge: 95,
+          minTypicalAge: 18,
           recordsCount: 2,
           publishers: [],
           themes: [],
@@ -109,6 +110,11 @@ describe("LocalIndexDiscoveryProvider", () => {
               text: "Luxembourg",
             },
           ],
+          accessRights: {
+            value:
+              "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
+            label: "Public",
+          },
         },
         {
           id: "b",
@@ -124,6 +130,7 @@ describe("LocalIndexDiscoveryProvider", () => {
           versionNotes: undefined,
           numberOfUniqueIndividuals: undefined,
           maxTypicalAge: undefined,
+          minTypicalAge: undefined,
           recordsCount: 2,
           publishers: [],
           themes: [],
@@ -131,6 +138,7 @@ describe("LocalIndexDiscoveryProvider", () => {
           populationCoverage: undefined,
           spatialResolutionInMeters: undefined,
           spatialCoverage: undefined,
+          accessRights: undefined,
         },
       ],
     });
@@ -207,6 +215,7 @@ describe("LocalIndexDiscoveryProvider", () => {
       versionNotes: "Initial release",
       numberOfUniqueIndividuals: 25000,
       maxTypicalAge: 95,
+      minTypicalAge: 18,
       numberOfRecords: 50000,
       publishers: [],
       themes: [
@@ -243,6 +252,35 @@ describe("LocalIndexDiscoveryProvider", () => {
         value: "http://example.org/dataset-type/STATISTICAL",
         label: "STATISTICAL",
       },
+      accessRights: {
+        value:
+          "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
+        label: "Public",
+      },
+      legalBasis: [
+        {
+          value: "GDPR Art. 6(1)(e)",
+          label: "GDPR Art. 6(1)(e)",
+        },
+        {
+          value: "GDPR Art. 6(1)(c)",
+          label: "GDPR Art. 6(1)(c)",
+        },
+      ],
+      applicableLegislation: [
+        {
+          value: "http://data.europa.eu/eli/reg/2016/679",
+          label: "GDPR",
+        },
+        {
+          value: "http://example.com/law/42",
+          label: "Example Law 42",
+        },
+        {
+          value: "http://example.com/law/99",
+          label: "99",
+        },
+      ],
     });
   });
 
@@ -276,6 +314,7 @@ describe("LocalIndexDiscoveryProvider", () => {
       versionNotes: "Initial release",
       numberOfUniqueIndividuals: 25000,
       maxTypicalAge: 95,
+      minTypicalAge: 18,
       numberOfRecords: 50000,
       publishers: [],
       themes: [],
@@ -286,6 +325,35 @@ describe("LocalIndexDiscoveryProvider", () => {
       healthTheme: [],
       healthCategory: [],
       dcatType: undefined,
+      accessRights: {
+        value:
+          "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
+        label: "Public",
+      },
+      legalBasis: [
+        {
+          value: "GDPR Art. 6(1)(e)",
+          label: "GDPR Art. 6(1)(e)",
+        },
+        {
+          value: "GDPR Art. 6(1)(c)",
+          label: "GDPR Art. 6(1)(c)",
+        },
+      ],
+      applicableLegislation: [
+        {
+          value: "http://data.europa.eu/eli/reg/2016/679",
+          label: "GDPR",
+        },
+        {
+          value: "http://example.com/law/42",
+          label: "Example Law 42",
+        },
+        {
+          value: "http://example.com/law/99",
+          label: "99",
+        },
+      ],
     });
   });
 

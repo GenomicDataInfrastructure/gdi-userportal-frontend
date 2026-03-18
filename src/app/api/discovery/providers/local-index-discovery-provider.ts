@@ -61,6 +61,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       versionNotes,
       numberOfUniqueIndividuals: dataset.numberOfUniqueIndividuals,
       maxTypicalAge: dataset.maxTypicalAge,
+      minTypicalAge: dataset.minTypicalAge,
       publishers: [],
       themes: dataset.themes ?? [],
       keywords: dataset.keywords ?? [],

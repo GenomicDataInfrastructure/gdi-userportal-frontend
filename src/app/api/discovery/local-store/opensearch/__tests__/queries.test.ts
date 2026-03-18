@@ -46,6 +46,7 @@ describe("opensearch/queries", () => {
           numberOfRecords: { type: "integer" },
           numberOfUniqueIndividuals: { type: "integer" },
           maxTypicalAge: { type: "integer" },
+          minTypicalAge: { type: "integer" },
           populationCoverage: { type: "text" },
           spatialCoverage: { type: "object" },
           spatialResolutionInMeters: { type: "keyword" },

@@ -90,6 +90,7 @@ export interface DiscoveryDatasetBase {
   conformsTo?: DiscoveryValueLabel[];
   numberOfUniqueIndividuals?: number;
   maxTypicalAge?: number;
+  minTypicalAge?: number;
   temporalCoverage?: DiscoveryTimeWindow;
   populationCoverage?: string;
   spatialCoverage?: DiscoverySpatialCoverage[];

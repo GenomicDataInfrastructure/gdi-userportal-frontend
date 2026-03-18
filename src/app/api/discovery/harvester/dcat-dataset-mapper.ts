@@ -34,6 +34,8 @@ const HEALTHDCATAP_NUMBER_OF_UNIQUE_INDIVIDUALS =
   "http://healthdataportal.eu/ns/health#numberOfUniqueIndividuals"; // NOSONAR
 const HEALTHDCATAP_MAX_TYPICAL_AGE =
   "http://healthdataportal.eu/ns/health#maxTypicalAge"; // NOSONAR
+const HEALTHDCATAP_MIN_TYPICAL_AGE =
+  "http://healthdataportal.eu/ns/health#minTypicalAge"; // NOSONAR
 const HEALTHDCATAP_POPULATION_COVERAGE =
   "http://healthdataportal.eu/ns/health#populationCoverage"; // NOSONAR
 const DCAT_SPATIAL_RESOLUTION_IN_METERS =
@@ -106,6 +108,11 @@ export const mapDataset = (
       datasetSubject,
       graph,
       HEALTHDCATAP_MAX_TYPICAL_AGE
+    ),
+    minTypicalAge: extractNumericLiteral(
+      datasetSubject,
+      graph,
+      HEALTHDCATAP_MIN_TYPICAL_AGE
     ),
     spatialCoverage: extractSpatialCoverage(datasetSubject, graph),
     populationCoverage: extractPopulationCoverage(datasetSubject, graph),

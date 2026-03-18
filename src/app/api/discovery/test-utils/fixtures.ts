@@ -34,6 +34,7 @@ export const canonicalDiscoveryRdf = `
       <healthdcatap:numberOfRecords>50000</healthdcatap:numberOfRecords>
       <healthdcatap:numberOfUniqueIndividuals>25000</healthdcatap:numberOfUniqueIndividuals>
       <healthdcatap:maxTypicalAge>95</healthdcatap:maxTypicalAge>
+      <healthdcatap:minTypicalAge>18</healthdcatap:minTypicalAge>
       <dct:spatial>
         <dct:Location rdf:about="http://publications.europa.eu/resource/authority/country/LUX">
           <skos:prefLabel xml:lang="eng">Luxembourg</skos:prefLabel>
@@ -126,6 +127,7 @@ export const buildLocalDiscoveryDataset = (
   numberOfRecords: 50000,
   numberOfUniqueIndividuals: 25000,
   maxTypicalAge: 95,
+  minTypicalAge: 18,
   populationCoverage: "People of LNDS.",
   spatialResolutionInMeters: [4],
   spatialCoverage: [
@@ -178,5 +180,6 @@ export const buildDdsSearchedDataset = (
   hasVersions: [{ value: "v1", label: "Version 1" }],
   numberOfUniqueIndividuals: 25000,
   maxTypicalAge: 95,
+  minTypicalAge: 18,
   ...overrides,
 });

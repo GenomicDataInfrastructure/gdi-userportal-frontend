@@ -25,6 +25,7 @@ export interface LocalDiscoveryDataset {
   numberOfRecords?: number;
   numberOfUniqueIndividuals?: number;
   maxTypicalAge?: number;
+  minTypicalAge?: number;
   populationCoverage?: string;
   spatialCoverage?: SpatialCoverage[];
   spatialResolutionInMeters?: number[];

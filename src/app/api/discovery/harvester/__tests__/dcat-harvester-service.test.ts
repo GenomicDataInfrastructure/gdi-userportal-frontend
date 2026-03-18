@@ -35,6 +35,7 @@ describe("DcatHarvesterService", () => {
         numberOfRecords: 50000,
         numberOfUniqueIndividuals: 25000,
         maxTypicalAge: 95,
+        minTypicalAge: 18,
         populationCoverage: "People of LNDS.",
         spatialCoverage: [
           {
@@ -131,6 +132,7 @@ describe("DcatHarvesterService", () => {
         numberOfRecords: undefined,
         numberOfUniqueIndividuals: undefined,
         maxTypicalAge: undefined,
+        minTypicalAge: undefined,
         populationCoverage: "",
         spatialCoverage: undefined,
         spatialResolutionInMeters: undefined,
@@ -491,6 +493,7 @@ describe("DcatHarvesterService", () => {
         numberOfRecords: undefined,
         numberOfUniqueIndividuals: undefined,
         maxTypicalAge: undefined,
+        minTypicalAge: undefined,
         populationCoverage: "",
         spatialCoverage: undefined,
         spatialResolutionInMeters: undefined,

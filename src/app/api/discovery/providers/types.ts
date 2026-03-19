@@ -177,7 +177,7 @@ export interface DiscoveryRetrievedDataset extends DiscoveryDatasetBase {
   healthCategory?: DiscoveryValueLabel[];
   publisherNote?: string;
   publisherCoverage?: string[];
-  trustedDataHolder?: boolean;
+  trustedDataHolder?: boolean; // Deprecated in HealthDCAT-AP V6; moved under Agent. Has to be removed in the future.
   legalBasis?: DiscoveryValueLabel[];
   applicableLegislation?: DiscoveryValueLabel[];
   numberOfRecords?: number;

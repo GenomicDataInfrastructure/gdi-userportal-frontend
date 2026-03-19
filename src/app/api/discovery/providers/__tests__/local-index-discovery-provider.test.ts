@@ -93,7 +93,6 @@ describe("LocalIndexDiscoveryProvider", () => {
           numberOfUniqueIndividuals: 25000,
           maxTypicalAge: 95,
           minTypicalAge: 18,
-          recordsCount: 2,
           publishers: [
             {
               name: "org",
@@ -194,7 +193,6 @@ describe("LocalIndexDiscoveryProvider", () => {
           numberOfUniqueIndividuals: undefined,
           maxTypicalAge: undefined,
           minTypicalAge: undefined,
-          recordsCount: 2,
           publishers: [],
           hdab: [],
           themes: [],

@@ -123,7 +123,6 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       count: response.count,
       results: response.results.map((dataset) => ({
         ...this.mapLocalDataset(dataset),
-        recordsCount: response.count,
       })),
     };
   }

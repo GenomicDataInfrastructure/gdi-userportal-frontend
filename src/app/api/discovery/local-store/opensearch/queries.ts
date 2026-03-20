@@ -25,7 +25,7 @@ const phrasePrefixFields = [
 ];
 
 type OpenSearchQueryClause = Record<string, unknown>;
-type OpenSearchSortClause = Record<string, "asc" | "desc">;
+type OpenSearchSortClause = Record<string, unknown>;
 
 type FieldConfig = {
   exactFields?: string[];
@@ -33,8 +33,6 @@ type FieldConfig = {
   rangeField?: string;
   sortField?: string;
 };
-
-const defaultSort: OpenSearchSortClause[] = [{ _score: "desc" }, { id: "asc" }];
 
 const fieldConfigs: Record<string, FieldConfig> = {
   id: { exactFields: ["id"], sortField: "id" },
@@ -55,24 +53,12 @@ const fieldConfigs: Record<string, FieldConfig> = {
     sortField: "catalogue",
   },
   languages: { exactFields: ["languages"] },
-  themes: {
-    exactFields: ["themes.value", "themes.label"],
-    textFields: ["themes.label"],
-  },
   theme: {
     exactFields: ["themes.value", "themes.label"],
     textFields: ["themes.label"],
   },
   keywords: { exactFields: ["keywords"], textFields: ["keywords"] },
-  publishers: {
-    exactFields: ["publishers.name.keyword"],
-    textFields: ["publishers.name"],
-  },
   publisher_name: {
-    exactFields: ["publishers.name.keyword"],
-    textFields: ["publishers.name"],
-  },
-  publisher: {
     exactFields: ["publishers.name.keyword"],
     textFields: ["publishers.name"],
   },
@@ -351,58 +337,19 @@ const buildFacetFilterClauses = (
   return clauses;
 };
 
-const sortFieldAliases: Record<string, string> = {
-  score: "_score",
-  issued: "createdAt",
-  created: "createdAt",
-  createdAt: "createdAt",
-  metadata_modified: "modifiedAt",
-  modified: "modifiedAt",
-  modifiedAt: "modifiedAt",
-  identifier: "identifier",
-  title: "title.keyword",
-  recordsCount: "numberOfRecords",
-  numberOfRecords: "numberOfRecords",
-  distributionsCount: "distributionsCount",
-  numberOfUniqueIndividuals: "numberOfUniqueIndividuals",
-  maxTypicalAge: "maxTypicalAge",
-  minTypicalAge: "minTypicalAge",
-  spatialResolutionInMeters: "spatialResolutionInMeters",
-};
-
-const parseSort = (sort: string | undefined): OpenSearchSortClause[] => {
-  if (!sort?.trim()) {
-    return [...defaultSort];
+const buildSortClause = (sort?: string): OpenSearchSortClause[] => {
+  if (sort === "newest") {
+    return [
+      { createdAt: { order: "desc", missing: "_last" } },
+      { id: "asc" },
+    ];
   }
 
-  const clauses = sort
-    .split(",")
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .map((part) => part.match(/^([A-Za-z0-9_.-]+)(?:\s+(asc|desc))?$/i))
-    .filter((match): match is RegExpMatchArray => Boolean(match))
-    .map(([, field, direction]) => {
-      const resolvedField =
-        sortFieldAliases[field] ?? resolveFieldConfig(field)?.sortField;
-      if (!resolvedField) return null;
-
-      return {
-        [resolvedField]: (direction?.toLowerCase() === "asc"
-          ? "asc"
-          : "desc") as "asc" | "desc",
-      };
-    })
-    .filter((clause): clause is OpenSearchSortClause => Boolean(clause));
-
-  if (!clauses.length) {
-    return [...defaultSort];
-  }
-
-  if (!clauses.some((clause) => Object.keys(clause)[0] === "id")) {
-    clauses.push({ id: "asc" });
-  }
-
-  return clauses;
+  return [
+    { _score: "desc" },
+    { modifiedAt: { order: "desc", missing: "_last" } },
+    { id: "asc" },
+  ];
 };
 
 export const createIndexMappings = () => ({
@@ -592,7 +539,7 @@ export const buildSearchBody = (options: LocalDiscoverySearchOptions) => {
     from,
     size,
     query: finalQuery,
-    sort: parseSort(options.sort),
+    sort: buildSortClause(options.sort),
   };
 };
 

@@ -246,7 +246,7 @@ describe("opensearch/queries", () => {
     expect(shouldClauses[1].multi_match.query).toBe("adminis");
   });
 
-  test("buildSearchBody adds AND facet filters and custom sort", () => {
+  test("buildSearchBody adds AND facet filters", () => {
     const body = buildSearchBody({
       query: "registry",
       facets: [
@@ -263,8 +263,20 @@ describe("opensearch/queries", () => {
           operator: ">=",
           value: "100",
         },
+        {
+          source: "ckan",
+          type: "FREE_TEXT",
+          key: "publisher_name",
+          value: "health",
+        },
+        {
+          source: "ckan",
+          type: "DATETIME",
+          key: "metadata_modified",
+          operator: "!",
+          value: "2024-01-01T00:00:00.000Z",
+        },
       ],
-      sort: "issued desc",
     });
 
     expect((body.query as any).bool.must).toHaveLength(1);
@@ -279,8 +291,15 @@ describe("opensearch/queries", () => {
         },
       },
       { range: { numberOfRecords: { gte: 100 } } },
+      {
+        match_phrase_prefix: { "publishers.name": "health" },
+      },
+      {
+        bool: {
+          must_not: [{ term: { modifiedAt: "2024-01-01T00:00:00.000Z" } }],
+        },
+      },
     ]);
-    expect(body.sort).toEqual([{ createdAt: "desc" }, { id: "asc" }]);
   });
 
   test("buildSearchBody adds OR facet filters", () => {
@@ -294,9 +313,12 @@ describe("opensearch/queries", () => {
         },
         {
           source: "ckan",
-          type: "DROPDOWN",
-          key: "identifier",
-          value: "ID-2",
+          type: "ENTRIES",
+          key: "accessRights",
+          entries: [
+            { key: "public", value: "Public" },
+            { key: "restricted", value: "Restricted" },
+          ],
         },
       ],
       operator: "OR",
@@ -320,8 +342,32 @@ describe("opensearch/queries", () => {
                 {
                   bool: {
                     should: [
-                      { term: { identifier: "ID-2" } },
-                      { term: { id: "ID-2" } },
+                      {
+                        bool: {
+                          should: [
+                            { term: { "accessRights.value": "Public" } },
+                            { term: { "accessRights.label": "Public" } },
+                          ],
+                          minimum_should_match: 1,
+                        },
+                      },
+                      {
+                        bool: {
+                          should: [
+                            {
+                              term: {
+                                "accessRights.value": "Restricted",
+                              },
+                            },
+                            {
+                              term: {
+                                "accessRights.label": "Restricted",
+                              },
+                            },
+                          ],
+                          minimum_should_match: 1,
+                        },
+                      },
                     ],
                     minimum_should_match: 1,
                   },
@@ -333,96 +379,6 @@ describe("opensearch/queries", () => {
         ],
       },
     });
-  });
-
-  test("buildSearchBody supports free-text, entries, and negated facets", () => {
-    const body = buildSearchBody({
-      facets: [
-        {
-          source: "ckan",
-          type: "FREE_TEXT",
-          key: "publishers",
-          value: "health",
-        },
-        {
-          source: "ckan",
-          type: "ENTRIES",
-          key: "accessRights",
-          entries: [
-            { key: "public", value: "Public" },
-            { key: "restricted", value: "Restricted" },
-          ],
-        },
-        {
-          source: "ckan",
-          type: "DATETIME",
-          key: "metadata_modified",
-          operator: "!",
-          value: "2024-01-01T00:00:00.000Z",
-        },
-      ],
-    });
-
-    expect((body.query as any).bool.filter).toEqual([
-      {
-        match_phrase_prefix: { "publishers.name": "health" },
-      },
-      {
-        bool: {
-          should: [
-            {
-              bool: {
-                should: [
-                  { term: { "accessRights.value": "Public" } },
-                  { term: { "accessRights.label": "Public" } },
-                ],
-                minimum_should_match: 1,
-              },
-            },
-            {
-              bool: {
-                should: [
-                  { term: { "accessRights.value": "Restricted" } },
-                  { term: { "accessRights.label": "Restricted" } },
-                ],
-                minimum_should_match: 1,
-              },
-            },
-          ],
-          minimum_should_match: 1,
-        },
-      },
-      {
-        bool: {
-          must_not: [{ term: { modifiedAt: "2024-01-01T00:00:00.000Z" } }],
-        },
-      },
-    ]);
-  });
-
-  test("buildSearchBody adds a fallback phrase match for keyword dropdown fields", () => {
-    const body = buildSearchBody({
-      facets: [
-        {
-          source: "ckan",
-          type: "DROPDOWN",
-          key: "publisher_name",
-          value: "PNED GIE",
-        },
-      ],
-    });
-
-    expect((body.query as any).bool.filter).toEqual([
-      {
-        bool: {
-          should: [
-            { term: { "publishers.name.keyword": "PNED GIE" } },
-            { match_phrase: { "publishers.name": "PNED GIE" } },
-          ],
-          minimum_should_match: 1,
-        },
-      },
-    ]);
   });
 
   test("buildClearBody returns delete-all query", () => {

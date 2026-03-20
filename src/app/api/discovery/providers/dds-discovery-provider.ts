@@ -49,8 +49,16 @@ export class DdsDiscoveryProvider implements DiscoveryProvider {
     options: DiscoveryDatasetSearchQuery,
     headers: Record<string, string>
   ): Promise<DiscoveryDatasetsSearchResponse> {
+    const sort =
+      options.sort === "newest"
+        ? "issued desc"
+        : "score desc, metadata_modified desc";
+
     const response = await discoveryClient.dataset_search(
-      options as DatasetSearchQuery,
+      {
+        ...options,
+        sort,
+      } as DatasetSearchQuery,
       { headers }
     );
     return response as DiscoveryDatasetsSearchResponse;

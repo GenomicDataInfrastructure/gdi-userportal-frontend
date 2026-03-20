@@ -97,6 +97,7 @@ export interface StoredDocumentResponse<TDocument> {
 
 export interface LocalDiscoverySearchOptions {
   query?: string;
+  sort?: string;
   start?: number;
   rows?: number;
 }

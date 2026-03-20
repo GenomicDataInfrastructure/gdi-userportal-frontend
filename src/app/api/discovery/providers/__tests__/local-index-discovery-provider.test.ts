@@ -214,8 +214,25 @@ describe("LocalIndexDiscoveryProvider", () => {
     expect(mockStore.ensureInitialized).toHaveBeenCalled();
     expect(mockStore.searchDatasets).toHaveBeenCalledWith({
       query: "Dataset",
+      sort: undefined,
       start: 5,
       rows: 10,
+    });
+  });
+
+  test("searchDatasets forwards supported sort modes to the local store", async () => {
+    mockStore.searchDatasets.mockResolvedValueOnce({
+      count: 0,
+      results: [],
+    });
+
+    await provider.searchDatasets({ sort: "newest" }, {});
+
+    expect(mockStore.searchDatasets).toHaveBeenCalledWith({
+      query: undefined,
+      sort: "newest",
+      start: undefined,
+      rows: undefined,
     });
   });
 

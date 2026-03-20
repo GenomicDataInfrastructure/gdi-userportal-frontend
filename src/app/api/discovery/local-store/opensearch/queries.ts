@@ -169,8 +169,20 @@ export const buildSearchBody = (options: LocalDiscoverySearchOptions) => {
     from,
     size,
     query: queryClause,
-    sort: [{ _score: "desc" }, { id: "asc" }],
+    sort: buildSortClause(options.sort),
   };
+};
+
+const buildSortClause = (sort?: string) => {
+  if (sort === "newest") {
+    return [{ createdAt: { order: "desc", missing: "_last" } }, { id: "asc" }];
+  }
+
+  return [
+    { _score: "desc" },
+    { modifiedAt: { order: "desc", missing: "_last" } },
+    { id: "asc" },
+  ];
 };
 
 export const buildClearBody = () => ({

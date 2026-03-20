@@ -117,7 +117,7 @@ export default function DatasetsProvider({
     const options: DatasetSearchQuery = {
       query: q,
       facets: convertActiveFiltersToFacets(activeFilters),
-      sort: sort || "score desc, metadata_modified desc",
+      sort: sort || "relevance",
       start: page ? (Number(page) - 1) * DATASET_PER_PAGE : 0,
       rows: DATASET_PER_PAGE,
       includeBeacon,

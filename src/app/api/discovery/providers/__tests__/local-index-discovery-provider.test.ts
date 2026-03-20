@@ -363,6 +363,20 @@ describe("LocalIndexDiscoveryProvider", () => {
           label: "99",
         },
       ],
+      distributions: [
+        {
+          id: "distribution-1",
+          title: "Population Registry CSV",
+          description: "",
+          format: {
+            value:
+              "http://publications.europa.eu/resource/authority/file-type/CSV",
+            label: "CSV",
+          },
+          accessUrl: "https://example.org/access/population-registry",
+          downloadUrl: "https://example.org/download/population-registry.csv",
+        },
+      ],
       temporalCoverage: {
         start: "2022-01-01T00:00:00.000Z",
         end: "2023-01-01T00:00:00.000Z",
@@ -493,6 +507,20 @@ describe("LocalIndexDiscoveryProvider", () => {
         {
           value: "http://example.com/law/99",
           label: "99",
+        },
+      ],
+      distributions: [
+        {
+          id: "distribution-1",
+          title: "Population Registry CSV",
+          description: "",
+          format: {
+            value:
+              "http://publications.europa.eu/resource/authority/file-type/CSV",
+            label: "CSV",
+          },
+          accessUrl: "https://example.org/access/population-registry",
+          downloadUrl: "https://example.org/download/population-registry.csv",
         },
       ],
       spatialCoverage: [

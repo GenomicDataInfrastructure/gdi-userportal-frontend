@@ -27,6 +27,11 @@ const DistributionAccordion = ({
   const [openIndex, setOpenIndex] = useState<null | number>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
 
+  const getFormatLabel = (distribution: RetrievedDistribution) =>
+    distribution.format?.label ||
+    distribution.format?.value?.split("/").pop() ||
+    "NA";
+
   useEffect(() => {
     contentRefs.current = contentRefs.current.slice(0, distributions.length);
   }, [distributions]);
@@ -133,11 +138,33 @@ const DistributionAccordion = ({
                       File Type:
                     </strong>
                     <span className="text-sm ml-2">
-                      {distribution.format?.label || "NA"}
+                      {getFormatLabel(distribution)}
                     </span>
                     <Tooltip message="File type of the distribution." />
                   </span>
                 </div>
+                {distribution.accessUrl && (
+                  <div className="flex items-center relative">
+                    <span className="group flex items-center">
+                      <FontAwesomeIcon
+                        icon={faLink}
+                        className="text-primary align-middle mr-2"
+                      />
+                      <strong className="text-sm font-semibold">
+                        Access URL:
+                      </strong>
+                      <a
+                        href={distribution.accessUrl}
+                        className="text-sm text-primary ml-2 break-all"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        here
+                      </a>
+                      <Tooltip message="Link to access the distribution." />
+                    </span>
+                  </div>
+                )}
                 {distribution.downloadUrl && (
                   <div className="flex items-center relative">
                     <span className="group flex items-center">

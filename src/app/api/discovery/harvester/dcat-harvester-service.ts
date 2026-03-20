@@ -60,9 +60,31 @@ export class DcatHarvesterService {
     }
 
     if (!response.ok) {
-      throw new Error(
-        `Failed to fetch DCAT catalogue from ${url} (${response.status} ${response.statusText})`
-      );
+      const contentType = response.headers.get("content-type") || undefined;
+      let bodySnippet: string | undefined;
+
+      try {
+        const responseBody = await response.text();
+        const compactBody = responseBody.replace(/\s+/g, " ").trim();
+        if (compactBody) {
+          bodySnippet =
+            compactBody.length > 400
+              ? `${compactBody.slice(0, 400)}...`
+              : compactBody;
+        }
+      } catch (error) {
+        bodySnippet = `unable to read error response body: ${formatErrorDetails(error)}`;
+      }
+
+      const details = [
+        `Failed to fetch DCAT catalogue from ${url} (${response.status} ${response.statusText})`,
+        contentType ? `content-type: ${contentType}` : null,
+        bodySnippet ? `response body: ${bodySnippet}` : null,
+      ]
+        .filter(Boolean)
+        .join(" | ");
+
+      throw new Error(details);
     }
 
     let xmlText: string;

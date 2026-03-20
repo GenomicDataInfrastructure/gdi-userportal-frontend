@@ -21,6 +21,14 @@ export interface LocalAgent {
   actedOnBehalfOf?: LocalAgent[];
 }
 
+export interface LocalDiscoveryDistribution {
+  id: string;
+  title: string;
+  format?: { value: string; label: string };
+  accessUrl?: string;
+  downloadUrl?: string;
+}
+
 export interface LocalDiscoveryDataset {
   id: string;
   identifier?: string;
@@ -52,6 +60,7 @@ export interface LocalDiscoveryDataset {
   accessRights?: { value: string; label: string };
   legalBasis?: Array<{ value: string; label: string }>;
   applicableLegislation?: Array<{ value: string; label: string }>;
+  distributions?: LocalDiscoveryDistribution[];
   publishers: LocalAgent[];
   hdab: LocalAgent[];
   creators: LocalAgent[];

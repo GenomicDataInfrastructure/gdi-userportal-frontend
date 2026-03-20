@@ -122,6 +122,15 @@ export const canonicalDiscoveryRdf = `
           <foaf:name xml:lang="eng">org</foaf:name>
         </foaf:Agent>
       </dct:creator>
+      <dcat:distribution>
+        <dcat:Distribution rdf:about="https://example.org/distributions/population-registry-csv">
+          <dct:identifier>distribution-1</dct:identifier>
+          <dct:title>Population Registry CSV</dct:title>
+          <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV" />
+          <dcat:accessURL rdf:resource="https://example.org/access/population-registry" />
+          <dcat:downloadURL rdf:resource="https://example.org/download/population-registry.csv" />
+        </dcat:Distribution>
+      </dcat:distribution>
     </dcat:Dataset>
 
     <dcat:Dataset>
@@ -186,6 +195,18 @@ export const buildLocalDiscoveryDataset = (
     {
       value: "http://example.com/law/99", // NOSONAR
       label: "99",
+    },
+  ],
+  distributions: [
+    {
+      id: "distribution-1",
+      title: "Population Registry CSV",
+      format: {
+        value: "http://publications.europa.eu/resource/authority/file-type/CSV",
+        label: "CSV",
+      },
+      accessUrl: "https://example.org/access/population-registry",
+      downloadUrl: "https://example.org/download/population-registry.csv",
     },
   ],
   temporalCoverage: {

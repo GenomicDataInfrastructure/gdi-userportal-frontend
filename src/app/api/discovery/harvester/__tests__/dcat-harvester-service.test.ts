@@ -144,6 +144,19 @@ describe("DcatHarvesterService", () => {
             label: "99",
           },
         ],
+        distributions: [
+          {
+            id: "distribution-1",
+            title: "Population Registry CSV",
+            format: {
+              value:
+                "http://publications.europa.eu/resource/authority/file-type/CSV",
+              label: "CSV",
+            },
+            accessUrl: "https://example.org/access/population-registry",
+            downloadUrl: "https://example.org/download/population-registry.csv",
+          },
+        ],
       },
       {
         id: "ID-2",
@@ -180,6 +193,7 @@ describe("DcatHarvesterService", () => {
         accessRights: undefined,
         legalBasis: undefined,
         applicableLegislation: undefined,
+        distributions: undefined,
       },
     ]);
   });
@@ -209,6 +223,42 @@ describe("DcatHarvesterService", () => {
       { title: "Dataset A", description: "Fallback description" },
       { title: "Dataset B", description: "Foo & Bar" },
     ]);
+  });
+
+  test("parses distributions exposed under healthdcatap analytics", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               xmlns:healthdcatap="http://healthdataportal.eu/ns/health#"
+               xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:identifier>dataset-1</dct:identifier>
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <healthdcatap:analytics>
+            <dcat:Distribution rdf:nodeID="distribution-analytics-1">
+              <dct:identifier>25</dct:identifier>
+              <dct:title>Distribution1</dct:title>
+              <dct:format>
+                <dct:MediaTypeOrExtent rdf:about="http://publications.europa.eu/resource/authority/file-type/AAB">
+                  <skos:prefLabel>Aab</skos:prefLabel>
+                </dct:MediaTypeOrExtent>
+              </dct:format>
+              <dcat:downloadURL rdf:resource="http://download-2/"/>
+              <dcat:accessURL rdf:resource="http://abc.com/"/>
+            </dcat:Distribution>
+          </healthdcatap:analytics>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+
+    expect(datasets[0].distributions).toHaveLength(1);
+    expect(datasets[0].distributions?.[0]?.id).toBe("25");
   });
 
   test("deduplicates dataset languages", async () => {
@@ -561,7 +611,8 @@ describe("DcatHarvesterService", () => {
       ok: false,
       status: 500,
       statusText: "Internal Server Error",
-      text: async () => "",
+      headers: new Headers({ "content-type": "text/plain; charset=utf-8" }),
+      text: async () => "upstream proxy failure",
     } as Response);
 
     const service = new DcatHarvesterService(fetcher);
@@ -569,7 +620,36 @@ describe("DcatHarvesterService", () => {
     await expect(
       service.harvestFromUrl("https://example.org/catalogue.rdf")
     ).rejects.toThrow(
-      "Failed to fetch DCAT catalogue from https://example.org/catalogue.rdf (500 Internal Server Error)"
+      "Failed to fetch DCAT catalogue from https://example.org/catalogue.rdf (500 Internal Server Error) | content-type: text/plain; charset=utf-8 | response body: upstream proxy failure"
+    );
+  });
+
+  test("harvestFromUrl reports failures while reading non-ok response bodies", async () => {
+    const fetcher =
+      jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
+    const cause = Object.assign(new Error("socket hang up"), {
+      code: "ECONNRESET",
+      host: "example.org",
+      port: 443,
+    });
+    const error = new Error("failed to consume error response body");
+    (error as Error & { cause?: Error }).cause = cause;
+    fetcher.mockResolvedValueOnce({
+      ok: false,
+      status: 502,
+      statusText: "Bad Gateway",
+      headers: new Headers({ "content-type": "text/html" }),
+      text: async () => {
+        throw error;
+      },
+    } as unknown as Response);
+
+    const service = new DcatHarvesterService(fetcher);
+
+    await expect(
+      service.harvestFromUrl("https://example.org/catalogue.rdf")
+    ).rejects.toThrow(
+      "Failed to fetch DCAT catalogue from https://example.org/catalogue.rdf (502 Bad Gateway) | content-type: text/html | response body: unable to read error response body: failed to consume error response body | cause: socket hang up (code=ECONNRESET, host=example.org, port=443)"
     );
   });
 

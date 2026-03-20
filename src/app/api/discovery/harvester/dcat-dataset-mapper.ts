@@ -8,6 +8,7 @@ import {
   LocalDiscoveryDataset,
   SpatialCoverage,
 } from "@/app/api/discovery/local-store/types";
+import { extractDistributions } from "@/app/api/discovery/harvester/dcat-distribution-mapper";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 
 export const DCAT_DATASET = "http://www.w3.org/ns/dcat#Dataset";
@@ -91,9 +92,10 @@ export const mapDataset = (
   const publisherTypes = publishers
     .map((p) => p.type)
     .filter((t): t is { value: string; label: string } => t !== undefined);
+  const datasetId = getDatasetId(datasetSubject, identifier, graph, index);
 
   return {
-    id: getDatasetId(datasetSubject, identifier, graph, index),
+    id: datasetId,
     identifier,
     title: getDatasetTitle(datasetSubject, graph),
     description: getDatasetDescription(datasetSubject, graph),
@@ -158,6 +160,7 @@ export const mapDataset = (
       graph.getObjects(datasetSubject, DCT_TYPE),
       graph
     ),
+    distributions: extractDistributions(datasetSubject, graph, datasetId),
     publishers,
     publisherType: publisherTypes.length > 0 ? publisherTypes : undefined,
     hdab: extractAgents(datasetSubject, graph, HEALTHDCATAP_HDAB),

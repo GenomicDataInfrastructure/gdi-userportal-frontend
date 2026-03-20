@@ -100,6 +100,17 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     };
   }
 
+  private mapDistributions(dataset: LocalDiscoveryDataset) {
+    return dataset.distributions?.map((distribution) => ({
+      id: distribution.id,
+      title: distribution.title,
+      description: "",
+      format: distribution.format,
+      accessUrl: distribution.accessUrl,
+      downloadUrl: distribution.downloadUrl,
+    }));
+  }
+
   async retrieveFilters(_headers: Record<string, string>) {
     return [];
   }
@@ -142,6 +153,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       healthTheme: dataset.healthTheme ?? [],
       healthCategory: dataset.healthCategory ?? [],
       dcatType,
+      distributions: this.mapDistributions(dataset),
       numberOfRecords: dataset.numberOfRecords,
       legalBasis: dataset.legalBasis,
       applicableLegislation: dataset.applicableLegislation,

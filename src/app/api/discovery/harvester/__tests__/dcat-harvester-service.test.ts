@@ -205,7 +205,6 @@ describe("DcatHarvesterService", () => {
         creators: [],
         publisherType: undefined,
         datasetRelationships: undefined,
-        datasetRelationships: undefined,
         themes: [],
         keywords: [],
         healthTheme: [],

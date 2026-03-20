@@ -202,8 +202,7 @@ export const buildLocalDiscoveryDataset = (
       id: "distribution-1",
       title: "Population Registry CSV",
       format: {
-        value:
-          "http://publications.europa.eu/resource/authority/file-type/CSV", // NOSONAR
+        value: "http://publications.europa.eu/resource/authority/file-type/CSV", // NOSONAR
         label: "CSV",
       },
       accessUrl: "https://example.org/access/population-registry",

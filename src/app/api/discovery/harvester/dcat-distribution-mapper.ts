@@ -37,10 +37,20 @@ export const extractDistributions = (
   return distributions.length ? distributions : undefined;
 };
 
-const getDistributionSubjects = (datasetSubject: RDF.Term, graph: RdfGraph) => [
-  ...graph.getObjects(datasetSubject, DCAT_DISTRIBUTION),
-  ...graph.getObjects(datasetSubject, HEALTHDCATAP_ANALYTICS),
-];
+const getDistributionSubjects = (datasetSubject: RDF.Term, graph: RdfGraph) => {
+  const subjects = [
+    ...graph.getObjects(datasetSubject, DCAT_DISTRIBUTION),
+    ...graph.getObjects(datasetSubject, HEALTHDCATAP_ANALYTICS),
+  ];
+
+  const seen = new Set<string>();
+  return subjects.filter((subject) => {
+    const key = `${subject.termType}:${subject.value}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
 
 const mapDistribution = (
   distributionSubject: RDF.Term,
@@ -49,16 +59,24 @@ const mapDistribution = (
   index: number
 ): LocalDiscoveryDistribution | undefined => {
   const id = getDistributionId(distributionSubject, graph, datasetId, index);
-  const title = getDistributionTitle(distributionSubject, graph);
+  const accessUrl = getDistributionAccessUrl(distributionSubject, graph);
+  const downloadUrl = getDistributionDownloadUrl(distributionSubject, graph);
+  const title = getDistributionTitle(
+    distributionSubject,
+    graph,
+    id,
+    accessUrl,
+    downloadUrl
+  );
 
-  if (!id || !title) return undefined;
+  if (!id && !accessUrl && !downloadUrl) return undefined;
 
   return {
-    id,
+    id: id || `${datasetId}-distribution-${index + 1}`,
     title,
     format: getDistributionFormat(distributionSubject, graph),
-    accessUrl: getDistributionAccessUrl(distributionSubject, graph),
-    downloadUrl: getDistributionDownloadUrl(distributionSubject, graph),
+    accessUrl,
+    downloadUrl,
   };
 };
 
@@ -70,12 +88,20 @@ const getDistributionId = (
 ): string =>
   graph.getLiteral(distributionSubject, DCT_IDENTIFIER) ||
   graph.getNamedNodeValue(distributionSubject) ||
-  `${datasetId}-distribution-${index + 1}`;
+  "";
 
 const getDistributionTitle = (
   distributionSubject: RDF.Term,
-  graph: RdfGraph
-): string => graph.getFirstLiteral(distributionSubject, [DCT_TITLE, DC_TITLE]);
+  graph: RdfGraph,
+  id: string,
+  accessUrl?: string,
+  downloadUrl?: string
+): string =>
+  graph.getFirstLiteral(distributionSubject, [DCT_TITLE, DC_TITLE]) ||
+  id ||
+  accessUrl ||
+  downloadUrl ||
+  "";
 
 const getDistributionFormat = (
   distributionSubject: RDF.Term,

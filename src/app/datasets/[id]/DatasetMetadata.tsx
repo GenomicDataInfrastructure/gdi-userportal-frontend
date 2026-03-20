@@ -289,30 +289,27 @@ const DatasetMetadata = ({
         </div>
       )}
       {relationships && relationships.length > 0 && (
-        <div className="flex flex-col mt-4 space-y-2">
-          <div className="flex flex-col gap-1">
+        <MetadataSection title="Dataset Relations" icon={faLink}>
+          <div className="flex flex-col gap-3 text-sm">
             {relationships.map((relationship, index) => (
               <div
                 key={index}
-                className="inline-flex bg-[#EFFAFE] px-4 py-1 rounded-full text-gray font-medium text-[14px] group relative"
+                className="flex items-start gap-2 flex-wrap relative group"
               >
+                <span className="font-medium shrink-0 min-w-[140px]">
+                  {relationship.relation}:
+                </span>
                 <Link
                   href={`/@${dataset.publishers?.map((p) => p.name).join(",")}/${relationship.target}`}
-                  className="group-hover:text-red hover:font-bold"
+                  className="text-info hover:text-hover-color hover:underline break-all"
                 >
-                  <FontAwesomeIcon
-                    icon={faTag}
-                    className="align-middle text-primary"
-                  />
-                  <span className="align-middle">
-                    {relationship.relation}: {relationship.target}
-                  </span>
+                  {relationship.target}
                 </Link>
-                <Tooltip message="Related dataset information." />
+                <Tooltip message="Link to related dataset." />
               </div>
             ))}
           </div>
-        </div>
+        </MetadataSection>
       )}
       {dictionary && dictionary.length > 0 && (
         <div className="mt-4">

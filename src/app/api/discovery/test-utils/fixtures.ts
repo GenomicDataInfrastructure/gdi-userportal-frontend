@@ -129,6 +129,8 @@ export const canonicalDiscoveryRdf = `
           <vcard:hasEmail rdf:resource="mailto:tab3-contactPoint-mail@test.com"/>
         </vcard:Kind>
       </dcat:contactPoint>
+      <dct:isPartOf rdf:resource="https://example.org/datasets/parent-collection"/>
+      <dct:hasPart rdf:resource="https://example.org/datasets/subset-1"/>
       <dcat:distribution>
         <dcat:Distribution rdf:about="https://example.org/distributions/population-registry-csv">
           <dct:identifier>distribution-1</dct:identifier>
@@ -220,6 +222,16 @@ export const buildLocalDiscoveryDataset = (
     {
       name: "Jane Doe",
       email: "jane.doe@example.org",
+    },
+  ],
+  datasetRelationships: [
+    {
+      relation: "Is part of",
+      target: "https://example.org/datasets/parent-collection",
+    },
+    {
+      relation: "Has part",
+      target: "https://example.org/datasets/subset-1",
     },
   ],
   temporalCoverage: {

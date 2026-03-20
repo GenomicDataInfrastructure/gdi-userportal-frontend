@@ -357,6 +357,16 @@ describe("LocalIndexDiscoveryProvider", () => {
           email: "jane.doe@example.org",
         },
       ],
+      datasetRelationships: [
+        {
+          relation: "Is part of",
+          target: "https://example.org/datasets/parent-collection",
+        },
+        {
+          relation: "Has part",
+          target: "https://example.org/datasets/subset-1",
+        },
+      ],
       accessRights: {
         value:
           "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
@@ -507,6 +517,16 @@ describe("LocalIndexDiscoveryProvider", () => {
         {
           name: "Jane Doe",
           email: "jane.doe@example.org",
+        },
+      ],
+      datasetRelationships: [
+        {
+          relation: "Is part of",
+          target: "https://example.org/datasets/parent-collection",
+        },
+        {
+          relation: "Has part",
+          target: "https://example.org/datasets/subset-1",
         },
       ],
       accessRights: {

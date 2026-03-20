@@ -15,7 +15,8 @@ export const canonicalDiscoveryRdf = `
            xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
            xmlns:skos="http://www.w3.org/2004/02/skos/core#"
            xmlns:dpv="http://www.w3.org/ns/dpv#"
-           xmlns:foaf="http://xmlns.com/foaf/0.1/">
+           xmlns:foaf="http://xmlns.com/foaf/0.1/"
+           xmlns:vcard="http://www.w3.org/2006/vcard/ns#">
     <dcat:Catalog rdf:about="https://example.org/catalogues/main">
       <dct:title>Main Catalogue</dct:title>
     </dcat:Catalog>
@@ -122,6 +123,12 @@ export const canonicalDiscoveryRdf = `
           <foaf:name xml:lang="eng">org</foaf:name>
         </foaf:Agent>
       </dct:creator>
+      <dcat:contactPoint>
+        <vcard:Kind rdf:nodeID="Ncontact1">
+          <vcard:hasURL rdf:resource="https://commission.europa.eu/"/>
+          <vcard:hasEmail rdf:resource="mailto:tab3-contactPoint-mail@test.com"/>
+        </vcard:Kind>
+      </dcat:contactPoint>
       <dcat:distribution>
         <dcat:Distribution rdf:about="https://example.org/distributions/population-registry-csv">
           <dct:identifier>distribution-1</dct:identifier>
@@ -207,6 +214,12 @@ export const buildLocalDiscoveryDataset = (
       },
       accessUrl: "https://example.org/access/population-registry",
       downloadUrl: "https://example.org/download/population-registry.csv",
+    },
+  ],
+  contacts: [
+    {
+      name: "Jane Doe",
+      email: "jane.doe@example.org",
     },
   ],
   temporalCoverage: {

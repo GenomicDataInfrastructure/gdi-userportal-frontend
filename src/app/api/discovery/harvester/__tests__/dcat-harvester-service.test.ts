@@ -144,6 +144,15 @@ describe("DcatHarvesterService", () => {
             label: "99",
           },
         ],
+        contacts: [
+          {
+            name: "tab3-contactPoint-mail@test.com",
+            email: "tab3-contactPoint-mail@test.com",
+            uri: undefined,
+            url: "https://commission.europa.eu/",
+            identifier: undefined,
+          },
+        ],
         distributions: [
           {
             id: "distribution-1",
@@ -193,6 +202,7 @@ describe("DcatHarvesterService", () => {
         accessRights: undefined,
         legalBasis: undefined,
         applicableLegislation: undefined,
+        contacts: undefined,
         distributions: undefined,
       },
     ]);

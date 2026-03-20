@@ -334,6 +334,12 @@ describe("LocalIndexDiscoveryProvider", () => {
         value: "http://example.org/dataset-type/STATISTICAL",
         label: "STATISTICAL",
       },
+      contacts: [
+        {
+          name: "Jane Doe",
+          email: "jane.doe@example.org",
+        },
+      ],
       accessRights: {
         value:
           "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
@@ -480,6 +486,12 @@ describe("LocalIndexDiscoveryProvider", () => {
       healthTheme: [],
       healthCategory: [],
       dcatType: undefined,
+      contacts: [
+        {
+          name: "Jane Doe",
+          email: "jane.doe@example.org",
+        },
+      ],
       accessRights: {
         value:
           "http://publications.europa.eu/resource/authority/access-right/PUBLIC",

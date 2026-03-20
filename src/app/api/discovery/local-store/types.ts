@@ -29,6 +29,14 @@ export interface LocalDiscoveryDistribution {
   downloadUrl?: string;
 }
 
+export interface LocalContactPoint {
+  name: string;
+  email: string;
+  uri?: string;
+  url?: string;
+  identifier?: string;
+}
+
 export interface LocalDiscoveryDataset {
   id: string;
   identifier?: string;
@@ -61,6 +69,7 @@ export interface LocalDiscoveryDataset {
   legalBasis?: Array<{ value: string; label: string }>;
   applicableLegislation?: Array<{ value: string; label: string }>;
   distributions?: LocalDiscoveryDistribution[];
+  contacts?: LocalContactPoint[];
   publishers: LocalAgent[];
   hdab: LocalAgent[];
   creators: LocalAgent[];

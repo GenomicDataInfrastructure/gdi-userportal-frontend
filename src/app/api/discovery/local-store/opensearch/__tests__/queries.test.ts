@@ -253,6 +253,12 @@ describe("opensearch/queries", () => {
         {
           source: "ckan",
           type: "DROPDOWN",
+          key: "publisher_name",
+          value: "PNED GIE",
+        },
+        {
+          source: "ckan",
+          type: "DROPDOWN",
           key: "identifier",
           value: "IDENT-1",
         },
@@ -281,6 +287,15 @@ describe("opensearch/queries", () => {
 
     expect((body.query as any).bool.must).toHaveLength(1);
     expect((body.query as any).bool.filter).toEqual([
+      {
+        bool: {
+          should: [
+            { term: { "publishers.name.keyword": "PNED GIE" } },
+            { match_phrase: { "publishers.name": "PNED GIE" } },
+          ],
+          minimum_should_match: 1,
+        },
+      },
       {
         bool: {
           should: [
@@ -379,6 +394,65 @@ describe("opensearch/queries", () => {
         ],
       },
     });
+  });
+
+  test("buildSearchBody ignores malformed and unsupported facets", () => {
+    const body = buildSearchBody({
+      facets: [
+        {
+          source: "ckan",
+          type: "NUMBER",
+          key: "numberOfRecords",
+          operator: ">",
+          value: "10",
+        },
+        {
+          source: "ckan",
+          type: "NUMBER",
+          key: "numberOfRecords",
+          operator: "<",
+          value: "20",
+        },
+        {
+          source: "ckan",
+          type: "DATETIME",
+          key: "metadata_modified",
+          operator: "<=",
+          value: "2024-01-01",
+        },
+        {
+          source: "ckan",
+          type: "DATETIME",
+          key: "metadata_modified",
+          operator: ">=",
+          value: "not-a-date",
+        },
+        {
+          source: "ckan",
+          type: "NUMBER",
+          key: "numberOfRecords",
+          value: "not-a-number",
+        },
+        {
+          source: "ckan",
+          type: "ENTRIES",
+          key: "accessRights",
+          entries: [],
+        },
+        {
+          source: "ckan",
+          type: "NOPE" as any,
+          key: "identifier",
+          value: "ignored",
+        },
+      ],
+    });
+
+    expect((body.query as any).bool.filter).toEqual([
+      { range: { numberOfRecords: { gt: 10 } } },
+      { range: { numberOfRecords: { lt: 20 } } },
+      { range: { modifiedAt: { lte: "2024-01-01" } } },
+    ]);
   });
 
   test("buildClearBody returns delete-all query", () => {

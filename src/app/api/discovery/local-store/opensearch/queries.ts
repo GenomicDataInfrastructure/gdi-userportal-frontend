@@ -207,12 +207,20 @@ const buildRangeClause = (
 ): OpenSearchQueryClause | null => {
   if (!field) return null;
 
-  const normalizedValue = valueType === "number" ? Number(value) : value;
+  const trimmedValue = value.trim();
+  if (!trimmedValue) return null;
+
+  const normalizedValue =
+    valueType === "number" ? Number(trimmedValue) : trimmedValue;
 
   if (
     valueType === "number" &&
     (Number.isNaN(normalizedValue) || !Number.isFinite(normalizedValue))
   ) {
+    return null;
+  }
+
+  if (valueType === "datetime" && Number.isNaN(Date.parse(trimmedValue))) {
     return null;
   }
 
@@ -339,10 +347,7 @@ const buildFacetFilterClauses = (
 
 const buildSortClause = (sort?: string): OpenSearchSortClause[] => {
   if (sort === "newest") {
-    return [
-      { createdAt: { order: "desc", missing: "_last" } },
-      { id: "asc" },
-    ];
+    return [{ createdAt: { order: "desc", missing: "_last" } }, { id: "asc" }];
   }
 
   return [

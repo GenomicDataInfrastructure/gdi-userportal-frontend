@@ -170,7 +170,27 @@ describe("opensearch/queries", () => {
       from: 2,
       size: 5,
       query: { match_all: {} },
-      sort: [{ _score: "desc" }, { id: "asc" }],
+      sort: [
+        { _score: "desc" },
+        { modifiedAt: { order: "desc", missing: "_last" } },
+        { id: "asc" },
+      ],
+    });
+  });
+
+  test("buildSearchBody supports newest sort mode", () => {
+    expect(buildSearchBody({ sort: "newest" })).toMatchObject({
+      sort: [{ createdAt: { order: "desc", missing: "_last" } }, { id: "asc" }],
+    });
+  });
+
+  test("buildSearchBody falls back to relevance for unknown sort values", () => {
+    expect(buildSearchBody({ sort: "issued desc" })).toMatchObject({
+      sort: [
+        { _score: "desc" },
+        { modifiedAt: { order: "desc", missing: "_last" } },
+        { id: "asc" },
+      ],
     });
   });
 

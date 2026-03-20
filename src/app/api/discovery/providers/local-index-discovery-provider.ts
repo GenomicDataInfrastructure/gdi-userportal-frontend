@@ -126,6 +126,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     await this.store.ensureInitialized();
     const response = await this.store.searchDatasets({
       query: options.query,
+      sort: options.sort,
       start: options.start,
       rows: options.rows,
     });

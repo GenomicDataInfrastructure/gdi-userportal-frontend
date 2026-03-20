@@ -60,7 +60,7 @@ const HomePage = ({ searchParams }: HomePageProps) => {
       try {
         const data = await searchDatasetsApi({
           rows: 4,
-          sort: "issued desc",
+          sort: "newest",
         });
         setDatasets(data.results!);
       } catch (error) {

@@ -37,6 +37,11 @@ export interface LocalContactPoint {
   identifier?: string;
 }
 
+export interface LocalDatasetRelation {
+  relation: string;
+  target: string;
+}
+
 export interface LocalDiscoveryDataset {
   id: string;
   identifier?: string;
@@ -70,6 +75,7 @@ export interface LocalDiscoveryDataset {
   applicableLegislation?: Array<{ value: string; label: string }>;
   distributions?: LocalDiscoveryDistribution[];
   contacts?: LocalContactPoint[];
+  datasetRelationships?: LocalDatasetRelation[];
   publishers: LocalAgent[];
   hdab: LocalAgent[];
   creators: LocalAgent[];

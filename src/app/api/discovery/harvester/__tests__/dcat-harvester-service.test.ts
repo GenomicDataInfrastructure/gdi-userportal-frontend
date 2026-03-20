@@ -153,6 +153,16 @@ describe("DcatHarvesterService", () => {
             identifier: undefined,
           },
         ],
+        datasetRelationships: [
+          {
+            relation: "Is part of",
+            target: "https://example.org/datasets/parent-collection",
+          },
+          {
+            relation: "Has part",
+            target: "https://example.org/datasets/subset-1",
+          },
+        ],
         distributions: [
           {
             id: "distribution-1",
@@ -194,6 +204,7 @@ describe("DcatHarvesterService", () => {
         hdab: [],
         creators: [],
         publisherType: undefined,
+        datasetRelationships: undefined,
         themes: [],
         keywords: [],
         healthTheme: [],
@@ -477,6 +488,7 @@ describe("DcatHarvesterService", () => {
       hdab: [],
       creators: [],
       publisherType: undefined,
+      datasetRelationships: undefined,
       themes: [],
       keywords: [],
       healthTheme: [],
@@ -662,6 +674,7 @@ describe("DcatHarvesterService", () => {
         hdab: [],
         creators: [],
         publisherType: undefined,
+        datasetRelationships: undefined,
         themes: [],
         keywords: [],
         healthTheme: [],

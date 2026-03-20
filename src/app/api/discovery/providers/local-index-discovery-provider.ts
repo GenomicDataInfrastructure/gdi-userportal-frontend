@@ -152,6 +152,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     return {
       ...this.mapLocalDataset(dataset),
       contacts: dataset.contacts,
+      datasetRelationships: dataset.datasetRelationships,
       healthTheme: dataset.healthTheme ?? [],
       healthCategory: dataset.healthCategory ?? [],
       dcatType,

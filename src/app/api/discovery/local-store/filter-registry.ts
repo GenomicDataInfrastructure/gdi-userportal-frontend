@@ -29,124 +29,139 @@ const comparisonOperators: LocalDiscoveryOperator[] = [
   "<=",
 ];
 
+const mapBucketToValueLabel = (
+  bucketKey: string
+): LocalDiscoveryValueLabel => ({
+  value: bucketKey,
+  label: bucketKey,
+});
+
+const createDropdownFilter = ({
+  group,
+  key,
+  label,
+  field,
+  mapBucket,
+}: {
+  group: string;
+  key: string;
+  label: string;
+  field: string;
+  mapBucket?: LocalFilterBucketMapper;
+}): LocalFilterDefinition => ({
+  source: "ckan",
+  group,
+  type: "DROPDOWN",
+  key,
+  label,
+  aggregation: {
+    field,
+    mapBucket,
+  },
+});
+
+const createOperatorFilter = ({
+  group,
+  type,
+  key,
+  label,
+  operators,
+}: {
+  group: string;
+  type: "NUMBER" | "DATETIME";
+  key: string;
+  label: string;
+  operators: LocalDiscoveryOperator[];
+}): LocalFilterDefinition => ({
+  source: "ckan",
+  group,
+  type,
+  key,
+  label,
+  operators,
+});
+
 const localFilterDefinitions: LocalFilterDefinition[] = [
-  {
-    source: "ckan",
+  createDropdownFilter({
     group: "Catalogue",
-    type: "DROPDOWN",
     key: "theme",
     label: "Theme",
-    aggregation: {
-      field: "themes.label",
-      mapBucket: (bucketKey) => ({ value: bucketKey, label: bucketKey }),
-    },
-  },
-  {
-    source: "ckan",
+    field: "themes.label",
+    mapBucket: mapBucketToValueLabel,
+  }),
+  createDropdownFilter({
     group: "Catalogue",
-    type: "DROPDOWN",
     key: "publisher_name",
     label: "Publisher",
-    aggregation: {
-      field: "publishers.name.keyword",
-    },
-  },
-  {
-    source: "ckan",
+    field: "publishers.name.keyword",
+  }),
+  createDropdownFilter({
     group: "Catalogue",
-    type: "DROPDOWN",
     key: "languages",
     label: "Language",
-    aggregation: {
-      field: "languages",
-      mapBucket: (bucketKey) => ({
-        value: bucketKey,
-        label:
-          formatDatasetLanguage(bucketKey) ??
-          bucketKey.split("/").pop() ??
-          bucketKey,
-      }),
-    },
-  },
-  {
-    source: "ckan",
+    field: "languages",
+    mapBucket: (bucketKey) => ({
+      value: bucketKey,
+      label:
+        formatDatasetLanguage(bucketKey) ??
+        bucketKey.split("/").pop() ??
+        bucketKey,
+    }),
+  }),
+  createDropdownFilter({
     group: "Catalogue",
-    type: "DROPDOWN",
     key: "catalogue",
     label: "Catalogue",
-    aggregation: {
-      field: "catalogue",
-    },
-  },
-  {
-    source: "ckan",
+    field: "catalogue",
+  }),
+  createDropdownFilter({
     group: "Access",
-    type: "DROPDOWN",
     key: "accessRights",
     label: "Access rights",
-    aggregation: {
-      field: "accessRights.label",
-      mapBucket: (bucketKey) => ({ value: bucketKey, label: bucketKey }),
-    },
-  },
-  {
-    source: "ckan",
+    field: "accessRights.label",
+    mapBucket: mapBucketToValueLabel,
+  }),
+  createDropdownFilter({
     group: "Standards",
-    type: "DROPDOWN",
     key: "conformsTo",
     label: "Conforms to",
-    aggregation: {
-      field: "conformsTo.label",
-      mapBucket: (bucketKey) => ({ value: bucketKey, label: bucketKey }),
-    },
-  },
-  {
-    source: "ckan",
+    field: "conformsTo.label",
+    mapBucket: mapBucketToValueLabel,
+  }),
+  createDropdownFilter({
     group: "Health",
-    type: "DROPDOWN",
     key: "healthTheme",
     label: "Health theme",
-    aggregation: {
-      field: "healthTheme.label",
-      mapBucket: (bucketKey) => ({ value: bucketKey, label: bucketKey }),
-    },
-  },
-  {
-    source: "ckan",
+    field: "healthTheme.label",
+    mapBucket: mapBucketToValueLabel,
+  }),
+  createDropdownFilter({
     group: "Health",
-    type: "DROPDOWN",
     key: "healthCategory",
     label: "Health category",
-    aggregation: {
-      field: "healthCategory.label",
-      mapBucket: (bucketKey) => ({ value: bucketKey, label: bucketKey }),
-    },
-  },
-  {
-    source: "ckan",
+    field: "healthCategory.label",
+    mapBucket: mapBucketToValueLabel,
+  }),
+  createOperatorFilter({
     group: "Population",
     type: "NUMBER",
     key: "numberOfUniqueIndividuals",
     label: "Unique individuals",
     operators: comparisonOperators,
-  },
-  {
-    source: "ckan",
+  }),
+  createOperatorFilter({
     group: "Dates",
     type: "DATETIME",
     key: "metadata_modified",
     label: "Modified date",
     operators: [...comparisonOperators, "!"],
-  },
+  }),
 ];
 
 const stripAggregation = ({
   aggregation: _aggregation,
   ...filter
 }: LocalFilterDefinition): LocalDiscoveryFilter => filter;
-
-export const listLocalFilterDefinitions = (): LocalFilterDefinition[] =>
-  localFilterDefinitions.map((definition) => ({ ...definition }));
 
 export const listLocalFilters = (): LocalDiscoveryFilter[] =>
   localFilterDefinitions.map(stripAggregation);

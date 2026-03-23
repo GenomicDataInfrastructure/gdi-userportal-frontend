@@ -79,6 +79,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       minTypicalAge: dataset.minTypicalAge,
       themes: dataset.themes ?? [],
       keywords: dataset.keywords ?? [],
+      conformsTo: dataset.conformsTo ?? [],
       publishers: dataset.publishers.map((a) => this.mapAgent(a)),
       hdab: dataset.hdab.map((a) => this.mapAgent(a)),
       creators: dataset.creators.map((a) => this.mapAgent(a)),
@@ -126,15 +127,18 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     await this.store.ensureInitialized();
     const response = await this.store.searchDatasets({
       query: options.query,
+      facets: options.facets,
       sort: options.sort,
       start: options.start,
       rows: options.rows,
+      operator: options.operator,
     });
 
     return {
       count: response.count,
       results: response.results.map((dataset) => ({
         ...this.mapLocalDataset(dataset),
+        distributionsCount: dataset.distributionsCount,
       })),
     };
   }

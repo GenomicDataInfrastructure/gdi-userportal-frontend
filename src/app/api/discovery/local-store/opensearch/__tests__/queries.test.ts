@@ -29,7 +29,12 @@ describe("opensearch/queries", () => {
         properties: {
           id: { type: "keyword" },
           identifier: { type: "keyword" },
-          title: { type: "text" },
+          title: {
+            type: "text",
+            fields: {
+              keyword: { type: "keyword" },
+            },
+          },
           description: { type: "text" },
           catalogue: { type: "keyword" },
           languages: { type: "keyword" },
@@ -49,7 +54,7 @@ describe("opensearch/queries", () => {
           minTypicalAge: { type: "integer" },
           populationCoverage: { type: "text" },
           spatialCoverage: { type: "object" },
-          spatialResolutionInMeters: { type: "keyword" },
+          spatialResolutionInMeters: { type: "float" },
           temporalCoverage: { type: "object" },
           retentionPeriod: { type: "object" },
           temporalResolution: { type: "keyword" },
@@ -87,7 +92,12 @@ describe("opensearch/queries", () => {
           publishers: {
             type: "object",
             properties: {
-              name: { type: "text" },
+              name: {
+                type: "text",
+                fields: {
+                  keyword: { type: "keyword" },
+                },
+              },
               email: { type: "keyword" },
               url: { type: "keyword" },
               uri: { type: "keyword" },
@@ -104,7 +114,12 @@ describe("opensearch/queries", () => {
           hdab: {
             type: "object",
             properties: {
-              name: { type: "text" },
+              name: {
+                type: "text",
+                fields: {
+                  keyword: { type: "keyword" },
+                },
+              },
               email: { type: "keyword" },
               url: { type: "keyword" },
               uri: { type: "keyword" },
@@ -121,7 +136,12 @@ describe("opensearch/queries", () => {
           creators: {
             type: "object",
             properties: {
-              name: { type: "text" },
+              name: {
+                type: "text",
+                fields: {
+                  keyword: { type: "keyword" },
+                },
+              },
               email: { type: "keyword" },
               url: { type: "keyword" },
               uri: { type: "keyword" },
@@ -148,6 +168,12 @@ describe("opensearch/queries", () => {
               label: { type: "keyword" },
             },
           },
+          conformsTo: {
+            properties: {
+              value: { type: "keyword" },
+              label: { type: "keyword" },
+            },
+          },
           legalBasis: {
             properties: {
               value: { type: "keyword" },
@@ -160,6 +186,7 @@ describe("opensearch/queries", () => {
               label: { type: "keyword" },
             },
           },
+          distributionsCount: { type: "integer" },
         },
       },
     });
@@ -196,12 +223,12 @@ describe("opensearch/queries", () => {
 
   test("buildSearchBody uses fuzzy + phrase_prefix when query is provided", () => {
     const body = buildSearchBody({ query: "regis" });
-    const shouldClauses = (body.query as any).bool.should;
+    const shouldClauses = (body.query as any).bool.must[0].bool.should;
 
     expect(body.from).toBe(0);
     expect(body.size).toBe(20);
     expect(body.query).toHaveProperty("bool");
-    expect((body.query as any).bool.minimum_should_match).toBe(1);
+    expect((body.query as any).bool.must[0].bool.minimum_should_match).toBe(1);
     expect(shouldClauses).toHaveLength(2);
     expect(shouldClauses[0].multi_match.fields).toContain("identifier");
     expect(shouldClauses[0].multi_match.fields).toContain("version");
@@ -213,10 +240,219 @@ describe("opensearch/queries", () => {
 
   test("buildSearchBody trims query before building clauses", () => {
     const body = buildSearchBody({ query: "  adminis  " });
-    const shouldClauses = (body.query as any).bool.should;
+    const shouldClauses = (body.query as any).bool.must[0].bool.should;
 
     expect(shouldClauses[0].multi_match.query).toBe("adminis");
     expect(shouldClauses[1].multi_match.query).toBe("adminis");
+  });
+
+  test("buildSearchBody adds AND facet filters", () => {
+    const body = buildSearchBody({
+      query: "registry",
+      facets: [
+        {
+          source: "ckan",
+          type: "DROPDOWN",
+          key: "publisher_name",
+          value: "PNED GIE",
+        },
+        {
+          source: "ckan",
+          type: "DROPDOWN",
+          key: "identifier",
+          value: "IDENT-1",
+        },
+        {
+          source: "ckan",
+          type: "NUMBER",
+          key: "numberOfRecords",
+          operator: ">=",
+          value: "100",
+        },
+        {
+          source: "ckan",
+          type: "FREE_TEXT",
+          key: "publisher_name",
+          value: "health",
+        },
+        {
+          source: "ckan",
+          type: "DATETIME",
+          key: "metadata_modified",
+          operator: "!",
+          value: "2024-01-01T00:00:00.000Z",
+        },
+      ],
+    });
+
+    expect((body.query as any).bool.must).toHaveLength(1);
+    expect((body.query as any).bool.filter).toEqual([
+      {
+        bool: {
+          should: [
+            { term: { "publishers.name.keyword": "PNED GIE" } },
+            { match_phrase: { "publishers.name": "PNED GIE" } },
+          ],
+          minimum_should_match: 1,
+        },
+      },
+      {
+        bool: {
+          should: [
+            { term: { identifier: "IDENT-1" } },
+            { term: { id: "IDENT-1" } },
+          ],
+          minimum_should_match: 1,
+        },
+      },
+      { range: { numberOfRecords: { gte: 100 } } },
+      {
+        match_phrase_prefix: { "publishers.name": "health" },
+      },
+      {
+        bool: {
+          must_not: [{ term: { modifiedAt: "2024-01-01T00:00:00.000Z" } }],
+        },
+      },
+    ]);
+  });
+
+  test("buildSearchBody adds OR facet filters", () => {
+    const body = buildSearchBody({
+      facets: [
+        {
+          source: "ckan",
+          type: "DROPDOWN",
+          key: "identifier",
+          value: "ID-1",
+        },
+        {
+          source: "ckan",
+          type: "ENTRIES",
+          key: "accessRights",
+          entries: [
+            { key: "public", value: "Public" },
+            { key: "restricted", value: "Restricted" },
+          ],
+        },
+      ],
+      operator: "OR",
+    });
+
+    expect(body.query).toEqual({
+      bool: {
+        filter: [
+          {
+            bool: {
+              should: [
+                {
+                  bool: {
+                    should: [
+                      { term: { identifier: "ID-1" } },
+                      { term: { id: "ID-1" } },
+                    ],
+                    minimum_should_match: 1,
+                  },
+                },
+                {
+                  bool: {
+                    should: [
+                      {
+                        bool: {
+                          should: [
+                            { term: { "accessRights.value": "Public" } },
+                            { term: { "accessRights.label": "Public" } },
+                          ],
+                          minimum_should_match: 1,
+                        },
+                      },
+                      {
+                        bool: {
+                          should: [
+                            {
+                              term: {
+                                "accessRights.value": "Restricted",
+                              },
+                            },
+                            {
+                              term: {
+                                "accessRights.label": "Restricted",
+                              },
+                            },
+                          ],
+                          minimum_should_match: 1,
+                        },
+                      },
+                    ],
+                    minimum_should_match: 1,
+                  },
+                },
+              ],
+              minimum_should_match: 1,
+            },
+          },
+        ],
+      },
+    });
+  });
+
+  test("buildSearchBody ignores malformed and unsupported facets", () => {
+    const body = buildSearchBody({
+      facets: [
+        {
+          source: "ckan",
+          type: "NUMBER",
+          key: "numberOfRecords",
+          operator: ">",
+          value: "10",
+        },
+        {
+          source: "ckan",
+          type: "NUMBER",
+          key: "numberOfRecords",
+          operator: "<",
+          value: "20",
+        },
+        {
+          source: "ckan",
+          type: "DATETIME",
+          key: "metadata_modified",
+          operator: "<=",
+          value: "2024-01-01",
+        },
+        {
+          source: "ckan",
+          type: "DATETIME",
+          key: "metadata_modified",
+          operator: ">=",
+          value: "not-a-date",
+        },
+        {
+          source: "ckan",
+          type: "NUMBER",
+          key: "numberOfRecords",
+          value: "not-a-number",
+        },
+        {
+          source: "ckan",
+          type: "ENTRIES",
+          key: "accessRights",
+          entries: [],
+        },
+        {
+          source: "ckan",
+          type: "NOPE" as any,
+          key: "identifier",
+          value: "ignored",
+        },
+      ],
+    });
+
+    expect((body.query as any).bool.filter).toEqual([
+      { range: { numberOfRecords: { gt: 10 } } },
+      { range: { numberOfRecords: { lt: 20 } } },
+      { range: { modifiedAt: { lte: "2024-01-01" } } },
+    ]);
   });
 
   test("buildClearBody returns delete-all query", () => {
@@ -252,6 +488,10 @@ describe("opensearch/queries", () => {
     expect(body).toContain(
       '"accessRights":{"value":"http://publications.europa.eu/resource/authority/access-right/PUBLIC","label":"Public"}'
     );
+    expect(body).toContain(
+      '"conformsTo":[{"value":"https://example.org/spec/healthdcat-ap-v6","label":"HealthDCAT-AP v6"}]'
+    );
+    expect(body).toContain('"distributionsCount":3');
     expect(body).toContain(
       '"legalBasis":[{"value":"GDPR Art. 6(1)(e)","label":"GDPR Art. 6(1)(e)"},{"value":"GDPR Art. 6(1)(c)","label":"GDPR Art. 6(1)(c)"}]'
     );

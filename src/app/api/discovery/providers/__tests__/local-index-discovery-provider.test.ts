@@ -68,7 +68,24 @@ describe("LocalIndexDiscoveryProvider", () => {
     });
 
     await expect(
-      provider.searchDatasets({ query: "Dataset", start: 5, rows: 10 }, {})
+      provider.searchDatasets(
+        {
+          query: "Dataset",
+          facets: [
+            {
+              source: "ckan",
+              type: "DROPDOWN",
+              key: "identifier",
+              value: "IDENT-A",
+            },
+          ],
+          sort: "issued desc",
+          start: 5,
+          rows: 10,
+          operator: "AND",
+        },
+        {}
+      )
     ).resolves.toEqual({
       count: 2,
       results: [
@@ -93,6 +110,7 @@ describe("LocalIndexDiscoveryProvider", () => {
           numberOfUniqueIndividuals: 25000,
           maxTypicalAge: 95,
           minTypicalAge: 18,
+          distributionsCount: 3,
           publishers: [
             {
               name: "org",
@@ -110,6 +128,12 @@ describe("LocalIndexDiscoveryProvider", () => {
           ],
           themes: [],
           keywords: [],
+          conformsTo: [
+            {
+              value: "https://example.org/spec/healthdcat-ap-v6",
+              label: "HealthDCAT-AP v6",
+            },
+          ],
           populationCoverage: "People of LNDS.",
           spatialResolutionInMeters: 4,
           spatialCoverage: [
@@ -193,10 +217,12 @@ describe("LocalIndexDiscoveryProvider", () => {
           numberOfUniqueIndividuals: undefined,
           maxTypicalAge: undefined,
           minTypicalAge: undefined,
+          distributionsCount: undefined,
           publishers: [],
           hdab: [],
           themes: [],
           keywords: [],
+          conformsTo: [],
           populationCoverage: undefined,
           spatialResolutionInMeters: undefined,
           spatialCoverage: undefined,
@@ -214,9 +240,34 @@ describe("LocalIndexDiscoveryProvider", () => {
     expect(mockStore.ensureInitialized).toHaveBeenCalled();
     expect(mockStore.searchDatasets).toHaveBeenCalledWith({
       query: "Dataset",
-      sort: undefined,
+      facets: [
+        {
+          source: "ckan",
+          type: "DROPDOWN",
+          key: "identifier",
+          value: "IDENT-A",
+        },
+      ],
+      sort: "issued desc",
       start: 5,
       rows: 10,
+      operator: "AND",
+    });
+  });
+
+  test("searchDatasets forwards supported sort modes to the local store", async () => {
+    mockStore.searchDatasets.mockResolvedValueOnce({
+      count: 0,
+      results: [],
+    });
+
+    await provider.searchDatasets({ sort: "newest" }, {});
+
+    expect(mockStore.searchDatasets).toHaveBeenCalledWith({
+      query: undefined,
+      sort: "newest",
+      start: undefined,
+      rows: undefined,
     });
   });
 
@@ -307,6 +358,12 @@ describe("LocalIndexDiscoveryProvider", () => {
         { value: "http://example.org/theme/science", label: "Science" },
       ],
       keywords: ["oncology", "genomics"],
+      conformsTo: [
+        {
+          value: "https://example.org/spec/healthdcat-ap-v6",
+          label: "HealthDCAT-AP v6",
+        },
+      ],
       publishers: [
         {
           name: "org",
@@ -508,6 +565,12 @@ describe("LocalIndexDiscoveryProvider", () => {
       ],
       themes: [],
       keywords: [],
+      conformsTo: [
+        {
+          value: "https://example.org/spec/healthdcat-ap-v6",
+          label: "HealthDCAT-AP v6",
+        },
+      ],
       populationCoverage: undefined,
       spatialResolutionInMeters: undefined,
       healthTheme: [],

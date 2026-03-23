@@ -71,9 +71,11 @@ export interface LocalDiscoveryDataset {
   healthCategory?: Array<{ value: string; label: string }>;
   dcatType?: Array<{ value: string; label: string }>;
   accessRights?: { value: string; label: string };
+  conformsTo?: Array<{ value: string; label: string }>;
   legalBasis?: Array<{ value: string; label: string }>;
   applicableLegislation?: Array<{ value: string; label: string }>;
   distributions?: LocalDiscoveryDistribution[];
+  distributionsCount?: number;
   contacts?: LocalContactPoint[];
   datasetRelationships?: LocalDatasetRelation[];
   publishers: LocalAgent[];
@@ -101,11 +103,40 @@ export interface StoredDocumentResponse<TDocument> {
   _source?: TDocument;
 }
 
+export type LocalDiscoverySearchFacetType =
+  | "DROPDOWN"
+  | "FREE_TEXT"
+  | "ENTRIES"
+  | "DATETIME"
+  | "NUMBER";
+
+export type LocalDiscoveryQueryOperator = "OR" | "AND";
+export type LocalDiscoverySearchFacetOperator =
+  | "="
+  | "<"
+  | ">"
+  | "!"
+  | "!="
+  | ">="
+  | "<=";
+export type LocalDiscoverySearchFacetEntry = { key: string; value: string };
+
+export interface LocalDiscoverySearchFacet {
+  source: string;
+  type: LocalDiscoverySearchFacetType;
+  key?: string;
+  value?: string;
+  operator?: LocalDiscoverySearchFacetOperator;
+  entries?: LocalDiscoverySearchFacetEntry[];
+}
+
 export interface LocalDiscoverySearchOptions {
   query?: string;
+  facets?: LocalDiscoverySearchFacet[];
   sort?: string;
   start?: number;
   rows?: number;
+  operator?: LocalDiscoveryQueryOperator;
 }
 
 export interface LocalDiscoverySearchResult {

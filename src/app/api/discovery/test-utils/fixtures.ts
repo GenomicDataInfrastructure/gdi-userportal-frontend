@@ -182,6 +182,12 @@ export const buildLocalDiscoveryDataset = (
       "http://publications.europa.eu/resource/authority/access-right/PUBLIC", // NOSONAR
     label: "Public",
   },
+  conformsTo: [
+    {
+      value: "https://example.org/spec/healthdcat-ap-v6", // NOSONAR
+      label: "HealthDCAT-AP v6",
+    },
+  ],
   legalBasis: [
     {
       value: "GDPR Art. 6(1)(e)",
@@ -249,6 +255,7 @@ export const buildLocalDiscoveryDataset = (
     value: "http://publications.europa.eu/resource/authority/frequency/ANNUAL", // NOSONAR
     label: "Annual",
   },
+  distributionsCount: 3,
   publishers: [
     {
       name: "org",
@@ -290,6 +297,16 @@ export const buildDdsSearchedDataset = (
   modifiedAt: "2024-03-10T00:00:00.000Z",
   version: "1.0.0",
   hasVersions: [{ value: "v1", label: "Version 1" }],
+  themes: [{ value: "theme-1", label: "Theme 1" }],
+  keywords: ["keyword-1"],
+  temporalCoverage: {
+    start: "2022-01-01T00:00:00.000Z",
+    end: "2023-01-01T00:00:00.000Z",
+  },
+  accessRights: { value: "public", label: "Public" },
+  conformsTo: [{ value: "spec-1", label: "Spec 1" }],
+  publishers: [{ name: "DDS Publisher" }],
+  distributionsCount: 4,
   numberOfUniqueIndividuals: 25000,
   maxTypicalAge: 95,
   minTypicalAge: 18,

@@ -5,9 +5,11 @@
 import { getLocalDiscoveryStore } from "@/app/api/discovery/local-store/factory";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import { BasePlaceholderDiscoveryProvider } from "@/app/api/discovery/providers/base-placeholder-provider";
+import { listLocalFilters } from "@/app/api/discovery/local-store/filter-registry";
 import {
   DiscoveryAgent,
   DiscoveryDatasetBase,
+  DiscoveryFilter,
   DiscoveryDatasetSearchQuery,
   DiscoveryDatasetsSearchResponse,
   DiscoveryRetrievedDataset,
@@ -112,12 +114,30 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     }));
   }
 
-  async retrieveFilters(_headers: Record<string, string>) {
-    return [];
+  async retrieveFilters(
+    _headers: Record<string, string>
+  ): Promise<DiscoveryFilter[]> {
+    const localFilters = listLocalFilters();
+
+    return Promise.all(
+      localFilters.map(async (filter) => {
+        if (filter.type !== "DROPDOWN") {
+          return filter;
+        }
+
+        return {
+          ...filter,
+          values: await this.store.retrieveFilterValues(filter.key),
+        };
+      })
+    );
   }
 
-  async retrieveFilterValues(_key: string, _headers: Record<string, string>) {
-    return [];
+  async retrieveFilterValues(
+    key: string,
+    _headers: Record<string, string>
+  ): Promise<DiscoveryValueLabel[]> {
+    return this.store.retrieveFilterValues(key);
   }
 
   async searchDatasets(

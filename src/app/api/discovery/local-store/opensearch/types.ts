@@ -15,3 +15,16 @@ export type SearchBackendSearchResponse = StoredDocumentSearchResponse<
 export type SearchBackendDocumentResponse = StoredDocumentResponse<
   Partial<LocalDiscoveryDataset>
 >;
+
+export interface SearchBackendTermsAggregationBucket {
+  key: string;
+  doc_count: number;
+}
+
+export interface SearchBackendTermsAggregationResponse {
+  aggregations?: {
+    values?: {
+      buckets?: SearchBackendTermsAggregationBucket[];
+    };
+  };
+}

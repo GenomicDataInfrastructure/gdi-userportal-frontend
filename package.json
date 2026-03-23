@@ -91,7 +91,7 @@
     "@typescript-eslint/eslint-plugin": "^8.18.2",
     "dotenv": "^17.1.0",
     "eslint": "^10.0.0",
-    "eslint-config-next": "16.2.0",
+    "eslint-config-next": "16.2.1",
     "eslint-config-prettier": "^10.0.0",
     "jest": "^30.0.4",
     "openapi-zod-client": "^1.18.2",

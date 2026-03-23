@@ -105,14 +105,7 @@ export type LocalDiscoverySearchFacetType =
   | "NUMBER";
 
 export type LocalDiscoveryQueryOperator = "OR" | "AND";
-export type LocalDiscoverySearchFacetOperator =
-  | "="
-  | "<"
-  | ">"
-  | "!"
-  | "!="
-  | ">="
-  | "<=";
+export type LocalDiscoveryOperator = "=" | "<" | ">" | "!" | ">=" | "<=";
 export type LocalDiscoverySearchFacetEntry = { key: string; value: string };
 
 export interface LocalDiscoverySearchFacet {
@@ -120,7 +113,7 @@ export interface LocalDiscoverySearchFacet {
   type: LocalDiscoverySearchFacetType;
   key?: string;
   value?: string;
-  operator?: LocalDiscoverySearchFacetOperator;
+  operator?: LocalDiscoveryOperator;
   entries?: LocalDiscoverySearchFacetEntry[];
 }
 
@@ -138,10 +131,39 @@ export interface LocalDiscoverySearchResult {
   results: LocalDiscoveryDataset[];
 }
 
+export interface LocalDiscoveryValueLabel {
+  value: string;
+  label: string;
+  count?: number;
+}
+
+export interface LocalDiscoveryFilterRange {
+  min?: string;
+  max?: string;
+}
+
+export interface LocalDiscoveryFilterEntry {
+  key: string;
+  label: string;
+}
+
+export interface LocalDiscoveryFilter {
+  source: string;
+  group?: string;
+  type: LocalDiscoverySearchFacetType;
+  key: string;
+  label: string;
+  values?: LocalDiscoveryValueLabel[];
+  range?: LocalDiscoveryFilterRange;
+  operators?: LocalDiscoveryOperator[];
+  entries?: LocalDiscoveryFilterEntry[];
+}
+
 export interface LocalDiscoveryStore {
   readonly key: string;
   ensureInitialized: () => Promise<void>;
   clearDatasets: () => Promise<void>;
+  retrieveFilterValues: (key: string) => Promise<LocalDiscoveryValueLabel[]>;
   searchDatasets: (
     options: LocalDiscoverySearchOptions
   ) => Promise<LocalDiscoverySearchResult>;

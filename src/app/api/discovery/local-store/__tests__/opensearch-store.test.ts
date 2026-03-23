@@ -83,6 +83,37 @@ describe("OpenSearchDiscoveryStore", () => {
     );
   });
 
+  test("retrieveFilterValues returns aggregated dropdown values", async () => {
+    const store = createStore();
+    mockClient.post.mockResolvedValueOnce({
+      data: {
+        aggregations: {
+          values: {
+            buckets: [
+              { key: "Health", doc_count: 3 },
+              { key: "Science", doc_count: 1 },
+            ],
+          },
+        },
+      },
+    });
+
+    await expect(store.retrieveFilterValues("theme")).resolves.toEqual([
+      { value: "Health", label: "Health", count: 3 },
+      { value: "Science", label: "Science", count: 1 },
+    ]);
+  });
+
+  test("retrieveFilterValues returns empty list for unsupported keys", async () => {
+    const store = createStore();
+
+    await expect(store.retrieveFilterValues("unknown")).resolves.toEqual([]);
+    expect(mockClient.post).not.toHaveBeenCalledWith(
+      "/discovery_datasets/_search",
+      expect.objectContaining({ aggs: expect.anything() })
+    );
+  });
+
   test("searchDatasets builds search and maps response", async () => {
     const store = createStore();
     mockClient.post.mockResolvedValueOnce({

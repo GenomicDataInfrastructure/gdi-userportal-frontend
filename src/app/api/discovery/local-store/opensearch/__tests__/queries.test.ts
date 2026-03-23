@@ -5,6 +5,7 @@
 import {
   buildBulkUpsertBody,
   buildClearBody,
+  buildFilterValuesBody,
   buildSearchBody,
   createIndexMappings,
 } from "@/app/api/discovery/local-store/opensearch/queries";
@@ -458,6 +459,21 @@ describe("opensearch/queries", () => {
   test("buildClearBody returns delete-all query", () => {
     expect(buildClearBody()).toEqual({
       query: { match_all: {} },
+    });
+  });
+
+  test("buildFilterValuesBody returns terms aggregation query", () => {
+    expect(buildFilterValuesBody("themes.label", 25)).toEqual({
+      size: 0,
+      aggs: {
+        values: {
+          terms: {
+            field: "themes.label",
+            size: 25,
+            order: { _count: "desc" },
+          },
+        },
+      },
     });
   });
 

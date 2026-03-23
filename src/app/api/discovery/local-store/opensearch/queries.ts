@@ -243,7 +243,7 @@ const applyNegation = (
   operator?: string
 ): OpenSearchQueryClause | null => {
   if (!clause) return null;
-  if (operator !== "!" && operator !== "!=") return clause;
+  if (operator !== "!") return clause;
 
   return {
     bool: {
@@ -550,6 +550,19 @@ export const buildSearchBody = (options: LocalDiscoverySearchOptions) => {
 
 export const buildClearBody = () => ({
   query: { match_all: {} },
+});
+
+export const buildFilterValuesBody = (field: string, size = 1000) => ({
+  size: 0,
+  aggs: {
+    values: {
+      terms: {
+        field,
+        size,
+        order: { _count: "desc" },
+      },
+    },
+  },
 });
 
 export const buildBulkUpsertBody = (

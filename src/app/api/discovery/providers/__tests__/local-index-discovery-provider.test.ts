@@ -12,6 +12,7 @@ import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtu
 const mockStore = {
   key: "opensearch",
   ensureInitialized: jest.fn<() => Promise<void>>(),
+  retrieveFilterValues: jest.fn<(_key: string) => Promise<unknown[]>>(),
   searchDatasets:
     jest.fn<(_options: unknown) => Promise<LocalDiscoverySearchResult>>(),
   retrieveDataset:
@@ -42,9 +43,10 @@ describe("LocalIndexDiscoveryProvider", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     provider = new LocalIndexDiscoveryProvider();
+    mockStore.retrieveFilterValues.mockResolvedValue([]);
   });
 
-  test("exposes expected key, capabilities, and empty filters", async () => {
+  test("exposes expected key, capabilities, and local filters", async () => {
     expect(provider.key).toBe("local-index");
     expect(provider.capabilities).toEqual({
       supportsBeaconEnrichment: false,
@@ -52,10 +54,44 @@ describe("LocalIndexDiscoveryProvider", () => {
       supportsFilterEntries: false,
     });
 
-    await expect(provider.retrieveFilters({})).resolves.toEqual([]);
-    await expect(provider.retrieveFilterValues("theme", {})).resolves.toEqual(
-      []
+    mockStore.retrieveFilterValues.mockImplementation(async (key) => {
+      if (key === "theme") {
+        return [{ value: "Health", label: "Health", count: 3 }];
+      }
+
+      if (key === "publisher_name") {
+        return [{ value: "LNDS", label: "LNDS", count: 2 }];
+      }
+
+      return [];
+    });
+
+    await expect(provider.retrieveFilters({})).resolves.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          source: "ckan",
+          key: "theme",
+          type: "DROPDOWN",
+          values: [{ value: "Health", label: "Health", count: 3 }],
+        }),
+        expect.objectContaining({
+          source: "ckan",
+          key: "publisher_name",
+          type: "DROPDOWN",
+          values: [{ value: "LNDS", label: "LNDS", count: 2 }],
+        }),
+        expect.objectContaining({
+          source: "ckan",
+          key: "metadata_modified",
+          type: "DATETIME",
+          operators: ["=", ">", "<", ">=", "<=", "!"],
+        }),
+      ])
     );
+
+    await expect(provider.retrieveFilterValues("theme", {})).resolves.toEqual([
+      { value: "Health", label: "Health", count: 3 },
+    ]);
   });
 
   test("searchDatasets maps a canonical dataset fixture and applies defaults", async () => {

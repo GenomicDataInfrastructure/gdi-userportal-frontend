@@ -122,11 +122,12 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     return Promise.all(
       localFilters.map(async (filter) => {
         if (filter.type !== "DROPDOWN") {
-          return filter;
+          return { ...filter, source: this.key };
         }
 
         return {
           ...filter,
+          source: this.key,
           values: await this.store.retrieveFilterValues(filter.key),
         };
       })
@@ -147,7 +148,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     await this.store.ensureInitialized();
     const response = await this.store.searchDatasets({
       query: options.query,
-      facets: options.facets,
+      facets: options.facets?.map(({ source: _source, ...facet }) => facet),
       sort: options.sort,
       start: options.start,
       rows: options.rows,

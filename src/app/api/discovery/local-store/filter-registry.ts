@@ -49,7 +49,6 @@ const createDropdownFilter = ({
   field: string;
   mapBucket?: LocalFilterBucketMapper;
 }): LocalFilterDefinition => ({
-  source: "ckan",
   group,
   type: "DROPDOWN",
   key,
@@ -73,7 +72,6 @@ const createOperatorFilter = ({
   label: string;
   operators: LocalDiscoveryOperator[];
 }): LocalFilterDefinition => ({
-  source: "ckan",
   group,
   type,
   key,

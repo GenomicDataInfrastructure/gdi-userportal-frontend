@@ -109,7 +109,6 @@ export type LocalDiscoveryOperator = "=" | "<" | ">" | "!" | ">=" | "<=";
 export type LocalDiscoverySearchFacetEntry = { key: string; value: string };
 
 export interface LocalDiscoverySearchFacet {
-  source: string;
   type: LocalDiscoverySearchFacetType;
   key?: string;
   value?: string;
@@ -148,7 +147,6 @@ export interface LocalDiscoveryFilterEntry {
 }
 
 export interface LocalDiscoveryFilter {
-  source: string;
   group?: string;
   type: LocalDiscoverySearchFacetType;
   key: string;

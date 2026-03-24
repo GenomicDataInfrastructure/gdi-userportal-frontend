@@ -252,32 +252,27 @@ describe("opensearch/queries", () => {
       query: "registry",
       facets: [
         {
-          source: "ckan",
           type: "DROPDOWN",
           key: "publisher_name",
           value: "PNED GIE",
         },
         {
-          source: "ckan",
           type: "DROPDOWN",
           key: "identifier",
           value: "IDENT-1",
         },
         {
-          source: "ckan",
           type: "NUMBER",
           key: "numberOfRecords",
           operator: ">=",
           value: "100",
         },
         {
-          source: "ckan",
           type: "FREE_TEXT",
           key: "publisher_name",
           value: "health",
         },
         {
-          source: "ckan",
           type: "DATETIME",
           key: "metadata_modified",
           operator: "!",
@@ -322,13 +317,11 @@ describe("opensearch/queries", () => {
     const body = buildSearchBody({
       facets: [
         {
-          source: "ckan",
           type: "DROPDOWN",
           key: "identifier",
           value: "ID-1",
         },
         {
-          source: "ckan",
           type: "ENTRIES",
           key: "accessRights",
           entries: [
@@ -401,47 +394,40 @@ describe("opensearch/queries", () => {
     const body = buildSearchBody({
       facets: [
         {
-          source: "ckan",
           type: "NUMBER",
           key: "numberOfRecords",
           operator: ">",
           value: "10",
         },
         {
-          source: "ckan",
           type: "NUMBER",
           key: "numberOfRecords",
           operator: "<",
           value: "20",
         },
         {
-          source: "ckan",
           type: "DATETIME",
           key: "metadata_modified",
           operator: "<=",
           value: "2024-01-01",
         },
         {
-          source: "ckan",
           type: "DATETIME",
           key: "metadata_modified",
           operator: ">=",
           value: "not-a-date",
         },
         {
-          source: "ckan",
           type: "NUMBER",
           key: "numberOfRecords",
           value: "not-a-number",
         },
         {
-          source: "ckan",
           type: "ENTRIES",
           key: "accessRights",
           entries: [],
         },
         {
-          source: "ckan",
           type: "NOPE" as any,
           key: "identifier",
           value: "ignored",

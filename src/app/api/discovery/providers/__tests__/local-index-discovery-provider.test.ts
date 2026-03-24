@@ -69,19 +69,19 @@ describe("LocalIndexDiscoveryProvider", () => {
     await expect(provider.retrieveFilters({})).resolves.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          source: "ckan",
+          source: "local-index",
           key: "theme",
           type: "DROPDOWN",
           values: [{ value: "Health", label: "Health", count: 3 }],
         }),
         expect.objectContaining({
-          source: "ckan",
+          source: "local-index",
           key: "publisher_name",
           type: "DROPDOWN",
           values: [{ value: "LNDS", label: "LNDS", count: 2 }],
         }),
         expect.objectContaining({
-          source: "ckan",
+          source: "local-index",
           key: "metadata_modified",
           type: "DATETIME",
           operators: ["=", ">", "<", ">=", "<=", "!"],
@@ -109,7 +109,7 @@ describe("LocalIndexDiscoveryProvider", () => {
           query: "Dataset",
           facets: [
             {
-              source: "ckan",
+              source: "local-index",
               type: "DROPDOWN",
               key: "identifier",
               value: "IDENT-A",
@@ -278,7 +278,6 @@ describe("LocalIndexDiscoveryProvider", () => {
       query: "Dataset",
       facets: [
         {
-          source: "ckan",
           type: "DROPDOWN",
           key: "identifier",
           value: "IDENT-A",

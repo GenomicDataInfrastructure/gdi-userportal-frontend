@@ -89,7 +89,7 @@ const localFilterDefinitions: LocalFilterDefinition[] = [
   }),
   createDropdownFilter({
     group: "Catalogue",
-    key: "publisher_name",
+    key: "publisherName",
     label: "Publisher",
     field: "publishers.name.keyword",
   }),
@@ -150,7 +150,7 @@ const localFilterDefinitions: LocalFilterDefinition[] = [
   createOperatorFilter({
     group: "Dates",
     type: "DATETIME",
-    key: "metadata_modified",
+    key: "modified",
     label: "Modified date",
     operators: [...comparisonOperators, "!"],
   }),

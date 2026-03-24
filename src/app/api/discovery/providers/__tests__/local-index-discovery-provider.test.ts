@@ -59,7 +59,7 @@ describe("LocalIndexDiscoveryProvider", () => {
         return [{ value: "Health", label: "Health", count: 3 }];
       }
 
-      if (key === "publisher_name") {
+      if (key === "publisherName") {
         return [{ value: "LNDS", label: "LNDS", count: 2 }];
       }
 
@@ -76,13 +76,13 @@ describe("LocalIndexDiscoveryProvider", () => {
         }),
         expect.objectContaining({
           source: "local-index",
-          key: "publisher_name",
+          key: "publisherName",
           type: "DROPDOWN",
           values: [{ value: "LNDS", label: "LNDS", count: 2 }],
         }),
         expect.objectContaining({
           source: "local-index",
-          key: "metadata_modified",
+          key: "modified",
           type: "DATETIME",
           operators: ["=", ">", "<", ">=", "<=", "!"],
         }),

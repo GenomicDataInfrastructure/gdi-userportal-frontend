@@ -5,9 +5,11 @@
 import { getLocalDiscoveryStore } from "@/app/api/discovery/local-store/factory";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import { BasePlaceholderDiscoveryProvider } from "@/app/api/discovery/providers/base-placeholder-provider";
+import { listLocalFilters } from "@/app/api/discovery/local-store/filter-registry";
 import {
   DiscoveryAgent,
   DiscoveryDatasetBase,
+  DiscoveryFilter,
   DiscoveryDatasetSearchQuery,
   DiscoveryDatasetsSearchResponse,
   DiscoveryRetrievedDataset,
@@ -79,6 +81,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       minTypicalAge: dataset.minTypicalAge,
       themes: dataset.themes ?? [],
       keywords: dataset.keywords ?? [],
+      conformsTo: dataset.conformsTo ?? [],
       publishers: dataset.publishers.map((a) => this.mapAgent(a)),
       hdab: dataset.hdab.map((a) => this.mapAgent(a)),
       creators: dataset.creators.map((a) => this.mapAgent(a)),
@@ -111,12 +114,31 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     }));
   }
 
-  async retrieveFilters(_headers: Record<string, string>) {
-    return [];
+  async retrieveFilters(
+    _headers: Record<string, string>
+  ): Promise<DiscoveryFilter[]> {
+    const localFilters = listLocalFilters();
+
+    return Promise.all(
+      localFilters.map(async (filter) => {
+        if (filter.type !== "DROPDOWN") {
+          return { ...filter, source: this.key };
+        }
+
+        return {
+          ...filter,
+          source: this.key,
+          values: await this.store.retrieveFilterValues(filter.key),
+        };
+      })
+    );
   }
 
-  async retrieveFilterValues(_key: string, _headers: Record<string, string>) {
-    return [];
+  async retrieveFilterValues(
+    key: string,
+    _headers: Record<string, string>
+  ): Promise<DiscoveryValueLabel[]> {
+    return this.store.retrieveFilterValues(key);
   }
 
   async searchDatasets(
@@ -126,15 +148,18 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     await this.store.ensureInitialized();
     const response = await this.store.searchDatasets({
       query: options.query,
+      facets: options.facets?.map(({ source: _source, ...facet }) => facet),
       sort: options.sort,
       start: options.start,
       rows: options.rows,
+      operator: options.operator,
     });
 
     return {
       count: response.count,
       results: response.results.map((dataset) => ({
         ...this.mapLocalDataset(dataset),
+        distributionsCount: dataset.distributionsCount,
       })),
     };
   }

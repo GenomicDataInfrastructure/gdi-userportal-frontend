@@ -5,18 +5,21 @@
 import axios, { AxiosInstance } from "axios";
 import https from "node:https";
 import {
+  LocalDiscoveryValueLabel,
   LocalDiscoveryDataset,
   LocalDiscoverySearchOptions,
   LocalDiscoverySearchResult,
   LocalDiscoveryStore,
 } from "@/app/api/discovery/local-store/types";
 import {
+  SearchBackendTermsAggregationResponse,
   SearchBackendDocumentResponse,
   SearchBackendSearchResponse,
 } from "@/app/api/discovery/local-store/opensearch/types";
 import {
   buildBulkUpsertBody,
   buildClearBody,
+  buildFilterValuesBody,
   buildSearchBody,
   createIndexMappings,
 } from "@/app/api/discovery/local-store/opensearch/queries";
@@ -25,6 +28,7 @@ import {
   mapSearchResponse,
 } from "@/app/api/discovery/local-store/opensearch/mappers";
 import { isIndexAlreadyExistsError } from "@/app/api/discovery/local-store/opensearch/errors";
+import { getLocalFilterDefinition } from "@/app/api/discovery/local-store/filter-registry";
 
 const formatSearchBackendError = (error: unknown): string => {
   if (!axios.isAxiosError(error)) {
@@ -116,6 +120,54 @@ export class OpenSearchDiscoveryStore implements LocalDiscoveryStore {
     await this.client.post(
       `/${this.indexName}/_delete_by_query`,
       buildClearBody()
+    );
+  }
+
+  async retrieveFilterValues(key: string): Promise<LocalDiscoveryValueLabel[]> {
+    await this.ensureInitialized();
+
+    const filterDefinition = getLocalFilterDefinition(key);
+    if (
+      filterDefinition?.type !== "DROPDOWN" ||
+      !filterDefinition.aggregation
+    ) {
+      return [];
+    }
+
+    const requestBody = buildFilterValuesBody(
+      filterDefinition.aggregation.field,
+      filterDefinition.aggregation.size
+    );
+
+    let response;
+    try {
+      response = await this.client.post<SearchBackendTermsAggregationResponse>(
+        `/${this.indexName}/_search`,
+        requestBody
+      );
+    } catch (error) {
+      throw new Error(formatSearchBackendError(error));
+    }
+
+    const aggregatedValues =
+      response.data.aggregations?.values?.buckets?.map((bucket) => {
+        const mappedValue = filterDefinition.aggregation?.mapBucket
+          ? filterDefinition.aggregation.mapBucket(bucket.key)
+          : { value: bucket.key, label: bucket.key };
+
+        if (!mappedValue.value || !mappedValue.label) {
+          return null;
+        }
+
+        return {
+          ...mappedValue,
+          count: bucket.doc_count,
+        };
+      }) ?? [];
+
+    return aggregatedValues.filter(
+      (value): value is NonNullable<(typeof aggregatedValues)[number]> =>
+        value !== null
     );
   }
 

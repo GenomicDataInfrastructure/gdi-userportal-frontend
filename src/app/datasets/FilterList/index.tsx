@@ -35,19 +35,21 @@ export default function FilterList() {
   });
 
   // Group filters by source
-  const ckanFilters = visibleFilters.filter((f) => f.source === "ckan");
+  const catalogueFilters = visibleFilters.filter(
+    (f) => f.source === "ckan" || f.source === "local-index"
+  );
   const beaconFilters = visibleFilters.filter((f) => f.source === "beacon");
 
   return (
     <div className="flex flex-col gap-y-8">
-      {/* CKAN Filters Section */}
-      {ckanFilters.length > 0 && (
+      {/* Catalogue Filters Section */}
+      {catalogueFilters.length > 0 && (
         <section>
           <h3 className="text-sm font-semibold text-gray-500 uppercase mb-4 tracking-wide">
             Catalogue Filters
           </h3>
           <ul className="flex flex-col gap-y-6">
-            {ckanFilters.map((filter) => (
+            {catalogueFilters.map((filter) => (
               <li key={filter.key} className="list-none">
                 <FilterItem filter={filter} />
               </li>

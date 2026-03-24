@@ -71,9 +71,11 @@ export interface LocalDiscoveryDataset {
   healthCategory?: Array<{ value: string; label: string }>;
   dcatType?: Array<{ value: string; label: string }>;
   accessRights?: { value: string; label: string };
+  conformsTo?: Array<{ value: string; label: string }>;
   legalBasis?: Array<{ value: string; label: string }>;
   applicableLegislation?: Array<{ value: string; label: string }>;
   distributions?: LocalDiscoveryDistribution[];
+  distributionsCount?: number;
   contacts?: LocalContactPoint[];
   datasetRelationships?: LocalDatasetRelation[];
   publishers: LocalAgent[];
@@ -101,11 +103,32 @@ export interface StoredDocumentResponse<TDocument> {
   _source?: TDocument;
 }
 
+export type LocalDiscoverySearchFacetType =
+  | "DROPDOWN"
+  | "FREE_TEXT"
+  | "ENTRIES"
+  | "DATETIME"
+  | "NUMBER";
+
+export type LocalDiscoveryQueryOperator = "OR" | "AND";
+export type LocalDiscoveryOperator = "=" | "<" | ">" | "!" | ">=" | "<=";
+export type LocalDiscoverySearchFacetEntry = { key: string; value: string };
+
+export interface LocalDiscoverySearchFacet {
+  type: LocalDiscoverySearchFacetType;
+  key?: string;
+  value?: string;
+  operator?: LocalDiscoveryOperator;
+  entries?: LocalDiscoverySearchFacetEntry[];
+}
+
 export interface LocalDiscoverySearchOptions {
   query?: string;
+  facets?: LocalDiscoverySearchFacet[];
   sort?: string;
   start?: number;
   rows?: number;
+  operator?: LocalDiscoveryQueryOperator;
 }
 
 export interface LocalDiscoverySearchResult {
@@ -113,10 +136,38 @@ export interface LocalDiscoverySearchResult {
   results: LocalDiscoveryDataset[];
 }
 
+export interface LocalDiscoveryValueLabel {
+  value: string;
+  label: string;
+  count?: number;
+}
+
+export interface LocalDiscoveryFilterRange {
+  min?: string;
+  max?: string;
+}
+
+export interface LocalDiscoveryFilterEntry {
+  key: string;
+  label: string;
+}
+
+export interface LocalDiscoveryFilter {
+  group?: string;
+  type: LocalDiscoverySearchFacetType;
+  key: string;
+  label: string;
+  values?: LocalDiscoveryValueLabel[];
+  range?: LocalDiscoveryFilterRange;
+  operators?: LocalDiscoveryOperator[];
+  entries?: LocalDiscoveryFilterEntry[];
+}
+
 export interface LocalDiscoveryStore {
   readonly key: string;
   ensureInitialized: () => Promise<void>;
   clearDatasets: () => Promise<void>;
+  retrieveFilterValues: (key: string) => Promise<LocalDiscoveryValueLabel[]>;
   searchDatasets: (
     options: LocalDiscoverySearchOptions
   ) => Promise<LocalDiscoverySearchResult>;

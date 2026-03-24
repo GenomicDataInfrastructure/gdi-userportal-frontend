@@ -16,7 +16,7 @@ export enum FilterType {
 }
 
 export enum FilterValueType {
-  PUBLISHER = "publisher_name",
+  PUBLISHER = "publisherName",
   THEME = "theme",
 }
 

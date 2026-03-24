@@ -45,4 +45,44 @@ describe("Searching datasets", () => {
     expect(response).toBeDefined();
     expect(response.count).toEqual(1);
   });
+
+  test("maps publisherName facets to publisher_name and uses default relevance sort", async () => {
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
+
+    mockDiscoveryAdapter.onPost("/api/v1/datasets/search").reply((config) => {
+      expect(config.data).toBeDefined();
+
+      const body = JSON.parse(config.data as string);
+      expect(body.sort).toBe("score desc, metadata_modified desc");
+      expect(body.facets).toEqual([
+        {
+          source: "ckan",
+          type: "DROPDOWN",
+          key: "publisher_name",
+          operator: "=",
+          value: "LNDS",
+        },
+      ]);
+
+      return [200, { count: 0, results: [] }];
+    });
+
+    const options: DatasetSearchQuery = {
+      facets: [
+        {
+          source: "ckan",
+          type: "DROPDOWN",
+          key: "publisherName",
+          value: "LNDS",
+        },
+      ],
+    };
+
+    const response = await searchDatasetsApi(options);
+
+    expect(response).toEqual({ count: 0, results: [] });
+  });
 });

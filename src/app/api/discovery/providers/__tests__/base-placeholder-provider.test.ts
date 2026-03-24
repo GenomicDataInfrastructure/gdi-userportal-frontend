@@ -38,7 +38,7 @@ describe("BasePlaceholderDiscoveryProvider", () => {
 
   test("throws for retrieveFilterValues", async () => {
     await expect(
-      provider.retrieveFilterValues("publisher_name", {})
+      provider.retrieveFilterValues("publisherName", {})
     ).rejects.toThrow(
       'Discovery provider "test-provider" does not implement "retrieveFilterValues" yet'
     );

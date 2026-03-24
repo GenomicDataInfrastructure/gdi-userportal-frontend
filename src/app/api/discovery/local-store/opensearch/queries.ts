@@ -58,7 +58,7 @@ const fieldConfigs: Record<string, FieldConfig> = {
     textFields: ["themes.label"],
   },
   keywords: { exactFields: ["keywords"], textFields: ["keywords"] },
-  publisher_name: {
+  publisherName: {
     exactFields: ["publishers.name.keyword"],
     textFields: ["publishers.name"],
   },
@@ -88,12 +88,7 @@ const fieldConfigs: Record<string, FieldConfig> = {
     rangeField: "createdAt",
     sortField: "createdAt",
   },
-  modifiedAt: {
-    exactFields: ["modifiedAt"],
-    rangeField: "modifiedAt",
-    sortField: "modifiedAt",
-  },
-  metadata_modified: {
+  modified: {
     exactFields: ["modifiedAt"],
     rangeField: "modifiedAt",
     sortField: "modifiedAt",

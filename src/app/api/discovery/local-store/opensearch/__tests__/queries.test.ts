@@ -253,7 +253,7 @@ describe("opensearch/queries", () => {
       facets: [
         {
           type: "DROPDOWN",
-          key: "publisher_name",
+          key: "publisherName",
           value: "PNED GIE",
         },
         {
@@ -269,12 +269,12 @@ describe("opensearch/queries", () => {
         },
         {
           type: "FREE_TEXT",
-          key: "publisher_name",
+          key: "publisherName",
           value: "health",
         },
         {
           type: "DATETIME",
-          key: "metadata_modified",
+          key: "modified",
           operator: "!",
           value: "2024-01-01T00:00:00.000Z",
         },
@@ -407,13 +407,13 @@ describe("opensearch/queries", () => {
         },
         {
           type: "DATETIME",
-          key: "metadata_modified",
+          key: "modified",
           operator: "<=",
           value: "2024-01-01",
         },
         {
           type: "DATETIME",
-          key: "metadata_modified",
+          key: "modified",
           operator: ">=",
           value: "not-a-date",
         },

@@ -42,7 +42,7 @@ describe("Retrieving filters", () => {
           count: 9,
         },
       ]);
-    const response = await retrieveFilterValuesApi("publisher_name");
+    const response = await retrieveFilterValuesApi("publisherName");
 
     expect(response).toBeDefined();
     expect(response.length).toEqual(2);

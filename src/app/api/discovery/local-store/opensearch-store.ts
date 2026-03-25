@@ -27,7 +27,10 @@ import {
   mapGetDocumentResponse,
   mapSearchResponse,
 } from "@/app/api/discovery/local-store/opensearch/mappers";
-import { isIndexAlreadyExistsError } from "@/app/api/discovery/local-store/opensearch/errors";
+import {
+  isIndexAlreadyExistsError,
+  isIndexCreateBlockedError,
+} from "@/app/api/discovery/local-store/opensearch/errors";
 import { getLocalFilterDefinition } from "@/app/api/discovery/local-store/filter-registry";
 
 const formatSearchBackendError = (error: unknown): string => {
@@ -91,24 +94,44 @@ export class OpenSearchDiscoveryStore implements LocalDiscoveryStore {
   async ensureInitialized(): Promise<void> {
     if (this.initialized) return;
 
+    let initializationError: unknown;
     try {
       await this.client.put(`/${this.indexName}`, createIndexMappings());
     } catch (error) {
-      if (!isIndexAlreadyExistsError(error)) {
-        throw error;
+      initializationError = error;
+    }
+
+    if (!initializationError) {
+      this.initialized = true;
+      return;
+    }
+
+    if (
+      !isIndexAlreadyExistsError(initializationError) &&
+      !isIndexCreateBlockedError(initializationError)
+    ) {
+      throw initializationError;
+    }
+
+    try {
+      await this.client.put(
+        `/${this.indexName}/_mapping`,
+        createIndexMappings().mappings
+      );
+    } catch (mappingError) {
+      if (
+        isIndexCreateBlockedError(initializationError) &&
+        axios.isAxiosError(mappingError) &&
+        mappingError.response?.status === 404
+      ) {
+        throw initializationError;
       }
-      try {
-        await this.client.put(
-          `/${this.indexName}/_mapping`,
-          createIndexMappings().mappings
-        );
-      } catch (mappingError) {
-        console.warn(
-          `[OpenSearch] Could not update mapping for index "${this.indexName}" — ` +
-            `one or more field types may have changed. Delete and recreate the index to apply the new schema. ` +
-            `Error: ${formatSearchBackendError(mappingError)}`
-        );
-      }
+
+      console.warn(
+        `[OpenSearch] Could not update mapping for index "${this.indexName}" — ` +
+          `one or more field types may have changed. Delete and recreate the index to apply the new schema. ` +
+          `Error: ${formatSearchBackendError(mappingError)}`
+      );
     }
 
     this.initialized = true;

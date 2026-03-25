@@ -2,7 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { isIndexAlreadyExistsError } from "@/app/api/discovery/local-store/opensearch/errors";
+import {
+  isIndexAlreadyExistsError,
+  isIndexCreateBlockedError,
+} from "@/app/api/discovery/local-store/opensearch/errors";
 
 describe("opensearch/errors", () => {
   test("returns true for resource_already_exists axios error", () => {
@@ -38,5 +41,22 @@ describe("opensearch/errors", () => {
         },
       })
     ).toBe(false);
+  });
+
+  test("returns true for create-index blocked axios error", () => {
+    expect(
+      isIndexCreateBlockedError({
+        isAxiosError: true,
+        response: {
+          status: 403,
+          data: {
+            error: {
+              type: "index_create_block_exception",
+              reason: "blocked by: [FORBIDDEN/10/cluster create-index blocked (api)];",
+            },
+          },
+        },
+      })
+    ).toBe(true);
   });
 });

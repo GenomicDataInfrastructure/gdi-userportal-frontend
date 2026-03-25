@@ -65,6 +65,54 @@ describe("OpenSearchDiscoveryStore", () => {
     await expect(store.ensureInitialized()).resolves.toBeUndefined();
   });
 
+  test("ensureInitialized falls back to mapping update when create-index is blocked", async () => {
+    const store = createStore();
+    mockClient.put.mockRejectedValueOnce({
+      isAxiosError: true,
+      response: {
+        status: 403,
+        data: {
+          error: {
+            type: "index_create_block_exception",
+            reason: "blocked by: [FORBIDDEN/10/cluster create-index blocked (api)];",
+          },
+        },
+      },
+    });
+    mockClient.put.mockResolvedValueOnce({});
+
+    await expect(store.ensureInitialized()).resolves.toBeUndefined();
+    expect(mockClient.put).toHaveBeenNthCalledWith(
+      2,
+      "/discovery_datasets/_mapping",
+      expect.any(Object)
+    );
+  });
+
+  test("ensureInitialized rethrows create-index blocked when mapping says index is missing", async () => {
+    const store = createStore();
+    mockClient.put.mockRejectedValueOnce({
+      isAxiosError: true,
+      response: {
+        status: 403,
+        data: {
+          error: {
+            type: "index_create_block_exception",
+            reason: "blocked by: [FORBIDDEN/10/cluster create-index blocked (api)];",
+          },
+        },
+      },
+    });
+    mockClient.put.mockRejectedValueOnce({
+      isAxiosError: true,
+      response: { status: 404, data: { error: { type: "index_not_found_exception" } } },
+    });
+
+    await expect(store.ensureInitialized()).rejects.toMatchObject({
+      response: { status: 403 },
+    });
+  });
+
   test("ensureInitialized rethrows non-matching errors", async () => {
     const store = createStore();
     mockClient.put.mockRejectedValueOnce(new Error("boom"));

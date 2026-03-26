@@ -42,6 +42,12 @@ export interface LocalDatasetRelation {
   target: string;
 }
 
+export interface LocalDatasetDictionaryEntry {
+  name: string;
+  type: string;
+  description: string;
+}
+
 export interface LocalDiscoveryDataset {
   id: string;
   identifier?: string;
@@ -78,6 +84,7 @@ export interface LocalDiscoveryDataset {
   distributionsCount?: number;
   contacts?: LocalContactPoint[];
   datasetRelationships?: LocalDatasetRelation[];
+  dataDictionary?: LocalDatasetDictionaryEntry[];
   publishers: LocalAgent[];
   hdab: LocalAgent[];
   creators: LocalAgent[];

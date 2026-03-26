@@ -52,7 +52,8 @@ describe("opensearch/errors", () => {
           data: {
             error: {
               type: "index_create_block_exception",
-              reason: "blocked by: [FORBIDDEN/10/cluster create-index blocked (api)];",
+              reason:
+                "blocked by: [FORBIDDEN/10/cluster create-index blocked (api)];",
             },
           },
         },

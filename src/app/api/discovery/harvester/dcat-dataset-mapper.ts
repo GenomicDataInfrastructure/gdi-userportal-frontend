@@ -9,6 +9,7 @@ import {
   SpatialCoverage,
 } from "@/app/api/discovery/local-store/types";
 import { extractContactPoints } from "@/app/api/discovery/harvester/dcat-contact-point-mapper";
+import { extractDataDictionary } from "@/app/api/discovery/harvester/dcat-data-dictionary-mapper";
 import { extractDatasetRelations } from "@/app/api/discovery/harvester/dcat-dataset-relation-mapper";
 import { extractDistributions } from "@/app/api/discovery/harvester/dcat-distribution-mapper";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
@@ -162,6 +163,7 @@ export const mapDataset = (
       graph.getObjects(datasetSubject, DCT_TYPE),
       graph
     ),
+    dataDictionary: extractDataDictionary(datasetSubject, graph),
     contacts: extractContactPoints(datasetSubject, graph),
     datasetRelationships: extractDatasetRelations(datasetSubject, graph),
     distributions: extractDistributions(datasetSubject, graph, datasetId),

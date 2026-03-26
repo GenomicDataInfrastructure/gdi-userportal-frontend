@@ -240,6 +240,18 @@ export const buildLocalDiscoveryDataset = (
       target: "https://example.org/datasets/subset-1",
     },
   ],
+  dataDictionary: [
+    {
+      name: "patient_id",
+      type: "string",
+      description: "Unique pseudonymised identifier for each patient.",
+    },
+    {
+      name: "diagnosis_code",
+      type: "string",
+      description: "Primary diagnosis code recorded for the encounter.",
+    },
+  ],
   temporalCoverage: {
     start: "2022-01-01T00:00:00.000Z",
     end: "2023-01-01T00:00:00.000Z",

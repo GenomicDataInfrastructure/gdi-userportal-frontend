@@ -484,6 +484,14 @@ export const createIndexMappings = () => ({
       applicableLegislation: {
         properties: { value: { type: "keyword" }, label: { type: "keyword" } },
       },
+      dataDictionary: {
+        type: "object",
+        properties: {
+          name: { type: "keyword" },
+          type: { type: "keyword" },
+          description: { type: "text" },
+        },
+      },
       distributionsCount: { type: "integer" },
     },
   },

@@ -459,6 +459,18 @@ describe("LocalIndexDiscoveryProvider", () => {
           target: "https://example.org/datasets/subset-1",
         },
       ],
+      dataDictionary: [
+        {
+          name: "patient_id",
+          type: "string",
+          description: "Unique pseudonymised identifier for each patient.",
+        },
+        {
+          name: "diagnosis_code",
+          type: "string",
+          description: "Primary diagnosis code recorded for the encounter.",
+        },
+      ],
       accessRights: {
         value:
           "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
@@ -625,6 +637,18 @@ describe("LocalIndexDiscoveryProvider", () => {
         {
           relation: "Has part",
           target: "https://example.org/datasets/subset-1",
+        },
+      ],
+      dataDictionary: [
+        {
+          name: "patient_id",
+          type: "string",
+          description: "Unique pseudonymised identifier for each patient.",
+        },
+        {
+          name: "diagnosis_code",
+          type: "string",
+          description: "Primary diagnosis code recorded for the encounter.",
         },
       ],
       accessRights: {

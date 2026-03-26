@@ -14,6 +14,7 @@ import {
   DiscoveryDatasetsSearchResponse,
   DiscoveryRetrievedDataset,
   DiscoveryValueLabel,
+  DiscoveryDatasetDictionaryEntry,
 } from "@/app/api/discovery/providers/types";
 import formatDatasetLanguage from "@/utils/formatDatasetLanguage";
 
@@ -114,6 +115,16 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     }));
   }
 
+  private mapDataDictionary(
+    dataset: LocalDiscoveryDataset
+  ): DiscoveryDatasetDictionaryEntry[] | undefined {
+    return dataset.dataDictionary?.map((entry) => ({
+      name: entry.name,
+      type: entry.type,
+      description: entry.description,
+    }));
+  }
+
   async retrieveFilters(
     _headers: Record<string, string>
   ): Promise<DiscoveryFilter[]> {
@@ -178,6 +189,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       ...this.mapLocalDataset(dataset),
       contacts: dataset.contacts,
       datasetRelationships: dataset.datasetRelationships,
+      dataDictionary: this.mapDataDictionary(dataset),
       healthTheme: dataset.healthTheme ?? [],
       healthCategory: dataset.healthCategory ?? [],
       dcatType,

@@ -74,7 +74,8 @@ describe("OpenSearchDiscoveryStore", () => {
         data: {
           error: {
             type: "index_create_block_exception",
-            reason: "blocked by: [FORBIDDEN/10/cluster create-index blocked (api)];",
+            reason:
+              "blocked by: [FORBIDDEN/10/cluster create-index blocked (api)];",
           },
         },
       },
@@ -98,14 +99,18 @@ describe("OpenSearchDiscoveryStore", () => {
         data: {
           error: {
             type: "index_create_block_exception",
-            reason: "blocked by: [FORBIDDEN/10/cluster create-index blocked (api)];",
+            reason:
+              "blocked by: [FORBIDDEN/10/cluster create-index blocked (api)];",
           },
         },
       },
     });
     mockClient.put.mockRejectedValueOnce({
       isAxiosError: true,
-      response: { status: 404, data: { error: { type: "index_not_found_exception" } } },
+      response: {
+        status: 404,
+        data: { error: { type: "index_not_found_exception" } },
+      },
     });
 
     await expect(store.ensureInitialized()).rejects.toMatchObject({

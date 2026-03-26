@@ -10,15 +10,17 @@ on: push
 jobs:
   test-frontend:
     runs-on: ubuntu-latest
+    environment: ci-security
     permissions:
       contents: read
-      packages: write
     env:
       E2E_MODE: mocked
       MOCK_API_PORT: 4010
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version: 24
       - name: Install
@@ -36,7 +38,7 @@ jobs:
 
       - name: Upload Playwright report
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: playwright-report
           path: playwright-report
@@ -52,10 +54,10 @@ jobs:
         run: |
           npm run type-check
       - name: REUSE Compliance Check
-        uses: fsfe/reuse-action@v6
+        uses: fsfe/reuse-action@676e2d560c9a403aa252096d99fcab3e1132b0f5 # v6.0.0
       - name: SonarQube Scan
         if: github.actor != 'dependabot[bot]'
-        uses: SonarSource/sonarqube-scan-action@v7
+        uses: SonarSource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9 # v7.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io

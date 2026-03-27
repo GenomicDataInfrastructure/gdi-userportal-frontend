@@ -750,6 +750,14 @@ describe("LocalIndexDiscoveryProvider", () => {
     );
   });
 
+  test("retrieveDatasetInFormat throws when the dataset is missing", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce(null);
+
+    await expect(
+      provider.retrieveDatasetInFormat("missing-export", "rdf", {})
+    ).rejects.toThrow("Dataset not found in local index: missing-export");
+  });
+
   test("retrieveDataset throws when the dataset is missing", async () => {
     mockStore.retrieveDataset.mockResolvedValueOnce(null);
 

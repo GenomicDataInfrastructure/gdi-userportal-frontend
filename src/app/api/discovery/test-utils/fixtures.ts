@@ -150,6 +150,17 @@ export const canonicalDiscoveryRdf = `
   </rdf:RDF>
 `;
 
+export const canonicalLocalDiscoveryDatasetExportRdf = `<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:dcat="http://www.w3.org/ns/dcat#"
+         xmlns:dct="http://purl.org/dc/terms/">
+  <dcat:Dataset rdf:about="https://example.org/datasets/export-1">
+    <dct:title>Population Registry &amp; Statistics</dct:title>
+    <dct:description>National &lt;regional&gt; data</dct:description>
+  </dcat:Dataset>
+</rdf:RDF>
+`;
+
 export const buildLocalDiscoveryDataset = (
   overrides: Partial<LocalDiscoveryDataset> = {}
 ): LocalDiscoveryDataset => ({

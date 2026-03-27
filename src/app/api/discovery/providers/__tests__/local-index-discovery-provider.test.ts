@@ -7,7 +7,10 @@ import {
   LocalDiscoveryDataset,
   LocalDiscoverySearchResult,
 } from "@/app/api/discovery/local-store/types";
-import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtures";
+import {
+  buildLocalDiscoveryDataset,
+  canonicalLocalDiscoveryDatasetExportRdf,
+} from "@/app/api/discovery/test-utils/fixtures";
 
 const mockStore = {
   key: "opensearch",
@@ -726,6 +729,33 @@ describe("LocalIndexDiscoveryProvider", () => {
         },
       ],
     });
+  });
+
+  test("retrieveDatasetInFormat serializes local-store datasets to RDF", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce(
+      buildLocalDiscoveryDataset({
+        id: "https://example.org/datasets/export-1",
+        title: "Population Registry & Statistics",
+        description: "National <regional> data",
+      })
+    );
+
+    const blob = await provider.retrieveDatasetInFormat("export-1", "rdf", {});
+
+    expect(mockStore.ensureInitialized).toHaveBeenCalled();
+    expect(mockStore.retrieveDataset).toHaveBeenCalledWith("export-1");
+    expect(blob.type).toBe("application/rdf+xml");
+    await expect(blob.text()).resolves.toBe(
+      canonicalLocalDiscoveryDatasetExportRdf
+    );
+  });
+
+  test("retrieveDatasetInFormat throws when the dataset is missing", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce(null);
+
+    await expect(
+      provider.retrieveDatasetInFormat("missing-export", "rdf", {})
+    ).rejects.toThrow("Dataset not found in local index: missing-export");
   });
 
   test("retrieveDataset throws when the dataset is missing", async () => {

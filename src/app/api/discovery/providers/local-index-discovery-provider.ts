@@ -4,6 +4,10 @@
 
 import { getLocalDiscoveryStore } from "@/app/api/discovery/local-store/factory";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
+import {
+  getLocalDiscoveryDatasetExportMimeType,
+  serializeLocalDiscoveryDataset,
+} from "@/app/api/discovery/harvester/dcat-dataset-rdf-generator";
 import { BasePlaceholderDiscoveryProvider } from "@/app/api/discovery/providers/base-placeholder-provider";
 import { listLocalFilters } from "@/app/api/discovery/local-store/filter-registry";
 import {
@@ -186,5 +190,21 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       legalBasis: dataset.legalBasis,
       applicableLegislation: dataset.applicableLegislation,
     };
+  }
+
+  async retrieveDatasetInFormat(
+    id: string,
+    format: "rdf" | "ttl" | "jsonld",
+    _headers: Record<string, string>
+  ): Promise<Blob> {
+    await this.store.ensureInitialized();
+    const dataset = await this.store.retrieveDataset(id);
+    if (!dataset) {
+      throw new Error(`Dataset not found in local index: ${id}`);
+    }
+
+    return new Blob([serializeLocalDiscoveryDataset(dataset, format)], {
+      type: getLocalDiscoveryDatasetExportMimeType(format),
+    });
   }
 }

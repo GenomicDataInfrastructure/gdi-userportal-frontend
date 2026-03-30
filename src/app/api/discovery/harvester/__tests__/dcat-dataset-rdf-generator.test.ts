@@ -16,12 +16,10 @@ import {
   getLocalDiscoveryDatasetExportMimeType,
   serializeLocalDiscoveryDataset,
 } from "@/app/api/discovery/harvester/dcat-dataset-rdf-generator";
+import { parseRdfXmlToQuads } from "@/app/api/discovery/harvester/rdf-quad-loader";
 import { serializeDatasetAsRdfXml } from "@/app/api/discovery/harvester/dcat-dataset-rdfxml-generator";
 import { serializeDatasetAsTurtle } from "@/app/api/discovery/harvester/dcat-dataset-turtle-generator";
-import {
-  buildLocalDiscoveryDataset,
-  canonicalLocalDiscoveryDatasetExportRdf,
-} from "@/app/api/discovery/test-utils/fixtures";
+import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtures";
 
 describe("DCAT dataset export generators", () => {
   const originalBaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -94,70 +92,105 @@ describe("DCAT dataset export generators", () => {
     );
   });
 
-  test("serializes RDF/XML master dataset export", () => {
+  test("serializes RDF/XML with extended dataset metadata", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",
       title: "Population Registry & Statistics",
       description: "National <regional> data",
     });
 
-    expect(serializeDatasetAsRdfXml(dataset)).toBe(
-      canonicalLocalDiscoveryDatasetExportRdf
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(rdfXml).toContain("<rdf:RDF");
+    expect(rdfXml).toContain("<healthdcatap:numberOfRecords");
+    expect(rdfXml).toContain(
+      'rdf:about="https://example.org/datasets/export-1#distribution-1"'
     );
+    expect(rdfXml).toContain(
+      'rdf:about="https://example.org/datasets/export-1#contact-point-1"'
+    );
+
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    expect(
+      quads.some(
+        (quad) =>
+          quad.predicate.value === "http://www.w3.org/ns/dcat#version" &&
+          quad.object.termType === "Literal" &&
+          quad.object.value === "1.0.0"
+      )
+    ).toBe(true);
+    expect(
+      quads.some(
+        (quad) =>
+          quad.predicate.value === "http://www.w3.org/ns/dcat#distribution" &&
+          quad.object.termType === "NamedNode"
+      )
+    ).toBe(true);
   });
 
-  test("serializes Turtle master dataset export", () => {
+  test("serializes Turtle with extended dataset metadata", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",
       title: 'Population "Registry"',
       description: "Line 1\nLine 2",
     });
 
-    expect(serializeDatasetAsTurtle(dataset))
-      .toBe(`@prefix dcat: <http://www.w3.org/ns/dcat#> .
-@prefix dct: <http://purl.org/dc/terms/> .
+    const turtle = await serializeDatasetAsTurtle(dataset);
 
-<https://example.org/datasets/export-1> a dcat:Dataset ;
-  dct:title "Population \\"Registry\\"" ;
-  dct:description "Line 1\\nLine 2" .
-`);
+    expect(turtle).toContain("@prefix healthdcatap:");
+    expect(turtle).toContain('dct:title "Population \\"Registry\\""');
+    expect(turtle).toContain('dct:description "Line 1\\nLine 2"');
+    expect(turtle).toContain("healthdcatap:numberOfRecords 50000");
+    expect(turtle).toContain(
+      "<https://example.org/datasets/export-1#distribution-1>"
+    );
+    expect(turtle).toContain("a dcat:Distribution");
   });
 
-  test("serializes JSON-LD master dataset export", () => {
+  test("serializes JSON-LD with extended dataset metadata", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",
       title: "Dataset A",
       description: "desc-a",
     });
 
-    expect(serializeDatasetAsJsonLd(dataset)).toBe(`{
-  "@context": {
-    "dcat": "http://www.w3.org/ns/dcat#",
-    "dct": "http://purl.org/dc/terms/"
-  },
-  "@type": "dcat:Dataset",
-  "@id": "https://example.org/datasets/export-1",
-  "dct:title": "Dataset A",
-  "dct:description": "desc-a"
-}
-`);
+    const jsonLd = JSON.parse(
+      await serializeDatasetAsJsonLd(dataset)
+    ) as Record<string, unknown>;
+    const graph = jsonLd["@graph"] as Array<Record<string, unknown>>;
+
+    expect(jsonLd["@context"]).toBeDefined();
+    expect(Array.isArray(graph)).toBe(true);
+    expect(
+      graph.some(
+        (item) =>
+          item["@id"] === "https://example.org/datasets/export-1" &&
+          Array.isArray(item["dct:title"])
+      )
+    ).toBe(true);
+    expect(
+      graph.some(
+        (item) =>
+          item["@id"] === "https://example.org/datasets/export-1#distribution-1"
+      )
+    ).toBe(true);
   });
 
-  test("facade dispatches serializers and MIME types for all supported formats", () => {
+  test("facade dispatches serializers and MIME types for all supported formats", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",
       title: "Dataset A",
       description: "desc-a",
     });
 
-    expect(serializeLocalDiscoveryDataset(dataset, "rdf")).toContain(
+    expect(await serializeLocalDiscoveryDataset(dataset, "rdf")).toContain(
       "<rdf:RDF"
     );
-    expect(serializeLocalDiscoveryDataset(dataset, "ttl")).toContain(
+    expect(await serializeLocalDiscoveryDataset(dataset, "ttl")).toContain(
       "@prefix dcat:"
     );
-    expect(serializeLocalDiscoveryDataset(dataset, "jsonld")).toContain(
-      '"@type": "dcat:Dataset"'
+    expect(await serializeLocalDiscoveryDataset(dataset, "jsonld")).toContain(
+      '"@context"'
     );
 
     expect(getLocalDiscoveryDatasetExportMimeType("rdf")).toBe(
@@ -169,36 +202,66 @@ describe("DCAT dataset export generators", () => {
     );
   });
 
-  test("handles missing optional export fields in all formats", () => {
+  test("handles missing optional export fields in all formats", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "dataset-1",
       title: "",
       description: undefined,
+      languages: undefined,
+      versionNotes: undefined,
+      distributions: undefined,
+      contacts: undefined,
+      publishers: [],
+      hdab: [],
+      creators: [],
+      keywords: undefined,
+      themes: undefined,
+      healthTheme: undefined,
+      healthCategory: undefined,
+      dcatType: undefined,
+      conformsTo: undefined,
+      applicableLegislation: undefined,
+      legalBasis: undefined,
+      spatialCoverage: undefined,
+      spatialResolutionInMeters: undefined,
+      temporalCoverage: undefined,
+      retentionPeriod: undefined,
+      frequency: undefined,
+      datasetRelationships: undefined,
+      accessRights: undefined,
+      numberOfRecords: undefined,
+      numberOfUniqueIndividuals: undefined,
+      maxTypicalAge: undefined,
+      minTypicalAge: undefined,
+      populationCoverage: undefined,
+      temporalResolution: undefined,
+      hasVersions: undefined,
+      version: undefined,
+      createdAt: undefined,
+      modifiedAt: undefined,
     });
 
-    expect(serializeDatasetAsRdfXml(dataset))
-      .toBe(`<?xml version="1.0" encoding="UTF-8"?>
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-         xmlns:dcat="http://www.w3.org/ns/dcat#"
-         xmlns:dct="http://purl.org/dc/terms/">
-  <dcat:Dataset rdf:about="https://portal.example.org/datasets/dataset-1">
-  </dcat:Dataset>
-</rdf:RDF>
-`);
-    expect(serializeDatasetAsTurtle(dataset))
-      .toBe(`@prefix dcat: <http://www.w3.org/ns/dcat#> .
-@prefix dct: <http://purl.org/dc/terms/> .
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    expect(rdfXml).toContain(
+      'rdf:about="https://portal.example.org/datasets/dataset-1"'
+    );
+    await expect(parseRdfXmlToQuads(rdfXml)).resolves.toEqual(
+      expect.any(Array)
+    );
 
-<https://portal.example.org/datasets/dataset-1> a dcat:Dataset .
-`);
-    expect(serializeDatasetAsJsonLd(dataset)).toBe(`{
-  "@context": {
-    "dcat": "http://www.w3.org/ns/dcat#",
-    "dct": "http://purl.org/dc/terms/"
-  },
-  "@type": "dcat:Dataset",
-  "@id": "https://portal.example.org/datasets/dataset-1"
-}
-`);
+    expect(await serializeDatasetAsTurtle(dataset)).toContain(
+      "<https://portal.example.org/datasets/dataset-1> a dcat:Dataset"
+    );
+
+    const jsonLd = JSON.parse(
+      await serializeDatasetAsJsonLd(dataset)
+    ) as Record<string, unknown>;
+    const graph = jsonLd["@graph"] as Array<Record<string, unknown>>;
+    expect(
+      graph.some(
+        (item) =>
+          item["@id"] === "https://portal.example.org/datasets/dataset-1"
+      )
+    ).toBe(true);
   });
 });

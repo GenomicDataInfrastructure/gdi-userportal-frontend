@@ -11,7 +11,7 @@ import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 export const serializeLocalDiscoveryDataset = (
   dataset: LocalDiscoveryDataset,
   format: LocalDiscoveryDatasetExportFormat
-): string => {
+): Promise<string> => {
   switch (format) {
     case "rdf":
       return serializeDatasetAsRdfXml(dataset);

@@ -33,7 +33,7 @@ describe("dcat dataset rdf shared helpers", () => {
     );
 
     expect(toHttpUri()).toBeUndefined();
-    expect(toHttpUri(null)).toBeUndefined();
+    expect(toHttpUri("")).toBeUndefined();
     expect(toHttpUri("   ")).toBeUndefined();
     expect(toHttpUri("https://example.org/docs")).toBe(
       "https://example.org/docs"

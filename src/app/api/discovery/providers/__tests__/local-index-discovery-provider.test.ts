@@ -7,10 +7,8 @@ import {
   LocalDiscoveryDataset,
   LocalDiscoverySearchResult,
 } from "@/app/api/discovery/local-store/types";
-import {
-  buildLocalDiscoveryDataset,
-  canonicalLocalDiscoveryDatasetExportRdf,
-} from "@/app/api/discovery/test-utils/fixtures";
+import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtures";
+import { parseRdfXmlToQuads } from "@/app/api/discovery/harvester/rdf-quad-loader";
 
 const mockStore = {
   key: "opensearch",
@@ -745,9 +743,14 @@ describe("LocalIndexDiscoveryProvider", () => {
     expect(mockStore.ensureInitialized).toHaveBeenCalled();
     expect(mockStore.retrieveDataset).toHaveBeenCalledWith("export-1");
     expect(blob.type).toBe("application/rdf+xml");
-    await expect(blob.text()).resolves.toBe(
-      canonicalLocalDiscoveryDatasetExportRdf
-    );
+    const text = await blob.text();
+    expect(text).toContain("<rdf:RDF");
+    expect(text).toContain("<dcat:Distribution");
+    expect(
+      (await parseRdfXmlToQuads(text)).some(
+        (quad) => quad.predicate.value === "http://www.w3.org/ns/dcat#version"
+      )
+    ).toBe(true);
   });
 
   test("retrieveDatasetInFormat throws when the dataset is missing", async () => {

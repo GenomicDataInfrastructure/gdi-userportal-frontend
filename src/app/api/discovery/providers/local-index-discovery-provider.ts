@@ -203,7 +203,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       throw new Error(`Dataset not found in local index: ${id}`);
     }
 
-    return new Blob([serializeLocalDiscoveryDataset(dataset, format)], {
+    return new Blob([await serializeLocalDiscoveryDataset(dataset, format)], {
       type: getLocalDiscoveryDatasetExportMimeType(format),
     });
   }

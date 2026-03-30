@@ -41,6 +41,28 @@ import { LocalIndexDiscoveryProvider } from "@/app/api/discovery/providers/local
 describe("LocalIndexDiscoveryProvider", () => {
   let provider: LocalIndexDiscoveryProvider;
 
+  const hasQuad = (
+    quads: Awaited<ReturnType<typeof parseRdfXmlToQuads>>,
+    {
+      subject,
+      predicate,
+      object,
+      objectTermType,
+    }: {
+      subject?: string;
+      predicate: string;
+      object?: string;
+      objectTermType?: "NamedNode" | "Literal" | "BlankNode";
+    }
+  ) =>
+    quads.some(
+      (quad) =>
+        (!subject || quad.subject.value === subject) &&
+        quad.predicate.value === predicate &&
+        (!object || quad.object.value === object) &&
+        (!objectTermType || quad.object.termType === objectTermType)
+    );
+
   beforeEach(() => {
     jest.clearAllMocks();
     provider = new LocalIndexDiscoveryProvider();
@@ -729,7 +751,7 @@ describe("LocalIndexDiscoveryProvider", () => {
     });
   });
 
-  test("retrieveDatasetInFormat serializes local-store datasets to RDF", async () => {
+  test("retrieveDatasetInFormat serializes full local-store datasets to RDF", async () => {
     mockStore.retrieveDataset.mockResolvedValueOnce(
       buildLocalDiscoveryDataset({
         id: "https://example.org/datasets/export-1",
@@ -746,10 +768,390 @@ describe("LocalIndexDiscoveryProvider", () => {
     const text = await blob.text();
     expect(text).toContain("<rdf:RDF");
     expect(text).toContain("<dcat:Distribution");
+    const quads = await parseRdfXmlToQuads(text);
+    const datasetSubject = "https://example.org/datasets/export-1";
+
     expect(
-      (await parseRdfXmlToQuads(text)).some(
-        (quad) => quad.predicate.value === "http://www.w3.org/ns/dcat#version"
-      )
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://purl.org/dc/terms/language",
+        object: "http://publications.europa.eu/resource/authority/language/ENG",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://purl.org/dc/terms/issued",
+        object: "2024-01-01T00:00:00.000Z",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://purl.org/dc/terms/modified",
+        object: "2024-03-10T00:00:00.000Z",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://www.w3.org/ns/dcat#version",
+        object: "1.0.0",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://www.w3.org/ns/dcat#hasVersion",
+        object: "https://example.org/datasets/export-1#version-1",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://www.w3.org/ns/adms#versionNotes",
+        object: "Initial release",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://healthdataportal.eu/ns/health#numberOfRecords",
+        object: "50000",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate:
+          "http://healthdataportal.eu/ns/health#numberOfUniqueIndividuals",
+        object: "25000",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://healthdataportal.eu/ns/health#maxTypicalAge",
+        object: "95",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://healthdataportal.eu/ns/health#minTypicalAge",
+        object: "18",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://healthdataportal.eu/ns/health#populationCoverage",
+        object: "People of LNDS.",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://purl.org/dc/terms/spatial",
+        object: "http://publications.europa.eu/resource/authority/country/LUX",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "http://publications.europa.eu/resource/authority/country/LUX",
+        predicate: "http://www.w3.org/2004/02/skos/core#prefLabel",
+        object: "Luxembourg",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://www.w3.org/ns/dcat#spatialResolutionInMeters",
+        object: "4",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://purl.org/dc/terms/temporal",
+        object: "https://example.org/datasets/export-1#temporal-coverage",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#temporal-coverage",
+        predicate: "http://www.w3.org/ns/dcat#startDate",
+        object: "2022-01-01T00:00:00.000Z",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#temporal-coverage",
+        predicate: "http://www.w3.org/ns/dcat#endDate",
+        object: "2023-01-01T00:00:00.000Z",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://healthdataportal.eu/ns/health#retentionPeriod",
+        object: "https://example.org/datasets/export-1#retention-period-1",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#retention-period-1",
+        predicate: "http://www.w3.org/ns/dcat#startDate",
+        object: "2026-03-13T00:00:00.000Z",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#retention-period-1",
+        predicate: "http://www.w3.org/ns/dcat#endDate",
+        object: "2026-03-20T00:00:00.000Z",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://www.w3.org/ns/dcat#temporalResolution",
+        object: "P1D",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://purl.org/dc/terms/accrualPeriodicity",
+        object:
+          "http://publications.europa.eu/resource/authority/frequency/ANNUAL",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject:
+          "http://publications.europa.eu/resource/authority/frequency/ANNUAL",
+        predicate: "http://www.w3.org/2004/02/skos/core#prefLabel",
+        object: "Annual",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://purl.org/dc/terms/accessRights",
+        object:
+          "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject:
+          "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
+        predicate: "http://www.w3.org/2004/02/skos/core#prefLabel",
+        object: "Public",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://purl.org/dc/terms/conformsTo",
+        object: "https://example.org/spec/healthdcat-ap-v6",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/spec/healthdcat-ap-v6",
+        predicate: "http://www.w3.org/2004/02/skos/core#prefLabel",
+        object: "HealthDCAT-AP v6",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://www.w3.org/ns/dpv#hasLegalBasis",
+        object: "https://example.org/datasets/export-1#legal-basis-1",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#legal-basis-1",
+        predicate: "http://purl.org/dc/terms/description",
+        object: "GDPR Art. 6(1)(e)",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://data.europa.eu/r5r/applicableLegislation",
+        object: "http://data.europa.eu/eli/reg/2016/679",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "http://data.europa.eu/eli/reg/2016/679",
+        predicate: "http://www.w3.org/2004/02/skos/core#prefLabel",
+        object: "GDPR",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://www.w3.org/ns/dcat#contactPoint",
+        object: "https://example.org/datasets/export-1#contact-point-1",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#contact-point-1",
+        predicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        object: "http://www.w3.org/2006/vcard/ns#Kind",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://purl.org/dc/terms/publisher",
+        object: "https://example.org/datasets/export-1#publisher-1",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#publisher-1",
+        predicate: "http://xmlns.com/foaf/0.1/name",
+        object: "org",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://healthdataportal.eu/ns/health#hdab",
+        object: "https://health.data.lu/hdab/luxembourg",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://health.data.lu/hdab/luxembourg",
+        predicate: "http://xmlns.com/foaf/0.1/name",
+        object: "Health Data Access Body Luxembourg",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://purl.org/dc/terms/creator",
+        object: "https://example.org/datasets/export-1#creator-1",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#creator-1",
+        predicate: "http://xmlns.com/foaf/0.1/name",
+        object: "org",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://www.w3.org/ns/dcat#distribution",
+        object: "https://example.org/datasets/export-1#distribution-1",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#distribution-1",
+        predicate: "http://purl.org/dc/terms/identifier",
+        object: "distribution-1",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#distribution-1",
+        predicate: "http://purl.org/dc/terms/title",
+        object: "Population Registry CSV",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#distribution-1",
+        predicate: "http://purl.org/dc/terms/format",
+        object:
+          "http://publications.europa.eu/resource/authority/file-type/CSV",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#distribution-1",
+        predicate: "http://www.w3.org/ns/dcat#accessURL",
+        object: "https://example.org/access/population-registry",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#distribution-1",
+        predicate: "http://www.w3.org/ns/dcat#downloadURL",
+        object: "https://example.org/download/population-registry.csv",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://purl.org/dc/terms/isPartOf",
+        object: "https://example.org/datasets/parent-collection",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://purl.org/dc/terms/hasPart",
+        object: "https://example.org/datasets/subset-1",
+        objectTermType: "NamedNode",
+      })
     ).toBe(true);
   });
 

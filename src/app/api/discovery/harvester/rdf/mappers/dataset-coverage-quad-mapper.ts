@@ -69,7 +69,6 @@ export const addDatasetCoverageQuads = ({
     addLiteral(store, locationNode, ns.skos("prefLabel"), coverage.text);
     addLiteral(store, locationNode, ns.dcat("bbox"), coverage.bbox);
     addLiteral(store, locationNode, ns.dcat("centroid"), coverage.centroid);
-    addLiteral(store, locationNode, ns.dcat("bbox"), coverage.geom);
   });
 
   dataset.spatialResolutionInMeters?.forEach((value) =>

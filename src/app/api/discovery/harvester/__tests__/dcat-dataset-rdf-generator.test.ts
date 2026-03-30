@@ -5,8 +5,10 @@
 import {
   escapeTurtleLiteral,
   escapeXml,
+  getDatasetExportUri,
   getDatasetRdfAboutAttribute,
   getDatasetTurtleSubject,
+  getLocalDiscoveryExportBaseUrl,
   isAbsoluteUri,
 } from "@/app/api/discovery/harvester/dcat-dataset-rdf-shared";
 import { serializeDatasetAsJsonLd } from "@/app/api/discovery/harvester/dcat-dataset-jsonld-generator";
@@ -22,6 +24,16 @@ import {
 } from "@/app/api/discovery/test-utils/fixtures";
 
 describe("DCAT dataset export generators", () => {
+  const originalBaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+  beforeEach(() => {
+    process.env.NEXT_PUBLIC_BASE_URL = "https://portal.example.org/";
+  });
+
+  afterEach(() => {
+    process.env.NEXT_PUBLIC_BASE_URL = originalBaseUrl;
+  });
+
   test("shared helpers escape XML and Turtle values", () => {
     expect(escapeXml(`5 < 6 & "7" '8' > 4`)).toBe(
       "5 &lt; 6 &amp; &quot;7&quot; &apos;8&apos; &gt; 4"
@@ -31,23 +43,55 @@ describe("DCAT dataset export generators", () => {
     );
   });
 
-  test("shared helpers detect URI-backed and blank-node dataset subjects", () => {
+  test("shared helpers preserve absolute ids and generate valid export URIs", () => {
     const uriDataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",
     });
     const localIdDataset = buildLocalDiscoveryDataset({ id: "dataset-1" });
-    const emptyIdDataset = buildLocalDiscoveryDataset({ id: "" });
+    const identifierDataset = buildLocalDiscoveryDataset({
+      id: "",
+      identifier: "identifier-1",
+    });
+    const emptyIdDataset = buildLocalDiscoveryDataset({
+      id: "",
+      identifier: undefined,
+    });
 
     expect(isAbsoluteUri("https://example.org/datasets/export-1")).toBe(true);
     expect(isAbsoluteUri("dataset-1")).toBe(false);
+    expect(getLocalDiscoveryExportBaseUrl()).toBe("https://portal.example.org");
+    expect(getDatasetExportUri(uriDataset)).toBe(
+      "https://example.org/datasets/export-1"
+    );
+    expect(getDatasetExportUri(localIdDataset)).toBe(
+      "https://portal.example.org/datasets/dataset-1"
+    );
+    expect(getDatasetExportUri(identifierDataset)).toBe(
+      "https://portal.example.org/datasets/identifier-1"
+    );
+    expect(
+      getDatasetExportUri(
+        buildLocalDiscoveryDataset({
+          id: "dataset-1",
+          identifier: "identifier-2",
+        })
+      )
+    ).toBe("https://portal.example.org/datasets/identifier-2");
+    expect(getDatasetExportUri(emptyIdDataset)).toBe(
+      "https://portal.example.org/datasets/unknown-dataset"
+    );
     expect(getDatasetRdfAboutAttribute(uriDataset)).toBe(
       ' rdf:about="https://example.org/datasets/export-1"'
     );
-    expect(getDatasetRdfAboutAttribute(localIdDataset)).toBe("");
+    expect(getDatasetRdfAboutAttribute(localIdDataset)).toBe(
+      ' rdf:about="https://portal.example.org/datasets/dataset-1"'
+    );
     expect(getDatasetTurtleSubject(uriDataset)).toBe(
       "<https://example.org/datasets/export-1>"
     );
-    expect(getDatasetTurtleSubject(emptyIdDataset)).toBe("[]");
+    expect(getDatasetTurtleSubject(emptyIdDataset)).toBe(
+      "<https://portal.example.org/datasets/unknown-dataset>"
+    );
   });
 
   test("serializes RDF/XML master dataset export", () => {
@@ -137,7 +181,7 @@ describe("DCAT dataset export generators", () => {
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:dcat="http://www.w3.org/ns/dcat#"
          xmlns:dct="http://purl.org/dc/terms/">
-  <dcat:Dataset>
+  <dcat:Dataset rdf:about="https://portal.example.org/datasets/dataset-1">
   </dcat:Dataset>
 </rdf:RDF>
 `);
@@ -145,14 +189,15 @@ describe("DCAT dataset export generators", () => {
       .toBe(`@prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dct: <http://purl.org/dc/terms/> .
 
-[] a dcat:Dataset .
+<https://portal.example.org/datasets/dataset-1> a dcat:Dataset .
 `);
     expect(serializeDatasetAsJsonLd(dataset)).toBe(`{
   "@context": {
     "dcat": "http://www.w3.org/ns/dcat#",
     "dct": "http://purl.org/dc/terms/"
   },
-  "@type": "dcat:Dataset"
+  "@type": "dcat:Dataset",
+  "@id": "https://portal.example.org/datasets/dataset-1"
 }
 `);
   });

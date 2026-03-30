@@ -26,9 +26,8 @@ export const isAbsoluteUri = (value: string): boolean =>
   /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(value);
 
 export const getLocalDiscoveryExportBaseUrl = (): string =>
-  (process.env.NEXT_PUBLIC_BASE_URL ?? DEFAULT_EXPORT_BASE_URL).replace(
-    /\/+$/,
-    ""
+  trimTrailingSlashes(
+    process.env.NEXT_PUBLIC_BASE_URL ?? DEFAULT_EXPORT_BASE_URL
   );
 
 const getDatasetExportKey = (dataset: LocalDiscoveryDataset): string =>

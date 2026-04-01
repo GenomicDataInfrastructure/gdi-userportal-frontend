@@ -505,6 +505,7 @@ describe("DcatHarvesterService", () => {
       healthTheme: [],
       healthCategory: [],
       dcatType: [],
+      personalData: undefined,
     });
   });
 
@@ -691,6 +692,7 @@ describe("DcatHarvesterService", () => {
         healthTheme: [],
         healthCategory: [],
         dcatType: [],
+        personalData: undefined,
       },
     ]);
 

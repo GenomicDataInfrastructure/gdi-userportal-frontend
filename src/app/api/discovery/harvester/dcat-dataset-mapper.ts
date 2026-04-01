@@ -435,7 +435,7 @@ const extractPersonalData = (
       if (!value) return null;
       const label =
         graph.getFirstLiteral(obj, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
-        value.split(/[/#]/).filter(Boolean).pop() ||
+        value.split(/[/#]/).findLast(Boolean) ||
         value;
       return { value, label };
     })

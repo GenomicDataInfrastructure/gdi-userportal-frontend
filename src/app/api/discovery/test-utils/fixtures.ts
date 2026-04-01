@@ -101,6 +101,12 @@ export const canonicalDiscoveryRdf = `
       <dcatap:applicableLegislation>
         <rdf:Description rdf:about="http://example.com/law/99"/>
       </dcatap:applicableLegislation>
+      <dpv:hasPersonalData rdf:resource="https://w3id.org/dpv/dpv-pd#Age"/>
+      <dpv:hasPersonalData>
+        <dpv:PersonalData rdf:about="https://w3id.org/dpv/dpv-pd#MedicalRecord">
+          <skos:prefLabel xml:lang="eng">Medical Record</skos:prefLabel>
+        </dpv:PersonalData>
+      </dpv:hasPersonalData>
       <dct:publisher>
         <foaf:Agent rdf:nodeID="Npublisher1">
           <foaf:name xml:lang="eng">org</foaf:name>

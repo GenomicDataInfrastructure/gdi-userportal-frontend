@@ -60,6 +60,7 @@ const HEALTHDCATAP_HEALTH_CATEGORY =
 const DCT_TYPE = "http://purl.org/dc/terms/type"; // NOSONAR
 const DCT_ACCESS_RIGHTS = "http://purl.org/dc/terms/accessRights"; // NOSONAR
 const DPV_HAS_LEGAL_BASIS = "http://www.w3.org/ns/dpv#hasLegalBasis"; // NOSONAR
+const DPV_HAS_PERSONAL_DATA = "http://www.w3.org/ns/dpv#hasPersonalData"; // NOSONAR
 const DCATAP_APPLICABLE_LEGISLATION =
   "http://data.europa.eu/r5r/applicableLegislation"; // NOSONAR
 const DCT_PUBLISHER = "http://purl.org/dc/terms/publisher"; // NOSONAR
@@ -68,7 +69,6 @@ const FOAF_NAME = "http://xmlns.com/foaf/0.1/name"; // NOSONAR
 const FOAF_MBOX = "http://xmlns.com/foaf/0.1/mbox"; // NOSONAR
 const FOAF_HOMEPAGE = "http://xmlns.com/foaf/0.1/homepage"; // NOSONAR
 const FOAF_URL = "http://xmlns.com/foaf/0.1/workInfoHomepage"; // NOSONAR
-const PROV_ACTED_ON_BEHALF_OF = "http://www.w3.org/ns/prov#actedOnBehalfOf"; // NOSONAR
 const HEALTHDCATAP_HDAB = "http://healthdataportal.eu/ns/health#hdab"; // NOSONAR
 
 export const getFallbackCatalogue = (graph: RdfGraph): string => {
@@ -169,6 +169,7 @@ export const mapDataset = (
     publisherType: publisherTypes.length > 0 ? publisherTypes : undefined,
     hdab: extractAgents(datasetSubject, graph, HEALTHDCATAP_HDAB),
     creators: extractAgents(datasetSubject, graph, DCT_CREATOR),
+    personalData: extractPersonalData(datasetSubject, graph),
   };
 };
 
@@ -415,6 +416,26 @@ const extractApplicableLegislation = (
       const label =
         graph.getFirstLiteral(obj, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
         value.split("/").pop() ||
+        value;
+      return { value, label };
+    })
+    .filter((item): item is { value: string; label: string } => item !== null);
+  return result.length > 0 ? result : undefined;
+};
+
+const extractPersonalData = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): Array<{ value: string; label: string }> | undefined => {
+  const objects = graph.getObjects(datasetSubject, DPV_HAS_PERSONAL_DATA);
+  if (!objects.length) return undefined;
+  const result = objects
+    .map((obj) => {
+      const value = graph.getNamedNodeValue(obj) || obj.value;
+      if (!value) return null;
+      const label =
+        graph.getFirstLiteral(obj, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
+        value.split(/[/#]/).filter(Boolean).pop() ||
         value;
       return { value, label };
     })

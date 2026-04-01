@@ -5,6 +5,7 @@
 import {
   DatasetRdfContext,
   addConcept,
+  addNamedNode,
   createLiteral,
   createNamedNode,
   createNestedNode,
@@ -55,5 +56,9 @@ export const addDatasetGovernanceQuads = ({
       entry.value,
       entry.label
     )
+  );
+
+  dataset.personalData?.forEach((entry) =>
+    addNamedNode(store, datasetNode, ns.dpv("hasPersonalData"), entry.value)
   );
 };

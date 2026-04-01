@@ -189,6 +189,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       numberOfRecords: dataset.numberOfRecords,
       legalBasis: dataset.legalBasis,
       applicableLegislation: dataset.applicableLegislation,
+      personalData: dataset.personalData,
     };
   }
 

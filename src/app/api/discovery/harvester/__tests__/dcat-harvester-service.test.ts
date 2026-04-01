@@ -144,6 +144,16 @@ describe("DcatHarvesterService", () => {
             label: "99",
           },
         ],
+        personalData: [
+          {
+            value: "https://w3id.org/dpv/dpv-pd#Age",
+            label: "Age",
+          },
+          {
+            value: "https://w3id.org/dpv/dpv-pd#MedicalRecord",
+            label: "Medical Record",
+          },
+        ],
         contacts: [
           {
             name: "tab3-contactPoint-mail@test.com",
@@ -213,6 +223,7 @@ describe("DcatHarvesterService", () => {
         accessRights: undefined,
         legalBasis: undefined,
         applicableLegislation: undefined,
+        personalData: undefined,
         contacts: undefined,
         distributions: undefined,
       },

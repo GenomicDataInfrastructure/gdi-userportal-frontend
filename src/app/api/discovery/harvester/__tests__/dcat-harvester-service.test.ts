@@ -968,6 +968,54 @@ describe("DcatHarvesterService", () => {
     expect(datasets[0].retentionPeriod).toBeUndefined();
   });
 
+  test("extracts personalData as ValueLabel array using URI fragment as fallback label", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dpv="http://www.w3.org/ns/dpv#"
+               xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dpv:hasPersonalData rdf:resource="https://w3id.org/dpv/dpv-pd#Age"/>
+          <dpv:hasPersonalData>
+            <dpv:PersonalData rdf:about="https://w3id.org/dpv/dpv-pd#MedicalRecord">
+              <skos:prefLabel xml:lang="eng">Medical Record</skos:prefLabel>
+            </dpv:PersonalData>
+          </dpv:hasPersonalData>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].personalData).toEqual([
+      { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
+      {
+        value: "https://w3id.org/dpv/dpv-pd#MedicalRecord",
+        label: "Medical Record",
+      },
+    ]);
+  });
+
+  test("returns undefined for personalData when no dpv:hasPersonalData triples exist", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].personalData).toBeUndefined();
+  });
+
   test("extracts temporalResolution as ISO duration string", async () => {
     const service = new DcatHarvesterService();
     const rdf = `

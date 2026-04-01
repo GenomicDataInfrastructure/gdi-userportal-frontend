@@ -222,6 +222,7 @@ describe("DCAT dataset export generators", () => {
       conformsTo: undefined,
       applicableLegislation: undefined,
       legalBasis: undefined,
+      personalData: undefined,
       spatialCoverage: undefined,
       spatialResolutionInMeters: undefined,
       temporalCoverage: undefined,
@@ -263,5 +264,89 @@ describe("DCAT dataset export generators", () => {
           item["@id"] === "https://portal.example.org/datasets/dataset-1"
       )
     ).toBe(true);
+  });
+
+  test("emits dpv:hasPersonalData as plain rdf:resource references in RDF/XML", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      personalData: [
+        { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
+        {
+          value: "https://w3id.org/dpv/dpv-pd#MedicalRecord",
+          label: "Medical Record",
+        },
+      ],
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    const personalDataQuads = quads.filter(
+      (q) => q.predicate.value === "http://www.w3.org/ns/dpv#hasPersonalData"
+    );
+    expect(personalDataQuads).toHaveLength(2);
+    expect(personalDataQuads.map((q) => q.object.value).sort()).toEqual([
+      "https://w3id.org/dpv/dpv-pd#Age",
+      "https://w3id.org/dpv/dpv-pd#MedicalRecord",
+    ]);
+    // plain NamedNode references — no skos:prefLabel triples should be emitted
+    const prefLabelQuads = quads.filter(
+      (q) =>
+        q.predicate.value === "http://www.w3.org/2004/02/skos/core#prefLabel" &&
+        (q.subject.value === "https://w3id.org/dpv/dpv-pd#Age" ||
+          q.subject.value === "https://w3id.org/dpv/dpv-pd#MedicalRecord")
+    );
+    expect(prefLabelQuads).toHaveLength(0);
+  });
+
+  test("emits dpv:hasPersonalData triples in Turtle format", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      personalData: [
+        { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
+      ],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+
+    expect(turtle).toContain("dpv:hasPersonalData");
+    expect(turtle).toContain("dpv-pd#Age");
+  });
+
+  test("emits dpv:hasPersonalData in JSON-LD", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      personalData: [
+        { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
+        {
+          value: "https://w3id.org/dpv/dpv-pd#MedicalRecord",
+          label: "Medical Record",
+        },
+      ],
+    });
+
+    const jsonLd = JSON.parse(
+      await serializeDatasetAsJsonLd(dataset)
+    ) as Record<string, unknown>;
+    const jsonLdStr = JSON.stringify(jsonLd);
+
+    expect(jsonLdStr).toContain("hasPersonalData");
+    expect(jsonLdStr).toContain("dpv-pd#Age");
+    expect(jsonLdStr).toContain("dpv-pd#MedicalRecord");
+  });
+
+  test("omits dpv:hasPersonalData triples when personalData is undefined", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      personalData: undefined,
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    const personalDataQuads = quads.filter(
+      (q) => q.predicate.value === "http://www.w3.org/ns/dpv#hasPersonalData"
+    );
+    expect(personalDataQuads).toHaveLength(0);
   });
 });

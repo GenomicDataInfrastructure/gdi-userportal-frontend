@@ -61,4 +61,15 @@ export const addDatasetGovernanceQuads = ({
   dataset.personalData?.forEach((entry) =>
     addNamedNode(store, datasetNode, ns.dpv("hasPersonalData"), entry.value)
   );
+
+  dataset.purpose?.forEach((entry, index) => {
+    if (!isNonEmptyString(entry.value)) return;
+    const purposeNode = createNestedNode(
+      { dataset, store, datasetNode },
+      `purpose-${index + 1}`
+    );
+    store.add(datasetNode, ns.dpv("hasPurpose"), purposeNode);
+    store.add(purposeNode, ns.rdf("type"), ns.dpv("Purpose"));
+    store.add(purposeNode, ns.dct("description"), createLiteral(entry.value));
+  });
 };

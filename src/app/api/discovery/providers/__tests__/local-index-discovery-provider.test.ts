@@ -517,6 +517,12 @@ describe("LocalIndexDiscoveryProvider", () => {
           label: "Medical Record",
         },
       ],
+      purpose: [
+        {
+          value: "https://www.example.com/purpose/research",
+          label: "https://www.example.com/purpose/research",
+        },
+      ],
       distributions: [
         {
           id: "distribution-1",
@@ -687,6 +693,12 @@ describe("LocalIndexDiscoveryProvider", () => {
         {
           value: "https://w3id.org/dpv/dpv-pd#MedicalRecord",
           label: "Medical Record",
+        },
+      ],
+      purpose: [
+        {
+          value: "https://www.example.com/purpose/research",
+          label: "https://www.example.com/purpose/research",
         },
       ],
       distributions: [

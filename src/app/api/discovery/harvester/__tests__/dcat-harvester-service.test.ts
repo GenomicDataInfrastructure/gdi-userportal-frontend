@@ -154,6 +154,12 @@ describe("DcatHarvesterService", () => {
             label: "Medical Record",
           },
         ],
+        purpose: [
+          {
+            value: "https://www.example.com/purpose/research",
+            label: "https://www.example.com/purpose/research",
+          },
+        ],
         contacts: [
           {
             name: "tab3-contactPoint-mail@test.com",
@@ -224,6 +230,7 @@ describe("DcatHarvesterService", () => {
         legalBasis: undefined,
         applicableLegislation: undefined,
         personalData: undefined,
+        purpose: undefined,
         contacts: undefined,
         distributions: undefined,
       },
@@ -506,6 +513,7 @@ describe("DcatHarvesterService", () => {
       healthCategory: [],
       dcatType: [],
       personalData: undefined,
+      purpose: undefined,
     });
   });
 
@@ -693,6 +701,7 @@ describe("DcatHarvesterService", () => {
         healthCategory: [],
         dcatType: [],
         personalData: undefined,
+        purpose: undefined,
       },
     ]);
 
@@ -1092,6 +1101,115 @@ describe("DcatHarvesterService", () => {
       { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
     ]);
     expect(datasets[1].personalData).toBeUndefined();
+  });
+
+  test("extracts purpose using dct:description as value and label", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dpv="http://www.w3.org/ns/dpv#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dpv:hasPurpose>
+            <dpv:Purpose rdf:nodeID="Npurpose1">
+              <dct:description xml:lang="eng">https://www.example.com/purpose/research</dct:description>
+            </dpv:Purpose>
+          </dpv:hasPurpose>
+          <dpv:hasPurpose>
+            <dpv:Purpose rdf:nodeID="Npurpose2">
+              <dct:description xml:lang="eng">Scientific analysis</dct:description>
+            </dpv:Purpose>
+          </dpv:hasPurpose>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].purpose).toEqual([
+      {
+        value: "https://www.example.com/purpose/research",
+        label: "https://www.example.com/purpose/research",
+      },
+      { value: "Scientific analysis", label: "Scientific analysis" },
+    ]);
+  });
+
+  test("returns undefined for purpose when no dpv:hasPurpose triples exist", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].purpose).toBeUndefined();
+  });
+
+  test("ignores dpv:hasPurpose entries with no dct:description", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dpv="http://www.w3.org/ns/dpv#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dpv:hasPurpose>
+            <dpv:Purpose rdf:nodeID="Npurpose-empty"/>
+          </dpv:hasPurpose>
+          <dpv:hasPurpose>
+            <dpv:Purpose rdf:nodeID="Npurpose-valid">
+              <dct:description xml:lang="eng">Valid purpose</dct:description>
+            </dpv:Purpose>
+          </dpv:hasPurpose>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].purpose).toEqual([
+      { value: "Valid purpose", label: "Valid purpose" },
+    ]);
+  });
+
+  test("collects purpose across multiple datasets independently", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dpv="http://www.w3.org/ns/dpv#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dpv:hasPurpose>
+            <dpv:Purpose rdf:nodeID="Np1">
+              <dct:description xml:lang="eng">Research</dct:description>
+            </dpv:Purpose>
+          </dpv:hasPurpose>
+        </dcat:Dataset>
+        <dcat:Dataset rdf:about="https://example.org/datasets/2">
+          <dct:title>Dataset B</dct:title>
+          <dct:description>Description B</dct:description>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].purpose).toEqual([
+      { value: "Research", label: "Research" },
+    ]);
+    expect(datasets[1].purpose).toBeUndefined();
   });
 
   test("extracts temporalResolution as ISO duration string", async () => {

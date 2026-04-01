@@ -60,6 +60,7 @@ const HEALTHDCATAP_HEALTH_CATEGORY =
 const DCT_TYPE = "http://purl.org/dc/terms/type"; // NOSONAR
 const DCT_ACCESS_RIGHTS = "http://purl.org/dc/terms/accessRights"; // NOSONAR
 const DPV_HAS_LEGAL_BASIS = "http://www.w3.org/ns/dpv#hasLegalBasis"; // NOSONAR
+const DPV_HAS_PURPOSE = "http://www.w3.org/ns/dpv#hasPurpose"; // NOSONAR
 const DPV_HAS_PERSONAL_DATA = "http://www.w3.org/ns/dpv#hasPersonalData"; // NOSONAR
 const DCATAP_APPLICABLE_LEGISLATION =
   "http://data.europa.eu/r5r/applicableLegislation"; // NOSONAR
@@ -170,6 +171,7 @@ export const mapDataset = (
     hdab: extractAgents(datasetSubject, graph, HEALTHDCATAP_HDAB),
     creators: extractAgents(datasetSubject, graph, DCT_CREATOR),
     personalData: extractPersonalData(datasetSubject, graph),
+    purpose: extractPurpose(datasetSubject, graph),
   };
 };
 
@@ -395,6 +397,22 @@ const extractLegalBasis = (
       if (!label) return null;
       const value = graph.getNamedNodeValue(obj) || label;
       return { value, label };
+    })
+    .filter((item): item is { value: string; label: string } => item !== null);
+  return result.length > 0 ? result : undefined;
+};
+
+const extractPurpose = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): Array<{ value: string; label: string }> | undefined => {
+  const objects = graph.getObjects(datasetSubject, DPV_HAS_PURPOSE);
+  if (!objects.length) return undefined;
+  const result = objects
+    .map((obj) => {
+      const value = graph.getLiteral(obj, DCT_DESCRIPTION);
+      if (!value) return null;
+      return { value, label: value };
     })
     .filter((item): item is { value: string; label: string } => item !== null);
   return result.length > 0 ? result : undefined;

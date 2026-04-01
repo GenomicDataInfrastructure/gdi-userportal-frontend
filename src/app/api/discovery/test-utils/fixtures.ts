@@ -229,6 +229,16 @@ export const buildLocalDiscoveryDataset = (
       label: "99",
     },
   ],
+  personalData: [
+    {
+      value: "https://w3id.org/dpv/dpv-pd#Age", // NOSONAR
+      label: "Age",
+    },
+    {
+      value: "https://w3id.org/dpv/dpv-pd#MedicalRecord", // NOSONAR
+      label: "Medical Record",
+    },
+  ],
   distributions: [
     {
       id: "distribution-1",

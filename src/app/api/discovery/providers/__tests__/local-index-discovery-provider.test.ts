@@ -434,7 +434,6 @@ describe("LocalIndexDiscoveryProvider", () => {
           uri: undefined,
           homepage: undefined,
           identifier: undefined,
-          actedOnBehalfOf: undefined,
         },
       ],
       populationCoverage: "People of LNDS.",
@@ -511,6 +510,13 @@ describe("LocalIndexDiscoveryProvider", () => {
           label: "99",
         },
       ],
+      personalData: [
+        { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
+        {
+          value: "https://w3id.org/dpv/dpv-pd#MedicalRecord",
+          label: "Medical Record",
+        },
+      ],
       distributions: [
         {
           id: "distribution-1",
@@ -550,7 +556,6 @@ describe("LocalIndexDiscoveryProvider", () => {
           homepage: undefined,
           identifier: undefined,
           type: undefined,
-          actedOnBehalfOf: undefined,
         },
       ],
       creators: [
@@ -562,7 +567,6 @@ describe("LocalIndexDiscoveryProvider", () => {
           homepage: undefined,
           identifier: undefined,
           type: undefined,
-          actedOnBehalfOf: undefined,
         },
       ],
       publisherType: [
@@ -618,7 +622,6 @@ describe("LocalIndexDiscoveryProvider", () => {
           uri: undefined,
           homepage: undefined,
           identifier: undefined,
-          actedOnBehalfOf: undefined,
         },
       ],
       themes: [],
@@ -679,6 +682,13 @@ describe("LocalIndexDiscoveryProvider", () => {
           label: "99",
         },
       ],
+      personalData: [
+        { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
+        {
+          value: "https://w3id.org/dpv/dpv-pd#MedicalRecord",
+          label: "Medical Record",
+        },
+      ],
       distributions: [
         {
           id: "distribution-1",
@@ -727,7 +737,6 @@ describe("LocalIndexDiscoveryProvider", () => {
           homepage: undefined,
           identifier: undefined,
           type: undefined,
-          actedOnBehalfOf: undefined,
         },
       ],
       creators: [
@@ -739,7 +748,6 @@ describe("LocalIndexDiscoveryProvider", () => {
           homepage: undefined,
           identifier: undefined,
           type: undefined,
-          actedOnBehalfOf: undefined,
         },
       ],
       publisherType: [

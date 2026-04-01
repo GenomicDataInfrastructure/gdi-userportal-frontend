@@ -82,6 +82,7 @@ export interface LocalDiscoveryDataset {
   hdab: LocalAgent[];
   creators: LocalAgent[];
   publisherType?: Array<{ value: string; label: string }>;
+  personalData?: Array<{ value: string; label: string }>;
 }
 
 export interface StoredDocumentHit<TDocument> {

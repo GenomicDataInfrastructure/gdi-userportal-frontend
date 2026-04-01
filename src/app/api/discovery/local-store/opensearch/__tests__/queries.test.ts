@@ -187,6 +187,12 @@ describe("opensearch/queries", () => {
               label: { type: "keyword" },
             },
           },
+          personalData: {
+            properties: {
+              value: { type: "keyword" },
+              label: { type: "keyword" },
+            },
+          },
           distributionsCount: { type: "integer" },
         },
       },

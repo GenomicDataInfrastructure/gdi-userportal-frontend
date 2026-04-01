@@ -144,6 +144,16 @@ describe("DcatHarvesterService", () => {
             label: "99",
           },
         ],
+        personalData: [
+          {
+            value: "https://w3id.org/dpv/dpv-pd#Age",
+            label: "Age",
+          },
+          {
+            value: "https://w3id.org/dpv/dpv-pd#MedicalRecord",
+            label: "Medical Record",
+          },
+        ],
         contacts: [
           {
             name: "tab3-contactPoint-mail@test.com",
@@ -213,6 +223,7 @@ describe("DcatHarvesterService", () => {
         accessRights: undefined,
         legalBasis: undefined,
         applicableLegislation: undefined,
+        personalData: undefined,
         contacts: undefined,
         distributions: undefined,
       },
@@ -494,6 +505,7 @@ describe("DcatHarvesterService", () => {
       healthTheme: [],
       healthCategory: [],
       dcatType: [],
+      personalData: undefined,
     });
   });
 
@@ -680,6 +692,7 @@ describe("DcatHarvesterService", () => {
         healthTheme: [],
         healthCategory: [],
         dcatType: [],
+        personalData: undefined,
       },
     ]);
 
@@ -953,6 +966,132 @@ describe("DcatHarvesterService", () => {
 
     const datasets = await service.parseDatasetsFromRdf(rdf);
     expect(datasets[0].retentionPeriod).toBeUndefined();
+  });
+
+  test("extracts personalData as ValueLabel array using URI fragment as fallback label", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dpv="http://www.w3.org/ns/dpv#"
+               xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dpv:hasPersonalData rdf:resource="https://w3id.org/dpv/dpv-pd#Age"/>
+          <dpv:hasPersonalData>
+            <dpv:PersonalData rdf:about="https://w3id.org/dpv/dpv-pd#MedicalRecord">
+              <skos:prefLabel xml:lang="eng">Medical Record</skos:prefLabel>
+            </dpv:PersonalData>
+          </dpv:hasPersonalData>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].personalData).toEqual([
+      { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
+      {
+        value: "https://w3id.org/dpv/dpv-pd#MedicalRecord",
+        label: "Medical Record",
+      },
+    ]);
+  });
+
+  test("returns undefined for personalData when no dpv:hasPersonalData triples exist", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].personalData).toBeUndefined();
+  });
+
+  test("uses rdfs:label as fallback label when skos:prefLabel is absent", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dpv="http://www.w3.org/ns/dpv#"
+               xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dpv:hasPersonalData>
+            <dpv:PersonalData rdf:about="https://w3id.org/dpv/dpv-pd#Location">
+              <rdfs:label xml:lang="eng">Location Data</rdfs:label>
+            </dpv:PersonalData>
+          </dpv:hasPersonalData>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].personalData).toEqual([
+      { value: "https://w3id.org/dpv/dpv-pd#Location", label: "Location Data" },
+    ]);
+  });
+
+  test("falls back to URI path segment when no label triple exists", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dpv="http://www.w3.org/ns/dpv#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dpv:hasPersonalData rdf:resource="https://w3id.org/dpv/dpv-pd#Financial"/>
+          <dpv:hasPersonalData rdf:resource="https://example.org/personal-data/Genetic"/>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].personalData).toEqual([
+      { value: "https://w3id.org/dpv/dpv-pd#Financial", label: "Financial" },
+      {
+        value: "https://example.org/personal-data/Genetic",
+        label: "Genetic",
+      },
+    ]);
+  });
+
+  test("collects personalData across multiple datasets independently", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dpv="http://www.w3.org/ns/dpv#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dpv:hasPersonalData rdf:resource="https://w3id.org/dpv/dpv-pd#Age"/>
+        </dcat:Dataset>
+        <dcat:Dataset rdf:about="https://example.org/datasets/2">
+          <dct:title>Dataset B</dct:title>
+          <dct:description>Description B</dct:description>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].personalData).toEqual([
+      { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
+    ]);
+    expect(datasets[1].personalData).toBeUndefined();
   });
 
   test("extracts temporalResolution as ISO duration string", async () => {

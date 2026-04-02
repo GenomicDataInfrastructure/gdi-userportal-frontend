@@ -144,6 +144,7 @@ export const canonicalDiscoveryRdf = `
           <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV" />
           <dcat:accessURL rdf:resource="https://example.org/access/population-registry" />
           <dcat:downloadURL rdf:resource="https://example.org/download/population-registry.csv" />
+          <dct:issued>2023-06-15</dct:issued>
         </dcat:Distribution>
       </dcat:distribution>
     </dcat:Dataset>
@@ -249,6 +250,7 @@ export const buildLocalDiscoveryDataset = (
       },
       accessUrl: "https://example.org/access/population-registry",
       downloadUrl: "https://example.org/download/population-registry.csv",
+      createdAt: "2023-06-15T00:00:00.000Z",
     },
   ],
   contacts: [

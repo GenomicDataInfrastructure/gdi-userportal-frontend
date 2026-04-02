@@ -27,6 +27,7 @@ export interface LocalDiscoveryDistribution {
   format?: { value: string; label: string };
   accessUrl?: string;
   downloadUrl?: string;
+  createdAt?: string;
 }
 
 export interface LocalContactPoint {

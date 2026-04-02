@@ -16,6 +16,7 @@ const DC_TITLE = "http://purl.org/dc/elements/1.1/title"; // NOSONAR
 const DCT_FORMAT = "http://purl.org/dc/terms/format"; // NOSONAR
 const SKOS_PREF_LABEL = "http://www.w3.org/2004/02/skos/core#prefLabel"; // NOSONAR
 const RDFS_LABEL = "http://www.w3.org/2000/01/rdf-schema#label"; // NOSONAR
+const DCT_ISSUED = "http://purl.org/dc/terms/issued"; // NOSONAR
 
 export const extractDistributions = (
   datasetSubject: RDF.Term,
@@ -77,6 +78,7 @@ const mapDistribution = (
     format: getDistributionFormat(distributionSubject, graph),
     accessUrl,
     downloadUrl,
+    createdAt: normalizeDate(graph.getLiteral(distributionSubject, DCT_ISSUED)),
   };
 };
 
@@ -140,4 +142,17 @@ const getDistributionDownloadUrl = (
     .getObjects(distributionSubject, DCAT_DOWNLOAD_URL)[0]
     ?.value.trim();
   return url || undefined;
+};
+
+const normalizeDate = (value: string): string | undefined => {
+  if (!value) return undefined;
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  try {
+    const date = new Date(trimmed);
+    if (isNaN(date.getTime())) return undefined;
+    return date.toISOString();
+  } catch {
+    return undefined;
+  }
 };

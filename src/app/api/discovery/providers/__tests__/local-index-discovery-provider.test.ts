@@ -529,6 +529,7 @@ describe("LocalIndexDiscoveryProvider", () => {
           },
           accessUrl: "https://example.org/access/population-registry",
           downloadUrl: "https://example.org/download/population-registry.csv",
+          createdAt: "2023-06-15T00:00:00.000Z",
         },
       ],
       temporalCoverage: {
@@ -701,6 +702,7 @@ describe("LocalIndexDiscoveryProvider", () => {
           },
           accessUrl: "https://example.org/access/population-registry",
           downloadUrl: "https://example.org/download/population-registry.csv",
+          createdAt: "2023-06-15T00:00:00.000Z",
         },
       ],
       spatialCoverage: [

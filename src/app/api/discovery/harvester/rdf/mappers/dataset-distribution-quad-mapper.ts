@@ -41,6 +41,16 @@ export const addDatasetDistributionQuads = ({
       );
     }
 
+    if (distribution.mediaType) {
+      addConcept(
+        store,
+        distributionNode,
+        ns.dcat("mediaType"),
+        distribution.mediaType.value,
+        distribution.mediaType.label
+      );
+    }
+
     addNamedNode(
       store,
       distributionNode,

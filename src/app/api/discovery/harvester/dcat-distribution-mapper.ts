@@ -130,6 +130,28 @@ const getDistributionFormat = (
   return { value, label };
 };
 
+const getDistributionMediaType = (
+  distributionSubject: RDF.Term,
+  graph: RdfGraph
+): LocalDiscoveryDistribution["mediaType"] => {
+  const mediaTypeSubject = graph.getObjects(
+    distributionSubject,
+    DCAT_MEDIA_TYPE
+  )[0];
+  if (!mediaTypeSubject) return undefined;
+
+  const value =
+    graph.getNamedNodeValue(mediaTypeSubject) || mediaTypeSubject.value.trim();
+  if (!value) return undefined;
+
+  const label =
+    graph.getFirstLiteral(mediaTypeSubject, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
+    value.split("/").pop() ||
+    value;
+
+  return { value, label };
+};
+
 const getDistributionAccessUrl = (
   distributionSubject: RDF.Term,
   graph: RdfGraph

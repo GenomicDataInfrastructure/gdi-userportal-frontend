@@ -147,7 +147,7 @@ export interface DiscoveryRetrievedDistribution {
   languages?: DiscoveryValueLabel[];
   license?: DiscoveryValueLabel;
   conformsTo?: DiscoveryValueLabel[];
-  mediaType?: string;
+  mediaType?: DiscoveryValueLabel;
   modifiedAt?: string;
   packagingFormat?: DiscoveryValueLabel;
   createdAt?: string;

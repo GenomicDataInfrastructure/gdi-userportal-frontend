@@ -25,6 +25,7 @@ export interface LocalDiscoveryDistribution {
   id: string;
   title: string;
   format?: { value: string; label: string };
+  mediaType?: { value: string; label: string };
   accessUrl?: string;
   downloadUrl?: string;
 }

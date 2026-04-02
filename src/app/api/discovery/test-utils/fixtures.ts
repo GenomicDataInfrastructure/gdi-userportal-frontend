@@ -142,6 +142,11 @@ export const canonicalDiscoveryRdf = `
           <dct:identifier>distribution-1</dct:identifier>
           <dct:title>Population Registry CSV</dct:title>
           <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV" />
+          <dcat:mediaType>
+            <dct:MediaType rdf:about="http://www.iana.org/assignments/media-types/text/csv">
+              <skos:prefLabel xml:lang="eng">CSV</skos:prefLabel>
+            </dct:MediaType>
+          </dcat:mediaType>
           <dcat:accessURL rdf:resource="https://example.org/access/population-registry" />
           <dcat:downloadURL rdf:resource="https://example.org/download/population-registry.csv" />
         </dcat:Distribution>
@@ -245,6 +250,10 @@ export const buildLocalDiscoveryDataset = (
       title: "Population Registry CSV",
       format: {
         value: "http://publications.europa.eu/resource/authority/file-type/CSV", // NOSONAR
+        label: "CSV",
+      },
+      mediaType: {
+        value: "http://www.iana.org/assignments/media-types/text/csv", // NOSONAR
         label: "CSV",
       },
       accessUrl: "https://example.org/access/population-registry",

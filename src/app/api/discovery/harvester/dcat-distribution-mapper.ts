@@ -14,6 +14,7 @@ const DCT_IDENTIFIER = "http://purl.org/dc/terms/identifier"; // NOSONAR
 const DCT_TITLE = "http://purl.org/dc/terms/title"; // NOSONAR
 const DC_TITLE = "http://purl.org/dc/elements/1.1/title"; // NOSONAR
 const DCT_FORMAT = "http://purl.org/dc/terms/format"; // NOSONAR
+const DCAT_MEDIA_TYPE = "http://www.w3.org/ns/dcat#mediaType"; // NOSONAR
 const SKOS_PREF_LABEL = "http://www.w3.org/2004/02/skos/core#prefLabel"; // NOSONAR
 const RDFS_LABEL = "http://www.w3.org/2000/01/rdf-schema#label"; // NOSONAR
 
@@ -75,6 +76,7 @@ const mapDistribution = (
     id: id || `${datasetId}-distribution-${index + 1}`,
     title,
     format: getDistributionFormat(distributionSubject, graph),
+    mediaType: getDistributionMediaType(distributionSubject, graph),
     accessUrl,
     downloadUrl,
   };
@@ -116,6 +118,28 @@ const getDistributionFormat = (
 
   const label =
     graph.getFirstLiteral(formatSubject, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
+    value.split("/").pop() ||
+    value;
+
+  return { value, label };
+};
+
+const getDistributionMediaType = (
+  distributionSubject: RDF.Term,
+  graph: RdfGraph
+): LocalDiscoveryDistribution["mediaType"] => {
+  const mediaTypeSubject = graph.getObjects(
+    distributionSubject,
+    DCAT_MEDIA_TYPE
+  )[0];
+  if (!mediaTypeSubject) return undefined;
+
+  const value =
+    graph.getNamedNodeValue(mediaTypeSubject) || mediaTypeSubject.value.trim();
+  if (!value) return undefined;
+
+  const label =
+    graph.getFirstLiteral(mediaTypeSubject, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
     value.split("/").pop() ||
     value;
 

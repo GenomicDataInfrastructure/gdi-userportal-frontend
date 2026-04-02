@@ -143,6 +143,23 @@ const DistributionAccordion = ({
                     <Tooltip message="File type of the distribution." />
                   </span>
                 </div>
+                <div className="flex items-center relative">
+                  <span className="group flex items-center">
+                    <FontAwesomeIcon
+                      icon={faFile}
+                      className="text-primary align-middle mr-2"
+                    />
+                    <strong className="text-sm font-semibold">
+                      Media Type:
+                    </strong>
+                    <span className="text-sm ml-2">
+                      {distribution.mediaType?.label ||
+                        distribution.mediaType?.value?.split("/").pop() ||
+                        "NA"}
+                    </span>
+                    <Tooltip message="Media type of the distribution." />
+                  </span>
+                </div>
                 {distribution.accessUrl && (
                   <div className="flex items-center relative">
                     <span className="group flex items-center">

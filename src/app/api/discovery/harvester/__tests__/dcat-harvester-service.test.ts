@@ -183,8 +183,7 @@ describe("DcatHarvesterService", () => {
               label: "CSV",
             },
             mediaType: {
-              value:
-                "http://www.iana.org/assignments/media-types/text/csv",
+              value: "http://www.iana.org/assignments/media-types/text/csv",
               label: "CSV",
             },
             accessUrl: "https://example.org/access/population-registry",

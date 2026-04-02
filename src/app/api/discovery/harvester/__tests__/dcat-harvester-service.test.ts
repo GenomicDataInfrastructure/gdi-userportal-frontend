@@ -324,6 +324,7 @@ describe("DcatHarvesterService", () => {
         id: "dist-1",
         title: "dist-1",
         format: undefined,
+        mediaType: undefined,
         accessUrl: "https://example.org/access/1",
         downloadUrl: undefined,
       },
@@ -356,6 +357,97 @@ describe("DcatHarvesterService", () => {
 
     expect(datasets[0].distributions).toHaveLength(1);
     expect(datasets[0].distributions?.[0]?.id).toBe("dist-1");
+  });
+
+  test("parses distribution mediaType with skos:prefLabel", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:identifier>dataset-1</dct:identifier>
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:distribution>
+            <dcat:Distribution rdf:nodeID="dist-1">
+              <dct:identifier>dist-1</dct:identifier>
+              <dct:title>Distribution 1</dct:title>
+              <dcat:mediaType>
+                <dct:MediaType rdf:about="http://www.iana.org/assignments/media-types/text/csv">
+                  <skos:prefLabel xml:lang="eng">CSV</skos:prefLabel>
+                </dct:MediaType>
+              </dcat:mediaType>
+              <dcat:accessURL rdf:resource="https://example.org/access/1"/>
+            </dcat:Distribution>
+          </dcat:distribution>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+
+    expect(datasets[0].distributions?.[0]?.mediaType).toEqual({
+      value: "http://www.iana.org/assignments/media-types/text/csv",
+      label: "CSV",
+    });
+  });
+
+  test("parses distribution mediaType falling back to last URI segment when no label", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:identifier>dataset-1</dct:identifier>
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:distribution>
+            <dcat:Distribution rdf:nodeID="dist-1">
+              <dct:identifier>dist-1</dct:identifier>
+              <dct:title>Distribution 1</dct:title>
+              <dcat:mediaType rdf:resource="http://www.iana.org/assignments/media-types/application/json"/>
+              <dcat:accessURL rdf:resource="https://example.org/access/1"/>
+            </dcat:Distribution>
+          </dcat:distribution>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+
+    expect(datasets[0].distributions?.[0]?.mediaType).toEqual({
+      value: "http://www.iana.org/assignments/media-types/application/json",
+      label: "json",
+    });
+  });
+
+  test("parses distribution with no mediaType as undefined", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:identifier>dataset-1</dct:identifier>
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:distribution>
+            <dcat:Distribution rdf:nodeID="dist-1">
+              <dct:identifier>dist-1</dct:identifier>
+              <dct:title>Distribution 1</dct:title>
+              <dcat:accessURL rdf:resource="https://example.org/access/1"/>
+            </dcat:Distribution>
+          </dcat:distribution>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+
+    expect(datasets[0].distributions?.[0]?.mediaType).toBeUndefined();
   });
 
   test("deduplicates dataset languages", async () => {

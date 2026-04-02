@@ -1140,6 +1140,14 @@ describe("LocalIndexDiscoveryProvider", () => {
     expect(
       hasQuad(quads, {
         subject: "https://example.org/datasets/export-1#distribution-1",
+        predicate: "http://www.w3.org/ns/dcat#mediaType",
+        object: "http://www.iana.org/assignments/media-types/text/csv",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#distribution-1",
         predicate: "http://www.w3.org/ns/dcat#accessURL",
         object: "https://example.org/access/population-registry",
         objectTermType: "NamedNode",

@@ -12,6 +12,9 @@ import {
   faFileAlt,
   faLink,
   faLanguage,
+  faBalanceScale,
+  faCheckCircle,
+  faDatabase,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
 import Tooltip from "./Tooltip";
@@ -143,6 +146,79 @@ const DistributionAccordion = ({
                     <Tooltip message="File type of the distribution." />
                   </span>
                 </div>
+                <div className="flex items-center relative">
+                  <span className="group flex items-center">
+                    <FontAwesomeIcon
+                      icon={faFile}
+                      className="text-primary align-middle mr-2"
+                    />
+                    <strong className="text-sm font-semibold">
+                      Media Type:
+                    </strong>
+                    <span className="text-sm ml-2">
+                      {distribution.mediaType?.label ||
+                        distribution.mediaType?.value?.split("/").pop() ||
+                        "NA"}
+                    </span>
+                    <Tooltip message="Media type of the distribution." />
+                  </span>
+                </div>
+                <div className="flex items-center relative">
+                  <span className="group flex items-center">
+                    <FontAwesomeIcon
+                      icon={faBalanceScale}
+                      className="text-primary align-middle mr-2"
+                    />
+                    <strong className="text-sm font-semibold">License:</strong>
+                    <span className="text-sm ml-2">
+                      {distribution.license?.label ||
+                        distribution.license?.value?.split("/").pop() ||
+                        "NA"}
+                    </span>
+                    <Tooltip message="License under which the distribution is made available." />
+                  </span>
+                </div>
+                <div className="flex items-center relative">
+                  <span className="group flex items-center">
+                    <FontAwesomeIcon
+                      icon={faDatabase}
+                      className="text-primary align-middle mr-2"
+                    />
+                    <strong className="text-sm font-semibold">
+                      Byte Size:
+                    </strong>
+                    <span className="text-sm ml-2">
+                      {distribution.byteSize !== undefined &&
+                      distribution.byteSize !== null
+                        ? distribution.byteSize.toLocaleString()
+                        : "NA"}
+                    </span>
+                    <Tooltip message="Size of the distribution in bytes." />
+                  </span>
+                </div>
+                {distribution.conformsTo &&
+                  distribution.conformsTo.length > 0 && (
+                    <div className="flex items-center relative">
+                      <span className="group flex items-center">
+                        <FontAwesomeIcon
+                          icon={faCheckCircle}
+                          className="text-primary align-middle mr-2"
+                        />
+                        <strong className="text-sm font-semibold">
+                          Conforms To:
+                        </strong>
+                        <span className="text-sm ml-2">
+                          {distribution.conformsTo
+                            .map(
+                              (c) =>
+                                c.label || c.value?.split("/").pop() || c.value
+                            )
+                            .join(", ")}
+                        </span>
+                        <Tooltip message="Standards or specifications the distribution conforms to." />
+                      </span>
+                    </div>
+                  )}
                 {distribution.accessUrl && (
                   <div className="flex items-center relative">
                     <span className="group flex items-center">

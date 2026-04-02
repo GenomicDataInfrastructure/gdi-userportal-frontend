@@ -113,6 +113,10 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       title: distribution.title,
       description: "",
       format: distribution.format,
+      mediaType: distribution.mediaType,
+      license: distribution.license,
+      conformsTo: distribution.conformsTo,
+      byteSize: distribution.byteSize,
       accessUrl: distribution.accessUrl,
       downloadUrl: distribution.downloadUrl,
     }));

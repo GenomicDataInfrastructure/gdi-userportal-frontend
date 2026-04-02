@@ -142,6 +142,18 @@ export const canonicalDiscoveryRdf = `
           <dct:identifier>distribution-1</dct:identifier>
           <dct:title>Population Registry CSV</dct:title>
           <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV" />
+          <dcat:mediaType>
+            <dct:MediaType rdf:about="http://www.iana.org/assignments/media-types/text/csv">
+              <skos:prefLabel xml:lang="eng">CSV</skos:prefLabel>
+            </dct:MediaType>
+          </dcat:mediaType>
+          <dct:license>
+            <dct:LicenseDocument rdf:about="http://spdx.org/licenses/Apache-2.0">
+              <skos:prefLabel xml:lang="eng">Apache 2.0</skos:prefLabel>
+            </dct:LicenseDocument>
+          </dct:license>
+          <dct:conformsTo rdf:resource="https://example.org/spec/standard-1" />
+          <dcat:byteSize rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2048</dcat:byteSize>
           <dcat:accessURL rdf:resource="https://example.org/access/population-registry" />
           <dcat:downloadURL rdf:resource="https://example.org/download/population-registry.csv" />
         </dcat:Distribution>
@@ -247,6 +259,21 @@ export const buildLocalDiscoveryDataset = (
         value: "http://publications.europa.eu/resource/authority/file-type/CSV", // NOSONAR
         label: "CSV",
       },
+      mediaType: {
+        value: "http://www.iana.org/assignments/media-types/text/csv", // NOSONAR
+        label: "CSV",
+      },
+      license: {
+        value: "http://spdx.org/licenses/Apache-2.0", // NOSONAR
+        label: "Apache 2.0",
+      },
+      conformsTo: [
+        {
+          value: "https://example.org/spec/standard-1", // NOSONAR
+          label: "standard-1",
+        },
+      ],
+      byteSize: 2048,
       accessUrl: "https://example.org/access/population-registry",
       downloadUrl: "https://example.org/download/population-registry.csv",
     },

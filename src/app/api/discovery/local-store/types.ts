@@ -25,6 +25,10 @@ export interface LocalDiscoveryDistribution {
   id: string;
   title: string;
   format?: { value: string; label: string };
+  mediaType?: { value: string; label: string };
+  license?: { value: string; label: string };
+  conformsTo?: Array<{ value: string; label: string }>;
+  byteSize?: number;
   accessUrl?: string;
   downloadUrl?: string;
 }

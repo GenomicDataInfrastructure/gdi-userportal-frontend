@@ -5,6 +5,7 @@
 import type * as RDF from "@rdfjs/types";
 import { LocalDiscoveryDistribution } from "@/app/api/discovery/local-store/types";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
+import { normalizeDate } from "@/app/api/discovery/harvester/date-utils";
 
 const DCAT_DISTRIBUTION = "http://www.w3.org/ns/dcat#distribution"; // NOSONAR
 const HEALTHDCATAP_ANALYTICS = "http://healthdataportal.eu/ns/health#analytics"; // NOSONAR
@@ -142,17 +143,4 @@ const getDistributionDownloadUrl = (
     .getObjects(distributionSubject, DCAT_DOWNLOAD_URL)[0]
     ?.value.trim();
   return url || undefined;
-};
-
-const normalizeDate = (value: string): string | undefined => {
-  if (!value) return undefined;
-  const trimmed = value.trim();
-  if (!trimmed) return undefined;
-  try {
-    const date = new Date(trimmed);
-    if (isNaN(date.getTime())) return undefined;
-    return date.toISOString();
-  } catch {
-    return undefined;
-  }
 };

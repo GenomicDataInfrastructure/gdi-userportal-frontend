@@ -12,6 +12,7 @@ import { extractContactPoints } from "@/app/api/discovery/harvester/dcat-contact
 import { extractDatasetRelations } from "@/app/api/discovery/harvester/dcat-dataset-relation-mapper";
 import { extractDistributions } from "@/app/api/discovery/harvester/dcat-distribution-mapper";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
+import { normalizeDate } from "@/app/api/discovery/harvester/date-utils";
 
 export const DCAT_DATASET = "http://www.w3.org/ns/dcat#Dataset";
 export const DCAT_CATALOG = "http://www.w3.org/ns/dcat#Catalog";
@@ -247,19 +248,6 @@ const getDatasetId = (
   }
 
   return `dataset-${index + 1}`;
-};
-
-const normalizeDate = (value: string): string | undefined => {
-  if (!value) return undefined;
-  const trimmed = value.trim();
-  if (!trimmed) return undefined;
-  try {
-    const date = new Date(trimmed);
-    if (isNaN(date.getTime())) return undefined;
-    return date.toISOString();
-  } catch {
-    return undefined;
-  }
 };
 
 const extractNumericLiteral = (

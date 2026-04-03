@@ -72,8 +72,10 @@ const FOAF_MBOX = "http://xmlns.com/foaf/0.1/mbox"; // NOSONAR
 const FOAF_HOMEPAGE = "http://xmlns.com/foaf/0.1/homepage"; // NOSONAR
 const FOAF_URL = "http://xmlns.com/foaf/0.1/workInfoHomepage"; // NOSONAR
 const HEALTHDCATAP_HDAB = "http://healthdataportal.eu/ns/health#hdab"; // NOSONAR
-const HEALTHDCATAP_HAS_CODE_VALUES = "http://healthdataportal.eu/ns/health#hasCodeValues"; // NOSONAR
-const HEALTHDCATAP_HAS_CODING_SYSTEM = "http://healthdataportal.eu/ns/health#hasCodingSystem"; // NOSONAR
+const HEALTHDCATAP_HAS_CODE_VALUES =
+  "http://healthdataportal.eu/ns/health#hasCodeValues"; // NOSONAR
+const HEALTHDCATAP_HAS_CODING_SYSTEM =
+  "http://healthdataportal.eu/ns/health#hasCodingSystem"; // NOSONAR
 
 export const getFallbackCatalogue = (graph: RdfGraph): string => {
   const namedCatalogs = graph
@@ -175,8 +177,16 @@ export const mapDataset = (
     creators: extractAgents(datasetSubject, graph, DCT_CREATOR),
     personalData: extractPersonalData(datasetSubject, graph),
     purpose: extractPurpose(datasetSubject, graph),
-    codeValues: extractLiteralValueLabels(datasetSubject, graph, HEALTHDCATAP_HAS_CODE_VALUES),
-    codingSystem: extractNamedNodeValueLabels(datasetSubject, graph, HEALTHDCATAP_HAS_CODING_SYSTEM),
+    codeValues: extractLiteralValueLabels(
+      datasetSubject,
+      graph,
+      HEALTHDCATAP_HAS_CODE_VALUES
+    ),
+    codingSystem: extractNamedNodeValueLabels(
+      datasetSubject,
+      graph,
+      HEALTHDCATAP_HAS_CODING_SYSTEM
+    ),
   };
 };
 
@@ -538,6 +548,9 @@ const extractNamedNodeValueLabels = (
   graph: RdfGraph,
   predicate: string
 ): Array<{ value: string; label: string }> | undefined => {
-  const result = resolveValueLabels(graph.getObjects(subject, predicate), graph);
+  const result = resolveValueLabels(
+    graph.getObjects(subject, predicate),
+    graph
+  );
   return result.length > 0 ? result : undefined;
 };

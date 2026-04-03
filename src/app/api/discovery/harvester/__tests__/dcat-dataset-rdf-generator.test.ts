@@ -354,8 +354,14 @@ describe("DCAT dataset export generators", () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",
       codingSystem: [
-        { value: "https://www.wikidata.org/entity/Q9006342", label: "Q9006342" },
-        { value: "https://www.wikidata.org/entity/Q5969475", label: "Q5969475" },
+        {
+          value: "https://www.wikidata.org/entity/Q9006342",
+          label: "Q9006342",
+        },
+        {
+          value: "https://www.wikidata.org/entity/Q5969475",
+          label: "Q5969475",
+        },
       ],
     });
 
@@ -367,10 +373,13 @@ describe("DCAT dataset export generators", () => {
     expect(turtle).toContain("wikidata.org/entity/Q5969475");
 
     // Each value must be typed as dct:Standard
-    const quads = await parseRdfXmlToQuads(await serializeDatasetAsRdfXml(dataset));
+    const quads = await parseRdfXmlToQuads(
+      await serializeDatasetAsRdfXml(dataset)
+    );
     const typeQuads = quads.filter(
       (q) =>
-        q.predicate.value === "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
         q.object.value === "http://purl.org/dc/terms/Standard"
     );
     expect(typeQuads.map((q) => q.subject.value).sort()).toEqual([

@@ -14,6 +14,10 @@ const DCT_IDENTIFIER = "http://purl.org/dc/terms/identifier"; // NOSONAR
 const DCT_TITLE = "http://purl.org/dc/terms/title"; // NOSONAR
 const DC_TITLE = "http://purl.org/dc/elements/1.1/title"; // NOSONAR
 const DCT_FORMAT = "http://purl.org/dc/terms/format"; // NOSONAR
+const DCAT_MEDIA_TYPE = "http://www.w3.org/ns/dcat#mediaType"; // NOSONAR
+const DCT_LICENSE = "http://purl.org/dc/terms/license"; // NOSONAR
+const DCT_CONFORMS_TO = "http://purl.org/dc/terms/conformsTo"; // NOSONAR
+const DCAT_BYTE_SIZE = "http://www.w3.org/ns/dcat#byteSize"; // NOSONAR
 const SKOS_PREF_LABEL = "http://www.w3.org/2004/02/skos/core#prefLabel"; // NOSONAR
 const RDFS_LABEL = "http://www.w3.org/2000/01/rdf-schema#label"; // NOSONAR
 
@@ -75,6 +79,10 @@ const mapDistribution = (
     id: id || `${datasetId}-distribution-${index + 1}`,
     title,
     format: getDistributionFormat(distributionSubject, graph),
+    mediaType: getDistributionMediaType(distributionSubject, graph),
+    license: getDistributionLicense(distributionSubject, graph),
+    conformsTo: getDistributionConformsTo(distributionSubject, graph),
+    byteSize: getDistributionByteSize(distributionSubject, graph),
     accessUrl,
     downloadUrl,
   };
@@ -122,6 +130,28 @@ const getDistributionFormat = (
   return { value, label };
 };
 
+const getDistributionMediaType = (
+  distributionSubject: RDF.Term,
+  graph: RdfGraph
+): LocalDiscoveryDistribution["mediaType"] => {
+  const mediaTypeSubject = graph.getObjects(
+    distributionSubject,
+    DCAT_MEDIA_TYPE
+  )[0];
+  if (!mediaTypeSubject) return undefined;
+
+  const value =
+    graph.getNamedNodeValue(mediaTypeSubject) || mediaTypeSubject.value.trim();
+  if (!value) return undefined;
+
+  const label =
+    graph.getFirstLiteral(mediaTypeSubject, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
+    value.split("/").pop() ||
+    value;
+
+  return { value, label };
+};
+
 const getDistributionAccessUrl = (
   distributionSubject: RDF.Term,
   graph: RdfGraph
@@ -140,4 +170,55 @@ const getDistributionDownloadUrl = (
     .getObjects(distributionSubject, DCAT_DOWNLOAD_URL)[0]
     ?.value.trim();
   return url || undefined;
+};
+
+const getDistributionLicense = (
+  distributionSubject: RDF.Term,
+  graph: RdfGraph
+): LocalDiscoveryDistribution["license"] => {
+  const licenseSubject = graph.getObjects(distributionSubject, DCT_LICENSE)[0];
+  if (!licenseSubject) return undefined;
+
+  const value =
+    graph.getNamedNodeValue(licenseSubject) || licenseSubject.value.trim();
+  if (!value) return undefined;
+
+  const label =
+    graph.getFirstLiteral(licenseSubject, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
+    value.split("/").pop() ||
+    value;
+
+  return { value, label };
+};
+
+const getDistributionConformsTo = (
+  distributionSubject: RDF.Term,
+  graph: RdfGraph
+): LocalDiscoveryDistribution["conformsTo"] => {
+  const objects = graph.getObjects(distributionSubject, DCT_CONFORMS_TO);
+  if (!objects.length) return undefined;
+
+  const result = objects
+    .map((obj) => {
+      const value = graph.getNamedNodeValue(obj) || obj.value.trim();
+      if (!value) return null;
+      const label =
+        graph.getFirstLiteral(obj, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
+        value.split("/").pop() ||
+        value;
+      return { value, label };
+    })
+    .filter((item): item is { value: string; label: string } => item !== null);
+
+  return result.length > 0 ? result : undefined;
+};
+
+const getDistributionByteSize = (
+  distributionSubject: RDF.Term,
+  graph: RdfGraph
+): number | undefined => {
+  const value = graph.getLiteral(distributionSubject, DCAT_BYTE_SIZE);
+  if (!value) return undefined;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isNaN(parsed) ? undefined : parsed;
 };

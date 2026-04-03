@@ -182,6 +182,21 @@ describe("DcatHarvesterService", () => {
                 "http://publications.europa.eu/resource/authority/file-type/CSV",
               label: "CSV",
             },
+            mediaType: {
+              value: "http://www.iana.org/assignments/media-types/text/csv",
+              label: "CSV",
+            },
+            license: {
+              value: "http://spdx.org/licenses/Apache-2.0",
+              label: "Apache 2.0",
+            },
+            conformsTo: [
+              {
+                value: "https://example.org/spec/standard-1",
+                label: "standard-1",
+              },
+            ],
+            byteSize: 2048,
             accessUrl: "https://example.org/access/population-registry",
             downloadUrl: "https://example.org/download/population-registry.csv",
           },

@@ -72,4 +72,14 @@ export const addDatasetGovernanceQuads = ({
     store.add(purposeNode, ns.rdf("type"), ns.dpv("Purpose"));
     store.add(purposeNode, ns.dct("description"), createLiteral(entry.value));
   });
+  dataset.codeValues?.forEach((entry) =>
+    addNamedNode(store, datasetNode, ns.health("hasCodeValues"), entry.value)
+  );
+
+  dataset.codingSystem?.forEach((entry) => {
+    if (!isNonEmptyString(entry.value) || !isAbsoluteUri(entry.value)) return;
+    const standardNode = createNamedNode(entry.value);
+    store.add(datasetNode, ns.health("hasCodingSystem"), standardNode);
+    store.add(standardNode, ns.rdf("type"), ns.dct("Standard"));
+  });
 };

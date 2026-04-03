@@ -38,6 +38,18 @@ describe("opensearch/queries", () => {
           },
           description: { type: "text" },
           catalogue: { type: "keyword" },
+          codeValues: {
+            properties: {
+              value: { type: "keyword" },
+              label: { type: "keyword" },
+            },
+          },
+          codingSystem: {
+            properties: {
+              value: { type: "keyword" },
+              label: { type: "keyword" },
+            },
+          },
           languages: { type: "keyword" },
           createdAt: { type: "date" },
           modifiedAt: { type: "date" },

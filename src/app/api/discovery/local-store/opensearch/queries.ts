@@ -487,6 +487,9 @@ export const createIndexMappings = () => ({
       personalData: {
         properties: { value: { type: "keyword" }, label: { type: "keyword" } },
       },
+      purpose: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
       distributionsCount: { type: "integer" },
     },
   },

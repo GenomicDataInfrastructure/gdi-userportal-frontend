@@ -107,6 +107,11 @@ export const canonicalDiscoveryRdf = `
           <skos:prefLabel xml:lang="eng">Medical Record</skos:prefLabel>
         </dpv:PersonalData>
       </dpv:hasPersonalData>
+      <dpv:hasPurpose>
+        <dpv:Purpose rdf:nodeID="Npurpose1">
+          <dct:description xml:lang="eng">https://www.example.com/purpose/research</dct:description>
+        </dpv:Purpose>
+      </dpv:hasPurpose>
       <dct:publisher>
         <foaf:Agent rdf:nodeID="Npublisher1">
           <foaf:name xml:lang="eng">org</foaf:name>
@@ -250,6 +255,12 @@ export const buildLocalDiscoveryDataset = (
     {
       value: "https://w3id.org/dpv/dpv-pd#MedicalRecord", // NOSONAR
       label: "Medical Record",
+    },
+  ],
+  purpose: [
+    {
+      value: "https://www.example.com/purpose/research", // NOSONAR
+      label: "https://www.example.com/purpose/research",
     },
   ],
   distributions: [

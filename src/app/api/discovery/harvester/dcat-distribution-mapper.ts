@@ -5,6 +5,7 @@
 import type * as RDF from "@rdfjs/types";
 import { LocalDiscoveryDistribution } from "@/app/api/discovery/local-store/types";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
+import { normalizeDate } from "@/app/api/discovery/harvester/date-utils";
 
 const DCAT_DISTRIBUTION = "http://www.w3.org/ns/dcat#distribution"; // NOSONAR
 const HEALTHDCATAP_ANALYTICS = "http://healthdataportal.eu/ns/health#analytics"; // NOSONAR
@@ -20,6 +21,7 @@ const DCT_CONFORMS_TO = "http://purl.org/dc/terms/conformsTo"; // NOSONAR
 const DCAT_BYTE_SIZE = "http://www.w3.org/ns/dcat#byteSize"; // NOSONAR
 const SKOS_PREF_LABEL = "http://www.w3.org/2004/02/skos/core#prefLabel"; // NOSONAR
 const RDFS_LABEL = "http://www.w3.org/2000/01/rdf-schema#label"; // NOSONAR
+const DCT_ISSUED = "http://purl.org/dc/terms/issued"; // NOSONAR
 
 export const extractDistributions = (
   datasetSubject: RDF.Term,
@@ -85,6 +87,7 @@ const mapDistribution = (
     byteSize: getDistributionByteSize(distributionSubject, graph),
     accessUrl,
     downloadUrl,
+    createdAt: normalizeDate(graph.getLiteral(distributionSubject, DCT_ISSUED)),
   };
 };
 

@@ -31,6 +31,7 @@ export interface LocalDiscoveryDistribution {
   byteSize?: number;
   accessUrl?: string;
   downloadUrl?: string;
+  createdAt?: string;
 }
 
 export interface LocalContactPoint {

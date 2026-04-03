@@ -156,6 +156,7 @@ export const canonicalDiscoveryRdf = `
           <dcat:byteSize rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2048</dcat:byteSize>
           <dcat:accessURL rdf:resource="https://example.org/access/population-registry" />
           <dcat:downloadURL rdf:resource="https://example.org/download/population-registry.csv" />
+          <dct:issued>2023-06-15</dct:issued>
         </dcat:Distribution>
       </dcat:distribution>
     </dcat:Dataset>
@@ -276,6 +277,7 @@ export const buildLocalDiscoveryDataset = (
       byteSize: 2048,
       accessUrl: "https://example.org/access/population-registry",
       downloadUrl: "https://example.org/download/population-registry.csv",
+      createdAt: "2023-06-15T00:00:00.000Z",
     },
   ],
   contacts: [

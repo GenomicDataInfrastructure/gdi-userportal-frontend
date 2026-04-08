@@ -155,7 +155,20 @@ function Header() {
               )}
             </div>
 
-            <Link href={contentConfig.headerLogoUrl} className="py-2" target={contentConfig.headerLogoUrl.startsWith("http") ? "_blank" : undefined} rel={contentConfig.headerLogoUrl.startsWith("http") ? "noopener noreferrer" : undefined}>
+            <Link
+              href={contentConfig.headerLogoUrl}
+              className="py-2"
+              target={
+                contentConfig.headerLogoUrl.startsWith("http")
+                  ? "_blank"
+                  : undefined
+              }
+              rel={
+                contentConfig.headerLogoUrl.startsWith("http")
+                  ? "noopener noreferrer"
+                  : undefined
+              }
+            >
               <Image
                 src={"/logo.png"}
                 alt={"Logo"}

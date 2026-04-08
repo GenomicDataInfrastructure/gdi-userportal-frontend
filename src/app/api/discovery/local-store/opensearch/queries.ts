@@ -396,6 +396,12 @@ export const createIndexMappings = () => ({
       healthCategory: {
         properties: { value: { type: "keyword" }, label: { type: "keyword" } },
       },
+      codeValues: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
+      codingSystem: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
       dcatType: {
         properties: { value: { type: "keyword" }, label: { type: "keyword" } },
       },

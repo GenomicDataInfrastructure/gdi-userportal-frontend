@@ -160,6 +160,8 @@ describe("DcatHarvesterService", () => {
             label: "https://www.example.com/purpose/research",
           },
         ],
+        codeValues: undefined,
+        codingSystem: undefined,
         contacts: [
           {
             name: "tab3-contactPoint-mail@test.com",
@@ -247,6 +249,8 @@ describe("DcatHarvesterService", () => {
         applicableLegislation: undefined,
         personalData: undefined,
         purpose: undefined,
+        codeValues: undefined,
+        codingSystem: undefined,
         contacts: undefined,
         distributions: undefined,
       },
@@ -530,6 +534,8 @@ describe("DcatHarvesterService", () => {
       dcatType: [],
       personalData: undefined,
       purpose: undefined,
+      codeValues: undefined,
+      codingSystem: undefined,
     });
   });
 
@@ -718,6 +724,8 @@ describe("DcatHarvesterService", () => {
         dcatType: [],
         personalData: undefined,
         purpose: undefined,
+        codeValues: undefined,
+        codingSystem: undefined,
       },
     ]);
 

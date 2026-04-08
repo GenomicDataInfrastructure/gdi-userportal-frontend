@@ -183,6 +183,8 @@ export interface DiscoveryRetrievedDataset extends DiscoveryDatasetBase {
   numberOfRecords?: number;
   personalData?: DiscoveryValueLabel[];
   purpose?: DiscoveryValueLabel[];
+  codeValues?: DiscoveryValueLabel[];
+  codingSystem?: DiscoveryValueLabel[];
 }
 
 export interface DiscoveryFilterRange {

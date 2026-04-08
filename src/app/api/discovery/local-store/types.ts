@@ -89,6 +89,8 @@ export interface LocalDiscoveryDataset {
   publisherType?: Array<{ value: string; label: string }>;
   personalData?: Array<{ value: string; label: string }>;
   purpose?: Array<{ value: string; label: string }>;
+  codeValues?: Array<{ value: string; label: string }>;
+  codingSystem?: Array<{ value: string; label: string }>;
 }
 
 export interface StoredDocumentHit<TDocument> {

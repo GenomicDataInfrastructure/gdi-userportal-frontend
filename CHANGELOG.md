@@ -13,21 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.3.9] - 2025-04-04
 
-## [v1.6.8] - 2026-03-06
-
-### Added
-
-- feat(discovery local-index): harvest/index id, identifier, catalogue (#832) by @Inderpal Singh in a4122a0
-- feat(discovery-harvest): add OIDC-protected DCAT harvesting with generic client-credentials config (#831) by @Inderpal Singh in 542a846
-- feat(discovery): add DCAT local-index harvesting with Elasticsearch adapter and (dev harvest endpoint (#830) by @Inderpal Singh in b8534d1
-
-### Changed
-
-- chore(deps): update docker/metadata-action action to v6 by @Renovate Bot in e321c69
-- chore(deps): update docker/build-push-action action to v7 by @Renovate Bot in bdb8cd6
-- refactor(discovery): introduce configurable provider layer, keep DDS default (#829) by @Inderpal Singh in b454ba5
-- doc: update CHANGELOG.md for v1.6.7 by @LNDS-Sysadmins in dd6084c
-
 ## [v1.6.7] - 2026-03-05
 
 ### Changed

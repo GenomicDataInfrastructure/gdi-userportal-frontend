@@ -65,6 +65,11 @@ export const canonicalDiscoveryRdf = `
       <dcat:theme rdf:resource="http://publications.europa.eu/resource/authority/data-theme/HEAL"/>
       <dcat:keyword>oncology</dcat:keyword>
       <dcat:keyword>genomics</dcat:keyword>
+      <dct:provenance>
+        <dct:ProvenanceStatement rdf:nodeID="Nprovenance1">
+          <rdfs:label xml:lang="eng">The data for the LINK-VACC project is sourced from several existing databases, including Vaccinnet+, HealthData COVID-19 database (Contact tracing and Clinic database), CoBRHA, STATBEL, and the AIM database. These databases collectively provide comprehensive demographic, clinical, and socio-economic data relevant to the project's objectives</rdfs:label>
+        </dct:ProvenanceStatement>
+      </dct:provenance>
       <healthdcatap:healthTheme rdf:resource="http://healthdataportal.eu/ns/health-theme/cancer"/>
       <healthdcatap:healthCategory rdf:resource="http://healthdataportal.eu/ns/health-category/registries"/>
       <dct:type rdf:resource="http://publications.europa.eu/resource/authority/dataset-type/STATISTICAL"/>
@@ -200,6 +205,8 @@ export const buildLocalDiscoveryDataset = (
   version: "1.0.0",
   hasVersions: [{ value: "v1", label: "Version 1" }],
   versionNotes: ["Initial release"],
+  provenance:
+    "The data for the LINK-VACC project is sourced from several existing databases, including Vaccinnet+, HealthData COVID-19 database (Contact tracing and Clinic database), CoBRHA, STATBEL, and the AIM database. These databases collectively provide comprehensive demographic, clinical, and socio-economic data relevant to the project's objectives",
   numberOfRecords: 50000,
   numberOfUniqueIndividuals: 25000,
   maxTypicalAge: 95,

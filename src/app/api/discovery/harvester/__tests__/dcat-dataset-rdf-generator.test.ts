@@ -103,6 +103,7 @@ describe("DCAT dataset export generators", () => {
 
     expect(rdfXml).toContain("<rdf:RDF");
     expect(rdfXml).toContain("<healthdcatap:numberOfRecords");
+    expect(rdfXml).toContain("<dct:provenance");
     expect(rdfXml).toContain(
       'rdf:about="https://example.org/datasets/export-1#distribution-1"'
     );
@@ -126,6 +127,18 @@ describe("DCAT dataset export generators", () => {
           quad.object.termType === "NamedNode"
       )
     ).toBe(true);
+    expect(
+      quads.some(
+        (quad) =>
+          quad.subject.value ===
+            "https://example.org/datasets/export-1#provenance" &&
+          quad.predicate.value ===
+            "http://www.w3.org/2000/01/rdf-schema#label" &&
+          quad.object.termType === "Literal" &&
+          quad.object.value ===
+            "The data for the LINK-VACC project is sourced from several existing databases, including Vaccinnet+, HealthData COVID-19 database (Contact tracing and Clinic database), CoBRHA, STATBEL, and the AIM database. These databases collectively provide comprehensive demographic, clinical, and socio-economic data relevant to the project's objectives"
+      )
+    ).toBe(true);
   });
 
   test("serializes Turtle with extended dataset metadata", async () => {
@@ -138,8 +151,10 @@ describe("DCAT dataset export generators", () => {
     const turtle = await serializeDatasetAsTurtle(dataset);
 
     expect(turtle).toContain("@prefix healthdcatap:");
+    expect(turtle).toContain("@prefix rdfs:");
     expect(turtle).toContain('dct:title "Population \\"Registry\\""');
     expect(turtle).toContain('dct:description "Line 1\\nLine 2"');
+    expect(turtle).toContain("dct:provenance");
     expect(turtle).toContain("healthdcatap:numberOfRecords 50000");
     expect(turtle).toContain(
       "<https://example.org/datasets/export-1#distribution-1>"

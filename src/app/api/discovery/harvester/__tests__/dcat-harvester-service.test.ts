@@ -32,6 +32,8 @@ describe("DcatHarvesterService", () => {
           },
         ],
         versionNotes: ["Updated with 2024 data"],
+        provenance:
+          "The data for the LINK-VACC project is sourced from several existing databases, including Vaccinnet+, HealthData COVID-19 database (Contact tracing and Clinic database), CoBRHA, STATBEL, and the AIM database. These databases collectively provide comprehensive demographic, clinical, and socio-economic data relevant to the project's objectives",
         numberOfRecords: 50000,
         numberOfUniqueIndividuals: 25000,
         maxTypicalAge: 95,
@@ -643,6 +645,29 @@ describe("DcatHarvesterService", () => {
       "Version Notes 1",
       "Version Notes 2",
     ]);
+  });
+
+  test("extracts provenance labels from provenance statements", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:provenance>
+            <dct:ProvenanceStatement>
+              <rdfs:label>Collected from national registries</rdfs:label>
+            </dct:ProvenanceStatement>
+          </dct:provenance>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].provenance).toBe("Collected from national registries");
   });
 
   test("maps spatial coverage without labels when only the URI exists", async () => {

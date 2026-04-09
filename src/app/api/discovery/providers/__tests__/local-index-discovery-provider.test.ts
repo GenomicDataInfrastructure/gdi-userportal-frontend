@@ -407,6 +407,8 @@ describe("LocalIndexDiscoveryProvider", () => {
       version: "1.0.0",
       hasVersions: [{ value: "v1", label: "Version 1" }],
       versionNotes: "Initial release",
+      provenance:
+        "The data for the LINK-VACC project is sourced from several existing databases, including Vaccinnet+, HealthData COVID-19 database (Contact tracing and Clinic database), CoBRHA, STATBEL, and the AIM database. These databases collectively provide comprehensive demographic, clinical, and socio-economic data relevant to the project's objectives",
       numberOfUniqueIndividuals: 25000,
       maxTypicalAge: 95,
       minTypicalAge: 18,
@@ -628,6 +630,8 @@ describe("LocalIndexDiscoveryProvider", () => {
       version: "1.0.0",
       hasVersions: [{ value: "v1", label: "Version 1" }],
       versionNotes: "Initial release",
+      provenance:
+        "The data for the LINK-VACC project is sourced from several existing databases, including Vaccinnet+, HealthData COVID-19 database (Contact tracing and Clinic database), CoBRHA, STATBEL, and the AIM database. These databases collectively provide comprehensive demographic, clinical, and socio-economic data relevant to the project's objectives",
       numberOfUniqueIndividuals: 25000,
       maxTypicalAge: 95,
       minTypicalAge: 18,
@@ -868,6 +872,31 @@ describe("LocalIndexDiscoveryProvider", () => {
         subject: datasetSubject,
         predicate: "http://www.w3.org/ns/adms#versionNotes",
         object: "Initial release",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: datasetSubject,
+        predicate: "http://purl.org/dc/terms/provenance",
+        object: "https://example.org/datasets/export-1#provenance",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#provenance",
+        predicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        object: "http://purl.org/dc/terms/ProvenanceStatement",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: "https://example.org/datasets/export-1#provenance",
+        predicate: "http://www.w3.org/2000/01/rdf-schema#label",
+        object:
+          "The data for the LINK-VACC project is sourced from several existing databases, including Vaccinnet+, HealthData COVID-19 database (Contact tracing and Clinic database), CoBRHA, STATBEL, and the AIM database. These databases collectively provide comprehensive demographic, clinical, and socio-economic data relevant to the project's objectives",
         objectTermType: "Literal",
       })
     ).toBe(true);

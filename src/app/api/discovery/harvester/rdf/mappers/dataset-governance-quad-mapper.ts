@@ -72,6 +72,21 @@ export const addDatasetGovernanceQuads = ({
     store.add(purposeNode, ns.rdf("type"), ns.dpv("Purpose"));
     store.add(purposeNode, ns.dct("description"), createLiteral(entry.value));
   });
+
+  if (isNonEmptyString(dataset.provenance)) {
+    const provenanceNode = createNestedNode(
+      { dataset, store, datasetNode },
+      "provenance"
+    );
+    store.add(datasetNode, ns.dct("provenance"), provenanceNode);
+    store.add(provenanceNode, ns.rdf("type"), ns.dct("ProvenanceStatement"));
+    store.add(
+      provenanceNode,
+      ns.rdfs("label"),
+      createLiteral(dataset.provenance)
+    );
+  }
+
   dataset.codeValues?.forEach((entry) =>
     addNamedNode(store, datasetNode, ns.health("hasCodeValues"), entry.value)
   );

@@ -61,6 +61,7 @@ describe("opensearch/queries", () => {
             },
           },
           versionNotes: { type: "text" },
+          provenance: { type: "text" },
           numberOfRecords: { type: "integer" },
           numberOfUniqueIndividuals: { type: "integer" },
           maxTypicalAge: { type: "integer" },
@@ -258,9 +259,11 @@ describe("opensearch/queries", () => {
     expect(shouldClauses[0].multi_match.fields).toContain("identifier");
     expect(shouldClauses[0].multi_match.fields).toContain("version");
     expect(shouldClauses[0].multi_match.fields).toContain("versionNotes");
+    expect(shouldClauses[0].multi_match.fields).toContain("provenance");
     expect(shouldClauses[1].multi_match.fields).not.toContain("identifier");
     expect(shouldClauses[1].multi_match.fields).not.toContain("catalogue");
     expect(shouldClauses[1].multi_match.fields).toContain("versionNotes");
+    expect(shouldClauses[1].multi_match.fields).toContain("provenance");
   });
 
   test("buildSearchBody trims query before building clauses", () => {

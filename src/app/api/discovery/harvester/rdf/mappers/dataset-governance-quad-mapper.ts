@@ -6,6 +6,7 @@ import {
   DatasetRdfContext,
   addConcept,
   addNamedNode,
+  createLanguageLiteral,
   createLiteral,
   createNamedNode,
   createNestedNode,
@@ -87,9 +88,14 @@ export const addDatasetGovernanceQuads = ({
     );
   }
 
-  dataset.codeValues?.forEach((entry) =>
-    addNamedNode(store, datasetNode, ns.health("hasCodeValues"), entry.value)
-  );
+  dataset.codeValues?.forEach((entry) => {
+    if (!isNonEmptyString(entry.value)) return;
+    store.add(
+      datasetNode,
+      ns.health("hasCodeValues"),
+      createLanguageLiteral(entry.value, "en")
+    );
+  });
 
   dataset.codingSystem?.forEach((entry) => {
     if (!isNonEmptyString(entry.value) || !isAbsoluteUri(entry.value)) return;

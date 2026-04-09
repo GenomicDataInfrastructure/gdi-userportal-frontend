@@ -192,6 +192,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       dcatType,
       distributions: this.mapDistributions(dataset),
       numberOfRecords: dataset.numberOfRecords,
+      provenance: dataset.provenance,
       legalBasis: dataset.legalBasis,
       applicableLegislation: dataset.applicableLegislation,
       personalData: dataset.personalData,

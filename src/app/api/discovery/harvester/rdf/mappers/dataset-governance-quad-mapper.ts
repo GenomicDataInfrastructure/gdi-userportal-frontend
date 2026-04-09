@@ -6,7 +6,6 @@ import {
   DatasetRdfContext,
   addConcept,
   addNamedNode,
-  createBlankNode,
   createLanguageLiteral,
   createLiteral,
   createNamedNode,
@@ -64,17 +63,31 @@ export const addDatasetGovernanceQuads = ({
     addNamedNode(store, datasetNode, ns.dpv("hasPersonalData"), entry.value)
   );
 
-  dataset.purpose?.forEach((entry) => {
+  dataset.purpose?.forEach((entry, index) => {
     if (!isNonEmptyString(entry.value)) return;
-    const purposeNode = createBlankNode();
+    const purposeNode = createNestedNode(
+      { dataset, store, datasetNode },
+      `purpose-${index + 1}`
+    );
     store.add(datasetNode, ns.dpv("hasPurpose"), purposeNode);
     store.add(purposeNode, ns.rdf("type"), ns.dpv("Purpose"));
-    store.add(
-      purposeNode,
-      ns.dct("description"),
-      createLanguageLiteral(entry.value, "en")
-    );
+    store.add(purposeNode, ns.dct("description"), createLiteral(entry.value));
   });
+
+  if (isNonEmptyString(dataset.provenance)) {
+    const provenanceNode = createNestedNode(
+      { dataset, store, datasetNode },
+      "provenance"
+    );
+    store.add(datasetNode, ns.dct("provenance"), provenanceNode);
+    store.add(provenanceNode, ns.rdf("type"), ns.dct("ProvenanceStatement"));
+    store.add(
+      provenanceNode,
+      ns.rdfs("label"),
+      createLiteral(dataset.provenance)
+    );
+  }
+
   dataset.codeValues?.forEach((entry) => {
     if (!isNonEmptyString(entry.value)) return;
     store.add(

@@ -24,6 +24,7 @@ const DCT_TITLE = "http://purl.org/dc/terms/title"; // NOSONAR
 const DC_TITLE = "http://purl.org/dc/elements/1.1/title"; // NOSONAR
 const DCT_DESCRIPTION = "http://purl.org/dc/terms/description"; // NOSONAR
 const DC_DESCRIPTION = "http://purl.org/dc/elements/1.1/description"; // NOSONAR
+const DCT_PROVENANCE = "http://purl.org/dc/terms/provenance"; // NOSONAR
 const DCT_LANGUAGE = "http://purl.org/dc/terms/language"; // NOSONAR
 const DCT_ISSUED = "http://purl.org/dc/terms/issued"; // NOSONAR
 const DCT_MODIFIED = "http://purl.org/dc/terms/modified"; // NOSONAR
@@ -156,6 +157,7 @@ export const mapDataset = (
       graph
     ),
     keywords: graph.getObjectValues(datasetSubject, DCAT_KEYWORD),
+    provenance: extractProvenance(datasetSubject, graph),
     healthTheme: resolveValueLabels(
       graph.getObjects(datasetSubject, HEALTHDCATAP_HEALTH_THEME),
       graph
@@ -290,6 +292,31 @@ const extractVersionNotes = (
     .getObjectValues(datasetSubject, ADMS_VERSION_NOTES)
     .filter(Boolean);
   return values.length > 0 ? values : undefined;
+};
+
+const extractProvenance = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): string | undefined => {
+  for (const provenance of graph.getObjects(datasetSubject, DCT_PROVENANCE)) {
+    if (provenance.termType === "Literal") {
+      const literal = provenance.value.trim();
+      if (literal) {
+        return literal;
+      }
+      continue;
+    }
+
+    const label = graph.getFirstLiteral(provenance, [
+      RDFS_LABEL,
+      DCT_DESCRIPTION,
+    ]);
+    if (label) {
+      return label;
+    }
+  }
+
+  return undefined;
 };
 
 const extractSpatialResolutionInMeters = (

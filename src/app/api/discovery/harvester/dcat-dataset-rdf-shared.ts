@@ -13,6 +13,7 @@ export const DATASET_EXPORT_PREFIXES = {
   adms: "http://www.w3.org/ns/adms#", // NOSONAR
   healthdcatap: "http://healthdataportal.eu/ns/health#", // NOSONAR
   dcatap: "http://data.europa.eu/r5r/", // NOSONAR
+  rdfs: "http://www.w3.org/2000/01/rdf-schema#", // NOSONAR
   skos: "http://www.w3.org/2004/02/skos/core#", // NOSONAR
   dpv: "http://www.w3.org/ns/dpv#", // NOSONAR
   foaf: "http://xmlns.com/foaf/0.1/", // NOSONAR

@@ -12,6 +12,7 @@ const fullTextSearchFields = [
   "title^3",
   "description",
   "populationCoverage",
+  "provenance",
   "versionNotes",
 ];
 
@@ -21,6 +22,7 @@ const phrasePrefixFields = [
   "title^4",
   "description",
   "populationCoverage",
+  "provenance",
   "versionNotes",
 ];
 
@@ -47,6 +49,7 @@ const fieldConfigs: Record<string, FieldConfig> = {
     sortField: "title.keyword",
   },
   description: { textFields: ["description"] },
+  provenance: { textFields: ["provenance"] },
   catalogue: {
     exactFields: ["catalogue"],
     textFields: ["catalogue"],
@@ -373,6 +376,7 @@ export const createIndexMappings = () => ({
         properties: { value: { type: "keyword" }, label: { type: "keyword" } },
       },
       versionNotes: { type: "text" },
+      provenance: { type: "text" },
       numberOfRecords: { type: "integer" },
       numberOfUniqueIndividuals: { type: "integer" },
       maxTypicalAge: { type: "integer" },

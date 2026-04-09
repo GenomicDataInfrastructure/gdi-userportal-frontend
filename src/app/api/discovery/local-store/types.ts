@@ -72,6 +72,7 @@ export interface LocalDiscoveryDataset {
   frequency?: { value: string; label: string };
   themes?: Array<{ value: string; label: string }>;
   keywords?: string[];
+  provenance?: string;
   healthTheme?: Array<{ value: string; label: string }>;
   healthCategory?: Array<{ value: string; label: string }>;
   dcatType?: Array<{ value: string; label: string }>;

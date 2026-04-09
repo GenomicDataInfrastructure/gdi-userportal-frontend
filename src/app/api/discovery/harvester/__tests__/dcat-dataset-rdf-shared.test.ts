@@ -61,6 +61,7 @@ describe("dcat dataset rdf shared helpers", () => {
       adms: "http://www.w3.org/ns/adms#",
       healthdcatap: "http://healthdataportal.eu/ns/health#",
       dcatap: "http://data.europa.eu/r5r/",
+      rdfs: "http://www.w3.org/2000/01/rdf-schema#",
       skos: "http://www.w3.org/2004/02/skos/core#",
       dpv: "http://www.w3.org/ns/dpv#",
       foaf: "http://xmlns.com/foaf/0.1/",

@@ -670,6 +670,48 @@ describe("DcatHarvesterService", () => {
     expect(datasets[0].provenance).toBe("Collected from national registries");
   });
 
+  test("extracts literal provenance values", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:provenance>Imported from a national registry</dct:provenance>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].provenance).toBe("Imported from a national registry");
+  });
+
+  test("falls back to provenance statement descriptions", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:provenance>
+            <dct:ProvenanceStatement>
+              <dct:description>Derived from an audited clinical system</dct:description>
+            </dct:ProvenanceStatement>
+          </dct:provenance>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].provenance).toBe(
+      "Derived from an audited clinical system"
+    );
+  });
+
   test("maps spatial coverage without labels when only the URI exists", async () => {
     const service = new DcatHarvesterService();
     const rdf = `

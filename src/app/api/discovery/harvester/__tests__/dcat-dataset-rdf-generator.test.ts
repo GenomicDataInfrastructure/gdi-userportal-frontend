@@ -253,6 +253,7 @@ describe("DCAT dataset export generators", () => {
       temporalResolution: undefined,
       hasVersions: undefined,
       version: undefined,
+      provenance: undefined,
       createdAt: undefined,
       modifiedAt: undefined,
     });
@@ -267,6 +268,9 @@ describe("DCAT dataset export generators", () => {
 
     expect(await serializeDatasetAsTurtle(dataset)).toContain(
       "<https://portal.example.org/datasets/dataset-1> a dcat:Dataset"
+    );
+    expect(await serializeDatasetAsTurtle(dataset)).not.toContain(
+      "dct:provenance"
     );
 
     const jsonLd = JSON.parse(

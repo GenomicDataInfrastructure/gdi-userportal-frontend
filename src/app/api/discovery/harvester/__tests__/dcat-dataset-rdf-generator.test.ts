@@ -379,9 +379,7 @@ describe("DCAT dataset export generators", () => {
     expect(rdfXml).toContain(
       '<healthdcatap:hasCodingSystem>\n      <dct:Standard rdf:about="https://www.wikidata.org/entity/Q5969475"/>\n    </healthdcatap:hasCodingSystem>'
     );
-    expect(rdfXml).not.toContain(
-      '<healthdcatap:hasCodingSystem rdf:resource='
-    );
+    expect(rdfXml).not.toContain("<healthdcatap:hasCodingSystem rdf:resource=");
 
     // Each value must be typed as dct:Standard when round-tripped
     const quads = await parseRdfXmlToQuads(rdfXml);
@@ -420,8 +418,6 @@ describe("DCAT dataset export generators", () => {
     expect(rdfXml).toContain(
       '<healthdcatap:hasCodeValues xml:lang="eng">https://www.wikidata.org/entity/Q67890</healthdcatap:hasCodeValues>'
     );
-    expect(rdfXml).not.toContain(
-      '<healthdcatap:hasCodeValues rdf:resource='
-    );
+    expect(rdfXml).not.toContain("<healthdcatap:hasCodeValues rdf:resource=");
   });
 });

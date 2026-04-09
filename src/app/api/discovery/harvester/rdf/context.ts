@@ -47,6 +47,8 @@ export const createDatasetRdfContext = (
 export const createNamedNode = (value: string): RdfNamedNode =>
   rdf.namedNode(value);
 
+export const createBlankNode = (): any => rdf.blankNode();
+
 export const createNestedNode = (
   context: DatasetRdfContext,
   segment: string

@@ -350,7 +350,7 @@ describe("DCAT dataset export generators", () => {
     expect(personalDataQuads).toHaveLength(0);
   });
 
-  test("emits hasCodingSystem as named node references with rdf:type dct:Standard in Turtle", async () => {
+  test("emits hasCodingSystem as nested dct:Standard element with rdf:about in RDF/XML", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",
       codingSystem: [
@@ -372,19 +372,56 @@ describe("DCAT dataset export generators", () => {
     expect(turtle).toContain("wikidata.org/entity/Q9006342");
     expect(turtle).toContain("wikidata.org/entity/Q5969475");
 
-    // Each value must be typed as dct:Standard
-    const quads = await parseRdfXmlToQuads(
-      await serializeDatasetAsRdfXml(dataset)
+    // RDF/XML must use the nested typed-node form, not rdf:resource shorthand
+    expect(rdfXml).toContain(
+      '<healthdcatap:hasCodingSystem>\n      <dct:Standard rdf:about="https://www.wikidata.org/entity/Q9006342"/>\n    </healthdcatap:hasCodingSystem>'
     );
-    const typeQuads = quads.filter(
-      (q) =>
-        q.predicate.value ===
-          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
-        q.object.value === "http://purl.org/dc/terms/Standard"
+    expect(rdfXml).toContain(
+      '<healthdcatap:hasCodingSystem>\n      <dct:Standard rdf:about="https://www.wikidata.org/entity/Q5969475"/>\n    </healthdcatap:hasCodingSystem>'
     );
-    expect(typeQuads.map((q) => q.subject.value).sort()).toEqual([
+    expect(rdfXml).not.toContain(
+      '<healthdcatap:hasCodingSystem rdf:resource='
+    );
+
+    // Each value must be typed as dct:Standard when round-tripped
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    const typeSubjects = [
+      ...new Set(
+        quads
+          .filter(
+            (q) =>
+              q.predicate.value ===
+                "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+              q.object.value === "http://purl.org/dc/terms/Standard"
+          )
+          .map((q) => q.subject.value)
+      ),
+    ].sort();
+    expect(typeSubjects).toEqual([
       "https://www.wikidata.org/entity/Q5969475",
       "https://www.wikidata.org/entity/Q9006342",
     ]);
+  });
+
+  test("emits hasCodeValues as language-tagged literal with xml:lang='eng' in RDF/XML", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      codeValues: [
+        { value: "https://www.wikidata.org/entity/Q12345", label: "Q12345" },
+        { value: "https://www.wikidata.org/entity/Q67890", label: "Q67890" },
+      ],
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(rdfXml).toContain(
+      '<healthdcatap:hasCodeValues xml:lang="eng">https://www.wikidata.org/entity/Q12345</healthdcatap:hasCodeValues>'
+    );
+    expect(rdfXml).toContain(
+      '<healthdcatap:hasCodeValues xml:lang="eng">https://www.wikidata.org/entity/Q67890</healthdcatap:hasCodeValues>'
+    );
+    expect(rdfXml).not.toContain(
+      '<healthdcatap:hasCodeValues rdf:resource='
+    );
   });
 });

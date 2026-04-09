@@ -76,6 +76,7 @@ const HEALTHDCATAP_HAS_CODE_VALUES =
   "http://healthdataportal.eu/ns/health#hasCodeValues"; // NOSONAR
 const HEALTHDCATAP_HAS_CODING_SYSTEM =
   "http://healthdataportal.eu/ns/health#hasCodingSystem"; // NOSONAR
+const DCT_IS_REFERENCED_BY = "http://purl.org/dc/terms/isReferencedBy"; // NOSONAR
 
 export const getFallbackCatalogue = (graph: RdfGraph): string => {
   const namedCatalogs = graph
@@ -187,6 +188,7 @@ export const mapDataset = (
       graph,
       HEALTHDCATAP_HAS_CODING_SYSTEM
     ),
+    isReferencedBy: extractIsReferencedBy(datasetSubject, graph),
   };
 };
 
@@ -553,4 +555,16 @@ const extractNamedNodeValueLabels = (
     graph
   );
   return result.length > 0 ? result : undefined;
+};
+
+const extractIsReferencedBy = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): string[] | undefined => {
+  const objects = graph.getObjects(datasetSubject, DCT_IS_REFERENCED_BY);
+  if (!objects.length) return undefined;
+  const values = objects
+    .map((obj) => graph.getNamedNodeValue(obj) || obj.value.trim())
+    .filter(Boolean);
+  return values.length > 0 ? values : undefined;
 };

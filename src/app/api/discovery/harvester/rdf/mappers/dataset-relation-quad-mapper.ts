@@ -4,6 +4,7 @@
 
 import {
   DatasetRdfContext,
+  addNamedNode,
   createLiteral,
   createNamedNode,
   isAbsoluteUri,
@@ -47,4 +48,8 @@ export const addDatasetRelationQuads = ({
 
     store.add(datasetNode, predicate, object);
   });
+
+  dataset.isReferencedBy?.forEach((ref) =>
+    addNamedNode(store, datasetNode, ns.dct("isReferencedBy"), ref)
+  );
 };

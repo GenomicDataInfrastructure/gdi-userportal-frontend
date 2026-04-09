@@ -91,6 +91,7 @@ export interface LocalDiscoveryDataset {
   purpose?: Array<{ value: string; label: string }>;
   codeValues?: Array<{ value: string; label: string }>;
   codingSystem?: Array<{ value: string; label: string }>;
+  isReferencedBy?: string[];
 }
 
 export interface StoredDocumentHit<TDocument> {

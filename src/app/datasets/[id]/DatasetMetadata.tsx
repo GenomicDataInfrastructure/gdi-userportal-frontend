@@ -303,7 +303,7 @@ const DatasetMetadata = ({
                   href={`/@${dataset.publishers?.map((p) => p.name).join(",")}/${relationship.target}`}
                   className="text-info hover:text-hover-color hover:underline break-all"
                 >
-                  {relationship.target}
+                  Dataset
                 </Link>
                 <Tooltip message="Link to related dataset." />
               </div>

@@ -50,6 +50,7 @@ describe("opensearch/queries", () => {
               label: { type: "keyword" },
             },
           },
+          isReferencedBy: { type: "keyword" },
           languages: { type: "keyword" },
           createdAt: { type: "date" },
           modifiedAt: { type: "date" },

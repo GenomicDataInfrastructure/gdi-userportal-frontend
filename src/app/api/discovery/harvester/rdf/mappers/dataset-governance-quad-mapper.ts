@@ -72,7 +72,7 @@ export const addDatasetGovernanceQuads = ({
     store.add(
       purposeNode,
       ns.dct("description"),
-      createLanguageLiteral(entry.value, "eng")
+      createLanguageLiteral(entry.value, "en")
     );
   });
   dataset.codeValues?.forEach((entry) =>

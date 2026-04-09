@@ -75,9 +75,14 @@ export const addDatasetGovernanceQuads = ({
       createLanguageLiteral(entry.value, "en")
     );
   });
-  dataset.codeValues?.forEach((entry) =>
-    addNamedNode(store, datasetNode, ns.health("hasCodeValues"), entry.value)
-  );
+  dataset.codeValues?.forEach((entry) => {
+    if (!isNonEmptyString(entry.value)) return;
+    store.add(
+      datasetNode,
+      ns.health("hasCodeValues"),
+      createLanguageLiteral(entry.value, "en")
+    );
+  });
 
   dataset.codingSystem?.forEach((entry) => {
     if (!isNonEmptyString(entry.value) || !isAbsoluteUri(entry.value)) return;

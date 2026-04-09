@@ -6,6 +6,8 @@ import {
   DatasetRdfContext,
   addConcept,
   addNamedNode,
+  createBlankNode,
+  createLanguageLiteral,
   createLiteral,
   createNamedNode,
   createNestedNode,
@@ -62,15 +64,16 @@ export const addDatasetGovernanceQuads = ({
     addNamedNode(store, datasetNode, ns.dpv("hasPersonalData"), entry.value)
   );
 
-  dataset.purpose?.forEach((entry, index) => {
+  dataset.purpose?.forEach((entry) => {
     if (!isNonEmptyString(entry.value)) return;
-    const purposeNode = createNestedNode(
-      { dataset, store, datasetNode },
-      `purpose-${index + 1}`
-    );
+    const purposeNode = createBlankNode();
     store.add(datasetNode, ns.dpv("hasPurpose"), purposeNode);
     store.add(purposeNode, ns.rdf("type"), ns.dpv("Purpose"));
-    store.add(purposeNode, ns.dct("description"), createLiteral(entry.value));
+    store.add(
+      purposeNode,
+      ns.dct("description"),
+      createLanguageLiteral(entry.value, "en")
+    );
   });
   dataset.codeValues?.forEach((entry) =>
     addNamedNode(store, datasetNode, ns.health("hasCodeValues"), entry.value)

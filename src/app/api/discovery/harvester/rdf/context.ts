@@ -53,8 +53,13 @@ export const createNestedNode = (
 ): RdfNamedNode =>
   createNamedNode(getDatasetNestedResourceUri(context.dataset, segment));
 
+export const createBlankNode = (): any => rdf.blankNode();
+
 export const createLiteral = (value: string, datatype?: string) =>
   datatype ? rdf.literal(value, createNamedNode(datatype)) : rdf.literal(value);
+
+export const createLanguageLiteral = (value: string, language: string) =>
+  rdf.literal(value, language);
 
 export const createIntegerLiteral = (value: number) =>
   createLiteral(String(value), `${DATASET_EXPORT_PREFIXES.xsd}integer`);

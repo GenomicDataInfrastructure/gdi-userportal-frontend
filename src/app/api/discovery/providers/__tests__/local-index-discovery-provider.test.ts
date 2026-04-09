@@ -481,6 +481,12 @@ describe("LocalIndexDiscoveryProvider", () => {
           target: "https://example.org/datasets/subset-1",
         },
       ],
+      codeValues: undefined,
+      codingSystem: undefined,
+      isReferencedBy: [
+        "https://example.org/publications/study-001",
+        "https://example.org/publications/report-2024",
+      ],
       accessRights: {
         value:
           "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
@@ -674,6 +680,12 @@ describe("LocalIndexDiscoveryProvider", () => {
           relation: "Has part",
           target: "https://example.org/datasets/subset-1",
         },
+      ],
+      codeValues: undefined,
+      codingSystem: undefined,
+      isReferencedBy: [
+        "https://example.org/publications/study-001",
+        "https://example.org/publications/report-2024",
       ],
       accessRights: {
         value:

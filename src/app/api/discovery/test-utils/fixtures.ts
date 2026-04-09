@@ -142,6 +142,8 @@ export const canonicalDiscoveryRdf = `
       </dcat:contactPoint>
       <dct:isPartOf rdf:resource="https://example.org/datasets/parent-collection"/>
       <dct:hasPart rdf:resource="https://example.org/datasets/subset-1"/>
+      <dct:isReferencedBy rdf:resource="https://example.org/publications/study-001"/>
+      <dct:isReferencedBy rdf:resource="https://example.org/publications/report-2024"/>
       <dcat:distribution>
         <dcat:Distribution rdf:about="https://example.org/distributions/population-registry-csv">
           <dct:identifier>distribution-1</dct:identifier>
@@ -306,6 +308,10 @@ export const buildLocalDiscoveryDataset = (
       relation: "Has part",
       target: "https://example.org/datasets/subset-1",
     },
+  ],
+  isReferencedBy: [
+    "https://example.org/publications/study-001",
+    "https://example.org/publications/report-2024",
   ],
   temporalCoverage: {
     start: "2022-01-01T00:00:00.000Z",

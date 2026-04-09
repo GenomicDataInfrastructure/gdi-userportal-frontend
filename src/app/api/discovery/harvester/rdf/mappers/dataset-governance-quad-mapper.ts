@@ -80,7 +80,7 @@ export const addDatasetGovernanceQuads = ({
     store.add(
       datasetNode,
       ns.health("hasCodeValues"),
-      createLanguageLiteral(entry.value, "eng")
+      createLanguageLiteral(entry.value, "en")
     );
   });
 

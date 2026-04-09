@@ -401,7 +401,7 @@ describe("DCAT dataset export generators", () => {
     ]);
   });
 
-  test("emits hasCodeValues as language-tagged literal with xml:lang='eng' in RDF/XML", async () => {
+  test("emits hasCodeValues as language-tagged literal with xml:lang='en' in RDF/XML", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",
       codeValues: [
@@ -413,10 +413,10 @@ describe("DCAT dataset export generators", () => {
     const rdfXml = await serializeDatasetAsRdfXml(dataset);
 
     expect(rdfXml).toContain(
-      '<healthdcatap:hasCodeValues xml:lang="eng">https://www.wikidata.org/entity/Q12345</healthdcatap:hasCodeValues>'
+      '<healthdcatap:hasCodeValues xml:lang="en">https://www.wikidata.org/entity/Q12345</healthdcatap:hasCodeValues>'
     );
     expect(rdfXml).toContain(
-      '<healthdcatap:hasCodeValues xml:lang="eng">https://www.wikidata.org/entity/Q67890</healthdcatap:hasCodeValues>'
+      '<healthdcatap:hasCodeValues xml:lang="en">https://www.wikidata.org/entity/Q67890</healthdcatap:hasCodeValues>'
     );
     expect(rdfXml).not.toContain("<healthdcatap:hasCodeValues rdf:resource=");
   });

@@ -164,6 +164,10 @@ describe("DcatHarvesterService", () => {
         ],
         codeValues: undefined,
         codingSystem: undefined,
+        isReferencedBy: [
+          "https://example.org/publications/study-001",
+          "https://example.org/publications/report-2024",
+        ],
         contacts: [
           {
             name: "tab3-contactPoint-mail@test.com",
@@ -181,6 +185,14 @@ describe("DcatHarvesterService", () => {
           {
             relation: "Has part",
             target: "https://example.org/datasets/subset-1",
+          },
+          {
+            relation: "Is referenced by",
+            target: "https://example.org/publications/study-001",
+          },
+          {
+            relation: "Is referenced by",
+            target: "https://example.org/publications/report-2024",
           },
         ],
         distributions: [
@@ -253,6 +265,7 @@ describe("DcatHarvesterService", () => {
         purpose: undefined,
         codeValues: undefined,
         codingSystem: undefined,
+        isReferencedBy: undefined,
         contacts: undefined,
         distributions: undefined,
       },
@@ -538,6 +551,7 @@ describe("DcatHarvesterService", () => {
       purpose: undefined,
       codeValues: undefined,
       codingSystem: undefined,
+      isReferencedBy: undefined,
     });
   });
 
@@ -793,6 +807,7 @@ describe("DcatHarvesterService", () => {
         purpose: undefined,
         codeValues: undefined,
         codingSystem: undefined,
+        isReferencedBy: undefined,
       },
     ]);
 

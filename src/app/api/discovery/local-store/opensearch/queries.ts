@@ -406,6 +406,7 @@ export const createIndexMappings = () => ({
       codingSystem: {
         properties: { value: { type: "keyword" }, label: { type: "keyword" } },
       },
+      isReferencedBy: { type: "keyword" },
       dcatType: {
         properties: { value: { type: "keyword" }, label: { type: "keyword" } },
       },

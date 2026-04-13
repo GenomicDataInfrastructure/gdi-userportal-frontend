@@ -82,7 +82,18 @@ const MetadataField = ({
 
 const NotProvided = () => <span className="text-primary">Not provided</span>;
 
-const isHealthDcatApCompatible = (dataset: RetrievedDataset): boolean => {
+type ExtendedRetrievedDataset = RetrievedDataset & {
+  publisherType?: ValueLabel[];
+  publisherNote?: string;
+  temporalCoverage?:
+    | RetrievedDataset["temporalCoverage"]
+    | { start?: string; end?: string };
+  analytics?: RetrievedDataset["analytics"] | string[];
+};
+
+const isHealthDcatApCompatible = (
+  dataset: ExtendedRetrievedDataset
+): boolean => {
   const healthDcatApIndicators = [
     dataset.healthTheme && dataset.healthTheme.length > 0,
     dataset.healthCategory && dataset.healthCategory.length > 0,
@@ -112,11 +123,20 @@ const DatasetMetadata = ({
   relationships,
   dictionary,
 }: {
-  dataset: RetrievedDataset;
+  dataset: ExtendedRetrievedDataset;
   relationships: DatasetRelationEntry[];
   dictionary: DatasetDictionaryEntry[];
 }) => {
   const [userTimezone, setUserTimezone] = useState<string | null>(null);
+  const temporalCoverage = Array.isArray(dataset.temporalCoverage)
+    ? dataset.temporalCoverage[0]
+    : dataset.temporalCoverage;
+  const analytics =
+    dataset.analytics
+      ?.map((entry) =>
+        typeof entry === "string" ? entry : entry.title || entry.description
+      )
+      .filter((entry): entry is string => Boolean(entry)) ?? [];
 
   useEffect(() => {
     try {
@@ -432,8 +452,8 @@ const DatasetMetadata = ({
 
       {(isHealthDcatApCompatible(dataset) ||
         (dataset.spatialCoverage && dataset.spatialCoverage.length > 0) ||
-        (dataset.temporalCoverage &&
-          (dataset.temporalCoverage.start || dataset.temporalCoverage.end)) ||
+        (temporalCoverage &&
+          (temporalCoverage.start || temporalCoverage.end)) ||
         dataset.temporalResolution ||
         dataset.spatialResolutionInMeters !== undefined) && (
         <MetadataSection title="Coverage" icon={faGlobe}>
@@ -457,16 +477,15 @@ const DatasetMetadata = ({
               label="Temporal Coverage"
               tooltip="Time period covered by the data in this dataset."
             >
-              {dataset.temporalCoverage &&
-              (dataset.temporalCoverage.start ||
-                dataset.temporalCoverage.end) ? (
+              {temporalCoverage &&
+              (temporalCoverage.start || temporalCoverage.end) ? (
                 <>
-                  {dataset.temporalCoverage.start
-                    ? formatDate(dataset.temporalCoverage.start)
+                  {temporalCoverage.start
+                    ? formatDate(temporalCoverage.start)
                     : "N/A"}{" "}
                   -{" "}
-                  {dataset.temporalCoverage.end
-                    ? formatDate(dataset.temporalCoverage.end)
+                  {temporalCoverage.end
+                    ? formatDate(temporalCoverage.end)
                     : "Present"}
                 </>
               ) : (
@@ -799,13 +818,12 @@ const DatasetMetadata = ({
         </MetadataSection>
       )}
 
-      {(isHealthDcatApCompatible(dataset) ||
-        (dataset.analytics && dataset.analytics.length > 0)) && (
+      {(isHealthDcatApCompatible(dataset) || analytics.length > 0) && (
         <MetadataSection title="Analytics" icon={faChartBar}>
           <div className="relative group">
-            {dataset.analytics && dataset.analytics.length > 0 ? (
+            {analytics.length > 0 ? (
               <Chips
-                chips={dataset.analytics}
+                chips={analytics}
                 className="bg-primary/10 text-primary rounded-full py-1"
               />
             ) : (

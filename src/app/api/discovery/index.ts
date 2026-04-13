@@ -13,6 +13,7 @@ import {
   RetrievedDataset,
   ValueLabel,
 } from "@/app/api/discovery/open-api/schemas";
+import { DiscoveryGVariantSearchQuery } from "@/app/api/discovery/providers/types";
 import { getDiscoveryProvider } from "@/app/api/discovery/providers/factory";
 import { createHeaders } from "@/app/api/shared/headers";
 
@@ -79,7 +80,11 @@ export const searchGVariantsApi = async (
     );
   }
 
+  const normalizedOptions: DiscoveryGVariantSearchQuery = {
+    params: options.params ?? {},
+  };
+
   return (await discoveryProvider.searchGVariants(
-    options
+    normalizedOptions
   )) as GVariantsSearchResponse[];
 };

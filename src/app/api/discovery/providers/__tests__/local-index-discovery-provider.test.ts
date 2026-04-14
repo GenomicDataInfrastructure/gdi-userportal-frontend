@@ -489,6 +489,10 @@ describe("LocalIndexDiscoveryProvider", () => {
         "https://example.org/publications/study-001",
         "https://example.org/publications/report-2024",
       ],
+      documentation: [
+        "https://example.org/docs/dataset-1",
+        "https://example.org/docs/dataset-1-guide",
+      ],
       accessRights: {
         value:
           "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
@@ -690,6 +694,10 @@ describe("LocalIndexDiscoveryProvider", () => {
       isReferencedBy: [
         "https://example.org/publications/study-001",
         "https://example.org/publications/report-2024",
+      ],
+      documentation: [
+        "https://example.org/docs/dataset-1",
+        "https://example.org/docs/dataset-1-guide",
       ],
       accessRights: {
         value:

@@ -420,6 +420,56 @@ describe("DCAT dataset export generators", () => {
     ]);
   });
 
+  test("emits documentation as nested foaf:Document element with rdf:about in RDF/XML", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      documentation: [
+        "https://example.org/docs/dataset-1",
+        "https://example.org/docs/dataset-1-guide",
+      ],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(turtle).toContain("foaf:page");
+    expect(turtle).toContain("example.org/docs/dataset-1");
+    expect(turtle).toContain("example.org/docs/dataset-1-guide");
+
+    // RDF/XML emits foaf:Document as a typed top-level node referenced via rdf:resource
+    expect(rdfXml).toContain(
+      '<foaf:page rdf:resource="https://example.org/docs/dataset-1"/>'
+    );
+    expect(rdfXml).toContain(
+      '<foaf:page rdf:resource="https://example.org/docs/dataset-1-guide"/>'
+    );
+    expect(rdfXml).toContain(
+      'rdf:about="https://example.org/docs/dataset-1"'
+    );
+    expect(rdfXml).toContain(
+      'rdf:about="https://example.org/docs/dataset-1-guide"'
+    );
+
+    // Each value must be typed as foaf:Document when round-tripped
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    const typeSubjects = [
+      ...new Set(
+        quads
+          .filter(
+            (q) =>
+              q.predicate.value ===
+                "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+              q.object.value === "http://xmlns.com/foaf/0.1/Document"
+          )
+          .map((q) => q.subject.value)
+      ),
+    ].sort();
+    expect(typeSubjects).toEqual([
+      "https://example.org/docs/dataset-1",
+      "https://example.org/docs/dataset-1-guide",
+    ]);
+  });
+
   test("emits hasCodeValues as language-tagged literal with xml:lang='en' in RDF/XML", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",

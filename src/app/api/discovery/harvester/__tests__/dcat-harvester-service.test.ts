@@ -168,6 +168,10 @@ describe("DcatHarvesterService", () => {
           "https://example.org/publications/study-001",
           "https://example.org/publications/report-2024",
         ],
+        documentation: [
+          "https://example.org/docs/dataset-1",
+          "https://example.org/docs/dataset-1-guide",
+        ],
         contacts: [
           {
             name: "tab3-contactPoint-mail@test.com",
@@ -266,9 +270,59 @@ describe("DcatHarvesterService", () => {
         codeValues: undefined,
         codingSystem: undefined,
         isReferencedBy: undefined,
+        documentation: undefined,
         contacts: undefined,
         distributions: undefined,
       },
+    ]);
+  });
+
+  test("throws an error when a foaf:page documentation value is not a valid URL", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:foaf="http://xmlns.com/foaf/0.1/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <foaf:page>
+            <foaf:Document rdf:about="not-a-valid-url"/>
+          </foaf:page>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+    await expect(
+      service.parseDatasetsFromRdf(rdf, "https://example.org/api/v1/catalogue")
+    ).rejects.toThrow(
+      '[extractDocumentation] Invalid documentation URL: "not-a-valid-url"'
+    );
+  });
+
+  test("parses valid foaf:page documentation URLs", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:foaf="http://xmlns.com/foaf/0.1/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <foaf:page>
+            <foaf:Document rdf:about="https://example.org/docs/guide"/>
+          </foaf:page>
+          <foaf:page>
+            <foaf:Document rdf:about="https://example.org/docs/reference"/>
+          </foaf:page>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].documentation).toEqual([
+      "https://example.org/docs/guide",
+      "https://example.org/docs/reference",
     ]);
   });
 

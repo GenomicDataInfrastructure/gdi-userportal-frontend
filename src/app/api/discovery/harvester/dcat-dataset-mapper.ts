@@ -78,6 +78,7 @@ const HEALTHDCATAP_HAS_CODE_VALUES =
 const HEALTHDCATAP_HAS_CODING_SYSTEM =
   "http://healthdataportal.eu/ns/health#hasCodingSystem"; // NOSONAR
 const DCT_IS_REFERENCED_BY = "http://purl.org/dc/terms/isReferencedBy"; // NOSONAR
+const FOAF_PAGE = "http://xmlns.com/foaf/0.1/page"; // NOSONAR
 
 export const getFallbackCatalogue = (graph: RdfGraph): string => {
   const namedCatalogs = graph
@@ -191,6 +192,7 @@ export const mapDataset = (
       HEALTHDCATAP_HAS_CODING_SYSTEM
     ),
     isReferencedBy: extractIsReferencedBy(datasetSubject, graph),
+    documentation: extractDocumentation(datasetSubject, graph),
   };
 };
 
@@ -593,5 +595,38 @@ const extractIsReferencedBy = (
   const values = objects
     .map((obj) => graph.getNamedNodeValue(obj) || obj.value.trim())
     .filter(Boolean);
+  return values.length > 0 ? values : undefined;
+};
+
+const isValidAbsoluteUrl = (value: string): boolean => {
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+};
+
+const extractDocumentation = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): string[] | undefined => {
+  const objects = graph.getObjects(datasetSubject, FOAF_PAGE);
+  if (!objects.length) return undefined;
+  const baseDir = graph.baseIRI
+    ? graph.baseIRI.slice(0, graph.baseIRI.lastIndexOf("/") + 1)
+    : undefined;
+  const values = objects.map((obj) => {
+    const raw = obj.value;
+    const segment =
+      baseDir && raw.startsWith(baseDir) ? raw.slice(baseDir.length) : raw;
+    // The segment must be a valid absolute http(s) URL
+    if (!isValidAbsoluteUrl(segment)) {
+      throw new Error(
+        `[extractDocumentation] Invalid documentation URL: "${segment}" (dataset: ${datasetSubject.value})`
+      );
+    }
+    return segment;
+  });
   return values.length > 0 ? values : undefined;
 };

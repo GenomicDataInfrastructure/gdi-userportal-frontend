@@ -52,4 +52,10 @@ export const addDatasetRelationQuads = ({
   dataset.isReferencedBy?.forEach((ref) =>
     addNamedNode(store, datasetNode, ns.dct("isReferencedBy"), ref)
   );
+
+  dataset.documentation?.forEach((doc) => {
+    const docNode = createNamedNode(doc);
+    store.add(datasetNode, ns.foaf("page"), docNode);
+    store.add(docNode, ns.rdf("type"), ns.foaf("Document"));
+  });
 };

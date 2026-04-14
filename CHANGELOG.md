@@ -12,6 +12,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+## [v1.6.11] - 2026-04-14
+
+### Added
+- feature: Pin Trivy to a specific version (#912) by @lnds-ak in 515ce07
+
+
+### Changed
+- chore: update workflow configurations to optimize deployment speed (#917) by @Kacem Bechka in 811c814
+- chore: update Node.js base image version in Dockerfile (#916) by @Kacem Bechka in aa59369
+- chore: update workflow configurations to optimize deployment speed (#915) by @Kacem Bechka in 9dedb7a
+- chore: update discovery.yaml and enhance test workflow (#913) by @Kacem Bechka in 0e0c951
+- doc: update CHANGELOG.md for v1.6.10 (#911) by @github-actions[bot] in a2b83fd
+
+
 
 ## [v1.6.10] - 2026-04-13
 

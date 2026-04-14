@@ -6,3 +6,7 @@ excludes:
     - pattern: "documentation/**"
       reason: "DOCUMENTATION_OF"
       comment: "Documentation folder that is not shipped"
+  scopes:
+    - pattern: "devDependencies"
+      reason: "DEV_DEPENDENCY_OF"
+      comment: "NPM development dependencies are not part of the runtime deployment."

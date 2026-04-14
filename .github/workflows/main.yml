@@ -33,8 +33,9 @@ jobs:
         with:
           allow-dynamic-versions: "true"
           fail-on: "issues"
-          # Keep main deployments fast; full ORT advisory runs stay in weekly/manual security scans.
-          run: "cache-dependencies,cache-scan-results,labels,analyzer,evaluator,reporter,upload-results"
+          # Keep deploy pipeline fast: run dependency analysis only.
+          # Full evaluator / advisor / reporter still run in weekly/manual security scans.
+          run: "cache-dependencies,labels,analyzer,upload-results"
 
   build-and-push-image:
     runs-on: ubuntu-latest

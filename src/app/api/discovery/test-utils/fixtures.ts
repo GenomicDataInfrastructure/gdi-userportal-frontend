@@ -15,6 +15,7 @@ export const canonicalDiscoveryRdf = `
            xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
            xmlns:skos="http://www.w3.org/2004/02/skos/core#"
            xmlns:dpv="http://www.w3.org/ns/dpv#"
+           xmlns:csvw="http://www.w3.org/ns/csvw#"
            xmlns:foaf="http://xmlns.com/foaf/0.1/"
            xmlns:vcard="http://www.w3.org/2006/vcard/ns#">
     <dcat:Catalog rdf:about="https://example.org/catalogues/main">
@@ -117,6 +118,35 @@ export const canonicalDiscoveryRdf = `
           <dct:description xml:lang="eng">https://www.example.com/purpose/research</dct:description>
         </dpv:Purpose>
       </dpv:hasPurpose>
+      <foaf:page>
+        <foaf:Document rdf:nodeID="Nc7c963dbbd1a488fa763cf3e13cfaf21">
+          <rdf:type rdf:resource="http://www.w3.org/ns/csvw#TableSchema"/>
+          <csvw:column>
+            <csvw:Column rdf:nodeID="Ncfd77d58a1a54203a688390ef40d27d4">
+              <csvw:name>Data_1</csvw:name>
+              <csvw:datatype rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+              <dct:description xml:lang="eng">This is a test description for field 1</dct:description>
+              <csvw:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</csvw:required>
+              <csvw:in xml:lang="eng">[1,2,3]</csvw:in>
+              <rdfs:comment xml:lang="eng">[1=Low, 2=Medium, 3=High]</rdfs:comment>
+            </csvw:Column>
+          </csvw:column>
+          <csvw:column>
+            <csvw:Column rdf:nodeID="N0a793d617ce247cd9364e1e295315ce5">
+              <rdf:type rdf:resource="http://www.w3.org/ns/dpv#PersonalData"/>
+              <csvw:name>Data_2</csvw:name>
+              <csvw:datatype rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+              <dct:description xml:lang="eng">This is a test description for field 2</dct:description>
+              <csvw:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</csvw:required>
+              <csvw:maxInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">100.0</csvw:maxInclusive>
+              <csvw:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">10.0</csvw:minInclusive>
+              <csvw:unit>kg</csvw:unit>
+              <csvw:in xml:lang="eng">[10,20,30]</csvw:in>
+              <rdfs:comment xml:lang="eng">[10=Low, 20=Medium, 30=High]</rdfs:comment>
+            </csvw:Column>
+          </csvw:column>
+        </foaf:Document>
+      </foaf:page>
       <dct:publisher>
         <foaf:Agent rdf:nodeID="Npublisher1">
           <foaf:name xml:lang="eng">org</foaf:name>
@@ -270,6 +300,18 @@ export const buildLocalDiscoveryDataset = (
     {
       value: "https://www.example.com/purpose/research", // NOSONAR
       label: "https://www.example.com/purpose/research",
+    },
+  ],
+  dataDictionary: [
+    {
+      name: "Data_1",
+      type: "string",
+      description: "This is a test description for field 1",
+    },
+    {
+      name: "Data_2",
+      type: "integer",
+      description: "This is a test description for field 2",
     },
   ],
   distributions: [

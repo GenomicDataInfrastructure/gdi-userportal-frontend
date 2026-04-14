@@ -443,9 +443,7 @@ describe("DCAT dataset export generators", () => {
     expect(rdfXml).toContain(
       '<foaf:page rdf:resource="https://example.org/docs/dataset-1-guide"/>'
     );
-    expect(rdfXml).toContain(
-      'rdf:about="https://example.org/docs/dataset-1"'
-    );
+    expect(rdfXml).toContain('rdf:about="https://example.org/docs/dataset-1"');
     expect(rdfXml).toContain(
       'rdf:about="https://example.org/docs/dataset-1-guide"'
     );

@@ -36,7 +36,8 @@ jobs:
         with:
           allow-dynamic-versions: "true"
           fail-on: "issues"
-          run: "cache-dependencies,cache-scan-results,labels,analyzer,evaluator,advisor,reporter,upload-results"
+          # Keep release pipeline fast; full ORT advisory runs stay in weekly/manual security scans.
+          run: "cache-dependencies,cache-scan-results,labels,analyzer,evaluator,reporter,upload-results"
 
   e2e-tests:
     runs-on: ubuntu-latest

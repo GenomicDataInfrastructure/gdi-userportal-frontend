@@ -162,6 +162,18 @@ describe("DcatHarvesterService", () => {
             label: "https://www.example.com/purpose/research",
           },
         ],
+        dataDictionary: [
+          {
+            name: "Data_1",
+            type: "string",
+            description: "This is a test description for field 1",
+          },
+          {
+            name: "Data_2",
+            type: "integer",
+            description: "This is a test description for field 2",
+          },
+        ],
         codeValues: undefined,
         codingSystem: undefined,
         isReferencedBy: [
@@ -263,6 +275,7 @@ describe("DcatHarvesterService", () => {
         applicableLegislation: undefined,
         personalData: undefined,
         purpose: undefined,
+        dataDictionary: undefined,
         codeValues: undefined,
         codingSystem: undefined,
         isReferencedBy: undefined,

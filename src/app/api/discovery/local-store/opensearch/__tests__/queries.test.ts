@@ -201,6 +201,19 @@ describe("opensearch/queries", () => {
               label: { type: "keyword" },
             },
           },
+          dataDictionary: {
+            type: "object",
+            properties: {
+              name: {
+                type: "text",
+                fields: {
+                  keyword: { type: "keyword" },
+                },
+              },
+              type: { type: "keyword" },
+              description: { type: "text" },
+            },
+          },
           personalData: {
             properties: {
               value: { type: "keyword" },

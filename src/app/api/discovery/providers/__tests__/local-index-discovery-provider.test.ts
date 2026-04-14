@@ -531,6 +531,18 @@ describe("LocalIndexDiscoveryProvider", () => {
           label: "https://www.example.com/purpose/research",
         },
       ],
+      dataDictionary: [
+        {
+          name: "Data_1",
+          type: "string",
+          description: "This is a test description for field 1",
+        },
+        {
+          name: "Data_2",
+          type: "integer",
+          description: "This is a test description for field 2",
+        },
+      ],
       distributions: [
         {
           id: "distribution-1",
@@ -731,6 +743,18 @@ describe("LocalIndexDiscoveryProvider", () => {
         {
           value: "https://www.example.com/purpose/research",
           label: "https://www.example.com/purpose/research",
+        },
+      ],
+      dataDictionary: [
+        {
+          name: "Data_1",
+          type: "string",
+          description: "This is a test description for field 1",
+        },
+        {
+          name: "Data_2",
+          type: "integer",
+          description: "This is a test description for field 2",
         },
       ],
       distributions: [

@@ -12,15 +12,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+
 ## [v1.6.10] - 2026-04-13
 
 ### Added
+
 - feat: Update OpenAPI schema to enhance dataset representation (#910) by @Kacem Bechka in b97f115
 - feat: Add provenance (#904) by @Inderpal Singh in 2d4bfd3
 - feat: harvest field isReferencedBy by @Alessandro in fb9d65a
 
-
 ### Changed
+
 - chore(deps): update actions/upload-artifact action to v7.0.1 by @Renovate Bot in 2c7b19d
 - chore(deps): update docker/build-push-action action to v7.1.0 (#908) by @LNDS-Sysadmins in 668bd51
 - chore(deps): bump axios from 1.13.5 to 1.15.0 (#906) by @dependabot[bot] in 2a13f25
@@ -28,15 +30,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix code value and sys rdf by @Alessandro in e4e4ac1
 - Fix export has purpose (#902) by @Alessandro in 1c15985
 
-
 ### Fixed
+
 - fix(deps): update react monorepo to v19.2.5 by @Renovate Bot in 94bc270
 - fix(deps): update dependency next to v16.2.3 by @Renovate Bot in ef51991
 - fix: redefinition error by @Alessandro in a31216e
 - fix: replace eng with en by @Alessandro in 4a251ed
 - fix format by @Alessandro in 08b7689
-
-
 
 ## [v1.6.8] - 2026-03-06
 

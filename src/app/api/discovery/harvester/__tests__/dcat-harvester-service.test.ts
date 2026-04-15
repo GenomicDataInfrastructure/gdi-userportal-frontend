@@ -293,9 +293,7 @@ describe("DcatHarvesterService", () => {
         </dcat:Dataset>
       </rdf:RDF>
     `;
-    await expect(
-      service.parseDatasetsFromRdf(rdf)
-    ).rejects.toThrow(
+    await expect(service.parseDatasetsFromRdf(rdf)).rejects.toThrow(
       '[extractDocumentation] Invalid documentation URL: "ftp://example.org/not-http"'
     );
   });

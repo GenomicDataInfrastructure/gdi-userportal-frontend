@@ -443,7 +443,7 @@ describe("DCAT dataset export generators", () => {
     expect(rdfXml).toContain(
       '<foaf:page>\n      <foaf:Document rdf:about="https://example.org/docs/dataset-1-guide"/>\n    </foaf:page>'
     );
-    expect(rdfXml).not.toContain('<foaf:page rdf:resource=');
+    expect(rdfXml).not.toContain("<foaf:page rdf:resource=");
 
     // Each value must be typed as foaf:Document when round-tripped
     const quads = await parseRdfXmlToQuads(rdfXml);

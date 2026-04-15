@@ -38,7 +38,10 @@ const collapseEmptyFoafDocumentTags = (xml: string): string =>
   );
 
 const removeTopLevelFoafDocumentNodes = (xml: string): string =>
-  xml.replace(/\n?\s*<foaf:Document rdf:about="[^"]+"\/>(?!\s*<\/foaf:page>)/g, "");
+  xml.replace(
+    /\n?\s*<foaf:Document rdf:about="[^"]+"\/>(?!\s*<\/foaf:page>)/g,
+    ""
+  );
 
 export const serializeDatasetAsRdfXml = async (
   dataset: LocalDiscoveryDataset

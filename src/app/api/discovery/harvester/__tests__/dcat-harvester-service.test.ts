@@ -277,7 +277,7 @@ describe("DcatHarvesterService", () => {
     ]);
   });
 
-  test("throws an error when a foaf:page documentation value is not a valid URL", async () => {
+  test("stores foaf:page documentation values as-is regardless of scheme", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -293,9 +293,8 @@ describe("DcatHarvesterService", () => {
         </dcat:Dataset>
       </rdf:RDF>
     `;
-    await expect(service.parseDatasetsFromRdf(rdf)).rejects.toThrow(
-      '[extractDocumentation] Invalid documentation URL: "ftp://example.org/not-http"'
-    );
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].documentation).toEqual(["ftp://example.org/not-http"]);
   });
 
   test("parses valid foaf:page documentation URLs", async () => {

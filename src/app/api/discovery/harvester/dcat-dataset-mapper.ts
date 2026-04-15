@@ -598,28 +598,12 @@ const extractIsReferencedBy = (
   return values.length > 0 ? values : undefined;
 };
 
-const isValidAbsoluteUrl = (value: string): boolean => {
-  try {
-    const url = new URL(value);
-    return url.protocol === "http:" || url.protocol === "https:";
-  } catch {
-    return false;
-  }
-};
-
 const extractDocumentation = (
   datasetSubject: RDF.Term,
   graph: RdfGraph
 ): string[] | undefined => {
   const objects = graph.getObjects(datasetSubject, FOAF_PAGE);
   if (!objects.length) return undefined;
-  const values = objects.map((obj) => {
-    if (!isValidAbsoluteUrl(obj.value)) {
-      throw new Error(
-        `[extractDocumentation] Invalid documentation URL: "${obj.value}" (dataset: ${datasetSubject.value})`
-      );
-    }
-    return obj.value;
-  });
+  const values = objects.map((obj) => obj.value);
   return values.length > 0 ? values : undefined;
 };

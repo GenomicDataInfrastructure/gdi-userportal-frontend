@@ -31,25 +31,9 @@ const rewriteDocumentationNodes = (xml: string): string =>
       `<foaf:page>\n      <foaf:Document rdf:about="${uri}"/>\n    </foaf:page>`
   );
 
-const collapseEmptyFoafDocumentTags = (xml: string): string =>
-  xml.replace(
-    /<foaf:Document rdf:about="([^"]+)">\s*<\/foaf:Document>/g,
-    (_, uri) => `<foaf:Document rdf:about="${uri}"/>`
-  );
-
-const removeTopLevelFoafDocumentNodes = (xml: string): string =>
-  xml.replace(
-    /\n?\s*<foaf:Document rdf:about="[^"]+"\/>(?!\s*<\/foaf:page>)/g,
-    ""
-  );
-
 export const serializeDatasetAsRdfXml = async (
   dataset: LocalDiscoveryDataset
 ): Promise<string> => {
   const xml = await serializeDatasetStore(dataset, "rdf");
-  return removeTopLevelFoafDocumentNodes(
-    rewriteDocumentationNodes(
-      collapseEmptyFoafDocumentTags(rewriteCodingSystemNodes(xml))
-    )
-  );
+  return rewriteDocumentationNodes(rewriteCodingSystemNodes(xml));
 };

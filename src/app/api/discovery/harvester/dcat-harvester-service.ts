@@ -32,7 +32,7 @@ export class DcatHarvesterService {
     sourceUrl?: string
   ): Promise<LocalDiscoveryDataset[]> {
     const quads = await parseRdfXmlToQuads(xmlText, sourceUrl);
-    const graph = new RdfGraph(quads, sourceUrl);
+    const graph = new RdfGraph(quads);
     const fallbackCatalogue = getFallbackCatalogue(graph);
 
     return graph

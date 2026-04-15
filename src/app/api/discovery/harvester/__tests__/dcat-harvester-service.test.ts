@@ -288,15 +288,15 @@ describe("DcatHarvesterService", () => {
           <dct:title>Dataset A</dct:title>
           <dct:description>Description A</dct:description>
           <foaf:page>
-            <foaf:Document rdf:about="not-a-valid-url"/>
+            <foaf:Document rdf:about="ftp://example.org/not-http"/>
           </foaf:page>
         </dcat:Dataset>
       </rdf:RDF>
     `;
     await expect(
-      service.parseDatasetsFromRdf(rdf, "https://example.org/api/v1/catalogue")
+      service.parseDatasetsFromRdf(rdf)
     ).rejects.toThrow(
-      '[extractDocumentation] Invalid documentation URL: "not-a-valid-url"'
+      '[extractDocumentation] Invalid documentation URL: "ftp://example.org/not-http"'
     );
   });
 

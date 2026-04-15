@@ -6,10 +6,8 @@ import type * as RDF from "@rdfjs/types";
 
 export class RdfGraph {
   private readonly quadsBySubject = new Map<string, RDF.Quad[]>();
-  readonly baseIRI: string | undefined;
 
-  constructor(quads: RDF.Quad[], baseIRI?: string) {
-    this.baseIRI = baseIRI;
+  constructor(quads: RDF.Quad[]) {
     for (const quad of quads) {
       const subjectKey = this.getSubjectKey(quad.subject);
       const subjectQuads = this.quadsBySubject.get(subjectKey) ?? [];

@@ -613,20 +613,13 @@ const extractDocumentation = (
 ): string[] | undefined => {
   const objects = graph.getObjects(datasetSubject, FOAF_PAGE);
   if (!objects.length) return undefined;
-  const baseDir = graph.baseIRI
-    ? graph.baseIRI.slice(0, graph.baseIRI.lastIndexOf("/") + 1)
-    : undefined;
   const values = objects.map((obj) => {
-    const raw = obj.value;
-    const segment =
-      baseDir && raw.startsWith(baseDir) ? raw.slice(baseDir.length) : raw;
-    // The segment must be a valid absolute http(s) URL
-    if (!isValidAbsoluteUrl(segment)) {
+    if (!isValidAbsoluteUrl(obj.value)) {
       throw new Error(
-        `[extractDocumentation] Invalid documentation URL: "${segment}" (dataset: ${datasetSubject.value})`
+        `[extractDocumentation] Invalid documentation URL: "${obj.value}" (dataset: ${datasetSubject.value})`
       );
     }
-    return segment;
+    return obj.value;
   });
   return values.length > 0 ? values : undefined;
 };

@@ -51,6 +51,7 @@ describe("opensearch/queries", () => {
             },
           },
           isReferencedBy: { type: "keyword" },
+          documentation: { type: "keyword" },
           languages: { type: "keyword" },
           createdAt: { type: "date" },
           modifiedAt: { type: "date" },

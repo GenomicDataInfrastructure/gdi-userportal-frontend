@@ -179,6 +179,12 @@ export const canonicalDiscoveryRdf = `
       <dct:hasPart rdf:resource="https://example.org/datasets/subset-1"/>
       <dct:isReferencedBy rdf:resource="https://example.org/publications/study-001"/>
       <dct:isReferencedBy rdf:resource="https://example.org/publications/report-2024"/>
+      <foaf:page>
+        <foaf:Document rdf:about="https://example.org/docs/dataset-1"/>
+      </foaf:page>
+      <foaf:page>
+        <foaf:Document rdf:about="https://example.org/docs/dataset-1-guide"/>
+      </foaf:page>
       <dcat:distribution>
         <dcat:Distribution rdf:about="https://example.org/distributions/population-registry-csv">
           <dct:identifier>distribution-1</dct:identifier>
@@ -361,6 +367,10 @@ export const buildLocalDiscoveryDataset = (
   isReferencedBy: [
     "https://example.org/publications/study-001",
     "https://example.org/publications/report-2024",
+  ],
+  documentation: [
+    "https://example.org/docs/dataset-1",
+    "https://example.org/docs/dataset-1-guide",
   ],
   temporalCoverage: {
     start: "2022-01-01T00:00:00.000Z",

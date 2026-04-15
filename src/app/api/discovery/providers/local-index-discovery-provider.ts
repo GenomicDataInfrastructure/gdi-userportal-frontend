@@ -201,6 +201,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       codeValues: dataset.codeValues,
       codingSystem: dataset.codingSystem,
       isReferencedBy: dataset.isReferencedBy,
+      documentation: dataset.documentation,
     };
   }
 

@@ -24,9 +24,16 @@ const rewriteCodingSystemNodes = (xml: string): string =>
       `<healthdcatap:hasCodingSystem>\n      <dct:Standard rdf:about="${uri}"/>\n    </healthdcatap:hasCodingSystem>`
   );
 
+const rewriteDocumentationNodes = (xml: string): string =>
+  xml.replace(
+    /<foaf:page rdf:resource="([^"]+)"\/>/g,
+    (_, uri) =>
+      `<foaf:page>\n      <foaf:Document rdf:about="${uri}"/>\n    </foaf:page>`
+  );
+
 export const serializeDatasetAsRdfXml = async (
   dataset: LocalDiscoveryDataset
 ): Promise<string> => {
   const xml = await serializeDatasetStore(dataset, "rdf");
-  return rewriteCodingSystemNodes(xml);
+  return rewriteDocumentationNodes(rewriteCodingSystemNodes(xml));
 };

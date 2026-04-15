@@ -186,6 +186,7 @@ export interface DiscoveryRetrievedDataset extends DiscoveryDatasetBase {
   codeValues?: DiscoveryValueLabel[];
   codingSystem?: DiscoveryValueLabel[];
   isReferencedBy?: string[];
+  documentation?: string[];
 }
 
 export interface DiscoveryFilterRange {

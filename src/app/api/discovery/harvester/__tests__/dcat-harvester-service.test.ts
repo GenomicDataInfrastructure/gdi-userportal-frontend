@@ -258,6 +258,7 @@ describe("DcatHarvesterService", () => {
         maxTypicalAge: undefined,
         minTypicalAge: undefined,
         populationCoverage: "",
+        provenance: undefined,
         spatialCoverage: undefined,
         spatialResolutionInMeters: undefined,
         temporalCoverage: undefined,

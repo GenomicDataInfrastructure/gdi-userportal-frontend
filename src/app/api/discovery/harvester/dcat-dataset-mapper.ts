@@ -606,6 +606,8 @@ const extractDocumentation = (
 ): string[] | undefined => {
   const objects = graph.getObjects(datasetSubject, FOAF_PAGE);
   if (!objects.length) return undefined;
-  const values = objects.map((obj) => obj.value);
+  const values = objects
+    .map((obj) => graph.getNamedNodeValue(obj))
+    .filter(Boolean);
   return values.length > 0 ? values : undefined;
 };

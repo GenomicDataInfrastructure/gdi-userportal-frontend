@@ -28,6 +28,25 @@
       "source": "ckan",
       "group": "catalog",
       "type": "DROPDOWN",
+      "key": "vocab_in_series_title",
+      "label": "Dataset series",
+      "values": [
+        {
+          "value": "colorectal-cohort",
+          "label": "Colorectal cohort",
+          "count": 4
+        },
+        {
+          "value": "rare-disease-panel",
+          "label": "Rare disease panel",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "source": "ckan",
+      "group": "catalog",
+      "type": "DROPDOWN",
       "key": "publisher_name",
       "label": "Publisher",
       "values": [
@@ -106,6 +125,18 @@
         "value": "public_health",
         "label": "Public Health",
         "count": 5
+      }
+    ],
+    "vocab_in_series_title": [
+      {
+        "value": "colorectal-cohort",
+        "label": "Colorectal cohort",
+        "count": 4
+      },
+      {
+        "value": "rare-disease-panel",
+        "label": "Rare disease panel",
+        "count": 2
       }
     ],
     "publisher_name": [

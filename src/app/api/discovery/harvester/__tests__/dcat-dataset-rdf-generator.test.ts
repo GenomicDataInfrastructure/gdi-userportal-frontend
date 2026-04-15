@@ -436,17 +436,14 @@ describe("DCAT dataset export generators", () => {
     expect(turtle).toContain("example.org/docs/dataset-1");
     expect(turtle).toContain("example.org/docs/dataset-1-guide");
 
-    // RDF/XML emits foaf:Document as a typed top-level node referenced via rdf:resource
+    // RDF/XML must use the nested foaf:Document form enclosed in foaf:page
     expect(rdfXml).toContain(
-      '<foaf:page rdf:resource="https://example.org/docs/dataset-1"/>'
+      '<foaf:page>\n      <foaf:Document rdf:about="https://example.org/docs/dataset-1"/>\n    </foaf:page>'
     );
     expect(rdfXml).toContain(
-      '<foaf:page rdf:resource="https://example.org/docs/dataset-1-guide"/>'
+      '<foaf:page>\n      <foaf:Document rdf:about="https://example.org/docs/dataset-1-guide"/>\n    </foaf:page>'
     );
-    expect(rdfXml).toContain('rdf:about="https://example.org/docs/dataset-1"');
-    expect(rdfXml).toContain(
-      'rdf:about="https://example.org/docs/dataset-1-guide"'
-    );
+    expect(rdfXml).not.toContain('<foaf:page rdf:resource=');
 
     // Each value must be typed as foaf:Document when round-tripped
     const quads = await parseRdfXmlToQuads(rdfXml);

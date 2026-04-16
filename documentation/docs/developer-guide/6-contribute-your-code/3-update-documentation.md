@@ -48,19 +48,13 @@ int retentionYears = calculateRetention(dataset.getSensitivityLevel());
 
 ## Document APIs with OpenAPI
 
-Use OpenAPI annotations in Java backend services to generate interactive API documentation:
+GDI uses API-first development. API contracts are defined in OpenAPI YAML files located in `src/main/openapi/` before implementation.
 
-```java
-@Operation(summary = "Create a new dataset")
-@APIResponse(responseCode = "201", description = "Dataset created")
-@APIResponse(responseCode = "400", description = "Invalid input")
-@POST
-public Response createDataset(Dataset dataset) {
-    // Implementation
-}
-```
+**For details on working with OpenAPI specifications:**
+- [Add metadata fields](/developer-guide/add-metadata-fields#discovery-service) - Shows the complete OpenAPI workflow including updating YAML files and regenerating code
+- [Add API endpoint](/developer-guide/add-api-endpoint) - General guidance on API development
 
-View the generated documentation at `http://localhost:8080/q/swagger-ui/` during development.
+View generated API documentation at `http://localhost:8080/q/swagger-ui/` during development.
 
 ## Update user guides
 

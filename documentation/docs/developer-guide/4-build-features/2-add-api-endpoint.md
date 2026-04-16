@@ -12,88 +12,34 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Add a new API endpoint
 
-Build REST endpoints in Quarkus backend services (DDS or AMS) using JAX-RS patterns.  
+Build REST endpoints in Quarkus backend services (DDS or AMS) following GDI's API-first approach.
 
-In this guide  
-> [Create the resource class](#create-the-resource-class)  
-> [Implement the service](#implement-the-service)  
-> [Add OpenAPI documentation](#add-openapi-documentation)  
-> [Write tests](#write-tests)  
+## API-first development
 
-## Create the resource class
+GDI follows an API-first methodology where OpenAPI specifications are defined before implementation. This ensures consistent contracts between frontend and backend teams.
 
-```java
-@Path("/api/v1/example")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-public class ExampleResource {
+## Learn from existing examples
 
-    @Inject
-    ExampleService service;
+The best way to understand how to add an API endpoint is to examine existing implementations in the codebase.
 
-    @GET
-    public Response list() {
-        var results = service.findAll();
-        return Response.ok(results).build();
-    }
+**For detailed workflow examples:**
+- [Add metadata fields](/developer-guide/add-metadata-fields#discovery-service) - Shows the complete workflow for updating OpenAPI definitions and implementing changes in the Discovery Service
+- Backend repositories - Review existing resource classes and their corresponding OpenAPI definitions
 
-    @POST
-    public Response create(ExampleRequest request) {
-        var created = service.create(request);
-        return Response.status(Status.CREATED).entity(created).build();
-    }
-}
-```
+**Key files to examine:**
+- `src/main/openapi/` - OpenAPI YAML specifications
+- `src/main/java/.../api/` - REST resource implementations
+- `src/main/java/.../services/` - Business logic services
 
-## Implement the service
+## General workflow
 
-```java
-@ApplicationScoped
-public class ExampleService {
+Based on the [metadata fields guide](/developer-guide/add-metadata-fields#discovery-service):
 
-    public List<ExampleDTO> findAll() {
-        // Business logic here
-        return List.of();
-    }
+1. Update the OpenAPI definition in `src/main/openapi/` folder
+2. Regenerate code: `mvn clean compile`
+3. Implement or update the business logic and mapping
+4. Update test cases
+5. Verify with automated testing: `mvn test`
+6. View documentation at `http://localhost:8080/q/swagger-ui/`
 
-    @Transactional
-    public ExampleDTO create(ExampleRequest request) {
-        // Create and persist entity
-        return new ExampleDTO();
-    }
-}
-```
-
-## Add OpenAPI documentation
-
-```java
-@Tag(name = "Example", description = "Example operations")
-@Path("/api/v1/example")
-public class ExampleResource {
-
-    @Operation(summary = "List all examples")
-    @APIResponse(responseCode = "200", description = "Success")
-    @GET
-    public Response list() {
-        // ...
-    }
-}
-```
-
-## Write tests
-
-```java
-@QuarkusTest
-class ExampleResourceTest {
-
-    @Test
-    void testList() {
-        given()
-            .when().get("/api/v1/example")
-            .then()
-            .statusCode(200);
-    }
-}
-```
-
-View documentation at `http://localhost:8080/q/swagger-ui/`
+For specific implementation patterns and detailed steps, refer to existing endpoints in the codebase and the metadata fields guide.

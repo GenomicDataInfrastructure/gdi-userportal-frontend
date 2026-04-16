@@ -23,6 +23,13 @@ import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtu
 
 describe("DCAT dataset export generators", () => {
   const originalBaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const FOAF_PAGE = "http://xmlns.com/foaf/0.1/page";
+  const RDF_TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+  const CSVW_TABLE_SCHEMA = "http://www.w3.org/ns/csvw#TableSchema";
+  const CSVW_COLUMN = "http://www.w3.org/ns/csvw#column";
+  const CSVW_NAME = "http://www.w3.org/ns/csvw#name";
+  const CSVW_DATATYPE = "http://www.w3.org/ns/csvw#datatype";
+  const DCT_DESCRIPTION = "http://purl.org/dc/terms/description";
 
   beforeEach(() => {
     process.env.NEXT_PUBLIC_BASE_URL = "https://portal.example.org/";
@@ -229,6 +236,7 @@ describe("DCAT dataset export generators", () => {
       publishers: [],
       hdab: [],
       creators: [],
+      dataDictionary: undefined,
       keywords: undefined,
       themes: undefined,
       healthTheme: undefined,
@@ -281,6 +289,119 @@ describe("DCAT dataset export generators", () => {
       graph.some(
         (item) =>
           item["@id"] === "https://portal.example.org/datasets/dataset-1"
+      )
+    ).toBe(true);
+  });
+
+  test("emits data dictionary entries in all export formats", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      dataDictionary: [
+        {
+          name: "patient_id",
+          type: "string",
+          description: "Pseudonymous patient identifier",
+        },
+        {
+          name: "visit_count",
+          type: "integer",
+          description: "Number of recorded visits",
+        },
+      ],
+      documentation: undefined,
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const jsonLd = JSON.parse(
+      await serializeDatasetAsJsonLd(dataset)
+    ) as Record<string, unknown>;
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    const schemaNodes = [
+      ...new Set(
+        quads
+          .filter(
+            (q) =>
+              q.subject.value === "https://example.org/datasets/export-1" &&
+              q.predicate.value === FOAF_PAGE
+          )
+          .map((q) => q.object.value)
+      ),
+    ];
+
+    expect(schemaNodes).toHaveLength(1);
+    expect(
+      quads.some(
+        (q) =>
+          q.subject.value === schemaNodes[0] &&
+          q.predicate.value === RDF_TYPE &&
+          q.object.value === CSVW_TABLE_SCHEMA
+      )
+    ).toBe(true);
+
+    const columnNodes = quads
+      .filter(
+        (q) =>
+          q.subject.value === schemaNodes[0] &&
+          q.predicate.value === CSVW_COLUMN
+      )
+      .map((q) => q.object.value);
+    expect(columnNodes).toHaveLength(2);
+
+    expect(
+      quads.some(
+        (q) =>
+          columnNodes.includes(q.subject.value) &&
+          q.predicate.value === CSVW_NAME &&
+          q.object.value === "patient_id"
+      )
+    ).toBe(true);
+    expect(
+      quads.some(
+        (q) =>
+          columnNodes.includes(q.subject.value) &&
+          q.predicate.value === CSVW_DATATYPE &&
+          q.object.value === "http://www.w3.org/2001/XMLSchema#string"
+      )
+    ).toBe(true);
+    expect(
+      quads.some(
+        (q) =>
+          columnNodes.includes(q.subject.value) &&
+          q.predicate.value === DCT_DESCRIPTION &&
+          q.object.value === "Pseudonymous patient identifier"
+      )
+    ).toBe(true);
+
+    expect(turtle).toContain("@prefix csvw:");
+    expect(turtle).toContain("csvw:TableSchema");
+    expect(turtle).toContain('csvw:name "patient_id"');
+    expect(turtle).toContain("csvw:datatype xsd:string");
+
+    const graph = jsonLd["@graph"] as Array<Record<string, unknown>>;
+    expect(
+      graph.some(
+        (item) =>
+          item["@id"] === "https://example.org/datasets/export-1" &&
+          Array.isArray(item["foaf:page"])
+      )
+    ).toBe(true);
+    expect(
+      graph.some(
+        (item) =>
+          Array.isArray(item["@type"]) &&
+          (item["@type"] as string[]).includes("csvw:TableSchema") &&
+          Array.isArray(item["csvw:column"])
+      )
+    ).toBe(true);
+    expect(
+      graph.some(
+        (item) =>
+          Array.isArray(item["@type"]) &&
+          (item["@type"] as string[]).includes("csvw:Column") &&
+          JSON.stringify(item).includes("patient_id") &&
+          JSON.stringify(item).includes("xsd:string")
       )
     ).toBe(true);
   });
@@ -459,7 +580,9 @@ describe("DCAT dataset export generators", () => {
           .map((q) => q.subject.value)
       ),
     ].sort();
-    expect(typeSubjects).toEqual([
+    expect(
+      typeSubjects.filter((subject) => dataset.documentation?.includes(subject))
+    ).toEqual([
       "https://example.org/docs/dataset-1",
       "https://example.org/docs/dataset-1-guide",
     ]);

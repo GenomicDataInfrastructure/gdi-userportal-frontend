@@ -11,7 +11,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Understand the codebase
 
-Learn how each component is architected internally—from folder structures to design patterns—so you can navigate the code confidently and make changes effectively.
+Each component of the GDI platform is built with a modular architecture, following best practices for maintainability, from folder structure to design patterns.
 
 If you're new to GDI, start with [Platform overview](/developer-guide/platform-overview), then return here to dive into individual components.
 
@@ -36,3 +36,4 @@ The GDI platform consists of multiple repositories:
 import DocCardList from '@theme/DocCardList';
 
 <DocCardList />
+

@@ -12,7 +12,9 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Follow Git workflow
 
-Follow GDI's Git branching strategy and commit conventions.
+Development on GDI follows a trunk-based development model with feature branches and specific commit message conventions to ensure consistency and clarity in contributions. 
+
+Follow these guidelines when contributing code to any of the [GDI repositories](/developer-guide/understand-the-codebase#gdi-repositories).
 
 ## Branching strategy
 
@@ -22,7 +24,7 @@ Create feature branches from `main`:
 git checkout -b feature/add-dataset-validation
 ```
 
-Branch naming conventions:
+**Branch naming conventions:**
 - `feature/` - New features
 - `fix/` - Bug fixes
 - `docs/` - Documentation updates

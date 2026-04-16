@@ -24,7 +24,9 @@ The GDI platform consists of multiple repositories:
 | Frontend | [gdi-userportal-frontend](https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend) |
 | Backend - DDS | [gdi-userportal-dataset-discovery-service](https://github.com/GenomicDataInfrastructure/gdi-userportal-dataset-discovery-service) |
 | Backend - AMS | [gdi-userportal-access-management-service](https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service) |
-| CKAN extension | [gdi-userportal-ckanext-fairdatapoint](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-fairdatapoint) |
+| CKAN extension - GDI | [gdi-userportal-ckanext-gdi-userportal](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-gdi-userportal) |
+| CKAN extension - FDP | [gdi-userportal-ckanext-fairdatapoint](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-fairdatapoint) |
+| CKAN extension - Harvest | [gdi-userportal-ckanext-harvest](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-harvest) |
 | CKAN Docker | [gdi-userportal-ckan-docker](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckan-docker) |
 | Infrastructure | [gdi-userportal-docker](https://github.com/GenomicDataInfrastructure/gdi-userportal-docker) |
 

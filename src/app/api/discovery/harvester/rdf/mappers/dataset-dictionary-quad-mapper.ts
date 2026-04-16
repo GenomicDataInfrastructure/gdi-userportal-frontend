@@ -6,8 +6,8 @@ import {
   DATASET_EXPORT_PREFIXES,
   DatasetRdfContext,
   addLiteral,
-  createBlankNode,
   createNamedNode,
+  createNestedNode,
   isAbsoluteUri,
   isNonEmptyString,
   ns,
@@ -27,12 +27,15 @@ export const addDatasetDictionaryQuads = ({
     return;
   }
 
-  const schemaNode = createBlankNode();
+  const schemaNode = createNestedNode(
+    { dataset, store, datasetNode },
+    "data-dictionary"
+  );
   store.add(datasetNode, ns.foaf("page"), schemaNode);
   store.add(schemaNode, ns.rdf("type"), ns.foaf("Document"));
   store.add(schemaNode, ns.rdf("type"), ns.csvw("TableSchema"));
 
-  dataset.dataDictionary.forEach((entry) => {
+  dataset.dataDictionary.forEach((entry, index) => {
     if (
       !isNonEmptyString(entry.name) ||
       !isNonEmptyString(entry.type) ||
@@ -41,7 +44,10 @@ export const addDatasetDictionaryQuads = ({
       return;
     }
 
-    const columnNode = createBlankNode();
+    const columnNode = createNestedNode(
+      { dataset, store, datasetNode },
+      `data-dictionary-column-${index + 1}`
+    );
     store.add(schemaNode, ns.csvw("column"), columnNode);
     store.add(columnNode, ns.rdf("type"), ns.csvw("Column"));
     addLiteral(store, columnNode, ns.csvw("name"), entry.name);

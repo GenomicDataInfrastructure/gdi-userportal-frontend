@@ -36,7 +36,7 @@ public class DatasetServiceTest {
 Run tests:
 
 ```bash
-./mvnw test
+./mvn test
 ```
 
 ## REST API tests

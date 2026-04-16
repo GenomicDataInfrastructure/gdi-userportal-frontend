@@ -145,7 +145,7 @@ The service will start with:
 
 Run tests:
 ```bash
-./mvnw test
+./mvn test
 ```
 
 Run integration tests:

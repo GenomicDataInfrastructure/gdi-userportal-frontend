@@ -46,12 +46,11 @@ Explore the APIs of the different services in the GDI platform for dataset manag
 
 All endpoints require authentication except public dataset search:
 - **Frontend ↔ Services**: Bearer token from Keycloak OIDC flow
-- **Service ↔ CKAN**: API key or user token
 - **Service ↔ REMS**: API key with user impersonation
 
 ## Response formats
 
-All services return JSON:
+All services return JSON. Below are examples of typical responses.
 
 ```json
 {
@@ -64,7 +63,7 @@ All services return JSON:
 }
 ```
 
-Error responses follow RFC 7807 Problem Details:
+Error responses follow RFC 7807 Problem Details. Example:
 
 ```json
 {
@@ -80,9 +79,21 @@ Error responses follow RFC 7807 Problem Details:
 Use curl, Postman, or HTTPie to test endpoints:
 
 ```bash
-# Search datasets
-curl "http://localhost:8080/api/v1/datasets?q=genomics"
+# Search datasets - Full example
+curl -X POST "http://localhost:8080/api/v1/datasets/search" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "genomics",
+    "rows": 10,
+    "start": 0,
+    "operator": "OR",
+    "includeBeacon": true
+  }'
 
-# Get dataset details
-curl "http://localhost:8080/api/v1/datasets/123"
+# Search datasets - Minimal version
+curl -X POST "http://localhost:8080/api/v1/datasets/search" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "genomics"
+  }'
 ``` 

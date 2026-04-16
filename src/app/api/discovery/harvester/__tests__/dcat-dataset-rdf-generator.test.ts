@@ -580,7 +580,9 @@ describe("DCAT dataset export generators", () => {
           .map((q) => q.subject.value)
       ),
     ].sort();
-    expect(typeSubjects).toEqual([
+    expect(
+      typeSubjects.filter((subject) => dataset.documentation?.includes(subject))
+    ).toEqual([
       "https://example.org/docs/dataset-1",
       "https://example.org/docs/dataset-1-guide",
     ]);

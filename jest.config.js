@@ -11,6 +11,8 @@ module.exports = {
       {
         tsconfig: {
           allowJs: true,
+          rootDir: ".",
+          ignoreDeprecations: "6.0",
         },
       },
     ],

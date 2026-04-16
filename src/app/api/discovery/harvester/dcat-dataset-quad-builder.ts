@@ -13,6 +13,7 @@ import { addDatasetClassificationQuads } from "@/app/api/discovery/harvester/rdf
 import { addDatasetContactQuads } from "@/app/api/discovery/harvester/rdf/mappers/dataset-contact-quad-mapper";
 import { addDatasetCoreQuads } from "@/app/api/discovery/harvester/rdf/mappers/dataset-core-quad-mapper";
 import { addDatasetCoverageQuads } from "@/app/api/discovery/harvester/rdf/mappers/dataset-coverage-quad-mapper";
+import { addDatasetDictionaryQuads } from "@/app/api/discovery/harvester/rdf/mappers/dataset-dictionary-quad-mapper";
 import { addDatasetDistributionQuads } from "@/app/api/discovery/harvester/rdf/mappers/dataset-distribution-quad-mapper";
 import { addDatasetGovernanceQuads } from "@/app/api/discovery/harvester/rdf/mappers/dataset-governance-quad-mapper";
 import { addDatasetRelationQuads } from "@/app/api/discovery/harvester/rdf/mappers/dataset-relation-quad-mapper";
@@ -28,6 +29,7 @@ export const buildDatasetRdfStore = (
   addDatasetGovernanceQuads(context);
   addDatasetAgentQuads(context);
   addDatasetContactQuads(context);
+  addDatasetDictionaryQuads(context);
   addDatasetRelationQuads(context);
   addDatasetDistributionQuads(context);
 

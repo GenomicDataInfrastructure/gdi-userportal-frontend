@@ -16,6 +16,7 @@ export const DATASET_EXPORT_PREFIXES = {
   rdfs: "http://www.w3.org/2000/01/rdf-schema#", // NOSONAR
   skos: "http://www.w3.org/2004/02/skos/core#", // NOSONAR
   dpv: "http://www.w3.org/ns/dpv#", // NOSONAR
+  csvw: "http://www.w3.org/ns/csvw#", // NOSONAR
   foaf: "http://xmlns.com/foaf/0.1/", // NOSONAR
   vcard: "http://www.w3.org/2006/vcard/ns#", // NOSONAR
   xsd: "http://www.w3.org/2001/XMLSchema#", // NOSONAR

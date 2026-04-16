@@ -32,6 +32,7 @@ export const ns = {
   rdfs: rdf.Namespace(DATASET_EXPORT_PREFIXES.rdfs),
   skos: rdf.Namespace(DATASET_EXPORT_PREFIXES.skos),
   dpv: rdf.Namespace(DATASET_EXPORT_PREFIXES.dpv),
+  csvw: rdf.Namespace(DATASET_EXPORT_PREFIXES.csvw),
   foaf: rdf.Namespace(DATASET_EXPORT_PREFIXES.foaf),
   vcard: rdf.Namespace(DATASET_EXPORT_PREFIXES.vcard),
   xsd: rdf.Namespace(DATASET_EXPORT_PREFIXES.xsd),

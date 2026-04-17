@@ -12,6 +12,44 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+## [v1.6.12] - 2026-04-17
+
+### Added
+- feat: Add dataset series count and implement DataSeriesAccordion component (#929) by @Kacem Bechka in 3775eef7
+- feat: Generate Data Dictionary in RDF export (#926) by @Inderpal Singh in a4d11fb8
+- feat: make about content shown as html by @Alessandro in 17f8e953
+- feat: add dataset series filter to search functionality and update tests and documentation (#921) by @Kacem Bechka in bc518798
+- feat: Harvest data dictionaries from rdf and save it in local store (#919) by @Inderpal Singh in d54523c5
+- feat: add harvest and dowload of documentation by @Alessandro in 632da473
+
+
+### Changed
+- chore(deps): bump protobufjs from 7.5.4 to 7.5.5 (#927) by @dependabot[bot] in c597b012
+- chore(deps): update astral-sh/setup-uv action to v8.1.0 (#928) by @LNDS-Sysadmins in 19951e4a
+- chore(deps): update oras-project/setup-oras digest to 0036b2c by @Renovate Bot in 63f1f809
+- chore(deps): update actions/cache digest to 27d5ce7 by @Renovate Bot in 2cadb468
+- chore(deps): update dependency typescript to v6 (#869) by @LNDS-Sysadmins in 9cb02f1c
+- chore(deps): bump dompurify from 3.3.2 to 3.4.0 in /documentation (#924) by @dependabot[bot] in 68e7372d
+- chore(deps): update actions/upload-pages-artifact action to v5 (#909) by @LNDS-Sysadmins in 3db5aebd
+- chore: update modify discovery.yml to change URL type to array (#923) by @Kacem Bechka in 1dbbbade
+- chore(deps): bump follow-redirects in /documentation (#922) by @dependabot[bot] in 1aded2e7
+- Remove useless validation check by @Alessandro in 13eb60ea
+- chore(deps): bump follow-redirects from 1.15.11 to 1.16.0 (#914) by @dependabot[bot] in 074fcf7b
+- doc: update CHANGELOG.md for v1.6.11 (#918) by @github-actions[bot] in 65d9c79d
+
+
+### Fixed
+- fix security issue by @Alessandro in 126df7c8
+- fix format by @Alessandro in 3a457fd4
+- fix download by @Alessandro in 0993fa07
+- fix format by @Alessandro in 3d5892ea
+- format fix by @Alessandro in 72c90588
+
+
+### Removed
+- remove baseIRI as isn't necessary concatenate by @Alessandro in 01789e3d
+
+
 ## [v1.6.11] - 2026-04-14
 
 ### Added

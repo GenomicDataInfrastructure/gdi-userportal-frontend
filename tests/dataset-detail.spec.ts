@@ -57,6 +57,22 @@ test("Dataset detail renders metadata and distributions", async ({ page }) => {
     page.getByRole("heading", { name: /dataset dictionary/i })
   ).toBeVisible();
 
+  await expect(
+    page.getByRole("heading", { name: /data series/i })
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /synthetic cohort series/i })
+  ).toBeVisible();
+  await page.getByRole("link", { name: /synthetic cohort series/i }).click();
+  await expect(page).toHaveURL(/\/datasets\/series-001$/);
+  await expect(
+    page.getByRole("heading", { name: /synthetic cohort series/i })
+  ).toBeVisible();
+  await page.goBack();
+  await expect(
+    page.getByRole("heading", { name: /cancer cohort study/i })
+  ).toBeVisible();
+
   await expect(page.getByText("Clinical CSV Export")).toBeVisible();
   await page.getByText("Clinical CSV Export").click();
   await expect(

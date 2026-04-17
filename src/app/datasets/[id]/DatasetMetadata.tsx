@@ -25,6 +25,7 @@ import {
   faChartBar,
   faCode,
   faLink,
+  faLayerGroup,
   faInfoCircle,
   faUserShield,
   faNoteSticky,
@@ -33,6 +34,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
 import DistributionAccordion from "./DistributionAccordion";
+import DataSeriesAccordion from "./DataSeriesAccordion";
 import Link from "next/link";
 import Tooltip from "./Tooltip";
 import Chips from "@/components/Chips";
@@ -267,6 +269,23 @@ const DatasetMetadata = ({
                   : `${dataset.distributions.length} Distributions`}
               </span>
               <Tooltip message="Number of distributions available for the dataset." />
+            </span>
+          </>
+        )}
+        {dataset.inSeries && dataset.inSeries.length > 0 && (
+          <>
+            <div className="text-lightaccent hidden sm:inline-block">|</div>
+            <span className="flex gap-2 items-center relative group">
+              <FontAwesomeIcon
+                icon={faLayerGroup}
+                className="align-middle text-primary"
+              />
+              <span className="align-middle">
+                {dataset.inSeries.length === 1
+                  ? "1 Dataset series"
+                  : `${dataset.inSeries.length} Dataset series`}
+              </span>
+              <Tooltip message="Number of dataset series this dataset belongs to." />
             </span>
           </>
         )}
@@ -834,10 +853,16 @@ const DatasetMetadata = ({
         </MetadataSection>
       )}
 
+      {dataset.inSeries && dataset.inSeries.length > 0 && (
+        <MetadataSection title="Data Series" icon={faLayerGroup}>
+          <DataSeriesAccordion series={dataset.inSeries} />
+        </MetadataSection>
+      )}
+
       {dataset.distributions && dataset.distributions.length > 0 && (
-        <div className="mt-4">
+        <MetadataSection title="Distributions" icon={faFile}>
           <DistributionAccordion distributions={dataset.distributions} />
-        </div>
+        </MetadataSection>
       )}
     </>
   );

@@ -35,11 +35,11 @@ The best way to understand how to add an API endpoint is to examine existing imp
 
 Based on the [metadata fields guide](/developer-guide/add-metadata-fields#discovery-service):
 
-1. Update the OpenAPI definition in `src/main/openapi/` folder
-2. Regenerate code: `mvn clean compile`
-3. Implement or update the business logic and mapping
-4. Update test cases
-5. Verify with automated testing: `mvn test`
-6. View documentation at `http://localhost:8080/q/swagger-ui/`
+1. Update the OpenAPI definition in `src/main/openapi/` folder.
+2. Regenerate code: `mvn clean compile`.
+3. Implement or update the business logic and mapping.
+4. Update test cases.
+5. Verify with automated testing: `mvn test`.
+6. View documentation at `http://localhost:8080/q/swagger-ui/`.
 
 For specific implementation patterns and detailed steps, refer to existing endpoints in the codebase and the metadata fields guide.

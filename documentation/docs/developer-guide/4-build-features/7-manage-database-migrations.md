@@ -12,11 +12,15 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Manage database migrations
 
-Create and apply database schema changes across environments with Flyway for Java/Quarkus services and Alembic for CKAN. 
+Create and apply database schema changes across environments. GDI uses different migration tools depending on the component.
 
-Database migrations manage schema changes across environments. GDI uses:
-- **Flyway** for Java/Quarkus services
-- **Alembic** for CKAN
+In this guide
+
+> [Flyway migrations (DDS/AMS)](#flyway-migrations-ddsams)  
+> [CKAN migrations](#ckan-migrations)  
+> [CKAN labels](#ckan-labels)
+
+<!-- TODO: Add REMS migrations to guide outline once information is available -->
 
 ## Flyway migrations (DDS/AMS)
 
@@ -31,7 +35,7 @@ CREATE TABLE examples (
 );
 ```
 
-Apply on startup automatically or via:
+Flyway applies migrations automatically on startup, or run manually via:
 
 ```bash
 ./mvnw flyway:migrate
@@ -40,5 +44,31 @@ Apply on startup automatically or via:
 ## CKAN migrations
 
 See [CKAN documentation<sup>↗</sup>](https://docs.ckan.org/en/2.9/contributing/database-migrations.html) for Alembic migrations.
+
+## CKAN labels
+
+CKAN labels use a versioned migration system for managing term translations in the `term_translation` table. 
+
+The extension stores migrations in `ckanext/gdi_userportal/migrations/versions/` and runs them automatically on container startup.
+
+**Check migration status:**
+
+```bash
+ckan gdi-userportal translations status
+```
+
+**Run migrations manually:**
+
+```bash
+ckan gdi-userportal translations migrate
+```
+
+For detailed documentation, see [term_translation_migrations.md<sup>↗</sup>](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-gdi-userportal/blob/main/docs/term_translation_migrations.md) in the [gdi-userportal-ckanext-gdi-userportal<sup>↗</sup>](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-gdi-userportal) repository.
+
+<!--
+## REMS migrations
+
+TODO: Pending information from reviewers
+-->
 
 

@@ -67,4 +67,3 @@ const apiKey = process.env.API_KEY;
 - Validate JWT tokens
 - Implement rate limiting
 
-See [Implement authentication](/developer-guide/implement-authentication) for OIDC integration details.

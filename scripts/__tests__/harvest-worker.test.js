@@ -79,6 +79,31 @@ describe("harvest-worker", () => {
     );
   });
 
+  test("triggerHarvest adds the harvest TLS dispatcher", async () => {
+    const fetchImpl = jest.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      statusText: "OK",
+      text: jest.fn().mockResolvedValue('{"count":12}'),
+    });
+
+    await triggerHarvest(
+      {
+        apiUrl: "https://frontend.example/api/discovery/harvest",
+        sourceUrl: "https://example.org/catalogue.rdf",
+        secret: "top-secret",
+      },
+      { fetchImpl }
+    );
+
+    expect(fetchImpl).toHaveBeenCalledWith(
+      "https://frontend.example/api/discovery/harvest",
+      expect.objectContaining({
+        dispatcher: expect.anything(),
+      })
+    );
+  });
+
   test("triggerHarvest surfaces API response failures", async () => {
     const fetchImpl = jest.fn().mockResolvedValue({
       ok: false,

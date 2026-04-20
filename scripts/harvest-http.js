@@ -2,7 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+const { Agent } = require("undici");
+
 const HARVEST_REQUEST_TIMEOUT_MS = 600000;
+const harvestDispatcher = new Agent({
+  connect: { rejectUnauthorized: false },
+});
 
 function buildHarvestApiUrl(baseUrl) {
   return `${String(baseUrl).replace(/\/+$/, "")}/api/discovery/harvest`;
@@ -81,6 +86,7 @@ async function requestHarvest(
       },
       body: JSON.stringify({ url: sourceUrl }),
       signal: timeoutController.signal,
+      dispatcher: harvestDispatcher,
     });
   } catch (error) {
     throw new Error(

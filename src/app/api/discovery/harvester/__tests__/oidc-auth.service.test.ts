@@ -78,12 +78,38 @@ describe("OidcAuthService", () => {
     const headers = await service.getAuthorizationHeaderIfConfigured();
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(fetchMock).toHaveBeenCalledWith("https://id.example/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: "grant_type=client_credentials&client_id=client-id&client_secret=client-secret",
-    });
+    expect(fetchMock).toHaveBeenCalledWith(
+      "https://id.example/token",
+      expect.objectContaining({
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "grant_type=client_credentials&client_id=client-id&client_secret=client-secret",
+        dispatcher: expect.anything(),
+      })
+    );
     expect(headers).toEqual({ Authorization: "Bearer token-123" });
+  });
+
+  test("adds the harvest TLS dispatcher", async () => {
+    process.env.HARVEST_OIDC_TOKEN_URL = "https://id.example/token";
+    process.env.HARVEST_OIDC_CLIENT_ID = "client-id";
+    process.env.HARVEST_OIDC_CLIENT_SECRET = "client-secret";
+
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ access_token: "token-123", expires_in: 3600 }),
+    } as Response);
+
+    const service = new OidcAuthService();
+    await service.getAuthorizationHeaderIfConfigured();
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      "https://id.example/token",
+      expect.objectContaining({
+        method: "POST",
+        dispatcher: expect.anything(),
+      })
+    );
   });
 
   test("reuses cached token while it is still valid", async () => {

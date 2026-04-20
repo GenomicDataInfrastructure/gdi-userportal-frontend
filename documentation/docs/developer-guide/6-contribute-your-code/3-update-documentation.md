@@ -51,8 +51,8 @@ int retentionYears = calculateRetention(dataset.getSensitivityLevel());
 GDI uses API-first development. API contracts are defined in OpenAPI YAML files located in `src/main/openapi/` before implementation.
 
 **For details on working with OpenAPI specifications:**
-- [Add metadata fields](/developer-guide/add-metadata-fields#discovery-service) - Shows the complete OpenAPI workflow including updating YAML files and regenerating code
-- [Add API endpoint](/developer-guide/add-api-endpoint) - General guidance on API development
+- **[Add metadata fields](/developer-guide/add-metadata-fields#discovery-service):** Shows the complete OpenAPI workflow including updating YAML files and regenerating code.
+- **[Add API endpoint](/developer-guide/add-api-endpoint):** General guidance on API development.
 
 View generated API documentation at `http://localhost:8080/q/swagger-ui/` during development.
 

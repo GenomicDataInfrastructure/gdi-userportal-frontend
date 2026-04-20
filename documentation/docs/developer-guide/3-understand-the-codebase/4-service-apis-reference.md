@@ -19,24 +19,24 @@ The GDI platform services communicate via REST APIs. Each service exposes OpenAP
 Explore the APIs of the different services in the GDI platform for dataset management:
 
 ### Dataset Discovery Service (DDS)
-- **Base URL**: `http://localhost:8080`
-- **OpenAPI**: `http://localhost:8080/q/swagger-ui/`
+- **OpenAPI**: Access at `<base-url>/q/swagger-ui/`
+- **Example:** `http://localhost:8080/q/swagger-ui/` for local development
 - **Endpoints**:
   - `GET /api/v1/datasets`: Search datasets
   - `GET /api/v1/datasets/{id}`: Retrieve dataset details
   - `GET /api/v1/facets`: Get available search facets
 
 ### Access Management Service (AMS)
-- **Base URL**: `http://localhost:8081`
-- **OpenAPI**: `http://localhost:8081/q/swagger-ui/`
+- **OpenAPI**: Access at `<base-url>/q/swagger-ui/` 
+- **Example:** `http://localhost:8081/q/swagger-ui/` for local development
 - **Endpoints**:
   - `POST /api/v1/applications`: Create access request application
   - `GET /api/v1/applications`: List user's applications
   - `GET /api/v1/applications/{id}`: Retrieve application status
 
 ### CKAN API
-- **Base URL**: `http://localhost:5000`
-- **Documentation**: https://docs.ckan.org/en/latest/api/
+- **Documentation**: https://docs.ckan.org/en/latest/api/ (access at `<ckan-base-url>/api/3/action/`
+- **Example:** `http://localhost:5000/api/3/action/` for local development
 - **Endpoints**:
   - `GET /api/3/action/package_search`: Search datasets
   - `GET /api/3/action/package_show`: Get dataset details

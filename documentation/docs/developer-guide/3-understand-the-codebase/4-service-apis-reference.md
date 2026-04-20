@@ -22,25 +22,25 @@ Explore the APIs of the different services in the GDI platform for dataset manag
 - **Base URL**: `http://localhost:8080`
 - **OpenAPI**: `http://localhost:8080/q/swagger-ui/`
 - **Endpoints**:
-  - `GET /api/v1/datasets` - Search datasets
-  - `GET /api/v1/datasets/{id}` - Retrieve dataset details
-  - `GET /api/v1/facets` - Get available search facets
+  - `GET /api/v1/datasets`: Search datasets
+  - `GET /api/v1/datasets/{id}`: Retrieve dataset details
+  - `GET /api/v1/facets`: Get available search facets
 
 ### Access Management Service (AMS)
 - **Base URL**: `http://localhost:8081`
 - **OpenAPI**: `http://localhost:8081/q/swagger-ui/`
 - **Endpoints**:
-  - `POST /api/v1/applications` - Create access request application
-  - `GET /api/v1/applications` - List user's applications
-  - `GET /api/v1/applications/{id}` - Retrieve application status
+  - `POST /api/v1/applications`: Create access request application
+  - `GET /api/v1/applications`: List user's applications
+  - `GET /api/v1/applications/{id}`: Retrieve application status
 
 ### CKAN API
 - **Base URL**: `http://localhost:5000`
 - **Documentation**: https://docs.ckan.org/en/latest/api/
 - **Endpoints**:
-  - `GET /api/3/action/package_search` - Search datasets
-  - `GET /api/3/action/package_show` - Get dataset details
-  - `POST /api/3/action/package_create` - Create dataset (auth required)
+  - `GET /api/3/action/package_search`: Search datasets
+  - `GET /api/3/action/package_show`: Get dataset details
+  - `POST /api/3/action/package_create`: Create dataset (auth required)
 
 ## Authentication
 

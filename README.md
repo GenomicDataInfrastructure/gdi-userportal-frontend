@@ -81,12 +81,52 @@ To trigger a DCAT harvest from CLI:
 npm run harvest:dcat -- --url https://letzdata.public.lu/content/dam/dga/ctie/c/catalogue.rdf
 ```
 
+The `harvest:dcat` command calls the server route at
+`/api/discovery/harvest`. That route is protected with
+`HARVEST_INTERNAL_SECRET`, so set the secret in the app container and in the
+CLI environment before running it. It uses `http://localhost:3000` by default,
+or `HARVEST_BASE_URL` if you need to point it somewhere else.
+
 If the DCAT URL is protected by OIDC client-credentials, set:
 
 ```bash
 HARVEST_OIDC_TOKEN_URL=<oidc-token-endpoint>
 HARVEST_OIDC_CLIENT_ID=<client-id>
 HARVEST_OIDC_CLIENT_SECRET=<client-secret>
+```
+
+## Scheduled harvesting worker
+
+For recurring harvesting in a container, use the built-in worker process:
+
+```bash
+npm run harvest:worker
+```
+
+The worker uses `node-cron` and calls `/api/discovery/harvest`. It is meant to
+run as a separate container from the same image while the main app container
+serves the endpoint.
+
+Required environment variables:
+
+```bash
+HARVEST_SOURCE_URL=https://example.org/catalogue.rdf
+HARVEST_INTERNAL_SECRET=<shared-secret>
+HARVEST_SCHEDULE=0 * * * *
+```
+
+Optional for local host-based worker runs:
+
+```bash
+HARVEST_BASE_URL=http://localhost:3000
+```
+
+For a single manual run through the same internal flow:
+
+```bash
+npm run harvest:dcat -- \
+  --url https://example.org/catalogue.rdf \
+  --secret <shared-secret>
 ```
 
 ## Modifying Open API Specifications

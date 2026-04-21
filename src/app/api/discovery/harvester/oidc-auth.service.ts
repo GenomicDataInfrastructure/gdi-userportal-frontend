@@ -6,6 +6,7 @@ import {
   formatErrorDetails,
   wrapError,
 } from "@/app/api/discovery/harvester/error-utils";
+import { buildHarvestRequestInit } from "@/app/api/discovery/harvester/fetch-options";
 
 type OidcTokenResponse = {
   access_token: string;
@@ -56,13 +57,16 @@ export class OidcAuthService {
 
     let response: Response;
     try {
-      response = await fetch(tokenUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: body.toString(),
-      });
+      response = await fetch(
+        tokenUrl,
+        buildHarvestRequestInit({
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: body.toString(),
+        })
+      );
     } catch (error) {
       throw wrapError(
         `Failed to retrieve OIDC access token from ${tokenUrl}: ${formatErrorDetails(error)}`,

@@ -14,18 +14,22 @@ jest.mock("@/app/api/discovery/local-index", () => ({
 import { POST } from "@/app/api/discovery/harvest/route";
 
 describe("POST /api/discovery/harvest", () => {
-  const originalNodeEnv = process.env.NODE_ENV;
+  const originalSecret = process.env.HARVEST_INTERNAL_SECRET;
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   afterAll(() => {
-    (process.env as any).NODE_ENV = originalNodeEnv;
+    if (originalSecret === undefined) {
+      delete process.env.HARVEST_INTERNAL_SECRET;
+    } else {
+      process.env.HARVEST_INTERNAL_SECRET = originalSecret;
+    }
   });
 
-  test("returns 404 outside development", async () => {
-    (process.env as any).NODE_ENV = "production";
+  test("returns 404 when the shared secret is not configured", async () => {
+    delete process.env.HARVEST_INTERNAL_SECRET;
 
     const response = await POST(
       new Request("http://localhost/api/discovery/harvest", {
@@ -38,12 +42,29 @@ describe("POST /api/discovery/harvest", () => {
     await expect(response.json()).resolves.toEqual({ error: "Not found" });
   });
 
-  test("returns 400 when url is missing", async () => {
-    (process.env as any).NODE_ENV = "development";
+  test("returns 401 when the provided secret is missing", async () => {
+    process.env.HARVEST_INTERNAL_SECRET = "top-secret";
 
     const response = await POST(
       new Request("http://localhost/api/discovery/harvest", {
         method: "POST",
+        body: JSON.stringify({ url: "https://example.org/catalogue.rdf" }),
+      })
+    );
+
+    expect(response.status).toBe(401);
+    await expect(response.json()).resolves.toEqual({ error: "Unauthorized" });
+  });
+
+  test("returns 400 when url is missing", async () => {
+    process.env.HARVEST_INTERNAL_SECRET = "top-secret";
+
+    const response = await POST(
+      new Request("http://localhost/api/discovery/harvest", {
+        method: "POST",
+        headers: {
+          "x-harvest-secret": "top-secret",
+        },
         body: JSON.stringify({}),
       })
     );
@@ -55,12 +76,15 @@ describe("POST /api/discovery/harvest", () => {
   });
 
   test("returns 200 with count when harvest succeeds", async () => {
-    (process.env as any).NODE_ENV = "development";
+    process.env.HARVEST_INTERNAL_SECRET = "top-secret";
     mockHarvestLocalIndexFromDcatUrlApi.mockResolvedValueOnce(12);
 
     const response = await POST(
       new Request("http://localhost/api/discovery/harvest", {
         method: "POST",
+        headers: {
+          authorization: "Bearer top-secret",
+        },
         body: JSON.stringify({ url: "https://example.org/catalogue.rdf" }),
       })
     );
@@ -73,7 +97,7 @@ describe("POST /api/discovery/harvest", () => {
   });
 
   test("returns 500 with error message when harvest throws", async () => {
-    (process.env as any).NODE_ENV = "development";
+    process.env.HARVEST_INTERNAL_SECRET = "top-secret";
     mockHarvestLocalIndexFromDcatUrlApi.mockRejectedValueOnce(
       new Error("harvest failed")
     );
@@ -81,6 +105,9 @@ describe("POST /api/discovery/harvest", () => {
     const response = await POST(
       new Request("http://localhost/api/discovery/harvest", {
         method: "POST",
+        headers: {
+          "x-harvest-secret": "top-secret",
+        },
         body: JSON.stringify({ url: "https://example.org/catalogue.rdf" }),
       })
     );

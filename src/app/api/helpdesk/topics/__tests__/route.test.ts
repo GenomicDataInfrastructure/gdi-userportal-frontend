@@ -47,4 +47,17 @@ describe("GET /api/helpdesk/topics", () => {
       error: "broken config",
     });
   });
+
+  test("stringifies non-Error failures", async () => {
+    mockGetHelpdeskTopicOptions.mockImplementationOnce(() => {
+      throw "broken as string";
+    });
+
+    const response = await GET();
+
+    expect(response.status).toBe(500);
+    await expect(response.json()).resolves.toEqual({
+      error: "broken as string",
+    });
+  });
 });

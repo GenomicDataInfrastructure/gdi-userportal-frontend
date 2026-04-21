@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import { z } from "zod";
+
 export type HelpdeskTopicRouting = {
   value: string;
   label: string;
@@ -19,8 +21,7 @@ const DEFAULT_HELPDESK_TOPIC_ROUTING: HelpdeskTopicRouting[] = [
     zammadGroup: "Users",
   },
 ];
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_SCHEMA = z.string().email();
 
 function assertNonEmptyString(value: unknown, fieldName: string): string {
   if (typeof value !== "string" || value.trim().length === 0) {
@@ -48,7 +49,7 @@ function parseHelpdeskTopicRoutingEntry(
     "recipientEmail"
   );
 
-  if (!EMAIL_REGEX.test(recipientEmail)) {
+  if (!EMAIL_SCHEMA.safeParse(recipientEmail).success) {
     throw new Error(
       `Invalid recipientEmail for HELPDESK_TOPIC_ROUTING entry "${value}".`
     );

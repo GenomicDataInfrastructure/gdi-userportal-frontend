@@ -9,12 +9,14 @@ describe("createZammadTicket", () => {
   const originalBaseUrl = process.env.HELPDESK_ZAMMAD_URL;
   const originalApiToken = process.env.HELPDESK_ZAMMAD_API_TOKEN;
   const originalDefaultGroup = process.env.HELPDESK_ZAMMAD_DEFAULT_GROUP;
+  const originalTlsInsecure = process.env.HELPDESK_ZAMMAD_TLS_INSECURE;
   const originalFetch = global.fetch;
 
   beforeEach(() => {
     process.env.HELPDESK_ZAMMAD_URL = "http://localhost:8080";
     process.env.HELPDESK_ZAMMAD_API_TOKEN = "test-token";
     process.env.HELPDESK_ZAMMAD_DEFAULT_GROUP = "Users";
+    process.env.HELPDESK_ZAMMAD_TLS_INSECURE = "false";
   });
 
   afterEach(() => {
@@ -23,6 +25,7 @@ describe("createZammadTicket", () => {
     process.env.HELPDESK_ZAMMAD_URL = originalBaseUrl;
     process.env.HELPDESK_ZAMMAD_API_TOKEN = originalApiToken;
     process.env.HELPDESK_ZAMMAD_DEFAULT_GROUP = originalDefaultGroup;
+    process.env.HELPDESK_ZAMMAD_TLS_INSECURE = originalTlsInsecure;
   });
 
   test("uses customer_id guess to allow unknown sender emails", async () => {
@@ -242,5 +245,154 @@ describe("createZammadTicket", () => {
     ).rejects.toThrow(
       'Zammad ticket creation failed with status 422: {"error":"No lookup value found"}'
     );
+  });
+
+  test("throws clear connectivity guidance when fetch throws", async () => {
+    const fetchMock = jest
+      .fn<typeof fetch>()
+      .mockRejectedValueOnce(new Error("certificate has expired"));
+    global.fetch = fetchMock as typeof fetch;
+
+    await expect(
+      createZammadTicket({
+        title: "Portal issue",
+        firstName: "Safe",
+        lastName: "User",
+        email: "safe@lnds.lu",
+        topicLabel: "General inquiry",
+        topicValue: "general",
+        recipientEmail: "bechkal198@gmail.com",
+        message: "I cannot see datasets",
+      })
+    ).rejects.toThrow(
+      "If this host uses an internal/self-signed certificate, set HELPDESK_ZAMMAD_TLS_INSECURE=true."
+    );
+  });
+
+  test("mentions disabled TLS verification when configured insecure", async () => {
+    process.env.HELPDESK_ZAMMAD_URL = "https://zammad.example.org";
+    process.env.HELPDESK_ZAMMAD_TLS_INSECURE = "true";
+
+    const fetchMock = jest
+      .fn<typeof fetch>()
+      .mockRejectedValueOnce(new Error("fetch failed"));
+    global.fetch = fetchMock as typeof fetch;
+
+    await expect(
+      createZammadTicket({
+        title: "Portal issue",
+        firstName: "Safe",
+        lastName: "User",
+        email: "safe@lnds.lu",
+        topicLabel: "General inquiry",
+        topicValue: "general",
+        recipientEmail: "bechkal198@gmail.com",
+        message: "I cannot see datasets",
+      })
+    ).rejects.toThrow(
+      "TLS verification is disabled via HELPDESK_ZAMMAD_TLS_INSECURE=true."
+    );
+  });
+
+  test("handles non-JSON success response from ticket create", async () => {
+    const fetchMock = jest.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      status: 201,
+      text: async () => "<html>ok</html>",
+    } as Response);
+    global.fetch = fetchMock as typeof fetch;
+
+    await expect(
+      createZammadTicket({
+        title: "Portal issue",
+        firstName: "Safe",
+        lastName: "User",
+        email: "safe@lnds.lu",
+        topicLabel: "General inquiry",
+        topicValue: "general",
+        recipientEmail: "bechkal198@gmail.com",
+        message: "I cannot see datasets",
+      })
+    ).rejects.toThrow("response was not valid JSON");
+  });
+
+  test("throws fallback failure when fallback ticket creation fails", async () => {
+    const fetchMock = jest
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        text: async () =>
+          `{"error":"No email address found for group 'Users' (1)"}`,
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 503,
+        text: async () => '{"error":"service unavailable"}',
+      } as Response);
+    global.fetch = fetchMock as typeof fetch;
+
+    await expect(
+      createZammadTicket({
+        title: "Portal issue",
+        firstName: "Safe",
+        lastName: "User",
+        email: "safe@lnds.lu",
+        topicLabel: "General inquiry",
+        topicValue: "general",
+        recipientEmail: "bechkal198@gmail.com",
+        message: "I cannot see datasets",
+      })
+    ).rejects.toThrow(
+      'Zammad ticket creation failed with status 503: {"error":"service unavailable"}'
+    );
+  });
+
+  test("does not fail when user profile sync request fails", async () => {
+    const fetchMock = jest
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 201,
+        text: async () => '{"id":80,"customer_id":40}',
+      } as Response)
+      .mockRejectedValueOnce(new Error("user update failed"));
+    global.fetch = fetchMock as typeof fetch;
+
+    await expect(
+      createZammadTicket({
+        title: "Portal issue",
+        firstName: "Safe",
+        lastName: "User",
+        email: "safe@lnds.lu",
+        topicLabel: "General inquiry",
+        topicValue: "general",
+        recipientEmail: "bechkal198@gmail.com",
+        message: "I cannot see datasets",
+      })
+    ).resolves.toEqual({ ticketId: 80 });
+  });
+
+  test("skips profile sync when ticket response has no customer_id", async () => {
+    const fetchMock = jest.fn<typeof fetch>().mockResolvedValueOnce({
+      ok: true,
+      status: 201,
+      text: async () => '{"id":81}',
+    } as Response);
+    global.fetch = fetchMock as typeof fetch;
+
+    const result = await createZammadTicket({
+      title: "Portal issue",
+      firstName: "Safe",
+      lastName: "User",
+      email: "safe@lnds.lu",
+      topicLabel: "General inquiry",
+      topicValue: "general",
+      recipientEmail: "bechkal198@gmail.com",
+      message: "I cannot see datasets",
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(result).toEqual({ ticketId: 81 });
   });
 });

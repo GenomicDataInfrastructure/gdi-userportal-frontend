@@ -4,6 +4,7 @@
 
 import { getHelpdeskTopicByValue } from "@/app/api/helpdesk/config";
 import { createZammadTicket } from "@/app/api/helpdesk/zammad";
+import { z } from "zod";
 
 type ContactRequestBody = {
   firstName?: string;
@@ -14,9 +15,9 @@ type ContactRequestBody = {
   message?: string;
 };
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_TITLE_LENGTH = 160;
 const MAX_MESSAGE_LENGTH = 4000;
+const EMAIL_SCHEMA = z.string().email();
 
 export async function POST(request: Request) {
   try {
@@ -50,7 +51,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!EMAIL_REGEX.test(email)) {
+    if (!EMAIL_SCHEMA.safeParse(email).success) {
       return Response.json(
         { error: 'Field "email" must be a valid email address' },
         { status: 400 }

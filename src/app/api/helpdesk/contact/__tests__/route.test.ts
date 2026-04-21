@@ -66,6 +66,148 @@ describe("POST /api/helpdesk/contact", () => {
     });
   });
 
+  test("returns 400 if lastName is missing", async () => {
+    const response = await POST(
+      new Request("http://localhost/api/helpdesk/contact", {
+        method: "POST",
+        body: JSON.stringify({
+          firstName: "John",
+          email: "john@example.org",
+          topic: "general",
+          title: "Need support",
+          message: "Help",
+        }),
+      })
+    );
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toEqual({
+      error: 'Missing required field "lastName"',
+    });
+  });
+
+  test("returns 400 if email is missing", async () => {
+    const response = await POST(
+      new Request("http://localhost/api/helpdesk/contact", {
+        method: "POST",
+        body: JSON.stringify({
+          firstName: "John",
+          lastName: "Doe",
+          topic: "general",
+          title: "Need support",
+          message: "Help",
+        }),
+      })
+    );
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toEqual({
+      error: 'Missing required field "email"',
+    });
+  });
+
+  test("returns 400 if topic is missing", async () => {
+    const response = await POST(
+      new Request("http://localhost/api/helpdesk/contact", {
+        method: "POST",
+        body: JSON.stringify({
+          firstName: "John",
+          lastName: "Doe",
+          email: "john@example.org",
+          title: "Need support",
+          message: "Help",
+        }),
+      })
+    );
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toEqual({
+      error: 'Missing required field "topic"',
+    });
+  });
+
+  test("returns 400 if title is missing", async () => {
+    const response = await POST(
+      new Request("http://localhost/api/helpdesk/contact", {
+        method: "POST",
+        body: JSON.stringify({
+          firstName: "John",
+          lastName: "Doe",
+          email: "john@example.org",
+          topic: "general",
+          message: "Help",
+        }),
+      })
+    );
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toEqual({
+      error: 'Missing required field "title"',
+    });
+  });
+
+  test("returns 400 if title is too long", async () => {
+    const response = await POST(
+      new Request("http://localhost/api/helpdesk/contact", {
+        method: "POST",
+        body: JSON.stringify({
+          firstName: "John",
+          lastName: "Doe",
+          email: "john@example.org",
+          topic: "general",
+          title: "A".repeat(161),
+          message: "Help",
+        }),
+      })
+    );
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toEqual({
+      error: 'Field "title" must not exceed 160 characters',
+    });
+  });
+
+  test("returns 400 if message is missing", async () => {
+    const response = await POST(
+      new Request("http://localhost/api/helpdesk/contact", {
+        method: "POST",
+        body: JSON.stringify({
+          firstName: "John",
+          lastName: "Doe",
+          email: "john@example.org",
+          topic: "general",
+          title: "Need support",
+        }),
+      })
+    );
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toEqual({
+      error: 'Missing required field "message"',
+    });
+  });
+
+  test("returns 400 if message is too long", async () => {
+    const response = await POST(
+      new Request("http://localhost/api/helpdesk/contact", {
+        method: "POST",
+        body: JSON.stringify({
+          firstName: "John",
+          lastName: "Doe",
+          email: "john@example.org",
+          topic: "general",
+          title: "Need support",
+          message: "A".repeat(4001),
+        }),
+      })
+    );
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toEqual({
+      error: 'Field "message" must not exceed 4000 characters',
+    });
+  });
+
   test("returns 400 if topic is unknown", async () => {
     mockGetHelpdeskTopicByValue.mockReturnValueOnce(undefined);
 
@@ -158,6 +300,35 @@ describe("POST /api/helpdesk/contact", () => {
     expect(response.status).toBe(500);
     await expect(response.json()).resolves.toEqual({
       error: "Zammad unavailable",
+    });
+  });
+
+  test("returns generic 500 message when non-Error is thrown", async () => {
+    mockGetHelpdeskTopicByValue.mockReturnValueOnce({
+      value: "general",
+      label: "General inquiry",
+      recipientEmail: "helpdesk@example.org",
+      zammadGroup: "Users",
+    });
+    mockCreateZammadTicket.mockRejectedValueOnce("boom");
+
+    const response = await POST(
+      new Request("http://localhost/api/helpdesk/contact", {
+        method: "POST",
+        body: JSON.stringify({
+          firstName: "John",
+          lastName: "Doe",
+          email: "john@example.org",
+          topic: "general",
+          title: "Need support",
+          message: "Help",
+        }),
+      })
+    );
+
+    expect(response.status).toBe(500);
+    await expect(response.json()).resolves.toEqual({
+      error: "Unexpected helpdesk dispatch error",
     });
   });
 });

@@ -19,6 +19,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import contentConfig from "@/config/contentConfig";
 import Link from "next/link";
+import ContactUsModal from "@/components/ContactUsModal";
 
 function Footer() {
   return (
@@ -198,6 +199,7 @@ function Footer() {
                 {contentConfig.email}
               </a>
             )}
+            {contentConfig.contactUsEnabled && <ContactUsModal />}
           </div>
         </div>
       </footer>

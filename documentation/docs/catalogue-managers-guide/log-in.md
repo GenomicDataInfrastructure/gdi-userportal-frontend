@@ -6,16 +6,20 @@ sidebar_position: 2
 
 # Log in to the GDI Data Catalogue
 
-Access the GDI Dataset Catalogue to manage your organisation's genomic datasets. You need an active account with appropriate permissions to perform catalogue management tasks.
+Access the GDI Dataset Catalogue to manage your organisation's genomic datasets. 
 
-To log in:
+:::tip Need an account?
 
-1. Open the Dataset Catalogue at [https://catalogue.portal.gdi.lu](https://catalogue.portal.gdi.lu)
+You need an active account with admin permissions to perform catalogue management tasks. To register for an account, contact the [LNDS Service Desk](https://service.desk.lnds.lu/)<sup>↗</sup>.
+
+:::
+
+<br/>
+
+**To log in:**
+
+1. Open the GDI Dataset Catalogue at [https://catalogue.portal.gdi.lu](https://catalogue.portal.gdi.lu).
 
 2. Select **Log in** in the top-right corner of the page.
 
-3. Select LSAAI as your sign-in method.
-
-4. Select your account provider: Search for your institution in the search bar, or select from the list of options (LinkedIn, Apple, Google, ORCID, GitHub).
-
-5. Follow the instructions to sign in with your selected account. If it's your first time signing in, you may need to verify your email address. After you sign in, the Catalogue Portal homepage opens and you can start managing datasets.
+3. Enter the credentials you used when registering with the LNDS Service Desk. If it's your first time signing in, you may need to verify your email address.

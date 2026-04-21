@@ -29,8 +29,7 @@ The diagram below shows how data flows from external sources through the GDI Dat
 flowchart LR
     subgraph sources["External data sources"]
         fdp["FAIR data points"]
-        dcat["DCAT-AP endpoints"]
-        ckan["CKAN catalogues"]
+        dcat["HealthDCAT-AP endpoints"]
     end
 
     subgraph catalogue["**GDI Data Catalogue**"]
@@ -45,7 +44,6 @@ flowchart LR
 
     fdp -->|Harvest| harvester
     dcat -->|Harvest| harvester
-    ckan -->|Harvest| harvester
 
     harvester -->|Import <br/>& sync| datasets
     datasets -->|Publish <br/> public datasets| public
@@ -61,10 +59,15 @@ flowchart LR
 The GDI Data Catalogue can harvest from:
 
 - **FAIR Data Points:** Research data repositories that follow FAIR principles
-- **DCAT-AP endpoints:** European data portals using the DCAT-AP standard
-- **CKAN catalogues:** Other CKAN instances operated by partner organisations
+- **HealthDCAT-AP endpoints:** European data portals using the HealthDCAT-AP standard for health data
 
-[Learn how to add harvest sources →](./add-harvest-sources)
+:::info GDI platform compliance
+
+The GDI platform is HealthDCAT-AP compliant, following European standards for health data catalogues to ensure interoperability across the health data ecosystem.
+
+:::
+
+[Learn how to add harvest sources](./add-harvest-sources)
 
 ## How harvesting works
 

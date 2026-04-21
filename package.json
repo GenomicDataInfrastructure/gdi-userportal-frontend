@@ -84,7 +84,7 @@
     "sharp": "^0.34.2",
     "tailwind-merge": "^3.0.0",
     "tailwindcss-animate": "^1.0.7",
-    "undici": "^7.25.0",
+    "undici": "^8.0.0",
     "utils": "^0.2.2"
   },
   "devDependencies": {

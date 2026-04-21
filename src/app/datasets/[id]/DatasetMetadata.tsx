@@ -25,6 +25,7 @@ import {
   faChartBar,
   faCode,
   faLink,
+  faLayerGroup,
   faInfoCircle,
   faUserShield,
   faNoteSticky,
@@ -33,6 +34,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
 import DistributionAccordion from "./DistributionAccordion";
+import DataSeriesAccordion from "./DataSeriesAccordion";
 import Link from "next/link";
 import Tooltip from "./Tooltip";
 import Chips from "@/components/Chips";
@@ -82,7 +84,18 @@ const MetadataField = ({
 
 const NotProvided = () => <span className="text-primary">Not provided</span>;
 
-const isHealthDcatApCompatible = (dataset: RetrievedDataset): boolean => {
+type ExtendedRetrievedDataset = RetrievedDataset & {
+  publisherType?: ValueLabel[];
+  publisherNote?: string;
+  temporalCoverage?:
+    | RetrievedDataset["temporalCoverage"]
+    | { start?: string; end?: string };
+  analytics?: RetrievedDataset["analytics"] | string[];
+};
+
+const isHealthDcatApCompatible = (
+  dataset: ExtendedRetrievedDataset
+): boolean => {
   const healthDcatApIndicators = [
     dataset.healthTheme && dataset.healthTheme.length > 0,
     dataset.healthCategory && dataset.healthCategory.length > 0,
@@ -112,11 +125,20 @@ const DatasetMetadata = ({
   relationships,
   dictionary,
 }: {
-  dataset: RetrievedDataset;
+  dataset: ExtendedRetrievedDataset;
   relationships: DatasetRelationEntry[];
   dictionary: DatasetDictionaryEntry[];
 }) => {
   const [userTimezone, setUserTimezone] = useState<string | null>(null);
+  const temporalCoverage = Array.isArray(dataset.temporalCoverage)
+    ? dataset.temporalCoverage[0]
+    : dataset.temporalCoverage;
+  const analytics =
+    dataset.analytics
+      ?.map((entry) =>
+        typeof entry === "string" ? entry : entry.title || entry.description
+      )
+      .filter((entry): entry is string => Boolean(entry)) ?? [];
 
   useEffect(() => {
     try {
@@ -190,7 +212,7 @@ const DatasetMetadata = ({
                 {dataset.publishers.map((publisher, index) => (
                   <span key={publisher.name}>
                     <Link
-                      href={`/datasets?page=1&ckan-publisher_name=${publisher.name}`}
+                      href={`/datasets?page=1&ckan-publisherName=${publisher.name}`}
                     >
                       {publisher.name || "No title"}
                     </Link>
@@ -250,6 +272,23 @@ const DatasetMetadata = ({
             </span>
           </>
         )}
+        {dataset.inSeries && dataset.inSeries.length > 0 && (
+          <>
+            <div className="text-lightaccent hidden sm:inline-block">|</div>
+            <span className="flex gap-2 items-center relative group">
+              <FontAwesomeIcon
+                icon={faLayerGroup}
+                className="align-middle text-primary"
+              />
+              <span className="align-middle">
+                {dataset.inSeries.length === 1
+                  ? "1 Dataset series"
+                  : `${dataset.inSeries.length} Dataset series`}
+              </span>
+              <Tooltip message="Number of dataset series this dataset belongs to." />
+            </span>
+          </>
+        )}
         {dataset.dcatType && (
           <>
             <div className="text-lightaccent hidden sm:inline-block">|</div>
@@ -289,30 +328,27 @@ const DatasetMetadata = ({
         </div>
       )}
       {relationships && relationships.length > 0 && (
-        <div className="flex flex-col mt-4 space-y-2">
-          <div className="flex flex-col gap-1">
+        <MetadataSection title="Dataset Relations" icon={faLink}>
+          <div className="flex flex-col gap-3 text-sm">
             {relationships.map((relationship, index) => (
               <div
                 key={index}
-                className="inline-flex bg-[#EFFAFE] px-4 py-1 rounded-full text-gray font-medium text-[14px] group relative"
+                className="flex items-start gap-2 flex-wrap relative group"
               >
+                <span className="font-medium shrink-0 min-w-[140px]">
+                  {relationship.relation}:
+                </span>
                 <Link
                   href={`/@${dataset.publishers?.map((p) => p.name).join(",")}/${relationship.target}`}
-                  className="group-hover:text-red hover:font-bold"
+                  className="text-info hover:text-hover-color hover:underline break-all"
                 >
-                  <FontAwesomeIcon
-                    icon={faTag}
-                    className="align-middle text-primary"
-                  />
-                  <span className="align-middle">
-                    {relationship.relation}: {relationship.target}
-                  </span>
+                  Dataset
                 </Link>
-                <Tooltip message="Related dataset information." />
+                <Tooltip message="Link to related dataset." />
               </div>
             ))}
           </div>
-        </div>
+        </MetadataSection>
       )}
       {dictionary && dictionary.length > 0 && (
         <div className="mt-4">
@@ -435,8 +471,8 @@ const DatasetMetadata = ({
 
       {(isHealthDcatApCompatible(dataset) ||
         (dataset.spatialCoverage && dataset.spatialCoverage.length > 0) ||
-        (dataset.temporalCoverage &&
-          (dataset.temporalCoverage.start || dataset.temporalCoverage.end)) ||
+        (temporalCoverage &&
+          (temporalCoverage.start || temporalCoverage.end)) ||
         dataset.temporalResolution ||
         dataset.spatialResolutionInMeters !== undefined) && (
         <MetadataSection title="Coverage" icon={faGlobe}>
@@ -460,16 +496,15 @@ const DatasetMetadata = ({
               label="Temporal Coverage"
               tooltip="Time period covered by the data in this dataset."
             >
-              {dataset.temporalCoverage &&
-              (dataset.temporalCoverage.start ||
-                dataset.temporalCoverage.end) ? (
+              {temporalCoverage &&
+              (temporalCoverage.start || temporalCoverage.end) ? (
                 <>
-                  {dataset.temporalCoverage.start
-                    ? formatDate(dataset.temporalCoverage.start)
+                  {temporalCoverage.start
+                    ? formatDate(temporalCoverage.start)
                     : "N/A"}{" "}
                   -{" "}
-                  {dataset.temporalCoverage.end
-                    ? formatDate(dataset.temporalCoverage.end)
+                  {temporalCoverage.end
+                    ? formatDate(temporalCoverage.end)
                     : "Present"}
                 </>
               ) : (
@@ -565,6 +600,7 @@ const DatasetMetadata = ({
         dataset.publisherNote ||
         (dataset.publisherType && dataset.publisherType.length > 0) ||
         (dataset.hdab && dataset.hdab.length > 0) ||
+        (dataset.creators && dataset.creators.length > 0) ||
         dataset.trustedDataHolder !== undefined) && (
         <MetadataSection
           title="Publisher & Data Governance"
@@ -592,6 +628,29 @@ const DatasetMetadata = ({
                 <NotProvided />
               )}
               <Tooltip message="Type of organization publishing this dataset." />
+            </div>
+            <div className="flex items-center gap-2 flex-wrap relative group">
+              <FontAwesomeIcon
+                icon={faBuilding}
+                className="text-primary text-xs"
+              />
+              <span className="font-medium shrink-0">Creators:</span>
+              {dataset.creators && dataset.creators.length > 0 ? (
+                dataset.creators.map((agent, index) => (
+                  <span key={index} className="flex items-center gap-1">
+                    <span>
+                      {agent.name}
+                      {agent.email && (
+                        <span className="ml-1 text-info">({agent.email})</span>
+                      )}
+                    </span>
+                    {index < dataset.creators!.length - 1 && ","}
+                  </span>
+                ))
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Entities responsible for creating this dataset." />
             </div>
             <div className="flex items-center gap-2 relative group">
               <FontAwesomeIcon
@@ -778,13 +837,12 @@ const DatasetMetadata = ({
         </MetadataSection>
       )}
 
-      {(isHealthDcatApCompatible(dataset) ||
-        (dataset.analytics && dataset.analytics.length > 0)) && (
+      {(isHealthDcatApCompatible(dataset) || analytics.length > 0) && (
         <MetadataSection title="Analytics" icon={faChartBar}>
           <div className="relative group">
-            {dataset.analytics && dataset.analytics.length > 0 ? (
+            {analytics.length > 0 ? (
               <Chips
-                chips={dataset.analytics}
+                chips={analytics}
                 className="bg-primary/10 text-primary rounded-full py-1"
               />
             ) : (
@@ -795,10 +853,16 @@ const DatasetMetadata = ({
         </MetadataSection>
       )}
 
+      {dataset.inSeries && dataset.inSeries.length > 0 && (
+        <MetadataSection title="Data Series" icon={faLayerGroup}>
+          <DataSeriesAccordion series={dataset.inSeries} />
+        </MetadataSection>
+      )}
+
       {dataset.distributions && dataset.distributions.length > 0 && (
-        <div className="mt-4">
+        <MetadataSection title="Distributions" icon={faFile}>
           <DistributionAccordion distributions={dataset.distributions} />
-        </div>
+        </MetadataSection>
       )}
     </>
   );

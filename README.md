@@ -50,24 +50,24 @@ You can switch the server-side discovery adapter via environment variables in `.
 - `DISCOVERY_PROVIDER=dds` uses the current DDS backend behavior.
 - `DISCOVERY_PROVIDER=local-index` uses the local index adapter.
 
-If you choose the local index adapter with Elasticsearch, set:
+If you choose the local index adapter with OpenSearch, set:
 
 ```bash
 DISCOVERY_PROVIDER=local-index
-LOCAL_DISCOVERY_STORE=elasticsearch
-ELASTICSEARCH_URL=https://localhost:9200
-ELASTICSEARCH_DISCOVERY_INDEX=discovery_datasets
-ELASTICSEARCH_USERNAME=elastic
-ELASTICSEARCH_PASSWORD=<your-password>
-ELASTICSEARCH_TLS_INSECURE=true
+OPENSEARCH_URL=https://localhost:9200
+OPENSEARCH_DISCOVERY_INDEX=discovery_datasets
+OPENSEARCH_USERNAME=admin
+OPENSEARCH_PASSWORD=<your-password>
+OPENSEARCH_TLS_INSECURE=true
 ```
 
-To run Elasticsearch locally:
+To run OpenSearch locally:
 
 ```bash
-docker network create elastic
-docker run --name es01 --net elastic -p 9200:9200 -it -m 1GB docker.elastic.co/elasticsearch/elasticsearch:9.3.1
+docker run -d -p 9200:9200 -p 9600:9600 -e "discovery.type=single-node" -e "OPENSEARCH_INITIAL_ADMIN_PASSWORD=myStrongPassword123" opensearchproject/opensearch:latest
 ```
+
+The default username is `admin`. `OPENSEARCH_INITIAL_ADMIN_PASSWORD` sets the password for that user.
 
 Then start the dev server:
 
@@ -81,12 +81,52 @@ To trigger a DCAT harvest from CLI:
 npm run harvest:dcat -- --url https://letzdata.public.lu/content/dam/dga/ctie/c/catalogue.rdf
 ```
 
+The `harvest:dcat` command calls the server route at
+`/api/discovery/harvest`. That route is protected with
+`HARVEST_INTERNAL_SECRET`, so set the secret in the app container and in the
+CLI environment before running it. It uses `http://localhost:3000` by default,
+or `HARVEST_BASE_URL` if you need to point it somewhere else.
+
 If the DCAT URL is protected by OIDC client-credentials, set:
 
 ```bash
 HARVEST_OIDC_TOKEN_URL=<oidc-token-endpoint>
 HARVEST_OIDC_CLIENT_ID=<client-id>
 HARVEST_OIDC_CLIENT_SECRET=<client-secret>
+```
+
+## Scheduled harvesting worker
+
+For recurring harvesting in a container, use the built-in worker process:
+
+```bash
+npm run harvest:worker
+```
+
+The worker uses `node-cron` and calls `/api/discovery/harvest`. It is meant to
+run as a separate container from the same image while the main app container
+serves the endpoint.
+
+Required environment variables:
+
+```bash
+HARVEST_SOURCE_URL=https://example.org/catalogue.rdf
+HARVEST_INTERNAL_SECRET=<shared-secret>
+HARVEST_SCHEDULE=0 * * * *
+```
+
+Optional for local host-based worker runs:
+
+```bash
+HARVEST_BASE_URL=http://localhost:3000
+```
+
+For a single manual run through the same internal flow:
+
+```bash
+npm run harvest:dcat -- \
+  --url https://example.org/catalogue.rdf \
+  --secret <shared-secret>
 ```
 
 ## Modifying Open API Specifications

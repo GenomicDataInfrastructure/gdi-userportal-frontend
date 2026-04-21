@@ -28,6 +28,25 @@
       "source": "ckan",
       "group": "catalog",
       "type": "DROPDOWN",
+      "key": "vocab_in_series_title",
+      "label": "Dataset series",
+      "values": [
+        {
+          "value": "colorectal-cohort",
+          "label": "Colorectal cohort",
+          "count": 4
+        },
+        {
+          "value": "rare-disease-panel",
+          "label": "Rare disease panel",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "source": "ckan",
+      "group": "catalog",
+      "type": "DROPDOWN",
       "key": "publisher_name",
       "label": "Publisher",
       "values": [
@@ -108,6 +127,18 @@
         "count": 5
       }
     ],
+    "vocab_in_series_title": [
+      {
+        "value": "colorectal-cohort",
+        "label": "Colorectal cohort",
+        "count": 4
+      },
+      {
+        "value": "rare-disease-panel",
+        "label": "Rare disease panel",
+        "count": 2
+      }
+    ],
     "publisher_name": [
       {
         "value": "gdi-oncology",
@@ -142,6 +173,7 @@
           }
         ],
         "distributionsCount": 2,
+        "inSeriesCount": 1,
         "recordsCount": 1200,
         "conformsTo": [
           {
@@ -170,6 +202,7 @@
           }
         ],
         "distributionsCount": 1,
+        "inSeriesCount": 0,
         "recordsCount": 48,
         "conformsTo": [
           {
@@ -198,6 +231,7 @@
           }
         ],
         "distributionsCount": 0,
+        "inSeriesCount": 0,
         "recordsCount": 0,
         "conformsTo": [
           {
@@ -226,6 +260,7 @@
           }
         ],
         "distributionsCount": 3,
+        "inSeriesCount": 0,
         "recordsCount": 320,
         "conformsTo": [
           {
@@ -439,6 +474,31 @@
             }
           ]
         }
+      ],
+      "inSeries": [
+        {
+          "id": "series-001",
+          "identifier": "series-001",
+          "title": "Synthetic Cohort Series",
+          "description": "Series grouping synthetic cohort datasets.",
+          "frequency": {
+            "value": "monthly",
+            "label": "Monthly"
+          },
+          "issued": "2023-01-01T00:00:00Z",
+          "modified": "2024-01-15T00:00:00Z",
+          "publishers": [
+            {
+              "name": "GDI Oncology Institute"
+            }
+          ],
+          "temporalCoverage": [
+            {
+              "start": "2020-01-01T00:00:00Z",
+              "end": "2024-12-31T00:00:00Z"
+            }
+          ]
+        }
       ]
     },
     "ds-002": {
@@ -551,6 +611,33 @@
       "publishers": [
         {
           "name": "GDI Pharmacology Unit"
+        }
+      ],
+      "distributions": []
+    },
+    "series-001": {
+      "id": "series-001",
+      "title": "Synthetic Cohort Series",
+      "description": "Series grouping synthetic cohort datasets.",
+      "createdAt": "2023-01-01T00:00:00Z",
+      "modifiedAt": "2024-01-15T00:00:00Z",
+      "identifier": "series-001",
+      "publishers": [
+        {
+          "name": "GDI Oncology Institute"
+        }
+      ],
+      "themes": [
+        {
+          "value": "oncology",
+          "label": "Oncology"
+        }
+      ],
+      "keywords": ["cohort", "series"],
+      "conformsTo": [
+        {
+          "value": "http://example.org/schema/gdi-core",
+          "label": "GDI Core"
         }
       ],
       "distributions": []

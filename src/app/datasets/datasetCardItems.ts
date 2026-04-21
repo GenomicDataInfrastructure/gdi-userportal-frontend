@@ -8,6 +8,7 @@ import {
   faBookBookmark,
   faCalendarAlt,
   faFile,
+  faLayerGroup,
   faSyncAlt,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -47,6 +48,15 @@ export function createDatasetCardItems(dataset: SearchedDataset): CardItem[] {
             : `${dataset.distributionsCount} Distributions`)) ||
         "",
       icon: faFile,
+    },
+    {
+      text:
+        (dataset.inSeriesCount &&
+          (dataset.inSeriesCount === 1
+            ? "1 Dataset series"
+            : `${dataset.inSeriesCount} Dataset series`)) ||
+        "",
+      icon: faLayerGroup,
     },
     {
       text:

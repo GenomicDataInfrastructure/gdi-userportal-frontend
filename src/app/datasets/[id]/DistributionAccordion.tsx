@@ -12,6 +12,9 @@ import {
   faFileAlt,
   faLink,
   faLanguage,
+  faBalanceScale,
+  faCheckCircle,
+  faDatabase,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
 import Tooltip from "./Tooltip";
@@ -27,6 +30,11 @@ const DistributionAccordion = ({
   const [openIndex, setOpenIndex] = useState<null | number>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
 
+  const getFormatLabel = (distribution: RetrievedDistribution) =>
+    distribution.format?.label ||
+    distribution.format?.value?.split("/").pop() ||
+    "NA";
+
   useEffect(() => {
     contentRefs.current = contentRefs.current.slice(0, distributions.length);
   }, [distributions]);
@@ -40,20 +48,23 @@ const DistributionAccordion = ({
   };
 
   return (
-    <div className="accordion flex w-full flex-col items-center justify-center">
+    <div className="accordion w-full">
       {distributions.map((distribution, index) => (
         <div
-          className="mb-2 w-full rounded-2xl bg-surface hover:bg-hover transition relative"
+          className="w-full border-b border-primary/20 last:border-b-0"
           key={distribution.id}
         >
-          <div
+          <button
+            type="button"
             onClick={() => toggleItem(index)}
-            onKeyPress={() => toggleItem(index)}
-            className="flex cursor-pointer items-center justify-between rounded-2xl p-4"
+            className={`flex w-full cursor-pointer items-center justify-between rounded-md px-2 py-3 text-left transition-colors ${
+              openIndex === index ? "bg-hover" : "hover:bg-hover"
+            }`}
+            aria-expanded={openIndex === index}
           >
             <span className="flex items-center">
               <FontAwesomeIcon icon={faFile} className="text-primary" />
-              <span className="struncate ml-2 break-all">
+              <span className="ml-2 break-all font-medium">
                 {distribution.title}
               </span>
             </span>
@@ -61,7 +72,7 @@ const DistributionAccordion = ({
               icon={openIndex === index ? faChevronUp : faChevronDown}
               className="text-primary"
             />
-          </div>
+          </button>
           <div
             ref={(el: HTMLDivElement | null) => {
               contentRefs.current[index] = el;
@@ -74,110 +85,211 @@ const DistributionAccordion = ({
               overflow: "hidden",
               transition: "max-height 0.5s ease",
             }}
-            className="rounded-b-2xl bg-white"
+            className="overflow-hidden"
           >
-            <div className="p-4 pb-8">
-              <div className="relative group">
-                <strong className="block text-sm font-semibold">
-                  <FontAwesomeIcon
-                    icon={faFileAlt}
-                    className="text-primary align-middle mr-2"
-                  />
-                  Description:
-                </strong>
-                <span className="text-sm">{distribution.description}</span>
-                <Tooltip message="Description of the distribution." />
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                <div className="flex items-center relative">
-                  <span className="group flex items-center">
+            <div className="px-2 pb-4">
+              <div className="ml-3 border-l-2 border-primary/20 pl-4">
+                <div className="relative group">
+                  <strong className="block text-sm font-semibold">
                     <FontAwesomeIcon
-                      icon={faCalendarAlt}
+                      icon={faFileAlt}
                       className="text-primary align-middle mr-2"
                     />
-                    <strong className="text-sm font-semibold">
-                      Created On:
-                    </strong>
-                    <span className="text-sm ml-2">
-                      {distribution.createdAt
-                        ? formatDate(distribution.createdAt)
-                        : "NA"}
-                    </span>
-                    <Tooltip message="Date when the distribution was created." />
-                  </span>
+                    Description:
+                  </strong>
+                  <span className="text-sm">{distribution.description}</span>
+                  <Tooltip message="Description of the distribution." />
                 </div>
-                <div className="flex items-center relative">
-                  <span className="group flex items-center">
-                    <FontAwesomeIcon
-                      icon={faCalendarAlt}
-                      className="text-primary align-middle mr-2"
-                    />
-                    <strong className="text-sm font-semibold">
-                      Modified On:
-                    </strong>
-                    <span className="text-sm ml-2">
-                      {distribution.modifiedAt
-                        ? formatDate(distribution.modifiedAt)
-                        : "NA"}
-                    </span>
-                    <Tooltip message="Date when the distribution was last modified." />
-                  </span>
-                </div>
-                <div className="flex items-center relative">
-                  <span className="group flex items-center">
-                    <FontAwesomeIcon
-                      icon={faFile}
-                      className="text-primary align-middle mr-2"
-                    />
-                    <strong className="text-sm font-semibold">
-                      File Type:
-                    </strong>
-                    <span className="text-sm ml-2">
-                      {distribution.format?.label || "NA"}
-                    </span>
-                    <Tooltip message="File type of the distribution." />
-                  </span>
-                </div>
-                {distribution.downloadUrl && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                   <div className="flex items-center relative">
                     <span className="group flex items-center">
                       <FontAwesomeIcon
-                        icon={faLink}
+                        icon={faCalendarAlt}
                         className="text-primary align-middle mr-2"
                       />
                       <strong className="text-sm font-semibold">
-                        Download URL:
+                        Created On:
                       </strong>
-                      <a
-                        href={distribution.downloadUrl}
-                        className="text-sm text-primary ml-2 break-all"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        here
-                      </a>
-                      <Tooltip message="Link to download the distribution." />
+                      <span className="text-sm ml-2">
+                        {distribution.createdAt
+                          ? formatDate(distribution.createdAt)
+                          : "NA"}
+                      </span>
+                      <Tooltip message="Date when the distribution was created." />
                     </span>
                   </div>
-                )}
-                {distribution.languages &&
-                  distribution.languages.length > 0 && (
+                  <div className="flex items-center relative">
+                    <span className="group flex items-center">
+                      <FontAwesomeIcon
+                        icon={faCalendarAlt}
+                        className="text-primary align-middle mr-2"
+                      />
+                      <strong className="text-sm font-semibold">
+                        Modified On:
+                      </strong>
+                      <span className="text-sm ml-2">
+                        {distribution.modifiedAt
+                          ? formatDate(distribution.modifiedAt)
+                          : "NA"}
+                      </span>
+                      <Tooltip message="Date when the distribution was last modified." />
+                    </span>
+                  </div>
+                  <div className="flex items-center relative">
+                    <span className="group flex items-center">
+                      <FontAwesomeIcon
+                        icon={faFile}
+                        className="text-primary align-middle mr-2"
+                      />
+                      <strong className="text-sm font-semibold">
+                        File Type:
+                      </strong>
+                      <span className="text-sm ml-2">
+                        {getFormatLabel(distribution)}
+                      </span>
+                      <Tooltip message="File type of the distribution." />
+                    </span>
+                  </div>
+                  <div className="flex items-center relative">
+                    <span className="group flex items-center">
+                      <FontAwesomeIcon
+                        icon={faFile}
+                        className="text-primary align-middle mr-2"
+                      />
+                      <strong className="text-sm font-semibold">
+                        Media Type:
+                      </strong>
+                      <span className="text-sm ml-2">
+                        {distribution.mediaType?.label ||
+                          distribution.mediaType?.value?.split("/").pop() ||
+                          "NA"}
+                      </span>
+                      <Tooltip message="Media type of the distribution." />
+                    </span>
+                  </div>
+                  <div className="flex items-center relative">
+                    <span className="group flex items-center">
+                      <FontAwesomeIcon
+                        icon={faBalanceScale}
+                        className="text-primary align-middle mr-2"
+                      />
+                      <strong className="text-sm font-semibold">
+                        License:
+                      </strong>
+                      <span className="text-sm ml-2">
+                        {distribution.license?.label ||
+                          distribution.license?.value?.split("/").pop() ||
+                          "NA"}
+                      </span>
+                      <Tooltip message="License under which the distribution is made available." />
+                    </span>
+                  </div>
+                  <div className="flex items-center relative">
+                    <span className="group flex items-center">
+                      <FontAwesomeIcon
+                        icon={faDatabase}
+                        className="text-primary align-middle mr-2"
+                      />
+                      <strong className="text-sm font-semibold">
+                        Byte Size:
+                      </strong>
+                      <span className="text-sm ml-2">
+                        {distribution.byteSize !== undefined &&
+                        distribution.byteSize !== null
+                          ? distribution.byteSize.toLocaleString()
+                          : "NA"}
+                      </span>
+                      <Tooltip message="Size of the distribution in bytes." />
+                    </span>
+                  </div>
+                  {distribution.conformsTo &&
+                    distribution.conformsTo.length > 0 && (
+                      <div className="flex items-center relative">
+                        <span className="group flex items-center">
+                          <FontAwesomeIcon
+                            icon={faCheckCircle}
+                            className="text-primary align-middle mr-2"
+                          />
+                          <strong className="text-sm font-semibold">
+                            Conforms To:
+                          </strong>
+                          <span className="text-sm ml-2">
+                            {distribution.conformsTo
+                              .map(
+                                (c) =>
+                                  c.label ||
+                                  c.value?.split("/").pop() ||
+                                  c.value
+                              )
+                              .join(", ")}
+                          </span>
+                          <Tooltip message="Standards or specifications the distribution conforms to." />
+                        </span>
+                      </div>
+                    )}
+                  {distribution.accessUrl && (
                     <div className="flex items-center relative">
                       <span className="group flex items-center">
                         <FontAwesomeIcon
-                          icon={faLanguage}
+                          icon={faLink}
                           className="text-primary align-middle mr-2"
                         />
-                        <span className="align-middle">
-                          Languages:{" "}
-                          {distribution.languages
-                            .map((lang) => lang.label)
-                            .join(", ")}
-                        </span>
-                        <Tooltip message="Languages in which the distribution is available." />
+                        <strong className="text-sm font-semibold">
+                          Access URL:
+                        </strong>
+                        <a
+                          href={distribution.accessUrl}
+                          className="text-sm text-primary ml-2 break-all"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          here
+                        </a>
+                        <Tooltip message="Link to access the distribution." />
                       </span>
                     </div>
                   )}
+                  {distribution.downloadUrl && (
+                    <div className="flex items-center relative">
+                      <span className="group flex items-center">
+                        <FontAwesomeIcon
+                          icon={faLink}
+                          className="text-primary align-middle mr-2"
+                        />
+                        <strong className="text-sm font-semibold">
+                          Download URL:
+                        </strong>
+                        <a
+                          href={distribution.downloadUrl}
+                          className="text-sm text-primary ml-2 break-all"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          here
+                        </a>
+                        <Tooltip message="Link to download the distribution." />
+                      </span>
+                    </div>
+                  )}
+                  {distribution.languages &&
+                    distribution.languages.length > 0 && (
+                      <div className="flex items-center relative">
+                        <span className="group flex items-center">
+                          <FontAwesomeIcon
+                            icon={faLanguage}
+                            className="text-primary align-middle mr-2"
+                          />
+                          <span className="align-middle">
+                            Languages:{" "}
+                            {distribution.languages
+                              .map((lang) => lang.label)
+                              .join(", ")}
+                          </span>
+                          <Tooltip message="Languages in which the distribution is available." />
+                        </span>
+                      </div>
+                    )}
+                </div>
               </div>
             </div>
           </div>

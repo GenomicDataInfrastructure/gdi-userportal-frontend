@@ -3,12 +3,23 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { getLocalDiscoveryStore } from "@/app/api/discovery/local-store/factory";
-import { BasePlaceholderDiscoveryProvider } from "@/app/api/discovery/providers/base-placeholder-provider";
+import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import {
+  getLocalDiscoveryDatasetExportMimeType,
+  serializeLocalDiscoveryDataset,
+} from "@/app/api/discovery/harvester/dcat-dataset-rdf-generator";
+import { BasePlaceholderDiscoveryProvider } from "@/app/api/discovery/providers/base-placeholder-provider";
+import { listLocalFilters } from "@/app/api/discovery/local-store/filter-registry";
+import {
+  DiscoveryAgent,
+  DiscoveryDatasetBase,
+  DiscoveryFilter,
   DiscoveryDatasetSearchQuery,
   DiscoveryDatasetsSearchResponse,
   DiscoveryRetrievedDataset,
+  DiscoveryValueLabel,
 } from "@/app/api/discovery/providers/types";
+import formatDatasetLanguage from "@/utils/formatDatasetLanguage";
 
 export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvider {
   readonly key = "local-index";
@@ -21,12 +32,122 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
 
   private readonly store = getLocalDiscoveryStore();
 
-  async retrieveFilters(_headers: Record<string, string>) {
-    return [];
+  private mapDatasetLanguages(languages?: string[]): DiscoveryValueLabel[] {
+    return (
+      languages?.map((language) => ({
+        value: language,
+        label:
+          formatDatasetLanguage(language) ??
+          language.split("/").pop() ??
+          language,
+      })) ?? []
+    );
   }
 
-  async retrieveFilterValues(_key: string, _headers: Record<string, string>) {
-    return [];
+  private mapAgent(
+    agent: LocalDiscoveryDataset["publishers"][number]
+  ): DiscoveryAgent {
+    return {
+      name: agent.name,
+      email: agent.email,
+      url: agent.url,
+      uri: agent.uri,
+      homepage: agent.homepage,
+      type: agent.type,
+      identifier: agent.identifier,
+    };
+  }
+
+  private mapLocalDataset(
+    dataset: LocalDiscoveryDataset
+  ): DiscoveryDatasetBase {
+    // HealthDCAT-AP can expose multiple spatial resolution values, but the
+    // current UI and DDS-facing contract only support a single number.
+    const spatialResolutionInMeters = dataset.spatialResolutionInMeters?.[0];
+    // HealthDCAT-AP can expose multiple version notes, but the current UI and
+    // DDS-facing contract only support a single string.
+    const versionNotes = dataset.versionNotes?.[0];
+
+    return {
+      id: dataset.id,
+      identifier: dataset.identifier ?? "",
+      title: dataset.title,
+      description: dataset.description ?? "",
+      catalogue: dataset.catalogue ?? "",
+      languages: this.mapDatasetLanguages(dataset.languages),
+      createdAt: dataset.createdAt,
+      modifiedAt: dataset.modifiedAt,
+      version: dataset.version,
+      hasVersions: dataset.hasVersions,
+      versionNotes,
+      numberOfUniqueIndividuals: dataset.numberOfUniqueIndividuals,
+      maxTypicalAge: dataset.maxTypicalAge,
+      minTypicalAge: dataset.minTypicalAge,
+      themes: dataset.themes ?? [],
+      keywords: dataset.keywords ?? [],
+      conformsTo: dataset.conformsTo ?? [],
+      publishers: dataset.publishers.map((a) => this.mapAgent(a)),
+      hdab: dataset.hdab.map((a) => this.mapAgent(a)),
+      creators: dataset.creators.map((a) => this.mapAgent(a)),
+      publisherType: dataset.publisherType,
+      populationCoverage: dataset.populationCoverage,
+      spatialResolutionInMeters,
+      spatialCoverage: dataset.spatialCoverage?.map((sc) => ({
+        uri: sc.uri ? { value: sc.uri, label: sc.uri } : undefined,
+        text: sc.text,
+        geom: sc.geom,
+        bbox: sc.bbox,
+        centroid: sc.centroid,
+      })),
+      temporalCoverage: dataset.temporalCoverage,
+      retentionPeriod: dataset.retentionPeriod,
+      temporalResolution: dataset.temporalResolution,
+      frequency: dataset.frequency,
+      accessRights: dataset.accessRights,
+    };
+  }
+
+  private mapDistributions(dataset: LocalDiscoveryDataset) {
+    return dataset.distributions?.map((distribution) => ({
+      id: distribution.id,
+      title: distribution.title,
+      description: "",
+      format: distribution.format,
+      mediaType: distribution.mediaType,
+      license: distribution.license,
+      conformsTo: distribution.conformsTo,
+      byteSize: distribution.byteSize,
+      accessUrl: distribution.accessUrl,
+      downloadUrl: distribution.downloadUrl,
+      createdAt: distribution.createdAt,
+    }));
+  }
+
+  async retrieveFilters(
+    _headers: Record<string, string>
+  ): Promise<DiscoveryFilter[]> {
+    const localFilters = listLocalFilters();
+
+    return Promise.all(
+      localFilters.map(async (filter) => {
+        if (filter.type !== "DROPDOWN") {
+          return { ...filter, source: this.key };
+        }
+
+        return {
+          ...filter,
+          source: this.key,
+          values: await this.store.retrieveFilterValues(filter.key),
+        };
+      })
+    );
+  }
+
+  async retrieveFilterValues(
+    key: string,
+    _headers: Record<string, string>
+  ): Promise<DiscoveryValueLabel[]> {
+    return this.store.retrieveFilterValues(key);
   }
 
   async searchDatasets(
@@ -36,21 +157,18 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     await this.store.ensureInitialized();
     const response = await this.store.searchDatasets({
       query: options.query,
+      facets: options.facets?.map(({ source: _source, ...facet }) => facet),
+      sort: options.sort,
       start: options.start,
       rows: options.rows,
+      operator: options.operator,
     });
 
     return {
       count: response.count,
       results: response.results.map((dataset) => ({
-        id: dataset.id,
-        identifier: dataset.identifier ?? "",
-        title: dataset.title,
-        description: dataset.description ?? "",
-        catalogue: dataset.catalogue ?? "",
-        publishers: [],
-        themes: [],
-        keywords: [],
+        ...this.mapLocalDataset(dataset),
+        distributionsCount: dataset.distributionsCount,
       })),
     };
   }
@@ -61,16 +179,45 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     if (!dataset) {
       throw new Error(`Dataset not found in local index: ${id}`);
     }
+    // DCAT can expose multiple dataset types, but the current UI and
+    // DDS-facing contract only support a single value.
+    const dcatType = dataset.dcatType?.[0];
 
     return {
-      id: dataset.id,
-      identifier: dataset.identifier ?? "",
-      title: dataset.title,
-      description: dataset.description ?? "",
-      catalogue: dataset.catalogue ?? "",
-      publishers: [],
-      themes: [],
-      keywords: [],
+      ...this.mapLocalDataset(dataset),
+      contacts: dataset.contacts,
+      datasetRelationships: dataset.datasetRelationships,
+      dataDictionary: dataset.dataDictionary,
+      healthTheme: dataset.healthTheme ?? [],
+      healthCategory: dataset.healthCategory ?? [],
+      dcatType,
+      distributions: this.mapDistributions(dataset),
+      numberOfRecords: dataset.numberOfRecords,
+      provenance: dataset.provenance,
+      legalBasis: dataset.legalBasis,
+      applicableLegislation: dataset.applicableLegislation,
+      personalData: dataset.personalData,
+      purpose: dataset.purpose,
+      codeValues: dataset.codeValues,
+      codingSystem: dataset.codingSystem,
+      isReferencedBy: dataset.isReferencedBy,
+      documentation: dataset.documentation,
     };
+  }
+
+  async retrieveDatasetInFormat(
+    id: string,
+    format: "rdf" | "ttl" | "jsonld",
+    _headers: Record<string, string>
+  ): Promise<Blob> {
+    await this.store.ensureInitialized();
+    const dataset = await this.store.retrieveDataset(id);
+    if (!dataset) {
+      throw new Error(`Dataset not found in local index: ${id}`);
+    }
+
+    return new Blob([await serializeLocalDiscoveryDataset(dataset, format)], {
+      type: getLocalDiscoveryDatasetExportMimeType(format),
+    });
   }
 }

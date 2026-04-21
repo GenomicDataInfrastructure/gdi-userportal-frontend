@@ -18,6 +18,12 @@ import {
   DiscoveryDatasetsSearchResponse,
 } from "@/app/api/discovery/providers/types";
 
+const mapDdsFilterKeyToApp = (key: string): string =>
+  key === "publisher_name" ? "publisherName" : key;
+
+const mapAppFilterKeyToDds = (key: string): string =>
+  key === "publisherName" ? "publisher_name" : key;
+
 export class DdsDiscoveryProvider implements DiscoveryProvider {
   readonly key = "dds";
 
@@ -31,7 +37,10 @@ export class DdsDiscoveryProvider implements DiscoveryProvider {
     headers: Record<string, string>
   ): Promise<DiscoveryFilter[]> {
     const response = await discoveryClient.retrieve_filters({ headers });
-    return response as DiscoveryFilter[];
+    return (response as DiscoveryFilter[]).map((filter) => ({
+      ...filter,
+      key: mapDdsFilterKeyToApp(filter.key),
+    }));
   }
 
   async retrieveFilterValues(
@@ -39,7 +48,7 @@ export class DdsDiscoveryProvider implements DiscoveryProvider {
     headers: Record<string, string>
   ): Promise<DiscoveryValueLabel[]> {
     const response = await discoveryClient.retrieve_filter_values({
-      params: { key },
+      params: { key: mapAppFilterKeyToDds(key) },
       headers,
     });
     return response as DiscoveryValueLabel[];
@@ -49,8 +58,20 @@ export class DdsDiscoveryProvider implements DiscoveryProvider {
     options: DiscoveryDatasetSearchQuery,
     headers: Record<string, string>
   ): Promise<DiscoveryDatasetsSearchResponse> {
+    const sort =
+      options.sort === "newest"
+        ? "issued desc"
+        : "score desc, metadata_modified desc";
+
     const response = await discoveryClient.dataset_search(
-      options as DatasetSearchQuery,
+      {
+        ...options,
+        facets: options.facets?.map((facet) => ({
+          ...facet,
+          key: facet.key ? mapAppFilterKeyToDds(facet.key) : facet.key,
+        })),
+        sort,
+      } as DatasetSearchQuery,
       { headers }
     );
     return response as DiscoveryDatasetsSearchResponse;

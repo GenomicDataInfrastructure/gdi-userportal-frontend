@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+const { buildHarvestApiUrl, requestHarvest } = require("./harvest-http");
+
 function parseArgs(argv) {
   const args = { url: "" };
 
@@ -9,6 +11,9 @@ function parseArgs(argv) {
     const token = argv[i];
     if (token === "--url") {
       args.url = argv[i + 1] || "";
+      i += 1;
+    } else if (token === "--secret") {
+      args.secret = argv[i + 1] || "";
       i += 1;
     } else if (token === "--help" || token === "-h") {
       args.help = true;
@@ -23,6 +28,7 @@ function printUsage() {
     [
       "Usage:",
       "  npm run harvest:dcat -- --url <catalogue-rdf-url>",
+      "  npm run harvest:dcat -- --url <catalogue-rdf-url> --secret <shared-secret>",
       "",
       "Example:",
       "  npm run harvest:dcat -- \\",
@@ -33,29 +39,42 @@ function printUsage() {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
+  const endpoint = buildHarvestApiUrl(
+    process.env.HARVEST_BASE_URL || "http://localhost:3000"
+  );
+  const secret = String(
+    args.secret || process.env.HARVEST_INTERNAL_SECRET || ""
+  ).trim();
 
   if (args.help || !args.url) {
     printUsage();
     process.exit(args.help ? 0 : 1);
   }
 
-  const endpoint = "http://localhost:3000/api/discovery/harvest";
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ url: args.url }),
-  });
-
-  const payload = await response.json();
-  if (!response.ok) {
+  if (!secret) {
     throw new Error(
-      `Harvest failed (${response.status}): ${payload?.error || response.statusText}`
+      "Missing harvest shared secret. Provide HARVEST_INTERNAL_SECRET or pass --secret."
     );
   }
 
-  console.log(
-    `Harvest completed: ${payload.count} datasets indexed from ${args.url}`
-  );
+  try {
+    const count = await requestHarvest({
+      apiUrl: endpoint,
+      sourceUrl: args.url,
+      secret,
+    });
+
+    console.log(
+      `Harvest completed: ${count} datasets indexed from ${args.url}`
+    );
+  } catch (error) {
+    throw new Error(
+      [
+        error instanceof Error ? error.message : String(error),
+        "Make sure the Next.js server is running and HARVEST_BASE_URL points to the correct host.",
+      ].join("\n")
+    );
+  }
 }
 
 main().catch((error) => {

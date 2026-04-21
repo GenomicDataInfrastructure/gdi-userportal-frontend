@@ -60,7 +60,7 @@ const HomePage = ({ searchParams }: HomePageProps) => {
       try {
         const data = await searchDatasetsApi({
           rows: 4,
-          sort: "issued desc",
+          sort: "newest",
         });
         setDatasets(data.results!);
       } catch (error) {
@@ -138,16 +138,12 @@ const HomePage = ({ searchParams }: HomePageProps) => {
         ></div>
         <div className="relative z-10 w-full md:w-3/4 lg:w-2/3 xl:w-3/5">
           <h3 className="mb-4 text-2xl">About the data portal</h3>
-          <p className="text-lg">
-            {contentConfig.aboutContent.split("\n").map((line, index) => (
-              <span key={index}>
-                {line}
-                {index < contentConfig.aboutContent.split("\n").length - 1 && (
-                  <br />
-                )}
-              </span>
-            ))}
-          </p>
+          <p
+            className="text-lg"
+            dangerouslySetInnerHTML={{
+              __html: contentConfig.aboutContent.replace(/\n/g, "<br />"),
+            }}
+          />
           <br />
           <a
             className="link-arrow text-primary hover:text-hover-color"

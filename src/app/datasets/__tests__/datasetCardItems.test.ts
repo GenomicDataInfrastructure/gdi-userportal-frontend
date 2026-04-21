@@ -34,15 +34,17 @@ describe("datasetCardItems", () => {
       createdAt: "2024-03-01T00:00:00.000Z",
       modifiedAt: "",
       recordsCount: 21,
+      inSeriesCount: 1,
     };
 
     const items = createDatasetCardItems(dataset);
-    expect(items.length).toBe(5);
+    expect(items.length).toBe(6);
     expect(items[0].text).toBe("Created on 1 March 2024");
     expect(items[1].text).toBe("");
     expect(items[2].text).toBe("Published by publisher1");
     expect(items[3].text).toBe("1 Distribution");
-    expect(items[4].text).toBe("21 Records");
+    expect(items[4].text).toBe("1 Dataset series");
+    expect(items[5].text).toBe("21 Records");
   });
 
   it("should handle missing optional fields without crashing", () => {
@@ -52,6 +54,7 @@ describe("datasetCardItems", () => {
       description: "",
       publishers: [],
       distributionsCount: 2,
+      inSeriesCount: 2,
       recordsCount: 1,
     };
 
@@ -60,6 +63,7 @@ describe("datasetCardItems", () => {
     expect(items[1].text).toBe("");
     expect(items[2].text).toBe("");
     expect(items[3].text).toBe("2 Distributions");
-    expect(items[4].text).toBe("1 Record");
+    expect(items[4].text).toBe("2 Dataset series");
+    expect(items[5].text).toBe("1 Record");
   });
 });

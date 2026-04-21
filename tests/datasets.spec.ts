@@ -41,16 +41,26 @@ test("Dataset list renders filters and results", async ({ page }) => {
   await expect(themeFilterButton).toBeVisible({ timeout: 15000 });
   await themeFilterButton.click();
   await page.getByLabel("Oncology").check();
+  const datasetSeriesFilterButton = page.getByRole("button", {
+    name: /dataset series/i,
+  });
+  await expect(datasetSeriesFilterButton).toBeVisible();
+  await datasetSeriesFilterButton.click();
+  await page.getByLabel("Colorectal cohort").check();
 
   await expect(
     page.getByRole("heading", { name: /active filters/i })
   ).toBeVisible();
   await expect(page.getByText(/theme\s*:\s*oncology/i)).toBeVisible();
+  await expect(
+    page.getByText(/dataset series\s*:\s*colorectal cohort/i)
+  ).toBeVisible();
 
   // Dataset list
   await expect(
     page.getByRole("link", { name: /cancer cohort study/i })
   ).toBeVisible();
+  await expect(page.getByText(/1 dataset series/i)).toBeVisible();
   await expect(page.getByText(/externally governed/i)).toBeVisible();
 
   // 6. Ensure there are no console errors

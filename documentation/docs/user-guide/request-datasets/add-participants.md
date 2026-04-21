@@ -24,8 +24,8 @@ To add participants to your application:
 3. Select **Add Participant** on the application details page.
 
 <figure>
-    <img src="img/add-participant/add-participant.png" alt="Screenshot showing the Add Participant button and process" width="900" />
-    <figcaption></figcaption>
+<img src="img/add-participant/add-participant.png" alt="Screenshot showing the Add Participant button and process" width="900" />
+<figcaption></figcaption>
 </figure>
 
 4. Enter the name and email address you want to invite and select **Send**. Do this for each participant you want to add.

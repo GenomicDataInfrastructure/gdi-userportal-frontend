@@ -3,47 +3,243 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { jest } from "@jest/globals";
+import { canonicalDiscoveryRdf } from "@/app/api/discovery/test-utils/fixtures";
 import { DcatHarvesterService } from "@/app/api/discovery/harvester/dcat-harvester-service";
 
 describe("DcatHarvesterService", () => {
-  test("parses a whole catalogue with basic fields", () => {
+  test("parses a canonical RDF fixture with discovery metadata", async () => {
     const service = new DcatHarvesterService();
-    const rdf = `
-      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-               xmlns:dcat="http://www.w3.org/ns/dcat#"
-               xmlns:dct="http://purl.org/dc/terms/"
-               xmlns:dc="http://purl.org/dc/elements/1.1/"
-               xmlns:foaf="http://xmlns.com/foaf/0.1/">
-        <dcat:Catalog rdf:about="https://example.org/catalogues/main">
-          <dct:title>Main Catalogue</dct:title>
-        </dcat:Catalog>
-        <dcat:Dataset rdf:about="https://example.org/datasets/1">
-          <dct:identifier>dataset-1</dct:identifier>
-          <dct:title xml:lang="en">Population Registry</dct:title>
-          <dct:description xml:lang="en">National &amp; regional data</dct:description>
-          <foaf:homepage rdf:resource="https://example.org/page/1" />
-        </dcat:Dataset>
-        <dcat:Dataset>
-          <dct:identifier>ID-2</dct:identifier>
-          <dc:title>Hospital Capacity</dc:title>
-          <dc:description><![CDATA[ Bed occupancy  ]]></dc:description>
-        </dcat:Dataset>
-        <dcat:Dataset>
-          <dct:title>   </dct:title>
-          <dct:description>   </dct:description>
-        </dcat:Dataset>
-      </rdf:RDF>
-    `;
-
-    const datasets = service.parseDatasetsFromRdf(rdf);
-
-    expect(datasets).toEqual([
+    await expect(
+      service.parseDatasetsFromRdf(canonicalDiscoveryRdf)
+    ).resolves.toEqual([
       {
         id: "dataset-1",
         identifier: "dataset-1",
         title: "Population Registry",
         description: "National & regional data",
         catalogue: "Main Catalogue",
+        languages: [
+          "http://publications.europa.eu/resource/authority/language/ENG",
+          "DEU",
+        ],
+        createdAt: "2023-06-15T00:00:00.000Z",
+        modifiedAt: "2024-02-20T14:30:00.000Z",
+        version: "1.2.0",
+        hasVersions: [
+          {
+            value: "https://example.org/datasets/1/v1",
+            label: "v1",
+          },
+        ],
+        versionNotes: ["Updated with 2024 data"],
+        provenance:
+          "The data for the LINK-VACC project is sourced from several existing databases, including Vaccinnet+, HealthData COVID-19 database (Contact tracing and Clinic database), CoBRHA, STATBEL, and the AIM database. These databases collectively provide comprehensive demographic, clinical, and socio-economic data relevant to the project's objectives",
+        numberOfRecords: 50000,
+        numberOfUniqueIndividuals: 25000,
+        maxTypicalAge: 95,
+        minTypicalAge: 18,
+        populationCoverage: "People of LNDS.",
+        spatialCoverage: [
+          {
+            uri: "http://publications.europa.eu/resource/authority/country/LUX",
+            text: "Luxembourg",
+          },
+        ],
+        spatialResolutionInMeters: [4],
+        temporalCoverage: {
+          start: "2022-01-01T00:00:00.000Z",
+          end: "2023-01-01T00:00:00.000Z",
+        },
+        retentionPeriod: [
+          {
+            start: "2026-03-13T00:00:00.000Z",
+            end: "2026-03-20T00:00:00.000Z",
+          },
+        ],
+        temporalResolution: "P1D",
+        frequency: {
+          value:
+            "http://publications.europa.eu/resource/authority/frequency/ANNUAL",
+          label: "Annual",
+        },
+        publishers: [
+          {
+            name: "org",
+            email: "a@mail.com",
+            type: {
+              value: "http://purl.org/adms/publishertype/Company",
+              label: "Company",
+            },
+          },
+        ],
+        hdab: [
+          {
+            name: "Health Data Access Body Luxembourg",
+            email: "hdab@health.lu",
+            uri: "https://health.data.lu/hdab/luxembourg",
+          },
+        ],
+        creators: [
+          {
+            name: "org",
+          },
+        ],
+        publisherType: [
+          {
+            value: "http://purl.org/adms/publishertype/Company",
+            label: "Company",
+          },
+        ],
+        themes: [
+          {
+            value:
+              "http://publications.europa.eu/resource/authority/data-theme/HEAL",
+            label: "HEAL",
+          },
+        ],
+        keywords: ["oncology", "genomics"],
+        healthTheme: [
+          {
+            value: "http://healthdataportal.eu/ns/health-theme/cancer",
+            label: "cancer",
+          },
+        ],
+        healthCategory: [
+          {
+            value: "http://healthdataportal.eu/ns/health-category/registries",
+            label: "registries",
+          },
+        ],
+        dcatType: [
+          {
+            value:
+              "http://publications.europa.eu/resource/authority/dataset-type/STATISTICAL",
+            label: "STATISTICAL",
+          },
+        ],
+        accessRights: {
+          value:
+            "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
+          label: "Public",
+        },
+        legalBasis: [
+          {
+            value: "GDPR Art. 6(1)(e)",
+            label: "GDPR Art. 6(1)(e)",
+          },
+          {
+            value: "GDPR Art. 6(1)(c)",
+            label: "GDPR Art. 6(1)(c)",
+          },
+        ],
+        applicableLegislation: [
+          {
+            value: "http://data.europa.eu/eli/reg/2016/679",
+            label: "GDPR",
+          },
+          {
+            value: "http://example.com/law/42",
+            label: "Example Law 42",
+          },
+          {
+            value: "http://example.com/law/99",
+            label: "99",
+          },
+        ],
+        personalData: [
+          {
+            value: "https://w3id.org/dpv/dpv-pd#Age",
+            label: "Age",
+          },
+          {
+            value: "https://w3id.org/dpv/dpv-pd#MedicalRecord",
+            label: "Medical Record",
+          },
+        ],
+        purpose: [
+          {
+            value: "https://www.example.com/purpose/research",
+            label: "https://www.example.com/purpose/research",
+          },
+        ],
+        dataDictionary: [
+          {
+            name: "Data_1",
+            type: "string",
+            description: "This is a test description for field 1",
+          },
+          {
+            name: "Data_2",
+            type: "integer",
+            description: "This is a test description for field 2",
+          },
+        ],
+        codeValues: undefined,
+        codingSystem: undefined,
+        isReferencedBy: [
+          "https://example.org/publications/study-001",
+          "https://example.org/publications/report-2024",
+        ],
+        documentation: [
+          "https://example.org/docs/dataset-1",
+          "https://example.org/docs/dataset-1-guide",
+        ],
+        contacts: [
+          {
+            name: "tab3-contactPoint-mail@test.com",
+            email: "tab3-contactPoint-mail@test.com",
+            uri: undefined,
+            url: "https://commission.europa.eu/",
+            identifier: undefined,
+          },
+        ],
+        datasetRelationships: [
+          {
+            relation: "Is part of",
+            target: "https://example.org/datasets/parent-collection",
+          },
+          {
+            relation: "Has part",
+            target: "https://example.org/datasets/subset-1",
+          },
+          {
+            relation: "Is referenced by",
+            target: "https://example.org/publications/study-001",
+          },
+          {
+            relation: "Is referenced by",
+            target: "https://example.org/publications/report-2024",
+          },
+        ],
+        distributions: [
+          {
+            id: "distribution-1",
+            title: "Population Registry CSV",
+            format: {
+              value:
+                "http://publications.europa.eu/resource/authority/file-type/CSV",
+              label: "CSV",
+            },
+            mediaType: {
+              value: "http://www.iana.org/assignments/media-types/text/csv",
+              label: "CSV",
+            },
+            license: {
+              value: "http://spdx.org/licenses/Apache-2.0",
+              label: "Apache 2.0",
+            },
+            conformsTo: [
+              {
+                value: "https://example.org/spec/standard-1",
+                label: "standard-1",
+              },
+            ],
+            byteSize: 2048,
+            accessUrl: "https://example.org/access/population-registry",
+            downloadUrl: "https://example.org/download/population-registry.csv",
+            createdAt: "2023-06-15T00:00:00.000Z",
+          },
+        ],
       },
       {
         id: "ID-2",
@@ -51,51 +247,572 @@ describe("DcatHarvesterService", () => {
         title: "Hospital Capacity",
         description: "Bed occupancy",
         catalogue: "Main Catalogue",
+        languages: [],
+        createdAt: undefined,
+        modifiedAt: undefined,
+        version: "",
+        hasVersions: [],
+        versionNotes: undefined,
+        numberOfRecords: undefined,
+        numberOfUniqueIndividuals: undefined,
+        maxTypicalAge: undefined,
+        minTypicalAge: undefined,
+        populationCoverage: "",
+        provenance: undefined,
+        spatialCoverage: undefined,
+        spatialResolutionInMeters: undefined,
+        temporalCoverage: undefined,
+        retentionPeriod: undefined,
+        temporalResolution: undefined,
+        frequency: undefined,
+        publishers: [],
+        hdab: [],
+        creators: [],
+        publisherType: undefined,
+        datasetRelationships: undefined,
+        themes: [],
+        keywords: [],
+        healthTheme: [],
+        healthCategory: [],
+        dcatType: [],
+        accessRights: undefined,
+        legalBasis: undefined,
+        applicableLegislation: undefined,
+        personalData: undefined,
+        purpose: undefined,
+        dataDictionary: undefined,
+        codeValues: undefined,
+        codingSystem: undefined,
+        isReferencedBy: undefined,
+        documentation: undefined,
+        contacts: undefined,
+        distributions: undefined,
       },
     ]);
   });
 
-  test("extracts title from dct:title and dc:title", () => {
+  test("stores foaf:page documentation values as-is regardless of scheme", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
-      <rdf:RDF xmlns:dcat="http://www.w3.org/ns/dcat#" xmlns:dct="http://purl.org/dc/terms/" xmlns:dc="http://purl.org/dc/elements/1.1/">
-        <dcat:Dataset rdf:about="d1">
-          <dct:title>  Dataset A  </dct:title>
-          <dct:description>x</dct:description>
-        </dcat:Dataset>
-        <dcat:Dataset rdf:about="d2">
-          <dc:title>Dataset B</dc:title>
-          <dct:description>y</dct:description>
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:foaf="http://xmlns.com/foaf/0.1/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <foaf:page>
+            <foaf:Document rdf:about="ftp://example.org/not-http"/>
+          </foaf:page>
         </dcat:Dataset>
       </rdf:RDF>
     `;
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].documentation).toEqual(["ftp://example.org/not-http"]);
+  });
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
-    expect(datasets.map((dataset) => dataset.title)).toEqual([
-      "Dataset A",
-      "Dataset B",
+  test("parses valid foaf:page documentation URLs", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:foaf="http://xmlns.com/foaf/0.1/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <foaf:page>
+            <foaf:Document rdf:about="https://example.org/docs/guide"/>
+          </foaf:page>
+          <foaf:page>
+            <foaf:Document rdf:about="https://example.org/docs/reference"/>
+          </foaf:page>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].documentation).toEqual([
+      "https://example.org/docs/guide",
+      "https://example.org/docs/reference",
     ]);
   });
 
-  test("extracts description from dct:description and dc:description", () => {
+  test("supports dct and dc title or description fallbacks", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
-      <rdf:RDF xmlns:dcat="http://www.w3.org/ns/dcat#" xmlns:dct="http://purl.org/dc/terms/" xmlns:dc="http://purl.org/dc/elements/1.1/">
-        <dcat:Dataset rdf:about="d1">
-          <dct:title>A</dct:title>
-          <dct:description>  Foo &amp; Bar  </dct:description>
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dc="http://purl.org/dc/elements/1.1/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>  Dataset A  </dct:title>
+          <dc:description><![CDATA[  Fallback description  ]]></dc:description>
         </dcat:Dataset>
-        <dcat:Dataset rdf:about="d2">
-          <dct:title>B</dct:title>
-          <dc:description><![CDATA[  CDATA text  ]]></dc:description>
+        <dcat:Dataset rdf:about="https://example.org/datasets/2">
+          <dc:title>Dataset B</dc:title>
+          <dct:description>  Foo &amp; Bar  </dct:description>
         </dcat:Dataset>
       </rdf:RDF>
     `;
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
-    expect(datasets.map((dataset) => dataset.description)).toEqual([
-      "Foo & Bar",
-      "CDATA text",
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(
+      datasets.map(({ title, description }) => ({ title, description }))
+    ).toEqual([
+      { title: "Dataset A", description: "Fallback description" },
+      { title: "Dataset B", description: "Foo & Bar" },
+    ]);
+  });
+
+  test("parses distributions exposed under healthdcatap analytics", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               xmlns:healthdcatap="http://healthdataportal.eu/ns/health#"
+               xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:identifier>dataset-1</dct:identifier>
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <healthdcatap:analytics>
+            <dcat:Distribution rdf:nodeID="distribution-analytics-1">
+              <dct:identifier>25</dct:identifier>
+              <dct:title>Distribution1</dct:title>
+              <dct:format>
+                <dct:MediaTypeOrExtent rdf:about="http://publications.europa.eu/resource/authority/file-type/AAB">
+                  <skos:prefLabel>Aab</skos:prefLabel>
+                </dct:MediaTypeOrExtent>
+              </dct:format>
+              <dcat:downloadURL rdf:resource="http://download-2/"/>
+              <dcat:accessURL rdf:resource="http://abc.com/"/>
+            </dcat:Distribution>
+          </healthdcatap:analytics>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+
+    expect(datasets[0].distributions).toHaveLength(1);
+    expect(datasets[0].distributions?.[0]?.id).toBe("25");
+  });
+
+  test("keeps distributions without titles by falling back to identifier or URLs", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:identifier>dataset-1</dct:identifier>
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:distribution>
+            <dcat:Distribution rdf:nodeID="distribution-1">
+              <dct:identifier>dist-1</dct:identifier>
+              <dcat:accessURL rdf:resource="https://example.org/access/1"/>
+            </dcat:Distribution>
+          </dcat:distribution>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+
+    expect(datasets[0].distributions).toEqual([
+      {
+        id: "dist-1",
+        title: "dist-1",
+        format: undefined,
+        accessUrl: "https://example.org/access/1",
+        downloadUrl: undefined,
+      },
+    ]);
+  });
+
+  test("deduplicates distributions referenced by both dcat distribution and healthdcatap analytics", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:healthdcatap="http://healthdataportal.eu/ns/health#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:identifier>dataset-1</dct:identifier>
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:distribution rdf:resource="https://example.org/distributions/1"/>
+          <healthdcatap:analytics rdf:resource="https://example.org/distributions/1"/>
+        </dcat:Dataset>
+        <dcat:Distribution rdf:about="https://example.org/distributions/1">
+          <dct:identifier>dist-1</dct:identifier>
+          <dct:title>Distribution 1</dct:title>
+          <dcat:downloadURL rdf:resource="https://example.org/download/1"/>
+        </dcat:Distribution>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+
+    expect(datasets[0].distributions).toHaveLength(1);
+    expect(datasets[0].distributions?.[0]?.id).toBe("dist-1");
+  });
+
+  test("deduplicates dataset languages", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG" />
+          <dct:language rdf:resource="http://publications.europa.eu/resource/authority/language/ENG" />
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].languages).toEqual([
+      "http://publications.europa.eu/resource/authority/language/ENG",
+    ]);
+  });
+
+  test("resolves explicit and inline catalogues, and only uses fallback when a single top-level catalogue exists", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Catalog rdf:about="https://example.org/catalogues/main">
+          <dct:title>Main Catalogue</dct:title>
+        </dcat:Catalog>
+        <dcat:Catalog rdf:about="https://example.org/catalogues/about-only">
+          <dct:description>About-only catalogue</dct:description>
+        </dcat:Catalog>
+
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:inCatalog rdf:resource="https://example.org/catalogues/about-only" />
+        </dcat:Dataset>
+
+        <dcat:Dataset rdf:about="https://example.org/datasets/2">
+          <dct:title>Dataset B</dct:title>
+          <dct:description>Description B</dct:description>
+          <dcat:inCatalog>
+            <dcat:Catalog>
+              <dct:title>Inline Catalogue</dct:title>
+            </dcat:Catalog>
+          </dcat:inCatalog>
+        </dcat:Dataset>
+
+        <dcat:Dataset rdf:about="https://example.org/datasets/3">
+          <dct:title>Dataset C</dct:title>
+          <dct:description>Description C</dct:description>
+        </dcat:Dataset>
+
+        <dcat:Catalog rdf:about="https://example.org/catalogues/fallback-only">
+          <dct:title>Fallback Catalogue</dct:title>
+        </dcat:Catalog>
+        <dcat:Dataset rdf:about="https://example.org/datasets/4">
+          <dct:title>Dataset D</dct:title>
+          <dct:description>Description D</dct:description>
+          <dcat:inCatalog>
+            <dcat:Catalog>
+              <dct:title>Nested Catalogue</dct:title>
+            </dcat:Catalog>
+          </dcat:inCatalog>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets.map((dataset) => dataset.catalogue)).toEqual([
+      "https://example.org/catalogues/about-only",
+      "Inline Catalogue",
+      "",
+      "Nested Catalogue",
+    ]);
+  });
+
+  test("uses the single top-level catalogue as fallback", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Catalog rdf:about="https://example.org/catalogues/main">
+          <dct:title>Main Catalogue</dct:title>
+        </dcat:Catalog>
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].catalogue).toBe("Main Catalogue");
+  });
+
+  test("falls back to generated dataset ids and keeps identifier independent", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset>
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+        </dcat:Dataset>
+        <dcat:Dataset rdf:about="https://example.org/datasets/2">
+          <dct:title>Dataset B</dct:title>
+          <dct:description>Description B</dct:description>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].id).toBe("dataset-1");
+    expect(datasets[1]).toMatchObject({
+      id: "https://example.org/datasets/2",
+      identifier: "",
+    });
+    expect(datasets[0]).toEqual({
+      id: "dataset-1",
+      identifier: "",
+      title: "Dataset A",
+      description: "Description A",
+      catalogue: "",
+      languages: [],
+      createdAt: undefined,
+      modifiedAt: undefined,
+      version: "",
+      hasVersions: [],
+      versionNotes: undefined,
+      populationCoverage: "",
+      spatialCoverage: undefined,
+      spatialResolutionInMeters: undefined,
+      temporalCoverage: undefined,
+      retentionPeriod: undefined,
+      temporalResolution: undefined,
+      frequency: undefined,
+      publishers: [],
+      hdab: [],
+      creators: [],
+      publisherType: undefined,
+      datasetRelationships: undefined,
+      themes: [],
+      keywords: [],
+      healthTheme: [],
+      healthCategory: [],
+      dcatType: [],
+      personalData: undefined,
+      purpose: undefined,
+      codeValues: undefined,
+      codingSystem: undefined,
+      isReferencedBy: undefined,
+    });
+  });
+
+  test("normalizes invalid dates to empty strings", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:issued>not-a-valid-date</dct:issued>
+          <dct:modified>also-invalid</dct:modified>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0]).toMatchObject({
+      createdAt: undefined,
+      modifiedAt: undefined,
+    });
+  });
+
+  test("parses dcterms issued and modified dates as ISO strings", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dcterms="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dcterms:title>Dataset A</dcterms:title>
+          <dcterms:description>Description A</dcterms:description>
+          <dcterms:issued>2020-01-02T03:04:05Z</dcterms:issued>
+          <dcterms:modified>2021-02-03T04:05:06Z</dcterms:modified>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0]).toMatchObject({
+      createdAt: "2020-01-02T03:04:05.000Z",
+      modifiedAt: "2021-02-03T04:05:06.000Z",
+    });
+  });
+
+  test("supports healthdcatap populationCoverage", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:healthdcatap="http://healthdataportal.eu/ns/health#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <healthdcatap:populationCoverage xml:lang="eng">Population cov</healthdcatap:populationCoverage>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].populationCoverage).toBe("Population cov");
+  });
+
+  test("stores all valid spatial resolution values and ignores invalid ones", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:spatialResolutionInMeters>not-a-number</dcat:spatialResolutionInMeters>
+          <dcat:spatialResolutionInMeters>100</dcat:spatialResolutionInMeters>
+          <dcat:spatialResolutionInMeters>200</dcat:spatialResolutionInMeters>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].spatialResolutionInMeters).toEqual([100, 200]);
+  });
+
+  test("stores all version notes values", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:adms="http://www.w3.org/ns/adms#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <adms:versionNotes>Version Notes 1</adms:versionNotes>
+          <adms:versionNotes>Version Notes 2</adms:versionNotes>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].versionNotes).toEqual([
+      "Version Notes 1",
+      "Version Notes 2",
+    ]);
+  });
+
+  test("extracts provenance labels from provenance statements", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:provenance>
+            <dct:ProvenanceStatement>
+              <rdfs:label>Collected from national registries</rdfs:label>
+            </dct:ProvenanceStatement>
+          </dct:provenance>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].provenance).toBe("Collected from national registries");
+  });
+
+  test("extracts literal provenance values", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:provenance>Imported from a national registry</dct:provenance>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].provenance).toBe("Imported from a national registry");
+  });
+
+  test("falls back to provenance statement descriptions", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:provenance>
+            <dct:ProvenanceStatement>
+              <dct:description>Derived from an audited clinical system</dct:description>
+            </dct:ProvenanceStatement>
+          </dct:provenance>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].provenance).toBe(
+      "Derived from an audited clinical system"
+    );
+  });
+
+  test("maps spatial coverage without labels when only the URI exists", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:spatial>
+            <dct:Location rdf:about="http://publications.europa.eu/resource/authority/country/LUX"/>
+          </dct:spatial>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].spatialCoverage).toEqual([
+      {
+        uri: "http://publications.europa.eu/resource/authority/country/LUX",
+        text: undefined,
+      },
     ]);
   });
 
@@ -107,113 +824,391 @@ describe("DcatHarvesterService", () => {
       status: 200,
       statusText: "OK",
       text: async () => `
-        <rdf:RDF xmlns:dcat="http://www.w3.org/ns/dcat#" xmlns:dct="http://purl.org/dc/terms/">
-          <dcat:Dataset rdf:about="x"><dct:title>T</dct:title><dct:description>D</dct:description></dcat:Dataset>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcat="http://www.w3.org/ns/dcat#" xmlns:dct="http://purl.org/dc/terms/">
+          <dcat:Dataset rdf:about="https://example.org/datasets/x"><dct:title>T</dct:title><dct:description>D</dct:description></dcat:Dataset>
         </rdf:RDF>
       `,
     } as Response);
 
     const service = new DcatHarvesterService(fetcher);
-    const datasets = await service.harvestFromUrl(
-      "https://example.org/catalogue.rdf"
-    );
 
-    expect(fetcher).toHaveBeenCalledWith("https://example.org/catalogue.rdf", {
-      headers: undefined,
+    await expect(
+      service.harvestFromUrl("https://example.org/catalogue.rdf")
+    ).resolves.toEqual([
+      {
+        id: "https://example.org/datasets/x",
+        identifier: "",
+        title: "T",
+        description: "D",
+        catalogue: "",
+        languages: [],
+        createdAt: undefined,
+        modifiedAt: undefined,
+        version: "",
+        hasVersions: [],
+        versionNotes: undefined,
+        numberOfRecords: undefined,
+        numberOfUniqueIndividuals: undefined,
+        maxTypicalAge: undefined,
+        minTypicalAge: undefined,
+        populationCoverage: "",
+        spatialCoverage: undefined,
+        spatialResolutionInMeters: undefined,
+        temporalCoverage: undefined,
+        retentionPeriod: undefined,
+        temporalResolution: undefined,
+        frequency: undefined,
+        publishers: [],
+        hdab: [],
+        creators: [],
+        publisherType: undefined,
+        datasetRelationships: undefined,
+        themes: [],
+        keywords: [],
+        healthTheme: [],
+        healthCategory: [],
+        dcatType: [],
+        personalData: undefined,
+        purpose: undefined,
+        codeValues: undefined,
+        codingSystem: undefined,
+        isReferencedBy: undefined,
+      },
+    ]);
+
+    expect(fetcher).toHaveBeenCalledWith(
+      "https://example.org/catalogue.rdf",
+      expect.objectContaining({
+        headers: undefined,
+        dispatcher: expect.anything(),
+      })
+    );
+  });
+
+  test("harvestFromUrl adds the harvest TLS dispatcher", async () => {
+    const fetcher =
+      jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
+    fetcher.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      statusText: "OK",
+      text: async () =>
+        '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" />',
+    } as Response);
+
+    const service = new DcatHarvesterService(fetcher);
+    await service.harvestFromUrl("https://example.org/catalogue.rdf", {
+      headers: { Authorization: "Bearer token" },
     });
-    expect(datasets).toEqual([
-      { id: "x", identifier: "", title: "T", description: "D", catalogue: "" },
+
+    expect(fetcher).toHaveBeenCalledWith(
+      "https://example.org/catalogue.rdf",
+      expect.objectContaining({
+        headers: { Authorization: "Bearer token" },
+        dispatcher: expect.anything(),
+      })
+    );
+  });
+
+  test("harvestFromUrl throws on non-ok response", async () => {
+    const fetcher =
+      jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
+    fetcher.mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+      statusText: "Internal Server Error",
+      headers: new Headers({ "content-type": "text/plain; charset=utf-8" }),
+      text: async () => "upstream proxy failure",
+    } as Response);
+
+    const service = new DcatHarvesterService(fetcher);
+
+    await expect(
+      service.harvestFromUrl("https://example.org/catalogue.rdf")
+    ).rejects.toThrow(
+      "Failed to fetch DCAT catalogue from https://example.org/catalogue.rdf (500 Internal Server Error) | content-type: text/plain; charset=utf-8 | response body: upstream proxy failure"
+    );
+  });
+
+  test("harvestFromUrl reports failures while reading non-ok response bodies", async () => {
+    const fetcher =
+      jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
+    const cause = Object.assign(new Error("socket hang up"), {
+      code: "ECONNRESET",
+      host: "example.org",
+      port: 443,
+    });
+    const error = new Error("failed to consume error response body");
+    (error as Error & { cause?: Error }).cause = cause;
+    fetcher.mockResolvedValueOnce({
+      ok: false,
+      status: 502,
+      statusText: "Bad Gateway",
+      headers: new Headers({ "content-type": "text/html" }),
+      text: async () => {
+        throw error;
+      },
+    } as unknown as Response);
+
+    const service = new DcatHarvesterService(fetcher);
+
+    await expect(
+      service.harvestFromUrl("https://example.org/catalogue.rdf")
+    ).rejects.toThrow(
+      "Failed to fetch DCAT catalogue from https://example.org/catalogue.rdf (502 Bad Gateway) | content-type: text/html | response body: unable to read error response body: failed to consume error response body | cause: socket hang up (code=ECONNRESET, host=example.org, port=443)"
+    );
+  });
+
+  test("harvestFromUrl includes non-Error failure details", async () => {
+    const fetcher =
+      jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
+    fetcher.mockRejectedValueOnce("socket closed");
+
+    const service = new DcatHarvesterService(fetcher);
+
+    await expect(
+      service.harvestFromUrl("https://example.org/catalogue.rdf")
+    ).rejects.toThrow(
+      "Failed to download DCAT catalogue from https://example.org/catalogue.rdf: socket closed"
+    );
+  });
+
+  test("harvestFromUrl includes response body read failures", async () => {
+    const fetcher =
+      jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
+    const cause = Object.assign(new Error("socket hang up"), {
+      code: "ECONNRESET",
+      host: "example.org",
+      port: 443,
+    });
+    const error = new Error("failed to consume response body");
+    (error as Error & { cause?: Error }).cause = cause;
+    fetcher.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      statusText: "OK",
+      text: async () => {
+        throw error;
+      },
+    } as unknown as Response);
+
+    const service = new DcatHarvesterService(fetcher);
+
+    await expect(
+      service.harvestFromUrl("https://example.org/catalogue.rdf")
+    ).rejects.toThrow(
+      "Failed to read DCAT catalogue response body from https://example.org/catalogue.rdf: failed to consume response body | cause: socket hang up (code=ECONNRESET, host=example.org, port=443)"
+    );
+  });
+
+  test("harvestFromUrl includes RDF parse failures", async () => {
+    const fetcher =
+      jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
+    fetcher.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      statusText: "OK",
+      text: async () => "<rdf />",
+    } as Response);
+
+    const service = new DcatHarvesterService(fetcher);
+    jest
+      .spyOn(service, "parseDatasetsFromRdf")
+      .mockRejectedValueOnce(new Error("invalid RDF payload"));
+
+    await expect(
+      service.harvestFromUrl("https://example.org/catalogue.rdf")
+    ).rejects.toThrow(
+      "Failed to parse RDF/XML from https://example.org/catalogue.rdf: invalid RDF payload"
+    );
+  });
+
+  test("extracts frequency with skos:prefLabel as label", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:accrualPeriodicity>
+            <dct:Frequency rdf:about="http://publications.europa.eu/resource/authority/frequency/ANNUAL">
+              <skos:prefLabel xml:lang="eng">Annual</skos:prefLabel>
+            </dct:Frequency>
+          </dct:accrualPeriodicity>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].frequency).toEqual({
+      value:
+        "http://publications.europa.eu/resource/authority/frequency/ANNUAL",
+      label: "Annual",
+    });
+  });
+
+  test("extracts frequency falling back to URI tail when skos:prefLabel is absent", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:accrualPeriodicity rdf:resource="http://publications.europa.eu/resource/authority/frequency/MONTHLY"/>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].frequency).toEqual({
+      value:
+        "http://publications.europa.eu/resource/authority/frequency/MONTHLY",
+      label: "MONTHLY",
+    });
+  });
+
+  test("extracts temporalCoverage with start and end dates", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:temporal>
+            <dct:PeriodOfTime>
+              <dcat:startDate>2020-01-01</dcat:startDate>
+              <dcat:endDate>2023-12-31</dcat:endDate>
+            </dct:PeriodOfTime>
+          </dct:temporal>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].temporalCoverage).toEqual({
+      start: "2020-01-01T00:00:00.000Z",
+      end: "2023-12-31T00:00:00.000Z",
+    });
+  });
+
+  test("extracts retentionPeriod with multiple periods", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:healthdcatap="http://healthdataportal.eu/ns/health#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <healthdcatap:retentionPeriod>
+            <dct:PeriodOfTime>
+              <dcat:startDate>2020-01-01</dcat:startDate>
+              <dcat:endDate>2022-12-31</dcat:endDate>
+            </dct:PeriodOfTime>
+          </healthdcatap:retentionPeriod>
+          <healthdcatap:retentionPeriod>
+            <dct:PeriodOfTime>
+              <dcat:startDate>2023-01-01</dcat:startDate>
+            </dct:PeriodOfTime>
+          </healthdcatap:retentionPeriod>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].retentionPeriod).toEqual([
+      { start: "2020-01-01T00:00:00.000Z", end: "2022-12-31T00:00:00.000Z" },
+      { start: "2023-01-01T00:00:00.000Z", end: undefined },
     ]);
   });
 
-  test("extracts dataset catalogue from dcat:inCatalog rdf:resource", () => {
+  test("returns undefined for temporalCoverage when period has no valid dates", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                xmlns:dcat="http://www.w3.org/ns/dcat#"
                xmlns:dct="http://purl.org/dc/terms/">
-        <dcat:Catalog rdf:about="https://example.org/catalogues/main">
-          <dct:title>Main Catalogue</dct:title>
-        </dcat:Catalog>
-        <dcat:Dataset rdf:about="d1">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
           <dct:title>Dataset A</dct:title>
           <dct:description>Description A</dct:description>
-          <dcat:inCatalog rdf:resource="https://example.org/catalogues/special" />
+          <dct:temporal>
+            <dct:PeriodOfTime>
+              <dcat:startDate>not-a-date</dcat:startDate>
+              <dcat:endDate>also-invalid</dcat:endDate>
+            </dct:PeriodOfTime>
+          </dct:temporal>
         </dcat:Dataset>
       </rdf:RDF>
     `;
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
-    expect(datasets[0].catalogue).toBe(
-      "https://example.org/catalogues/special"
-    );
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].temporalCoverage).toBeUndefined();
   });
 
-  test("falls back to catalog rdf:about when catalog has no title", () => {
+  test("returns undefined for retentionPeriod when all periods have no valid dates", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                xmlns:dcat="http://www.w3.org/ns/dcat#"
-               xmlns:dct="http://purl.org/dc/terms/">
-        <dcat:Catalog rdf:about="https://example.org/catalogues/about-only">
-          <dct:description>About-only catalogue</dct:description>
-        </dcat:Catalog>
-        <dcat:Dataset rdf:about="d1">
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:healthdcatap="http://healthdataportal.eu/ns/health#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
           <dct:title>Dataset A</dct:title>
           <dct:description>Description A</dct:description>
+          <healthdcatap:retentionPeriod>
+            <dct:PeriodOfTime>
+              <dcat:startDate>not-a-date</dcat:startDate>
+              <dcat:endDate>also-invalid</dcat:endDate>
+            </dct:PeriodOfTime>
+          </healthdcatap:retentionPeriod>
         </dcat:Dataset>
       </rdf:RDF>
     `;
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
-    expect(datasets[0].catalogue).toBe(
-      "https://example.org/catalogues/about-only"
-    );
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].retentionPeriod).toBeUndefined();
   });
 
-  test("extracts dataset catalogue from inline dcat:inCatalog title block", () => {
+  test("extracts personalData as ValueLabel array using URI fragment as fallback label", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                xmlns:dcat="http://www.w3.org/ns/dcat#"
-               xmlns:dct="http://purl.org/dc/terms/">
-        <dcat:Catalog rdf:about="https://example.org/catalogues/main">
-          <dct:title>Main Catalogue</dct:title>
-        </dcat:Catalog>
-        <dcat:Dataset rdf:about="d1">
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dpv="http://www.w3.org/ns/dpv#"
+               xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
           <dct:title>Dataset A</dct:title>
           <dct:description>Description A</dct:description>
-          <dcat:inCatalog>
-            <dcat:Catalog>
-              <dct:title>Inline Catalogue</dct:title>
-            </dcat:Catalog>
-          </dcat:inCatalog>
+          <dpv:hasPersonalData rdf:resource="https://w3id.org/dpv/dpv-pd#Age"/>
+          <dpv:hasPersonalData>
+            <dpv:PersonalData rdf:about="https://w3id.org/dpv/dpv-pd#MedicalRecord">
+              <skos:prefLabel xml:lang="eng">Medical Record</skos:prefLabel>
+            </dpv:PersonalData>
+          </dpv:hasPersonalData>
         </dcat:Dataset>
       </rdf:RDF>
     `;
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
-    expect(datasets[0].catalogue).toBe("Inline Catalogue");
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].personalData).toEqual([
+      { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
+      {
+        value: "https://w3id.org/dpv/dpv-pd#MedicalRecord",
+        label: "Medical Record",
+      },
+    ]);
   });
 
-  test("falls back to generated dataset id when identifier/about are missing", () => {
-    const service = new DcatHarvesterService();
-    const rdf = `
-      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-               xmlns:dcat="http://www.w3.org/ns/dcat#"
-               xmlns:dct="http://purl.org/dc/terms/">
-        <dcat:Dataset>
-          <dct:title>Dataset A</dct:title>
-          <dct:description>Description A</dct:description>
-        </dcat:Dataset>
-      </rdf:RDF>
-    `;
-
-    const datasets = service.parseDatasetsFromRdf(rdf);
-    expect(datasets[0].id).toBe("dataset-1");
-  });
-
-  test("extracts identifier independently from id fallback", () => {
+  test("returns undefined for personalData when no dpv:hasPersonalData triples exist", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -226,32 +1221,240 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = service.parseDatasetsFromRdf(rdf);
-    expect(datasets[0]).toEqual({
-      id: "https://example.org/datasets/1",
-      identifier: "",
-      title: "Dataset A",
-      description: "Description A",
-      catalogue: "",
-    });
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].personalData).toBeUndefined();
   });
 
-  test("harvestFromUrl throws on non-ok response", async () => {
-    const fetcher =
-      jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
-    fetcher.mockResolvedValueOnce({
-      ok: false,
-      status: 500,
-      statusText: "Internal Server Error",
-      text: async () => "",
-    } as Response);
+  test("uses rdfs:label as fallback label when skos:prefLabel is absent", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dpv="http://www.w3.org/ns/dpv#"
+               xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dpv:hasPersonalData>
+            <dpv:PersonalData rdf:about="https://w3id.org/dpv/dpv-pd#Location">
+              <rdfs:label xml:lang="eng">Location Data</rdfs:label>
+            </dpv:PersonalData>
+          </dpv:hasPersonalData>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
 
-    const service = new DcatHarvesterService(fetcher);
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].personalData).toEqual([
+      { value: "https://w3id.org/dpv/dpv-pd#Location", label: "Location Data" },
+    ]);
+  });
 
-    await expect(
-      service.harvestFromUrl("https://example.org/catalogue.rdf")
-    ).rejects.toThrow(
-      "Failed to fetch DCAT catalogue (500 Internal Server Error)"
-    );
+  test("falls back to URI path segment when no label triple exists", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dpv="http://www.w3.org/ns/dpv#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dpv:hasPersonalData rdf:resource="https://w3id.org/dpv/dpv-pd#Financial"/>
+          <dpv:hasPersonalData rdf:resource="https://example.org/personal-data/Genetic"/>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].personalData).toEqual([
+      { value: "https://w3id.org/dpv/dpv-pd#Financial", label: "Financial" },
+      {
+        value: "https://example.org/personal-data/Genetic",
+        label: "Genetic",
+      },
+    ]);
+  });
+
+  test("collects personalData across multiple datasets independently", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dpv="http://www.w3.org/ns/dpv#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dpv:hasPersonalData rdf:resource="https://w3id.org/dpv/dpv-pd#Age"/>
+        </dcat:Dataset>
+        <dcat:Dataset rdf:about="https://example.org/datasets/2">
+          <dct:title>Dataset B</dct:title>
+          <dct:description>Description B</dct:description>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].personalData).toEqual([
+      { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
+    ]);
+    expect(datasets[1].personalData).toBeUndefined();
+  });
+
+  test("extracts purpose using dct:description as value and label", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dpv="http://www.w3.org/ns/dpv#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dpv:hasPurpose>
+            <dpv:Purpose rdf:nodeID="Npurpose1">
+              <dct:description xml:lang="eng">https://www.example.com/purpose/research</dct:description>
+            </dpv:Purpose>
+          </dpv:hasPurpose>
+          <dpv:hasPurpose>
+            <dpv:Purpose rdf:nodeID="Npurpose2">
+              <dct:description xml:lang="eng">Scientific analysis</dct:description>
+            </dpv:Purpose>
+          </dpv:hasPurpose>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].purpose).toEqual([
+      {
+        value: "https://www.example.com/purpose/research",
+        label: "https://www.example.com/purpose/research",
+      },
+      { value: "Scientific analysis", label: "Scientific analysis" },
+    ]);
+  });
+
+  test("returns undefined for purpose when no dpv:hasPurpose triples exist", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].purpose).toBeUndefined();
+  });
+
+  test("ignores dpv:hasPurpose entries with no dct:description", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dpv="http://www.w3.org/ns/dpv#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dpv:hasPurpose>
+            <dpv:Purpose rdf:nodeID="Npurpose-empty"/>
+          </dpv:hasPurpose>
+          <dpv:hasPurpose>
+            <dpv:Purpose rdf:nodeID="Npurpose-valid">
+              <dct:description xml:lang="eng">Valid purpose</dct:description>
+            </dpv:Purpose>
+          </dpv:hasPurpose>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].purpose).toEqual([
+      { value: "Valid purpose", label: "Valid purpose" },
+    ]);
+  });
+
+  test("collects purpose across multiple datasets independently", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:dpv="http://www.w3.org/ns/dpv#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dpv:hasPurpose>
+            <dpv:Purpose rdf:nodeID="Np1">
+              <dct:description xml:lang="eng">Research</dct:description>
+            </dpv:Purpose>
+          </dpv:hasPurpose>
+        </dcat:Dataset>
+        <dcat:Dataset rdf:about="https://example.org/datasets/2">
+          <dct:title>Dataset B</dct:title>
+          <dct:description>Description B</dct:description>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].purpose).toEqual([
+      { value: "Research", label: "Research" },
+    ]);
+    expect(datasets[1].purpose).toBeUndefined();
+  });
+
+  test("extracts temporalResolution as ISO duration string", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:temporalResolution rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">P1M</dcat:temporalResolution>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].temporalResolution).toBe("P1M");
+  });
+
+  test("returns undefined for dates when getTime throws", async () => {
+    const service = new DcatHarvesterService();
+    const getTimeSpy = jest
+      .spyOn(Date.prototype, "getTime")
+      .mockImplementationOnce(() => {
+        throw new Error("date getTime failed");
+      });
+
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:issued>2020-01-02</dct:issued>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    try {
+      const datasets = await service.parseDatasetsFromRdf(rdf);
+      expect(datasets[0]).toMatchObject({ createdAt: undefined });
+    } finally {
+      getTimeSpy.mockRestore();
+    }
   });
 });

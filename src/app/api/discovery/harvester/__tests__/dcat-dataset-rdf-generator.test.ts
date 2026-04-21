@@ -1,0 +1,610 @@
+// SPDX-FileCopyrightText: 2026 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
+import {
+  escapeTurtleLiteral,
+  escapeXml,
+  getDatasetExportUri,
+  getDatasetRdfAboutAttribute,
+  getDatasetTurtleSubject,
+  getLocalDiscoveryExportBaseUrl,
+  isAbsoluteUri,
+} from "@/app/api/discovery/harvester/dcat-dataset-rdf-shared";
+import { serializeDatasetAsJsonLd } from "@/app/api/discovery/harvester/dcat-dataset-jsonld-generator";
+import {
+  getLocalDiscoveryDatasetExportMimeType,
+  serializeLocalDiscoveryDataset,
+} from "@/app/api/discovery/harvester/dcat-dataset-rdf-generator";
+import { parseRdfXmlToQuads } from "@/app/api/discovery/harvester/rdf-quad-loader";
+import { serializeDatasetAsRdfXml } from "@/app/api/discovery/harvester/dcat-dataset-rdfxml-generator";
+import { serializeDatasetAsTurtle } from "@/app/api/discovery/harvester/dcat-dataset-turtle-generator";
+import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtures";
+
+describe("DCAT dataset export generators", () => {
+  const originalBaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const FOAF_PAGE = "http://xmlns.com/foaf/0.1/page";
+  const RDF_TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+  const CSVW_TABLE_SCHEMA = "http://www.w3.org/ns/csvw#TableSchema";
+  const CSVW_COLUMN = "http://www.w3.org/ns/csvw#column";
+  const CSVW_NAME = "http://www.w3.org/ns/csvw#name";
+  const CSVW_DATATYPE = "http://www.w3.org/ns/csvw#datatype";
+  const DCT_DESCRIPTION = "http://purl.org/dc/terms/description";
+
+  beforeEach(() => {
+    process.env.NEXT_PUBLIC_BASE_URL = "https://portal.example.org/";
+  });
+
+  afterEach(() => {
+    process.env.NEXT_PUBLIC_BASE_URL = originalBaseUrl;
+  });
+
+  test("shared helpers escape XML and Turtle values", () => {
+    expect(escapeXml(`5 < 6 & "7" '8' > 4`)).toBe(
+      "5 &lt; 6 &amp; &quot;7&quot; &apos;8&apos; &gt; 4"
+    );
+    expect(escapeTurtleLiteral('line 1\\line 2 "quoted"\n\tend\r')).toBe(
+      'line 1\\\\line 2 \\"quoted\\"\\n\\tend\\r'
+    );
+  });
+
+  test("shared helpers preserve absolute ids and generate valid export URIs", () => {
+    const uriDataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+    });
+    const localIdDataset = buildLocalDiscoveryDataset({ id: "dataset-1" });
+    const identifierDataset = buildLocalDiscoveryDataset({
+      id: "",
+      identifier: "identifier-1",
+    });
+    const emptyIdDataset = buildLocalDiscoveryDataset({
+      id: "",
+      identifier: undefined,
+    });
+
+    expect(isAbsoluteUri("https://example.org/datasets/export-1")).toBe(true);
+    expect(isAbsoluteUri("dataset-1")).toBe(false);
+    expect(getLocalDiscoveryExportBaseUrl()).toBe("https://portal.example.org");
+    expect(getDatasetExportUri(uriDataset)).toBe(
+      "https://example.org/datasets/export-1"
+    );
+    expect(getDatasetExportUri(localIdDataset)).toBe(
+      "https://portal.example.org/datasets/dataset-1"
+    );
+    expect(getDatasetExportUri(identifierDataset)).toBe(
+      "https://portal.example.org/datasets/identifier-1"
+    );
+    expect(
+      getDatasetExportUri(
+        buildLocalDiscoveryDataset({
+          id: "dataset-1",
+          identifier: "identifier-2",
+        })
+      )
+    ).toBe("https://portal.example.org/datasets/identifier-2");
+    expect(getDatasetExportUri(emptyIdDataset)).toBe(
+      "https://portal.example.org/datasets/unknown-dataset"
+    );
+    expect(getDatasetRdfAboutAttribute(uriDataset)).toBe(
+      ' rdf:about="https://example.org/datasets/export-1"'
+    );
+    expect(getDatasetRdfAboutAttribute(localIdDataset)).toBe(
+      ' rdf:about="https://portal.example.org/datasets/dataset-1"'
+    );
+    expect(getDatasetTurtleSubject(uriDataset)).toBe(
+      "<https://example.org/datasets/export-1>"
+    );
+    expect(getDatasetTurtleSubject(emptyIdDataset)).toBe(
+      "<https://portal.example.org/datasets/unknown-dataset>"
+    );
+  });
+
+  test("serializes RDF/XML with extended dataset metadata", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      title: "Population Registry & Statistics",
+      description: "National <regional> data",
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(rdfXml).toContain("<rdf:RDF");
+    expect(rdfXml).toContain("<healthdcatap:numberOfRecords");
+    expect(rdfXml).toContain("<dct:provenance");
+    expect(rdfXml).toContain(
+      'rdf:about="https://example.org/datasets/export-1#distribution-1"'
+    );
+    expect(rdfXml).toContain(
+      'rdf:about="https://example.org/datasets/export-1#contact-point-1"'
+    );
+
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    expect(
+      quads.some(
+        (quad) =>
+          quad.predicate.value === "http://www.w3.org/ns/dcat#version" &&
+          quad.object.termType === "Literal" &&
+          quad.object.value === "1.0.0"
+      )
+    ).toBe(true);
+    expect(
+      quads.some(
+        (quad) =>
+          quad.predicate.value === "http://www.w3.org/ns/dcat#distribution" &&
+          quad.object.termType === "NamedNode"
+      )
+    ).toBe(true);
+    expect(
+      quads.some(
+        (quad) =>
+          quad.subject.value ===
+            "https://example.org/datasets/export-1#provenance" &&
+          quad.predicate.value ===
+            "http://www.w3.org/2000/01/rdf-schema#label" &&
+          quad.object.termType === "Literal" &&
+          quad.object.value ===
+            "The data for the LINK-VACC project is sourced from several existing databases, including Vaccinnet+, HealthData COVID-19 database (Contact tracing and Clinic database), CoBRHA, STATBEL, and the AIM database. These databases collectively provide comprehensive demographic, clinical, and socio-economic data relevant to the project's objectives"
+      )
+    ).toBe(true);
+  });
+
+  test("serializes Turtle with extended dataset metadata", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      title: 'Population "Registry"',
+      description: "Line 1\nLine 2",
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+
+    expect(turtle).toContain("@prefix healthdcatap:");
+    expect(turtle).toContain("@prefix rdfs:");
+    expect(turtle).toContain('dct:title "Population \\"Registry\\""');
+    expect(turtle).toContain('dct:description "Line 1\\nLine 2"');
+    expect(turtle).toContain("dct:provenance");
+    expect(turtle).toContain("healthdcatap:numberOfRecords 50000");
+    expect(turtle).toContain(
+      "<https://example.org/datasets/export-1#distribution-1>"
+    );
+    expect(turtle).toContain("a dcat:Distribution");
+  });
+
+  test("serializes JSON-LD with extended dataset metadata", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      title: "Dataset A",
+      description: "desc-a",
+    });
+
+    const jsonLd = JSON.parse(
+      await serializeDatasetAsJsonLd(dataset)
+    ) as Record<string, unknown>;
+    const graph = jsonLd["@graph"] as Array<Record<string, unknown>>;
+
+    expect(jsonLd["@context"]).toBeDefined();
+    expect(Array.isArray(graph)).toBe(true);
+    expect(
+      graph.some(
+        (item) =>
+          item["@id"] === "https://example.org/datasets/export-1" &&
+          Array.isArray(item["dct:title"])
+      )
+    ).toBe(true);
+    expect(
+      graph.some(
+        (item) =>
+          item["@id"] === "https://example.org/datasets/export-1#distribution-1"
+      )
+    ).toBe(true);
+  });
+
+  test("facade dispatches serializers and MIME types for all supported formats", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      title: "Dataset A",
+      description: "desc-a",
+    });
+
+    expect(await serializeLocalDiscoveryDataset(dataset, "rdf")).toContain(
+      "<rdf:RDF"
+    );
+    expect(await serializeLocalDiscoveryDataset(dataset, "ttl")).toContain(
+      "@prefix dcat:"
+    );
+    expect(await serializeLocalDiscoveryDataset(dataset, "jsonld")).toContain(
+      '"@context"'
+    );
+
+    expect(getLocalDiscoveryDatasetExportMimeType("rdf")).toBe(
+      "application/rdf+xml"
+    );
+    expect(getLocalDiscoveryDatasetExportMimeType("ttl")).toBe("text/turtle");
+    expect(getLocalDiscoveryDatasetExportMimeType("jsonld")).toBe(
+      "application/ld+json"
+    );
+  });
+
+  test("handles missing optional export fields in all formats", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "dataset-1",
+      title: "",
+      description: undefined,
+      languages: undefined,
+      versionNotes: undefined,
+      distributions: undefined,
+      contacts: undefined,
+      publishers: [],
+      hdab: [],
+      creators: [],
+      dataDictionary: undefined,
+      keywords: undefined,
+      themes: undefined,
+      healthTheme: undefined,
+      healthCategory: undefined,
+      dcatType: undefined,
+      conformsTo: undefined,
+      applicableLegislation: undefined,
+      legalBasis: undefined,
+      personalData: undefined,
+      spatialCoverage: undefined,
+      spatialResolutionInMeters: undefined,
+      temporalCoverage: undefined,
+      retentionPeriod: undefined,
+      frequency: undefined,
+      datasetRelationships: undefined,
+      accessRights: undefined,
+      numberOfRecords: undefined,
+      numberOfUniqueIndividuals: undefined,
+      maxTypicalAge: undefined,
+      minTypicalAge: undefined,
+      populationCoverage: undefined,
+      temporalResolution: undefined,
+      hasVersions: undefined,
+      version: undefined,
+      provenance: undefined,
+      createdAt: undefined,
+      modifiedAt: undefined,
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    expect(rdfXml).toContain(
+      'rdf:about="https://portal.example.org/datasets/dataset-1"'
+    );
+    await expect(parseRdfXmlToQuads(rdfXml)).resolves.toEqual(
+      expect.any(Array)
+    );
+
+    expect(await serializeDatasetAsTurtle(dataset)).toContain(
+      "<https://portal.example.org/datasets/dataset-1> a dcat:Dataset"
+    );
+    expect(await serializeDatasetAsTurtle(dataset)).not.toContain(
+      "dct:provenance"
+    );
+
+    const jsonLd = JSON.parse(
+      await serializeDatasetAsJsonLd(dataset)
+    ) as Record<string, unknown>;
+    const graph = jsonLd["@graph"] as Array<Record<string, unknown>>;
+    expect(
+      graph.some(
+        (item) =>
+          item["@id"] === "https://portal.example.org/datasets/dataset-1"
+      )
+    ).toBe(true);
+  });
+
+  test("emits data dictionary entries in all export formats", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      dataDictionary: [
+        {
+          name: "patient_id",
+          type: "string",
+          description: "Pseudonymous patient identifier",
+        },
+        {
+          name: "visit_count",
+          type: "integer",
+          description: "Number of recorded visits",
+        },
+      ],
+      documentation: undefined,
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const jsonLd = JSON.parse(
+      await serializeDatasetAsJsonLd(dataset)
+    ) as Record<string, unknown>;
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    const schemaNodes = [
+      ...new Set(
+        quads
+          .filter(
+            (q) =>
+              q.subject.value === "https://example.org/datasets/export-1" &&
+              q.predicate.value === FOAF_PAGE
+          )
+          .map((q) => q.object.value)
+      ),
+    ];
+
+    expect(schemaNodes).toHaveLength(1);
+    expect(
+      quads.some(
+        (q) =>
+          q.subject.value === schemaNodes[0] &&
+          q.predicate.value === RDF_TYPE &&
+          q.object.value === CSVW_TABLE_SCHEMA
+      )
+    ).toBe(true);
+
+    const columnNodes = quads
+      .filter(
+        (q) =>
+          q.subject.value === schemaNodes[0] &&
+          q.predicate.value === CSVW_COLUMN
+      )
+      .map((q) => q.object.value);
+    expect(columnNodes).toHaveLength(2);
+
+    expect(
+      quads.some(
+        (q) =>
+          columnNodes.includes(q.subject.value) &&
+          q.predicate.value === CSVW_NAME &&
+          q.object.value === "patient_id"
+      )
+    ).toBe(true);
+    expect(
+      quads.some(
+        (q) =>
+          columnNodes.includes(q.subject.value) &&
+          q.predicate.value === CSVW_DATATYPE &&
+          q.object.value === "http://www.w3.org/2001/XMLSchema#string"
+      )
+    ).toBe(true);
+    expect(
+      quads.some(
+        (q) =>
+          columnNodes.includes(q.subject.value) &&
+          q.predicate.value === DCT_DESCRIPTION &&
+          q.object.value === "Pseudonymous patient identifier"
+      )
+    ).toBe(true);
+
+    expect(turtle).toContain("@prefix csvw:");
+    expect(turtle).toContain("csvw:TableSchema");
+    expect(turtle).toContain('csvw:name "patient_id"');
+    expect(turtle).toContain("csvw:datatype xsd:string");
+
+    const graph = jsonLd["@graph"] as Array<Record<string, unknown>>;
+    expect(
+      graph.some(
+        (item) =>
+          item["@id"] === "https://example.org/datasets/export-1" &&
+          Array.isArray(item["foaf:page"])
+      )
+    ).toBe(true);
+    expect(
+      graph.some(
+        (item) =>
+          Array.isArray(item["@type"]) &&
+          (item["@type"] as string[]).includes("csvw:TableSchema") &&
+          Array.isArray(item["csvw:column"])
+      )
+    ).toBe(true);
+    expect(
+      graph.some(
+        (item) =>
+          Array.isArray(item["@type"]) &&
+          (item["@type"] as string[]).includes("csvw:Column") &&
+          JSON.stringify(item).includes("patient_id") &&
+          JSON.stringify(item).includes("xsd:string")
+      )
+    ).toBe(true);
+  });
+
+  test("emits dpv:hasPersonalData as plain rdf:resource references in RDF/XML", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      personalData: [
+        { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
+        {
+          value: "https://w3id.org/dpv/dpv-pd#MedicalRecord",
+          label: "Medical Record",
+        },
+      ],
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    const personalDataQuads = quads.filter(
+      (q) => q.predicate.value === "http://www.w3.org/ns/dpv#hasPersonalData"
+    );
+    expect(personalDataQuads).toHaveLength(2);
+    expect(personalDataQuads.map((q) => q.object.value).sort()).toEqual([
+      "https://w3id.org/dpv/dpv-pd#Age",
+      "https://w3id.org/dpv/dpv-pd#MedicalRecord",
+    ]);
+    // plain NamedNode references — no skos:prefLabel triples should be emitted
+    const prefLabelQuads = quads.filter(
+      (q) =>
+        q.predicate.value === "http://www.w3.org/2004/02/skos/core#prefLabel" &&
+        (q.subject.value === "https://w3id.org/dpv/dpv-pd#Age" ||
+          q.subject.value === "https://w3id.org/dpv/dpv-pd#MedicalRecord")
+    );
+    expect(prefLabelQuads).toHaveLength(0);
+  });
+
+  test("emits dpv:hasPersonalData triples in Turtle format", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      personalData: [
+        { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
+      ],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+
+    expect(turtle).toContain("dpv:hasPersonalData");
+    expect(turtle).toContain("dpv-pd#Age");
+  });
+
+  test("emits dpv:hasPersonalData in JSON-LD", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      personalData: [
+        { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
+        {
+          value: "https://w3id.org/dpv/dpv-pd#MedicalRecord",
+          label: "Medical Record",
+        },
+      ],
+    });
+
+    const jsonLd = JSON.parse(
+      await serializeDatasetAsJsonLd(dataset)
+    ) as Record<string, unknown>;
+    const jsonLdStr = JSON.stringify(jsonLd);
+
+    expect(jsonLdStr).toContain("hasPersonalData");
+    expect(jsonLdStr).toContain("dpv-pd#Age");
+    expect(jsonLdStr).toContain("dpv-pd#MedicalRecord");
+  });
+
+  test("omits dpv:hasPersonalData triples when personalData is undefined", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      personalData: undefined,
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    const personalDataQuads = quads.filter(
+      (q) => q.predicate.value === "http://www.w3.org/ns/dpv#hasPersonalData"
+    );
+    expect(personalDataQuads).toHaveLength(0);
+  });
+
+  test("emits hasCodingSystem as nested dct:Standard element with rdf:about in RDF/XML", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      codingSystem: [
+        {
+          value: "https://www.wikidata.org/entity/Q9006342",
+          label: "Q9006342",
+        },
+        {
+          value: "https://www.wikidata.org/entity/Q5969475",
+          label: "Q5969475",
+        },
+      ],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(turtle).toContain("healthdcatap:hasCodingSystem");
+    expect(turtle).toContain("wikidata.org/entity/Q9006342");
+    expect(turtle).toContain("wikidata.org/entity/Q5969475");
+
+    // RDF/XML must use the nested typed-node form, not rdf:resource shorthand
+    expect(rdfXml).toContain(
+      '<healthdcatap:hasCodingSystem>\n      <dct:Standard rdf:about="https://www.wikidata.org/entity/Q9006342"/>\n    </healthdcatap:hasCodingSystem>'
+    );
+    expect(rdfXml).toContain(
+      '<healthdcatap:hasCodingSystem>\n      <dct:Standard rdf:about="https://www.wikidata.org/entity/Q5969475"/>\n    </healthdcatap:hasCodingSystem>'
+    );
+    expect(rdfXml).not.toContain("<healthdcatap:hasCodingSystem rdf:resource=");
+
+    // Each value must be typed as dct:Standard when round-tripped
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    const typeSubjects = [
+      ...new Set(
+        quads
+          .filter(
+            (q) =>
+              q.predicate.value ===
+                "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+              q.object.value === "http://purl.org/dc/terms/Standard"
+          )
+          .map((q) => q.subject.value)
+      ),
+    ].sort();
+    expect(typeSubjects).toEqual([
+      "https://www.wikidata.org/entity/Q5969475",
+      "https://www.wikidata.org/entity/Q9006342",
+    ]);
+  });
+
+  test("emits documentation as nested foaf:Document element with rdf:about in RDF/XML", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      documentation: [
+        "https://example.org/docs/dataset-1",
+        "https://example.org/docs/dataset-1-guide",
+      ],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(turtle).toContain("foaf:page");
+    expect(turtle).toContain("example.org/docs/dataset-1");
+    expect(turtle).toContain("example.org/docs/dataset-1-guide");
+
+    // RDF/XML must use the nested foaf:Document form enclosed in foaf:page
+    expect(rdfXml).toContain(
+      '<foaf:page>\n      <foaf:Document rdf:about="https://example.org/docs/dataset-1"/>\n    </foaf:page>'
+    );
+    expect(rdfXml).toContain(
+      '<foaf:page>\n      <foaf:Document rdf:about="https://example.org/docs/dataset-1-guide"/>\n    </foaf:page>'
+    );
+    expect(rdfXml).not.toContain("<foaf:page rdf:resource=");
+
+    // Each value must be typed as foaf:Document when round-tripped
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    const typeSubjects = [
+      ...new Set(
+        quads
+          .filter(
+            (q) =>
+              q.predicate.value ===
+                "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+              q.object.value === "http://xmlns.com/foaf/0.1/Document"
+          )
+          .map((q) => q.subject.value)
+      ),
+    ].sort();
+    expect(
+      typeSubjects.filter((subject) => dataset.documentation?.includes(subject))
+    ).toEqual([
+      "https://example.org/docs/dataset-1",
+      "https://example.org/docs/dataset-1-guide",
+    ]);
+  });
+
+  test("emits hasCodeValues as language-tagged literal with xml:lang='en' in RDF/XML", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      codeValues: [
+        { value: "https://www.wikidata.org/entity/Q12345", label: "Q12345" },
+        { value: "https://www.wikidata.org/entity/Q67890", label: "Q67890" },
+      ],
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(rdfXml).toContain(
+      '<healthdcatap:hasCodeValues xml:lang="en">https://www.wikidata.org/entity/Q12345</healthdcatap:hasCodeValues>'
+    );
+    expect(rdfXml).toContain(
+      '<healthdcatap:hasCodeValues xml:lang="en">https://www.wikidata.org/entity/Q67890</healthdcatap:hasCodeValues>'
+    );
+    expect(rdfXml).not.toContain("<healthdcatap:hasCodeValues rdf:resource=");
+  });
+});

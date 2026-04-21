@@ -4,10 +4,17 @@
 
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import {
-  extractDatasetBlocks,
-  findFirstTagValue,
-  normalizeXmlText,
-} from "@/app/api/discovery/harvester/dcat-harvester-utils";
+  DCAT_DATASET,
+  getFallbackCatalogue,
+  mapDataset,
+} from "@/app/api/discovery/harvester/dcat-dataset-mapper";
+import {
+  formatErrorDetails,
+  wrapError,
+} from "@/app/api/discovery/harvester/error-utils";
+import { buildHarvestRequestInit } from "@/app/api/discovery/harvester/fetch-options";
+import { parseRdfXmlToQuads } from "@/app/api/discovery/harvester/rdf-quad-loader";
+import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 
 type FetchLike = (input: string | URL, init?: RequestInit) => Promise<Response>;
 type HarvestOptions = {
@@ -21,129 +28,19 @@ export class DcatHarvesterService {
     this.fetcher = fetcher;
   }
 
-  private extractDatasetTitle(datasetBlock: string): string {
-    return findFirstTagValue(datasetBlock, ["dct:title", "dc:title"]);
-  }
+  async parseDatasetsFromRdf(
+    xmlText: string,
+    sourceUrl?: string
+  ): Promise<LocalDiscoveryDataset[]> {
+    const quads = await parseRdfXmlToQuads(xmlText, sourceUrl);
+    const graph = new RdfGraph(quads);
+    const fallbackCatalogue = getFallbackCatalogue(graph);
 
-  private extractDatasetDescription(datasetBlock: string): string {
-    return findFirstTagValue(datasetBlock, [
-      "dct:description",
-      "dc:description",
-    ]);
-  }
-
-  private extractDatasetIdentifier(datasetBlock: string): string {
-    const identifierMatch = datasetBlock.match(
-      /\bdct:identifier\b[^>]*>([\s\S]*?)<\/dct:identifier>/i
-    );
-    if (identifierMatch && identifierMatch[1]) {
-      return normalizeXmlText(identifierMatch[1]);
-    }
-
-    return "";
-  }
-
-  private extractDatasetRdfAbout(datasetBlock: string): string {
-    const aboutMatch = datasetBlock.match(/\brdf:about="([^"]+)"/i);
-    if (aboutMatch && aboutMatch[1]) {
-      return aboutMatch[1].trim();
-    }
-
-    return "";
-  }
-
-  private extractCatalogueNameFromRdf(xmlText: string): string {
-    const catalogueBlockMatch = xmlText.match(
-      /<dcat:Catalog\b[\s\S]*?<\/dcat:Catalog>/i
-    );
-    if (!catalogueBlockMatch || !catalogueBlockMatch[0]) {
-      return "";
-    }
-
-    const catalogueBlock = catalogueBlockMatch[0];
-    const catalogueTitle = findFirstTagValue(catalogueBlock, [
-      "dct:title",
-      "dc:title",
-    ]);
-    if (catalogueTitle) {
-      return catalogueTitle;
-    }
-
-    const catalogueAboutMatch = catalogueBlock.match(/\brdf:about="([^"]+)"/i);
-    if (catalogueAboutMatch && catalogueAboutMatch[1]) {
-      return catalogueAboutMatch[1].trim();
-    }
-
-    return "";
-  }
-
-  private extractDatasetCatalogue(
-    datasetBlock: string,
-    fallbackCatalogue: string
-  ): string {
-    const inCatalogResourceMatch = datasetBlock.match(
-      /<dcat:inCatalog\b[^>]*\brdf:resource="([^"]+)"[^>]*\/?>/i
-    );
-    if (inCatalogResourceMatch && inCatalogResourceMatch[1]) {
-      return inCatalogResourceMatch[1].trim();
-    }
-
-    const inCatalogBlockMatch = datasetBlock.match(
-      /<dcat:inCatalog\b[\s\S]*?<\/dcat:inCatalog>/i
-    );
-    if (inCatalogBlockMatch && inCatalogBlockMatch[0]) {
-      const inCatalogTitle = findFirstTagValue(inCatalogBlockMatch[0], [
-        "dct:title",
-        "dc:title",
-      ]);
-      if (inCatalogTitle) {
-        return inCatalogTitle;
-      }
-    }
-
-    return fallbackCatalogue;
-  }
-
-  private extractDatasetId(
-    identifier: string,
-    rdfAbout: string,
-    index: number
-  ): string {
-    if (identifier) {
-      return identifier;
-    }
-
-    if (rdfAbout) {
-      return rdfAbout;
-    }
-
-    return `dataset-${index + 1}`;
-  }
-
-  parseDatasetsFromRdf(xmlText: string): LocalDiscoveryDataset[] {
-    const datasetBlocks = extractDatasetBlocks(xmlText);
-    const catalogueName = this.extractCatalogueNameFromRdf(xmlText);
-
-    return datasetBlocks
-      .map((datasetBlock, index) => {
-        const identifier = this.extractDatasetIdentifier(datasetBlock);
-        const rdfAbout = this.extractDatasetRdfAbout(datasetBlock);
-        const id = this.extractDatasetId(identifier, rdfAbout, index);
-        const title = this.extractDatasetTitle(datasetBlock);
-        const description = this.extractDatasetDescription(datasetBlock);
-        const catalogue = this.extractDatasetCatalogue(
-          datasetBlock,
-          catalogueName
-        );
-
-        return {
-          id,
-          identifier,
-          title,
-          description,
-          catalogue,
-        };
-      })
+    return graph
+      .getSubjectsOfType(DCAT_DATASET)
+      .map((datasetSubject, index) =>
+        mapDataset(datasetSubject, graph, fallbackCatalogue, index)
+      )
       .filter((dataset) => Boolean(dataset.title || dataset.description));
   }
 
@@ -151,17 +48,67 @@ export class DcatHarvesterService {
     url: string,
     options: HarvestOptions = {}
   ): Promise<LocalDiscoveryDataset[]> {
-    const response = await this.fetcher(url, {
-      headers: options.headers,
-    });
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch DCAT catalogue (${response.status} ${response.statusText})`
+    let response: Response;
+    try {
+      response = await this.fetcher(
+        url,
+        buildHarvestRequestInit({
+          headers: options.headers,
+        })
+      );
+    } catch (error) {
+      throw wrapError(
+        `Failed to download DCAT catalogue from ${url}: ${formatErrorDetails(error)}`,
+        error
       );
     }
 
-    const xmlText = await response.text();
-    return this.parseDatasetsFromRdf(xmlText);
+    if (!response.ok) {
+      const contentType = response.headers.get("content-type") || undefined;
+      let bodySnippet: string | undefined;
+
+      try {
+        const responseBody = await response.text();
+        const compactBody = responseBody.replace(/\s+/g, " ").trim();
+        if (compactBody) {
+          bodySnippet =
+            compactBody.length > 400
+              ? `${compactBody.slice(0, 400)}...`
+              : compactBody;
+        }
+      } catch (error) {
+        bodySnippet = `unable to read error response body: ${formatErrorDetails(error)}`;
+      }
+
+      const details = [
+        `Failed to fetch DCAT catalogue from ${url} (${response.status} ${response.statusText})`,
+        contentType ? `content-type: ${contentType}` : null,
+        bodySnippet ? `response body: ${bodySnippet}` : null,
+      ]
+        .filter(Boolean)
+        .join(" | ");
+
+      throw new Error(details);
+    }
+
+    let xmlText: string;
+    try {
+      xmlText = await response.text();
+    } catch (error) {
+      throw wrapError(
+        `Failed to read DCAT catalogue response body from ${url}: ${formatErrorDetails(error)}`,
+        error
+      );
+    }
+
+    try {
+      return await this.parseDatasetsFromRdf(xmlText, url);
+    } catch (error) {
+      throw wrapError(
+        `Failed to parse RDF/XML from ${url}: ${formatErrorDetails(error)}`,
+        error
+      );
+    }
   }
 }
 

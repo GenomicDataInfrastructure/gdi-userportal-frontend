@@ -22,7 +22,7 @@ describe("Retrieving filters", () => {
     jest.resetAllMocks();
   });
 
-  test("Retrieves filters", async () => {
+  test("Retrieves filters and remaps DDS keys for app consumers", async () => {
     const encryptedToken = encrypt("decryptedToken");
     mockedGetServerSession.mockResolvedValueOnce({
       access_token: encryptedToken,
@@ -31,14 +31,22 @@ describe("Retrieving filters", () => {
     mockDiscoveryAdapter.onGet("/api/v1/filters").reply(200, [
       {
         source: "CKAN",
-        key: "organization",
+        key: "publisher_name",
         title: "Organization",
         type: "DROPDOWN",
+      },
+      {
+        source: "CKAN",
+        key: "modified",
+        title: "Modified",
+        type: "DATETIME",
       },
     ]);
     const response = await retrieveFiltersApi();
 
     expect(response).toBeDefined();
-    expect(response.length).toEqual(1);
+    expect(response.length).toEqual(2);
+    expect(response[0].key).toBe("publisherName");
+    expect(response[1].key).toBe("modified");
   });
 });

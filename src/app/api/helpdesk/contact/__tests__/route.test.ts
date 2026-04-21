@@ -299,7 +299,7 @@ describe("POST /api/helpdesk/contact", () => {
 
     expect(response.status).toBe(500);
     await expect(response.json()).resolves.toEqual({
-      error: "Zammad unavailable",
+      error: "Your request could not be submitted. Please try again.",
     });
   });
 
@@ -328,7 +328,7 @@ describe("POST /api/helpdesk/contact", () => {
 
     expect(response.status).toBe(500);
     await expect(response.json()).resolves.toEqual({
-      error: "Unexpected helpdesk dispatch error",
+      error: "Your request could not be submitted. Please try again.",
     });
   });
 });

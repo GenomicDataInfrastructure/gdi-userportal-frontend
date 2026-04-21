@@ -18,6 +18,8 @@ type ContactRequestBody = {
 const MAX_TITLE_LENGTH = 160;
 const MAX_MESSAGE_LENGTH = 4000;
 const EMAIL_SCHEMA = z.string().email();
+const GENERIC_SUBMISSION_ERROR =
+  "Your request could not be submitted. Please try again.";
 
 export async function POST(request: Request) {
   try {
@@ -122,13 +124,9 @@ export async function POST(request: Request) {
       ticketId: result.ticketId,
     });
   } catch (error) {
+    console.error("Helpdesk contact submission failed", error);
     return Response.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Unexpected helpdesk dispatch error",
-      },
+      { error: GENERIC_SUBMISSION_ERROR },
       { status: 500 }
     );
   }

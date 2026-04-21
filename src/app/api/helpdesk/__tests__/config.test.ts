@@ -23,7 +23,7 @@ describe("helpdesk config", () => {
       {
         value: "general",
         label: "General inquiry",
-        recipientEmail: "bechkal198@gmail.com",
+        recipientEmail: "helpdesk@example.org",
         zammadGroup: "Users",
       },
     ]);

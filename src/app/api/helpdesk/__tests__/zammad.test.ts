@@ -50,7 +50,7 @@ describe("createZammadTicket", () => {
       email: "safe@lnds.lu",
       topicLabel: "General inquiry",
       topicValue: "general",
-      recipientEmail: "bechkal198@gmail.com",
+      recipientEmail: "helpdesk@example.org",
       message: "I cannot see datasets",
     });
 
@@ -77,7 +77,7 @@ describe("createZammadTicket", () => {
         article: expect.objectContaining({
           type: "email",
           sender: "Agent",
-          to: "bechkal198@gmail.com",
+          to: "helpdesk@example.org",
           reply_to: "safe@lnds.lu",
         }),
       })
@@ -125,7 +125,7 @@ describe("createZammadTicket", () => {
       email: "Safe.User@LNDS.LU",
       topicLabel: "General inquiry",
       topicValue: "general",
-      recipientEmail: "bechkal198@gmail.com",
+      recipientEmail: "helpdesk@example.org",
       message: "I cannot see datasets",
     });
 
@@ -180,7 +180,7 @@ describe("createZammadTicket", () => {
       email: "safe@lnds.lu",
       topicLabel: "General inquiry",
       topicValue: "general",
-      recipientEmail: "bechkal198@gmail.com",
+      recipientEmail: "helpdesk@example.org",
       message: "I cannot see datasets",
     });
 
@@ -239,7 +239,7 @@ describe("createZammadTicket", () => {
         email: "safe@lnds.lu",
         topicLabel: "General inquiry",
         topicValue: "general",
-        recipientEmail: "bechkal198@gmail.com",
+        recipientEmail: "helpdesk@example.org",
         message: "I cannot see datasets",
       })
     ).rejects.toThrow(
@@ -261,7 +261,7 @@ describe("createZammadTicket", () => {
         email: "safe@lnds.lu",
         topicLabel: "General inquiry",
         topicValue: "general",
-        recipientEmail: "bechkal198@gmail.com",
+        recipientEmail: "helpdesk@example.org",
         message: "I cannot see datasets",
       })
     ).rejects.toThrow(
@@ -286,7 +286,7 @@ describe("createZammadTicket", () => {
         email: "safe@lnds.lu",
         topicLabel: "General inquiry",
         topicValue: "general",
-        recipientEmail: "bechkal198@gmail.com",
+        recipientEmail: "helpdesk@example.org",
         message: "I cannot see datasets",
       })
     ).rejects.toThrow(
@@ -310,7 +310,7 @@ describe("createZammadTicket", () => {
         email: "safe@lnds.lu",
         topicLabel: "General inquiry",
         topicValue: "general",
-        recipientEmail: "bechkal198@gmail.com",
+        recipientEmail: "helpdesk@example.org",
         message: "I cannot see datasets",
       })
     ).rejects.toThrow("response was not valid JSON");
@@ -340,7 +340,7 @@ describe("createZammadTicket", () => {
         email: "safe@lnds.lu",
         topicLabel: "General inquiry",
         topicValue: "general",
-        recipientEmail: "bechkal198@gmail.com",
+        recipientEmail: "helpdesk@example.org",
         message: "I cannot see datasets",
       })
     ).rejects.toThrow(
@@ -367,7 +367,7 @@ describe("createZammadTicket", () => {
         email: "safe@lnds.lu",
         topicLabel: "General inquiry",
         topicValue: "general",
-        recipientEmail: "bechkal198@gmail.com",
+        recipientEmail: "helpdesk@example.org",
         message: "I cannot see datasets",
       })
     ).resolves.toEqual({ ticketId: 80 });
@@ -388,7 +388,7 @@ describe("createZammadTicket", () => {
       email: "safe@lnds.lu",
       topicLabel: "General inquiry",
       topicValue: "general",
-      recipientEmail: "bechkal198@gmail.com",
+      recipientEmail: "helpdesk@example.org",
       message: "I cannot see datasets",
     });
 

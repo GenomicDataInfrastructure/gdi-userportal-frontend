@@ -125,9 +125,6 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Helpdesk contact submission failed", error);
-    return Response.json(
-      { error: GENERIC_SUBMISSION_ERROR },
-      { status: 500 }
-    );
+    return Response.json({ error: GENERIC_SUBMISSION_ERROR }, { status: 500 });
   }
 }

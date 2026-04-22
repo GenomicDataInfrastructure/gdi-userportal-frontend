@@ -39,7 +39,12 @@ const INITIAL_FORM_STATE: ContactFormState = {
   message: "",
 };
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function isValidEmailFormat(value: string): boolean {
+  const emailInput = document.createElement("input");
+  emailInput.type = "email";
+  emailInput.value = value;
+  return emailInput.checkValidity();
+}
 
 export default function ContactUsModal() {
   const [open, setOpen] = useState(false);
@@ -145,7 +150,7 @@ export default function ContactUsModal() {
       return;
     }
 
-    if (!EMAIL_REGEX.test(formState.email.trim())) {
+    if (!isValidEmailFormat(formState.email.trim())) {
       setErrorMessage("Please provide a valid email address.");
       return;
     }

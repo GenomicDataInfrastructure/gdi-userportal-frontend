@@ -135,6 +135,24 @@ In case of changes in the OpenAPI specifications, you must upgrade the client an
 
 Additionally, you must export all the types defined in `schemas.ts` (can not be done automatically).
 
+## Helpdesk / Zammad setup (local)
+
+The footer includes a `Get in touch` modal that submits inquiries to Zammad via backend APIs.
+
+Set these environment variables in `.env.local`:
+
+```bash
+HELPDESK_TOPIC_ROUTING=[{"value":"general","label":"General inquiry","recipientEmail":"helpdesk@example.org","zammadGroup":"Users"},{"value":"technical","label":"Technical issue","recipientEmail":"helpdesk@example.org","zammadGroup":"2nd Level"}]
+HELPDESK_ZAMMAD_URL=http://localhost:8080
+HELPDESK_ZAMMAD_API_TOKEN=<token-from-zammad-user-profile>
+HELPDESK_ZAMMAD_DEFAULT_GROUP=Users
+HELPDESK_ZAMMAD_TLS_INSECURE=false
+NEXT_PUBLIC_FEATURE_CONTACT_US=true
+```
+
+If your Zammad endpoint uses an internal/self-signed HTTPS certificate, set
+`HELPDESK_ZAMMAD_TLS_INSECURE=true`.
+
 ## Build
 
 Run `npm run build` to build the project. The build artifacts will be stored in the `.next/` directory.

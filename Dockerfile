@@ -37,6 +37,7 @@ ENV NODE_ENV="production"
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/node_modules/node-cron ./node_modules/node-cron
+COPY --from=builder /app/node_modules/undici ./node_modules/undici
 
 # Ensure no write permissions for executable directories
 COPY --from=builder --chown=1001:1001 /app/.next/standalone ./

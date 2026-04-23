@@ -16,7 +16,7 @@ Learn more about Genomic Data Infrastructure (GDI) and its founding initiatives.
 
 ## Manage datasets in two ways
 
-- **[Harvest datasets automatically](./overview):** Set up automated harvesting from external sources like FAIR Data Points, DCAT-AP endpoints, or other CKAN catalogues to synchronise datasets continuously.
+- **[Harvest datasets automatically](./overview):** Set up automated harvesting from external sources like FAIR Data Points, HealthDCAT-AP endpoints, or other CKAN catalogues to synchronise datasets continuously.
 - **Manage datasets manually:** Create and update individual datasets through the catalogue interface—add detailed metadata, upload resources, and ensure data quality standards are met.
 
   :::info Datasets flow to the Data Portal

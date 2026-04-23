@@ -14,6 +14,14 @@ SPDX-License-Identifier: CC-BY-4.0
 
 Connect external data sources to automatically import and synchronise datasets into your GDI Data Catalogue. The process is the same for all source types—only the configuration differs.
 
+:::info Before you begin
+
+All datasets must belong to an organisation. Before adding a harvest source, ensure the managing **organisation** exists in the system. If not, [**create an organisation**](/catalogue-managers-guide/manage-organisations/create) first.
+
+:::
+
+<br/>
+
 In this guide
 
 > [Identify your source type](#identify-your-source-type)  
@@ -56,6 +64,5 @@ Use manual harvest to test new configuration changes, import urgent dataset upda
 
 Select your source type for detailed configuration instructions:
 
-- **[FAIR data points](./fair-data-points.md):** Research data repositories following FAIR principles
-- **[DCAT-AP endpoints](./dcat-ap.md):** European data portals using DCAT-AP standard
-- **[CKAN catalogues](./ckan.md):** Partner CKAN instances
+- **[FAIR data points](./fair-data-points.md):** Research data repositories following FAIR principles.
+- **[HealthDCAT-AP endpoints](./dcat-ap.md):** European data portals using HealthDCAT-AP standard.

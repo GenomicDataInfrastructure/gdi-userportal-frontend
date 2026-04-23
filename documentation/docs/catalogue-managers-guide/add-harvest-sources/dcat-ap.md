@@ -1,6 +1,6 @@
 ---
 slug: /catalogue-managers-guide/add-harvest-sources/dcat-ap
-sidebar_label: "DCAT-AP endpoints"
+sidebar_label: "HealthDCAT-AP endpoints"
 sidebar_position: 3
 ---
 
@@ -10,17 +10,19 @@ SPDX-FileCopyrightText: 2024 PNED G.I.E.
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
-# Harvest from DCAT-AP endpoints
+# Harvest from HealthDCAT-AP endpoints
 
-Connect to European data portals using the DCAT-AP standard to import standardised public sector datasets.
+Connect to European data portals using the HealthDCAT-AP standard to import standardised health-related datasets.
 
-:::tip What is DCAT-AP?
+:::tip What is HealthDCAT-AP?
 
-Data Catalog Vocabulary-Application Profile (DCAT-AP) is a European standard for describing public sector data catalogues. Many European national and regional portals use DCAT-AP to expose their metadata.
+HealthDCAT-AP is a European standard for describing health data catalogues, extending the DCAT-AP specification with health-specific metadata. The GDI platform is HealthDCAT-AP compliant, ensuring standardised metadata across the European health data ecosystem.
+
+For complete technical specifications, see the [HealthDCAT-AP documentation](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-6/index.html)<sup>↗</sup>.
 
 :::
 
-## Configure the DCAT-AP source
+## Configure the HealthDCAT-AP source
 
 :::info Prerequisites
 The `dcat_rdf_harvester` extension must be added to the CKAN plugins for this harvester to be available. Additionally, ensure the CKAN.ini file contains:
@@ -29,13 +31,13 @@ The `dcat_rdf_harvester` extension must be added to the CKAN plugins for this ha
 - `ckanext.dcat.compatibility_mode = true`
   :::
 
-When [adding a harvest source](./index.md), use these settings for DCAT-AP endpoints:
+When [adding a harvest source](./index.md), use these settings for HealthDCAT-AP endpoints:
 
-| Field             | Description                                                                                                                                                                                                                    |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **URL**           | Enter the DCAT-AP endpoint URL. Examples:<br/>• `https://opendata.swiss/en/dataset/verbreitung-der-steinbockkolonien.xml`<br/>• `https://raw.githubusercontent.com/Health-RI/starter-kit-info/main/example.ttl`                |
-| **Source type**   | Select **Generic DCAT RDF Harvester** from the dropdown                                                                                                                                                                        |
-| **Configuration** | Enter: `{ "rdf_format": "text/turtle", "profile": "fairdatapoint_dcat_ap" }`<br/><br/>**Note:** Set `rdf_format` to match your file format:<br/>• `text/turtle` for .ttl files<br/>• `application/rdf+xml` for .rdf/.xml files |
+| Field             | Description                                                                                                                                                                                                                                            |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **URL**           | Enter the HealthDCAT-AP endpoint URL. Examples:<br/>• `https://opendata.swiss/en/dataset/verbreitung-der-steinbockkolonien.xml`<br/>• `https://raw.githubusercontent.com/Health-RI/starter-kit-info/main/example.ttl`                                        |
+| **Source type**   | Select **Generic DCAT RDF Harvester** from the dropdown                                                                                                                                                                                                |
+| **Configuration** | Enter: `{ "profile": "fairdatapoint_dcat_ap", "rdf_format": "text/turtle", "force_all": "true" }`<br/><br/>**Note:** Set `rdf_format` to match your file format:<br/>• `text/turtle` for .ttl files<br/>• `application/rdf+xml` for .rdf/.xml files |
 
 :::tip Troubleshooting MIME types
 

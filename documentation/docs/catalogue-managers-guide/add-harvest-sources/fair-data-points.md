@@ -30,11 +30,11 @@ The `fairdatapointharvester` extension must be added to the CKAN plugins for thi
 
 When [adding a harvest source](./index.md), use these settings for FAIR data points:
 
-| Field             | Description                                                                             |
-| ----------------- | --------------------------------------------------------------------------------------- |
-| **URL**           | Enter the FAIR Data Point base URL. Example: `https://fair.healthinformationportal.eu/` |
-| **Source type**   | Select **FAIR data point harvester** from the dropdown                                  |
-| **Configuration** | Enter: `{ "profile": "fairdatapoint_dcat_ap" }`                                         |
+| Field             | Description                                                                                                               |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **URL**           | Enter the FAIR Data Point base URL. Example: `https://fair.healthinformationportal.eu/`                                   |
+| **Source type**   | Select **FAIR data point harvester** from the dropdown                                                                    |
+| **Configuration** | Enter: `{ "profile": "fairdatapoint_dcat_ap", "force_all": "true" }`                                                         |
 
 :::tip Known Behaviour
 

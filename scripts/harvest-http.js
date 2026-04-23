@@ -9,6 +9,10 @@ const harvestDispatcher = new Agent({
   connect: { rejectUnauthorized: false },
 });
 
+function usesHttps(url) {
+  return String(url).trim().toLowerCase().startsWith("https://");
+}
+
 function buildHarvestApiUrl(baseUrl) {
   return `${String(baseUrl).replace(/\/+$/, "")}/api/discovery/harvest`;
 }
@@ -86,7 +90,7 @@ async function requestHarvest(
       },
       body: JSON.stringify({ url: sourceUrl }),
       signal: timeoutController.signal,
-      dispatcher: harvestDispatcher,
+      ...(usesHttps(apiUrl) ? { dispatcher: harvestDispatcher } : {}),
     });
   } catch (error) {
     throw new Error(

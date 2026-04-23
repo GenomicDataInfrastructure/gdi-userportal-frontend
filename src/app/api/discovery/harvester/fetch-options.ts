@@ -19,9 +19,16 @@ export type HarvestFetchLike = (
 
 export const harvestFetch = undiciFetch as unknown as HarvestFetchLike;
 
+const usesHttps = (input: string | URL): boolean =>
+  String(input).trim().toLowerCase().startsWith("https://");
+
 export const buildHarvestRequestInit = (
+  input: string | URL,
   init: RequestInit = {}
-): HarvestRequestInit => ({
-  ...init,
-  dispatcher: harvestDispatcher,
-});
+): HarvestRequestInit =>
+  usesHttps(input)
+    ? {
+        ...init,
+        dispatcher: harvestDispatcher,
+      }
+    : { ...init };

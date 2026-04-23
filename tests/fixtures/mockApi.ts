@@ -40,6 +40,46 @@ const setupMockApiRoutes = async (page: Page) => {
       await route.fallback();
       return;
     }
+
+    const requestBody = route.request().postDataJSON() as
+      | { facets?: Array<{ key?: string; value?: string }> }
+      | undefined;
+    const seriesFacet = requestBody?.facets?.find(
+      (facet) => facet.key === "vocab_in_series_title" && facet.value
+    );
+
+    if (seriesFacet?.value) {
+      const datasetDetails = Object.values(datasetDetailsById) as Array<{
+        id: string;
+        isSeries?: boolean;
+        inSeries?: Array<{ title?: string }>;
+      }>;
+
+      const memberIds = new Set(
+        datasetDetails
+          .filter((dataset) => !dataset.isSeries)
+          .filter((dataset) =>
+            Array.isArray(dataset.inSeries)
+              ? dataset.inSeries.some(
+                  (series) => series?.title === seriesFacet.value
+                )
+              : false
+          )
+          .map((dataset) => dataset.id)
+      );
+
+      const results = mockData.datasetSearchResponse.results.filter((dataset) =>
+        memberIds.has(dataset.id)
+      );
+
+      await fulfillJson(route, {
+        ...mockData.datasetSearchResponse,
+        count: results.length,
+        results,
+      });
+      return;
+    }
+
     await fulfillJson(route, mockData.datasetSearchResponse);
   });
 

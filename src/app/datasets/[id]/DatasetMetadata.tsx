@@ -42,6 +42,7 @@ import {
   DatasetDictionaryEntry,
   DatasetRelationEntry,
   RetrievedDataset,
+  SearchedDataset,
   ValueLabel,
 } from "@/app/api/discovery/open-api/schemas";
 
@@ -124,10 +125,12 @@ const DatasetMetadata = ({
   dataset,
   relationships,
   dictionary,
+  seriesMembers = [],
 }: {
   dataset: ExtendedRetrievedDataset;
   relationships: DatasetRelationEntry[];
   dictionary: DatasetDictionaryEntry[];
+  seriesMembers?: SearchedDataset[];
 }) => {
   const [userTimezone, setUserTimezone] = useState<string | null>(null);
   const temporalCoverage = Array.isArray(dataset.temporalCoverage)
@@ -151,6 +154,192 @@ const DatasetMetadata = ({
 
   if (userTimezone === null) {
     return null;
+  }
+
+  if (dataset.isSeries) {
+    return (
+      <>
+        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 font-normal text-gray">
+          {dataset.createdAt && (
+            <span className="flex gap-2 items-center relative group">
+              <FontAwesomeIcon
+                icon={faCalendarAlt}
+                className="align-middle text-primary"
+              />
+              <span className="align-middle">
+                Created on {formatDate(dataset.createdAt)}
+              </span>
+              <Tooltip message="Date when this dataset series was created." />
+            </span>
+          )}
+          {dataset.createdAt && dataset.modifiedAt && (
+            <div className="text-lightaccent hidden sm:inline-block">|</div>
+          )}
+          {dataset.modifiedAt && (
+            <span className="flex gap-2 items-center relative group">
+              <FontAwesomeIcon
+                icon={faSyncAlt}
+                className="align-middle text-primary"
+              />
+              <span className="align-middle">
+                Modified on {formatDate(dataset.modifiedAt)}
+              </span>
+              <Tooltip message="Date when this dataset series was last modified." />
+            </span>
+          )}
+          {dataset.identifier && (
+            <>
+              <div className="text-lightaccent hidden sm:inline-block">|</div>
+              <span className="flex gap-2 items-center relative group">
+                <FontAwesomeIcon
+                  icon={faIdBadge}
+                  className="align-middle text-primary"
+                />
+                <span className="align-middle">
+                  Identifier: {dataset.identifier}
+                </span>
+                <Tooltip message="Unique identifier for this dataset series." />
+              </span>
+            </>
+          )}
+        </div>
+
+        <MetadataSection title="Series Overview" icon={faLayerGroup}>
+          <div className="flex flex-col gap-3 text-sm">
+            <MetadataField
+              label="Update Frequency"
+              icon={faSyncAlt}
+              tooltip="How often this series is updated."
+            >
+              {dataset.frequency?.label || <NotProvided />}
+            </MetadataField>
+            <MetadataField
+              label="Access Rights"
+              icon={faTag}
+              tooltip="Access policy applied to this series."
+            >
+              {dataset.accessRights?.label || <NotProvided />}
+            </MetadataField>
+            <div className="flex flex-wrap gap-2 items-center relative group">
+              <span className="font-medium shrink-0">Conforms To:</span>
+              {dataset.conformsTo && dataset.conformsTo.length > 0 ? (
+                <Chips
+                  chips={dataset.conformsTo.map((item) => item.label)}
+                  className="bg-primary/10 text-primary rounded-full py-1"
+                />
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Standards followed by this dataset series." />
+            </div>
+            <div className="flex items-center gap-2 flex-wrap relative group">
+              <span className="font-medium shrink-0">URI:</span>
+              {dataset.uri ? (
+                <a
+                  href={dataset.uri}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-info hover:text-hover-color hover:underline break-all"
+                >
+                  {dataset.uri}
+                </a>
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Canonical URI of this dataset series." />
+            </div>
+          </div>
+        </MetadataSection>
+
+        <MetadataSection title="Coverage" icon={faGlobe}>
+          <div className="flex flex-col gap-3 text-sm">
+            <div className="flex flex-wrap gap-2 items-center relative group">
+              <span className="font-medium shrink-0">Spatial Coverage:</span>
+              {dataset.spatialCoverage && dataset.spatialCoverage.length > 0 ? (
+                <Chips
+                  chips={dataset.spatialCoverage.map(
+                    (coverage) =>
+                      coverage.text || coverage.uri?.label || "Unknown"
+                  )}
+                  className="bg-primary/10 text-primary rounded-full py-1"
+                />
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Geographic area covered by this series." />
+            </div>
+            <MetadataField
+              label="Temporal Coverage"
+              tooltip="Time window covered by this series."
+            >
+              {temporalCoverage &&
+              (temporalCoverage.start || temporalCoverage.end) ? (
+                <>
+                  {temporalCoverage.start
+                    ? formatDate(temporalCoverage.start)
+                    : "N/A"}{" "}
+                  -{" "}
+                  {temporalCoverage.end
+                    ? formatDate(temporalCoverage.end)
+                    : "Present"}
+                </>
+              ) : (
+                <NotProvided />
+              )}
+            </MetadataField>
+          </div>
+        </MetadataSection>
+
+        <MetadataSection title="Legal & Compliance" icon={faGavel}>
+          <div className="flex flex-col gap-3 text-sm">
+            <div className="flex flex-wrap gap-2 items-center relative group">
+              <span className="font-medium shrink-0">
+                Applicable Legislation:
+              </span>
+              {dataset.applicableLegislation &&
+              dataset.applicableLegislation.length > 0 ? (
+                <Chips
+                  chips={dataset.applicableLegislation.map(
+                    (item) => item.label
+                  )}
+                  className="bg-primary/10 text-primary rounded-full py-1"
+                />
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Legislation applicable to this dataset series." />
+            </div>
+          </div>
+        </MetadataSection>
+
+        <MetadataSection title="Member Datasets" icon={faDatabase}>
+          <div className="flex flex-col gap-3 text-sm">
+            {seriesMembers.length > 0 ? (
+              seriesMembers.map((member) => (
+                <div
+                  key={member.id}
+                  className="border-b border-primary/20 pb-2 last:border-b-0"
+                >
+                  <Link
+                    href={`/datasets/${member.id}`}
+                    className="text-info hover:text-hover-color hover:underline font-medium"
+                  >
+                    {member.title}
+                  </Link>
+                  {member.description && (
+                    <p className="mt-1 text-xs text-gray">
+                      {member.description}
+                    </p>
+                  )}
+                </div>
+              ))
+            ) : (
+              <span className="text-primary">No member datasets found.</span>
+            )}
+          </div>
+        </MetadataSection>
+      </>
+    );
   }
 
   return (

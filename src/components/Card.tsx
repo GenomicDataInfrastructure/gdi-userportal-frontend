@@ -27,6 +27,7 @@ type CardProps = {
   externalUrl?: string;
   isExternal?: boolean;
   externalLabel?: string;
+  entityLabel?: string;
 };
 
 export default function Card({
@@ -40,6 +41,7 @@ export default function Card({
   externalUrl,
   isExternal: isExternalProp,
   externalLabel,
+  entityLabel,
 }: CardProps) {
   const isExternal = isExternalProp ?? !!externalUrl;
   return (
@@ -55,9 +57,7 @@ export default function Card({
                 <span
                   key={subTitle}
                   className={
-                    index
-                      ? "sm:border-l-[2px] sm:pl-2 sm:border-l-info"
-                      : undefined
+                    index ? "sm:border-l-2 sm:pl-2 sm:border-l-info" : undefined
                   }
                 >
                   {subTitle}
@@ -70,17 +70,26 @@ export default function Card({
             {title}
           </div>
 
-          {isExternal && externalLabel ? (
-            <div className="inline-block w-fit">
-              <span className="text-xs font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20">
-                {externalLabel}
-              </span>
+          {(entityLabel || (isExternal && externalLabel)) && (
+            <div className="inline-flex w-fit flex-wrap items-center gap-2">
+              {entityLabel && (
+                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-secondary/10 text-secondary border border-secondary/20">
+                  {entityLabel}
+                </span>
+              )}
+              {isExternal && externalLabel && (
+                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20">
+                  {externalLabel}
+                </span>
+              )}
             </div>
-          ) : isExternal && !externalLabel ? (
+          )}
+
+          {isExternal && !externalLabel ? (
             <div className="flex items-center gap-2 text-xs text-gray-500 italic">
               <FontAwesomeIcon
                 icon={faCircleInfo}
-                className="w-3 h-3 flex-shrink-0"
+                className="w-3 h-3 shrink-0"
               />
               <span>Conforms to: Not specified for this dataset</span>
             </div>

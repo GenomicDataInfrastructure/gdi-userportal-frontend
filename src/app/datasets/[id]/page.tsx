@@ -13,7 +13,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DatasetMetadata from "./DatasetMetadata";
 import Tooltip from "./Tooltip";
 import { createDatasetSidebarItems } from "./sidebarItems";
-import { retrieveDatasetApi } from "../../api/discovery";
+import { retrieveDatasetApi, searchDatasetsApi } from "../../api/discovery";
+import { SearchedDataset } from "../../api/discovery/open-api/schemas";
 import { UrlParams, UrlSearchParams } from "@/app/params";
 
 type DatasetDetailsPageProps = {
@@ -34,6 +35,34 @@ export default async function Page({
 
   try {
     const dataset = await retrieveDatasetApi(_params.id);
+    let seriesMembers: SearchedDataset[] = [];
+
+    if (dataset.isSeries && dataset.title) {
+      try {
+        const membersResponse = await searchDatasetsApi({
+          facets: [
+            {
+              source: "ckan",
+              type: "FREE_TEXT",
+              key: "vocab_in_series_title",
+              value: dataset.title,
+            },
+          ],
+          rows: 100,
+          start: 0,
+          includeBeacon: false,
+        });
+
+        seriesMembers = (membersResponse.results || []).filter(
+          (member) => member.id !== dataset.id
+        );
+      } catch (seriesMembersError) {
+        console.error(
+          "Failed to load dataset series members",
+          seriesMembersError
+        );
+      }
+    }
 
     const relationships = dataset.datasetRelationships || [];
 
@@ -49,23 +78,33 @@ export default async function Page({
               <PageHeading className="text-black">{dataset.title}</PageHeading>
 
               <ul className="flex gap-x-3 gap-y-2 flex-wrap">
-                {dataset.themes
-                  ?.filter(
-                    (theme): theme is typeof theme & { label: string } =>
-                      !!theme.label
-                  )
-                  .map((theme) => (
-                    <li
-                      key={theme.label}
-                      className="tracking-widest uppercase flex items-center relative group"
-                    >
-                      <Chip
-                        className="flex justify-center items-center w-24 md:w-32 h-12 text-[10px] md:text-xs text-center px-1 md:px-2"
-                        chip={theme.label}
-                      />
-                      <Tooltip message="Theme associated with the dataset." />
-                    </li>
-                  ))}
+                {dataset.isSeries && (
+                  <li className="tracking-widest uppercase flex items-center relative group">
+                    <Chip
+                      className="flex justify-center items-center w-24 md:w-32 h-12 text-[10px] md:text-xs text-center px-1 md:px-2"
+                      chip="Dataset series"
+                    />
+                    <Tooltip message="This page describes a dataset series." />
+                  </li>
+                )}
+                {!dataset.isSeries &&
+                  dataset.themes
+                    ?.filter(
+                      (theme): theme is typeof theme & { label: string } =>
+                        !!theme.label
+                    )
+                    .map((theme) => (
+                      <li
+                        key={theme.label}
+                        className="tracking-widest uppercase flex items-center relative group"
+                      >
+                        <Chip
+                          className="flex justify-center items-center w-24 md:w-32 h-12 text-[10px] md:text-xs text-center px-1 md:px-2"
+                          chip={theme.label}
+                        />
+                        <Tooltip message="Theme associated with the dataset." />
+                      </li>
+                    ))}
               </ul>
             </div>
 
@@ -96,7 +135,7 @@ export default async function Page({
               <div className="flex items-center gap-2 text-sm text-gray-500 italic">
                 <FontAwesomeIcon
                   icon={faCircleInfo}
-                  className="w-4 h-4 flex-shrink-0"
+                  className="w-4 h-4 shrink-0"
                 />
                 <span>Conforms to: Not specified for this dataset</span>
               </div>
@@ -119,6 +158,7 @@ export default async function Page({
                 dataset={dataset}
                 relationships={relationships}
                 dictionary={dictionary}
+                seriesMembers={seriesMembers}
               />
             </div>
           </div>

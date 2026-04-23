@@ -68,6 +68,17 @@ test("Dataset detail renders metadata and distributions", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: /synthetic cohort series/i })
   ).toBeVisible();
+  await expect(page.getByText(/dataset series/i).first()).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /member datasets/i })
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /cancer cohort study/i })
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /health information/i })
+  ).toHaveCount(0);
+  await expect(page.getByText(/add to basket/i)).toHaveCount(0);
   await page.goBack();
   await expect(
     page.getByRole("heading", { name: /cancer cohort study/i })

@@ -4,6 +4,7 @@ sidebar_label: "Set up your environment"
 sidebar_position: 3
 description: "Configure your development environment for the GDI platform components."
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -31,10 +32,8 @@ All GDI repositories follow these conventions:
 
 After setting up your environment, proceed to [Understand the codebase](/developer-guide/understand-the-codebase) to learn about architectural patterns.
 
-
 ## What would you like to do?
 
 import DocCardList from '@theme/DocCardList';
 
 <DocCardList />
-

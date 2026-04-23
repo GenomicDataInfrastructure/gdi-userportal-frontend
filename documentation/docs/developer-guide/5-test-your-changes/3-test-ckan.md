@@ -4,6 +4,7 @@ sidebar_label: "Test CKAN"
 sidebar_position: 3
 description: Test CKAN extensions with pytest framework and test helpers utilities
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -32,7 +33,7 @@ from ckan.tests import helpers
 
 class TestMyExtension:
     def test_schema_validation(self):
-        dataset = helpers.call_action('package_create', 
+        dataset = helpers.call_action('package_create',
             name='test-dataset',
             title='Test Dataset'
         )

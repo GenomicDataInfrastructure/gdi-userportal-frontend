@@ -4,6 +4,7 @@ sidebar_label: "Backend architecture"
 sidebar_position: 2
 description: "Explore Quarkus, hexagonal architecture, and REST API design"
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -40,22 +41,25 @@ gdi-userportal-{service}/
 The backend architecture follows established patterns for building maintainable and scalable Java applications:
 
 ### Hexagonal architecture
+
 - **Ports**: Interfaces defining business capabilities
 - **Adapters**: Implementations for external systems (CKAN, REMS, database)
 - **Domain**: Business logic independent of infrastructure
 
 ### REST API design
+
 - JAX-RS annotations for endpoints
 - DTOs for request/response mapping
 - OpenAPI/Swagger documentation
 
 ### Dependency injection
+
 - CDI (`@Inject`) for dependency management
 - `@ApplicationScoped` for singletons
 - `@RequestScoped` for per-request instances
 
 ### Database access
+
 - Hibernate Panache for ORM
 - Flyway for database migrations
 - Transactional boundaries with `@Transactional`
-

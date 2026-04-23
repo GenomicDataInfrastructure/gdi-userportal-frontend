@@ -4,6 +4,7 @@ sidebar_label: "Test backend"
 sidebar_position: 2
 description: Test Java services with JUnit 5, Quarkus extensions, and RestAssured
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 

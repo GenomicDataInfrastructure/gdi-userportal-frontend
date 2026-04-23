@@ -4,13 +4,14 @@ sidebar_label: "Run full stack"
 sidebar_position: 4
 description: "Run all GDI platform services for full-stack local development"
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
-Run all GDI platform services together using Docker Compose for full-stack local development.  
+Run all GDI platform services together using Docker Compose for full-stack local development.
 
 ## Prerequisites
 
@@ -23,18 +24,18 @@ Run all GDI platform services together using Docker Compose for full-stack local
 
 Full stack requires significant resources:
 
-| Component | Memory | CPU |
-|-----------|--------|-----|
-| Frontend  | 512MB | 0.5 cores |
-| DDS | 1GB | 1 core |
-| AMS | 1GB | 1 core |
-| CKAN | 2GB | 1 core |
-| PostgreSQL | 1GB | 1 core |
-| Solr | 2GB | 1 core |
-| Redis | 256MB | 0.5 cores |
-| Keycloak | 1GB | 1 core |
-| Kong | 512MB | 0.5 cores |
-| **Total** | **~10GB** | **8 cores** |
+| Component  | Memory    | CPU         |
+| ---------- | --------- | ----------- |
+| Frontend   | 512MB     | 0.5 cores   |
+| DDS        | 1GB       | 1 core      |
+| AMS        | 1GB       | 1 core      |
+| CKAN       | 2GB       | 1 core      |
+| PostgreSQL | 1GB       | 1 core      |
+| Solr       | 2GB       | 1 core      |
+| Redis      | 256MB     | 0.5 cores   |
+| Keycloak   | 1GB       | 1 core      |
+| Kong       | 512MB     | 0.5 cores   |
+| **Total**  | **~10GB** | **8 cores** |
 
 ## Clone the orchestration repository
 
@@ -114,14 +115,14 @@ All services should show status `Up` or `healthy`.
 
 Once started, access services at:
 
-| Service | URL | Credentials |
-|---------|-----|-------------|
-| Frontend | http://localhost:3000 | (use Keycloak login) |
-| DDS API | http://localhost:8080 | - |
-| AMS API | http://localhost:8081 | - |
-| CKAN | http://localhost:5000 | admin / admin123 |
-| Keycloak | http://localhost:8180 | admin / admin |
-| Kong Admin | http://localhost:8001 | - |
+| Service    | URL                   | Credentials          |
+| ---------- | --------------------- | -------------------- |
+| Frontend   | http://localhost:3000 | (use Keycloak login) |
+| DDS API    | http://localhost:8080 | -                    |
+| AMS API    | http://localhost:8081 | -                    |
+| CKAN       | http://localhost:5000 | admin / admin123     |
+| Keycloak   | http://localhost:8180 | admin / admin        |
+| Kong Admin | http://localhost:8001 | -                    |
 
 ### Health checks
 
@@ -172,6 +173,7 @@ docker compose exec <service-name> /bin/bash
 ```
 
 For example, access CKAN shell:
+
 ```bash
 docker compose exec ckan ckan --help
 ```
@@ -205,37 +207,36 @@ docker compose down -v
 docker system prune -a
 ```
 
-
 ## Troubleshooting
 
 Here are common issues and solutions when running the full stack:
 
 - **Services fail to start.** Check logs for errors:
 
-    ```bash
-    docker compose logs <service-name>
-    ```
+  ```bash
+  docker compose logs <service-name>
+  ```
 
 - **Port conflicts.** If ports are already in use, change them in `.env` file and restart:
 
-    ```bash
-    docker compose down
-    docker compose up -d
-    ```
+  ```bash
+  docker compose down
+  docker compose up -d
+  ```
 
-- **Out of memory errors.** Increase Docker memory limit: 
+- **Out of memory errors.** Increase Docker memory limit:
 
-    In your Docker Desktop, go to **Settings** > **Resources** > **Memory** and set it to 8GB (minimum).
+  In your Docker Desktop, go to **Settings** > **Resources** > **Memory** and set it to 8GB (minimum).
 
 - **Database connection errors.** Ensure PostgreSQL is fully initialised:
 
-    ```bash
-    docker compose logs postgres | grep "database system is ready"
-    ```
+  ```bash
+  docker compose logs postgres | grep "database system is ready"
+  ```
 
 - **Rebuild all images.** Force rebuild if code changes aren't reflected:
 
-    ```bash
-    docker compose build --no-cache
-    docker compose up -d
-    ```
+  ```bash
+  docker compose build --no-cache
+  docker compose up -d
+  ```

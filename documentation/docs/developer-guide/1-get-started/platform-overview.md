@@ -2,7 +2,7 @@
 slug: /developer-guide/platform-overview
 sidebar_label: "Platform overview"
 sidebar_position: 2
-description: "Learn about the GDI platform components and architecture" 
+description: "Learn about the GDI platform components and architecture"
 ---
 
 <!--
@@ -26,18 +26,21 @@ For detailed architecture diagrams and component interactions, see: GDI applicat
 ## Core components
 
 ### User-facing layer
+
 - **Frontend** (Next.js): React-based web application providing the user interface
   - TypeScript, Next.js 14, TailwindCSS
   - Server-side rendering (SSR) for performance
   - Responsive design for mobile and desktop
 
 ### API layer
+
 - **Kong Gateway**: API gateway handling routing, authentication, and rate limiting
   - Routes requests between frontend and backend services
   - Enforces security policies
   - Provides observability through logging
 
 ### Backend services (Java/Quarkus)
+
 - **Dataset Discovery Service (DDS)**: Mediates frontend requests to CKAN
   - REST API for dataset search and retrieval
   - Transforms CKAN responses to frontend-friendly format
@@ -49,6 +52,7 @@ For detailed architecture diagrams and component interactions, see: GDI applicat
   - Provides notification capabilities
 
 ### Data catalogue
+
 - **CKAN**: Open-source data catalogue system
   - PostgreSQL database for metadata storage
   - Solr for full-text search
@@ -56,6 +60,7 @@ For detailed architecture diagrams and component interactions, see: GDI applicat
   - Harvester extensions for collecting external datasets
 
 ### Supporting services
+
 - **Keycloak**: Identity and access management (IAM)
   - OpenID Connect (OIDC) authentication
   - Integration with LS-AAI federated login
@@ -73,16 +78,16 @@ For detailed architecture diagrams and component interactions, see: GDI applicat
 
 ## Technology stack
 
-| Component | Technology | Language |
-|-----------|-----------|----------|
-| Frontend | Next.js 14 | TypeScript |
-| DDS/AMS | Quarkus | Java 17+ |
-| CKAN | CKAN 2.10 | Python 3.9+ |
-| API Gateway | Kong | Lua/Docker |
-| Database | PostgreSQL 14+ | SQL |
-| Search | Apache Solr 8+ | - |
-| Cache | Redis 7+ | - |
-| IAM | Keycloak 22+ | - |
+| Component   | Technology     | Language    |
+| ----------- | -------------- | ----------- |
+| Frontend    | Next.js 14     | TypeScript  |
+| DDS/AMS     | Quarkus        | Java 17+    |
+| CKAN        | CKAN 2.10      | Python 3.9+ |
+| API Gateway | Kong           | Lua/Docker  |
+| Database    | PostgreSQL 14+ | SQL         |
+| Search      | Apache Solr 8+ | -           |
+| Cache       | Redis 7+       | -           |
+| IAM         | Keycloak 22+   | -           |
 
 <!-- ## Data flow example
 
@@ -100,7 +105,6 @@ For detailed architecture diagrams and component interactions, see: GDI applicat
 3. AMS creates application in REMS
 4. REMS notifies data controller
 5. Status updates flow back through AMS → Frontend -->
-
 
 <!-- TODO: Confirm with Bruno - Architecture documentation? -->
 

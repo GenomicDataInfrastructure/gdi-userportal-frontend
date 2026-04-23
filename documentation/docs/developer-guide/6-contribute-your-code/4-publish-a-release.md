@@ -4,6 +4,7 @@ sidebar_label: "Publish a release"
 sidebar_position: 4
 description: Publish releases using automated GitHub Actions workflow
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -43,6 +44,7 @@ The release process is automated through GitHub Actions:
 7. Select **Run workflow**.
 
 The workflow will automatically:
+
 - Create the release tag
 - Create the release branch
 - Update the changelog

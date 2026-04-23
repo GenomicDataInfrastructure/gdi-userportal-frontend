@@ -4,6 +4,7 @@ sidebar_label: "Optimise performance"
 sidebar_position: 1
 description: Optimise frontend, backend, and CKAN application performance
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -21,11 +22,13 @@ Profile and optimise GDI application performance.
 Use React DevTools Profiler to identify slow components:
 
 ```tsx
-import { memo } from 'react';
+import { memo } from "react";
 
 // Memoize expensive components
 export const DatasetList = memo(({ datasets }) => {
-  return datasets.map(dataset => <DatasetCard key={dataset.id} {...dataset} />);
+  return datasets.map((dataset) => (
+    <DatasetCard key={dataset.id} {...dataset} />
+  ));
 });
 ```
 
@@ -41,7 +44,7 @@ npm run analyze
 Reduce bundle size with dynamic imports:
 
 ```tsx
-const HeavyComponent = dynamic(() => import('./HeavyComponent'));
+const HeavyComponent = dynamic(() => import("./HeavyComponent"));
 ```
 
 ## Backend performance

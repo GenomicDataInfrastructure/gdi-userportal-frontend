@@ -4,6 +4,7 @@ sidebar_label: "Add a new API endpoint"
 sidebar_position: 2
 description: "Extend backend services with new REST endpoints"
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -23,10 +24,12 @@ GDI follows an API-first methodology where OpenAPI specifications are defined be
 The best way to understand how to add an API endpoint is to examine existing implementations in the codebase.
 
 **For detailed workflow examples:**
+
 - [Add metadata fields](/developer-guide/add-metadata-fields#discovery-service) - Shows the complete workflow for updating OpenAPI definitions and implementing changes in the Discovery Service
 - Backend repositories - Review existing resource classes and their corresponding OpenAPI definitions
 
 **Key files to examine:**
+
 - `src/main/openapi/` - OpenAPI YAML specifications
 - `src/main/java/.../api/` - REST resource implementations
 - `src/main/java/.../services/` - Business logic services

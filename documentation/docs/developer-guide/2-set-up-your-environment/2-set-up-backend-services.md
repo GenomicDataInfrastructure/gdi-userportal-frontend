@@ -4,6 +4,7 @@ sidebar_label: "Set up backend services"
 sidebar_position: 2
 description: "Set up Java/Quarkus services for local development"
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -12,7 +13,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Set up backend services
 
-Set up the Java/Quarkus backend services (Dataset Discovery Service and Access Management Service) for local development and testing.  
+Set up the Java/Quarkus backend services (Dataset Discovery Service and Access Management Service) for local development and testing.
 
 ## Prerequisites
 
@@ -27,21 +28,21 @@ Choose the service you want to set up and clone the corresponding repository—D
 
 - ### Dataset Discovery Service (DDS)
 
-    DDS mediates requests between frontend and CKAN for dataset search and retrieval.
+  DDS mediates requests between frontend and CKAN for dataset search and retrieval.
 
-    ```bash
-    git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-dataset-discovery-service.git
-    cd gdi-userportal-dataset-discovery-service
-    ```
+  ```bash
+  git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-dataset-discovery-service.git
+  cd gdi-userportal-dataset-discovery-service
+  ```
 
 - ### Access Management Service (AMS)
 
-    AMS manages access request workflows and integrates with REMS.
+  AMS manages access request workflows and integrates with REMS.
 
-    ```bash
-    git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service.git
-    cd gdi-userportal-access-management-service
-    ```
+  ```bash
+  git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service.git
+  cd gdi-userportal-access-management-service
+  ```
 
 ## Install dependencies
 
@@ -52,6 +53,7 @@ Maven downloads dependencies automatically when you first build the project. To 
 ```
 
 On Windows:
+
 ```cmd
 mvnw.cmd clean install
 ```
@@ -95,7 +97,7 @@ docker compose up -d postgres
 Or run PostgreSQL directly:
 
 ```bash
-docker run -d 
+docker run -d
   --name gdi-postgres \
   -e POSTGRES_DB=gdi \
   -e POSTGRES_USER=gdi_user \
@@ -113,6 +115,7 @@ Start the Quarkus development server:
 ```
 
 The service will start with:
+
 - **Hot reload**: Code changes trigger automatic recompilation
 - **Dev UI**: Available at `http://localhost:8080/q/dev/`
 - **Health checks**: `http://localhost:8080/q/health`
@@ -121,45 +124,50 @@ The service will start with:
 ## Verify the setup
 
 1. Check health endpoint:
-    ```bash
-    curl http://localhost:8080/q/health
-    ```
 
-    Expected response:
-    ```json
-    {
-      "status": "UP",
-      "checks": [...]
-    }
-    ```
+   ```bash
+   curl http://localhost:8080/q/health
+   ```
+
+   Expected response:
+
+   ```json
+   {
+     "status": "UP",
+     "checks": [...]
+   }
+   ```
 
 2. View OpenAPI documentation: Open `http://localhost:8080/q/swagger-ui/` in your browser to see API endpoints.
 
 3. Test an endpoint:
 
-    ```bash
-    curl http://localhost:8080/api/datasets
-    ```
+   ```bash
+   curl http://localhost:8080/api/datasets
+   ```
 
 ## Development workflow
 
 Run tests:
+
 ```bash
 ./mvn test
 ```
 
 Run integration tests:
+
 ```bash
 ./mvnw verify
 ```
 
-Code formatting:  
+Code formatting:
 
 ```bash
 ./mvnw spotless:apply
 ```
 
 Build for production:
+
 ```bash
 ./mvnw package
 ```
@@ -169,11 +177,13 @@ The executable JAR is in `target/quarkus-app/`.
 ## Configure your IDE
 
 **IntelliJ IDEA:**
+
 1. Open the project (File → Open → select pom.xml)
 2. Maven dependencies will import automatically
 3. Enable annotation processing (Settings → Build → Compiler → Annotation Processors)
 
 **Install VS Code extensions:**
+
 - Extension Pack for Java
 - Quarkus
 - Lombok Annotations Support for VS Code

@@ -4,6 +4,7 @@ sidebar_label: "Apply security practices"
 sidebar_position: 2
 description: Implement security best practices with OWASP guidelines
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -32,7 +33,7 @@ Dataset findById(@Param("id") Long id);
 Sanitise user input in React:
 
 ```tsx
-import DOMPurify from 'isomorphic-dompurify';
+import DOMPurify from "isomorphic-dompurify";
 
 const SafeContent = ({ html }) => {
   const clean = DOMPurify.sanitize(html);
@@ -66,4 +67,3 @@ const apiKey = process.env.API_KEY;
 - Set secure cookie flags
 - Validate JWT tokens
 - Implement rate limiting
-

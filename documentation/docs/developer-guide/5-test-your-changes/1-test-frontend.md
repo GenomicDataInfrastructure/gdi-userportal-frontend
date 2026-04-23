@@ -4,6 +4,7 @@ sidebar_label: "Test frontend"
 sidebar_position: 1
 description: Test React components with Jest, React Testing Library, and Playwright
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -19,13 +20,13 @@ Test React components with Jest and React Testing Library.
 Create `ComponentName.test.tsx`:
 
 ```tsx
-import { render, screen } from '@testing-library/react';
-import { DatasetCard } from './DatasetCard';
+import { render, screen } from "@testing-library/react";
+import { DatasetCard } from "./DatasetCard";
 
-describe('DatasetCard', () => {
-  it('renders dataset title', () => {
+describe("DatasetCard", () => {
+  it("renders dataset title", () => {
     render(<DatasetCard title="Test Dataset" />);
-    expect(screen.getByText('Test Dataset')).toBeInTheDocument();
+    expect(screen.getByText("Test Dataset")).toBeInTheDocument();
   });
 });
 ```

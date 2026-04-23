@@ -4,6 +4,7 @@ sidebar_label: "Test integration"
 sidebar_position: 4
 description: Test workflows with Testcontainers and API contract tests cross-service
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -31,14 +32,14 @@ public class IntegrationTest {
 Test API interactions between frontend and backend:
 
 ```typescript
-describe('Dataset API', () => {
-  it('creates and retrieves dataset', async () => {
-    const created = await fetch('/api/datasets', {
-      method: 'POST',
-      body: JSON.stringify({ title: 'Test' })
+describe("Dataset API", () => {
+  it("creates and retrieves dataset", async () => {
+    const created = await fetch("/api/datasets", {
+      method: "POST",
+      body: JSON.stringify({ title: "Test" }),
     });
     const dataset = await created.json();
-    
+
     const retrieved = await fetch(`/api/datasets/${dataset.id}`);
     expect(retrieved.status).toBe(200);
   });

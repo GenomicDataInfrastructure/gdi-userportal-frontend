@@ -4,6 +4,7 @@ sidebar_label: "Frontend architecture"
 sidebar_position: 1
 description: "Explore Next.js architecture, routing, and state management"
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -26,7 +27,7 @@ gdi-userportal-frontend/
 │   ├── datasets/           # Dataset routes
 │   └── applications/       # Application routes
 ├── components/             # Reusable React components
-│   ├── ui/                 # Base UI components  
+│   ├── ui/                 # Base UI components
 │   ├── dataset/            # Dataset-specific components
 │   └── layout/             # Layout components
 ├── lib/                    # Utility functions
@@ -45,24 +46,29 @@ gdi-userportal-frontend/
 The frontend architecture follows modern React and Next.js best practices:
 
 ### Server and client components
+
 - Server components (default): Render on server, better performance
 - Client components (`'use client'`): For interactivity, state, browser APIs
 
 ### Data fetching
+
 - Server components: Use `fetch` with Next.js caching
 - Client components: Use React hooks (useState, useEffect) or SWR
 
 ### Routing
+
 - File-based routing in `app/` directory
 - Dynamic routes: `[id]/page.tsx`
 - Route groups: `(auth)/login/page.tsx`
 
 ### State management
+
 - Local state: React `useState`
 - Global state: React Context API
 - Server state: SWR for data fetching
 
 ### Authentication
+
 - OIDC flow with Keycloak
 - PKCE implementation for security
 - Protected routes with middleware

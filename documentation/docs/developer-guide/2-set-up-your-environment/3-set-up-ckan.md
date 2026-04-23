@@ -5,7 +5,6 @@ sidebar_position: 3
 description: "Set up CKAN and extensions for local development"
 ---
 
-
 <!--
 SPDX-FileCopyrightText: 2024 Stichting Health-RI
 
@@ -25,72 +24,70 @@ Install CKAN and its extensions for local development and testing.
 
 ## Install CKAN locally
 
-
 1. **Set up virtual environment:**
 
-    ```commandline
-    sudo mkdir -p /etc/ckan/default/  # or other directory of choice
-    sudo chown `whoami` /etc/ckan/default
-    python3 -m venv /etc/ckan/default
-    source /etc/ckan/default/bin/activate
-    pip install setuptools
-    pip install --upgrade pip
-    ```
+   ```commandline
+   sudo mkdir -p /etc/ckan/default/  # or other directory of choice
+   sudo chown `whoami` /etc/ckan/default
+   python3 -m venv /etc/ckan/default
+   source /etc/ckan/default/bin/activate
+   pip install setuptools
+   pip install --upgrade pip
+   ```
 
-    :::info Important 
-    Keep your virtual environment activated throughout the entire installation process.
-    :::
+   :::info Important
+   Keep your virtual environment activated throughout the entire installation process.
+   :::
 
 2. **Install CKAN as a package into your virtual environment:**
 
-    ```commandline
-    pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.10.5#egg=ckan[requirements]'
-    # For development purposes, include dev dependencies:
-    pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.10.5#egg=ckan[requirements,dev]'
-    ```
+   ```commandline
+   pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.10.5#egg=ckan[requirements]'
+   # For development purposes, include dev dependencies:
+   pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.10.5#egg=ckan[requirements,dev]'
+   ```
 
-    :::tip Troubleshooting
-    If you encounter dependency installation issues, see: [Troubleshooting installation](#troubleshooting-installation).
-    :::
+   :::tip Troubleshooting
+   If you encounter dependency installation issues, see: [Troubleshooting installation](#troubleshooting-installation).
+   :::
 
 3. **Install the required CKAN extensions.** You can install extensions from a local repository or directly from GitHub.
-    
-    From a local repository:
 
-    ```commandline
-    pip install -e file:///<path to local extension repo>/ckan-fairdatapoint#egg=ckanext-fairdatapoint
-    ```
-    
-    Example on macOS:
+   From a local repository:
 
-    ```commandline
-    pip install -e file:///Users/<username>/Github/gdi-userportal-ckanext-fairdatapoint#egg=ckanext-fairdatapoint  
-    ```
+   ```commandline
+   pip install -e file:///<path to local extension repo>/ckan-fairdatapoint#egg=ckanext-fairdatapoint
+   ```
 
-    Directly from GitHub:
-    
-    ```commandline
-    pip install -e git+https://github.com/ckan/ckanext-dcat.git@v2.1.0#egg=ckanext-dcat 
-    ```
+   Example on macOS:
 
- 4. **Install the dependencies for the CKAN extensions:**
-    
-    From local repository:
+   ```commandline
+   pip install -e file:///Users/<username>/Github/gdi-userportal-ckanext-fairdatapoint#egg=ckanext-fairdatapoint
+   ```
 
-    ```commandline
-    pip install -r <path to local extension repo>/requirements.txt
-    pip install -r <path to local extension repo>/dev-requirements.txt
-    ```
-    
-    From GitHub (example for ckanext-harvest):
+   Directly from GitHub:
 
-    ```commandline
-    pip install -r https://raw.githubusercontent.com/ckan/ckanext-harvest/master/requirements.txt 
-    pip install -r https://raw.githubusercontent.com/ckan/ckanext-harvest/master/dev-requirements.txt  
-    ```
+   ```commandline
+   pip install -e git+https://github.com/ckan/ckanext-dcat.git@v2.1.0#egg=ckanext-dcat
+   ```
+
+4. **Install the dependencies for the CKAN extensions:**
+
+   From local repository:
+
+   ```commandline
+   pip install -r <path to local extension repo>/requirements.txt
+   pip install -r <path to local extension repo>/dev-requirements.txt
+   ```
+
+   From GitHub (example for ckanext-harvest):
+
+   ```commandline
+   pip install -r https://raw.githubusercontent.com/ckan/ckanext-harvest/master/requirements.txt
+   pip install -r https://raw.githubusercontent.com/ckan/ckanext-harvest/master/dev-requirements.txt
+   ```
 
 5. **Configure your database connection.** Set up a PostgreSQL database and specify the connection string in both `ckan.ini` and `test-core.ini`.
-
 
 ## Configure testing
 
@@ -100,36 +97,38 @@ To set up your test environment, configure plugin testing:
 
 1. **Verify pytest-ckan installation.** This package is typically listed in your plugin's `dev-requirements.txt` and should already be installed.
 
-    Check if it's installed:
-    ```commandline
-    pip list | grep pytest-ckan
-    ```
-    
-    If not found, install it:
-    ```commandline
-    pip install pytest-ckan
-    ```
+   Check if it's installed:
+
+   ```commandline
+   pip list | grep pytest-ckan
+   ```
+
+   If not found, install it:
+
+   ```commandline
+   pip install pytest-ckan
+   ```
 
 2. **Configure the test.ini file.** Each plugin includes an auto-generated `test.ini` file. Ensure it points to your CKAN installation's `test-core.ini` file:
 
-    ```ini
-    [app:main]
-    use = config:/etc/ckan/default/src/ckan/test-core.ini
-    ```
+   ```ini
+   [app:main]
+   use = config:/etc/ckan/default/src/ckan/test-core.ini
+   ```
 
 3. **Update your database connection.** Modify `test-core.ini` with the correct database connection string:
 
-    ```ini
-    sqlalchemy.url = postgresql://<user>:<password>@localhost/<db_name>
-    ```
+   ```ini
+   sqlalchemy.url = postgresql://<user>:<password>@localhost/<db_name>
+   ```
 
-    :::tip Best Practice
-    If your plugin writes to the database, set up a separate PostgreSQL test database to avoid affecting your development data.
-    :::
+   :::tip Best Practice
+   If your plugin writes to the database, set up a separate PostgreSQL test database to avoid affecting your development data.
+   :::
 
 ## Run tests
 
-**For basic tests**, run all tests with the following command: 
+**For basic tests**, run all tests with the following command:
 
 ```commandline
 pytest --ckan-ini=test.ini
@@ -149,7 +148,6 @@ CKAN_INI=test.ini
 
 Add this environment variable in PyCharm by navigating to **Run** > **Edit Configurations** > **Environment variables**.
 
-
 ## Troubleshooting installation
 
 Here are some common issues when installing CKAN and how to resolve them:
@@ -159,11 +157,11 @@ Here are some common issues when installing CKAN and how to resolve them:
 1. Navigate to `<venv directory>/src/ckan/requirements.txt`
 2. Change `psycopg2==2.9.7` to `psycopg2-binary==2.9.9`
 3. Reinstall dependencies and CKAN separately:
-    ```commandline
-    pip install -r <venv directory>/src/ckan/requirements.txt
-    pip install -r <venv directory>/src/ckan/dev-requirements.txt
-    pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.10.5#egg=ckan'
-    ```
+   ```commandline
+   pip install -r <venv directory>/src/ckan/requirements.txt
+   pip install -r <venv directory>/src/ckan/dev-requirements.txt
+   pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.10.5#egg=ckan'
+   ```
 
 - **PyYAML compatibility Issues (CKAN v2.9.10).** If you encounter the error `TypeError: load() missing 1 required positional argument: 'Loader'`, downgrade PyYAML:
 

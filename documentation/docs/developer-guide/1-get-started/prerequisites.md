@@ -11,7 +11,6 @@ SPDX-FileCopyrightText: 2024 PNED G.I.E.
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
-
 # Prerequisites
 
 Before you start developing for the GDI platform, ensure you have the following tools and accounts set up.
@@ -19,29 +18,29 @@ Before you start developing for the GDI platform, ensure you have the following 
 ## Required tools
 
 - ### Version control
-    - **Git** (v2.30+): For source code management
-    - **GitHub account**: To access repositories and create pull requests
+  - **Git** (v2.30+): For source code management
+  - **GitHub account**: To access repositories and create pull requests
 
 - ### Container tools
-    - **Docker** (v20.10+): For running services locally
-    - **Docker Compose** (v2.0+): For orchestrating multiple containers
+  - **Docker** (v20.10+): For running services locally
+  - **Docker Compose** (v2.0+): For orchestrating multiple containers
 
 ## Development tools by contribution area
 
 - ### Frontend development (Next.js)
-    - **Node.js** (v18 LTS or v20 LTS)
-    - **npm** (v9+) or **pnpm** (v8+)
-    - Code editor with TypeScript support (VS Code recommended)
+  - **Node.js** (v18 LTS or v20 LTS)
+  - **npm** (v9+) or **pnpm** (v8+)
+  - Code editor with TypeScript support (VS Code recommended)
 
 - ### Backend services (Java/Quarkus)
-    - **Java Development Kit (JDK)** (v17 or v21)
-    - **Maven** (v3.8+)
-    - IDE with Java support (IntelliJ IDEA or Eclipse recommended)
+  - **Java Development Kit (JDK)** (v17 or v21)
+  - **Maven** (v3.8+)
+  - IDE with Java support (IntelliJ IDEA or Eclipse recommended)
 
 - ### CKAN development (Python)
-    - **Python** (v3.9+)
-    - **pip** and **virtualenv**
-    - PostgreSQL client tools (optional, for database inspection)
+  - **Python** (v3.9+)
+  - **pip** and **virtualenv**
+  - PostgreSQL client tools (optional, for database inspection)
 
 ## Recommended tools
 

@@ -3,6 +3,7 @@ slug: /developer-guide/understand-the-codebase
 sidebar_label: "Understand the codebase"
 sidebar_position: 4
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -19,21 +20,19 @@ If you're new to GDI, start with [Platform overview](/developer-guide/platform-o
 
 The GDI platform consists of multiple repositories:
 
-| Component | Repository |
-|-----------|------------|
-| Frontend | [gdi-userportal-frontend](https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend) |
-| Backend - DDS | [gdi-userportal-dataset-discovery-service](https://github.com/GenomicDataInfrastructure/gdi-userportal-dataset-discovery-service) |
-| Backend - AMS | [gdi-userportal-access-management-service](https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service) |
-| CKAN extension - GDI | [gdi-userportal-ckanext-gdi-userportal](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-gdi-userportal) |
-| CKAN extension - FDP | [gdi-userportal-ckanext-fairdatapoint](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-fairdatapoint) |
-| CKAN extension - Harvest | [gdi-userportal-ckanext-harvest](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-harvest) |
-| CKAN Docker | [gdi-userportal-ckan-docker](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckan-docker) |
-| Infrastructure | [gdi-userportal-docker](https://github.com/GenomicDataInfrastructure/gdi-userportal-docker) |
-
+| Component                | Repository                                                                                                                        |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| Frontend                 | [gdi-userportal-frontend](https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend)                                   |
+| Backend - DDS            | [gdi-userportal-dataset-discovery-service](https://github.com/GenomicDataInfrastructure/gdi-userportal-dataset-discovery-service) |
+| Backend - AMS            | [gdi-userportal-access-management-service](https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service) |
+| CKAN extension - GDI     | [gdi-userportal-ckanext-gdi-userportal](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-gdi-userportal)       |
+| CKAN extension - FDP     | [gdi-userportal-ckanext-fairdatapoint](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-fairdatapoint)         |
+| CKAN extension - Harvest | [gdi-userportal-ckanext-harvest](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-harvest)                     |
+| CKAN Docker              | [gdi-userportal-ckan-docker](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckan-docker)                             |
+| Infrastructure           | [gdi-userportal-docker](https://github.com/GenomicDataInfrastructure/gdi-userportal-docker)                                       |
 
 ## What would you like to do?
 
 import DocCardList from '@theme/DocCardList';
 
 <DocCardList />
-

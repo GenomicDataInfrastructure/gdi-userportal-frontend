@@ -4,6 +4,7 @@ sidebar_label: "Manage database migrations"
 sidebar_position: 7
 description: "Create and apply database schema changes"
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -47,7 +48,7 @@ See [CKAN documentation<sup>↗</sup>](https://docs.ckan.org/en/2.9/contributing
 
 ## CKAN labels
 
-CKAN labels use a versioned migration system for managing term translations in the `term_translation` table. 
+CKAN labels use a versioned migration system for managing term translations in the `term_translation` table.
 
 The extension stores migrations in `ckanext/gdi_userportal/migrations/versions/` and runs them automatically on container startup.
 
@@ -70,5 +71,3 @@ For detailed documentation, see [term_translation_migrations.md<sup>↗</sup>](h
 
 TODO: Pending information from reviewers
 -->
-
-

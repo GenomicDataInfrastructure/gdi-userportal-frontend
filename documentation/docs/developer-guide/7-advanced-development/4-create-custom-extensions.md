@@ -4,6 +4,7 @@ sidebar_label: "Create custom extensions"
 sidebar_position: 4
 description: Create reusable CKAN extensions with plugin interfaces
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -23,6 +24,7 @@ ckan generate extension --name myextension
 ```
 
 Structure:
+
 ```
 ckanext-myextension/
 ├── ckanext/

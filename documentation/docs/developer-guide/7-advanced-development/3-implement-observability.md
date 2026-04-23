@@ -4,6 +4,7 @@ sidebar_label: "Implement observability"
 sidebar_position: 3
 description: Add logging, metrics, and tracing to monitor application health
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -21,10 +22,10 @@ Add logging, metrics, and tracing to monitor application health.
 Use structured logging:
 
 ```typescript
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
-logger.info('Dataset fetched', { datasetId, userId });
-logger.error('Fetch failed', { error, context });
+logger.info("Dataset fetched", { datasetId, userId });
+logger.error("Fetch failed", { error, context });
 ```
 
 ### Backend logging

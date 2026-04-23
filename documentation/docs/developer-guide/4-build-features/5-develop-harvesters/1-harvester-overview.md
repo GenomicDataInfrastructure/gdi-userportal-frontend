@@ -13,7 +13,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Harvester overview
 
-The Fair Data Point harvester in CKAN processes datasets through three stages: 
+The Fair Data Point harvester in CKAN processes datasets through three stages:
 
 - `gather_stage`
 - `fetch_stage`
@@ -23,40 +23,39 @@ The Fair Data Point harvester in CKAN processes datasets through three stages:
 
 During `gather_stage`, the harvester requests all available resources from a source and generates a unique guid for each resource.
 
-- ### GUID generation 
+- ### GUID generation
 
-    The harvester generates the following GUIDs:
+  The harvester generates the following GUIDs:
+  - for a catalog `catalog=<FDP link to a catalog>`
+  - for a dataset `catalog=<FDP link to the dataset's parent catalog>;dataset=<FDP link to a dataset>`
 
-    - for a catalog `catalog=<FDP link to a catalog>`
-    - for a dataset `catalog=<FDP link to the dataset's parent catalog>;dataset=<FDP link to a dataset>`
+  where `FDP link to a catalog/dataset` is an FDP reference URL (subject URL) of the resource.
 
-    where `FDP link to a catalog/dataset` is an FDP reference URL (subject URL) of the resource. 
-    
-    For example, for this dataset: https://health-ri.sandbox.semlab-leiden.nl/dataset/d7129d28-b72a-437f-8db0-4f0258dd3c25, the 
-     CKAN harvester GUID will be: 
-    ```
-    catalog=https://health-ri.sandbox.semlab-leiden.nl/catalog/e3faf7ad-050c-475f-8ce4-da7e2faa5cd0;dataset=https://health-ri.sandbox.semlab-leiden.nl/dataset/d7129d28-b72a-437f-8db0-4f0258dd3c25
-    ```
- 
+  For example, for this dataset: https://health-ri.sandbox.semlab-leiden.nl/dataset/d7129d28-b72a-437f-8db0-4f0258dd3c25, the
+  CKAN harvester GUID will be:
+
+  ```
+  catalog=https://health-ri.sandbox.semlab-leiden.nl/catalog/e3faf7ad-050c-475f-8ce4-da7e2faa5cd0;dataset=https://health-ri.sandbox.semlab-leiden.nl/dataset/d7129d28-b72a-437f-8db0-4f0258dd3c25
+  ```
 
 - ### Status assignment
 
-    The harvester queries CKAN database for guids harvested from the same source before:
+  The harvester queries CKAN database for guids harvested from the same source before:
 
-    ```sql
-    SELECT harvest_object.guid AS harvest_object_guid, harvest_object.package_id AS harvest_object_package_id 
-    FROM harvest_object 
-    WHERE harvest_object.current = true AND harvest_object.harvest_source_id = %(harvest_source_id_1)s
-    ```
+  ```sql
+  SELECT harvest_object.guid AS harvest_object_guid, harvest_object.package_id AS harvest_object_package_id
+  FROM harvest_object
+  WHERE harvest_object.current = true AND harvest_object.harvest_source_id = %(harvest_source_id_1)s
+  ```
 
-    where `harvest_source_id_1` is the harvester source id of the current job.
+  where `harvest_source_id_1` is the harvester source id of the current job.
 
-    Based on these two lists of guids, a harvest object is created and assigned with status `delete`, `new` or `change`:
-    - `delete = guids_in_db - guids_in_harvest` where `guids_in_db` are ids from CKAN `harvest_object` table for a given source (the result of the query above)
-    - `new` = resources that appear in the harvest but not in the database
-    - `change` = resources that exist in both with potential updates
+  Based on these two lists of guids, a harvest object is created and assigned with status `delete`, `new` or `change`:
+  - `delete = guids_in_db - guids_in_harvest` where `guids_in_db` are ids from CKAN `harvest_object` table for a given source (the result of the query above)
+  - `new` = resources that appear in the harvest but not in the database
+  - `change` = resources that exist in both with potential updates
 
-    For resources marked as `delete`, the harvester sets the status of harvest objects to `'current': False`, so they stay in the database but are not shown.
+  For resources marked as `delete`, the harvester sets the status of harvest objects to `'current': False`, so they stay in the database but are not shown.
 
 ## Fetch stage
 
@@ -65,6 +64,7 @@ During `fetch_stage`, data for resources with `new` or `change` status are colle
 ## Import stage
 
 During `import_stage`, resources are deleted, updated, or inserted to the CKAN database based on the harvest object status:
+
 - `delete`: The harvester deletes datasets by calling `toolkit.get_action('package_delete')(context, {ID: harvest_object.package_id})`
 - `new`: Datasets are inserted into CKAN
 - `change`: Existing datasets are updated with new metadata

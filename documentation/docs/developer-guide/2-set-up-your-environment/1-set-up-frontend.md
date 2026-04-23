@@ -4,6 +4,7 @@ sidebar_label: "Set up frontend"
 sidebar_position: 1
 description: "Set up the Next.js frontend for local development"
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -12,7 +13,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Set up frontend
 
-Set up the Next.js frontend for local development and testing. 
+Set up the Next.js frontend for local development and testing.
 
 ## Prerequisites
 
@@ -30,11 +31,13 @@ cd gdi-userportal-frontend
 ## Install dependencies
 
 Using npm:
+
 ```bash
 npm install
 ```
 
 Using pnpm (recommended):
+
 ```bash
 pnpm install
 ```
@@ -74,13 +77,14 @@ pnpm dev
 
 The application will start at `http://localhost:3000`.
 
-
 ## Development workflow
 
 ### Hot reload
+
 The development server supports hot module replacement (HMR). Changes to components are reflected immediately without full page reload.
 
 ### TypeScript checking
+
 Run type checking separately:
 
 ```bash
@@ -88,6 +92,7 @@ npm run type-check
 ```
 
 ### Linting
+
 Check code style:
 
 ```bash
@@ -95,6 +100,7 @@ npm run lint
 ```
 
 ### Formatting
+
 Format code with Prettier:
 
 ```bash
@@ -105,16 +111,15 @@ npm run format
 
 - **Port 3000 already in use:** Change the port.
 
-    ```bash
-    PORT=3001 npm run dev
-    ```
+  ```bash
+  PORT=3001 npm run dev
+  ```
 
 - **Module not found errors:** Clear node_modules and reinstall.
 
-    ```bash
-    rm -rf node_modules package-lock.json
-    npm install
-    ```
+  ```bash
+  rm -rf node_modules package-lock.json
+  npm install
+  ```
 
 - **Environment variables not loading:** Ensure `.env.local` exists and restart the development server.
- 

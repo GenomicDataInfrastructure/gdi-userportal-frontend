@@ -4,6 +4,7 @@ sidebar_label: "Update documentation"
 sidebar_position: 3
 description: Keep documentation synchronised with code changes in comments and guides
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -25,6 +26,7 @@ In this guide
 ## When to update documentation
 
 Update documentation whenever you:
+
 - Add new features or APIs
 - Change existing behaviour
 - Fix bugs that affect usage
@@ -42,6 +44,7 @@ int retentionYears = calculateRetention(dataset.getSensitivityLevel());
 ```
 
 **Guidelines:**
+
 - Focus on the "why", not the "what"
 - Keep comments concise and up to date
 - Use British English spelling
@@ -51,6 +54,7 @@ int retentionYears = calculateRetention(dataset.getSensitivityLevel());
 GDI uses API-first development. API contracts are defined in OpenAPI YAML files located in `src/main/openapi/` before implementation.
 
 **For details on working with OpenAPI specifications:**
+
 - **[Add metadata fields](/developer-guide/add-metadata-fields#discovery-service):** Shows the complete OpenAPI workflow including updating YAML files and regenerating code.
 - **[Add API endpoint](/developer-guide/add-api-endpoint):** General guidance on API development.
 
@@ -87,7 +91,7 @@ Follow these guidelines:
 
 - **Use sentence case:** For headers (capitalise only the first word unless it's a proper noun)
 - **Write in active voice:** "Select the button" instead of "The button should be selected"
-- **Use British English spelling:** "organise" not "organize", "behaviour" not "behavior" 
+- **Use British English spelling:** "organise" not "organize", "behaviour" not "behavior"
 - **Keep it concise:** Get to the point quickly
 - **Add code examples:** Show, don't just tell
 - **Include screenshots:** for UI changes (save in `documentation/static/img/`)
@@ -97,6 +101,7 @@ Follow these guidelines:
 Docusaurus supports MDX with additional components:
 
 **Admonitions:**
+
 ```markdown
 :::tip
 Helpful tip for readers
@@ -112,6 +117,7 @@ Additional context
 ```
 
 **Code blocks with syntax highlighting:**
+
 ````markdown
 ```typescript
 const greeting: string = "Hello, GDI!";
@@ -119,6 +125,7 @@ const greeting: string = "Hello, GDI!";
 ````
 
 **Tabs:**
+
 ```markdown
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -146,6 +153,7 @@ See [Set up frontend](/developer-guide/set-up-frontend) for more details.
 Add licence headers to all new files to comply with REUSE standards:
 
 **For Markdown files:**
+
 ```markdown
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
@@ -155,12 +163,14 @@ SPDX-License-Identifier: CC-BY-4.0
 ```
 
 **For code files:**
+
 ```java
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 // SPDX-License-Identifier: Apache-2.0
 ```
 
 Check licence compliance with:
+
 ```bash
 reuse lint
 ```

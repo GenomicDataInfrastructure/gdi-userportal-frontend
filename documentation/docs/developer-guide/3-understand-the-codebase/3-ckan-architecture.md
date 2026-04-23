@@ -4,6 +4,7 @@ sidebar_label: "CKAN architecture"
 sidebar_position: 3
 description: "Understand CKAN plugins, schemas, and database structure"
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
@@ -49,7 +50,7 @@ Understand CKAN's PostgreSQL database schema to develop extensions that interact
 
 In demo schema `ckan_ckan_dataplatform_nl` table `package`, columns are core fields of CKAN, and `package_extra` for every other field. Every field which extends the core schema lands in the extra table.
 
-The Scheming extension of Civity allows more flexibility for managing extra fields than CKAN core default functionality, but still such a field is converted to a string and lands in the extra table. 
+The Scheming extension of Civity allows more flexibility for managing extra fields than CKAN core default functionality, but still such a field is converted to a string and lands in the extra table.
 
 It is possible to write a mapper to and map all the extra fields. For DCAT there is an official extension:  
 [https://github.com/ckan/ckanext-dcat#json-dcat-harvester](https://github.com/ckan/ckanext-dcat#json-dcat-harvester) It is compatible with DCAT-AP v1.1 and 2.1
@@ -58,10 +59,10 @@ It is possible to write a mapper to and map all the extra fields. For DCAT there
 
 ### Harvester tables
 
-In the database, the following tables are dedicated to store harvester-related information: 
+In the database, the following tables are dedicated to store harvester-related information:
 
-* `harvest_source` - harvested sources are defined
-* `harvest_object` - the table where all the objects from a source are saved. Data from a source are stored in `harvest_object.content` and from there will be converted to a CKAN dataset.
+- `harvest_source` - harvested sources are defined
+- `harvest_object` - the table where all the objects from a source are saved. Data from a source are stored in `harvest_object.content` and from there will be converted to a CKAN dataset.
 
 Harvesters are also saved to the `package` table of `type` harvest.
 

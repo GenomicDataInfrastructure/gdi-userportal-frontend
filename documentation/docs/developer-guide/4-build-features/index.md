@@ -3,8 +3,8 @@ slug: /developer-guide/build-features
 sidebar_label: "Build features"
 sidebar_position: 5
 description: "Implement new features across the GDI platform"
-
 ---
+
 <!--
 SPDX-FileCopyrightText: 2024 PNED G.I.E.
 

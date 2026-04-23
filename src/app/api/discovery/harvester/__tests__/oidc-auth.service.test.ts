@@ -29,7 +29,6 @@ const applyEnv = (snapshot: EnvSnapshot): void => {
 
 describe("OidcAuthService", () => {
   const originalEnv = readEnv();
-  const originalFetch = global.fetch;
   let fetchMock: jest.MockedFunction<typeof fetch>;
 
   beforeEach(() => {
@@ -38,30 +37,28 @@ describe("OidcAuthService", () => {
     delete process.env.HARVEST_OIDC_CLIENT_SECRET;
     jest.restoreAllMocks();
     fetchMock = jest.fn<typeof fetch>();
-    global.fetch = fetchMock;
   });
 
   afterAll(() => {
     applyEnv(originalEnv);
-    global.fetch = originalFetch;
   });
 
   test("returns empty headers when OIDC is not configured", async () => {
-    const service = new OidcAuthService();
+    const service = new OidcAuthService(fetchMock);
     await expect(service.getAuthorizationHeaderIfConfigured()).resolves.toEqual(
       {}
     );
-    expect(global.fetch).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   test("throws when OIDC configuration is partial", async () => {
     process.env.HARVEST_OIDC_CLIENT_ID = "client-only";
-    const service = new OidcAuthService();
+    const service = new OidcAuthService(fetchMock);
 
     await expect(service.getAuthorizationHeaderIfConfigured()).rejects.toThrow(
       "Incomplete OIDC configuration for harvesting"
     );
-    expect(global.fetch).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   test("retrieves token and returns bearer authorization header", async () => {
@@ -74,7 +71,7 @@ describe("OidcAuthService", () => {
       json: async () => ({ access_token: "token-123", expires_in: 3600 }),
     } as Response);
 
-    const service = new OidcAuthService();
+    const service = new OidcAuthService(fetchMock);
     const headers = await service.getAuthorizationHeaderIfConfigured();
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -100,7 +97,7 @@ describe("OidcAuthService", () => {
       json: async () => ({ access_token: "token-123", expires_in: 3600 }),
     } as Response);
 
-    const service = new OidcAuthService();
+    const service = new OidcAuthService(fetchMock);
     await service.getAuthorizationHeaderIfConfigured();
 
     expect(fetchMock).toHaveBeenCalledWith(
@@ -122,7 +119,7 @@ describe("OidcAuthService", () => {
       json: async () => ({ access_token: "token-123", expires_in: 3600 }),
     } as Response);
 
-    const service = new OidcAuthService();
+    const service = new OidcAuthService(fetchMock);
     const first = await service.getAuthorizationHeaderIfConfigured();
     const second = await service.getAuthorizationHeaderIfConfigured();
 
@@ -149,7 +146,7 @@ describe("OidcAuthService", () => {
         json: async () => ({ access_token: "second-token", expires_in: 60 }),
       } as Response);
 
-    const service = new OidcAuthService();
+    const service = new OidcAuthService(fetchMock);
     await service.getAuthorizationHeaderIfConfigured();
 
     nowSpy.mockReturnValue(2_000_000);
@@ -170,7 +167,7 @@ describe("OidcAuthService", () => {
       statusText: "Unauthorized",
     } as Response);
 
-    const service = new OidcAuthService();
+    const service = new OidcAuthService(fetchMock);
     await expect(service.getAuthorizationHeaderIfConfigured()).rejects.toThrow(
       "Failed to retrieve OIDC access token from https://id.example/token (401 Unauthorized)"
     );
@@ -186,7 +183,7 @@ describe("OidcAuthService", () => {
     (error as Error & { cause?: Error }).cause = cause;
     fetchMock.mockRejectedValueOnce(error);
 
-    const service = new OidcAuthService();
+    const service = new OidcAuthService(fetchMock);
     await expect(service.getAuthorizationHeaderIfConfigured()).rejects.toThrow(
       "Failed to retrieve OIDC access token from https://id.example/token: fetch failed | cause: connect ECONNREFUSED 127.0.0.1:8443"
     );
@@ -199,7 +196,7 @@ describe("OidcAuthService", () => {
 
     fetchMock.mockRejectedValueOnce(new Error("fetch failed"));
 
-    const service = new OidcAuthService();
+    const service = new OidcAuthService(fetchMock);
     await expect(service.getAuthorizationHeaderIfConfigured()).rejects.toThrow(
       "Failed to retrieve OIDC access token from https://id.example/token: fetch failed"
     );

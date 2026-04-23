@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { Agent, Dispatcher } from "undici";
+import { Agent, Dispatcher, fetch as undiciFetch } from "undici";
 
 const harvestDispatcher = new Agent({
   connect: { rejectUnauthorized: false },
@@ -11,6 +11,13 @@ const harvestDispatcher = new Agent({
 type HarvestRequestInit = RequestInit & {
   dispatcher?: Dispatcher;
 };
+
+export type HarvestFetchLike = (
+  input: string | URL,
+  init?: RequestInit
+) => Promise<Response>;
+
+export const harvestFetch = undiciFetch as unknown as HarvestFetchLike;
 
 export const buildHarvestRequestInit = (
   init: RequestInit = {}

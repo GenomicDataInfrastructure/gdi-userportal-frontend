@@ -6,7 +6,11 @@ import {
   formatErrorDetails,
   wrapError,
 } from "@/app/api/discovery/harvester/error-utils";
-import { buildHarvestRequestInit } from "@/app/api/discovery/harvester/fetch-options";
+import {
+  buildHarvestRequestInit,
+  HarvestFetchLike,
+  harvestFetch,
+} from "@/app/api/discovery/harvester/fetch-options";
 
 type OidcTokenResponse = {
   access_token: string;
@@ -17,6 +21,8 @@ type OidcTokenResponse = {
 export class OidcAuthService {
   private accessToken: string | null = null;
   private tokenExpiryEpochMs: number | null = null;
+
+  constructor(private readonly fetcher: HarvestFetchLike = harvestFetch) {}
 
   private get config() {
     return {
@@ -57,7 +63,7 @@ export class OidcAuthService {
 
     let response: Response;
     try {
-      response = await fetch(
+      response = await this.fetcher(
         tokenUrl,
         buildHarvestRequestInit({
           method: "POST",

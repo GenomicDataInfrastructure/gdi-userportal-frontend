@@ -12,7 +12,10 @@ import {
   formatErrorDetails,
   wrapError,
 } from "@/app/api/discovery/harvester/error-utils";
-import { buildHarvestRequestInit } from "@/app/api/discovery/harvester/fetch-options";
+import {
+  buildHarvestRequestInit,
+  harvestFetch,
+} from "@/app/api/discovery/harvester/fetch-options";
 import { parseRdfXmlToQuads } from "@/app/api/discovery/harvester/rdf-quad-loader";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 
@@ -24,7 +27,7 @@ type HarvestOptions = {
 export class DcatHarvesterService {
   private readonly fetcher: FetchLike;
 
-  constructor(fetcher: FetchLike = fetch) {
+  constructor(fetcher: FetchLike = harvestFetch) {
     this.fetcher = fetcher;
   }
 

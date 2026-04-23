@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-const { Agent } = require("undici");
+const { Agent, fetch: undiciFetch } = require("undici");
 
 const HARVEST_REQUEST_TIMEOUT_MS = 600000;
 const harvestDispatcher = new Agent({
@@ -71,7 +71,7 @@ function truncateText(value, limit = 400) {
 
 async function requestHarvest(
   { apiUrl, sourceUrl, secret },
-  { fetchImpl = fetch, timeoutMs = HARVEST_REQUEST_TIMEOUT_MS } = {}
+  { fetchImpl = undiciFetch, timeoutMs = HARVEST_REQUEST_TIMEOUT_MS } = {}
 ) {
   const timeoutController = new AbortController();
   const timeout = setTimeout(() => timeoutController.abort(), timeoutMs);

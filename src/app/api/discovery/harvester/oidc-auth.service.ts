@@ -65,7 +65,7 @@ export class OidcAuthService {
     try {
       response = await this.fetcher(
         tokenUrl,
-        buildHarvestRequestInit({
+        buildHarvestRequestInit(tokenUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",

@@ -55,7 +55,7 @@ export class DcatHarvesterService {
     try {
       response = await this.fetcher(
         url,
-        buildHarvestRequestInit({
+        buildHarvestRequestInit(url, {
           headers: options.headers,
         })
       );

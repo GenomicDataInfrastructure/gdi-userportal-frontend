@@ -77,6 +77,7 @@ describe("harvest-worker", () => {
         body: JSON.stringify({ url: "https://example.org/catalogue.rdf" }),
       })
     );
+    expect(fetchImpl.mock.calls[0][1].dispatcher).toBeUndefined();
   });
 
   test("triggerHarvest adds the harvest TLS dispatcher", async () => {

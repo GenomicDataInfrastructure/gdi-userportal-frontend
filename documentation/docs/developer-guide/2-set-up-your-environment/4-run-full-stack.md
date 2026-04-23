@@ -40,7 +40,7 @@ Full stack requires significant resources:
 ## Clone the orchestration repository
 
 ```bash
-git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-docker.git
+git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-deployment
 cd gdi-userportal-docker
 ```
 

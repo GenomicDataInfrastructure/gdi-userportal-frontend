@@ -26,15 +26,15 @@ Install CKAN and its extensions for local development and testing.
 
 The local setup should match the versions used by the `gdi-userportal-ckan-docker` development image:
 
-| Component      | Version or source                                                                 |
-| -------------- | ---------------------------------------------------------------------------------- |
-| CKAN           | `2.11.4`                                                                           |
-| CKAN base image | `ckan/ckan-dev:2.11.4` for development, `ckan/ckan-base:2.11.4` for production    |
-| Python         | `3.10`                                                                             |
-| PostgreSQL     | `18-alpine`                                                                        |
-| Solr           | `10.0.0-slim`                                                                      |
-| Redis          | `7.4.2`                                                                            |
-| DCAT extension | `GenomicDataInfrastructure/gdi-userportal-ckanext-dcat@v2.4.2`                    |
+| Component       | Version or source                                                              |
+| --------------- | ------------------------------------------------------------------------------ |
+| CKAN            | `2.11.4`                                                                       |
+| CKAN base image | `ckan/ckan-dev:2.11.4` for development, `ckan/ckan-base:2.11.4` for production |
+| Python          | `3.10`                                                                         |
+| PostgreSQL      | `18-alpine`                                                                    |
+| Solr            | `10.0.0-slim`                                                                  |
+| Redis           | `7.4.2`                                                                        |
+| DCAT extension  | `GenomicDataInfrastructure/gdi-userportal-ckanext-dcat@v2.4.2`                 |
 
 ## Install CKAN locally
 

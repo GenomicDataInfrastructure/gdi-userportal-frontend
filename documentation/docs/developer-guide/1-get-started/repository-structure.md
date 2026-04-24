@@ -36,13 +36,13 @@ Java/Quarkus microservices for dataset discovery service (DDS) and access manage
 
 Data catalogue management with custom extensions and harvesters.
 
-| Repository name                         | Structure                                                                                                                    |
-| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `gdi-userportal-ckan-docker`            | - `/setup`: Startup scripts and configuration<br/>- `/Dockerfile`: Custom CKAN image build                                   |
-| `gdi-userportal-ckanext-gdi-userportal` | - DCAT-AP 3 schema implementation<br/>- OIDC with PKCE authentication support<br/>- Custom API endpoints for DDS integration |
+| Repository name                                                                                           | Structure                                                                                                                    |
+| --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `gdi-userportal-ckan-docker`                                                                              | - `/setup`: Startup scripts and configuration<br/>- `/Dockerfile`: Custom CKAN image build                                   |
+| `gdi-userportal-ckanext-gdi-userportal`                                                                   | - DCAT-AP 3 schema implementation<br/>- OIDC with PKCE authentication support<br/>- Custom API endpoints for DDS integration |
 | [`gdi-userportal-ckanext-dcat`](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-dcat) | - Fork of the official CKAN DCAT extension<br/>- Maps between the DCAT and CKAN models<br/>- Enables dataset series support  |
-| `gdi-userportal-ckanext-fairdatapoint`  | - Harvests metadata from FAIR Data Point instances                                                                           |
-| `gdi-userportal-ckanext-harvest`        | - Fork of official CKAN harvest extension with GDI customisations                                                            |
+| `gdi-userportal-ckanext-fairdatapoint`                                                                    | - Harvests metadata from FAIR Data Point instances                                                                           |
+| `gdi-userportal-ckanext-harvest`                                                                          | - Fork of official CKAN harvest extension with GDI customisations                                                            |
 
 ## Documentation repository
 
@@ -64,16 +64,16 @@ All repositories follow the same Git workflow:
 
 ## Common tasks and repositories
 
-| Task                     | Repository                                 |
-| ------------------------ | ------------------------------------------ |
-| User interface changes   | `gdi-userportal-frontend`                  |
-| Dataset search logic     | `gdi-userportal-dataset-discovery-service` |
-| Access request workflows | `gdi-userportal-access-management-service` |
+| Task                     | Repository                                                                                                |
+| ------------------------ | --------------------------------------------------------------------------------------------------------- |
+| User interface changes   | `gdi-userportal-frontend`                                                                                 |
+| Dataset search logic     | `gdi-userportal-dataset-discovery-service`                                                                |
+| Access request workflows | `gdi-userportal-access-management-service`                                                                |
 | DCAT and CKAN mapping    | [`gdi-userportal-ckanext-dcat`](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-dcat) |
-| Metadata schema changes  | `gdi-userportal-ckanext-gdi-userportal`    |
-| Harvesting from FDP      | `gdi-userportal-ckanext-fairdatapoint`     |
-| CKAN deployment config   | `gdi-userportal-ckan-docker`               |
-| Documentation            | `gdi-userportal-frontend/documentation`    |
+| Metadata schema changes  | `gdi-userportal-ckanext-gdi-userportal`                                                                   |
+| Harvesting from FDP      | `gdi-userportal-ckanext-fairdatapoint`                                                                    |
+| CKAN deployment config   | `gdi-userportal-ckan-docker`                                                                              |
+| Documentation            | `gdi-userportal-frontend/documentation`                                                                   |
 
 <br/>
 

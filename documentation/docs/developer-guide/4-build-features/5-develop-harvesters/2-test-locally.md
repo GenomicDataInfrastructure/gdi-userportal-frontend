@@ -32,13 +32,13 @@ You can also test harvesting with the Health-RI harvesting test data repository.
 
 4. Create a harvest source for the test data from [`Health-RI/harvesting-test-data`](https://github.com/Health-RI/harvesting-test-data):
 
-   | Field                | Value                                                                                                                                                                                                                                          |
-   | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   | **URL**              | `https://raw.githubusercontent.com/Health-RI/harvesting-test-data/c1019281532fb1114bd4eba362e94cc04ae18132/dataset_health.ttl`                                                                                                                |
-   | **Title**            | Any title you can recognise later, for example `harvest_dataset_health`                                                                                                                                                                        |
-   | **Source type**      | `Generic DCAT RDF Harvester`                                                                                                                                                                                                                   |
-   | **Update frequency** | `Manual`                                                                                                                                                                                                                                      |
-   | **Configuration**    | `{ "profile": "fairdatapoint_dcat_ap", "rdf_format": "text/turtle", "force_all": "true" }`                                                                                                                                                    |
+   | Field                | Value                                                                                                                          |
+   | -------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+   | **URL**              | `https://raw.githubusercontent.com/Health-RI/harvesting-test-data/c1019281532fb1114bd4eba362e94cc04ae18132/dataset_health.ttl` |
+   | **Title**            | Any title you can recognise later, for example `harvest_dataset_health`                                                        |
+   | **Source type**      | `Generic DCAT RDF Harvester`                                                                                                   |
+   | **Update frequency** | `Manual`                                                                                                                       |
+   | **Configuration**    | `{ "profile": "fairdatapoint_dcat_ap", "rdf_format": "text/turtle", "force_all": "true" }`                                     |
 
    The test data can change during development. Ask the team which version to use if you need reproducible results. The URL above pins an earlier commit.
 

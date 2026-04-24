@@ -136,27 +136,31 @@ To add and configure a searchable field:
    - **Cardinality** - Single or multiple-valued
    - **Range** - The datatype or class
 
-2. **Add the field to the class.** Go to the relevant class and add a property definition. Example for the `type` property in `HRI_Dataset`:
+   2. **Add the field to the class.** For HealthDCAT-AP fields, use the relevant class under `sempyro.healthdcatap` and add a property definition. Example for the `health_theme` property in `HEALTHDCATAPDataset`:
 
    ```python
-   type: List[AnyHttpUrl] = Field(
+      health_theme: List[AnyHttpUrl] = Field(
        default=None,
-       description="The nature or genre of the resource. HRI recommended",
-       rdf_term=DCTERMS.type,
-       rdf_type="uri")
+         description="A category of the Dataset or tag describing the Dataset.",
+         json_schema_extra={
+            "rdf_term": HEALTHDCATAP.healthTheme,
+            "rdf_type": "uri",
+         },
+      )
    ```
 
    Each field is defined as a class property with the following structure:
    - **Line 1**: Property name and range. Use `List[]` for multi-valued fields (cardinality > 1). Common range types include `AnyHttpUrl`, `LiteralField`, or classes like `Agent` or `VCard`.
    - **Line 2**: Set `default=None` for optional fields. Omit this line for mandatory fields.
    - **Line 3**: Human-readable description of the field.
-   - **Line 4**: RDF predicate (e.g., `DCTERMS.type`). Common namespaces like `DCTERMS` and `DCAT` are imported by default. Define custom predicates with `URIRef("http://example.com/range#property")`.
-   - **Line 5**: RDF type such as `rdfs_literal`, `xsd:string`, or `uri`. Review other properties in the class for guidance.
+      - **Line 4**: `json_schema_extra` containing the RDF mapping metadata.
+      - **Line 5**: RDF predicate (for example `HEALTHDCATAP.healthTheme`). Common namespaces like `DCTERMS`, `DCAT`, and `HEALTHDCATAP` are imported by default. Define custom predicates with `URIRef("http://example.com/range#property")`.
+      - **Line 6**: RDF type such as `rdfs_literal`, `xsd:string`, or `uri`. Review other properties in the class for guidance.
 
-3. **Regenerate schemas.** Regenerate the JSON and YAML schemas. For the `HRIDataset` class:
+   3. **Regenerate schemas.** Regenerate the JSON and YAML schemas. For the `HEALTHDCATAPDataset` class:
 
    ```bash
-   hatch run python sempyro/hri_dcat/hri_dataset
+      hatch run python sempyro/healthdcatap/healthdcatap_dataset.py
    ```
 
 ## FAIR Data Point (FDP)

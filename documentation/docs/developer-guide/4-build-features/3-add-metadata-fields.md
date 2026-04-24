@@ -18,41 +18,42 @@ Add, modify, or delete metadata fields across the CKAN ecosystem, including DCAT
 In this guide
 
 > [CKAN DCAT Model](#ckan-dcat-model)  
+> [CKAN scheming schemas](#ckan-scheming-schemas)
 > [Solr search integration](#solr-search-integration)  
 > [SeMPyRO](#sempyro)  
 > [FAIR Data Point (FDP)](#fair-data-point-fdp)  
 > [Discovery Service](#discovery-service)
 
-## CKAN DCAT Model
+## CKAN DCAT model
 
-To add DCAT-AP fields missing from the upstream CKAN DCAT extension:
+Use the GDI-maintained DCAT extension when adding fields that affect DCAT parsing, serialisation, or mapping between DCAT and CKAN:
 
-1. **Fork and clone the repository:**
+1. **Clone the GDI DCAT extension repository:**
 
    ```bash
-   git clone https://github.com/ckan/ckanext-dcat
+   git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-dcat.git
    ```
 
-2. **Add the new field to the schema:**
-   - Modify the schema file: `ckanext/dcat/schemas/dcat_ap_full.yaml`
+2. **Add the new field to the relevant DCAT schema.**
+   - For DCAT-AP fields, update files such as `ckanext/dcat/schemas/dcat_ap_full.yaml`.
+   - For HealthDCAT fields, update files such as `ckanext/dcat/schemas/health_dcat_ap.yaml` or `ckanext/dcat/schemas/health_dcat_ap_multilingual.yaml`.
+   - For dataset series fields, review `ckanext/dcat/schemas/dcat_ap_dataset_series.yaml` and `ckanext/dcat/schemas/dcat_ap_in_series.yaml`.
    - Use appropriate field types (e.g., text, repeating subfield, URI).
    - Follow examples from other fields for consistency.
-
-   For more information about scheming, see: [Work with CKAN schemas](/developer-guide/work-with-ckan-schemas).
 
 3. **Extend the existing mapping depending on the DCAT-AP version.** Modify the mapping files located in the directory: `ckanext/dcat/profiles`.
 
    :::tip Example
-   See [PR #302](https://github.com/ckan/ckanext-dcat/pull/302) for a practical example of how to implement mapping for multi-valued fields like `creator` in CKAN DCAT profiles.
+   Review existing multi-valued fields such as `creator` in the GDI DCAT fork for mapping and test patterns.
    :::
 
 4. **Fix the corresponding unit tests.**
 
-5. **Create a pull request to the CKAN DCAT extension repository.** Ensure that you follow the contributing guidelines for CKAN:
+5. **Create a pull request to [`gdi-userportal-ckanext-dcat`](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-dcat).**
    - Include unit tests for the new fields.
    - Ensure compatibility across different DCAT-AP versions.
 
-6. **Update the following repositories after a new release.** Update development and production Dockerfiles in these repositories( order is important):
+6. **Update the following repositories after a new release.** Update development and production Dockerfiles in these repositories (order is important):
    - https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-fairdatapoint
    - https://github.com/GenomicDataInfrastructure/gdi-userportal-ckan-docker
 
@@ -63,6 +64,27 @@ To add DCAT-AP fields missing from the upstream CKAN DCAT extension:
 Always take into account the mapping from CKAN → DCAT in addition to DCAT → CKAN.
 
 :::
+
+## CKAN scheming schemas
+
+Use the GDI User Portal CKAN extension when adding fields that should appear in CKAN dataset forms or be stored as CKAN package fields:
+
+1. **Clone the GDI User Portal CKAN extension repository:**
+
+   ```bash
+   git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-gdi-userportal.git
+   ```
+
+2. **Update the active scheming schemas.** The Docker setup configures these files through `scheming.dataset_schemas`:
+   - `ckanext/gdi_userportal/scheming/schemas/dataset_multilingual.yaml`
+   - `ckanext/gdi_userportal/scheming/schemas/dataset_series_multilingual.yaml`
+
+3. **Update GDI-specific presets if the field needs custom rendering or validation.**
+   - `ckanext/gdi_userportal/scheming/presets/gdi_presets.yaml`
+
+4. **Check the Docker scheming configuration.** The active configuration is maintained in [`gdi-userportal-ckan-docker`](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckan-docker), in `ckan/docker-entrypoint.d/setup_scheming.sh`.
+
+For field keys and schema syntax, see the [CKAN scheming documentation](https://github.com/ckan/ckanext-scheming/tree/release-3.1.0#field-keys) and [Work with CKAN schemas](/developer-guide/work-with-ckan-schemas).
 
 ## Solr search integration
 

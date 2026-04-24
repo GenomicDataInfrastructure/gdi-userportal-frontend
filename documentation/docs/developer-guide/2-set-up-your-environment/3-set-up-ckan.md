@@ -140,6 +140,16 @@ pytest --ckan-ini=test.ini
 <path to virtual environment>/default/bin/pytest --ckan-ini=test.ini --disable-warnings ./ckanext/fairdatapoint --cov ./ckanext/fairdatapoint -vv
 ```
 
+**When developing an extension in Docker**, start the development setup with Docker Compose, then run tests from inside the `ckan-dev` container:
+
+```bash
+docker compose exec -it ckan-dev bash
+cd /srv/app/src_extensions/ckanext-fairdatapoint
+pytest --ckan-ini=test.ini
+```
+
+Replace `ckanext-fairdatapoint` with the extension you are developing.
+
 **To run individual test files or unit tests within PyCharm**, set the following environment variable in your run configuration:
 
 ```commandline

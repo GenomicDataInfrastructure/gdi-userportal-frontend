@@ -21,23 +21,23 @@ env:
 permissions: {}
 
 jobs:
-  # TEMPORARY: ORT job is disabled for this workflow.
-  # ort:
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     contents: read
-  #   steps:
-  #     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-  #       with:
-  #         persist-credentials: false
-  #     - uses: oss-review-toolkit/ort-ci-github-action@1805edcf1f4f55f35ae6e4d2d9795ccfb29b6021 # v1
-  #       with:
-  #         allow-dynamic-versions: "true"
-  #         fail-on: "issues"
-  #         run: "cache-dependencies,cache-scan-results,labels,analyzer,evaluator,advisor,reporter,upload-results"
+  ort:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: oss-review-toolkit/ort-ci-github-action@1805edcf1f4f55f35ae6e4d2d9795ccfb29b6021 # v1
+        with:
+          allow-dynamic-versions: "true"
+          fail-on: "issues"
+          run: "cache-dependencies,cache-scan-results,labels,analyzer,evaluator,advisor,reporter,upload-results"
 
   build-and-push-image:
     runs-on: ubuntu-latest
+    needs: ort
     environment: catalogue-test
     permissions:
       contents: read

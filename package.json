@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.0.0 <25"
   },
   "scripts": {
     "local:script": "next dev",
@@ -28,7 +28,6 @@
     "validate": "npm run lint && npm run test && npm run type-check && npm run format"
   },
   "dependencies": {
-    "@docusaurus/preset-classic": "^3.9.1",
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
     "@fortawesome/free-brands-svg-icons": "^7.0.0",
     "@fortawesome/free-solid-svg-icons": "^7.0.0",
@@ -88,7 +87,6 @@
     "utils": "^0.2.2"
   },
   "devDependencies": {
-    "@docusaurus/types": "^3.9.1",
     "@eslint/compat": "^2.0.2",
     "@playwright/test": "^1.56.1",
     "@tailwindcss/postcss": "^4.0.0",

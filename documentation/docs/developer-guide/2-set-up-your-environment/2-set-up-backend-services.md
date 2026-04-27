@@ -19,7 +19,7 @@ Set up the Java/Quarkus backend services (Dataset Discovery Service and Access M
 
 - Java Development Kit (JDK) 17 or 21
 - Maven 3.8+
-- Docker (for running PostgreSQL and other dependencies)
+- Docker (optional, for running local integration dependencies)
 - Git
 
 ## Clone the repository
@@ -63,11 +63,6 @@ mvnw.cmd clean install
 Create an `application.properties` file in `src/main/resources/`:
 
 ```properties
-# Database configuration
-quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/gdi
-quarkus.datasource.username=gdi_user
-quarkus.datasource.password=gdi_pass
-
 # CKAN integration (for DDS)
 ckan.api.url=http://localhost:5000/api/3
 
@@ -86,25 +81,11 @@ quarkus.log.level=INFO
 quarkus.log.category."io.github.genomicdatainfrastructure".level=DEBUG
 ```
 
-## Start dependencies with Docker
+## Start integration dependencies
 
-Both services require PostgreSQL. Use Docker Compose:
+DDS and AMS are intermediate services and do not require their own PostgreSQL database connection. For local development, start only the services your target backend integrates with, such as CKAN for DDS, REMS for AMS, and Keycloak for authentication.
 
-```bash
-docker compose up -d postgres
-```
-
-Or run PostgreSQL directly:
-
-```bash
-docker run -d
-  --name gdi-postgres \
-  -e POSTGRES_DB=gdi \
-  -e POSTGRES_USER=gdi_user \
-  -e POSTGRES_PASSWORD=gdi_pass \
-  -p 5432:5432 \
-  postgres:14
-```
+Use the relevant Docker Compose setup from those repositories when you need local instances of these integration services.
 
 ## Run in development mode
 
@@ -194,12 +175,6 @@ The executable JAR is in `target/quarkus-app/`.
 
   ```properties
   quarkus.http.port=8081
-  ```
-
-- **Database connection failed:** Ensure PostgreSQL is running.
-
-  ```bash
-  docker ps | grep postgres
   ```
 
 - **Maven build fails:** Clear Maven cache and rebuild.

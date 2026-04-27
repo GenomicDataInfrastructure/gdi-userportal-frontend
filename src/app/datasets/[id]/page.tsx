@@ -67,14 +67,18 @@ export default async function Page({
     const relationships = dataset.datasetRelationships || [];
 
     const dictionary = dataset.dataDictionary || [];
+    const headingClasses = [
+      "flex flex-col gap-y-5 gap-x-3 justify-between",
+      dataset.isSeries || (dataset.themes?.length && dataset.themes.length < 2)
+        ? "md:flex-row md:items-start md:gap-y-0"
+        : "",
+    ].join(" ");
 
     return (
       <PageContainer searchParams={_searchParams}>
         <div className="flex flex-col items-start justify-start lg:flex-row">
           <div className="flex w-full flex-col gap-5 lg:w-2/3 lg:px-5">
-            <div
-              className={`flex flex-col ${dataset.themes?.length && dataset.themes.length < 2 && "md:flex-row md:gap-y-0 items-start"} gap-y-5 gap-x-3 justify-between`}
-            >
+            <div className={headingClasses}>
               <PageHeading className="text-black">{dataset.title}</PageHeading>
 
               <ul className="flex gap-x-3 gap-y-2 flex-wrap">

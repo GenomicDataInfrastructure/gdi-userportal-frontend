@@ -133,15 +133,36 @@ const DatasetMetadata = ({
   seriesMembers?: SearchedDataset[];
 }) => {
   const [userTimezone, setUserTimezone] = useState<string | null>(null);
-  const temporalCoverage = Array.isArray(dataset.temporalCoverage)
-    ? dataset.temporalCoverage[0]
-    : dataset.temporalCoverage;
+  const temporalCoverageCandidate = dataset.temporalCoverage as unknown;
+  const temporalCoverageSource = Array.isArray(temporalCoverageCandidate)
+    ? (temporalCoverageCandidate as Array<{ start?: string; end?: string }>)
+    : temporalCoverageCandidate && typeof temporalCoverageCandidate === "object"
+      ? [temporalCoverageCandidate as { start?: string; end?: string }]
+      : [];
+  const temporalCoverage = temporalCoverageSource.filter(
+    (coverage) => coverage.start || coverage.end
+  );
+  const hasTemporalCoverage = temporalCoverage.length > 0;
   const analytics =
     dataset.analytics
       ?.map((entry) =>
         typeof entry === "string" ? entry : entry.title || entry.description
       )
       .filter((entry): entry is string => Boolean(entry)) ?? [];
+  const renderTemporalCoverage = () => {
+    if (!hasTemporalCoverage) {
+      return <NotProvided />;
+    }
+
+    const temporalCoverageLabel = temporalCoverage
+      .map(
+        (coverage) =>
+          `${coverage.start ? formatDate(coverage.start) : "N/A"} — ${coverage.end ? formatDate(coverage.end) : "Present"}`
+      )
+      .join(", ");
+
+    return <span>{temporalCoverageLabel}</span>;
+  };
 
   useEffect(() => {
     try {
@@ -220,18 +241,6 @@ const DatasetMetadata = ({
             >
               {dataset.accessRights?.label || <NotProvided />}
             </MetadataField>
-            <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">Conforms To:</span>
-              {dataset.conformsTo && dataset.conformsTo.length > 0 ? (
-                <Chips
-                  chips={dataset.conformsTo.map((item) => item.label)}
-                  className="bg-primary/10 text-primary rounded-full py-1"
-                />
-              ) : (
-                <NotProvided />
-              )}
-              <Tooltip message="Standards followed by this dataset series." />
-            </div>
             <div className="flex items-center gap-2 flex-wrap relative group">
               <span className="font-medium shrink-0">URI:</span>
               {dataset.uri ? (
@@ -272,20 +281,7 @@ const DatasetMetadata = ({
               label="Temporal Coverage"
               tooltip="Time window covered by this series."
             >
-              {temporalCoverage &&
-              (temporalCoverage.start || temporalCoverage.end) ? (
-                <>
-                  {temporalCoverage.start
-                    ? formatDate(temporalCoverage.start)
-                    : "N/A"}{" "}
-                  -{" "}
-                  {temporalCoverage.end
-                    ? formatDate(temporalCoverage.end)
-                    : "Present"}
-                </>
-              ) : (
-                <NotProvided />
-              )}
+              {renderTemporalCoverage()}
             </MetadataField>
           </div>
         </MetadataSection>
@@ -660,8 +656,7 @@ const DatasetMetadata = ({
 
       {(isHealthDcatApCompatible(dataset) ||
         (dataset.spatialCoverage && dataset.spatialCoverage.length > 0) ||
-        (temporalCoverage &&
-          (temporalCoverage.start || temporalCoverage.end)) ||
+        hasTemporalCoverage ||
         dataset.temporalResolution ||
         dataset.spatialResolutionInMeters !== undefined) && (
         <MetadataSection title="Coverage" icon={faGlobe}>
@@ -685,20 +680,7 @@ const DatasetMetadata = ({
               label="Temporal Coverage"
               tooltip="Time period covered by the data in this dataset."
             >
-              {temporalCoverage &&
-              (temporalCoverage.start || temporalCoverage.end) ? (
-                <>
-                  {temporalCoverage.start
-                    ? formatDate(temporalCoverage.start)
-                    : "N/A"}{" "}
-                  -{" "}
-                  {temporalCoverage.end
-                    ? formatDate(temporalCoverage.end)
-                    : "Present"}
-                </>
-              ) : (
-                <NotProvided />
-              )}
+              {renderTemporalCoverage()}
             </MetadataField>
             <MetadataField
               label="Temporal Resolution"

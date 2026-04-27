@@ -12,6 +12,55 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+## [v1.6.13] - 2026-04-27
+
+### Added
+- feat(datasets): add temporal coverage fields and enhance UI representation (#947) by @Kacem Bechka in 67b91160
+- feat(discovery): enhance dataset series support in API and UI (#943) by @Kacem Bechka in f8410410
+- feat(helpdesk): implement contact us feature with Zammad integration (#937) by @Kacem Bechka in 79f20c2d
+- feat(discovery): add secret-protected harvest worker (#935) by @Inderpal Singh in aa177eb3
+- remove implement-authentication page by @Rose Pasigna in 0e9348e8
+
+
+### Changed
+- chore: enable ORT job in GitHub Actions workflow and adjust job dependencies (#949) by @Kacem Bechka in bb821932
+- chore: update configuration and dependencies (#948) by @Kacem Bechka in 21f5b823
+- chore(deps): update dependency eslint-config-next to v16.2.4 (#931) by @LNDS-Sysadmins in db65d2f2
+- chore(deps-dev): bump postcss from 8.5.6 to 8.5.10 (#946) by @dependabot[bot] in bf287e8d
+- update repo link by @Rose Pasigna in 7eccd558
+- Fix code style formatting issues by @Rose Pasigna in 8f19d8ab
+- chore(deps): bump @xmldom/xmldom from 0.8.12 to 0.8.13 (#941) by @dependabot[bot] in 6e3c60b9
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v9.7-1776863710 by @Renovate Bot in 922edbf8
+- chore(deps): update aquasecurity/trivy-action action to v0.36.0 (#939) by @LNDS-Sysadmins in e55b5dcb
+- chore(deps): update actions/setup-node action to v6.4.0 (#934) by @LNDS-Sysadmins in a09c0917
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v9.7-1776687733 by @Renovate Bot in d266a47f
+- apply style guide by @Rose Pasigna in 4e326b0a
+- apply style guide by @Rose Pasigna in fa8af4bb
+- revise service api reference to show openAPI docs asccess isntead of links by @Rose Pasigna in 1f2af72c
+- revise service api reference to show openAPI docs asccess isntead of links by @Rose Pasigna in 6c727272
+- revise migrations page based on feedback by @Rose Pasigna in 6d7671c9
+- chore(deps): update oras-project/setup-oras digest to ee85e73 by @Renovate Bot in ed0d409e
+- doc: update CHANGELOG.md for v1.6.12 (#930) by @github-actions[bot] in 2e811bf8
+- update add-api-endpoint and update-documentation by @Rose Pasigna in b6dcf08d
+- update git workflow intro by @Rose Pasigna in 636f3f43
+- update publish a release page - GitHub actions flow by @Rose Pasigna in 0e63c834
+- add missing extensions repo by @Rose Pasigna in d85369e5
+
+
+### Fixed
+- fix(harvest): limit tls dispatcher to https requests (#944) by @Inderpal Singh in 09517d80
+- fix(harvest): use undici fetch with harvest dispatcher on Node 24 (#942) by @Inderpal Singh in 06773658
+- fix(docker): include undici in frontend runtime image for harvest worker (#940) by @Inderpal Singh in 2a83b94a
+- fix(deps): update dependency undici to v8 (#936) by @LNDS-Sysadmins in cc9ebb60
+- fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.73.0 (#932) by @LNDS-Sysadmins in 778a2368
+- fix(deps): update opentelemetry-js monorepo (#933) by @LNDS-Sysadmins in 2ee295d8
+- fix(deps): update dependency next to v16.2.4 by @Renovate Bot in 04608885
+- fix minor items from Brunos feedback by @Rose Pasigna in a2390009
+- docs: ART-23909 Restructure developer guide, add setup/testing guides, fix links by @Rose Pasigna in 324ff8bf
+- docs: ART-23909 Restructure developer guide, add setup/testing guides, fix links by @Rose Pasigna in ea379b40
+- docs: ART-23909 Restructure developer guide, add setup/testing guides, fix links by @Rose Pasigna in addeb4d2
+
+
 ## [v1.6.12] - 2026-04-17
 
 ### Added

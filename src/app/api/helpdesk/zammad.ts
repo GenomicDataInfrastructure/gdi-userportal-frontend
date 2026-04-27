@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { getZammadConfig } from "@/app/api/helpdesk/config";
-import { Agent } from "undici";
 
 type CreateZammadTicketInput = {
   title: string;
@@ -38,11 +37,27 @@ type ZammadTicketPayload = {
   };
 };
 
-const INSECURE_TLS_DISPATCHER = new Agent({
-  connect: {
-    rejectUnauthorized: false,
-  },
-});
+async function withOptionalInsecureTls<T>(
+  baseUrl: string,
+  tlsInsecure: boolean,
+  run: () => Promise<T>
+): Promise<T> {
+  if (!(tlsInsecure && baseUrl.startsWith("https://"))) {
+    return run();
+  }
+
+  const previousTlsSetting = process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+  try {
+    return await run();
+  } finally {
+    if (previousTlsSetting === undefined) {
+      delete process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+    } else {
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = previousTlsSetting;
+    }
+  }
+}
 
 function formatArticleBody(input: CreateZammadTicketInput): string {
   return [
@@ -107,17 +122,16 @@ async function postZammadTicket(
 ) {
   let response: Response;
   try {
-    response = await fetch(`${baseUrl}/api/v1/tickets`, {
-      method: "POST",
-      headers: {
-        Authorization: `Token token=${apiToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-      ...(tlsInsecure && baseUrl.startsWith("https://")
-        ? { dispatcher: INSECURE_TLS_DISPATCHER }
-        : {}),
-    });
+    response = await withOptionalInsecureTls(baseUrl, tlsInsecure, () =>
+      fetch(`${baseUrl}/api/v1/tickets`, {
+        method: "POST",
+        headers: {
+          Authorization: `Token token=${apiToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      })
+    );
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     throw new Error(
@@ -145,21 +159,20 @@ async function updateZammadCustomerProfile(
   email: string
 ) {
   try {
-    await fetch(`${baseUrl}/api/v1/users/${customerId}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Token token=${apiToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        firstname: firstName,
-        lastname: lastName,
-        email,
-      }),
-      ...(tlsInsecure && baseUrl.startsWith("https://")
-        ? { dispatcher: INSECURE_TLS_DISPATCHER }
-        : {}),
-    });
+    await withOptionalInsecureTls(baseUrl, tlsInsecure, () =>
+      fetch(`${baseUrl}/api/v1/users/${customerId}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Token token=${apiToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstname: firstName,
+          lastname: lastName,
+          email,
+        }),
+      })
+    );
   } catch {
     // Ticket creation succeeded, so user profile sync failure should not break contact flow.
   }

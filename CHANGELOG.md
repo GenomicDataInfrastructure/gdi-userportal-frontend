@@ -12,6 +12,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+## [v1.6.14] - 2026-04-28
+
+### Added
+- feat(discovery): allow nullable fields in dataset schema for description and ID by @Kacem Bechka in 9d388e94
+- feat(discovery): enhance dataset search response and filtering capabilities (#952) by @Kacem Bechka in 14d846a6
+
+
+### Changed
+- chore(deps): update dependency prettier-plugin-tailwindcss to ^0.8.0 (#951) by @LNDS-Sysadmins in 9b87e89c
+- doc: update CHANGELOG.md for v1.6.13 (#950) by @github-actions[bot] in 5e4784e5
+- chore(deps): update oras-project/setup-oras digest to 36a6ade by @Renovate Bot in 26695d8c
+
+
 ## [v1.6.13] - 2026-04-27
 
 ### Added

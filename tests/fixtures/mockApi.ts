@@ -76,11 +76,15 @@ const setupMockApiRoutes = async (page: Page) => {
         ...mockData.datasetSearchResponse,
         count: results.length,
         results,
+        facets: mockData.filters,
       });
       return;
     }
 
-    await fulfillJson(route, mockData.datasetSearchResponse);
+    await fulfillJson(route, {
+      ...mockData.datasetSearchResponse,
+      facets: mockData.filters,
+    });
   });
 
   await page.route(/\/api\/v1\/datasets\/[^/]+$/, async (route) => {

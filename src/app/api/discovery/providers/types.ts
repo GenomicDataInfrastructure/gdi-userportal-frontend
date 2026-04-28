@@ -111,6 +111,7 @@ export interface DiscoverySearchedDataset extends DiscoveryDatasetBase {
 export interface DiscoveryDatasetsSearchResponse {
   count?: number;
   results?: DiscoverySearchedDataset[];
+  facets?: DiscoveryFilter[];
   beaconError?: string;
 }
 

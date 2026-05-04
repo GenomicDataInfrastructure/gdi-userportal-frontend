@@ -18,7 +18,7 @@ Connect to European data portals using the HealthDCAT-AP standard to import stan
 
 HealthDCAT-AP is a European standard for describing health data catalogues, extending the DCAT-AP specification with health-specific metadata. The GDI platform is HealthDCAT-AP compliant, ensuring standardised metadata across the European health data ecosystem.
 
-For complete technical specifications, see the [HealthDCAT-AP documentation](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-6/index.html)<sup>↗</sup>.
+For complete technical specifications, see the [HealthDCAT-AP documentation](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/latest/)<sup>↗</sup>.
 
 :::
 

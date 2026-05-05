@@ -24,9 +24,6 @@ CKAN provides three organisation-level roles, each with distinct permissions:
 | **Editor** | Can create, edit, and delete datasets within the organisation.                                             |
 | **Member** | Can view private datasets in the organisation.                                                             |
 
-
 ## Manage members
 
 For situations where you need to add, modify, or remove organisation members, refer to the [CKAN organisation management documentation](https://docs.ckan.org/en/2.11/user-guide.html#managing-an-organization)<sup>↗</sup>.
-
-

@@ -6,7 +6,7 @@ sidebar_position: 2
 
 # Log in to the GDI Data Catalogue
 
-Access the GDI Dataset Catalogue to manage your organisation's genomic datasets. 
+Access the GDI Dataset Catalogue to manage your organisation's genomic datasets.
 
 :::tip Need an account?
 

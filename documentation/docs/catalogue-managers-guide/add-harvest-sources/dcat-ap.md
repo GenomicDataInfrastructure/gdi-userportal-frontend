@@ -33,10 +33,10 @@ The `dcat_rdf_harvester` extension must be added to the CKAN plugins for this ha
 
 When [adding a harvest source](./index.md), use these settings for HealthDCAT-AP endpoints:
 
-| Field             | Description                                                                                                                                                                                                                                            |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **URL**           | Enter the HealthDCAT-AP endpoint URL. Examples:<br/>• `https://opendata.swiss/en/dataset/verbreitung-der-steinbockkolonien.xml`<br/>• `https://raw.githubusercontent.com/Health-RI/starter-kit-info/main/example.ttl`                                        |
-| **Source type**   | Select **Generic DCAT RDF Harvester** from the dropdown                                                                                                                                                                                                |
+| Field             | Description                                                                                                                                                                                                                                         |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **URL**           | Enter the HealthDCAT-AP endpoint URL. Examples:<br/>• `https://opendata.swiss/en/dataset/verbreitung-der-steinbockkolonien.xml`<br/>• `https://raw.githubusercontent.com/Health-RI/starter-kit-info/main/example.ttl`                               |
+| **Source type**   | Select **Generic DCAT RDF Harvester** from the dropdown                                                                                                                                                                                             |
 | **Configuration** | Enter: `{ "profile": "fairdatapoint_dcat_ap", "rdf_format": "text/turtle", "force_all": "true" }`<br/><br/>**Note:** Set `rdf_format` to match your file format:<br/>• `text/turtle` for .ttl files<br/>• `application/rdf+xml` for .rdf/.xml files |
 
 :::tip Troubleshooting MIME types

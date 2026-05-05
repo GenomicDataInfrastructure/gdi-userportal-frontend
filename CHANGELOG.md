@@ -12,6 +12,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+## [v1.7.0] - 2026-05-05
+
+### Changed
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v9.7-1777884007 by @Renovate Bot in 306cebc3
+- chore(deps): bump lodash-es and @traqula/chevrotain (#959) by @dependabot[bot] in 29f1a8b1
+- chore(deps): update sonarsource/sonarqube-scan-action action to v8 (#956) by @LNDS-Sysadmins in 58f5fa12
+- chore(deps): update sonarsource/sonarqube-scan-action action to v7.2.1 (#955) by @LNDS-Sysadmins in ee17e84f
+- doc: update CHANGELOG.md for v1.6.14 (#954) by @github-actions[bot] in a4abe36a
+
+
+### Fixed
+- fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.74.0 (#957) by @LNDS-Sysadmins in 629842e1
+- fix(deps): update opentelemetry-js monorepo to ^0.216.0 (#958) by @LNDS-Sysadmins in b8abdfd4
+- fix(deps): update opentelemetry-js monorepo to v2.7.1 by @Renovate Bot in 8b7f0dd9
+
+
 ## [v1.6.14] - 2026-04-28
 
 ### Added

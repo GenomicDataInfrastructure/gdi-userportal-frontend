@@ -13,7 +13,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ghcr.io/genomicdatainfrastructure/gdi-userportal-frontend
-  AZURE_WEBAPP_NAME: catalogue-test
   REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}
   GITHUB_SHA: ${{ github.sha }}
   GITHUB_REF_NAME: ${{ github.ref_name }}
@@ -122,11 +121,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3.0.8
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          images: "${{ steps.tag.outputs.last_tag }}"

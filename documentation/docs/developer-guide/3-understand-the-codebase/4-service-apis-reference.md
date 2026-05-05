@@ -42,9 +42,8 @@ Explore the APIs of the different services in the GDI platform for dataset manag
 - **Documentation:** https://docs.ckan.org/en/latest/api/ access at `<ckan-base-url>/api/3/action/`
 - **Example:** `http://localhost:5000/api/3/action/` for local development
 - **Endpoints:**
-  - `GET /api/3/action/package_search`: Search datasets
-  - `GET /api/3/action/package_show`: Get dataset details
-  - `POST /api/3/action/package_create`: Create dataset (auth required)
+  - `GET /api/3/action/enhanced_package_search`: Search datasets with GDI User Portal field translations
+  - `GET /api/3/action/enhanced_package_show`: Get dataset details with GDI User Portal field translations
 
 ## Authentication
 

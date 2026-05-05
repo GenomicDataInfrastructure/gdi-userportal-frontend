@@ -17,10 +17,24 @@ Install CKAN and its extensions for local development and testing.
 
 ## Prerequisites
 
-- Python 3 installed
+- Python 3.10 installed
 - PostgreSQL installed and running
 - Git installed
 - Administrator/sudo access on your machine
+
+## Version alignment
+
+The local setup should match the versions used by the `gdi-userportal-ckan-docker` development image:
+
+| Component       | Version or source                                                              |
+| --------------- | ------------------------------------------------------------------------------ |
+| CKAN            | `2.11.4`                                                                       |
+| CKAN base image | `ckan/ckan-dev:2.11.4` for development, `ckan/ckan-base:2.11.4` for production |
+| Python          | `3.10`                                                                         |
+| PostgreSQL      | `18-alpine`                                                                    |
+| Solr            | `10.0.0-slim`                                                                  |
+| Redis           | `7.4.2`                                                                        |
+| DCAT extension  | `GenomicDataInfrastructure/gdi-userportal-ckanext-dcat@v2.4.2`                 |
 
 ## Install CKAN locally
 
@@ -42,9 +56,9 @@ Install CKAN and its extensions for local development and testing.
 2. **Install CKAN as a package into your virtual environment:**
 
    ```commandline
-   pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.10.5#egg=ckan[requirements]'
+   pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.11.4#egg=ckan[requirements]'
    # For development purposes, include dev dependencies:
-   pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.10.5#egg=ckan[requirements,dev]'
+   pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.11.4#egg=ckan[requirements,dev]'
    ```
 
    :::tip Troubleshooting
@@ -68,7 +82,7 @@ Install CKAN and its extensions for local development and testing.
    Directly from GitHub:
 
    ```commandline
-   pip install -e git+https://github.com/ckan/ckanext-dcat.git@v2.1.0#egg=ckanext-dcat
+   pip install -e git+https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-dcat.git@v2.4.2#egg=ckanext-dcat
    ```
 
 4. **Install the dependencies for the CKAN extensions:**
@@ -91,7 +105,7 @@ Install CKAN and its extensions for local development and testing.
 
 ## Configure testing
 
-Your testing strategy depends on your plugin's functionality. CKAN provides helper functions to generate dummy data and clean up databases after tests. For detailed information, review the [official CKAN documentation](https://docs.ckan.org/en/2.10/extensions/testing-extensions.html).
+Your testing strategy depends on your plugin's functionality. CKAN provides helper functions to generate dummy data and clean up databases after tests. For detailed information, review the [official CKAN documentation](https://docs.ckan.org/en/2.11/extensions/testing-extensions.html).
 
 To set up your test environment, configure plugin testing:
 
@@ -140,6 +154,16 @@ pytest --ckan-ini=test.ini
 <path to virtual environment>/default/bin/pytest --ckan-ini=test.ini --disable-warnings ./ckanext/fairdatapoint --cov ./ckanext/fairdatapoint -vv
 ```
 
+**When developing an extension in Docker**, start the development setup with Docker Compose, then run tests from inside the `ckan-dev` container:
+
+```bash
+docker compose exec -it ckan-dev bash
+cd /srv/app/src_extensions/ckanext-fairdatapoint
+pytest --ckan-ini=test.ini
+```
+
+Replace `ckanext-fairdatapoint` with the extension you are developing.
+
 **To run individual test files or unit tests within PyCharm**, set the following environment variable in your run configuration:
 
 ```commandline
@@ -160,11 +184,5 @@ Here are some common issues when installing CKAN and how to resolve them:
    ```commandline
    pip install -r <venv directory>/src/ckan/requirements.txt
    pip install -r <venv directory>/src/ckan/dev-requirements.txt
-   pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.10.5#egg=ckan'
+   pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.11.4#egg=ckan'
    ```
-
-- **PyYAML compatibility Issues (CKAN v2.9.10).** If you encounter the error `TypeError: load() missing 1 required positional argument: 'Loader'`, downgrade PyYAML:
-
-1. Open `requirements.txt` in your CKAN installation.
-2. Change `pyyaml==5.4.1` or `pyyaml==6.0.1` to `pyyaml==5.3.1`
-3. Reinstall dependencies.

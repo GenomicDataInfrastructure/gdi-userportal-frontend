@@ -56,7 +56,7 @@ For detailed architecture diagrams and component interactions, see: GDI applicat
 - **CKAN**: Open-source data catalogue system
   - PostgreSQL database for metadata storage
   - Solr for full-text search
-  - Custom GDI extensions for DCAT-AP 3 support
+  - Custom GDI extensions make it possible to support DCAT-AP 3 and HealthDCAT
   - Harvester extensions for collecting external datasets
 
 ### Supporting services

@@ -12,6 +12,10 @@ import {
   formatErrorDetails,
   wrapError,
 } from "@/app/api/discovery/harvester/error-utils";
+import {
+  buildHarvestRequestInit,
+  harvestFetch,
+} from "@/app/api/discovery/harvester/fetch-options";
 import { parseRdfXmlToQuads } from "@/app/api/discovery/harvester/rdf-quad-loader";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 
@@ -23,7 +27,7 @@ type HarvestOptions = {
 export class DcatHarvesterService {
   private readonly fetcher: FetchLike;
 
-  constructor(fetcher: FetchLike = fetch) {
+  constructor(fetcher: FetchLike = harvestFetch) {
     this.fetcher = fetcher;
   }
 
@@ -49,9 +53,12 @@ export class DcatHarvesterService {
   ): Promise<LocalDiscoveryDataset[]> {
     let response: Response;
     try {
-      response = await this.fetcher(url, {
-        headers: options.headers,
-      });
+      response = await this.fetcher(
+        url,
+        buildHarvestRequestInit(url, {
+          headers: options.headers,
+        })
+      );
     } catch (error) {
       throw wrapError(
         `Failed to download DCAT catalogue from ${url}: ${formatErrorDetails(error)}`,

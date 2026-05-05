@@ -23,6 +23,7 @@ interface ContentConfig {
   showBasketAndLogin: boolean;
   addParticipantsEnabled: boolean;
   showAlleleFrequency: boolean;
+  contactUsEnabled: boolean;
   footerLogos?: Array<{ src: string; alt: string }>;
   favicon: string;
   headerLogoUrl: string;
@@ -61,6 +62,8 @@ const contentConfig: ContentConfig = {
   addParticipantsEnabled:
     env("NEXT_PUBLIC_FEATURE_ADD_PARTICIPANTS") !== "false",
   showAlleleFrequency: env("NEXT_PUBLIC_SHOW_ALLELE_FREQUENCY") !== "false",
+  contactUsEnabled:
+    env("NEXT_PUBLIC_FEATURE_CONTACT_US")?.toLowerCase() === "true",
   footerLogos: env("NEXT_PUBLIC_FOOTER_LOGOS")
     ? JSON.parse(env("NEXT_PUBLIC_FOOTER_LOGOS") || "[]")
     : undefined,

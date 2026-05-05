@@ -4,9 +4,12 @@
 
 "use client";
 
-import React, { createContext, useContext, useEffect, useReducer } from "react";
-import { AxiosError } from "axios";
-import { retrieveFiltersApi } from "../../app/api/discovery";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useReducer,
+} from "react";
 import { Filter } from "@/app/api/discovery/open-api/schemas";
 import {
   ActiveFilter,
@@ -117,27 +120,11 @@ function FilterProvider({ children }: { children: React.ReactNode }) {
     initialState
   );
 
-  const retrieveFilters = async () => {
-    dispatch({ type: FilterActionType.LOADING });
-
-    try {
-      const filters = await retrieveFiltersApi();
-      dispatch({ type: FilterActionType.FILTERS_RETRIEVED, payload: filters });
-    } catch (error) {
-      const message =
-        error instanceof AxiosError ? error.message : "An error occurred";
-      const statusCode =
-        error instanceof AxiosError ? error.response?.status : 500;
-
-      dispatch({
-        type: FilterActionType.REJECTED,
-        payload: { message, statusCode },
-      });
-    }
-  };
-
-  useEffect(() => {
-    retrieveFilters();
+  const setFilters = useCallback((nextFilters: Filter[]) => {
+    dispatch({
+      type: FilterActionType.FILTERS_RETRIEVED,
+      payload: nextFilters,
+    });
   }, []);
 
   const addActiveFilter = (filter: ActiveFilter) => {
@@ -162,6 +149,7 @@ function FilterProvider({ children }: { children: React.ReactNode }) {
         activeFilters,
         isLoading,
         error,
+        setFilters,
         addActiveFilter,
         removeActiveFilter,
         clearActiveFilters,

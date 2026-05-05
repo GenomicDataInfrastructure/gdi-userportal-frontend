@@ -50,7 +50,7 @@ export default function FilterList() {
           </h3>
           <ul className="flex flex-col gap-y-6">
             {catalogueFilters.map((filter) => (
-              <li key={filter.key} className="list-none">
+              <li key={`${filter.source}-${filter.key}`} className="list-none">
                 <FilterItem filter={filter} />
               </li>
             ))}
@@ -70,7 +70,10 @@ export default function FilterList() {
             </p>
             <ul className="flex flex-col gap-y-6">
               {beaconFilters.map((filter) => (
-                <li key={filter.key} className="list-none">
+                <li
+                  key={`${filter.source}-${filter.key}`}
+                  className="list-none"
+                >
                   <FilterItem filter={filter} />
                 </li>
               ))}

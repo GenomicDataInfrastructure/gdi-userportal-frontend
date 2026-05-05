@@ -54,7 +54,10 @@ const server = http.createServer((req, res) => {
   }
 
   if (pathname === "/api/v1/datasets/search" && req.method === "POST") {
-    return sendJson(res, 200, mockData.datasetSearchResponse);
+    return sendJson(res, 200, {
+      ...mockData.datasetSearchResponse,
+      facets: mockData.filters,
+    });
   }
 
   const datasetDetailMatch = pathname.match(/^\/api\/v1\/datasets\/([^/]+)$/);

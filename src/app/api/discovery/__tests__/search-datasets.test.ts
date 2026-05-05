@@ -85,4 +85,37 @@ describe("Searching datasets", () => {
 
     expect(response).toEqual({ count: 0, results: [] });
   });
+
+  test("maps returned facet keys to app-friendly keys", async () => {
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
+
+    mockDiscoveryAdapter.onPost("/api/v1/datasets/search").reply(200, {
+      count: 0,
+      results: [],
+      facets: [
+        {
+          source: "ckan",
+          type: "DROPDOWN",
+          key: "publisher_name",
+          label: "Publisher",
+          values: [{ value: "LNDS", label: "LNDS", count: 1 }],
+        },
+      ],
+    });
+
+    const response = await searchDatasetsApi({});
+
+    expect(response.facets).toEqual([
+      {
+        source: "ckan",
+        type: "DROPDOWN",
+        key: "publisherName",
+        label: "Publisher",
+        values: [{ value: "LNDS", label: "LNDS", count: 1 }],
+      },
+    ]);
+  });
 });

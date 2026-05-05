@@ -10,7 +10,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 First, make sure that the `fairdatapointharvester` extension has been added to the CKAN plugins.
 
-After signing in to the CKAN portal, go to CKAN harvest page (e.g. http://localhost:5500/harvest). Click on “Add Harvest Source”.
+After signing in to the CKAN portal, go to CKAN harvest page (e.g. http://localhost:5500/harvest). Select “Add Harvest Source”.
 
 Fill in the following fields:
 
@@ -19,7 +19,7 @@ Fill in the following fields:
 - Source type: "FAIR data point harvester"
 - Configuration: `{ "profile": "fairdatapoint_dcat_ap" }`
 
-Click on "Save".
+Select "Save".
 
 Then, enter the CKAN container:
 

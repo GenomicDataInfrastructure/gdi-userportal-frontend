@@ -61,6 +61,7 @@ function DatasetCard({
     const isConformsToEmpty = !conformsTo?.length;
     const shouldFetch =
       dataset.id &&
+      !dataset.isSeries &&
       !hasFetchedRef.current &&
       (isConformsToEmpty ||
         (isExternal && !distributions?.some((d) => d.accessUrl)));
@@ -77,7 +78,13 @@ function DatasetCard({
           hasFetchedRef.current = false;
         });
     }
-  }, [dataset.id, isExternal, distributions, conformsTo?.length]);
+  }, [
+    dataset.id,
+    dataset.isSeries,
+    isExternal,
+    distributions,
+    conformsTo?.length,
+  ]);
 
   const isInBasket = basket.some((ds) => ds.id === dataset.id);
   const externalAccessUrl = getFirstAccessUrl(distributions);
@@ -90,58 +97,59 @@ function DatasetCard({
   const hasIdentifier = !!dataset.identifier;
   const buttonDisabled = isLoading || !hasIdentifier;
 
-  const buttonElement = !displayBasketButton ? undefined : isExternal ? (
-    <div onClick={(e) => e.stopPropagation()}>
-      {externalAccessUrl ? (
-        <ExternalDatasetConfirmationDialog url={externalAccessUrl}>
-          {({ onClick }) => (
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onClick(e);
-              }}
-              className="text-xs sm:text-base text-primary hover:text-info underline hover:no-underline font-semibold transition-colors duration-200 cursor-pointer shrink-0 inline-flex items-center gap-1"
-            >
-              <span>Access external dataset</span>
-              <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-            </button>
-          )}
-        </ExternalDatasetConfirmationDialog>
-      ) : (
-        <button
-          disabled
-          onClick={(e) => {
+  const buttonElement =
+    !displayBasketButton || dataset.isSeries ? undefined : isExternal ? (
+      <div onClick={(e) => e.stopPropagation()}>
+        {externalAccessUrl ? (
+          <ExternalDatasetConfirmationDialog url={externalAccessUrl}>
+            {({ onClick }) => (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onClick(e);
+                }}
+                className="text-xs sm:text-base text-primary hover:text-info underline hover:no-underline font-semibold transition-colors duration-200 cursor-pointer shrink-0 inline-flex items-center gap-1"
+              >
+                <span>Access external dataset</span>
+                <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+              </button>
+            )}
+          </ExternalDatasetConfirmationDialog>
+        ) : (
+          <button
+            disabled
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            className="text-xs sm:text-base text-gray-400 cursor-not-allowed inline-flex items-center gap-1"
+          >
+            <span>External link not available</span>
+            <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+          </button>
+        )}
+      </div>
+    ) : (
+      <button
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+          if (buttonDisabled) {
             e.preventDefault();
             e.stopPropagation();
-          }}
-          className="text-xs sm:text-base text-gray-400 cursor-not-allowed inline-flex items-center gap-1"
-        >
-          <span>External link not available</span>
-          <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-        </button>
-      )}
-    </div>
-  ) : (
-    <button
-      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-        if (buttonDisabled) {
-          e.preventDefault();
-          e.stopPropagation();
-          return;
-        }
-        toggleDatasetInBasket(e);
-      }}
-      disabled={buttonDisabled}
-      className={`text-xs sm:text-base rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide cursor-pointer shrink-0 ${buttonDisabled ? "opacity-60 cursor-not-allowed" : ""} ${isInBasket ? "bg-warning text-black hover:bg-secondary hover:text-white" : "bg-primary text-white hover:bg-secondary"}`}
-    >
-      <FontAwesomeIcon
-        icon={isInBasket ? faMinusCircle : faPlusCircle}
-        className="mr-2"
-      />
-      <span>{isInBasket ? "Remove from basket" : "Add to basket"}</span>
-    </button>
-  );
+            return;
+          }
+          toggleDatasetInBasket(e);
+        }}
+        disabled={buttonDisabled}
+        className={`text-xs sm:text-base rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide cursor-pointer shrink-0 ${buttonDisabled ? "opacity-60 cursor-not-allowed" : ""} ${isInBasket ? "bg-warning text-black hover:bg-secondary hover:text-white" : "bg-primary text-white hover:bg-secondary"}`}
+      >
+        <FontAwesomeIcon
+          icon={isInBasket ? faMinusCircle : faPlusCircle}
+          className="mr-2"
+        />
+        <span>{isInBasket ? "Remove from basket" : "Add to basket"}</span>
+      </button>
+    );
 
   const subTitles = useMemo(
     () =>
@@ -155,6 +163,7 @@ function DatasetCard({
     () => dataset.keywords?.filter((kw): kw is string => !!kw),
     [dataset.keywords]
   );
+  const entityLabel = dataset.isSeries ? "Dataset series" : undefined;
 
   return (
     <Card
@@ -168,6 +177,7 @@ function DatasetCard({
       button={buttonElement}
       isExternal={isExternal}
       externalLabel={externalLabel}
+      entityLabel={entityLabel}
     />
   );
 }

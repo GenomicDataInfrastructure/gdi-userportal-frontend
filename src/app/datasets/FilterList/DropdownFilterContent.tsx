@@ -14,7 +14,7 @@ export default function DropdownFilterContent({
   const { activeFilters, addActiveFilter, removeActiveFilter } = useFilters();
 
   const correspondingActiveFilter = activeFilters.find(
-    (f) => f.key === filter.key
+    (f) => f.key === filter.key && f.source === filter.source
   );
 
   const handleCheckboxChange = (

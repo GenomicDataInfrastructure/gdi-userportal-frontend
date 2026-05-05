@@ -66,7 +66,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
           }}
         />
       ),
-      hideItem: false,
+      hideItem: !!dataset.isSeries,
     },
     {
       label: "Export Metadata in",

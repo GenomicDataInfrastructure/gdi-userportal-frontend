@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2024 PNED G.I.E.
 #
 # SPDX-License-Identifier: Apache-2.0
-FROM registry.access.redhat.com/ubi9/nodejs-24-minimal:9.7-1776142263 AS base
+FROM registry.access.redhat.com/ubi9/nodejs-24-minimal:9.7-1777884007 AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -36,6 +36,8 @@ ENV NODE_ENV="production"
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/scripts ./scripts
+COPY --from=builder /app/node_modules/node-cron ./node_modules/node-cron
+COPY --from=builder /app/node_modules/undici ./node_modules/undici
 
 # Ensure no write permissions for executable directories
 COPY --from=builder --chown=1001:1001 /app/.next/standalone ./

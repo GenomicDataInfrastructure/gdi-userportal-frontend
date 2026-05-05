@@ -74,7 +74,15 @@ export class DdsDiscoveryProvider implements DiscoveryProvider {
       } as DatasetSearchQuery,
       { headers }
     );
-    return response as DiscoveryDatasetsSearchResponse;
+    const typedResponse = response as DiscoveryDatasetsSearchResponse;
+
+    return {
+      ...typedResponse,
+      facets: typedResponse.facets?.map((facet) => ({
+        ...facet,
+        key: mapDdsFilterKeyToApp(facet.key),
+      })),
+    };
   }
 
   async retrieveDataset(id: string): Promise<DiscoveryRetrievedDataset> {

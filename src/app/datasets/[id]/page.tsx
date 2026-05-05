@@ -13,7 +13,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DatasetMetadata from "./DatasetMetadata";
 import Tooltip from "./Tooltip";
 import { createDatasetSidebarItems } from "./sidebarItems";
-import { retrieveDatasetApi } from "../../api/discovery";
+import { retrieveDatasetApi, searchDatasetsApi } from "../../api/discovery";
+import { SearchedDataset } from "../../api/discovery/open-api/schemas";
 import { UrlParams, UrlSearchParams } from "@/app/params";
 
 type DatasetDetailsPageProps = {
@@ -27,29 +28,86 @@ export default async function Page({
 }: DatasetDetailsPageProps) {
   const _params = await params;
   const _searchParams = await searchParams;
+  let dataset: Awaited<ReturnType<typeof retrieveDatasetApi>>;
+  let seriesMembers: SearchedDataset[] = [];
 
   if (!_params.id) {
     throw new Error("Missing dataset id");
   }
 
   try {
-    const dataset = await retrieveDatasetApi(_params.id);
+    dataset = await retrieveDatasetApi(_params.id);
 
-    const relationships = dataset.datasetRelationships || [];
+    if (dataset.isSeries && dataset.title) {
+      try {
+        const membersResponse = await searchDatasetsApi({
+          facets: [
+            {
+              source: "ckan",
+              type: "FREE_TEXT",
+              key: "vocab_in_series_title",
+              value: dataset.title,
+            },
+          ],
+          rows: 100,
+          start: 0,
+          includeBeacon: false,
+        });
 
-    const dictionary = dataset.dataDictionary || [];
+        seriesMembers = (membersResponse.results || []).filter(
+          (member) => member.id !== dataset.id
+        );
+      } catch (seriesMembersError) {
+        console.error(
+          "Failed to load dataset series members",
+          seriesMembersError
+        );
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    if (axios.isAxiosError(error)) {
+      const errorResponse = error.response!.data;
+      return (
+        <ErrorComponent
+          statusCode={errorResponse.status}
+          errorTitle={errorResponse.title}
+          errorDetail={errorResponse.detail}
+        />
+      );
+    }
 
-    return (
-      <PageContainer searchParams={_searchParams}>
-        <div className="flex flex-col items-start justify-start lg:flex-row">
-          <div className="flex w-full flex-col gap-5 lg:w-2/3 lg:px-5">
-            <div
-              className={`flex flex-col ${dataset.themes?.length && dataset.themes.length < 2 && "md:flex-row md:gap-y-0 items-start"} gap-y-5 gap-x-3 justify-between`}
-            >
-              <PageHeading className="text-black">{dataset.title}</PageHeading>
+    return <ErrorComponent statusCode={500} />;
+  }
 
-              <ul className="flex gap-x-3 gap-y-2 flex-wrap">
-                {dataset.themes
+  const relationships = dataset.datasetRelationships || [];
+  const dictionary = dataset.dataDictionary || [];
+  const headingClasses = [
+    "flex flex-col gap-y-5 gap-x-3 justify-between",
+    dataset.isSeries || (dataset.themes?.length && dataset.themes.length < 2)
+      ? "md:flex-row md:items-start md:gap-y-0"
+      : "",
+  ].join(" ");
+
+  return (
+    <PageContainer searchParams={_searchParams}>
+      <div className="flex flex-col items-start justify-start lg:flex-row">
+        <div className="flex w-full flex-col gap-5 lg:w-2/3 lg:px-5">
+          <div className={headingClasses}>
+            <PageHeading className="text-black">{dataset.title}</PageHeading>
+
+            <ul className="flex gap-x-3 gap-y-2 flex-wrap">
+              {dataset.isSeries && (
+                <li className="tracking-widest uppercase flex items-center relative group">
+                  <Chip
+                    className="flex justify-center items-center w-24 md:w-32 h-12 text-[10px] md:text-xs text-center px-1 md:px-2"
+                    chip="Dataset series"
+                  />
+                  <Tooltip message="This page describes a dataset series." />
+                </li>
+              )}
+              {!dataset.isSeries &&
+                dataset.themes
                   ?.filter(
                     (theme): theme is typeof theme & { label: string } =>
                       !!theme.label
@@ -66,81 +124,67 @@ export default async function Page({
                       <Tooltip message="Theme associated with the dataset." />
                     </li>
                   ))}
-              </ul>
-            </div>
-
-            {dataset.conformsTo && dataset.conformsTo.length > 0 ? (
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm font-semibold text-gray-700 whitespace-nowrap">
-                  Conforms to:
-                </span>
-                {dataset.conformsTo
-                  ?.filter(
-                    (
-                      item
-                    ): item is typeof item & {
-                      value?: string;
-                      label?: string;
-                    } => !!(item.value || item.label)
-                  )
-                  .map((item) => (
-                    <span
-                      key={item.value || item.label}
-                      className="text-sm font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20"
-                    >
-                      {item.label || item.value}
-                    </span>
-                  ))}
-              </div>
-            ) : (
-              <div className="flex items-center gap-2 text-sm text-gray-500 italic">
-                <FontAwesomeIcon
-                  icon={faCircleInfo}
-                  className="w-4 h-4 flex-shrink-0"
-                />
-                <span>Conforms to: Not specified for this dataset</span>
-              </div>
-            )}
-
-            <div className="flex items-center">
-              <p className="text-gray">{dataset.description}</p>
-            </div>
-
-            <div className="h-[2px] bg-secondary opacity-80"></div>
-
-            <div className="w-full lg:hidden">
-              <Sidebar items={createDatasetSidebarItems(dataset)} />
-            </div>
-
-            <div className="h-[2px] bg-secondary opacity-80 lg:hidden"></div>
-
-            <div>
-              <DatasetMetadata
-                dataset={dataset}
-                relationships={relationships}
-                dictionary={dictionary}
-              />
-            </div>
+            </ul>
           </div>
-          <div className="lg:w-1/3 hidden lg:block">
+
+          {dataset.conformsTo && dataset.conformsTo.length > 0 ? (
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-sm font-semibold text-gray-700 whitespace-nowrap">
+                Conforms to:
+              </span>
+              {dataset.conformsTo
+                ?.filter(
+                  (
+                    item
+                  ): item is typeof item & {
+                    value?: string;
+                    label?: string;
+                  } => !!(item.value || item.label)
+                )
+                .map((item) => (
+                  <span
+                    key={item.value || item.label}
+                    className="text-sm font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20"
+                  >
+                    {item.label || item.value}
+                  </span>
+                ))}
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 text-sm text-gray-500 italic">
+              <FontAwesomeIcon
+                icon={faCircleInfo}
+                className="w-4 h-4 shrink-0"
+              />
+              <span>Conforms to: Not specified for this dataset</span>
+            </div>
+          )}
+
+          <div className="flex items-center">
+            <p className="text-gray">{dataset.description}</p>
+          </div>
+
+          <div className="h-[2px] bg-secondary opacity-80"></div>
+
+          <div className="w-full lg:hidden">
             <Sidebar items={createDatasetSidebarItems(dataset)} />
           </div>
-        </div>
-      </PageContainer>
-    );
-  } catch (error) {
-    console.error(error);
-    if (axios.isAxiosError(error)) {
-      const errorResponse = error.response!.data;
-      return (
-        <ErrorComponent
-          statusCode={errorResponse.status}
-          errorTitle={errorResponse.title}
-          errorDetail={errorResponse.detail}
-        />
-      );
-    }
 
-    return <ErrorComponent statusCode={500} />;
-  }
+          <div className="h-[2px] bg-secondary opacity-80 lg:hidden"></div>
+
+          <div>
+            <DatasetMetadata
+              dataset={dataset}
+              relationships={relationships}
+              dictionary={dictionary}
+              seriesMembers={seriesMembers}
+            />
+          </div>
+        </div>
+        <div className="lg:w-1/3 hidden lg:block">
+          <Sidebar items={createDatasetSidebarItems(dataset)} />
+        </div>
+      </div>
+    </PageContainer>
+  );
 }

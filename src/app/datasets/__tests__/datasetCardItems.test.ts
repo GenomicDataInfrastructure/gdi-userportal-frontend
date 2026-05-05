@@ -33,18 +33,21 @@ describe("datasetCardItems", () => {
       ],
       createdAt: "2024-03-01T00:00:00.000Z",
       modifiedAt: "",
+      temporalCoverageStart: "2020-01-01T00:00:00.000Z",
+      temporalCoverageEnd: "2023-12-31T00:00:00.000Z",
       recordsCount: 21,
       inSeriesCount: 1,
     };
 
     const items = createDatasetCardItems(dataset);
-    expect(items.length).toBe(6);
+    expect(items.length).toBe(7);
     expect(items[0].text).toBe("Created on 1 March 2024");
     expect(items[1].text).toBe("");
-    expect(items[2].text).toBe("Published by publisher1");
-    expect(items[3].text).toBe("1 Distribution");
-    expect(items[4].text).toBe("1 Dataset series");
-    expect(items[5].text).toBe("21 Records");
+    expect(items[2].text).toBe("1 January 2020 — 31 December 2023");
+    expect(items[3].text).toBe("Published by publisher1");
+    expect(items[4].text).toBe("1 Distribution");
+    expect(items[5].text).toBe("1 Dataset series");
+    expect(items[6].text).toBe("21 Records");
   });
 
   it("should handle missing optional fields without crashing", () => {
@@ -62,8 +65,36 @@ describe("datasetCardItems", () => {
     expect(items[0].text).toBe("");
     expect(items[1].text).toBe("");
     expect(items[2].text).toBe("");
-    expect(items[3].text).toBe("2 Distributions");
-    expect(items[4].text).toBe("2 Dataset series");
-    expect(items[5].text).toBe("1 Record");
+    expect(items[3].text).toBe("");
+    expect(items[4].text).toBe("2 Distributions");
+    expect(items[5].text).toBe("2 Dataset series");
+    expect(items[6].text).toBe("1 Record");
+  });
+
+  it("should show temporal coverage from backend summary fields", () => {
+    const dataset: SearchedDataset = {
+      id: "3",
+      title: "",
+      description: "",
+      publishers: [],
+      temporalCoverageStart: "2020-06-01T00:00:00.000Z",
+      temporalCoverageEnd: "2025-02-01T00:00:00.000Z",
+    };
+
+    const items = createDatasetCardItems(dataset);
+    expect(items[2].text).toBe("1 June 2020 — 1 February 2025");
+  });
+
+  it("should handle open ended temporal coverage", () => {
+    const dataset: SearchedDataset = {
+      id: "4",
+      title: "",
+      description: "",
+      publishers: [],
+      temporalCoverageStart: "2021-07-01T00:00:00.000Z",
+    };
+
+    const items = createDatasetCardItems(dataset);
+    expect(items[2].text).toBe("1 July 2021 — Present");
   });
 });

@@ -83,7 +83,9 @@ export default function Home() {
                     />
                   }
                   <h3>
-                    <Link to="/welcome-developers">Developers</Link>
+                    <Link to="/developer-guide/welcome-developers">
+                      Developers
+                    </Link>
                   </h3>
                   <p className={styles.homeSubtext}>
                     I'm a developer or <strong>engineering team</strong> member

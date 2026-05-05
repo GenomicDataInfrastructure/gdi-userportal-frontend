@@ -1,41 +1,35 @@
 ---
-slug: /welcome-developers
+slug: /developer-guide/welcome-developers
 sidebar_label: "Welcome"
 sidebar_position: 1
+description: "Welcome to GDI development!"
 ---
 
-# Welcome, developers
+<!--
+SPDX-FileCopyrightText: 2024 PNED G.I.E.
 
-:::info content in progress
+SPDX-License-Identifier: CC-BY-4.0
+-->
 
-We are working on this developer guide.
+# Welcome to GDI development
 
-:::
+This guide is for developers who want to contribute to the GDI platform—fix bugs, add features, or extend the functionality of the platform.
 
-Welcome to the **GDI User Portal Developer Guide**! This comprehensive documentation will help you contribute to the Genomic Data Infrastructure (GDI) User Portal platform, whether you're developing new features, fixing bugs, or extending functionality.
+The GDI platform consists of the following components:
 
-## Development overview
+- **Frontend**: Next.js web application for end users
+- **Backend services**: Java/Quarkus microservices (Dataset Discovery Service, Access Management Service)
+- **CKAN**: Data catalogue management with custom extensions
+- **Supporting services**: Keycloak, REMS, FDP, Kong Gateway
 
-The GDI User Portal is built with modern web technologies and follows best practices for scalability, security, and maintainability:
+## What would you like to do?
 
-- **Frontend:** Next.js with TypeScript
-- **Backend Services:** Java/Spring Boot microservices
-- **Data Catalogue:** CKAN with custom extensions
-- **Authentication:** Keycloak with LS-AAI integration
-- **Containerisation:** Docker and Docker Compose
+## Choose your contribution path
 
-## Getting started
+The GDI platform supports multiple contribution areas:
 
-Choose your development focus:
-
-- **New to the project?** Start with [Get started](/developer-guide/get-started)
-- **Frontend development?** Go to [Develop frontend features](/developer-guide/develop-frontend)
-- **Backend integration?** Check out [Work with backend services](/developer-guide/work-with-backend)
-- **CKAN extensions?** Explore [Develop CKAN extensions](/developer-guide/develop-ckan-extensions)
-- **Feature development?** See [Add and modify features](/developer-guide/add-modify-features)
-
-## Contributing
-
-Before contributing, review our coding standards and follow the established Git workflow. Ensure comprehensive testing coverage and update documentation for new features.
-
-**GitHub Repository:** [GenomicDataInfrastructure/gdi-userportal-frontend](https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend)
+- **Frontend development**: Next.js web application (TypeScript, React)
+- **Backend services**: Java/Quarkus microservices (Dataset Discovery Service, Access Management Service)
+- **CKAN extensions**: Python-based data catalogue extensions
+- **Infrastructure**: Docker, Kubernetes, deployment configurations
+- **Documentation**: Improve guides, add examples, fix typos

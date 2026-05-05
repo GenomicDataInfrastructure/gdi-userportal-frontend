@@ -1,0 +1,8 @@
+{
+  "label": "Get started",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Set up your development environment and understand the GDI platform architecture to start contributing effectively."
+  }
+}

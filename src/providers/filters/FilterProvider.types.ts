@@ -16,6 +16,7 @@ export type FilterContextState = {
 };
 
 export type FilterContextReturnType = FilterContextState & {
+  setFilters: (filters: Filter[]) => void;
   addActiveFilter: (filter: ActiveFilter) => void;
   removeActiveFilter: (key: string, source: string) => void;
   clearActiveFilters: () => void;

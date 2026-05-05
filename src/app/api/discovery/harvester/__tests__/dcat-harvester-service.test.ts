@@ -876,9 +876,38 @@ describe("DcatHarvesterService", () => {
       },
     ]);
 
-    expect(fetcher).toHaveBeenCalledWith("https://example.org/catalogue.rdf", {
-      headers: undefined,
+    expect(fetcher).toHaveBeenCalledWith(
+      "https://example.org/catalogue.rdf",
+      expect.objectContaining({
+        headers: undefined,
+        dispatcher: expect.anything(),
+      })
+    );
+  });
+
+  test("harvestFromUrl adds the harvest TLS dispatcher", async () => {
+    const fetcher =
+      jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
+    fetcher.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      statusText: "OK",
+      text: async () =>
+        '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" />',
+    } as Response);
+
+    const service = new DcatHarvesterService(fetcher);
+    await service.harvestFromUrl("https://example.org/catalogue.rdf", {
+      headers: { Authorization: "Bearer token" },
     });
+
+    expect(fetcher).toHaveBeenCalledWith(
+      "https://example.org/catalogue.rdf",
+      expect.objectContaining({
+        headers: { Authorization: "Bearer token" },
+        dispatcher: expect.anything(),
+      })
+    );
   });
 
   test("harvestFromUrl throws on non-ok response", async () => {

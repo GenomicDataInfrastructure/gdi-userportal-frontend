@@ -6,3 +6,18 @@ excludes:
     - pattern: "documentation/**"
       reason: "DOCUMENTATION_OF"
       comment: "Documentation folder that is not shipped"
+    - pattern: "coverage/**"
+      reason: "BUILD_TOOL_OF"
+      comment: "Generated test coverage artifacts are not shipped"
+
+resolutions:
+  rule_violations:
+    - message: ".*NPM::next:14\\.2\\.35.*"
+      reason: "CANT_FIX_EXCEPTION"
+      comment: "Temporarily accepted while next-runtime-env keeps a transitive dependency on next 14.2.35. Remove once the dependency chain is upgraded."
+    - message: ".*NPM::uuid:8\\.3\\.2.*"
+      reason: "CANT_FIX_EXCEPTION"
+      comment: "Temporarily accepted while next-auth keeps a transitive dependency on uuid 8.3.2. Remove once the dependency chain is upgraded."
+    - message: ".*NPM::postcss:8\\.4\\.31.*"
+      reason: "CANT_FIX_EXCEPTION"
+      comment: "Temporarily accepted while Next.js pins postcss 8.4.31 transitively. Remove once the dependency chain is upgraded."

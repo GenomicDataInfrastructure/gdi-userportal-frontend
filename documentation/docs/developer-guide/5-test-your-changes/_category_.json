@@ -1,0 +1,8 @@
+{
+  "label": "Test your changes",
+  "position": 6,
+  "link": {
+    "type": "generated-index",
+    "description": "Ensure your changes work correctly with comprehensive testing strategies."
+  }
+}

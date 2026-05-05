@@ -7,6 +7,7 @@ import { formatDate } from "@/utils/formatDate";
 import {
   faBookBookmark,
   faCalendarAlt,
+  faClock,
   faFile,
   faLayerGroup,
   faSyncAlt,
@@ -18,6 +19,9 @@ export function createDatasetCardItems(dataset: SearchedDataset): CardItem[] {
   const publisherNames = dataset.publishers
     ?.map((publisher) => publisher.name)
     .filter((name): name is string => Boolean(name));
+  const hasTemporalCoverageSummary = Boolean(
+    dataset.temporalCoverageStart || dataset.temporalCoverageEnd
+  );
 
   return [
     {
@@ -32,6 +36,13 @@ export function createDatasetCardItems(dataset: SearchedDataset): CardItem[] {
           `Modified on ${formatDate(dataset.modifiedAt)}`) ||
         "",
       icon: faSyncAlt,
+    },
+    {
+      text:
+        (hasTemporalCoverageSummary &&
+          `${dataset.temporalCoverageStart ? formatDate(dataset.temporalCoverageStart) : "N/A"} — ${dataset.temporalCoverageEnd ? formatDate(dataset.temporalCoverageEnd) : "Present"}`) ||
+        "",
+      icon: faClock,
     },
     {
       text:

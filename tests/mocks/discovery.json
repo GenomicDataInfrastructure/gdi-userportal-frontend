@@ -275,6 +275,25 @@
           }
         ],
         "keywords": ["pharmacogenomics", "variants"]
+      },
+      {
+        "id": "series-010",
+        "title": "Pan-Cancer Longitudinal Series",
+        "description": "A longitudinal dataset series for pan-cancer studies.",
+        "createdAt": "2023-01-10T09:00:00Z",
+        "modifiedAt": "2024-02-20T10:30:00Z",
+        "identifier": "series-010",
+        "isSeries": true,
+        "distributionsCount": 0,
+        "inSeriesCount": 0,
+        "recordsCount": 0,
+        "themes": [
+          {
+            "value": "oncology",
+            "label": "Oncology"
+          }
+        ],
+        "keywords": ["series", "longitudinal", "pan-cancer"]
       }
     ]
   },
@@ -615,6 +634,91 @@
       ],
       "distributions": []
     },
+    "series-010": {
+      "id": "series-010",
+      "title": "Pan-Cancer Longitudinal Series",
+      "description": "A longitudinal dataset series for pan-cancer studies.",
+      "createdAt": "2023-01-10T09:00:00Z",
+      "modifiedAt": "2024-02-20T10:30:00Z",
+      "identifier": "series-010",
+      "isSeries": true,
+      "themes": [
+        {
+          "value": "oncology",
+          "label": "Oncology"
+        },
+        {
+          "value": "genomics",
+          "label": "Genomics"
+        }
+      ],
+      "keywords": ["series", "longitudinal", "pan-cancer"],
+      "conformsTo": [
+        {
+          "value": "http://example.org/schema/gdi-core",
+          "label": "GDI Core"
+        }
+      ],
+      "languages": [
+        {
+          "value": "en",
+          "label": "English"
+        }
+      ],
+      "publishers": [
+        {
+          "name": "GDI Oncology Institute",
+          "identifier": "publisher-series-010",
+          "email": "series-owner@example.org",
+          "url": "https://example.org/publishers/oncology-institute"
+        }
+      ],
+      "contacts": [
+        {
+          "name": "Series Coordination Desk",
+          "email": "series-desk@example.org",
+          "url": ["https://example.org/contact/series-desk"],
+          "identifier": "contact-series-010"
+        }
+      ],
+      "accessRights": {
+        "value": "restricted",
+        "label": "Restricted"
+      },
+      "dcatType": {
+        "value": "dataset_series",
+        "label": "Dataset series"
+      },
+      "frequency": {
+        "value": "monthly",
+        "label": "Monthly"
+      },
+      "temporalCoverage": [
+        {
+          "start": "2019-01-01T00:00:00Z",
+          "end": "2024-12-31T00:00:00Z"
+        }
+      ],
+      "spatialCoverage": [
+        {
+          "text": "European Union",
+          "uri": {
+            "value": "eu",
+            "label": "European Union"
+          }
+        }
+      ],
+      "applicableLegislation": [
+        {
+          "value": "data-act",
+          "label": "Data Act"
+        }
+      ],
+      "documentation": ["https://example.org/docs/series-010"],
+      "homepage": "https://example.org/series/series-010",
+      "uri": "https://example.org/resource/series-010",
+      "distributions": []
+    },
     "series-001": {
       "id": "series-001",
       "title": "Synthetic Cohort Series",
@@ -622,6 +726,7 @@
       "createdAt": "2023-01-01T00:00:00Z",
       "modifiedAt": "2024-01-15T00:00:00Z",
       "identifier": "series-001",
+      "isSeries": true,
       "publishers": [
         {
           "name": "GDI Oncology Institute"

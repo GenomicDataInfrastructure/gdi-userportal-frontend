@@ -386,6 +386,14 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/TimeWindow"
+        temporalCoverageStart:
+          type: string
+          format: date-time
+          description: Earliest available temporal coverage start across all periods.
+        temporalCoverageEnd:
+          type: string
+          format: date-time
+          description: Latest available temporal coverage end across all periods.
         recordsCount:
           type: integer
           title: Records count
@@ -395,6 +403,9 @@ components:
         inSeriesCount:
           type: integer
           title: Dataset series count
+        isSeries:
+          type: boolean
+          title: Whether this result is a dataset series
       required:
         - id
         - title
@@ -429,6 +440,9 @@ components:
         title:
           type: string
           title: Title
+        isSeries:
+          type: boolean
+          title: Whether this record is a dataset series
         description:
           type: string
           title: Description
@@ -817,6 +831,7 @@ components:
                   type: string
               description:
                 type: string
+                nullable: true
               endpointDescription:
                 type: string
               endpoint_url:
@@ -830,6 +845,7 @@ components:
               id:
                 type: string
                 title: Data service internal ID
+                nullable: true
               keywords:
                 type: array
                 items:

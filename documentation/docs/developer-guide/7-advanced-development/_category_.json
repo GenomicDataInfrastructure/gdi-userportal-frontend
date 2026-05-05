@@ -1,0 +1,8 @@
+{
+  "label": "Advanced development",
+  "position": 8,
+  "link": {
+    "type": "generated-index",
+    "description": "Dive deeper into GDI platform optimisation, security, and extensibility."
+  }
+}

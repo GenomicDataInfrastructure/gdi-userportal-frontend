@@ -42,11 +42,11 @@ $ git push origin releases/v1.2
 ```
 
 - Go to GitHub and create a new release, example:
-- Click on "Draft a new release" CHANGELOG
+- Select "Draft a new release" CHANGELOG
 - Select the just created release branch and tag.
 - Enter a title for the release that includes the version and possibly a short description.
 - Auto-generate release notes.
 - Remove unnecessary release notes: ensure that only relevant information for the users is included and matches CHANGELOG.md.
 - Double-check all entered information.
-- Click on "Publish release" to officially make the release.
+- Select "Publish release" to officially make the release.
 - Ensure docker images were built and published correctly.

@@ -101,7 +101,7 @@ export default function DatasetsProvider({
   children,
   searchParams,
 }: DatasetsProviderProps) {
-  const { activeFilters } = useFilters();
+  const { activeFilters, setFilters } = useFilters();
   const [
     { datasets, datasetCount, isLoading, errorCode, beaconError },
     dispatch,
@@ -125,6 +125,7 @@ export default function DatasetsProvider({
 
     try {
       const data = await searchDatasetsApi(options);
+      setFilters(data.facets ?? []);
 
       dispatch({
         type: DatasetsActionType.DATASETS_LOADED,
@@ -143,11 +144,11 @@ export default function DatasetsProvider({
       });
       console.error(error);
     }
-  }, [activeFilters, page, q, sort, beacon]);
+  }, [activeFilters, page, q, sort, beacon, setFilters]);
 
   useEffect(() => {
     fetchDatasets();
-  }, [fetchDatasets, activeFilters, page, q, sort, beacon]);
+  }, [fetchDatasets]);
 
   return (
     <DatasetsContext.Provider

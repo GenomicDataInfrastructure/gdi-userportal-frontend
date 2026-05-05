@@ -5,6 +5,7 @@
 import {
   IconDefinition,
   faCircleInfo,
+  faLayerGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
@@ -27,6 +28,7 @@ type CardProps = {
   externalUrl?: string;
   isExternal?: boolean;
   externalLabel?: string;
+  entityLabel?: string;
 };
 
 export default function Card({
@@ -40,6 +42,7 @@ export default function Card({
   externalUrl,
   isExternal: isExternalProp,
   externalLabel,
+  entityLabel,
 }: CardProps) {
   const isExternal = isExternalProp ?? !!externalUrl;
   return (
@@ -48,16 +51,14 @@ export default function Card({
       className="flex flex-col w-full shadow-bb rounded-lg pl-4 pr-4.5 group relative"
     >
       <div className="flex flex-col lg:flex-row gap-x-2 gap-y-4">
-        <div className="flex flex-col gap-y-2 shrink w-full lg:w-[90%] lg:pr-4">
+        <div className="flex flex-col gap-y-2 shrink w-full">
           {subTitles.length > 0 && (
             <div className="flex flex-wrap gap-2 font-normal text-xs sm:text-sm leading-[12px] uppercase pb-2">
               {subTitles.map((subTitle, index) => (
                 <span
                   key={subTitle}
                   className={
-                    index
-                      ? "sm:border-l-[2px] sm:pl-2 sm:border-l-info"
-                      : undefined
+                    index ? "sm:border-l-2 sm:pl-2 sm:border-l-info" : undefined
                   }
                 >
                   {subTitle}
@@ -66,21 +67,31 @@ export default function Card({
             </div>
           )}
 
-          <div className="font-bold text-[20px] group-hover:text-info group-hover:underline">
-            {title}
+          <div className="flex items-start justify-between gap-3">
+            <div className="font-bold text-[20px] group-hover:text-info group-hover:underline">
+              {title}
+            </div>
+            {entityLabel && (
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20 shrink-0">
+                <FontAwesomeIcon icon={faLayerGroup} className="w-3 h-3" />
+                {entityLabel}
+              </span>
+            )}
           </div>
 
-          {isExternal && externalLabel ? (
-            <div className="inline-block w-fit">
+          {isExternal && externalLabel && (
+            <div className="inline-flex w-fit flex-wrap items-center gap-2">
               <span className="text-xs font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20">
                 {externalLabel}
               </span>
             </div>
-          ) : isExternal && !externalLabel ? (
+          )}
+
+          {isExternal && !externalLabel ? (
             <div className="flex items-center gap-2 text-xs text-gray-500 italic">
               <FontAwesomeIcon
                 icon={faCircleInfo}
-                className="w-3 h-3 flex-shrink-0"
+                className="w-3 h-3 shrink-0"
               />
               <span>Conforms to: Not specified for this dataset</span>
             </div>

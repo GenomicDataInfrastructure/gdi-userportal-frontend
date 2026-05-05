@@ -35,7 +35,7 @@ Use passive voice only when the actor is unknown or irrelevant, or if the outcom
 
 Use device-agnostic language.
 
-**Bad**: Click Submit.
+**Bad**: Select **Submit**.
 **Good**: Select Submit.
 
 ### "Enter" not "type"
@@ -249,7 +249,7 @@ Good: alt="Diagram of ingestion, transformation, and serving"
 
 Use descriptive links: Avoid “click here”. Use the goal or destination as display texts for links.
 
-Bad: Click here for the template.
+Bad: Select here for the template.
 Good: Download the template.
 
 Introduce tables and lists: Describe their purpose or summary.

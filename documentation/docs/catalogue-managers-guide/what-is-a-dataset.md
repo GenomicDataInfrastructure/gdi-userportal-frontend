@@ -36,4 +36,5 @@ Datasets in GDI can be organised in several ways—such as by **organisation** a
 
 :::
 
-**What's next:** [Add a dataset](./manage-datasets-manually/add)
+<!-- TODO: Add link to manual dataset management page when available -->
+<!-- **What's next:** [Add a dataset](./manage-datasets-manually/add) -->

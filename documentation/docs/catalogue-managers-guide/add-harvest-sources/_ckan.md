@@ -10,6 +10,8 @@ SPDX-FileCopyrightText: 2024 PNED G.I.E.
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
+<!-- THIS FILE IS HIDDEN FROM THE SIDEBAR - WE DONT DOCUMENT THIS FOR NOW -->
+
 # Harvest from CKAN catalogues
 
 Synchronise datasets from other CKAN catalogues to enable cross-institutional collaboration and maintain distributed dataset collections.

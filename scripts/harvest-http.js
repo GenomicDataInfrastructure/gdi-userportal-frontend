@@ -74,7 +74,7 @@ function truncateText(value, limit = 400) {
 }
 
 async function requestHarvest(
-  { apiUrl, sourceUrl, secret },
+  { apiUrl, sourceUrl, secret, mode },
   { fetchImpl = undiciFetch, timeoutMs = HARVEST_REQUEST_TIMEOUT_MS } = {}
 ) {
   const timeoutController = new AbortController();
@@ -88,7 +88,10 @@ async function requestHarvest(
         "Content-Type": "application/json",
         "x-harvest-secret": secret,
       },
-      body: JSON.stringify({ url: sourceUrl }),
+      body: JSON.stringify({
+        url: sourceUrl,
+        ...(mode ? { mode } : {}),
+      }),
       signal: timeoutController.signal,
       ...(usesHttps(apiUrl) ? { dispatcher: harvestDispatcher } : {}),
     });

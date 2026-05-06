@@ -24,7 +24,17 @@ describe("harvest-worker", () => {
       sourceUrl: "https://example.org/catalogue.rdf",
       apiUrl: HARVEST_ENDPOINT,
       secret: "top-secret",
+      mode: "replace",
     });
+  });
+
+  test("resolveWorkerConfig supports append mode", () => {
+    const config = resolveWorkerConfig(["--once", "--append"], {
+      HARVEST_SOURCE_URL: "https://example.org/catalogue.rdf",
+      HARVEST_INTERNAL_SECRET: "top-secret",
+    });
+
+    expect(config.mode).toBe("append");
   });
 
   test("resolveWorkerConfig uses HARVEST_BASE_URL when provided", () => {
@@ -61,6 +71,7 @@ describe("harvest-worker", () => {
           apiUrl: HARVEST_ENDPOINT,
           sourceUrl: "https://example.org/catalogue.rdf",
           secret: "top-secret",
+          mode: "append",
         },
         { fetchImpl }
       )
@@ -74,7 +85,10 @@ describe("harvest-worker", () => {
           "Content-Type": "application/json",
           "x-harvest-secret": "top-secret",
         }),
-        body: JSON.stringify({ url: "https://example.org/catalogue.rdf" }),
+        body: JSON.stringify({
+          url: "https://example.org/catalogue.rdf",
+          mode: "append",
+        }),
       })
     );
     expect(fetchImpl.mock.calls[0][1].dispatcher).toBeUndefined();

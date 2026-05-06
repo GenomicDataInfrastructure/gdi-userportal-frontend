@@ -8,7 +8,7 @@ const { buildHarvestApiUrl, requestHarvest } = require("./harvest-http");
 const DEFAULT_HARVEST_BASE_URL = "http://gdi-userportal-frontend:3000";
 
 function parseArgs(argv) {
-  const args = { once: false };
+  const args = { once: false, mode: "" };
 
   for (let i = 0; i < argv.length; i += 1) {
     const token = argv[i];
@@ -21,6 +21,11 @@ function parseArgs(argv) {
     } else if (token === "--secret") {
       args.secret = argv[i + 1] || "";
       i += 1;
+    } else if (token === "--mode") {
+      args.mode = argv[i + 1] || "";
+      i += 1;
+    } else if (token === "--append") {
+      args.mode = "append";
     } else if (token === "--once") {
       args.once = true;
     } else if (token === "--help" || token === "-h") {
@@ -43,9 +48,11 @@ function printUsage() {
       "  HARVEST_BASE_URL             Base URL for the frontend app (default: http://gdi-userportal-frontend:3000)",
       "  HARVEST_INTERNAL_SECRET      Shared secret sent as x-harvest-secret",
       "  HARVEST_SCHEDULE             Cron expression for recurring runs",
+      '  HARVEST_MODE                 Import mode: "replace" or "append" (default: replace)',
       "",
       "Flags:",
       "  --once                Run a single harvest and exit",
+      "  --append              Append harvested datasets without clearing the local index",
     ].join("\n")
   );
 }
@@ -65,6 +72,7 @@ function resolveWorkerConfig(argv = process.argv.slice(2), env = process.env) {
     args.secret || env.HARVEST_INTERNAL_SECRET || ""
   ).trim();
   const schedule = String(args.schedule || env.HARVEST_SCHEDULE || "").trim();
+  const mode = String(args.mode || env.HARVEST_MODE || "replace").trim();
 
   if (!sourceUrl) {
     throw new Error(
@@ -76,6 +84,10 @@ function resolveWorkerConfig(argv = process.argv.slice(2), env = process.env) {
     throw new Error(
       "Missing harvest shared secret. Provide HARVEST_INTERNAL_SECRET or pass --secret."
     );
+  }
+
+  if (!["replace", "append"].includes(mode)) {
+    throw new Error('Invalid harvest mode. Use "replace" or "append".');
   }
 
   if (!once) {
@@ -96,6 +108,7 @@ function resolveWorkerConfig(argv = process.argv.slice(2), env = process.env) {
     apiUrl: buildHarvestApiUrl(baseUrl),
     secret,
     schedule,
+    mode,
   };
 }
 

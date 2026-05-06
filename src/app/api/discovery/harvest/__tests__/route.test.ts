@@ -5,7 +5,7 @@
 import { jest } from "@jest/globals";
 
 const mockHarvestLocalIndexFromDcatUrlApi =
-  jest.fn<(url: string) => Promise<number>>();
+  jest.fn<(url: string, options?: { mode?: string }) => Promise<number>>();
 
 jest.mock("@/app/api/discovery/local-index", () => ({
   harvestLocalIndexFromDcatUrlApi: mockHarvestLocalIndexFromDcatUrlApi,
@@ -90,10 +90,59 @@ describe("POST /api/discovery/harvest", () => {
     );
 
     expect(mockHarvestLocalIndexFromDcatUrlApi).toHaveBeenCalledWith(
-      "https://example.org/catalogue.rdf"
+      "https://example.org/catalogue.rdf",
+      { mode: "replace" }
     );
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual({ count: 12 });
+  });
+
+  test("passes append mode to the harvester", async () => {
+    process.env.HARVEST_INTERNAL_SECRET = "top-secret";
+    mockHarvestLocalIndexFromDcatUrlApi.mockResolvedValueOnce(4);
+
+    const response = await POST(
+      new Request("http://localhost/api/discovery/harvest", {
+        method: "POST",
+        headers: {
+          "x-harvest-secret": "top-secret",
+        },
+        body: JSON.stringify({
+          url: "https://example.org/catalogue.rdf",
+          mode: "append",
+        }),
+      })
+    );
+
+    expect(mockHarvestLocalIndexFromDcatUrlApi).toHaveBeenCalledWith(
+      "https://example.org/catalogue.rdf",
+      { mode: "append" }
+    );
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toEqual({ count: 4 });
+  });
+
+  test("returns 400 when mode is invalid", async () => {
+    process.env.HARVEST_INTERNAL_SECRET = "top-secret";
+
+    const response = await POST(
+      new Request("http://localhost/api/discovery/harvest", {
+        method: "POST",
+        headers: {
+          "x-harvest-secret": "top-secret",
+        },
+        body: JSON.stringify({
+          url: "https://example.org/catalogue.rdf",
+          mode: "merge",
+        }),
+      })
+    );
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toEqual({
+      error: 'Invalid field "mode". Expected "replace" or "append".',
+    });
+    expect(mockHarvestLocalIndexFromDcatUrlApi).not.toHaveBeenCalled();
   });
 
   test("returns 500 with error message when harvest throws", async () => {

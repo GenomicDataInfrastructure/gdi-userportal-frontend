@@ -4,6 +4,9 @@
 
 import { timingSafeEqual } from "node:crypto";
 import { harvestLocalIndexFromDcatUrlApi } from "@/app/api/discovery/local-index";
+import type { HarvestLocalIndexMode } from "@/app/api/discovery/local-index";
+
+const HARVEST_MODES = new Set<HarvestLocalIndexMode>(["replace", "append"]);
 
 const getProvidedSecret = (request: Request): string => {
   const headerSecret = request.headers.get("x-harvest-secret")?.trim();
@@ -52,8 +55,12 @@ export async function POST(request: Request) {
   }
 
   try {
-    const body = (await request.json()) as { url?: string };
+    const body = (await request.json()) as {
+      url?: string;
+      mode?: HarvestLocalIndexMode;
+    };
     const url = body?.url?.trim();
+    const mode = body?.mode ?? "replace";
 
     if (!url) {
       return Response.json(
@@ -62,7 +69,14 @@ export async function POST(request: Request) {
       );
     }
 
-    const count = await harvestLocalIndexFromDcatUrlApi(url);
+    if (!HARVEST_MODES.has(mode)) {
+      return Response.json(
+        { error: 'Invalid field "mode". Expected "replace" or "append".' },
+        { status: 400 }
+      );
+    }
+
+    const count = await harvestLocalIndexFromDcatUrlApi(url, { mode });
     return Response.json({ count });
   } catch (error) {
     return Response.json(

@@ -5,7 +5,7 @@
 const { buildHarvestApiUrl, requestHarvest } = require("./harvest-http");
 
 function parseArgs(argv) {
-  const args = { url: "" };
+  const args = { url: "", mode: "" };
 
   for (let i = 0; i < argv.length; i += 1) {
     const token = argv[i];
@@ -15,6 +15,11 @@ function parseArgs(argv) {
     } else if (token === "--secret") {
       args.secret = argv[i + 1] || "";
       i += 1;
+    } else if (token === "--mode") {
+      args.mode = argv[i + 1] || "";
+      i += 1;
+    } else if (token === "--append") {
+      args.mode = "append";
     } else if (token === "--help" || token === "-h") {
       args.help = true;
     }
@@ -29,6 +34,11 @@ function printUsage() {
       "Usage:",
       "  npm run harvest:dcat -- --url <catalogue-rdf-url>",
       "  npm run harvest:dcat -- --url <catalogue-rdf-url> --secret <shared-secret>",
+      "  npm run harvest:dcat -- --url <catalogue-rdf-url> --append",
+      "",
+      "Options:",
+      '  --mode <replace|append>   Import mode. Defaults to "replace", which clears the local index first.',
+      "  --append                  Shortcut for --mode append.",
       "",
       "Example:",
       "  npm run harvest:dcat -- \\",
@@ -45,6 +55,9 @@ async function main() {
   const secret = String(
     args.secret || process.env.HARVEST_INTERNAL_SECRET || ""
   ).trim();
+  const mode = String(
+    args.mode || process.env.HARVEST_MODE || "replace"
+  ).trim();
 
   if (args.help || !args.url) {
     printUsage();
@@ -57,11 +70,16 @@ async function main() {
     );
   }
 
+  if (!["replace", "append"].includes(mode)) {
+    throw new Error('Invalid harvest mode. Use "replace" or "append".');
+  }
+
   try {
     const count = await requestHarvest({
       apiUrl: endpoint,
       sourceUrl: args.url,
       secret,
+      mode,
     });
 
     console.log(

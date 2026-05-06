@@ -16,6 +16,12 @@ import { dcatHarvesterService } from "@/app/api/discovery/harvester/dcat-harvest
 import { wrapError } from "@/app/api/discovery/harvester/error-utils";
 import { oidcAuthService } from "@/app/api/discovery/harvester/oidc-auth.service";
 
+export type HarvestLocalIndexMode = "replace" | "append";
+
+export type HarvestLocalIndexOptions = {
+  mode?: HarvestLocalIndexMode;
+};
+
 export const upsertLocalIndexDatasetsApi = async (
   datasets: LocalDiscoveryDataset[]
 ): Promise<void> => {
@@ -64,8 +70,11 @@ export const seedLocalIndexFromDdsApi = async (
 };
 
 export const harvestLocalIndexFromDcatUrlApi = async (
-  catalogueRdfUrl: string
+  catalogueRdfUrl: string,
+  options: HarvestLocalIndexOptions = {}
 ): Promise<number> => {
+  const mode = options.mode ?? "replace";
+
   let authHeaders: Record<string, string>;
   try {
     authHeaders = await oidcAuthService.getAuthorizationHeaderIfConfigured();
@@ -88,13 +97,15 @@ export const harvestLocalIndexFromDcatUrlApi = async (
     );
   }
 
-  try {
-    await clearLocalDiscoveryDatasets();
-  } catch (error) {
-    throw wrapError(
-      `Failed to clear the local discovery index before importing ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`,
-      error
-    );
+  if (mode === "replace") {
+    try {
+      await clearLocalDiscoveryDatasets();
+    } catch (error) {
+      throw wrapError(
+        `Failed to clear the local discovery index before importing ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`,
+        error
+      );
+    }
   }
 
   try {

@@ -48,5 +48,6 @@ describe("Retrieving filters", () => {
     expect(response.length).toEqual(2);
     expect(response[0].key).toBe("publisherName");
     expect(response[1].key).toBe("modified");
+    expect(response[1].operators).toEqual(["=", ">", "<", ">=", "<="]);
   });
 });

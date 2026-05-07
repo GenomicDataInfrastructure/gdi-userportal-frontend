@@ -24,6 +24,8 @@ const mapDdsFilterKeyToApp = (key: string): string =>
 const mapAppFilterKeyToDds = (key: string): string =>
   key === "publisherName" ? "publisher_name" : key;
 
+const RANGE_DEFAULT_OPERATORS = ["=", ">", "<", ">=", "<="] as const;
+
 export class DdsDiscoveryProvider implements DiscoveryProvider {
   readonly key = "dds";
 
@@ -40,6 +42,11 @@ export class DdsDiscoveryProvider implements DiscoveryProvider {
     return (response as DiscoveryFilter[]).map((filter) => ({
       ...filter,
       key: mapDdsFilterKeyToApp(filter.key),
+      operators:
+        filter.operators ??
+        (filter.type === "DATETIME" || filter.type === "NUMBER"
+          ? [...RANGE_DEFAULT_OPERATORS]
+          : undefined),
     }));
   }
 

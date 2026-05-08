@@ -94,33 +94,6 @@ type ExtendedRetrievedDataset = RetrievedDataset & {
   analytics?: RetrievedDataset["analytics"] | string[];
 };
 
-const isHealthDcatApCompatible = (
-  dataset: ExtendedRetrievedDataset
-): boolean => {
-  const healthDcatApIndicators = [
-    dataset.healthTheme && dataset.healthTheme.length > 0,
-    dataset.healthCategory && dataset.healthCategory.length > 0,
-    dataset.hdab && dataset.hdab.length > 0,
-    dataset.trustedDataHolder !== undefined,
-    dataset.legalBasis && dataset.legalBasis.length > 0,
-    dataset.applicableLegislation && dataset.applicableLegislation.length > 0,
-    dataset.purpose && dataset.purpose.length > 0,
-    dataset.personalData && dataset.personalData.length > 0,
-    dataset.codingSystem && dataset.codingSystem.length > 0,
-    dataset.codeValues && dataset.codeValues.length > 0,
-    dataset.populationCoverage,
-    dataset.numberOfRecords !== undefined,
-    dataset.numberOfUniqueIndividuals !== undefined,
-    dataset.minTypicalAge !== undefined,
-    dataset.maxTypicalAge !== undefined,
-    dataset.publisherType && dataset.publisherType.length > 0,
-    dataset.publisherNote,
-    dataset.retentionPeriod && dataset.retentionPeriod.length > 0,
-  ];
-
-  return healthDcatApIndicators.some((indicator) => indicator);
-};
-
 const DatasetMetadata = ({
   dataset,
   relationships,
@@ -567,8 +540,7 @@ const DatasetMetadata = ({
       )}
 
       {hasHealthTheme &&
-        (isHealthDcatApCompatible(dataset) ||
-          (dataset.healthTheme && dataset.healthTheme.length > 0) ||
+        ((dataset.healthTheme && dataset.healthTheme.length > 0) ||
           (dataset.healthCategory && dataset.healthCategory.length > 0)) && (
           <MetadataSection title="Health Information" icon={faHeartPulse}>
             <div className="flex flex-col gap-3 text-sm">
@@ -600,69 +572,59 @@ const DatasetMetadata = ({
           </MetadataSection>
         )}
 
-      {hasHealthTheme &&
-        (isHealthDcatApCompatible(dataset) ||
-          dataset.populationCoverage ||
-          dataset.numberOfRecords !== undefined ||
-          dataset.numberOfUniqueIndividuals !== undefined ||
-          dataset.minTypicalAge !== undefined ||
-          dataset.maxTypicalAge !== undefined) && (
-          <MetadataSection title="Population & Demographics" icon={faUsers}>
-            <div className="flex flex-col gap-3 text-sm">
+      {hasHealthTheme && (
+        <MetadataSection title="Population & Demographics" icon={faUsers}>
+          <div className="flex flex-col gap-3 text-sm">
+            <MetadataField
+              label="Population Coverage"
+              tooltip="Description of the population covered by this dataset."
+            >
+              {dataset.populationCoverage || <NotProvided />}
+            </MetadataField>
+            <div className="flex items-center gap-4 flex-wrap">
               <MetadataField
-                label="Population Coverage"
-                tooltip="Description of the population covered by this dataset."
+                label="Number of Records"
+                icon={faChartBar}
+                tooltip="Total number of records in the dataset."
               >
-                {dataset.populationCoverage || <NotProvided />}
+                {dataset.numberOfRecords !== undefined ? (
+                  dataset.numberOfRecords.toLocaleString()
+                ) : (
+                  <NotProvided />
+                )}
               </MetadataField>
-              <div className="flex items-center gap-4 flex-wrap">
-                <MetadataField
-                  label="Number of Records"
-                  icon={faChartBar}
-                  tooltip="Total number of records in the dataset."
-                >
-                  {dataset.numberOfRecords !== undefined ? (
-                    dataset.numberOfRecords.toLocaleString()
-                  ) : (
-                    <NotProvided />
-                  )}
-                </MetadataField>
-                <MetadataField
-                  label="Unique Individuals"
-                  icon={faUsers}
-                  tooltip="Number of unique individuals represented in the dataset."
-                >
-                  {dataset.numberOfUniqueIndividuals !== undefined ? (
-                    dataset.numberOfUniqueIndividuals.toLocaleString()
-                  ) : (
-                    <NotProvided />
-                  )}
-                </MetadataField>
-                <MetadataField
-                  label="Age Range"
-                  icon={faCalendarAlt}
-                  tooltip="Typical age range of individuals in the dataset."
-                >
-                  {dataset.minTypicalAge !== undefined ||
-                  dataset.maxTypicalAge !== undefined ? (
-                    <>
-                      {dataset.minTypicalAge ?? "N/A"} -{" "}
-                      {dataset.maxTypicalAge ?? "N/A"} years
-                    </>
-                  ) : (
-                    <NotProvided />
-                  )}
-                </MetadataField>
-              </div>
+              <MetadataField
+                label="Unique Individuals"
+                icon={faUsers}
+                tooltip="Number of unique individuals represented in the dataset."
+              >
+                {dataset.numberOfUniqueIndividuals !== undefined ? (
+                  dataset.numberOfUniqueIndividuals.toLocaleString()
+                ) : (
+                  <NotProvided />
+                )}
+              </MetadataField>
+              <MetadataField
+                label="Age Range"
+                icon={faCalendarAlt}
+                tooltip="Typical age range of individuals in the dataset."
+              >
+                {dataset.minTypicalAge !== undefined ||
+                dataset.maxTypicalAge !== undefined ? (
+                  <>
+                    {dataset.minTypicalAge ?? "N/A"} -{" "}
+                    {dataset.maxTypicalAge ?? "N/A"} years
+                  </>
+                ) : (
+                  <NotProvided />
+                )}
+              </MetadataField>
             </div>
-          </MetadataSection>
-        )}
+          </div>
+        </MetadataSection>
+      )}
 
-      {(isHealthDcatApCompatible(dataset) ||
-        (dataset.spatialCoverage && dataset.spatialCoverage.length > 0) ||
-        hasTemporalCoverage ||
-        dataset.temporalResolution ||
-        dataset.spatialResolutionInMeters !== undefined) && (
+      {hasHealthTheme && (
         <MetadataSection title="Coverage" icon={faGlobe}>
           <div className="flex flex-col gap-3 text-sm">
             <div className="flex flex-wrap gap-2 items-center relative group">
@@ -706,8 +668,7 @@ const DatasetMetadata = ({
         </MetadataSection>
       )}
 
-      {(isHealthDcatApCompatible(dataset) ||
-        (dataset.legalBasis && dataset.legalBasis.length > 0) ||
+      {((dataset.legalBasis && dataset.legalBasis.length > 0) ||
         (dataset.applicableLegislation &&
           dataset.applicableLegislation.length > 0) ||
         (dataset.purpose && dataset.purpose.length > 0) ||
@@ -771,8 +732,7 @@ const DatasetMetadata = ({
         </MetadataSection>
       )}
 
-      {(isHealthDcatApCompatible(dataset) ||
-        dataset.publisherNote ||
+      {(dataset.publisherNote ||
         (dataset.publisherType && dataset.publisherType.length > 0) ||
         (dataset.hdab && dataset.hdab.length > 0) ||
         (dataset.creators && dataset.creators.length > 0) ||
@@ -882,8 +842,7 @@ const DatasetMetadata = ({
       )}
 
       {hasHealthTheme &&
-        (isHealthDcatApCompatible(dataset) ||
-          (dataset.codingSystem && dataset.codingSystem.length > 0) ||
+        ((dataset.codingSystem && dataset.codingSystem.length > 0) ||
           (dataset.codeValues && dataset.codeValues.length > 0)) && (
           <MetadataSection title="Coding & Standards" icon={faCode}>
             <div className="flex flex-col gap-3 text-sm">
@@ -916,8 +875,8 @@ const DatasetMetadata = ({
         )}
 
       {hasHealthTheme &&
-        (isHealthDcatApCompatible(dataset) ||
-          (dataset.retentionPeriod && dataset.retentionPeriod.length > 0)) && (
+        dataset.retentionPeriod &&
+        dataset.retentionPeriod.length > 0 && (
           <MetadataSection title="Retention Period" icon={faClock}>
             <div className="flex flex-col gap-2 text-sm relative group">
               {dataset.retentionPeriod && dataset.retentionPeriod.length > 0 ? (
@@ -937,7 +896,7 @@ const DatasetMetadata = ({
           </MetadataSection>
         )}
 
-      {isHealthDcatApCompatible(dataset) &&
+      {hasHealthTheme &&
         (!!dataset.homepage ||
           (!!dataset.documentation && dataset.documentation.length > 0) ||
           (!!dataset.isReferencedBy && dataset.isReferencedBy.length > 0)) && (
@@ -987,7 +946,7 @@ const DatasetMetadata = ({
           </MetadataSection>
         )}
 
-      {(isHealthDcatApCompatible(dataset) ||
+      {(hasHealthTheme ||
         dataset.version ||
         dataset.versionNotes ||
         dataset.frequency) && (
@@ -1014,22 +973,21 @@ const DatasetMetadata = ({
         </MetadataSection>
       )}
 
-      {hasHealthTheme &&
-        (isHealthDcatApCompatible(dataset) || analytics.length > 0) && (
-          <MetadataSection title="Analytics" icon={faChartBar}>
-            <div className="relative group">
-              {analytics.length > 0 ? (
-                <Chips
-                  chips={analytics}
-                  className="bg-primary/10 text-primary rounded-full py-1"
-                />
-              ) : (
-                <NotProvided />
-              )}
-              <Tooltip message="Analytics capabilities or methods available for this dataset." />
-            </div>
-          </MetadataSection>
-        )}
+      {hasHealthTheme && analytics.length > 0 && (
+        <MetadataSection title="Analytics" icon={faChartBar}>
+          <div className="relative group">
+            {analytics.length > 0 ? (
+              <Chips
+                chips={analytics}
+                className="bg-primary/10 text-primary rounded-full py-1"
+              />
+            ) : (
+              <NotProvided />
+            )}
+            <Tooltip message="Analytics capabilities or methods available for this dataset." />
+          </div>
+        </MetadataSection>
+      )}
 
       {dataset.inSeries && dataset.inSeries.length > 0 && (
         <MetadataSection title="Data Series" icon={faLayerGroup}>

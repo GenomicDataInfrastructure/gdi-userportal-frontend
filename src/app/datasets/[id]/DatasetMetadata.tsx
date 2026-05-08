@@ -143,6 +143,8 @@ const DatasetMetadata = ({
     (coverage) => coverage.start || coverage.end
   );
   const hasTemporalCoverage = temporalCoverage.length > 0;
+  const hasHealthTheme =
+    dataset.themes?.some((item) => item.label.includes("Health")) ?? false;
   const analytics =
     dataset.analytics
       ?.map((entry) =>
@@ -564,95 +566,97 @@ const DatasetMetadata = ({
         </div>
       )}
 
-      {(isHealthDcatApCompatible(dataset) ||
-        (dataset.healthTheme && dataset.healthTheme.length > 0) ||
-        (dataset.healthCategory && dataset.healthCategory.length > 0)) && (
-        <MetadataSection title="Health Information" icon={faHeartPulse}>
-          <div className="flex flex-col gap-3 text-sm">
-            <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">Health Themes:</span>
-              {dataset.healthTheme && dataset.healthTheme.length > 0 ? (
-                <Chips
-                  chips={dataset.healthTheme.map((item) => item.label)}
-                  className="bg-primary/10 text-primary rounded-full py-1"
-                />
-              ) : (
-                <NotProvided />
-              )}
-              <Tooltip message="Health-related themes or topics covered by this dataset." />
+      {hasHealthTheme &&
+        (isHealthDcatApCompatible(dataset) ||
+          (dataset.healthTheme && dataset.healthTheme.length > 0) ||
+          (dataset.healthCategory && dataset.healthCategory.length > 0)) && (
+          <MetadataSection title="Health Information" icon={faHeartPulse}>
+            <div className="flex flex-col gap-3 text-sm">
+              <div className="flex flex-wrap gap-2 items-center relative group">
+                <span className="font-medium shrink-0">Health Themes:</span>
+                {dataset.healthTheme && dataset.healthTheme.length > 0 ? (
+                  <Chips
+                    chips={dataset.healthTheme.map((item) => item.label)}
+                    className="bg-primary/10 text-primary rounded-full py-1"
+                  />
+                ) : (
+                  <NotProvided />
+                )}
+                <Tooltip message="Health-related themes or topics covered by this dataset." />
+              </div>
+              <div className="flex flex-wrap gap-2 items-center relative group">
+                <span className="font-medium shrink-0">Health Categories:</span>
+                {dataset.healthCategory && dataset.healthCategory.length > 0 ? (
+                  <Chips
+                    chips={dataset.healthCategory.map((item) => item.label)}
+                    className="bg-primary/10 text-primary rounded-full py-1"
+                  />
+                ) : (
+                  <NotProvided />
+                )}
+                <Tooltip message="Health data categories this dataset belongs to." />
+              </div>
             </div>
-            <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">Health Categories:</span>
-              {dataset.healthCategory && dataset.healthCategory.length > 0 ? (
-                <Chips
-                  chips={dataset.healthCategory.map((item) => item.label)}
-                  className="bg-primary/10 text-primary rounded-full py-1"
-                />
-              ) : (
-                <NotProvided />
-              )}
-              <Tooltip message="Health data categories this dataset belongs to." />
-            </div>
-          </div>
-        </MetadataSection>
-      )}
+          </MetadataSection>
+        )}
 
-      {(isHealthDcatApCompatible(dataset) ||
-        dataset.populationCoverage ||
-        dataset.numberOfRecords !== undefined ||
-        dataset.numberOfUniqueIndividuals !== undefined ||
-        dataset.minTypicalAge !== undefined ||
-        dataset.maxTypicalAge !== undefined) && (
-        <MetadataSection title="Population & Demographics" icon={faUsers}>
-          <div className="flex flex-col gap-3 text-sm">
-            <MetadataField
-              label="Population Coverage"
-              tooltip="Description of the population covered by this dataset."
-            >
-              {dataset.populationCoverage || <NotProvided />}
-            </MetadataField>
-            <div className="flex items-center gap-4 flex-wrap">
+      {hasHealthTheme &&
+        (isHealthDcatApCompatible(dataset) ||
+          dataset.populationCoverage ||
+          dataset.numberOfRecords !== undefined ||
+          dataset.numberOfUniqueIndividuals !== undefined ||
+          dataset.minTypicalAge !== undefined ||
+          dataset.maxTypicalAge !== undefined) && (
+          <MetadataSection title="Population & Demographics" icon={faUsers}>
+            <div className="flex flex-col gap-3 text-sm">
               <MetadataField
-                label="Number of Records"
-                icon={faChartBar}
-                tooltip="Total number of records in the dataset."
+                label="Population Coverage"
+                tooltip="Description of the population covered by this dataset."
               >
-                {dataset.numberOfRecords !== undefined ? (
-                  dataset.numberOfRecords.toLocaleString()
-                ) : (
-                  <NotProvided />
-                )}
+                {dataset.populationCoverage || <NotProvided />}
               </MetadataField>
-              <MetadataField
-                label="Unique Individuals"
-                icon={faUsers}
-                tooltip="Number of unique individuals represented in the dataset."
-              >
-                {dataset.numberOfUniqueIndividuals !== undefined ? (
-                  dataset.numberOfUniqueIndividuals.toLocaleString()
-                ) : (
-                  <NotProvided />
-                )}
-              </MetadataField>
-              <MetadataField
-                label="Age Range"
-                icon={faCalendarAlt}
-                tooltip="Typical age range of individuals in the dataset."
-              >
-                {dataset.minTypicalAge !== undefined ||
-                dataset.maxTypicalAge !== undefined ? (
-                  <>
-                    {dataset.minTypicalAge ?? "N/A"} -{" "}
-                    {dataset.maxTypicalAge ?? "N/A"} years
-                  </>
-                ) : (
-                  <NotProvided />
-                )}
-              </MetadataField>
+              <div className="flex items-center gap-4 flex-wrap">
+                <MetadataField
+                  label="Number of Records"
+                  icon={faChartBar}
+                  tooltip="Total number of records in the dataset."
+                >
+                  {dataset.numberOfRecords !== undefined ? (
+                    dataset.numberOfRecords.toLocaleString()
+                  ) : (
+                    <NotProvided />
+                  )}
+                </MetadataField>
+                <MetadataField
+                  label="Unique Individuals"
+                  icon={faUsers}
+                  tooltip="Number of unique individuals represented in the dataset."
+                >
+                  {dataset.numberOfUniqueIndividuals !== undefined ? (
+                    dataset.numberOfUniqueIndividuals.toLocaleString()
+                  ) : (
+                    <NotProvided />
+                  )}
+                </MetadataField>
+                <MetadataField
+                  label="Age Range"
+                  icon={faCalendarAlt}
+                  tooltip="Typical age range of individuals in the dataset."
+                >
+                  {dataset.minTypicalAge !== undefined ||
+                  dataset.maxTypicalAge !== undefined ? (
+                    <>
+                      {dataset.minTypicalAge ?? "N/A"} -{" "}
+                      {dataset.maxTypicalAge ?? "N/A"} years
+                    </>
+                  ) : (
+                    <NotProvided />
+                  )}
+                </MetadataField>
+              </div>
             </div>
-          </div>
-        </MetadataSection>
-      )}
+          </MetadataSection>
+        )}
 
       {(isHealthDcatApCompatible(dataset) ||
         (dataset.spatialCoverage && dataset.spatialCoverage.length > 0) ||
@@ -877,59 +881,61 @@ const DatasetMetadata = ({
         </MetadataSection>
       )}
 
-      {(isHealthDcatApCompatible(dataset) ||
-        (dataset.codingSystem && dataset.codingSystem.length > 0) ||
-        (dataset.codeValues && dataset.codeValues.length > 0)) && (
-        <MetadataSection title="Coding & Standards" icon={faCode}>
-          <div className="flex flex-col gap-3 text-sm">
-            <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">Coding Systems:</span>
-              {dataset.codingSystem && dataset.codingSystem.length > 0 ? (
-                <Chips
-                  chips={dataset.codingSystem.map((item) => item.label)}
-                  className="bg-primary/10 text-primary rounded-full py-1"
-                />
-              ) : (
-                <NotProvided />
-              )}
-              <Tooltip message="Coding systems or standards used in this dataset (e.g., ICD-10, SNOMED CT)." />
+      {hasHealthTheme &&
+        (isHealthDcatApCompatible(dataset) ||
+          (dataset.codingSystem && dataset.codingSystem.length > 0) ||
+          (dataset.codeValues && dataset.codeValues.length > 0)) && (
+          <MetadataSection title="Coding & Standards" icon={faCode}>
+            <div className="flex flex-col gap-3 text-sm">
+              <div className="flex flex-wrap gap-2 items-center relative group">
+                <span className="font-medium shrink-0">Coding Systems:</span>
+                {dataset.codingSystem && dataset.codingSystem.length > 0 ? (
+                  <Chips
+                    chips={dataset.codingSystem.map((item) => item.label)}
+                    className="bg-primary/10 text-primary rounded-full py-1"
+                  />
+                ) : (
+                  <NotProvided />
+                )}
+                <Tooltip message="Coding systems or standards used in this dataset (e.g., ICD-10, SNOMED CT)." />
+              </div>
+              <div className="flex flex-wrap gap-2 items-center relative group">
+                <span className="font-medium shrink-0">Code Values:</span>
+                {dataset.codeValues && dataset.codeValues.length > 0 ? (
+                  <Chips
+                    chips={dataset.codeValues.map((item) => item.label)}
+                    className="bg-primary/10 text-primary rounded-full py-1"
+                  />
+                ) : (
+                  <NotProvided />
+                )}
+                <Tooltip message="Specific code values used within the coding systems." />
+              </div>
             </div>
-            <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">Code Values:</span>
-              {dataset.codeValues && dataset.codeValues.length > 0 ? (
-                <Chips
-                  chips={dataset.codeValues.map((item) => item.label)}
-                  className="bg-primary/10 text-primary rounded-full py-1"
-                />
-              ) : (
-                <NotProvided />
-              )}
-              <Tooltip message="Specific code values used within the coding systems." />
-            </div>
-          </div>
-        </MetadataSection>
-      )}
+          </MetadataSection>
+        )}
 
-      {(isHealthDcatApCompatible(dataset) ||
-        (dataset.retentionPeriod && dataset.retentionPeriod.length > 0)) && (
-        <MetadataSection title="Retention Period" icon={faClock}>
-          <div className="flex flex-col gap-2 text-sm relative group">
-            {dataset.retentionPeriod && dataset.retentionPeriod.length > 0 ? (
-              dataset.retentionPeriod.map((period, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <span>
-                    {period.start ? formatDate(period.start) : "N/A"} -{" "}
-                    {period.end ? formatDate(period.end) : "Indefinite"}
-                  </span>
-                </div>
-              ))
-            ) : (
-              <NotProvided />
-            )}
-            <Tooltip message="Period during which the data will be retained." />
-          </div>
-        </MetadataSection>
-      )}
+      {hasHealthTheme &&
+        (isHealthDcatApCompatible(dataset) ||
+          (dataset.retentionPeriod && dataset.retentionPeriod.length > 0)) && (
+          <MetadataSection title="Retention Period" icon={faClock}>
+            <div className="flex flex-col gap-2 text-sm relative group">
+              {dataset.retentionPeriod && dataset.retentionPeriod.length > 0 ? (
+                dataset.retentionPeriod.map((period, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <span>
+                      {period.start ? formatDate(period.start) : "N/A"} -{" "}
+                      {period.end ? formatDate(period.end) : "Indefinite"}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Period during which the data will be retained." />
+            </div>
+          </MetadataSection>
+        )}
 
       {isHealthDcatApCompatible(dataset) &&
         (!!dataset.homepage ||
@@ -1008,21 +1014,22 @@ const DatasetMetadata = ({
         </MetadataSection>
       )}
 
-      {(isHealthDcatApCompatible(dataset) || analytics.length > 0) && (
-        <MetadataSection title="Analytics" icon={faChartBar}>
-          <div className="relative group">
-            {analytics.length > 0 ? (
-              <Chips
-                chips={analytics}
-                className="bg-primary/10 text-primary rounded-full py-1"
-              />
-            ) : (
-              <NotProvided />
-            )}
-            <Tooltip message="Analytics capabilities or methods available for this dataset." />
-          </div>
-        </MetadataSection>
-      )}
+      {hasHealthTheme &&
+        (isHealthDcatApCompatible(dataset) || analytics.length > 0) && (
+          <MetadataSection title="Analytics" icon={faChartBar}>
+            <div className="relative group">
+              {analytics.length > 0 ? (
+                <Chips
+                  chips={analytics}
+                  className="bg-primary/10 text-primary rounded-full py-1"
+                />
+              ) : (
+                <NotProvided />
+              )}
+              <Tooltip message="Analytics capabilities or methods available for this dataset." />
+            </div>
+          </MetadataSection>
+        )}
 
       {dataset.inSeries && dataset.inSeries.length > 0 && (
         <MetadataSection title="Data Series" icon={faLayerGroup}>

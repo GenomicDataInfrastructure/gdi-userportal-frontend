@@ -967,7 +967,7 @@ const DatasetMetadata = ({
         </MetadataSection>
       )}
 
-      {analytics.length > 0 && (
+      {hasHealthTheme && analytics.length > 0 && (
         <MetadataSection title="Analytics" icon={faChartBar}>
           <div className="relative group">
             {analytics.length > 0 ? (

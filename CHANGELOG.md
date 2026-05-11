@@ -12,6 +12,49 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+## [v1.7.1] - 2026-05-11
+
+### Added
+- feat:add a check to show health related fields only if the dataset has health in theme by @Alessandro in 52d79a87
+- feat(discovery): add default operators for filters in DdsDiscoveryProvider (#968) by @Kacem Bechka in 46e32967
+- feat: add support for 'append' mode in harvest API and update tests by @Haris Zenovic in fd73f653
+- feat: add support for append mode in harvest worker and update related configurations by @Haris Zenovic in 1d3f45e8
+
+
+### Changed
+- refactor: streamline DatasetMetadata component layout and improve coverage section rendering (#974) by @Kacem Bechka in a3e77011
+- chore(deps): bump minimatch and serve-handler in /documentation (#965) by @dependabot[bot] in 68f9de06
+- chore(deps): bump fast-uri from 3.1.0 to 3.1.2 in /documentation (#971) by @dependabot[bot] in 15c906e7
+- chore(deps-dev): bump fast-uri from 3.1.0 to 3.1.2 (#972) by @dependabot[bot] in 01e0da7e
+- chore(deps): bump @babel/plugin-transform-modules-systemjs (#973) by @dependabot[bot] in 87625ddb
+- add a hasHealthTheme check on other fields and does a cleanup by @Alessandro in 122975c9
+- chore(deps): update dependency eslint-config-next to v16.2.6 by @Renovate Bot in c9e653ea
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v9.7-1778116980 by @Renovate Bot in cf2d9a12
+- chore(deps): update dependency eslint-config-next to v16.2.5 by @Renovate Bot in 0393523c
+- chore(deps): update oras-project/setup-oras digest to d98226f by @Renovate Bot in 01e36bca
+- chore(deps): bump lodash-es and langium in /documentation (#963) by @dependabot[bot] in 387b35a2
+- chore(deps): update oss-review-toolkit/ort-ci-github-action digest to 086d928 by @Renovate Bot in 12a549ce
+- Remove Azure Web App deploy step from main.yml by @copilot-swe-agent[bot] in 5d0d8ed6
+- doc: update CHANGELOG.md for v1.7.0 by @LNDS-Sysadmins in 9fb93aad
+- update link for healthdcat release by @Rose Pasigna in cf799097
+- docs: update metadata field extension references by @Hans-christian in 36e6e21d
+- docs: update CKAN API endpoint references by @Hans-christian in e9e7460a
+- docs: align CKAN setup versions by @Hans-christian in 268bc0aa
+- docs: add CKAN harvest test data workflow by @Hans-christian in 1e17bfc6
+- docs: update developer guide platform notes by @Hans-christian in 69e4ba5e
+- Update CKAN - Catalogue Manager guide - Hans feedback by @Rose Pasigna in f8858fae
+
+
+### Fixed
+- fix(deps): update opentelemetry-js monorepo to ^0.217.0 (#967) by @LNDS-Sysadmins in a6294259
+- fix(deps): update dependency next to v16.2.6 by @Renovate Bot in db41fed1
+- fix(deps): update react monorepo to v19.2.6 by @Renovate Bot in e8a9a2c0
+- fix(deps): update dependency axios to v1.15.2 [security] by @Renovate Bot in 262ed58f
+- fix: apply prettier formatting to catalogue managers guide docs by @copilot-swe-agent[bot] in 594f550b
+- fix prettier by @Hans-christian in 129f2e26
+- docs: fix SeMPyRO HealthDCAT-AP example by @Hans-christian in 647152ba
+
+
 ## [v1.7.0] - 2026-05-05
 
 ### Changed

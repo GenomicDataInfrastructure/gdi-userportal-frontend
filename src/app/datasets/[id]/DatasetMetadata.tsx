@@ -624,49 +624,47 @@ const DatasetMetadata = ({
         </MetadataSection>
       )}
 
-      {hasHealthTheme && (
-        <MetadataSection title="Coverage" icon={faGlobe}>
-          <div className="flex flex-col gap-3 text-sm">
-            <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">Spatial Coverage:</span>
-              {dataset.spatialCoverage && dataset.spatialCoverage.length > 0 ? (
-                <Chips
-                  chips={dataset.spatialCoverage.map(
-                    (coverage) =>
-                      coverage.text || coverage.uri?.label || "Unknown"
-                  )}
-                  className="bg-primary/10 text-primary rounded-full py-1"
-                />
-              ) : (
-                <NotProvided />
-              )}
-              <Tooltip message="Geographic regions covered by this dataset." />
-            </div>
-            <MetadataField
-              label="Temporal Coverage"
-              tooltip="Time period covered by the data in this dataset."
-            >
-              {renderTemporalCoverage()}
-            </MetadataField>
-            <MetadataField
-              label="Temporal Resolution"
-              tooltip="Minimum time period resolvable in the dataset."
-            >
-              {dataset.temporalResolution || <NotProvided />}
-            </MetadataField>
-            <MetadataField
-              label="Spatial Resolution"
-              tooltip="Minimum spatial separation resolvable in the dataset, measured in meters."
-            >
-              {dataset.spatialResolutionInMeters !== undefined ? (
-                <>{dataset.spatialResolutionInMeters} meters</>
-              ) : (
-                <NotProvided />
-              )}
-            </MetadataField>
+      <MetadataSection title="Coverage" icon={faGlobe}>
+        <div className="flex flex-col gap-3 text-sm">
+          <div className="flex flex-wrap gap-2 items-center relative group">
+            <span className="font-medium shrink-0">Spatial Coverage:</span>
+            {dataset.spatialCoverage && dataset.spatialCoverage.length > 0 ? (
+              <Chips
+                chips={dataset.spatialCoverage.map(
+                  (coverage) =>
+                    coverage.text || coverage.uri?.label || "Unknown"
+                )}
+                className="bg-primary/10 text-primary rounded-full py-1"
+              />
+            ) : (
+              <NotProvided />
+            )}
+            <Tooltip message="Geographic regions covered by this dataset." />
           </div>
-        </MetadataSection>
-      )}
+          <MetadataField
+            label="Temporal Coverage"
+            tooltip="Time period covered by the data in this dataset."
+          >
+            {renderTemporalCoverage()}
+          </MetadataField>
+          <MetadataField
+            label="Temporal Resolution"
+            tooltip="Minimum time period resolvable in the dataset."
+          >
+            {dataset.temporalResolution || <NotProvided />}
+          </MetadataField>
+          <MetadataField
+            label="Spatial Resolution"
+            tooltip="Minimum spatial separation resolvable in the dataset, measured in meters."
+          >
+            {dataset.spatialResolutionInMeters !== undefined ? (
+              <>{dataset.spatialResolutionInMeters} meters</>
+            ) : (
+              <NotProvided />
+            )}
+          </MetadataField>
+        </div>
+      </MetadataSection>
 
       {((dataset.legalBasis && dataset.legalBasis.length > 0) ||
         (dataset.applicableLegislation &&
@@ -896,60 +894,56 @@ const DatasetMetadata = ({
           </MetadataSection>
         )}
 
-      {hasHealthTheme &&
-        (!!dataset.homepage ||
-          (!!dataset.documentation && dataset.documentation.length > 0) ||
-          (!!dataset.isReferencedBy && dataset.isReferencedBy.length > 0)) && (
-          <MetadataSection title="Links & References" icon={faLink}>
-            <div className="flex flex-col gap-2 text-sm">
-              {dataset.homepage && (
-                <div className="flex items-center gap-2 flex-wrap relative group">
-                  <span className="font-medium shrink-0">Homepage:</span>
+      {(!!dataset.homepage ||
+        (!!dataset.documentation && dataset.documentation.length > 0) ||
+        (!!dataset.isReferencedBy && dataset.isReferencedBy.length > 0)) && (
+        <MetadataSection title="Links & References" icon={faLink}>
+          <div className="flex flex-col gap-2 text-sm">
+            {dataset.homepage && (
+              <div className="flex items-center gap-2 flex-wrap relative group">
+                <span className="font-medium shrink-0">Homepage:</span>
+                <a
+                  href={dataset.homepage}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-info hover:text-hover-color hover:underline break-all"
+                >
+                  {dataset.homepage}
+                </a>
+                <Tooltip message="Homepage URL for more information about this dataset." />
+              </div>
+            )}
+            {dataset.documentation && dataset.documentation.length > 0 && (
+              <div className="flex items-center gap-2 flex-wrap relative group">
+                <span className="font-medium shrink-0">Documentation:</span>
+                {dataset.documentation.map((doc, index) => (
                   <a
-                    href={dataset.homepage}
+                    key={index}
+                    href={doc}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-info hover:text-hover-color hover:underline break-all"
+                    className="text-info hover:text-hover-color hover:underline"
                   >
-                    {dataset.homepage}
+                    {doc}
                   </a>
-                  <Tooltip message="Homepage URL for more information about this dataset." />
-                </div>
-              )}
-              {dataset.documentation && dataset.documentation.length > 0 && (
-                <div className="flex items-center gap-2 flex-wrap relative group">
-                  <span className="font-medium shrink-0">Documentation:</span>
-                  {dataset.documentation.map((doc, index) => (
-                    <a
-                      key={index}
-                      href={doc}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-info hover:text-hover-color hover:underline"
-                    >
-                      {doc}
-                    </a>
-                  ))}
-                  <Tooltip message="Links to documentation about this dataset." />
-                </div>
-              )}
-              {dataset.isReferencedBy && dataset.isReferencedBy.length > 0 && (
-                <div className="flex items-center gap-2 flex-wrap relative group">
-                  <span className="font-medium shrink-0">Referenced By:</span>
-                  {dataset.isReferencedBy.map((ref, index) => (
-                    <span key={index}>{ref}</span>
-                  ))}
-                  <Tooltip message="Resources that reference this dataset." />
-                </div>
-              )}
-            </div>
-          </MetadataSection>
-        )}
+                ))}
+                <Tooltip message="Links to documentation about this dataset." />
+              </div>
+            )}
+            {dataset.isReferencedBy && dataset.isReferencedBy.length > 0 && (
+              <div className="flex items-center gap-2 flex-wrap relative group">
+                <span className="font-medium shrink-0">Referenced By:</span>
+                {dataset.isReferencedBy.map((ref, index) => (
+                  <span key={index}>{ref}</span>
+                ))}
+                <Tooltip message="Resources that reference this dataset." />
+              </div>
+            )}
+          </div>
+        </MetadataSection>
+      )}
 
-      {(hasHealthTheme ||
-        dataset.version ||
-        dataset.versionNotes ||
-        dataset.frequency) && (
+      {(dataset.version || dataset.versionNotes || dataset.frequency) && (
         <MetadataSection title="Version Information" icon={faInfoCircle}>
           <div className="flex flex-col gap-2 text-sm">
             <MetadataField

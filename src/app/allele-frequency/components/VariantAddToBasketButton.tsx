@@ -6,23 +6,57 @@
 import React from "react";
 import AddToBasketButton from "@/components/AddToBasketButton";
 import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
-import { findDatasetByIdentifier } from "@/utils/datasetEntitlements";
+import { ExternalDatasetConfirmationDialog } from "@/components/ExternalDatasetCardLink";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 type VariantAddToBasketButtonProps = {
   datasetId: string;
+  dataset: SearchedDataset | null;
+  isExternal: boolean;
+  externalAccessUrl?: string;
+  disabled?: boolean;
 };
 
 export default function VariantAddToBasketButton({
   datasetId,
+  dataset,
+  isExternal,
+  externalAccessUrl,
+  disabled = false,
 }: VariantAddToBasketButtonProps) {
-  const [dataset, setDataset] = React.useState<SearchedDataset | null>(null);
+  if (isExternal) {
+    if (externalAccessUrl) {
+      return (
+        <ExternalDatasetConfirmationDialog url={externalAccessUrl}>
+          {({ onClick }) => (
+            <button
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                onClick(event);
+              }}
+              className="text-sm text-primary hover:text-info underline hover:no-underline font-semibold transition-colors duration-200 cursor-pointer inline-flex items-center gap-1"
+            >
+              <span>Access external dataset</span>
+              <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+            </button>
+          )}
+        </ExternalDatasetConfirmationDialog>
+      );
+    }
 
-  React.useEffect(() => {
-    if (!datasetId) return;
-    findDatasetByIdentifier(datasetId)
-      .then((data) => setDataset(data ?? null))
-      .catch(console.error);
-  }, [datasetId]);
+    return (
+      <span className="text-sm text-gray-400 cursor-not-allowed">
+        External link not available
+      </span>
+    );
+  }
 
-  return <AddToBasketButton dataset={dataset} disabled={!datasetId} />;
+  return (
+    <AddToBasketButton
+      dataset={dataset}
+      disabled={disabled || !datasetId || !dataset}
+    />
+  );
 }

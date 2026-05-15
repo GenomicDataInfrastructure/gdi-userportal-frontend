@@ -155,23 +155,25 @@ export default function AlleleFrequencyPage({
         countryOfBirth?: string;
       } = {};
 
-      // Only include variant fields if variant is provided
-      if (props.variant && props.variant.trim() !== "") {
-        const parts = props.variant.split("-");
-        if (parts.length !== 4) throw new Error("Invalid variant format");
-        const [referenceName, start, referenceBases, alternateBases] = parts;
-        const startNum = parseInt(start, 10);
-        if (isNaN(startNum)) throw new Error("Invalid start position");
-        const startPosition = [startNum];
+      const variant = props.variant.trim();
+      if (!variant) throw new Error("Variant is required");
+      const parts = variant.split("-");
+      if (parts.length !== 4) throw new Error("Invalid variant format");
+      const [referenceName, start, referenceBases, alternateBases] = parts;
+      const startNum = parseInt(start, 10);
+      if (isNaN(startNum) || startNum <= 0)
+        throw new Error("Invalid start position");
 
-        params.referenceName = referenceName;
-        params.start = startPosition;
-        params.end = null;
-        params.referenceBases = referenceBases;
-        params.alternateBases = alternateBases;
-      }
+      // Convert user-provided 1-based position to 0-based coordinate.
+      const startPosition = [startNum - 1];
 
-      if (props.refGenome && props.refGenome !== "All") {
+      params.referenceName = referenceName;
+      params.start = startPosition;
+      params.end = null;
+      params.referenceBases = referenceBases;
+      params.alternateBases = alternateBases;
+
+      if (props.refGenome) {
         params.assemblyId = props.refGenome;
       }
       if (props.sex && props.sex !== "All") {

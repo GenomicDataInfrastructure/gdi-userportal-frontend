@@ -7,6 +7,7 @@ import {
   GVariantsSearchResponse,
   SearchedDataset,
 } from "@/app/api/discovery/open-api/schemas";
+import { COUNTRY_OPTIONS } from "@/app/api/discovery/additional-types";
 import VariantAddToBasketButton from "./components/VariantAddToBasketButton";
 import { findDatasetByIdentifier } from "@/utils/datasetEntitlements";
 import React, { useEffect, useMemo, useState } from "react";
@@ -32,8 +33,19 @@ type DatasetActionInfo = {
 };
 
 const NOT_AVAILABLE = "not available";
+const COUNTRY_BY_CODE = new Map<string, string>(
+  COUNTRY_OPTIONS.map((c) => [c.value, c.label])
+);
 
 const getDisplayText = (value?: string) => value?.trim() || NOT_AVAILABLE;
+const getBeaconCountryLabel = (beaconId: string) => {
+  const parts = beaconId
+    .toUpperCase()
+    .split(/[^A-Z0-9]+/)
+    .filter(Boolean);
+  const matchedCode = parts.find((part) => COUNTRY_BY_CODE.has(part));
+  return matchedCode ? COUNTRY_BY_CODE.get(matchedCode) : undefined;
+};
 
 const renderCell = (value: unknown) =>
   value != null && (typeof value === "string" || typeof value === "number") ? (
@@ -200,6 +212,7 @@ export default function GVariantsTable({
         </thead>
         <tbody>
           {beaconIds.map((beaconId) => {
+            const beaconCountryLabel = getBeaconCountryLabel(beaconId);
             const datasetIds = Object.keys(
               groupedByBeacon[beaconId].datasets
             ).sort((a, b) =>
@@ -214,6 +227,7 @@ export default function GVariantsTable({
                 <tr className="bg-[#70154C14] border border-secondary">
                   <td colSpan={9} className="px-3 py-2 text-lg font-bold">
                     Beacon: {beaconId}
+                    {beaconCountryLabel ? ` (${beaconCountryLabel})` : ""}
                   </td>
                 </tr>
                 {datasetIds.map((datasetId) => {

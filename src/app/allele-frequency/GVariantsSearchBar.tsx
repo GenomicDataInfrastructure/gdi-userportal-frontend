@@ -82,6 +82,7 @@ const FormField: React.FC<FormFieldProps> = ({
 type GVariantsSearchBarProps = {
   onSearchAction: (inputData: SearchInputData) => void;
   loading: boolean;
+  datasetTypeOptions: string[];
 };
 
 export type SearchInputData = {
@@ -89,6 +90,7 @@ export type SearchInputData = {
   refGenome: string;
   sex: string;
   countryOfBirth: string;
+  datasetType: string;
 };
 
 const REFERENCE_OPTIONS = [
@@ -110,16 +112,26 @@ const DISABLED_SEARCH_TOOLTIP =
 export default function GVariantsSearchBar({
   onSearchAction,
   loading,
+  datasetTypeOptions,
 }: GVariantsSearchBarProps) {
   const [searchFilterInput, setSearchFilterInput] = useState<SearchInputData>({
     variant: "",
     refGenome: "",
     sex: "",
     countryOfBirth: "All",
+    datasetType: "All",
   });
   const [errorMessage, setErrorMessage] = useState("");
 
+  function isAllVariantKeyword(variant: string) {
+    return variant.trim().toLowerCase() === "all";
+  }
+
   function isVariantValid(variant: string) {
+    if (isAllVariantKeyword(variant)) {
+      return true;
+    }
+
     const variantPattern =
       /^(?:[1-9]|1[0-9]|2[0-2]|X|Y)-[1-9]\d*-[ACGT]+-[ACGT]+$/i;
     return variantPattern.test(variant);
@@ -128,14 +140,17 @@ export default function GVariantsSearchBar({
   const updateData = (field: keyof SearchInputData, value: string) => {
     setSearchFilterInput((prev) => {
       const updatedState = { ...prev, [field]: value };
+      const normalizedVariant = updatedState.variant.trim();
+      const variantIsAllKeyword = isAllVariantKeyword(normalizedVariant);
 
       if (field === "refGenome" && !value) {
         updatedState.variant = "";
         updatedState.sex = "";
         updatedState.countryOfBirth = "All";
+        updatedState.datasetType = "All";
       }
 
-      if (field === "variant" && !value.trim()) {
+      if (field === "variant" && (!normalizedVariant || variantIsAllKeyword)) {
         updatedState.sex = "";
         updatedState.countryOfBirth = "All";
       }
@@ -145,8 +160,7 @@ export default function GVariantsSearchBar({
       }
 
       setErrorMessage(() =>
-        !updatedState.variant.trim() ||
-        isVariantValid(updatedState.variant.trim())
+        !normalizedVariant || isVariantValid(normalizedVariant)
           ? ""
           : "Incorrect variant information"
       );
@@ -154,16 +168,17 @@ export default function GVariantsSearchBar({
     });
   };
 
-  const variantEntered = searchFilterInput.variant.trim().length > 0;
-  const variantIsValid =
-    variantEntered && isVariantValid(searchFilterInput.variant.trim());
+  const normalizedVariant = searchFilterInput.variant.trim();
+  const variantEntered = normalizedVariant.length > 0;
+  const variantIsAllKeyword = isAllVariantKeyword(normalizedVariant);
+  const variantIsValid = variantEntered && isVariantValid(normalizedVariant);
   const canShowVariant = searchFilterInput.refGenome !== "";
-  const canShowSex = canShowVariant && variantEntered;
+  const canShowSex = canShowVariant && variantEntered && !variantIsAllKeyword;
   const canShowCountry = canShowSex && searchFilterInput.sex !== "";
   const isSearchComplete =
     searchFilterInput.refGenome !== "" &&
     variantIsValid &&
-    searchFilterInput.sex !== "";
+    (variantIsAllKeyword || searchFilterInput.sex !== "");
   const isSearchDisabled = loading || !isSearchComplete;
 
   const search = () => {
@@ -177,7 +192,7 @@ export default function GVariantsSearchBar({
     <div className="mb-6">
       <h2 className="text-lg font-semibold mb-2">Search for your variant:</h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-end">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 items-end">
         <FormField
           fieldKey="refGenome"
           label="Ref Genome"
@@ -218,6 +233,23 @@ export default function GVariantsSearchBar({
             value={searchFilterInput.countryOfBirth}
             onChange={(value) => updateData("countryOfBirth", value)}
             options={[{ value: "All", label: "All" }, ...COUNTRY_OPTIONS]}
+          />
+        )}
+
+        {canShowVariant && (
+          <FormField
+            fieldKey="datasetType"
+            label="Dataset Type"
+            type="select"
+            value={searchFilterInput.datasetType}
+            onChange={(value) => updateData("datasetType", value)}
+            options={[
+              { value: "All", label: "All" },
+              ...datasetTypeOptions.map((datasetType) => ({
+                value: datasetType,
+                label: datasetType,
+              })),
+            ]}
           />
         )}
 

@@ -8,6 +8,7 @@ import GVariantsSearchBar, {
 } from "@/app/allele-frequency/GVariantsSearchBar";
 import GVariantsTable from "@/app/allele-frequency/GVariantsTable";
 import {
+  retrieveFilterValuesApi,
   retrieveDatasetApi,
   searchDatasetsApi,
   searchGVariantsApi,
@@ -24,7 +25,7 @@ import {
   getFirstAccessUrl,
 } from "@/utils/datasetHelpers";
 import { isAxiosError } from "axios";
-import { use, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 
 type AlleleFrequencyPageProps = {
   searchParams: Promise<UrlSearchParams>;
@@ -45,6 +46,7 @@ export default function AlleleFrequencyPage({
   >({});
   const [loading, setLoading] = useState(false);
   const [triedSearching, setTriedSearching] = useState(false);
+  const [datasetTypeOptions, setDatasetTypeOptions] = useState<string[]>([]);
   const _searchParams = use(searchParams);
   const [error, setError] = useState<{
     statusCode: number;
@@ -137,6 +139,63 @@ export default function AlleleFrequencyPage({
     );
   };
 
+  const filterResultsByDatasetType = (
+    gvariantsResults: GVariantsSearchResponse[],
+    actions: Record<string, DatasetActionInfo>,
+    selectedDatasetType: string
+  ) => {
+    if (!selectedDatasetType || selectedDatasetType === "All") {
+      return gvariantsResults;
+    }
+
+    return gvariantsResults.filter((row) => {
+      const datasetId = row.datasetId?.trim();
+      if (!datasetId) {
+        return false;
+      }
+
+      return (
+        actions[datasetId]?.dataset?.datasetType?.trim() === selectedDatasetType
+      );
+    });
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadDatasetTypeOptions = async () => {
+      try {
+        const values = await retrieveFilterValuesApi("dcat_type");
+        const options = Array.from(
+          new Set(
+            values
+              .map((valueLabel) => valueLabel.label?.trim())
+              .filter((label): label is string => !!label)
+          )
+        ).sort((a, b) =>
+          a.localeCompare(b, undefined, {
+            sensitivity: "base",
+            numeric: true,
+          })
+        );
+
+        if (isMounted) {
+          setDatasetTypeOptions(options);
+        }
+      } catch {
+        if (isMounted) {
+          setDatasetTypeOptions([]);
+        }
+      }
+    };
+
+    void loadDatasetTypeOptions();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const handleSearch = async (props: SearchInputData) => {
     setLoading(true);
     setResults([]);
@@ -157,6 +216,20 @@ export default function AlleleFrequencyPage({
 
       const variant = props.variant.trim();
       if (!variant) throw new Error("Variant is required");
+      if (variant.toLowerCase() === "all") {
+        const response = await searchGVariantsApi({ params: {} });
+        const actions = await buildDatasetActions(response);
+        const filteredResponse = filterResultsByDatasetType(
+          response,
+          actions,
+          props.datasetType
+        );
+        setResults(filteredResponse);
+        setDatasetActions(actions);
+        setTriedSearching(true);
+        return;
+      }
+
       const parts = variant.split("-");
       if (parts.length !== 4) throw new Error("Invalid variant format");
       const [referenceName, start, referenceBases, alternateBases] = parts;
@@ -185,7 +258,12 @@ export default function AlleleFrequencyPage({
 
       const response = await searchGVariantsApi({ params });
       const actions = await buildDatasetActions(response);
-      setResults(response);
+      const filteredResponse = filterResultsByDatasetType(
+        response,
+        actions,
+        props.datasetType
+      );
+      setResults(filteredResponse);
       setDatasetActions(actions);
       setTriedSearching(true);
     } catch (error) {
@@ -224,7 +302,11 @@ export default function AlleleFrequencyPage({
       searchParams={_searchParams}
       className="container mx-auto px-4 pt-5"
     >
-      <GVariantsSearchBar onSearchAction={handleSearch} loading={loading} />
+      <GVariantsSearchBar
+        onSearchAction={handleSearch}
+        loading={loading}
+        datasetTypeOptions={datasetTypeOptions}
+      />
 
       {loading && (
         <p className="text-center text-gray-500">

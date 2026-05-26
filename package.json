@@ -68,7 +68,7 @@
     "next-runtime-env": "^3.3.0",
     "node-cron": "^4.2.1",
     "node-mocks-http": "^1.17.2",
-    "npm-run-all2": "^8.0.4",
+    "npm-run-all2": "^9.0.0",
     "prism-react-renderer": "^2.4.1",
     "rdf-parse": "^5.0.0",
     "rdf-serialize": "^5.1.0",

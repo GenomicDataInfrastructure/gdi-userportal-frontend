@@ -40,7 +40,7 @@ Change these to secure passwords as required for your environment.
 
 ## Run the deployment
 
-Go to to the deployment repository: [GenomicDataInfrastructure/gdi-userportal-deployment](https://github.com/GenomicDataInfrastructure/gdi-userportal-deployment) and open the Azure deployment folder.
+Go to the deployment repository: [GenomicDataInfrastructure/gdi-userportal-deployment](https://github.com/GenomicDataInfrastructure/gdi-userportal-deployment) and open the Azure deployment folder.
 
 **Execute the deployment script:**
 

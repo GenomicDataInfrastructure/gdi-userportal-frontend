@@ -24,8 +24,6 @@ The GDI platform consists of the following components:
 
 ## What would you like to do?
 
-## Choose your contribution path
-
 The GDI platform supports multiple contribution areas:
 
 - **Frontend development**: Next.js web application (TypeScript, React)

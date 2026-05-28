@@ -6,58 +6,38 @@ sidebar_position: 3
 
 # Deploy infrastructure
 
-:::info content in progress
-
-We are working on this guide.
-
-:::
-
-The GDI User Portal consists of multiple interconnected components that require careful deployment and configuration. This section provides comprehensive guidance for system administrators on setting up production-ready infrastructure.
+Deploy the GDI User Portal on your chosen infrastructure. This guide covers deployment options, containerisation, and environment management for production-ready systems.
 
 ## Deployment options
 
-### Deploy to Azure
+Choose a deployment approach that aligns with your infrastructure requirements and organisational policies.
 
-Complete guide for deploying the GDI User Portal on Microsoft Azure infrastructure, including resource provisioning, networking, and security configuration.
+- **Deploy to Azure:** Complete guide for deploying the GDI User Portal on Microsoft Azure infrastructure, including resource provisioning, networking, and security configuration.
 
-### Deploy to ELIXIR-LU
+- **Deploy to ELIXIR-LU:** Specific instructions for deploying to ELIXIR Luxembourg infrastructure, tailored for genomic data infrastructure requirements.
 
-Specific instructions for deploying to ELIXIR Luxembourg infrastructure, tailored for genomic data infrastructure requirements.
+- **Configure Docker containers:** All components run as Docker containers. Learn about container orchestration, networking, and persistent storage configuration.
 
-### Configure Docker containers
-
-All components run as Docker containers. Learn about container orchestration, networking, and persistent storage configuration.
-
-### Manage environments
-
-Best practices for managing multiple environments (development, staging, production) and environment-specific configuration.
+- **Manage environments:** Best practices for managing multiple environments (development, staging, production) and environment-specific configuration.
 
 ## Component installation
 
-### User Portal Frontend
+- **User Portal Frontend:** The frontend provides the web interface and integrates with backend services. Built with Next.js for optimal performance and user experience. Installation guide: [User Portal Frontend README](https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend?tab=readme-ov-file#gdi-user-portal-front-end)<sup>↗</sup>
 
-The frontend provides the web interface and integrates with backend services. Built with Next.js for optimal performance and user experience.
+- **Dataset Discovery Service (DDS):** Backend service that mediates between the frontend and CKAN, providing abstraction and enhanced functionality. To use DDS, ensure that the GDI CKAN extension is installed in your CKAN instance. Installation guide: [Dataset Discovery Service README](https://github.com/GenomicDataInfrastructure/gdi-userportal-dataset-discovery-service?tab=readme-ov-file#gdi-user-portal---dataset-discovery-service)<sup>↗</sup>
 
-**Installation guide:** [User Portal Frontend README](https://github.com/GenomicDataInfrastructure/gdi-userportal-frontend?tab=readme-ov-file#gdi-user-portal-front-end)
+- **Access Management Service (AMS):** Handles access requests, user permissions, and integration with external systems like REMS. Installation guide: [Access Management Service README](https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service?tab=readme-ov-file#gdi-user-portal---access-management-service)<sup>↗</sup>
 
-### Dataset Discovery Service (DDS)
+- **CKAN Extensions:** The platform uses several custom CKAN extensions that must be properly integrated:
 
-Backend service that mediates between the frontend and CKAN, providing abstraction and enhanced functionality.
+    - **[GDI Userportal Ckanext](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-gdi-userportal)** - Adds a DCAT-AP 3 compatible schema with fields such as `issued`, `modified`, `has_version`, and `temporal_start`. It also provides enhanced parsing for creators in the DCAT profile, adds support for OpenID Connect with PKCE, introduces new fields to `scheming_package_show`, and links CKAN harvest views for admin users. Additionally, it offers endpoints for listing unique values and simplifies integration with CKAN-based datasets for the User Portal.
+    - **[Fair Datapoint Ckanext](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-fairdatapoint)** - FAIR principles support
+    - **[Harvest Ckanext](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-harvest)** - Data harvesting capabilities
 
-**Installation guide:** [Dataset Discovery Service README](https://github.com/GenomicDataInfrastructure/gdi-userportal-dataset-discovery-service?tab=readme-ov-file#gdi-user-portal---dataset-discovery-service)
+    <br/>
 
-### Access Management Service (AMS)
+    :::tip CKAN extension integration
 
-Handles access requests, user permissions, and integration with external systems like REMS.
+    To contribute to a CKAN extension and run it on your local machine, integrate it into the Docker build that will run as your backend service, connected to your DDS instance. For a detailed guide on how to integrate the extension, see [Installing new extensions](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckan-docker?tab=readme-ov-file#5-installing-new-extensions) in the [CKAN Docker repository](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckan-docker).
 
-**Installation guide:** [Access Management Service README](https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service?tab=readme-ov-file#gdi-user-portal---access-management-service)
-
-### CKAN Extensions
-
-The platform uses several custom CKAN extensions that must be properly integrated:
-
-- **[GDI Userportal Ckanext](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-gdi-userportal)** - Core GDI functionality
-- **[Fair Datapoint Ckanext](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-fairdatapoint)** - FAIR principles support
-- **[Harvest Ckanext](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-harvest)** - Data harvesting capabilities
-
-For extension integration, see the [CKAN Docker repository](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckan-docker) installation guide.
+    :::

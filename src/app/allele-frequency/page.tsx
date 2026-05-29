@@ -20,6 +20,7 @@ import {
 import ErrorComponent from "@/app/error";
 import { UrlSearchParams } from "@/app/params";
 import PageContainer from "@/components/PageContainer";
+import contentConfig from "@/config/contentConfig";
 import {
   getExternalDatasetInfo,
   getFirstAccessUrl,
@@ -36,6 +37,8 @@ type DatasetActionInfo = {
   isExternal: boolean;
   externalAccessUrl?: string;
 };
+
+const ALL_VARIANT_SEARCH_ENABLED = contentConfig.enableAllVariantSearch;
 
 export default function AlleleFrequencyPage({
   searchParams,
@@ -216,7 +219,7 @@ export default function AlleleFrequencyPage({
 
       const variant = props.variant.trim();
       if (!variant) throw new Error("Variant is required");
-      if (variant.toLowerCase() === "all") {
+      if (ALL_VARIANT_SEARCH_ENABLED && variant.toLowerCase() === "all") {
         const response = await searchGVariantsApi({ params: {} });
         const actions = await buildDatasetActions(response);
         const filteredResponse = filterResultsByDatasetType(
@@ -249,10 +252,14 @@ export default function AlleleFrequencyPage({
       if (props.refGenome) {
         params.assemblyId = props.refGenome;
       }
-      if (props.sex && props.sex !== "All") {
+      if (props.sex === "All") {
+        params.sex = "ALL";
+      } else if (props.sex) {
         params.sex = props.sex;
       }
-      if (props.countryOfBirth && props.countryOfBirth !== "All") {
+      if (props.countryOfBirth === "All") {
+        params.countryOfBirth = "ALL";
+      } else if (props.countryOfBirth) {
         params.countryOfBirth = props.countryOfBirth;
       }
 

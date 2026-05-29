@@ -5,6 +5,7 @@
 
 import Button from "@/components/Button";
 import { COUNTRY_OPTIONS } from "@/app/api/discovery/additional-types";
+import contentConfig from "@/config/contentConfig";
 import { faInfoCircle, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
@@ -108,6 +109,7 @@ const SEX_OPTIONS = [
 
 const DISABLED_SEARCH_TOOLTIP =
   "First select the reference genome, then provide the variant. Position is entered as 1-based and converted to 0-based for the query.";
+const ALL_VARIANT_SEARCH_ENABLED = contentConfig.enableAllVariantSearch;
 
 export default function GVariantsSearchBar({
   onSearchAction,
@@ -118,16 +120,21 @@ export default function GVariantsSearchBar({
     variant: "",
     refGenome: "",
     sex: "",
-    countryOfBirth: "All",
+    countryOfBirth: "",
     datasetType: "All",
   });
   const [errorMessage, setErrorMessage] = useState("");
 
   function isAllVariantKeyword(variant: string) {
-    return variant.trim().toLowerCase() === "all";
+    return ALL_VARIANT_SEARCH_ENABLED && variant.trim().toLowerCase() === "all";
   }
 
   function isVariantValid(variant: string) {
+    const normalizedVariant = variant.trim().toLowerCase();
+    if (normalizedVariant === "all") {
+      return ALL_VARIANT_SEARCH_ENABLED;
+    }
+
     if (isAllVariantKeyword(variant)) {
       return true;
     }
@@ -146,23 +153,24 @@ export default function GVariantsSearchBar({
       if (field === "refGenome" && !value) {
         updatedState.variant = "";
         updatedState.sex = "";
-        updatedState.countryOfBirth = "All";
+        updatedState.countryOfBirth = "";
         updatedState.datasetType = "All";
       }
 
       if (field === "variant" && (!normalizedVariant || variantIsAllKeyword)) {
         updatedState.sex = "";
-        updatedState.countryOfBirth = "All";
-      }
-
-      if (field === "sex" && !value) {
-        updatedState.countryOfBirth = "All";
+        updatedState.countryOfBirth = "";
       }
 
       setErrorMessage(() =>
-        !normalizedVariant || isVariantValid(normalizedVariant)
+        !normalizedVariant
           ? ""
-          : "Incorrect variant information"
+          : normalizedVariant.toLowerCase() === "all" &&
+              !ALL_VARIANT_SEARCH_ENABLED
+            ? "Incorrect variant information"
+            : isVariantValid(normalizedVariant)
+              ? ""
+              : "Incorrect variant information"
       );
       return updatedState;
     });
@@ -174,11 +182,9 @@ export default function GVariantsSearchBar({
   const variantIsValid = variantEntered && isVariantValid(normalizedVariant);
   const canShowVariant = searchFilterInput.refGenome !== "";
   const canShowSex = canShowVariant && variantEntered && !variantIsAllKeyword;
-  const canShowCountry = canShowSex && searchFilterInput.sex !== "";
-  const isSearchComplete =
-    searchFilterInput.refGenome !== "" &&
-    variantIsValid &&
-    (variantIsAllKeyword || searchFilterInput.sex !== "");
+  const canShowCountry =
+    canShowVariant && variantEntered && !variantIsAllKeyword;
+  const isSearchComplete = searchFilterInput.refGenome !== "" && variantIsValid;
   const isSearchDisabled = loading || !isSearchComplete;
 
   const search = () => {
@@ -232,7 +238,11 @@ export default function GVariantsSearchBar({
             type="select"
             value={searchFilterInput.countryOfBirth}
             onChange={(value) => updateData("countryOfBirth", value)}
-            options={[{ value: "All", label: "All" }, ...COUNTRY_OPTIONS]}
+            options={[
+              { value: "", label: "Select country" },
+              { value: "All", label: "All" },
+              ...COUNTRY_OPTIONS,
+            ]}
           />
         )}
 

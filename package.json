@@ -73,8 +73,8 @@
     "rdf-parse": "^5.0.0",
     "rdf-serialize": "^5.1.0",
     "rdflib": "^2.3.6",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
     "react-markdown": "^10.0.0",
     "react-phone-number-input": "^3.4.10",
     "rehype-raw": "^7.0.0",
@@ -92,7 +92,7 @@
     "@tailwindcss/postcss": "^4.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.10.4",
-    "@types/react": "19.2.15",
+    "@types/react": "19.2.16",
     "@types/react-dom": "19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.18.2",
     "dotenv": "^17.1.0",
@@ -109,7 +109,7 @@
     "typescript": "^6.0.0"
   },
   "overrides": {
-    "@types/react": "19.2.15",
+    "@types/react": "19.2.16",
     "@types/react-dom": "19.2.3"
   }
 }

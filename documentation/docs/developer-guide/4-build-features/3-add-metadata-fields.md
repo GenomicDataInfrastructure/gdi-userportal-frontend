@@ -163,27 +163,22 @@ To add and configure a searchable field:
 
 ## FAIR Data Point (FDP)
 
-From a technical point of view, updating the appropriate **SHACL shapes** allows for adding of fields.
+FDP field changes are managed through the [GDI metadata repository](https://github.com/GenomicDataInfrastructure/gdi-metadata), not by manually editing metadata schemas in the FDP UI.
 
-To add a field in FDP:
+To add or update a field for FDP:
 
-1. In the FDP, log in as an admin user and go to the **Metadata schemas** option.
-2. Select the resource to update (e.g. **Catalog**).
-3. In the **Form Definition** textarea, add a new entry in the list of `sh:property` values. For example:
+1. Update the source SHACL shapes and metadata documentation in `gdi-metadata`.
+   - The current model documentation lives in [`Documentation`](https://github.com/GenomicDataInfrastructure/gdi-metadata/tree/main/Documentation).
+   - Shape files live under [`Formulasation(shacl)/core/PiecesShape`](https://github.com/GenomicDataInfrastructure/gdi-metadata/tree/main/Formulasation%28shacl%29/core/PiecesShape).
+2. Review [`schema-tool/Properties.yaml`](https://github.com/GenomicDataInfrastructure/gdi-metadata/blob/main/schema-tool/Properties.yaml) if the field changes how shapes are combined, inherited, or published.
+3. Publish the updated SHACLs with the automated schema tool:
 
    ```bash
-   [
-   sh:path my:new-property ;      # the predicate IRI
-   sh:nodeKind sh:Literal ;       # the value type
-   sh:minCount 1 ;                # cardinality
-   dash:viewer dash:LiteralViewer ;  # UI hint for displaying
-   dash:editor dash:TextFieldEditor ; # UI hint for editing
-   ]
+   cd schema-tool
+   docker compose up
    ```
 
-4. Select **Save** if this is a draft and needs further work, or **Save and release** if the work is done.
-5. Add a description and select a version number.
-6. Select **Release**.
+For FDP deployment and User Portal connection details, refer to the [starter-kit deployment guide](https://github.com/GenomicDataInfrastructure/starter-kit/blob/main/deployment-guide.md#fair-data-point).
 
 ## Discovery Service
 

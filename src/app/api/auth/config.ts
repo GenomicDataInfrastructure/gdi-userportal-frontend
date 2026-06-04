@@ -10,6 +10,29 @@ import { signOut } from "next-auth/react";
 import { completeTokenWithAccountInfo, refreshAccessToken } from "./auth";
 import { JWTCallbackEntry, SessionCallbackEntry } from "./types/auth.types";
 
+type DecodedTokenRoles = {
+  realm_access?: { roles?: string[] };
+  resource_access?: Record<string, { roles?: string[] }>;
+};
+
+function extractRoles(decodedToken: DecodedTokenRoles): string[] {
+  const realmRoles = decodedToken.realm_access?.roles ?? [];
+  const resourceAccess = decodedToken.resource_access ?? {};
+  const configuredClientId = process.env.KEYCLOAK_CLIENT_ID;
+
+  const configuredClientRoles = configuredClientId
+    ? resourceAccess[configuredClientId]?.roles ?? []
+    : [];
+
+  const allClientRoles = Object.values(resourceAccess).flatMap(
+    (clientAccess) => clientAccess.roles ?? []
+  );
+
+  return Array.from(
+    new Set([...realmRoles, ...configuredClientRoles, ...allClientRoles])
+  );
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     Keycloack({
@@ -47,12 +70,13 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }: SessionCallbackEntry) {
+      const decodedToken = (token.decoded ?? {}) as DecodedTokenRoles;
+
       return {
         ...session,
         access_token: encrypt(token.access_token as string),
         id_token: encrypt(token.id_token as string),
-        roles: (token.decoded as { realm_access?: { roles?: string[] } })
-          .realm_access?.roles,
+        roles: extractRoles(decodedToken),
         error: token.error,
       };
     },

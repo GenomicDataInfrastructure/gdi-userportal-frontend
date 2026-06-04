@@ -21,7 +21,7 @@ function extractRoles(decodedToken: DecodedTokenRoles): string[] {
   const configuredClientId = process.env.KEYCLOAK_CLIENT_ID;
 
   const configuredClientRoles = configuredClientId
-    ? resourceAccess[configuredClientId]?.roles ?? []
+    ? (resourceAccess[configuredClientId]?.roles ?? [])
     : [];
 
   const allClientRoles = Object.values(resourceAccess).flatMap(

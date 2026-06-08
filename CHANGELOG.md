@@ -12,6 +12,42 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+## [v1.7.3] - 2026-06-04
+
+### Added
+- fix: enable all variant search feature in environment configuration (#996) by @Kacem Bechka in 2e5838d1
+- feat: add support for enabling all variant search (#995) by @Kacem Bechka in e217d63f
+- feat: enhance GVariantsSearchBar and GVariantsTable with dataset type functionality (#986) by @Kacem Bechka in 08f65364
+
+
+### Changed
+- chore(deps): update @playwright/test and related dependencies to version 1.60.0 (#1001) by @Kacem Bechka in cb439484
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1779831333 (#999) by @LNDS-Sysadmins in 83671afc
+- chore(deps): update react monorepo by @Renovate Bot in fa693110
+- chore(deps): update actions/checkout action to v6.0.3 by @Renovate Bot in 3d7b60d6
+- chore(deps): update dependency eslint-config-next to v16.2.7 by @Renovate Bot in 2ce62083
+- chore(deps): update oras-project/setup-oras digest to ae76689 by @Renovate Bot in 1f006b76
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v9.8-1779831271 by @Renovate Bot in 80eef982
+- chore(deps): bump brace-expansion from 5.0.5 to 5.0.6 in /documentation (#984) by @dependabot[bot] in 0d58ca77
+- chore(deps): update sonarsource/sonarqube-scan-action action to v8.1.0 (#987) by @LNDS-Sysadmins in 9715ec32
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v9.8-1779719601 (#988) by @LNDS-Sysadmins in 6c5979bf
+- chore(deps): bump webpack-dev-server in /documentation (#989) by @dependabot[bot] in bbd6ef32
+- chore(deps): update docker/build-push-action action to v7.2.0 (#990) by @LNDS-Sysadmins in d36dec62
+- chore(deps): update docker/login-action action to v4.2.0 (#991) by @LNDS-Sysadmins in b2ffbfce
+- chore(deps): update docker/metadata-action action to v6.1.0 (#992) by @LNDS-Sysadmins in 3d756bed
+- chore(deps): bump qs and express in /documentation (#993) by @dependabot[bot] in 84408907
+- chore(deps): update oras-project/setup-oras digest to 94695ea by @Renovate Bot in 7bb1bc6d
+- chore(deps): update dependency @types/react to v19.2.15 by @Renovate Bot in a2211811
+- chore(deps): update oras-project/setup-oras digest to f0d18da by @Renovate Bot in d9031840
+
+
+### Fixed
+- fix(deps): update dependency next to v16.2.7 by @Renovate Bot in be3dd8b2
+- fix(deps): update dependency axios to v1.16.0 [security] (#998) by @LNDS-Sysadmins in ec39934f
+- fix(deps): update dependency npm-run-all2 to v9 (#985) by @LNDS-Sysadmins in a6250fa7
+- fix(deps): update opentelemetry-js monorepo to ^0.218.0 (#980) by @LNDS-Sysadmins in d9159720
+
+
 ## [v1.7.1] - 2026-05-11
 
 ### Added

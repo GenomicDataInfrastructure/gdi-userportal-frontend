@@ -7,8 +7,8 @@ import {
   GVariantsSearchResponse,
   SearchedDataset,
 } from "@/app/api/discovery/open-api/schemas";
-import { COUNTRY_OPTIONS } from "@/app/api/discovery/additional-types";
 import VariantAddToBasketButton from "./components/VariantAddToBasketButton";
+import { GVariantsTableUtils } from "@/utils/GVariantsTableUtils";
 import { findDatasetByIdentifier } from "@/utils/datasetEntitlements";
 import React, { useEffect, useMemo, useState } from "react";
 
@@ -18,35 +18,13 @@ type GVariantsTableProps = {
   showSummary?: boolean;
 };
 
-type DatasetGroup = {
-  totalVariant?: GVariantsSearchResponse;
-  variants: GVariantsSearchResponse[];
-};
-
-type BeaconGroup = {
-  datasets: Record<string, DatasetGroup>;
-};
-
 type DatasetActionInfo = {
   dataset: SearchedDataset | null;
   isExternal: boolean;
   externalAccessUrl?: string;
 };
 
-const NOT_AVAILABLE = "not available";
-const COUNTRY_BY_CODE = new Map<string, string>(
-  COUNTRY_OPTIONS.map((c) => [c.value, c.label])
-);
-
-const getDisplayText = (value?: string) => value?.trim() || NOT_AVAILABLE;
-const getBeaconCountryLabel = (beaconId: string) => {
-  const parts = beaconId
-    .toUpperCase()
-    .split(/[^A-Z0-9]+/)
-    .filter(Boolean);
-  const matchedCode = parts.find((part) => COUNTRY_BY_CODE.has(part));
-  return matchedCode ? COUNTRY_BY_CODE.get(matchedCode) : undefined;
-};
+const NOT_AVAILABLE = GVariantsTableUtils.NOT_AVAILABLE;
 
 const renderCell = (value: unknown) =>
   value != null && (typeof value === "string" || typeof value === "number") ? (
@@ -54,22 +32,6 @@ const renderCell = (value: unknown) =>
   ) : (
     <span className="text-xs text-gray-400">not available</span>
   );
-
-const isNumber = (value: unknown): value is number =>
-  typeof value === "number" && Number.isFinite(value);
-
-const formatPopulationSummary = (populations: string[]) => {
-  if (populations.length === 0) {
-    return NOT_AVAILABLE;
-  }
-  if (populations.length === 1) {
-    return populations[0];
-  }
-
-  const preview = populations.slice(0, 2).join(", ");
-  const remaining = populations.length - 2;
-  return remaining > 0 ? `${preview}, +${remaining} more` : preview;
-};
 
 export default function GVariantsTable({
   results,
@@ -81,86 +43,17 @@ export default function GVariantsTable({
   >({});
 
   const sortedResults = useMemo(
-    () =>
-      [...results].sort((a, b) => {
-        const beaconComparison = getDisplayText(a.beacon).localeCompare(
-          getDisplayText(b.beacon),
-          undefined,
-          {
-            sensitivity: "base",
-            numeric: true,
-          }
-        );
-        if (beaconComparison !== 0) {
-          return beaconComparison;
-        }
-
-        const datasetComparison = getDisplayText(a.datasetId).localeCompare(
-          getDisplayText(b.datasetId),
-          undefined,
-          {
-            sensitivity: "base",
-            numeric: true,
-          }
-        );
-        if (datasetComparison !== 0) {
-          return datasetComparison;
-        }
-
-        return getDisplayText(a.population).localeCompare(
-          getDisplayText(b.population),
-          undefined,
-          {
-            sensitivity: "base",
-            numeric: true,
-          }
-        );
-      }),
+    () => GVariantsTableUtils.sortResults(results),
     [results]
   );
 
   const groupedByBeacon = useMemo(
-    () =>
-      sortedResults.reduce(
-        (acc, variant) => {
-          const datasetId = getDisplayText(variant.datasetId);
-          const beaconId = getDisplayText(variant.beacon);
-
-          if (!acc[beaconId]) {
-            acc[beaconId] = {
-              datasets: {},
-            };
-          }
-
-          if (!acc[beaconId].datasets[datasetId]) {
-            acc[beaconId].datasets[datasetId] = {
-              variants: [],
-            };
-          }
-
-          const population = getDisplayText(variant.population).toLowerCase();
-          if (population === "total") {
-            // Prefer server-provided totals row over client-side aggregation.
-            acc[beaconId].datasets[datasetId].totalVariant ??= variant;
-            return acc;
-          }
-
-          acc[beaconId].datasets[datasetId].variants.push(variant);
-          return acc;
-        },
-        {} as Record<string, BeaconGroup>
-      ),
+    () => GVariantsTableUtils.groupByBeacon(sortedResults),
     [sortedResults]
   );
 
   const beaconIds = useMemo(
-    () =>
-      Object.keys(groupedByBeacon).sort((a, b) =>
-        a.localeCompare(b, undefined, {
-          sensitivity: "base",
-          numeric: true,
-        })
-      ),
+    () => GVariantsTableUtils.getSortedBeaconIds(groupedByBeacon),
     [groupedByBeacon]
   );
 
@@ -169,60 +62,21 @@ export default function GVariantsTable({
       Object.fromEntries(
         Object.entries(datasetActions).map(([datasetId, actionInfo]) => [
           datasetId,
-          getDisplayText(actionInfo?.dataset?.datasetType),
+          GVariantsTableUtils.getDisplayText(actionInfo?.dataset?.datasetType),
         ])
       ),
     [datasetActions]
   );
 
-  const rowsForSummary = useMemo(() => {
-    const nonTotalRows = sortedResults.filter(
-      (variant) => getDisplayText(variant.population).toLowerCase() !== "total"
-    );
-    return nonTotalRows.length > 0 ? nonTotalRows : sortedResults;
-  }, [sortedResults]);
+  const rowsForSummary = useMemo(
+    () => GVariantsTableUtils.getRowsForSummary(sortedResults),
+    [sortedResults]
+  );
 
-  const summaryData = useMemo(() => {
-    if (rowsForSummary.length === 0) {
-      return null;
-    }
-
-    const populations = Array.from(
-      new Set(
-        rowsForSummary
-          .map((variant) => variant.population?.trim())
-          .filter((population): population is string => !!population)
-      )
-    ).sort((a, b) =>
-      a.localeCompare(b, undefined, { sensitivity: "base", numeric: true })
-    );
-
-    let alleleCount = 0;
-    let alleleNumber = 0;
-    let hasAlleleCount = false;
-    let hasAlleleNumber = false;
-
-    rowsForSummary.forEach((variant) => {
-      if (isNumber(variant.alleleCount)) {
-        alleleCount += variant.alleleCount;
-        hasAlleleCount = true;
-      }
-      if (isNumber(variant.alleleNumber)) {
-        alleleNumber += variant.alleleNumber;
-        hasAlleleNumber = true;
-      }
-    });
-
-    return {
-      population: formatPopulationSummary(populations),
-      alleleCount: hasAlleleCount ? alleleCount : null,
-      alleleNumber: hasAlleleNumber ? alleleNumber : null,
-      frequency:
-        hasAlleleCount && hasAlleleNumber && alleleNumber > 0
-          ? alleleCount / alleleNumber
-          : null,
-    };
-  }, [rowsForSummary]);
+  const summaryData = useMemo(
+    () => GVariantsTableUtils.buildSummaryData(rowsForSummary),
+    [rowsForSummary]
+  );
 
   const datasetGroupKeys = useMemo(
     () =>
@@ -372,7 +226,8 @@ export default function GVariantsTable({
             </thead>
             <tbody>
               {beaconIds.map((beaconId) => {
-                const beaconCountryLabel = getBeaconCountryLabel(beaconId);
+                const beaconCountryLabel =
+                  GVariantsTableUtils.getBeaconCountryLabel(beaconId);
                 const datasetIds = Object.keys(
                   groupedByBeacon[beaconId].datasets
                 ).sort((a, b) =>

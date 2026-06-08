@@ -44,6 +44,7 @@ export default function AlleleFrequencyPage({
   searchParams,
 }: AlleleFrequencyPageProps) {
   const [results, setResults] = useState<GVariantsSearchResponse[]>([]);
+  const [showSummary, setShowSummary] = useState(false);
   const [datasetActions, setDatasetActions] = useState<
     Record<string, DatasetActionInfo>
   >({});
@@ -202,10 +203,14 @@ export default function AlleleFrequencyPage({
   const handleSearch = async (props: SearchInputData) => {
     setLoading(true);
     setResults([]);
+    setShowSummary(false);
     setDatasetActions({});
     setError(null);
 
     try {
+      const hasSpecificFilterSelected =
+        (!!props.sex && props.sex !== "All") ||
+        (!!props.countryOfBirth && props.countryOfBirth !== "All");
       const params: {
         referenceName?: string;
         start?: number[];
@@ -228,6 +233,7 @@ export default function AlleleFrequencyPage({
           props.datasetType
         );
         setResults(filteredResponse);
+        setShowSummary(hasSpecificFilterSelected);
         setDatasetActions(actions);
         setTriedSearching(true);
         return;
@@ -271,6 +277,7 @@ export default function AlleleFrequencyPage({
         props.datasetType
       );
       setResults(filteredResponse);
+      setShowSummary(hasSpecificFilterSelected);
       setDatasetActions(actions);
       setTriedSearching(true);
     } catch (error) {
@@ -326,7 +333,11 @@ export default function AlleleFrequencyPage({
       )}
 
       {!loading && results.length > 0 && (
-        <GVariantsTable results={results} datasetActions={datasetActions} />
+        <GVariantsTable
+          results={results}
+          datasetActions={datasetActions}
+          showSummary={showSummary}
+        />
       )}
     </PageContainer>
   );

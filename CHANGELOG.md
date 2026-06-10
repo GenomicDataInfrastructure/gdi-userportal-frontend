@@ -12,6 +12,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+## [v1.7.4] - 2026-06-10
+
+### Added
+- feat: add summary feature to GVariantsTable and AlleleFrequencyPage (#1004) by @Kacem Bechka in 565416cb
+
+
+### Changed
+- chore(deps): update astral-sh/setup-uv action to v8.2.0 (#1000) by @LNDS-Sysadmins in 1ae0bd27
+- chore(deps): update sonarsource/sonarqube-scan-action action to v8.2.0 (#1006) by @LNDS-Sysadmins in faf6f93d
+- chore(deps): update oras-project/setup-oras digest to ce8d0d5 by @Renovate Bot in 8fd24ede
+- doc: update CHANGELOG.md for v1.7.3 (#1002) by @github-actions[bot] in 9f419500
+- chore(deps): update dependency @types/react to v19.2.17 by @Renovate Bot in 5fa4ab23
+
+
+### Fixed
+- fix: sonar (#1005) by @Kacem Bechka in bf012f05
+
+
 ## [v1.7.3] - 2026-06-04
 
 ### Added

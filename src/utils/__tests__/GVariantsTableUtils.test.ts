@@ -125,6 +125,72 @@ describe("GVariantsTableUtils", () => {
     });
   });
 
+  describe("buildVariantLabel", () => {
+    test("builds full label using one-based display position", () => {
+      expect(
+        GVariantsTableUtils.buildVariantLabel(
+          variant({
+            referenceName: "1",
+            start: 123455,
+            referenceBases: "A",
+            alternateBases: "G",
+          })
+        )
+      ).toBe("1-123456-A-G");
+    });
+
+    test("falls back to one-based range label when alleles are missing", () => {
+      expect(
+        GVariantsTableUtils.buildVariantLabel(
+          variant({
+            referenceName: "1",
+            start: 123455,
+            end: 123460,
+          })
+        )
+      ).toBe("1-123456-123460");
+    });
+
+    test("returns default label when coordinates are unavailable", () => {
+      expect(
+        GVariantsTableUtils.buildVariantLabel(variant({ population: "FR_F" }))
+      ).toBe(GVariantsTableUtils.DEFAULT_VARIANT_LABEL);
+    });
+  });
+
+  describe("groupResultsByVariant", () => {
+    test("groups rows by matched variant and sorts groups by label", () => {
+      const groups = GVariantsTableUtils.groupResultsByVariant([
+        variant({
+          beacon: "beacon-1",
+          datasetId: "dataset-1",
+          population: "FR_F",
+          referenceName: "2",
+          start: 222,
+          referenceBases: "C",
+          alternateBases: "T",
+        }),
+        variant({
+          beacon: "beacon-1",
+          datasetId: "dataset-1",
+          population: "FR_M",
+          referenceName: "1",
+          start: 111,
+          referenceBases: "A",
+          alternateBases: "G",
+        }),
+      ]);
+
+      expect(groups.map((group) => group.label)).toEqual([
+        "1-112-A-G",
+        "2-223-C-T",
+      ]);
+      expect(groups[0].rows).toHaveLength(1);
+      expect(groups[1].rows).toHaveLength(1);
+      expect(groups[0].beaconIds).toEqual(["beacon-1"]);
+    });
+  });
+
   describe("buildSummaryData", () => {
     test("returns null for empty summary rows", () => {
       expect(GVariantsTableUtils.buildSummaryData([])).toBeNull();

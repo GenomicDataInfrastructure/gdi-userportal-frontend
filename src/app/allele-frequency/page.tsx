@@ -240,7 +240,9 @@ export default function AlleleFrequencyPage({
       }
 
       const parts = variant.split("-");
-      if (parts.length !== 4) throw new Error("Invalid variant format");
+      if (parts.length !== 2 && parts.length !== 4) {
+        throw new Error("Invalid variant format");
+      }
       const [referenceName, start, referenceBases, alternateBases] = parts;
       const startNum = parseInt(start, 10);
       if (isNaN(startNum) || startNum <= 0)
@@ -251,9 +253,15 @@ export default function AlleleFrequencyPage({
 
       params.referenceName = referenceName;
       params.start = startPosition;
-      params.end = null;
-      params.referenceBases = referenceBases;
-      params.alternateBases = alternateBases;
+
+      if (parts.length === 4) {
+        params.end = null;
+        params.referenceBases = referenceBases;
+        params.alternateBases = alternateBases;
+      } else {
+        // Single-base range query around the requested position.
+        params.end = [startNum];
+      }
 
       if (props.refGenome) {
         params.assemblyId = props.refGenome;

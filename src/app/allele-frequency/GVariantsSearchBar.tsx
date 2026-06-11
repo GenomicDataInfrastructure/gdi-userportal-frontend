@@ -139,9 +139,14 @@ export default function GVariantsSearchBar({
       return true;
     }
 
-    const variantPattern =
+    const fullVariantPattern =
       /^(?:[1-9]|1[0-9]|2[0-2]|X|Y)-[1-9]\d*-[ACGT]+-[ACGT]+$/i;
-    return variantPattern.test(variant);
+    const positionOnlyPattern = /^(?:[1-9]|1[0-9]|2[0-2]|X|Y)-[1-9]\d*$/i;
+
+    return (
+      fullVariantPattern.test(normalizedVariant) ||
+      positionOnlyPattern.test(normalizedVariant)
+    );
   }
 
   const updateData = (field: keyof SearchInputData, value: string) => {
@@ -215,8 +220,8 @@ export default function GVariantsSearchBar({
             type="text"
             value={searchFilterInput.variant}
             onChange={(value) => updateData("variant", value)}
-            placeholder="e.g. 21-9411449-G-T"
-            tooltip="Format: chromosome-position-reference-alternate (e.g. 21-9411449-G-T). Position is interpreted as 1-based."
+            placeholder="e.g. 21-9411449 or 21-9411449-G-T"
+            tooltip="Supported formats: chromosome-position (e.g. 21-9411449) or chromosome-position-reference-alternate (e.g. 21-9411449-G-T). Position is interpreted as 1-based."
           />
         )}
 

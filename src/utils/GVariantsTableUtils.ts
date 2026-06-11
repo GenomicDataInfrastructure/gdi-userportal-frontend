@@ -20,8 +20,17 @@ export type GVariantSummaryData = {
   frequency: number | null;
 };
 
+export type VariantGroup = {
+  key: string;
+  label: string;
+  rows: GVariantsSearchResponse[];
+  groupedByBeacon: Record<string, BeaconGroup>;
+  beaconIds: string[];
+};
+
 export class GVariantsTableUtils {
   static readonly NOT_AVAILABLE = "not available";
+  static readonly DEFAULT_VARIANT_LABEL = "Matched variant";
 
   private static readonly COUNTRY_BY_CODE = new Map<string, string>(
     COUNTRY_OPTIONS.map((country) => [country.value, country.label])
@@ -135,6 +144,59 @@ export class GVariantsTableUtils {
         GVariantsTableUtils.getDisplayText(variant.population).toLowerCase() !==
         "total"
     );
+  }
+
+  static buildVariantLabel(variant: GVariantsSearchResponse): string {
+    const referenceName = variant.referenceName?.trim();
+    if (!referenceName || !GVariantsTableUtils.isNumber(variant.start)) {
+      return GVariantsTableUtils.DEFAULT_VARIANT_LABEL;
+    }
+    const oneBasedStart = variant.start + 1;
+
+    const referenceBases = variant.referenceBases?.trim();
+    const alternateBases = variant.alternateBases?.trim();
+    if (referenceBases && alternateBases) {
+      return `${referenceName}-${oneBasedStart}-${referenceBases}-${alternateBases}`;
+    }
+
+    if (GVariantsTableUtils.isNumber(variant.end)) {
+      const oneBasedEnd = variant.end;
+      if (oneBasedEnd > oneBasedStart) {
+        return `${referenceName}-${oneBasedStart}-${oneBasedEnd}`;
+      }
+    }
+
+    return `${referenceName}-${oneBasedStart}`;
+  }
+
+  static groupResultsByVariant(
+    sortedResults: GVariantsSearchResponse[]
+  ): VariantGroup[] {
+    const groupedRows = sortedResults.reduce((acc, row) => {
+      const label = GVariantsTableUtils.buildVariantLabel(row);
+      const group = acc.get(label) ?? [];
+      group.push(row);
+      acc.set(label, group);
+      return acc;
+    }, new Map<string, GVariantsSearchResponse[]>());
+
+    return Array.from(groupedRows.entries())
+      .sort(([labelA], [labelB]) =>
+        labelA.localeCompare(labelB, undefined, {
+          sensitivity: "base",
+          numeric: true,
+        })
+      )
+      .map(([label, rows]) => {
+        const groupedByBeacon = GVariantsTableUtils.groupByBeacon(rows);
+        return {
+          key: label,
+          label,
+          rows,
+          groupedByBeacon,
+          beaconIds: GVariantsTableUtils.getSortedBeaconIds(groupedByBeacon),
+        };
+      });
   }
 
   static buildSummaryData(

@@ -78,14 +78,21 @@ export default function GVariantsTable({
     [rowsForSummary]
   );
 
+  const variantGroups = useMemo(
+    () => GVariantsTableUtils.groupResultsByVariant(sortedResults),
+    [sortedResults]
+  );
+
   const datasetGroupKeys = useMemo(
     () =>
-      beaconIds.flatMap((beaconId) =>
-        Object.keys(groupedByBeacon[beaconId].datasets).map(
-          (datasetId) => `${beaconId}::${datasetId}`
+      variantGroups.flatMap((variantGroup) =>
+        variantGroup.beaconIds.flatMap((beaconId) =>
+          Object.keys(variantGroup.groupedByBeacon[beaconId].datasets).map(
+            (datasetId) => `${variantGroup.key}::${beaconId}::${datasetId}`
+          )
         )
       ),
-    [beaconIds, groupedByBeacon]
+    [variantGroups]
   );
 
   useEffect(() => {
@@ -188,194 +195,243 @@ export default function GVariantsTable({
         <h3 className="text-base sm:text-lg font-semibold mb-2">
           Detailed results
         </h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-[1100px] lg:min-w-full border border-surface shadow-lg rounded-xl overflow-hidden table-fixed text-xs sm:text-sm">
-            <thead>
-              <tr className="bg-primary text-surface">
-                <th className="px-3 py-2 text-left whitespace-nowrap">
-                  Dataset
-                </th>
-                <th className="px-3 py-2 text-left whitespace-nowrap">
-                  Dataset Type
-                </th>
-                <th className="px-3 py-2 text-left whitespace-nowrap">
-                  Population
-                </th>
-                <th className="px-3 py-2 text-left whitespace-nowrap">
-                  Allele Count
-                </th>
-                <th className="px-3 py-2 text-left whitespace-nowrap">
-                  Allele Number
-                </th>
-                <th className="px-3 py-2 text-left whitespace-nowrap">
-                  Homozygous
-                </th>
-                <th className="px-3 py-2 text-left whitespace-nowrap">
-                  Heterozygous
-                </th>
-                <th className="px-3 py-2 text-left whitespace-nowrap">
-                  Hemizygous
-                </th>
-                <th className="px-3 py-2 text-left whitespace-nowrap">
-                  Frequency
-                </th>
-                <th className="px-3 py-2 text-left w-[220px] whitespace-nowrap">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {beaconIds.map((beaconId) => {
-                const beaconCountryLabel =
-                  GVariantsTableUtils.getBeaconCountryLabel(beaconId);
-                const datasetIds = Object.keys(
-                  groupedByBeacon[beaconId].datasets
-                ).sort((a, b) =>
-                  a.localeCompare(b, undefined, {
-                    sensitivity: "base",
-                    numeric: true,
-                  })
-                );
+        <div className="space-y-6">
+          {variantGroups.map((variantGroup) => {
+            const showVariantTitle =
+              variantGroups.length > 1 ||
+              variantGroup.label !== GVariantsTableUtils.DEFAULT_VARIANT_LABEL;
 
-                return (
-                  <React.Fragment key={beaconId}>
-                    <tr className="bg-[#70154C14] border border-secondary">
-                      <td
-                        colSpan={10}
-                        className="px-3 py-2 text-base sm:text-lg font-bold"
-                      >
-                        Beacon: {beaconId}
-                        {beaconCountryLabel ? ` (${beaconCountryLabel})` : ""}
-                      </td>
-                    </tr>
-                    {datasetIds.map((datasetId) => {
-                      const groupKey = `${beaconId}::${datasetId}`;
-                      const datasetGroup =
-                        groupedByBeacon[beaconId].datasets[datasetId];
-                      const isExpanded = expandedDatasets[groupKey];
-                      const actionInfo = datasetActions[datasetId];
-                      const datasetType =
-                        datasetTypeByDatasetId[datasetId] ?? NOT_AVAILABLE;
-                      const totals =
-                        datasetGroup.totalVariant ??
-                        (datasetGroup.variants.length === 1
-                          ? datasetGroup.variants[0]
-                          : undefined);
-                      const rowsToRender =
-                        datasetGroup.variants.length > 0
-                          ? datasetGroup.variants
-                          : datasetGroup.totalVariant
-                            ? [datasetGroup.totalVariant]
-                            : [];
+            return (
+              <div key={variantGroup.key} className="space-y-2">
+                {showVariantTitle && (
+                  <p className="text-base sm:text-lg font-semibold">
+                    Variant:{" "}
+                    <span className="text-info break-all">
+                      {variantGroup.label}
+                    </span>
+                  </p>
+                )}
+                <div className="overflow-x-auto">
+                  <table className="min-w-[1100px] lg:min-w-full border border-surface shadow-lg rounded-xl overflow-hidden table-fixed text-xs sm:text-sm">
+                    <thead>
+                      <tr className="bg-primary text-surface">
+                        <th className="px-3 py-2 text-left whitespace-nowrap">
+                          Dataset
+                        </th>
+                        <th className="px-3 py-2 text-left whitespace-nowrap">
+                          Dataset Type
+                        </th>
+                        <th className="px-3 py-2 text-left whitespace-nowrap">
+                          Population
+                        </th>
+                        <th className="px-3 py-2 text-left whitespace-nowrap">
+                          Allele Count
+                        </th>
+                        <th className="px-3 py-2 text-left whitespace-nowrap">
+                          Allele Number
+                        </th>
+                        <th className="px-3 py-2 text-left whitespace-nowrap">
+                          Homozygous
+                        </th>
+                        <th className="px-3 py-2 text-left whitespace-nowrap">
+                          Heterozygous
+                        </th>
+                        <th className="px-3 py-2 text-left whitespace-nowrap">
+                          Hemizygous
+                        </th>
+                        <th className="px-3 py-2 text-left whitespace-nowrap">
+                          Frequency
+                        </th>
+                        <th className="px-3 py-2 text-left w-[220px] whitespace-nowrap">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {variantGroup.beaconIds.map((beaconId) => {
+                        const beaconCountryLabel =
+                          GVariantsTableUtils.getBeaconCountryLabel(beaconId);
+                        const datasetIds = Object.keys(
+                          variantGroup.groupedByBeacon[beaconId].datasets
+                        ).sort((a, b) =>
+                          a.localeCompare(b, undefined, {
+                            sensitivity: "base",
+                            numeric: true,
+                          })
+                        );
 
-                      return (
-                        <React.Fragment key={groupKey}>
-                          <tr className="bg-surface border border-secondary">
-                            <td className="px-3 py-2 whitespace-nowrap">
-                              <button
-                                onClick={() => toggleDatasetExpansion(groupKey)}
-                                className="mr-2 font-semibold"
-                                aria-label={`Toggle dataset group ${datasetId}`}
+                        return (
+                          <React.Fragment
+                            key={`${variantGroup.key}::${beaconId}`}
+                          >
+                            <tr className="bg-[#70154C14] border border-secondary">
+                              <td
+                                colSpan={10}
+                                className="px-3 py-2 text-base sm:text-lg font-bold"
                               >
-                                {isExpanded ? "▼" : "▶"}
-                              </button>
-                              <button
-                                onClick={() => handleDatasetClick(datasetId)}
-                                disabled={datasetId === NOT_AVAILABLE}
-                                className={`underline transition-colors break-all ${
-                                  datasetId !== NOT_AVAILABLE
-                                    ? "text-primary hover:text-secondary hover:no-underline cursor-pointer"
-                                    : "text-gray-400 cursor-not-allowed opacity-50"
-                                }`}
-                              >
-                                {datasetId}
-                              </button>
-                            </td>
-                            <td className="px-3 py-2 whitespace-nowrap">
-                              {datasetType}
-                            </td>
-                            <td className="px-3 py-2 whitespace-nowrap" />
-                            <td className="px-3 py-2 whitespace-nowrap">
-                              {renderCell(totals?.alleleCount)}
-                            </td>
-                            <td className="px-3 py-2 whitespace-nowrap">
-                              {renderCell(totals?.alleleNumber)}
-                            </td>
-                            <td className="px-3 py-2 whitespace-nowrap">
-                              {renderCell(totals?.alleleCountHomozygous)}
-                            </td>
-                            <td className="px-3 py-2 whitespace-nowrap">
-                              {renderCell(totals?.alleleCountHeterozygous)}
-                            </td>
-                            <td className="px-3 py-2 whitespace-nowrap">
-                              {renderCell(totals?.alleleCountHemizygous)}
-                            </td>
-                            <td className="px-3 py-2 whitespace-nowrap">
-                              {typeof totals?.alleleFrequency === "number"
-                                ? totals.alleleFrequency.toFixed(4)
-                                : renderCell(undefined)}
-                            </td>
-                            <td className="px-3 py-2 w-[220px] whitespace-nowrap">
-                              <div className="w-[220px]">
-                                <VariantAddToBasketButton
-                                  datasetId={
-                                    datasetId === NOT_AVAILABLE ? "" : datasetId
-                                  }
-                                  dataset={actionInfo?.dataset ?? null}
-                                  isExternal={actionInfo?.isExternal ?? false}
-                                  externalAccessUrl={
-                                    actionInfo?.externalAccessUrl
-                                  }
-                                  disabled={
-                                    datasetId === NOT_AVAILABLE ||
-                                    (datasetId !== NOT_AVAILABLE && !actionInfo)
-                                  }
-                                />
-                              </div>
-                            </td>
-                          </tr>
-                          {isExpanded &&
-                            rowsToRender.map((variant, index) => (
-                              <tr
-                                key={`${groupKey}-${index}`}
-                                className="border-t border-surface bg-[#70154C14]"
-                              >
-                                <td className="px-3 py-2 whitespace-nowrap" />
-                                <td className="px-3 py-2 whitespace-nowrap" />
-                                <td className="px-3 py-2 whitespace-nowrap">
-                                  {variant.population || "-"}
-                                </td>
-                                <td className="px-3 py-2 whitespace-nowrap">
-                                  {renderCell(variant.alleleCount)}
-                                </td>
-                                <td className="px-3 py-2 whitespace-nowrap">
-                                  {renderCell(variant.alleleNumber)}
-                                </td>
-                                <td className="px-3 py-2 whitespace-nowrap">
-                                  {renderCell(variant.alleleCountHomozygous)}
-                                </td>
-                                <td className="px-3 py-2 whitespace-nowrap">
-                                  {renderCell(variant.alleleCountHeterozygous)}
-                                </td>
-                                <td className="px-3 py-2 whitespace-nowrap">
-                                  {renderCell(variant.alleleCountHemizygous)}
-                                </td>
-                                <td className="px-3 py-2 whitespace-nowrap">
-                                  {variant.alleleFrequency != null
-                                    ? variant.alleleFrequency.toFixed(4)
-                                    : renderCell(undefined)}
-                                </td>
-                                <td className="px-3 py-2 w-[220px] whitespace-nowrap" />
-                              </tr>
-                            ))}
-                        </React.Fragment>
-                      );
-                    })}
-                  </React.Fragment>
-                );
-              })}
-            </tbody>
-          </table>
+                                Beacon: {beaconId}
+                                {beaconCountryLabel
+                                  ? ` (${beaconCountryLabel})`
+                                  : ""}
+                              </td>
+                            </tr>
+                            {datasetIds.map((datasetId) => {
+                              const groupKey = `${variantGroup.key}::${beaconId}::${datasetId}`;
+                              const datasetGroup =
+                                variantGroup.groupedByBeacon[beaconId].datasets[
+                                  datasetId
+                                ];
+                              const isExpanded = expandedDatasets[groupKey];
+                              const actionInfo = datasetActions[datasetId];
+                              const datasetType =
+                                datasetTypeByDatasetId[datasetId] ??
+                                NOT_AVAILABLE;
+                              const totals =
+                                datasetGroup.totalVariant ??
+                                (datasetGroup.variants.length === 1
+                                  ? datasetGroup.variants[0]
+                                  : undefined);
+                              const rowsToRender =
+                                datasetGroup.variants.length > 0
+                                  ? datasetGroup.variants
+                                  : datasetGroup.totalVariant
+                                    ? [datasetGroup.totalVariant]
+                                    : [];
+
+                              return (
+                                <React.Fragment key={groupKey}>
+                                  <tr className="bg-surface border border-secondary">
+                                    <td className="px-3 py-2 whitespace-nowrap">
+                                      <button
+                                        onClick={() =>
+                                          toggleDatasetExpansion(groupKey)
+                                        }
+                                        className="mr-2 font-semibold"
+                                        aria-label={`Toggle dataset group ${datasetId}`}
+                                      >
+                                        {isExpanded ? "▼" : "▶"}
+                                      </button>
+                                      <button
+                                        onClick={() =>
+                                          handleDatasetClick(datasetId)
+                                        }
+                                        disabled={datasetId === NOT_AVAILABLE}
+                                        className={`underline transition-colors break-all ${
+                                          datasetId !== NOT_AVAILABLE
+                                            ? "text-primary hover:text-secondary hover:no-underline cursor-pointer"
+                                            : "text-gray-400 cursor-not-allowed opacity-50"
+                                        }`}
+                                      >
+                                        {datasetId}
+                                      </button>
+                                    </td>
+                                    <td className="px-3 py-2 whitespace-nowrap">
+                                      {datasetType}
+                                    </td>
+                                    <td className="px-3 py-2 whitespace-nowrap" />
+                                    <td className="px-3 py-2 whitespace-nowrap">
+                                      {renderCell(totals?.alleleCount)}
+                                    </td>
+                                    <td className="px-3 py-2 whitespace-nowrap">
+                                      {renderCell(totals?.alleleNumber)}
+                                    </td>
+                                    <td className="px-3 py-2 whitespace-nowrap">
+                                      {renderCell(
+                                        totals?.alleleCountHomozygous
+                                      )}
+                                    </td>
+                                    <td className="px-3 py-2 whitespace-nowrap">
+                                      {renderCell(
+                                        totals?.alleleCountHeterozygous
+                                      )}
+                                    </td>
+                                    <td className="px-3 py-2 whitespace-nowrap">
+                                      {renderCell(
+                                        totals?.alleleCountHemizygous
+                                      )}
+                                    </td>
+                                    <td className="px-3 py-2 whitespace-nowrap">
+                                      {typeof totals?.alleleFrequency ===
+                                      "number"
+                                        ? totals.alleleFrequency.toFixed(4)
+                                        : renderCell(undefined)}
+                                    </td>
+                                    <td className="px-3 py-2 w-[220px] whitespace-nowrap">
+                                      <div className="w-[220px]">
+                                        <VariantAddToBasketButton
+                                          datasetId={
+                                            datasetId === NOT_AVAILABLE
+                                              ? ""
+                                              : datasetId
+                                          }
+                                          dataset={actionInfo?.dataset ?? null}
+                                          isExternal={
+                                            actionInfo?.isExternal ?? false
+                                          }
+                                          externalAccessUrl={
+                                            actionInfo?.externalAccessUrl
+                                          }
+                                          disabled={
+                                            datasetId === NOT_AVAILABLE ||
+                                            (datasetId !== NOT_AVAILABLE &&
+                                              !actionInfo)
+                                          }
+                                        />
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  {isExpanded &&
+                                    rowsToRender.map((variant, index) => (
+                                      <tr
+                                        key={`${groupKey}-${index}`}
+                                        className="border-t border-surface bg-[#70154C14]"
+                                      >
+                                        <td className="px-3 py-2 whitespace-nowrap" />
+                                        <td className="px-3 py-2 whitespace-nowrap" />
+                                        <td className="px-3 py-2 whitespace-nowrap">
+                                          {variant.population || "-"}
+                                        </td>
+                                        <td className="px-3 py-2 whitespace-nowrap">
+                                          {renderCell(variant.alleleCount)}
+                                        </td>
+                                        <td className="px-3 py-2 whitespace-nowrap">
+                                          {renderCell(variant.alleleNumber)}
+                                        </td>
+                                        <td className="px-3 py-2 whitespace-nowrap">
+                                          {renderCell(
+                                            variant.alleleCountHomozygous
+                                          )}
+                                        </td>
+                                        <td className="px-3 py-2 whitespace-nowrap">
+                                          {renderCell(
+                                            variant.alleleCountHeterozygous
+                                          )}
+                                        </td>
+                                        <td className="px-3 py-2 whitespace-nowrap">
+                                          {renderCell(
+                                            variant.alleleCountHemizygous
+                                          )}
+                                        </td>
+                                        <td className="px-3 py-2 whitespace-nowrap">
+                                          {variant.alleleFrequency != null
+                                            ? variant.alleleFrequency.toFixed(4)
+                                            : renderCell(undefined)}
+                                        </td>
+                                        <td className="px-3 py-2 w-[220px] whitespace-nowrap" />
+                                      </tr>
+                                    ))}
+                                </React.Fragment>
+                              );
+                            })}
+                          </React.Fragment>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

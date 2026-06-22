@@ -12,8 +12,6 @@ Deploy the GDI User Portal on your chosen infrastructure. This guide covers depl
 
 Choose a deployment approach that aligns with your infrastructure requirements and organisational policies.
 
-- **Deploy to Azure:** Complete guide for deploying the GDI User Portal on Microsoft Azure infrastructure, including resource provisioning, networking, and security configuration.
-
 - **Deploy to ELIXIR-LU:** Specific instructions for deploying to ELIXIR Luxembourg infrastructure, tailored for genomic data infrastructure requirements.
 
 - **Configure Docker containers:** All components run as Docker containers. Learn about container orchestration, networking, and persistent storage configuration.

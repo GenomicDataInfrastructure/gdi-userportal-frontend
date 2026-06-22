@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-const createNavigationMock = jest.fn(() => ({
+const createNavigationMock = jest.fn((_routing?: unknown) => ({
   Link: "Link",
   redirect: jest.fn(),
   permanentRedirect: jest.fn(),

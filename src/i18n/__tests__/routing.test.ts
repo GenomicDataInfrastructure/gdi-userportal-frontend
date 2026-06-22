@@ -19,6 +19,6 @@ describe("i18n routing", () => {
   it("defines the supported locales and default locale", () => {
     expect(routing.locales).toEqual(["en", "fr"]);
     expect(routing.defaultLocale).toBe("en");
-    expect(routing.localePrefix.mode).toBe("always");
+    expect(routing.localePrefix).toBe("always");
   });
 });

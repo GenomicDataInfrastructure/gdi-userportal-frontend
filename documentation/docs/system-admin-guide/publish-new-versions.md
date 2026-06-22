@@ -6,70 +6,71 @@ sidebar_position: 12
 
 # Publish new versions
 
-Publish new versions of GDI User Portal components using semantic versioning and GitHub releases. This guide covers the standardised release process for all repositories, including tagging, release branch creation, and Docker image publication.
+Publish new versions of GDI User Portal components using semantic versioning and GitHub releases. The release process is primarily automated through GitHub Actions, with manual steps available as fallback options.
 
-:::info Standardised process
+:::info Automated process
 
-Apply this release process consistently across all GDI User Portal repositories to maintain version control and release quality.
+The GDI User Portal uses automated workflows to handle versioning, release branch creation, and Docker image publication. This guide describes the automated release workflow and includes manual verification steps.
 
 :::
 
-## Prepare for release
+## Automated release workflow
 
-Ensure all necessary changes are merged to the `main` branch before beginning the release process.
+The release process is triggered automatically when you push a version tag to the repository.
 
 1. **Update changelog:** Verify that `CHANGELOG.md` reflects all changes included in the release.
 
-2. **Create version tag:** Push a new tag following semantic versioning `v{major}.{minor}.{patch}`:
+2. **Create and push version tag:** Push a new tag following semantic versioning `v{major}.{minor}.{patch}`:
 
    ```bash
    git tag -a v1.2.0 -m "GDI MS08"
    git push origin v1.2.0
    ```
 
-3. **Create release branch:** Create a release branch to simplify bug fixing and security patches. Branch name follows `releases/v{major}.{minor}`:
+The automated workflow then:
+
+- Creates a release branch following the pattern `releases/v{major}.{minor}`
+- Generates a GitHub release with auto-generated release notes
+- Builds and publishes Docker images to the container registry
+
+## Verify automated release
+
+After the automated workflow completes, verify that the release was created successfully.
+
+1. **Check GitHub release:** Navigate to the repository's Releases page and verify the new release appears with generated notes.
+
+2. **Review release notes:** Ensure auto-generated notes match the changelog. Edit the release if necessary to remove unnecessary information and include only relevant information for users.
+
+3. **Verify Docker images:** Confirm that Docker images built and published correctly to the container registry.
+
+4. **Confirm release branch:** Check that the release branch `releases/v{major}.{minor}` was created for bug fixes and security patches.
+
+## Manual release process (fallback)
+
+If the automated workflow fails or is unavailable, you can create releases manually.
+
+1. **Create release branch:** Create a release branch to simplify bug fixing and security patches. Branch name follows `releases/v{major}.{minor}`:
 
    ```bash
    git checkout -b releases/v1.2
    ```
 
-4. **Stage changelog:** Add the updated changelog to staging:
+2. **Stage and commit changelog:** Add and commit the updated changelog:
 
    ```bash
    git add .
-   ```
-
-5. **Commit changelog:** Commit the changelog with a descriptive message:
-
-   ```bash
    git commit -m "Prepare for release v1.2"
    ```
 
-6. **Push release branch:** Push the branch to the remote repository:
+3. **Push release branch:** Push the branch to the remote repository:
 
    ```bash
    git push origin releases/v1.2
    ```
 
-## Create GitHub release
+4. **Create GitHub release:** Go to GitHub, select **Create a new release**, select the release branch and tag, add a release title, generate release notes, review for accuracy, and publish the release.
 
-Create and publish the release on GitHub with appropriate documentation.
-
-1. **Draft new release:** Go to GitHub and select "Draft a new release".
-
-2. **Select branch and tag:** Choose the release branch and tag you created.
-
-3. **Add release title:** Enter a title that includes the version and a short description.
-
-4. **Generate release notes:** Select auto-generate release notes to populate initial content.
-
-5. **Review release notes:** Remove unnecessary information and ensure notes match the changelog. Include only relevant information for users.
-
-6. **Verify information:** Review all entered information for accuracy and completeness.
-
-7. **Publish release:** Select "Publish release" to make the release official.
-
-8. **Verify Docker images:** Confirm that Docker images built and published correctly.
+5. **Verify Docker images:** Confirm that Docker images built and published correctly.
 
 :::tip Next steps
 

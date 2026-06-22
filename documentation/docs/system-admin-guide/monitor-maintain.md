@@ -46,9 +46,9 @@ To make activity history public, add this to your `ckan.ini` file:
 ckan.auth.public_activity_stream_detail = true
 ```
 
-:::info CKAN 2.10 plugin requirement
+:::info CKAN 2.11.3 plugin requirement
 
-Since CKAN 2.10, you must activate Activity as a plugin. See the [CKAN 2.10 changelog](https://docs.ckan.org/en/2.10/changelog.html) for details.
+Since CKAN 2.11.3, you must activate Activity as a plugin. See the [CKAN 2.11 changelog](https://docs.ckan.org/en/2.11/changelog.html) for details.
 
 :::
 
@@ -63,7 +63,7 @@ Configure activity tracking at different levels:
 
 #### Audit configuration
 
-For complete activity configuration options, see [CKAN activity settings documentation](https://docs.ckan.org/en/2.10/maintaining/configuration.html).
+For complete activity configuration options, see [CKAN activity settings documentation](https://docs.ckan.org/en/2.11/maintaining/configuration.html).
 
 ## Data backup
 

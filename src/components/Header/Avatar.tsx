@@ -14,6 +14,7 @@ import { User } from "@/app/api/auth/types/user.types";
 import { keycloackSessionLogOut } from "@/utils/logout";
 import { faSignOut, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useLocale, useTranslations } from "next-intl";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 
@@ -21,11 +22,14 @@ type AvatarProps = {
   user: User;
 };
 
-function handleSignOut() {
-  keycloackSessionLogOut().then(() => signOut({ callbackUrl: "/" }));
-}
-
 function Avatar({ user }: Readonly<AvatarProps>) {
+  const locale = useLocale();
+  const t = useTranslations("auth");
+
+  function handleSignOut() {
+    keycloackSessionLogOut().then(() => signOut({ callbackUrl: `/${locale}` }));
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -50,7 +54,7 @@ function Avatar({ user }: Readonly<AvatarProps>) {
             onClick={handleSignOut}
           >
             <FontAwesomeIcon icon={faSignOut} className="text-lg" />
-            <span>Log out</span>
+            <span>{t("logout")}</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

@@ -1,0 +1,478 @@
+{
+  "metadata.siteTitle": {
+    "en": "GDI - User Portal",
+    "fr": "GDI - Portail utilisateur"
+  },
+  "metadata.siteDescription": {
+    "en": "Genomic Data Infrastructure User Portal",
+    "fr": "Portail utilisateur de l'infrastructure de donnees genomiques"
+  },
+  "nav.home": {
+    "en": "Home",
+    "fr": "Accueil"
+  },
+  "nav.datasets": {
+    "en": "Datasets",
+    "fr": "Jeux de donnees"
+  },
+  "nav.alleleFrequency": {
+    "en": "Allele Frequency",
+    "fr": "Frequence allelique"
+  },
+  "nav.themes": {
+    "en": "Themes",
+    "fr": "Themes"
+  },
+  "nav.publishers": {
+    "en": "Publishers",
+    "fr": "Fournisseurs"
+  },
+  "nav.about": {
+    "en": "About",
+    "fr": "A propos"
+  },
+  "nav.requests": {
+    "en": "Requests",
+    "fr": "Demandes"
+  },
+  "auth.login": {
+    "en": "Login",
+    "fr": "Connexion"
+  },
+  "auth.logout": {
+    "en": "Log out",
+    "fr": "Se deconnecter"
+  },
+  "localeSwitcher.label": {
+    "en": "Language",
+    "fr": "Langue"
+  },
+  "localeSwitcher.en": {
+    "en": "EN",
+    "fr": "EN"
+  },
+  "localeSwitcher.fr": {
+    "en": "FR",
+    "fr": "FR"
+  },
+  "home.title": {
+    "en": "WELCOME TO GDI",
+    "fr": "BIENVENUE SUR GDI"
+  },
+  "home.subtitle": {
+    "en": "The Genomic Data Infrastructure (GDI) project is enabling access to genomic and related phenotypic and clinical data across Europe.",
+    "fr": "Le projet Genomic Data Infrastructure (GDI) permet l'acces aux donnees genomiques ainsi qu'aux donnees phenotypiques et cliniques associees a travers l'Europe."
+  },
+  "home.noticeTitle": {
+    "en": "Planned maintenance notice",
+    "fr": "Avis de maintenance planifiee"
+  },
+  "home.noticeMessage": {
+    "en": "Because of scheduled migration in our provider, the User portal could get service disruption on 19 February between 11:00 and 14:00.",
+    "fr": "En raison d'une migration planifiee chez notre fournisseur, le portail utilisateur pourrait subir une interruption de service le 19 fevrier entre 11h00 et 14h00."
+  },
+  "home.aboutContent": {
+    "en": "The Genomic Data Infrastructure (GDI) homepage is your gateway to an extensive network of genomic data designed to revolutionize research, policymaking, and healthcare in Europe. The GDI project aims to provide seamless access to over one million genome sequences, facilitating groundbreaking advancements in personalized medicine for various diseases, including cancer and rare conditions. By integrating genomic, phenotypic, and clinical data, GDI supports precise diagnostics, treatments, and clinical decision-making. Explore our user-friendly platform to connect with crucial datasets, and join our mission to enhance healthcare outcomes and foster innovation across Europe. Visit the GDI website for more information.",
+    "fr": "La page d'accueil de la Genomic Data Infrastructure (GDI) est votre porte d'entree vers un vaste reseau de donnees genomiques concu pour transformer la recherche, l'elaboration des politiques publiques et les soins de sante en Europe. Le projet GDI vise a fournir un acces fluide a plus d'un million de genomes, en favorisant des avancees majeures en medecine personnalisee pour diverses maladies, notamment le cancer et les maladies rares. En integrant les donnees genomiques, phenotypiques et cliniques, GDI soutient des diagnostics, des traitements et une prise de decision clinique plus precise. Explorez notre plateforme conviviale pour acceder a des jeux de donnees essentiels et rejoignez notre mission d'amelioration des soins et de stimulation de l'innovation a travers l'Europe. Consultez le site web de GDI pour en savoir plus."
+  },
+  "home.aboutPortal": {
+    "en": "About the data portal",
+    "fr": "A propos du portail de donnees"
+  },
+  "home.readMore": {
+    "en": "Read more",
+    "fr": "En savoir plus"
+  },
+  "home.recentDatasets": {
+    "en": "Most Recent Datasets",
+    "fr": "Jeux de donnees les plus recents"
+  },
+  "home.themesSectionTitle": {
+    "en": "Themes",
+    "fr": "Themes"
+  },
+  "footer.banner": {
+    "en": "How to use the data portal",
+    "fr": "Comment utiliser le portail de donnees"
+  },
+  "footer.funding": {
+    "en": "GDI project receives funding from the European Union's Digital Europe \n Programme under grant agreement number 101081813.",
+    "fr": "Le projet GDI recoit un financement de l'Union europeenne dans le cadre du programme Europe numerique \n au titre de la convention de subvention numero 101081813."
+  },
+  "footer.legal": {
+    "en": "Legal",
+    "fr": "Mentions legales"
+  },
+  "footer.terms": {
+    "en": "Terms & Conditions",
+    "fr": "Conditions generales"
+  },
+  "footer.privacy": {
+    "en": "Privacy Notice",
+    "fr": "Avis de confidentialite"
+  },
+  "footer.cookies": {
+    "en": "Cookie Policy",
+    "fr": "Politique relative aux cookies"
+  },
+  "footer.portalLinks": {
+    "en": "Portal Links",
+    "fr": "Liens du portail"
+  },
+  "footer.contactUs": {
+    "en": "Contact Us",
+    "fr": "Nous contacter"
+  },
+  "footer.getInTouch": {
+    "en": "Get in touch",
+    "fr": "Nous contacter"
+  },
+  "search.placeholder": {
+    "en": "Search datasets",
+    "fr": "Rechercher des jeux de donnees"
+  },
+  "recent.seeAll": {
+    "en": "See all",
+    "fr": "Voir tout"
+  },
+  "recent.readMore": {
+    "en": "Read More",
+    "fr": "En savoir plus"
+  },
+  "valueList.datasetCount": {
+    "en": "{count, plural, one {# dataset} other {# datasets}}",
+    "fr": "{count, plural, one {# jeu de donnees} other {# jeux de donnees}}"
+  },
+  "valueList.seeDatasets": {
+    "en": "See datasets",
+    "fr": "Voir les jeux de donnees"
+  },
+  "error.genericHeading": {
+    "en": "Something Went Wrong",
+    "fr": "Une erreur est survenue"
+  },
+  "error.genericMessage": {
+    "en": "Our apologies, but our server has encountered an internal error that prevents it from fulfilling your request. This is a temporary issue, and we're on the case to get it fixed. Please try again in a little while.",
+    "fr": "Toutes nos excuses, mais notre serveur a rencontre une erreur interne qui l'empeche de traiter votre requete. Il s'agit d'un probleme temporaire et nous travaillons deja a sa resolution. Veuillez reessayer dans quelques instants."
+  },
+  "error.notFoundHeading": {
+    "en": "Page Not Found",
+    "fr": "Page introuvable"
+  },
+  "error.notFoundMessage": {
+    "en": "The page you're looking for doesn't seem to exist. It might have been moved or deleted.",
+    "fr": "La page que vous recherchez semble ne pas exister. Elle a peut-etre ete deplacee ou supprimee."
+  },
+  "error.unauthorizedHeading": {
+    "en": "Unauthorized",
+    "fr": "Acces non autorise"
+  },
+  "error.unauthorizedMessage": {
+    "en": "You're not authorized to access this page. Please log in and try again.",
+    "fr": "Vous n'etes pas autorise a acceder a cette page. Veuillez vous connecter puis reessayer."
+  },
+  "error.takeMeHome": {
+    "en": "Take me home",
+    "fr": "Retour a l'accueil"
+  },
+  "datasets.results": {
+    "en": "{count, plural, =0 {No datasets found} one {# dataset found} other {# datasets found}}",
+    "fr": "{count, plural, =0 {Aucun jeu de donnees trouve} one {# jeu de donnees trouve} other {# jeux de donnees trouves}}"
+  },
+  "datasets.noResults": {
+    "en": "No datasets found matching your criteria. Try adjusting your search or filters.",
+    "fr": "Aucun jeu de donnees ne correspond a vos criteres. Essayez d'ajuster votre recherche ou vos filtres."
+  },
+  "datasets.catalogueFilters": {
+    "en": "Catalogue Filters",
+    "fr": "Filtres du catalogue"
+  },
+  "datasets.individualFilters": {
+    "en": "Individual-level data discovery Filters",
+    "fr": "Filtres de decouverte de donnees au niveau individuel"
+  },
+  "datasets.individualFiltersDescription": {
+    "en": "Filter by individual-level data characteristics",
+    "fr": "Filtrer par caracteristiques de donnees au niveau individuel"
+  },
+  "datasets.conformsToUnspecified": {
+    "en": "Conforms to: Not specified for this dataset",
+    "fr": "Conforme a : non precise pour ce jeu de donnees"
+  },
+  "datasets.beaconToggle": {
+    "en": "Include Individual-level data discovery",
+    "fr": "Inclure la decouverte de donnees au niveau individuel"
+  },
+  "datasets.beaconActive": {
+    "en": "Active",
+    "fr": "Actif"
+  },
+  "datasets.beaconEnabled": {
+    "en": "Showing datasets with individual-level data and record counts from Individual-level data discovery (searches may be slower)",
+    "fr": "Affichage des jeux de donnees avec donnees individuelles et nombre d'enregistrements issus de la decouverte de donnees au niveau individuel (les recherches peuvent etre plus lentes)"
+  },
+  "datasets.beaconDisabled": {
+    "en": "Enable to filter by individual-level data characteristics and see record counts",
+    "fr": "Activez cette option pour filtrer par caracteristiques de donnees au niveau individuel et voir le nombre d'enregistrements"
+  },
+  "themes.title": {
+    "en": "Themes",
+    "fr": "Themes"
+  },
+  "themes.loading": {
+    "en": "Retrieving themes. This may take a few moments.",
+    "fr": "Recuperation des themes. Cela peut prendre quelques instants."
+  },
+  "themes.empty": {
+    "en": "No themes found.",
+    "fr": "Aucun theme trouve."
+  },
+  "publishers.title": {
+    "en": "Publishers",
+    "fr": "Fournisseurs"
+  },
+  "publishers.loading": {
+    "en": "Retrieving publishers. This may take a few moments.",
+    "fr": "Recuperation des fournisseurs. Cela peut prendre quelques instants."
+  },
+  "publishers.empty": {
+    "en": "No publishers found.",
+    "fr": "Aucun fournisseur trouve."
+  },
+  "basket.title": {
+    "en": "Your Basket",
+    "fr": "Votre panier"
+  },
+  "basket.titleWithCount": {
+    "en": "Your Basket ({count})",
+    "fr": "Votre panier ({count})"
+  },
+  "basket.loading": {
+    "en": "Loading your basket...",
+    "fr": "Chargement de votre panier..."
+  },
+  "basket.loginToRequest": {
+    "en": "Login to request",
+    "fr": "Se connecter pour demander"
+  },
+  "basket.requestNow": {
+    "en": "Request now",
+    "fr": "Faire la demande"
+  },
+  "basket.continueAdding": {
+    "en": "Continue adding",
+    "fr": "Continuer a ajouter"
+  },
+  "basket.empty": {
+    "en": "Your basket is empty.",
+    "fr": "Votre panier est vide."
+  },
+  "basket.addDatasets": {
+    "en": "Add datasets",
+    "fr": "Ajouter des jeux de donnees"
+  },
+  "basket.addToBasket": {
+    "en": "Add to basket",
+    "fr": "Ajouter au panier"
+  },
+  "basket.removeFromBasket": {
+    "en": "Remove from basket",
+    "fr": "Retirer du panier"
+  },
+  "requests.tabs.applications": {
+    "en": "Applications",
+    "fr": "Demandes"
+  },
+  "requests.tabs.entitlements": {
+    "en": "Entitlements",
+    "fr": "Autorisations"
+  },
+  "requests.applications.loading": {
+    "en": "Retrieving applications...",
+    "fr": "Recuperation des demandes..."
+  },
+  "requests.applications.title": {
+    "en": "Manage your Applications",
+    "fr": "Gerer vos demandes"
+  },
+  "requests.applications.subtitle": {
+    "en": "View and update your submitted applications",
+    "fr": "Consultez et mettez a jour vos demandes soumises"
+  },
+  "requests.applications.empty": {
+    "en": "You don't have any applications yet.",
+    "fr": "Vous n'avez encore aucune demande."
+  },
+  "requests.applications.addDatasets": {
+    "en": "Add datasets",
+    "fr": "Ajouter des jeux de donnees"
+  },
+  "requests.entitlements.loading": {
+    "en": "Retrieving entitlements...",
+    "fr": "Recuperation des autorisations..."
+  },
+  "requests.entitlements.title": {
+    "en": "Entitlements",
+    "fr": "Autorisations"
+  },
+  "requests.entitlements.subtitle": {
+    "en": "View your entitlements",
+    "fr": "Consultez vos autorisations"
+  },
+  "requests.entitlements.empty": {
+    "en": "You don't have any entitlement yet.\nWait for your application(s) to be approved, or submit a new application.",
+    "fr": "Vous n'avez encore aucune autorisation.\nAttendez l'approbation de votre ou vos demandes, ou soumettez une nouvelle demande."
+  },
+  "application.title": {
+    "en": "Application {id}",
+    "fr": "Demande {id}"
+  },
+  "application.delete": {
+    "en": "Delete",
+    "fr": "Supprimer"
+  },
+  "application.submit": {
+    "en": "Submit",
+    "fr": "Soumettre"
+  },
+  "application.savingChanges": {
+    "en": "Saving Changes...",
+    "fr": "Enregistrement des modifications..."
+  },
+  "application.lastEvent": {
+    "en": "Last Event: {event} at {time}",
+    "fr": "Dernier evenement : {event} a {time}"
+  },
+  "application.sidebar.datasets": {
+    "en": "Datasets",
+    "fr": "Jeux de donnees"
+  },
+  "application.sidebar.participants": {
+    "en": "Participants",
+    "fr": "Participants"
+  },
+  "application.sidebar.events": {
+    "en": "Events",
+    "fr": "Evenements"
+  },
+  "application.sidebar.at": {
+    "en": "at",
+    "fr": "a"
+  },
+  "application.sidebar.terms": {
+    "en": "Terms & Conditions",
+    "fr": "Conditions generales"
+  },
+  "contact.open": {
+    "en": "Get in touch",
+    "fr": "Nous contacter"
+  },
+  "contact.title": {
+    "en": "Contact Us",
+    "fr": "Nous contacter"
+  },
+  "contact.description": {
+    "en": "Send your inquiry to the right team by selecting a topic.",
+    "fr": "Envoyez votre demande a la bonne equipe en selectionnant un sujet."
+  },
+  "contact.firstName": {
+    "en": "First Name",
+    "fr": "Prenom"
+  },
+  "contact.firstNamePlaceholder": {
+    "en": "Your first name",
+    "fr": "Votre prenom"
+  },
+  "contact.lastName": {
+    "en": "Last Name",
+    "fr": "Nom"
+  },
+  "contact.lastNamePlaceholder": {
+    "en": "Your last name",
+    "fr": "Votre nom"
+  },
+  "contact.email": {
+    "en": "Email",
+    "fr": "E-mail"
+  },
+  "contact.emailPlaceholder": {
+    "en": "you@example.org",
+    "fr": "vous@exemple.org"
+  },
+  "contact.topic": {
+    "en": "Topic",
+    "fr": "Sujet"
+  },
+  "contact.topicLoading": {
+    "en": "Loading topics...",
+    "fr": "Chargement des sujets..."
+  },
+  "contact.topicEmpty": {
+    "en": "No topics available",
+    "fr": "Aucun sujet disponible"
+  },
+  "contact.subject": {
+    "en": "Title",
+    "fr": "Titre"
+  },
+  "contact.subjectPlaceholder": {
+    "en": "A short title",
+    "fr": "Un titre court"
+  },
+  "contact.message": {
+    "en": "Message",
+    "fr": "Message"
+  },
+  "contact.messagePlaceholder": {
+    "en": "Describe your request",
+    "fr": "Decrivez votre demande"
+  },
+  "contact.cancel": {
+    "en": "Cancel",
+    "fr": "Annuler"
+  },
+  "contact.submit": {
+    "en": "Submit",
+    "fr": "Envoyer"
+  },
+  "contact.submitting": {
+    "en": "Submitting...",
+    "fr": "Envoi en cours..."
+  },
+  "contact.success": {
+    "en": "Your request has been submitted successfully.",
+    "fr": "Votre demande a ete envoyee avec succes."
+  },
+  "contact.errorTopics": {
+    "en": "Unable to load support topic options.",
+    "fr": "Impossible de charger les options de sujet d'assistance."
+  },
+  "contact.errorSubmit": {
+    "en": "Your request could not be submitted. Please try again.",
+    "fr": "Votre demande n'a pas pu etre envoyee. Veuillez reessayer."
+  },
+  "contact.validation.firstName": {
+    "en": "Please provide your first name.",
+    "fr": "Veuillez renseigner votre prenom."
+  },
+  "contact.validation.lastName": {
+    "en": "Please provide your last name.",
+    "fr": "Veuillez renseigner votre nom."
+  },
+  "contact.validation.email": {
+    "en": "Please provide a valid email address.",
+    "fr": "Veuillez renseigner une adresse e-mail valide."
+  },
+  "contact.validation.topic": {
+    "en": "Please select a topic.",
+    "fr": "Veuillez selectionner un sujet."
+  },
+  "contact.validation.subject": {
+    "en": "Please provide a title.",
+    "fr": "Veuillez renseigner un titre."
+  },
+  "contact.validation.message": {
+    "en": "Please enter a message.",
+    "fr": "Veuillez saisir un message."
+  }
+}

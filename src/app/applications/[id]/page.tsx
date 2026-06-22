@@ -13,6 +13,7 @@ import Chip from "@/components/Chip";
 import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
 import Sidebar from "@/components/Sidebar";
+import { useRouter } from "@/i18n/navigation";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import {
   formatApplicationProp,
@@ -27,7 +28,7 @@ import {
   faXmarkCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { use, useEffect, useState } from "react";
 import FormContainer from "./FormContainer";
 import { createApplicationSidebarItems } from "./sidebarItems";
@@ -40,6 +41,7 @@ type ApplicationDetailsPageProps = {
 export default function ApplicationDetailsPage({
   searchParams,
 }: ApplicationDetailsPageProps) {
+  const t = useTranslations();
   const _searchParams = use(searchParams);
   const router = useRouter();
   const [alert, setAlert] = useState<AlertState | null>(null);
@@ -133,7 +135,7 @@ export default function ApplicationDetailsPage({
           <div className="sm:flex sm:justify-between">
             <div className="flex items-center gap-x-4">
               <PageHeading className="text-black">
-                Application {application.externalId}
+                {t("application.title", { id: application.externalId ?? "" })}
               </PageHeading>
               {application.id && (
                 <Chip
@@ -146,7 +148,7 @@ export default function ApplicationDetailsPage({
               {isDraft && (
                 <Button
                   type="warning"
-                  text="Delete"
+                  text={t("application.delete")}
                   icon={faXmarkCircle}
                   disabled={isLoading}
                   onClick={handleDelete}
@@ -155,7 +157,7 @@ export default function ApplicationDetailsPage({
               {editable && (
                 <Button
                   type="primary"
-                  text="Submit"
+                  text={t("application.submit")}
                   icon={faPaperPlane}
                   disabled={isLoading}
                   onClick={handleSubmission}
@@ -167,16 +169,21 @@ export default function ApplicationDetailsPage({
             <div className="gap-x-1 flex items-center">
               {" "}
               <FontAwesomeIcon icon={faSpinner} />{" "}
-              <span>Saving Changes...</span>
+              <span>{t("application.savingChanges")}</span>
             </div>
           ) : (
-            <p>{`Last Event: ${formatApplicationProp(lastEvent.eventType!)} at ${formatDateTime(lastEvent.eventTime!.toString())}`}</p>
+            <p>
+              {t("application.lastEvent", {
+                event: formatApplicationProp(lastEvent.eventType!) ?? "",
+                time: formatDateTime(lastEvent.eventTime!.toString()),
+              })}
+            </p>
           )}
 
           <div className="h-[2px] bg-secondary opacity-80"></div>
 
           <div className="lg:hidden w-full">
-            <Sidebar items={createApplicationSidebarItems(application)} />
+            <Sidebar items={createApplicationSidebarItems(application, t)} />
           </div>
 
           <div className="h-[2px] bg-secondary opacity-80 lg:hidden"></div>
@@ -214,7 +221,7 @@ export default function ApplicationDetailsPage({
         </div>
 
         <aside className="hidden w-full lg:block lg:w-1/3">
-          <Sidebar items={createApplicationSidebarItems(application)} />
+          <Sidebar items={createApplicationSidebarItems(application, t)} />
         </aside>
       </div>
     </PageContainer>

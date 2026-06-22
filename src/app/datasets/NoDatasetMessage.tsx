@@ -5,10 +5,12 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { useDatasets } from "@/providers/datasets/DatasetsProvider";
 import { useFilters } from "@/providers/filters/FilterProvider";
 
 export default function NoDatasetMessage() {
+  const t = useTranslations("datasets");
   const { datasetCount, isLoading } = useDatasets();
   const { activeFilters } = useFilters();
 
@@ -20,10 +22,7 @@ export default function NoDatasetMessage() {
 
   return (
     <div className="text-center py-8 mt-4">
-      <p className="text-lg text-primary mb-4">
-        No datasets found matching your criteria. Try adjusting your search or
-        filters.
-      </p>
+      <p className="text-lg text-primary mb-4">{t("noResults")}</p>
     </div>
   );
 }

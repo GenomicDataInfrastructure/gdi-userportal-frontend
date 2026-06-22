@@ -24,6 +24,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card, { CardItem } from "../../components/Card";
 import { useEffect, useState, useRef, useMemo } from "react";
 import { ExternalDatasetConfirmationDialog } from "@/components/ExternalDatasetCardLink";
+import { useTranslations } from "next-intl";
 
 type DatasetCardProps = {
   dataset: SearchedDataset;
@@ -36,6 +37,7 @@ function DatasetCard({
   cardItems,
   displayBasketButton = true,
 }: Readonly<DatasetCardProps>) {
+  const t = useTranslations("basket");
   const screenSize = useWindowSize();
   const truncatedDesc = dataset.description
     ? truncateDescription(dataset.description, screenSize)
@@ -147,7 +149,7 @@ function DatasetCard({
           icon={isInBasket ? faMinusCircle : faPlusCircle}
           className="mr-2"
         />
-        <span>{isInBasket ? "Remove from basket" : "Add to basket"}</span>
+        <span>{isInBasket ? t("removeFromBasket") : t("addToBasket")}</span>
       </button>
     );
 

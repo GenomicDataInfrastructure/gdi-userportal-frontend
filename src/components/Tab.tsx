@@ -9,6 +9,7 @@ import ListItem from "./List/ListItem";
 
 type ITabItem = {
   name: string;
+  label: string;
   icon: IconDefinition;
 };
 
@@ -27,7 +28,7 @@ function TabItem({ tabItem, activeTab, setActiveTab }: Readonly<TabItemProps>) {
       } transition-all duration-300 ease-linear`}
     >
       <FontAwesomeIcon icon={tabItem.icon} />
-      <span>{tabItem.name.toUpperCase()}</span>
+      <span>{tabItem.label}</span>
     </button>
   );
 }

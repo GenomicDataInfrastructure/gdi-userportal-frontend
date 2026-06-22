@@ -6,10 +6,12 @@
 
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import FilterItem from "./FilterItem";
 import { useFilters } from "@/providers/filters/FilterProvider";
 
 export default function FilterList() {
+  const t = useTranslations("datasets");
   const { data: session } = useSession();
   const { filters } = useFilters();
   const searchParams = useSearchParams();
@@ -46,7 +48,7 @@ export default function FilterList() {
       {catalogueFilters.length > 0 && (
         <section>
           <h3 className="text-sm font-semibold text-gray-500 uppercase mb-4 tracking-wide">
-            Catalogue Filters
+            {t("catalogueFilters")}
           </h3>
           <ul className="flex flex-col gap-y-6">
             {catalogueFilters.map((filter) => (
@@ -63,10 +65,10 @@ export default function FilterList() {
         <section>
           <div className="border-t pt-6">
             <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2 tracking-wide">
-              Individual-level data discovery Filters
+              {t("individualFilters")}
             </h3>
             <p className="text-xs text-gray-600 mb-4">
-              Filter by individual-level data characteristics
+              {t("individualFiltersDescription")}
             </p>
             <ul className="flex flex-col gap-y-6">
               {beaconFilters.map((filter) => (

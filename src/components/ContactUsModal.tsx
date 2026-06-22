@@ -15,6 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/shadcn/dialog";
+import { useTranslations } from "next-intl";
 
 type TopicOption = {
   value: string;
@@ -47,6 +48,7 @@ function isValidEmailFormat(value: string): boolean {
 }
 
 export default function ContactUsModal() {
+  const t = useTranslations("contact");
   const [open, setOpen] = useState(false);
   const [topics, setTopics] = useState<TopicOption[]>([]);
   const [formState, setFormState] =
@@ -77,9 +79,7 @@ export default function ContactUsModal() {
         };
 
         if (!response.ok) {
-          throw new Error(
-            responseBody.error || "Unable to load support topic options."
-          );
+          throw new Error(responseBody.error || t("errorTopics"));
         }
 
         const loadedTopics = responseBody.topics ?? [];
@@ -93,9 +93,7 @@ export default function ContactUsModal() {
         }
       } catch (error) {
         setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : "Unable to load support topic options."
+          error instanceof Error ? error.message : t("errorTopics")
         );
       } finally {
         setIsLoadingTopics(false);
@@ -103,10 +101,10 @@ export default function ContactUsModal() {
     };
 
     loadTopics().catch(() => {
-      setErrorMessage("Unable to load support topic options.");
+      setErrorMessage(t("errorTopics"));
       setIsLoadingTopics(false);
     });
-  }, [isLoadingTopics, open, topics.length]);
+  }, [isLoadingTopics, open, t, topics.length]);
 
   const updateField =
     (field: keyof ContactFormState) =>
@@ -141,32 +139,32 @@ export default function ContactUsModal() {
     event.preventDefault();
 
     if (!formState.firstName.trim()) {
-      setErrorMessage("Please provide your first name.");
+      setErrorMessage(t("validation.firstName"));
       return;
     }
 
     if (!formState.lastName.trim()) {
-      setErrorMessage("Please provide your last name.");
+      setErrorMessage(t("validation.lastName"));
       return;
     }
 
     if (!isValidEmailFormat(formState.email.trim())) {
-      setErrorMessage("Please provide a valid email address.");
+      setErrorMessage(t("validation.email"));
       return;
     }
 
     if (!formState.topic.trim()) {
-      setErrorMessage("Please select a topic.");
+      setErrorMessage(t("validation.topic"));
       return;
     }
 
     if (!formState.title.trim()) {
-      setErrorMessage("Please provide a title.");
+      setErrorMessage(t("validation.subject"));
       return;
     }
 
     if (!formState.message.trim()) {
-      setErrorMessage("Please enter a message.");
+      setErrorMessage(t("validation.message"));
       return;
     }
 
@@ -196,13 +194,10 @@ export default function ContactUsModal() {
       };
 
       if (!response.ok) {
-        throw new Error(
-          responseBody.error ||
-            "Your request could not be submitted. Please try again."
-        );
+        throw new Error(responseBody.error || t("errorSubmit"));
       }
 
-      setSuccessMessage("Your request has been submitted successfully.");
+      setSuccessMessage(t("success"));
 
       setFormState((previousState) => ({
         ...INITIAL_FORM_STATE,
@@ -210,9 +205,7 @@ export default function ContactUsModal() {
       }));
     } catch (error) {
       setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "Your request could not be submitted. Please try again."
+        error instanceof Error ? error.message : t("errorSubmit")
       );
     } finally {
       setIsSubmitting(false);
@@ -222,7 +215,7 @@ export default function ContactUsModal() {
   return (
     <>
       <AppButton
-        text="Get in touch"
+        text={t("open")}
         type="primary"
         className="self-start"
         onClick={(event) => {
@@ -234,56 +227,54 @@ export default function ContactUsModal() {
       <Dialog open={open} onOpenChange={closeDialog}>
         <DialogContent className="sm:max-w-xl bg-white max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Contact Us</DialogTitle>
-            <DialogDescription>
-              Send your inquiry to the right team by selecting a topic.
-            </DialogDescription>
+            <DialogTitle>{t("title")}</DialogTitle>
+            <DialogDescription>{t("description")}</DialogDescription>
           </DialogHeader>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <label htmlFor="firstName" className="text-sm font-title">
-                First Name
+                {t("firstName")}
               </label>
               <Input
                 id="firstName"
                 value={formState.firstName}
                 onChange={updateField("firstName")}
-                placeholder="Your first name"
+                placeholder={t("firstNamePlaceholder")}
                 required
               />
             </div>
 
             <div className="space-y-2">
               <label htmlFor="lastName" className="text-sm font-title">
-                Last Name
+                {t("lastName")}
               </label>
               <Input
                 id="lastName"
                 value={formState.lastName}
                 onChange={updateField("lastName")}
-                placeholder="Your last name"
+                placeholder={t("lastNamePlaceholder")}
                 required
               />
             </div>
 
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-title">
-                Email
+                {t("email")}
               </label>
               <Input
                 id="email"
                 type="email"
                 value={formState.email}
                 onChange={updateField("email")}
-                placeholder="you@example.org"
+                placeholder={t("emailPlaceholder")}
                 required
               />
             </div>
 
             <div className="space-y-2">
               <label htmlFor="topic" className="text-sm font-title">
-                Topic
+                {t("topic")}
               </label>
               <select
                 id="topic"
@@ -295,9 +286,7 @@ export default function ContactUsModal() {
               >
                 {!isTopicAvailable && (
                   <option value="">
-                    {isLoadingTopics
-                      ? "Loading topics..."
-                      : "No topics available"}
+                    {isLoadingTopics ? t("topicLoading") : t("topicEmpty")}
                   </option>
                 )}
                 {topics.map((topic) => (
@@ -310,13 +299,13 @@ export default function ContactUsModal() {
 
             <div className="space-y-2">
               <label htmlFor="title" className="text-sm font-title">
-                Title
+                {t("subject")}
               </label>
               <Input
                 id="title"
                 value={formState.title}
                 onChange={updateField("title")}
-                placeholder="A short title"
+                placeholder={t("subjectPlaceholder")}
                 maxLength={160}
                 required
               />
@@ -324,13 +313,13 @@ export default function ContactUsModal() {
 
             <div className="space-y-2">
               <label htmlFor="message" className="text-sm font-title">
-                Message
+                {t("message")}
               </label>
               <textarea
                 id="message"
                 value={formState.message}
                 onChange={updateField("message")}
-                placeholder="Describe your request"
+                placeholder={t("messagePlaceholder")}
                 className="border-input bg-background ring-offset-background placeholder:text-muted-foreground min-h-[140px] w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50"
                 maxLength={4000}
                 required
@@ -355,13 +344,13 @@ export default function ContactUsModal() {
                 onClick={() => closeDialog(false)}
                 disabled={isSubmitting}
               >
-                Cancel
+                {t("cancel")}
               </DialogButton>
               <DialogButton
                 type="submit"
                 disabled={isSubmitting || !isTopicAvailable}
               >
-                {isSubmitting ? "Submitting..." : "Submit"}
+                {isSubmitting ? t("submitting") : t("submit")}
               </DialogButton>
             </div>
           </form>

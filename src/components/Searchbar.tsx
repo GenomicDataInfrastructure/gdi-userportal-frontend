@@ -5,7 +5,8 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import { UrlSearchParams } from "@/app/params";
 
@@ -15,6 +16,7 @@ type SearchBarProps = {
 };
 
 function SearchBar({ size, searchParams }: Readonly<SearchBarProps>) {
+  const t = useTranslations();
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const router = useRouter();
@@ -34,7 +36,6 @@ function SearchBar({ size, searchParams }: Readonly<SearchBarProps>) {
   function handleQueryChange(e: React.ChangeEvent<HTMLInputElement>): void {
     setQuery(e.target.value);
   }
-  useSearchParams();
 
   function redirectToSearchResults(query: string): void {
     const params = new URLSearchParams();
@@ -61,7 +62,7 @@ function SearchBar({ size, searchParams }: Readonly<SearchBarProps>) {
     <form onSubmit={handleSubmit} className="w-full text-sm">
       <div className="relative">
         <input
-          placeholder="Search datasets"
+          placeholder={t("search.placeholder")}
           className={`${sizeClass} w-full rounded-lg px-4 py-[9px] shadow-xl ease-in-out hover:shadow-2xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-focus-ring focus:outline-none transition-all duration-300`}
           value={query}
           onChange={handleQueryChange}

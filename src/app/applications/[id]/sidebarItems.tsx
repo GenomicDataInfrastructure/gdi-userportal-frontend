@@ -18,13 +18,14 @@ import AddParticipantForm from "./AddParticipantForm";
 import contentConfig from "@/config/contentConfig";
 
 export function createApplicationSidebarItems(
-  application: RetrievedApplication
+  application: RetrievedApplication,
+  t: (key: string) => string
 ): SidebarItem[] {
   const { datasets, applicant, events, members } = application;
 
   return [
     {
-      label: "Datasets",
+      label: t("application.sidebar.datasets"),
       value: datasets!.map((dataset, index) => (
         <span
           className="mb-3 flex items-center gap-x-6"
@@ -36,7 +37,7 @@ export function createApplicationSidebarItems(
       )),
     },
     {
-      label: "Participants",
+      label: t("application.sidebar.participants"),
       value: (
         <>
           <div className="mb-6">
@@ -58,7 +59,7 @@ export function createApplicationSidebarItems(
       ),
     },
     {
-      label: "Events",
+      label: t("application.sidebar.events"),
       value: (
         <ul>
           {events!.slice(0, 5).map((event, index) => (
@@ -68,7 +69,7 @@ export function createApplicationSidebarItems(
                 <div>
                   {formatApplicationProp(event!.eventType!)}
                   <div className="text-xs md:text-sm">
-                    at{" "}
+                    {t("application.sidebar.at")}{" "}
                     <span className="font-date text-info">
                       {formatDateTime(event.eventTime!.toString())}
                     </span>
@@ -81,7 +82,7 @@ export function createApplicationSidebarItems(
       ),
     },
     {
-      label: "Terms & Conditions",
+      label: t("application.sidebar.terms"),
       value: <TermsAcceptance />,
     },
   ];

@@ -35,7 +35,7 @@ import {
 import { formatDate } from "@/utils/formatDate";
 import DistributionAccordion from "./DistributionAccordion";
 import DataSeriesAccordion from "./DataSeriesAccordion";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Tooltip from "./Tooltip";
 import Chips from "@/components/Chips";
 import {

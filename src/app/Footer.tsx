@@ -4,6 +4,9 @@
 
 "use client";
 
+import ContactUsModal from "@/components/ContactUsModal";
+import LocaleSwitcher from "@/components/LocaleSwitcher";
+import { Link } from "@/i18n/navigation";
 import {
   faGithub,
   faLinkedin,
@@ -17,11 +20,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import contentConfig from "@/config/contentConfig";
-import Link from "next/link";
-import ContactUsModal from "@/components/ContactUsModal";
 
 function Footer() {
+  const t = useTranslations();
+
   return (
     <>
       <div className="bg-primary p-4 text-center mt-4">
@@ -31,9 +35,7 @@ function Footer() {
           rel="noopener noreferrer"
         >
           <FontAwesomeIcon icon={faInfoCircle} className="mr-2 text-warning" />
-          <h2 className="inline text-lg text-white">
-            How to use the data portal
-          </h2>
+          <h2 className="inline text-lg text-white">{t("footer.banner")}</h2>
           <FontAwesomeIcon icon={faArrowRight} className="ml-2 text-white" />
         </a>
       </div>
@@ -78,48 +80,48 @@ function Footer() {
               />
             </div>
             <p className="text-xs md:text-sm">
-              {contentConfig.footerText.split("\n").map((line, index) => (
-                <span key={index}>
-                  {line}
-                  {index < contentConfig.footerText.split("\n").length - 1 && (
-                    <br />
-                  )}
-                </span>
-              ))}
+              {t("footer.funding")
+                .split("\n")
+                .map((line, index, lines) => (
+                  <span key={index}>
+                    {line}
+                    {index < lines.length - 1 && <br />}
+                  </span>
+                ))}
             </p>
           </div>
           {/* Second column: Legal */}
           <div className="flex flex-col gap-2 text-left w-full md:w-1/6">
-            <h3 className="text-lg font-bold">Legal</h3>
-            <a href="/legal#website-terms" className="hover:text-info">
-              Terms & Conditions
-            </a>
-            <a href="/legal#privacy-notice" className="hover:text-info">
-              Privacy Notice
-            </a>
-            <a href="/legal#cookies" className="hover:text-info">
-              Cookie Policy
-            </a>
+            <h3 className="text-lg font-bold">{t("footer.legal")}</h3>
+            <Link href="/legal#website-terms" className="hover:text-info">
+              {t("footer.terms")}
+            </Link>
+            <Link href="/legal#privacy-notice" className="hover:text-info">
+              {t("footer.privacy")}
+            </Link>
+            <Link href="/legal#cookies" className="hover:text-info">
+              {t("footer.cookies")}
+            </Link>
           </div>
           {/* Third column: Portal links */}
           <div className="flex flex-col gap-2 text-left w-full md:w-1/6">
-            <h3 className="text-lg font-bold">Portal Links</h3>
+            <h3 className="text-lg font-bold">{t("footer.portalLinks")}</h3>
             <Link className="hover:text-info" href="/datasets">
-              Datasets
+              {t("nav.datasets")}
             </Link>
             <Link className="hover:text-info" href="/themes">
-              Themes
+              {t("nav.themes")}
             </Link>
             <Link className="hover:text-info" href="/publishers">
-              Publishers
+              {t("nav.publishers")}
             </Link>
             <Link className="hover:text-info" href="/about">
-              About
+              {t("nav.about")}
             </Link>
           </div>
           {/* Fourth column: Contact us */}
           <div className="flex flex-col gap-2 text-left w-full md:w-1/3">
-            <h3 className="text-lg font-bold">Contact Us</h3>
+            <h3 className="text-lg font-bold">{t("footer.contactUs")}</h3>
             <div className="flex gap-4">
               {contentConfig.linkedInUrl && (
                 <a
@@ -199,6 +201,9 @@ function Footer() {
                 {contentConfig.email}
               </a>
             )}
+            <div className="mt-2 max-w-[180px]">
+              <LocaleSwitcher />
+            </div>
             {contentConfig.contactUsEnabled && <ContactUsModal />}
           </div>
         </div>

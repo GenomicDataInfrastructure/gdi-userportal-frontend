@@ -2,11 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 "use client";
-import Link from "next/link";
+
+import { Link } from "@/i18n/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faDatabase } from "@fortawesome/free-solid-svg-icons";
 import { useFilters } from "@/providers/filters/FilterProvider";
 import { ValueLabel } from "@/app/api/discovery/open-api/schemas";
+import { useTranslations } from "next-intl";
 
 interface ValueListProps {
   items: ValueLabel[];
@@ -15,6 +17,7 @@ interface ValueListProps {
 }
 
 const ValueList: React.FC<ValueListProps> = ({ items, filterKey, title }) => {
+  const t = useTranslations();
   const { addActiveFilter } = useFilters();
   const validItems = items.filter(
     (item): item is typeof item & { value: string } => !!item.value
@@ -45,7 +48,7 @@ const ValueList: React.FC<ValueListProps> = ({ items, filterKey, title }) => {
                 </h3>
                 <div className="flex items-center mb-3 text-sm text-heading-secondary">
                   <FontAwesomeIcon icon={faDatabase} className="mr-2" />
-                  {item.count} {item.count === 1 ? "dataset" : "datasets"}
+                  {t("valueList.datasetCount", { count: item.count ?? 0 })}
                 </div>
                 <div className="mt-auto text-sm">
                   <Link
@@ -53,7 +56,7 @@ const ValueList: React.FC<ValueListProps> = ({ items, filterKey, title }) => {
                     href={`/datasets?page=1`}
                     className="link-arrow text-primary hover:text-hover-color"
                   >
-                    See datasets
+                    {t("valueList.seeDatasets")}
                   </Link>
                 </div>
               </div>

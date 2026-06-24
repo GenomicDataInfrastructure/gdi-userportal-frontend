@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 "use client";
 
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/navigation";
 import DatasetCount from "./DatasetCount";
 import DatasetListContainer from "./DatasetListContainer";
 import FilterList from "./FilterList";
@@ -18,6 +18,7 @@ import DatasetsProvider, {
 } from "@/providers/datasets/DatasetsProvider";
 import Error from "@/app/error";
 import { UrlSearchParams } from "@/app/params";
+import { useLocale } from "next-intl";
 import BeaconToggle from "./BeaconToggle";
 import BeaconErrorAlert from "./BeaconErrorAlert";
 
@@ -36,9 +37,10 @@ function BeaconErrorWrapper() {
 
 export default function DatasetsPage({ searchParams }: DatasetsPageProps) {
   const _searchParams = use(searchParams);
+  const locale = useLocale();
 
   if (!_searchParams.page) {
-    redirect("/datasets?page=1");
+    redirect({ href: "/datasets?page=1", locale });
   }
 
   const currentPage = Number(_searchParams.page);

@@ -11,6 +11,7 @@ import ListItem from "@/components/List/ListItem";
 import ListContainer from "@/components/ListContainer";
 import PageHeading from "@/components/PageHeading";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import { Status } from "@/utils/pageStatus.types";
 import LoadingContainer from "@/components/LoadingContainer";
@@ -29,6 +30,7 @@ interface ApplicationResponse {
 }
 
 const ApplicationsPage: React.FC = () => {
+  const t = useTranslations();
   const [response, setResponse] = useState<ApplicationResponse>({
     status: "loading",
   });
@@ -54,7 +56,7 @@ const ApplicationsPage: React.FC = () => {
   if (response.status === "loading") {
     return (
       <LoadingContainer
-        text="Retrieving applications..."
+        text={t("requests.applications.loading")}
         className="text-center"
       />
     );
@@ -72,8 +74,10 @@ const ApplicationsPage: React.FC = () => {
 
   return (
     <div className="pt-5 md:pt-10">
-      <PageHeading className="mb-4">Manage your Applications</PageHeading>
-      <span>View and update your submitted applications</span>
+      <PageHeading className="mb-4">
+        {t("requests.applications.title")}
+      </PageHeading>
+      <span>{t("requests.applications.subtitle")}</span>
       <ListContainer>
         {response.applications?.length && response.applications.length > 0 ? (
           <List>
@@ -89,11 +93,11 @@ const ApplicationsPage: React.FC = () => {
         ) : (
           <div className="flex w-full flex-col items-center justify-center gap-4">
             <p className="text-md text-center text-primary">
-              You don&apos;t have any applications yet.
+              {t("requests.applications.empty")}
             </p>
             <Button
               icon={faPlusCircle}
-              text="Add datasets"
+              text={t("requests.applications.addDatasets")}
               href="/datasets"
               type="primary"
               className="text-xs"

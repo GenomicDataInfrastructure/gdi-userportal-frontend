@@ -5,6 +5,7 @@
 import * as React from "react";
 
 import { ButtonProps, buttonVariants } from "@/components/shadcn/button";
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/utils/tailwindMerge";
 import {
   faChevronLeft,
@@ -12,7 +13,6 @@ import {
   faEllipsisH,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
 
 const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
   <nav

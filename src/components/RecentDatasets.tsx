@@ -1,11 +1,12 @@
 // SPDX-FileCopyrightText: 2025 PNED G.I.E.
 // SPDX-License-Identifier: Apache-2.0
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
 import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
+import { useTranslations } from "next-intl";
 
 type DatasetLinkProps = Pick<
   SearchedDataset,
@@ -13,6 +14,8 @@ type DatasetLinkProps = Pick<
 >;
 
 const RecentDatasets = ({ datasets }: { datasets: SearchedDataset[] }) => {
+  const t = useTranslations();
+
   return (
     <div className="bg-white">
       <div className="flex flex-col items-center w-full">
@@ -37,7 +40,7 @@ const RecentDatasets = ({ datasets }: { datasets: SearchedDataset[] }) => {
           href="/datasets"
           className="link-arrow text-primary hover:text-hover-color"
         >
-          See all
+          {t("recent.seeAll")}
         </Link>
       </div>
     </div>
@@ -49,6 +52,8 @@ function DatasetLink({
   createdAt,
   description,
 }: Readonly<DatasetLinkProps>) {
+  const t = useTranslations();
+
   return (
     <div className="p-5 h-full flex flex-col w-full">
       <span className="text-info text-sm font-subheading mb-2">
@@ -57,7 +62,7 @@ function DatasetLink({
       <h3 className="text-lg font-title mb-2 line-clamp-2">{title}</h3>
       <p className="mb-4 line-clamp-3 text-heading-secondary">{description}</p>
       <div className="mt-auto text-primary text-sm font-title link-arrow">
-        Read More
+        {t("recent.readMore")}
       </div>
     </div>
   );

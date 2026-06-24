@@ -8,9 +8,10 @@ import {
   faLayerGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Chips from "./Chips";
 import contentConfig from "@/config/contentConfig";
+import { useTranslations } from "next-intl";
 
 export type CardItem = {
   text: string;
@@ -44,6 +45,7 @@ export default function Card({
   externalLabel,
   entityLabel,
 }: CardProps) {
+  const t = useTranslations();
   const isExternal = isExternalProp ?? !!externalUrl;
   return (
     <Link
@@ -93,7 +95,7 @@ export default function Card({
                 icon={faCircleInfo}
                 className="w-3 h-3 shrink-0"
               />
-              <span>Conforms to: Not specified for this dataset</span>
+              <span>{t("datasets.conformsToUnspecified")}</span>
             </div>
           ) : null}
 
@@ -126,7 +128,7 @@ export default function Card({
         <div className="mt-4 bg-info/5 rounded-md p-3 border-l-4 border-info w-full">
           <div className="flex items-center gap-x-2 mb-2">
             <span className="text-sm font-semibold text-black">
-              Individual-level data discovery
+              {t("datasets.individualFilters")}
             </span>
           </div>
           <div className="flex gap-x-2.5 text-xs sm:text-[15px]">

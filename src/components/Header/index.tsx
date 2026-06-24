@@ -4,8 +4,10 @@
 "use client";
 
 import { User } from "@/app/api/auth/types/user.types";
+import { Link, usePathname } from "@/i18n/navigation";
 import contentConfig from "@/config/contentConfig";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
+import { useTranslations } from "next-intl";
 import {
   faBars,
   faBook,
@@ -20,54 +22,54 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Button from "../Button";
 import Avatar from "./Avatar";
 import RequestIcon from "./RequestIcon";
 
 function Header() {
+  const t = useTranslations();
   const { data: session, status } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const activeTab = usePathname();
   const { basket, isLoading } = useDatasetBasket();
+  const isExternalHeaderLogo = contentConfig.headerLogoUrl.startsWith("http");
 
   let navItems = [
     {
       icon: faHome,
-      label: "Home",
+      label: t("nav.home"),
       href: "/",
       isActive: (activePath: string) => activePath === "/",
     },
     {
       icon: faDatabase,
-      label: "Datasets",
+      label: t("nav.datasets"),
       href: "/datasets",
       isActive: (activePath: string) => activePath.includes("/datasets"),
     },
     {
       icon: faLineChart,
-      label: "Allele Frequency",
+      label: t("nav.alleleFrequency"),
       href: "/allele-frequency",
       isActive: (activePath: string) =>
         activePath.includes("/allele-frequency"),
     },
     {
       icon: faWandSparkles,
-      label: "Themes",
+      label: t("nav.themes"),
       href: "/themes",
       isActive: (activePath: string) => activePath === "/themes",
     },
     {
       icon: faBook,
-      label: "Publishers",
+      label: t("nav.publishers"),
       href: "/publishers",
       isActive: (activePath: string) => activePath === "/publishers",
     },
     {
       icon: faInfoCircle,
-      label: "About",
+      label: t("nav.about"),
       href: "/about",
       isActive: (activePath: string) => activePath === "/about",
     },
@@ -107,7 +109,7 @@ function Header() {
     ) : (
       <Button
         icon={faUser}
-        text="Login"
+        text={t("auth.login")}
         type="primary"
         onClick={() => signIn("keycloak")}
         flex={true}
@@ -155,28 +157,32 @@ function Header() {
               )}
             </div>
 
-            <Link
-              href={contentConfig.headerLogoUrl}
-              className="py-2"
-              target={
-                contentConfig.headerLogoUrl.startsWith("http")
-                  ? "_blank"
-                  : undefined
-              }
-              rel={
-                contentConfig.headerLogoUrl.startsWith("http")
-                  ? "noopener noreferrer"
-                  : undefined
-              }
-            >
-              <Image
-                src={"/logo.png"}
-                alt={"Logo"}
-                width="100"
-                height="37"
-                className={"mb-2 mt-2 w-[70px] md:w-[100px]"}
-              />
-            </Link>
+            {isExternalHeaderLogo ? (
+              <a
+                href={contentConfig.headerLogoUrl}
+                className="py-2"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={"/logo.png"}
+                  alt={"Logo"}
+                  width="100"
+                  height="37"
+                  className={"mb-2 mt-2 w-[70px] md:w-[100px]"}
+                />
+              </a>
+            ) : (
+              <Link href={contentConfig.headerLogoUrl} className="py-2">
+                <Image
+                  src={"/logo.png"}
+                  alt={"Logo"}
+                  width="100"
+                  height="37"
+                  className={"mb-2 mt-2 w-[70px] md:w-[100px]"}
+                />
+              </Link>
+            )}
 
             <div className="hidden items-center gap-x-2 text-base font-body lg:flex lg:text-lg xl:gap-x-4">
               {navItems.map((item) => {

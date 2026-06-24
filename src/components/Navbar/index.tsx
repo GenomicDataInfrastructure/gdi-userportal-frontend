@@ -3,8 +3,10 @@
 
 "use client";
 
+import { Link, usePathname } from "@/i18n/navigation";
 import contentConfig from "@/config/contentConfig";
 import debounce from "@/utils/debounce";
+import { useTranslations } from "next-intl";
 import {
   faBook,
   faDatabase,
@@ -13,11 +15,10 @@ import {
   faWandSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 function Navbar() {
+  const t = useTranslations();
   const activeTab = usePathname();
   const [showNavbar, setShowNavbar] = useState(true);
   const prevScrollPos = useRef(
@@ -27,32 +28,32 @@ function Navbar() {
   let navItems = [
     {
       icon: faHome,
-      label: "Home",
+      label: t("nav.home"),
       href: "/",
       isActive: (activePath: string) => activePath === "/",
     },
     {
       icon: faDatabase,
-      label: "Datasets",
+      label: t("nav.datasets"),
       href: "/datasets",
       isActive: (activePath: string) => activePath.includes("/datasets"),
     },
     {
       icon: faLineChart,
-      label: "Allele Frequency",
+      label: t("nav.alleleFrequency"),
       href: "/allele-frequency",
       isActive: (activePath: string) =>
         activePath.includes("/allele-frequency"),
     },
     {
       icon: faWandSparkles,
-      label: "Themes",
+      label: t("nav.themes"),
       href: "/themes",
       isActive: (activePath: string) => activePath === "/themes",
     },
     {
       icon: faBook,
-      label: "Publishers",
+      label: t("nav.publishers"),
       href: "/publishers",
       isActive: (activePath: string) => activePath === "/publishers",
     },

@@ -4,10 +4,13 @@
 
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
 export default function BeaconToggle() {
+  const t = useTranslations("datasets");
   const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -58,27 +61,18 @@ export default function BeaconToggle() {
           />
           <div className="flex-1">
             <div className="flex items-center gap-2 font-semibold text-base mb-1">
-              <span>Include Individual-level data discovery</span>
+              <span>{t("beaconToggle")}</span>
               {includeBeacon && (
                 <span className="text-xs bg-warning text-black px-2 py-0.5 rounded-full font-normal">
-                  Active
+                  {t("beaconActive")}
                 </span>
               )}
             </div>
             <div className="text-sm text-gray-600 font-normal">
               {includeBeacon ? (
-                <>
-                  Showing datasets with individual-level data and record counts
-                  from Individual-level data discovery{" "}
-                  <span className="text-secondary font-medium">
-                    (searches may be slower)
-                  </span>
-                </>
+                <>{t("beaconEnabled")}</>
               ) : (
-                <>
-                  Enable to filter by individual-level data characteristics and
-                  see record counts
-                </>
+                <>{t("beaconDisabled")}</>
               )}
             </div>
           </div>

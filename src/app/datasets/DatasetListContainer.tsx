@@ -48,7 +48,6 @@ export default function DatasetListContainer({
         <PaginationContainer
           datasetCount={datasetCount || 0}
           datasetPerPage={DATASET_PER_PAGE}
-          pathname="/datasets"
           currentPage={currentPage}
         />
       </div>

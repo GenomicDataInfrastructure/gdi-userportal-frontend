@@ -15,7 +15,21 @@ import {
 } from "@/utils/datasetHelpers";
 import ExternalDatasetLink from "./ExternalDatasetLink";
 
-function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
+type DatasetSidebarTranslations = {
+  requestDataAccess: string;
+  externalRequestUnavailable: string;
+  externalRequestPortal: string;
+  noExternalLinkAvailable: string;
+  exportMetadataIn: string;
+  contactPoints: string;
+  noContactProvided: string;
+  noEmailProvided: string;
+};
+
+function createDatasetSidebarItems(
+  dataset: RetrievedDataset,
+  t: DatasetSidebarTranslations
+): SidebarItem[] {
   const externalInfo = getExternalDatasetInfo(dataset);
   const externalAccessUrl = getFirstAccessUrl(dataset.distributions);
   const metaFormats = [
@@ -41,20 +55,18 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
 
   return [
     {
-      label: "Request data access",
+      label: t.requestDataAccess,
       value: externalInfo.isExternal ? (
         <div className="flex flex-col gap-2">
           <p className="text-xs text-gray-600">
-            This dataset is not available for request through the GDI User
-            Portal.
-            {externalAccessUrl &&
-              " Access it via the external provider's portal."}
+            {t.externalRequestUnavailable}
+            {externalAccessUrl ? ` ${t.externalRequestPortal}` : ""}
           </p>
           {externalAccessUrl ? (
             <ExternalDatasetLink url={externalAccessUrl} />
           ) : (
             <span className="text-xs px-3 py-2 font-semibold bg-gray-200 text-gray-600 rounded-md w-fit">
-              No external link available
+              {t.noExternalLinkAvailable}
             </span>
           )}
         </div>
@@ -69,7 +81,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
       hideItem: !!dataset.isSeries,
     },
     {
-      label: "Export Metadata in",
+      label: t.exportMetadataIn,
       value: (
         <div className="flex gap-2 transition py-2 sm:py-0">
           {metaFormats.map((item) => (
@@ -83,7 +95,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
       ),
     },
     {
-      label: "Contact Point(s)",
+      label: t.contactPoints,
       value: (
         <div className="flex items-center text-[14px]">
           <div className="flex flex-col gap-1">
@@ -91,11 +103,11 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
               <>
                 <div className="flex gap-8 items-center">
                   <FontAwesomeIcon icon={faUser} className="text-primary" />
-                  <p>No contact provided.</p>
+                  <p>{t.noContactProvided}</p>
                 </div>
                 <div className="flex gap-8 items-center">
                   <FontAwesomeIcon icon={faEnvelope} className="text-primary" />
-                  <p>No e-mail provided.</p>
+                  <p>{t.noEmailProvided}</p>
                 </div>
               </>
             ) : (
@@ -103,7 +115,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
                 <div key={index}>
                   <div className="flex gap-8 items-center">
                     <FontAwesomeIcon icon={faUser} className="text-primary" />
-                    <p>{contact.name || "No contact provided."}</p>
+                    <p>{contact.name || t.noContactProvided}</p>
                   </div>
                   <div
                     key={`${index}-email`}
@@ -113,7 +125,7 @@ function createDatasetSidebarItems(dataset: RetrievedDataset): SidebarItem[] {
                       icon={faEnvelope}
                       className="text-primary"
                     />
-                    <p>{contact.email || "No e-mail provided."}</p>
+                    <p>{contact.email || t.noEmailProvided}</p>
                   </div>
                 </div>
               ))

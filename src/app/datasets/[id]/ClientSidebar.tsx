@@ -4,13 +4,24 @@
 
 import { createDatasetSidebarItems } from "./sidebarItems";
 import { RetrievedDataset } from "@/app/api/discovery/open-api/schemas";
+import { useTranslations } from "next-intl";
 
 type ClientSidebarProps = {
   dataset: RetrievedDataset;
 };
 
 function ClientSidebar({ dataset }: ClientSidebarProps) {
-  const sidebarItems = createDatasetSidebarItems(dataset);
+  const t = useTranslations("datasets.detail");
+  const sidebarItems = createDatasetSidebarItems(dataset, {
+    requestDataAccess: t("requestDataAccess"),
+    externalRequestUnavailable: t("externalRequestUnavailable"),
+    externalRequestPortal: t("externalRequestPortal"),
+    noExternalLinkAvailable: t("noExternalLinkAvailable"),
+    exportMetadataIn: t("exportMetadataIn"),
+    contactPoints: t("contactPoints"),
+    noContactProvided: t("noContactProvided"),
+    noEmailProvided: t("noEmailProvided"),
+  });
 
   return (
     <aside className="w-full lg:w-1/3 lg:sticky top-24">

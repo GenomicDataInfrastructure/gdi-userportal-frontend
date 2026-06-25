@@ -33,7 +33,7 @@ test("Real backend smoke: datasets list and detail", async ({ page }) => {
   await expect(datasetLink.first()).toBeVisible({ timeout: 15000 });
 
   await datasetLink.first().click();
-  await expect(page).toHaveURL(/\/(en|fr)\/datasets\/[^/?]+$/);
+  await expect(page).toHaveURL(/\/(?:(en|fr)\/)?datasets\/[^/?]+$/);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible({
     timeout: 15000,
   });

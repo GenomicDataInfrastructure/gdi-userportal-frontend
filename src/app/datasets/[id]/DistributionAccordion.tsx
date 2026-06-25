@@ -19,6 +19,7 @@ import {
 import { formatDate } from "@/utils/formatDate";
 import Tooltip from "./Tooltip";
 import { RetrievedDistribution } from "@/app/api/discovery/open-api/schemas";
+import { useTranslations } from "next-intl";
 
 interface DistributionAccordionProps {
   distributions: RetrievedDistribution[];
@@ -27,13 +28,15 @@ interface DistributionAccordionProps {
 const DistributionAccordion = ({
   distributions,
 }: DistributionAccordionProps) => {
+  const t = useTranslations("datasets.detail");
   const [openIndex, setOpenIndex] = useState<null | number>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const notAvailableLabel = t("notAvailable");
 
   const getFormatLabel = (distribution: RetrievedDistribution) =>
     distribution.format?.label ||
     distribution.format?.value?.split("/").pop() ||
-    "NA";
+    notAvailableLabel;
 
   useEffect(() => {
     contentRefs.current = contentRefs.current.slice(0, distributions.length);
@@ -95,10 +98,10 @@ const DistributionAccordion = ({
                       icon={faFileAlt}
                       className="text-primary align-middle mr-2"
                     />
-                    Description:
+                    {t("description")}:
                   </strong>
                   <span className="text-sm">{distribution.description}</span>
-                  <Tooltip message="Description of the distribution." />
+                  <Tooltip message={t("tooltips.distributionDescription")} />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                   <div className="flex items-center relative">
@@ -108,14 +111,14 @@ const DistributionAccordion = ({
                         className="text-primary align-middle mr-2"
                       />
                       <strong className="text-sm font-semibold">
-                        Created On:
+                        {t("createdOn")}:
                       </strong>
                       <span className="text-sm ml-2">
                         {distribution.createdAt
                           ? formatDate(distribution.createdAt)
-                          : "NA"}
+                          : notAvailableLabel}
                       </span>
-                      <Tooltip message="Date when the distribution was created." />
+                      <Tooltip message={t("tooltips.distributionCreated")} />
                     </span>
                   </div>
                   <div className="flex items-center relative">
@@ -125,14 +128,14 @@ const DistributionAccordion = ({
                         className="text-primary align-middle mr-2"
                       />
                       <strong className="text-sm font-semibold">
-                        Modified On:
+                        {t("modifiedOn")}:
                       </strong>
                       <span className="text-sm ml-2">
                         {distribution.modifiedAt
                           ? formatDate(distribution.modifiedAt)
-                          : "NA"}
+                          : notAvailableLabel}
                       </span>
-                      <Tooltip message="Date when the distribution was last modified." />
+                      <Tooltip message={t("tooltips.distributionModified")} />
                     </span>
                   </div>
                   <div className="flex items-center relative">
@@ -142,12 +145,12 @@ const DistributionAccordion = ({
                         className="text-primary align-middle mr-2"
                       />
                       <strong className="text-sm font-semibold">
-                        File Type:
+                        {t("fileType")}:
                       </strong>
                       <span className="text-sm ml-2">
                         {getFormatLabel(distribution)}
                       </span>
-                      <Tooltip message="File type of the distribution." />
+                      <Tooltip message={t("tooltips.distributionFileType")} />
                     </span>
                   </div>
                   <div className="flex items-center relative">
@@ -157,14 +160,14 @@ const DistributionAccordion = ({
                         className="text-primary align-middle mr-2"
                       />
                       <strong className="text-sm font-semibold">
-                        Media Type:
+                        {t("mediaType")}:
                       </strong>
                       <span className="text-sm ml-2">
                         {distribution.mediaType?.label ||
                           distribution.mediaType?.value?.split("/").pop() ||
-                          "NA"}
+                          notAvailableLabel}
                       </span>
-                      <Tooltip message="Media type of the distribution." />
+                      <Tooltip message={t("tooltips.distributionMediaType")} />
                     </span>
                   </div>
                   <div className="flex items-center relative">
@@ -174,14 +177,14 @@ const DistributionAccordion = ({
                         className="text-primary align-middle mr-2"
                       />
                       <strong className="text-sm font-semibold">
-                        License:
+                        {t("license")}:
                       </strong>
                       <span className="text-sm ml-2">
                         {distribution.license?.label ||
                           distribution.license?.value?.split("/").pop() ||
-                          "NA"}
+                          notAvailableLabel}
                       </span>
-                      <Tooltip message="License under which the distribution is made available." />
+                      <Tooltip message={t("tooltips.distributionLicense")} />
                     </span>
                   </div>
                   <div className="flex items-center relative">
@@ -191,15 +194,15 @@ const DistributionAccordion = ({
                         className="text-primary align-middle mr-2"
                       />
                       <strong className="text-sm font-semibold">
-                        Byte Size:
+                        {t("byteSize")}:
                       </strong>
                       <span className="text-sm ml-2">
                         {distribution.byteSize !== undefined &&
                         distribution.byteSize !== null
                           ? distribution.byteSize.toLocaleString()
-                          : "NA"}
+                          : notAvailableLabel}
                       </span>
-                      <Tooltip message="Size of the distribution in bytes." />
+                      <Tooltip message={t("tooltips.distributionByteSize")} />
                     </span>
                   </div>
                   {distribution.conformsTo &&
@@ -211,7 +214,7 @@ const DistributionAccordion = ({
                             className="text-primary align-middle mr-2"
                           />
                           <strong className="text-sm font-semibold">
-                            Conforms To:
+                            {t("conformsTo")}:
                           </strong>
                           <span className="text-sm ml-2">
                             {distribution.conformsTo
@@ -223,7 +226,9 @@ const DistributionAccordion = ({
                               )
                               .join(", ")}
                           </span>
-                          <Tooltip message="Standards or specifications the distribution conforms to." />
+                          <Tooltip
+                            message={t("tooltips.distributionConformsTo")}
+                          />
                         </span>
                       </div>
                     )}
@@ -235,7 +240,7 @@ const DistributionAccordion = ({
                           className="text-primary align-middle mr-2"
                         />
                         <strong className="text-sm font-semibold">
-                          Access URL:
+                          {t("accessUrl")}:
                         </strong>
                         <a
                           href={distribution.accessUrl}
@@ -243,9 +248,11 @@ const DistributionAccordion = ({
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          here
+                          {t("here")}
                         </a>
-                        <Tooltip message="Link to access the distribution." />
+                        <Tooltip
+                          message={t("tooltips.distributionAccessUrl")}
+                        />
                       </span>
                     </div>
                   )}
@@ -257,7 +264,7 @@ const DistributionAccordion = ({
                           className="text-primary align-middle mr-2"
                         />
                         <strong className="text-sm font-semibold">
-                          Download URL:
+                          {t("downloadUrl")}:
                         </strong>
                         <a
                           href={distribution.downloadUrl}
@@ -265,9 +272,11 @@ const DistributionAccordion = ({
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          here
+                          {t("here")}
                         </a>
-                        <Tooltip message="Link to download the distribution." />
+                        <Tooltip
+                          message={t("tooltips.distributionDownloadUrl")}
+                        />
                       </span>
                     </div>
                   )}
@@ -280,12 +289,14 @@ const DistributionAccordion = ({
                             className="text-primary align-middle mr-2"
                           />
                           <span className="align-middle">
-                            Languages:{" "}
+                            {t("languages")}:{" "}
                             {distribution.languages
                               .map((lang) => lang.label)
                               .join(", ")}
                           </span>
-                          <Tooltip message="Languages in which the distribution is available." />
+                          <Tooltip
+                            message={t("tooltips.distributionLanguages")}
+                          />
                         </span>
                       </div>
                     )}

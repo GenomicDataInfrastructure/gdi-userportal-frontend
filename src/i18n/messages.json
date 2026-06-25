@@ -215,6 +215,646 @@
     "en": "Enable to filter by individual-level data characteristics and see record counts",
     "fr": "Activez cette option pour filtrer par caractéristiques de données au niveau individuel et afficher le nombre d'enregistrements"
   },
+  "datasets.detail.datasetSeriesTag": {
+    "en": "Dataset series",
+    "fr": "Série de jeux de données"
+  },
+  "datasets.detail.conformsTo": {
+    "en": "Conforms to",
+    "fr": "Conforme à"
+  },
+  "datasets.detail.conformsToUnspecified": {
+    "en": "Conforms to: Not specified for this dataset",
+    "fr": "Conforme à : non précisé pour ce jeu de données"
+  },
+  "datasets.detail.requestDataAccess": {
+    "en": "Request data access",
+    "fr": "Demander l'accès aux données"
+  },
+  "datasets.detail.externalRequestUnavailable": {
+    "en": "This dataset is not available for request through the GDI User Portal.",
+    "fr": "Ce jeu de données n'est pas disponible à la demande via le portail utilisateur GDI."
+  },
+  "datasets.detail.externalRequestPortal": {
+    "en": "Access it via the external provider's portal.",
+    "fr": "Accédez-y via le portail du fournisseur externe."
+  },
+  "datasets.detail.noExternalLinkAvailable": {
+    "en": "No external link available",
+    "fr": "Aucun lien externe disponible"
+  },
+  "datasets.detail.exportMetadataIn": {
+    "en": "Export metadata in",
+    "fr": "Exporter les métadonnées en"
+  },
+  "datasets.detail.contactPoints": {
+    "en": "Contact point(s)",
+    "fr": "Point(s) de contact"
+  },
+  "datasets.detail.noContactProvided": {
+    "en": "No contact provided.",
+    "fr": "Aucun contact fourni."
+  },
+  "datasets.detail.noEmailProvided": {
+    "en": "No e-mail provided.",
+    "fr": "Aucune adresse e-mail fournie."
+  },
+  "datasets.detail.accessExternalDataset": {
+    "en": "Access External Dataset",
+    "fr": "Accéder au jeu de données externe"
+  },
+  "datasets.detail.notProvided": {
+    "en": "Not provided",
+    "fr": "Non renseigné"
+  },
+  "datasets.detail.notAvailable": {
+    "en": "N/A",
+    "fr": "N/D"
+  },
+  "datasets.detail.present": {
+    "en": "Present",
+    "fr": "À ce jour"
+  },
+  "datasets.detail.indefinite": {
+    "en": "Indefinite",
+    "fr": "Indéfinie"
+  },
+  "datasets.detail.unknown": {
+    "en": "Unknown",
+    "fr": "Inconnu"
+  },
+  "datasets.detail.yes": {
+    "en": "Yes",
+    "fr": "Oui"
+  },
+  "datasets.detail.no": {
+    "en": "No",
+    "fr": "Non"
+  },
+  "datasets.detail.here": {
+    "en": "here",
+    "fr": "ici"
+  },
+  "datasets.detail.noTitle": {
+    "en": "No title",
+    "fr": "Sans titre"
+  },
+  "datasets.detail.createdOn": {
+    "en": "Created on",
+    "fr": "Créé le"
+  },
+  "datasets.detail.modifiedOn": {
+    "en": "Modified on",
+    "fr": "Modifié le"
+  },
+  "datasets.detail.languages": {
+    "en": "Languages",
+    "fr": "Langues"
+  },
+  "datasets.detail.publishedBy": {
+    "en": "Published by",
+    "fr": "Publié par"
+  },
+  "datasets.detail.accessRights": {
+    "en": "Access rights",
+    "fr": "Droits d'accès"
+  },
+  "datasets.detail.noAccessRightsInformation": {
+    "en": "No access rights information.",
+    "fr": "Aucune information sur les droits d'accès."
+  },
+  "datasets.detail.identifier": {
+    "en": "Identifier",
+    "fr": "Identifiant"
+  },
+  "datasets.detail.distributionCount": {
+    "en": "{count, plural, one {# Distribution} other {# Distributions}}",
+    "fr": "{count, plural, one {# distribution} other {# distributions}}"
+  },
+  "datasets.detail.datasetSeriesCount": {
+    "en": "{count, plural, one {# Dataset series} other {# Dataset series}}",
+    "fr": "{count, plural, one {# série de jeux de données} other {# séries de jeux de données}}"
+  },
+  "datasets.detail.type": {
+    "en": "Type",
+    "fr": "Type"
+  },
+  "datasets.detail.keywords": {
+    "en": "Keywords",
+    "fr": "Mots-clés"
+  },
+  "datasets.detail.datasetRelations": {
+    "en": "Dataset Relations",
+    "fr": "Relations entre jeux de données"
+  },
+  "datasets.detail.datasetLink": {
+    "en": "Dataset",
+    "fr": "Jeu de données"
+  },
+  "datasets.detail.datasetDictionary": {
+    "en": "Dataset Dictionary",
+    "fr": "Dictionnaire du jeu de données"
+  },
+  "datasets.detail.healthInformation": {
+    "en": "Health Information",
+    "fr": "Informations de santé"
+  },
+  "datasets.detail.healthThemes": {
+    "en": "Health Themes",
+    "fr": "Thèmes de santé"
+  },
+  "datasets.detail.healthCategories": {
+    "en": "Health Categories",
+    "fr": "Catégories de santé"
+  },
+  "datasets.detail.populationAndDemographics": {
+    "en": "Population & Demographics",
+    "fr": "Population et démographie"
+  },
+  "datasets.detail.populationCoverage": {
+    "en": "Population Coverage",
+    "fr": "Couverture de la population"
+  },
+  "datasets.detail.numberOfRecords": {
+    "en": "Number of Records",
+    "fr": "Nombre d'enregistrements"
+  },
+  "datasets.detail.uniqueIndividuals": {
+    "en": "Unique Individuals",
+    "fr": "Individus uniques"
+  },
+  "datasets.detail.ageRange": {
+    "en": "Age Range",
+    "fr": "Tranche d'âge"
+  },
+  "datasets.detail.years": {
+    "en": "years",
+    "fr": "ans"
+  },
+  "datasets.detail.coverage": {
+    "en": "Coverage",
+    "fr": "Couverture"
+  },
+  "datasets.detail.spatialCoverage": {
+    "en": "Spatial Coverage",
+    "fr": "Couverture spatiale"
+  },
+  "datasets.detail.temporalCoverage": {
+    "en": "Temporal Coverage",
+    "fr": "Couverture temporelle"
+  },
+  "datasets.detail.temporalResolution": {
+    "en": "Temporal Resolution",
+    "fr": "Résolution temporelle"
+  },
+  "datasets.detail.spatialResolution": {
+    "en": "Spatial Resolution",
+    "fr": "Résolution spatiale"
+  },
+  "datasets.detail.meters": {
+    "en": "meters",
+    "fr": "mètres"
+  },
+  "datasets.detail.legalAndCompliance": {
+    "en": "Legal & Compliance",
+    "fr": "Juridique et conformité"
+  },
+  "datasets.detail.legalBasis": {
+    "en": "Legal Basis",
+    "fr": "Base légale"
+  },
+  "datasets.detail.applicableLegislation": {
+    "en": "Applicable Legislation",
+    "fr": "Législation applicable"
+  },
+  "datasets.detail.purpose": {
+    "en": "Purpose",
+    "fr": "Finalité"
+  },
+  "datasets.detail.personalDataTypes": {
+    "en": "Personal Data Types",
+    "fr": "Types de données personnelles"
+  },
+  "datasets.detail.publisherAndDataGovernance": {
+    "en": "Publisher & Data Governance",
+    "fr": "Éditeur et gouvernance des données"
+  },
+  "datasets.detail.publisherNote": {
+    "en": "Publisher Note",
+    "fr": "Note de l'éditeur"
+  },
+  "datasets.detail.publisherType": {
+    "en": "Publisher Type",
+    "fr": "Type d'éditeur"
+  },
+  "datasets.detail.creators": {
+    "en": "Creators",
+    "fr": "Créateurs"
+  },
+  "datasets.detail.trustedDataHolder": {
+    "en": "Trusted Data Holder",
+    "fr": "Détenteur de données de confiance"
+  },
+  "datasets.detail.healthDataAccessBody": {
+    "en": "Health Data Access Body (HDAB)",
+    "fr": "Organisme d'accès aux données de santé (HDAB)"
+  },
+  "datasets.detail.codingAndStandards": {
+    "en": "Coding & Standards",
+    "fr": "Codification et standards"
+  },
+  "datasets.detail.codingSystems": {
+    "en": "Coding Systems",
+    "fr": "Systèmes de codification"
+  },
+  "datasets.detail.codeValues": {
+    "en": "Code Values",
+    "fr": "Valeurs de code"
+  },
+  "datasets.detail.retentionPeriod": {
+    "en": "Retention Period",
+    "fr": "Période de conservation"
+  },
+  "datasets.detail.linksAndReferences": {
+    "en": "Links & References",
+    "fr": "Liens et références"
+  },
+  "datasets.detail.homepage": {
+    "en": "Homepage",
+    "fr": "Page d'accueil"
+  },
+  "datasets.detail.documentation": {
+    "en": "Documentation",
+    "fr": "Documentation"
+  },
+  "datasets.detail.referencedBy": {
+    "en": "Referenced By",
+    "fr": "Référencé par"
+  },
+  "datasets.detail.versionInformation": {
+    "en": "Version Information",
+    "fr": "Informations de version"
+  },
+  "datasets.detail.version": {
+    "en": "Version",
+    "fr": "Version"
+  },
+  "datasets.detail.versionNotes": {
+    "en": "Version Notes",
+    "fr": "Notes de version"
+  },
+  "datasets.detail.analytics": {
+    "en": "Analytics",
+    "fr": "Analytique"
+  },
+  "datasets.detail.dataSeries": {
+    "en": "Data Series",
+    "fr": "Séries de données"
+  },
+  "datasets.detail.distributions": {
+    "en": "Distributions",
+    "fr": "Distributions"
+  },
+  "datasets.detail.seriesOverview": {
+    "en": "Series Overview",
+    "fr": "Vue d'ensemble de la série"
+  },
+  "datasets.detail.updateFrequency": {
+    "en": "Update Frequency",
+    "fr": "Fréquence de mise à jour"
+  },
+  "datasets.detail.uri": {
+    "en": "URI",
+    "fr": "URI"
+  },
+  "datasets.detail.memberDatasets": {
+    "en": "Member Datasets",
+    "fr": "Jeux de données membres"
+  },
+  "datasets.detail.noMemberDatasetsFound": {
+    "en": "No member datasets found.",
+    "fr": "Aucun jeu de données membre trouvé."
+  },
+  "datasets.detail.description": {
+    "en": "Description",
+    "fr": "Description"
+  },
+  "datasets.detail.issued": {
+    "en": "Issued",
+    "fr": "Publié"
+  },
+  "datasets.detail.modified": {
+    "en": "Modified",
+    "fr": "Modifié"
+  },
+  "datasets.detail.frequency": {
+    "en": "Frequency",
+    "fr": "Fréquence"
+  },
+  "datasets.detail.publisher": {
+    "en": "Publisher",
+    "fr": "Éditeur"
+  },
+  "datasets.detail.fileType": {
+    "en": "File Type",
+    "fr": "Type de fichier"
+  },
+  "datasets.detail.mediaType": {
+    "en": "Media Type",
+    "fr": "Type de média"
+  },
+  "datasets.detail.license": {
+    "en": "License",
+    "fr": "Licence"
+  },
+  "datasets.detail.byteSize": {
+    "en": "Byte Size",
+    "fr": "Taille en octets"
+  },
+  "datasets.detail.accessUrl": {
+    "en": "Access URL",
+    "fr": "URL d'accès"
+  },
+  "datasets.detail.downloadUrl": {
+    "en": "Download URL",
+    "fr": "URL de téléchargement"
+  },
+  "datasets.detail.tooltips.datasetSeriesDescription": {
+    "en": "This page describes a dataset series.",
+    "fr": "Cette page décrit une série de jeux de données."
+  },
+  "datasets.detail.tooltips.themeAssociated": {
+    "en": "Theme associated with the dataset.",
+    "fr": "Thème associé au jeu de données."
+  },
+  "datasets.detail.tooltips.openDatasetSeriesDetails": {
+    "en": "Open dataset series details.",
+    "fr": "Ouvrir les détails de la série de jeux de données."
+  },
+  "datasets.detail.tooltips.datasetSeriesDescriptionField": {
+    "en": "Description of the dataset series.",
+    "fr": "Description de la série de jeux de données."
+  },
+  "datasets.detail.tooltips.datasetSeriesIssued": {
+    "en": "Date when the dataset series was issued.",
+    "fr": "Date de publication de la série de jeux de données."
+  },
+  "datasets.detail.tooltips.datasetSeriesModified": {
+    "en": "Date when the dataset series was last modified.",
+    "fr": "Date de dernière modification de la série de jeux de données."
+  },
+  "datasets.detail.tooltips.datasetSeriesFrequency": {
+    "en": "Update frequency for the dataset series.",
+    "fr": "Fréquence de mise à jour de la série de jeux de données."
+  },
+  "datasets.detail.tooltips.datasetSeriesPublisher": {
+    "en": "Publishers responsible for the dataset series.",
+    "fr": "Éditeurs responsables de la série de jeux de données."
+  },
+  "datasets.detail.tooltips.distributionDescription": {
+    "en": "Description of the distribution.",
+    "fr": "Description de la distribution."
+  },
+  "datasets.detail.tooltips.distributionCreated": {
+    "en": "Date when the distribution was created.",
+    "fr": "Date de création de la distribution."
+  },
+  "datasets.detail.tooltips.distributionModified": {
+    "en": "Date when the distribution was last modified.",
+    "fr": "Date de dernière modification de la distribution."
+  },
+  "datasets.detail.tooltips.distributionFileType": {
+    "en": "File type of the distribution.",
+    "fr": "Type de fichier de la distribution."
+  },
+  "datasets.detail.tooltips.distributionMediaType": {
+    "en": "Media type of the distribution.",
+    "fr": "Type de média de la distribution."
+  },
+  "datasets.detail.tooltips.distributionLicense": {
+    "en": "License under which the distribution is made available.",
+    "fr": "Licence sous laquelle la distribution est mise à disposition."
+  },
+  "datasets.detail.tooltips.distributionByteSize": {
+    "en": "Size of the distribution in bytes.",
+    "fr": "Taille de la distribution en octets."
+  },
+  "datasets.detail.tooltips.distributionConformsTo": {
+    "en": "Standards or specifications the distribution conforms to.",
+    "fr": "Normes ou spécifications auxquelles la distribution est conforme."
+  },
+  "datasets.detail.tooltips.distributionAccessUrl": {
+    "en": "Link to access the distribution.",
+    "fr": "Lien pour accéder à la distribution."
+  },
+  "datasets.detail.tooltips.distributionDownloadUrl": {
+    "en": "Link to download the distribution.",
+    "fr": "Lien pour télécharger la distribution."
+  },
+  "datasets.detail.tooltips.distributionLanguages": {
+    "en": "Languages in which the distribution is available.",
+    "fr": "Langues dans lesquelles la distribution est disponible."
+  },
+  "datasets.detail.tooltips.datasetSeriesCreated": {
+    "en": "Date when this dataset series was created.",
+    "fr": "Date de création de cette série de jeux de données."
+  },
+  "datasets.detail.tooltips.datasetSeriesUpdated": {
+    "en": "Date when this dataset series was last modified.",
+    "fr": "Date de dernière modification de cette série de jeux de données."
+  },
+  "datasets.detail.tooltips.datasetSeriesIdentifier": {
+    "en": "Unique identifier for this dataset series.",
+    "fr": "Identifiant unique de cette série de jeux de données."
+  },
+  "datasets.detail.tooltips.datasetSeriesUpdateFrequency": {
+    "en": "How often this series is updated.",
+    "fr": "Fréquence de mise à jour de cette série."
+  },
+  "datasets.detail.tooltips.datasetSeriesAccessRights": {
+    "en": "Access policy applied to this series.",
+    "fr": "Politique d'accès appliquée à cette série."
+  },
+  "datasets.detail.tooltips.datasetSeriesUri": {
+    "en": "Canonical URI of this dataset series.",
+    "fr": "URI canonique de cette série de jeux de données."
+  },
+  "datasets.detail.tooltips.datasetSeriesSpatialCoverage": {
+    "en": "Geographic area covered by this series.",
+    "fr": "Zone géographique couverte par cette série."
+  },
+  "datasets.detail.tooltips.datasetSeriesTemporalCoverage": {
+    "en": "Time window covered by this series.",
+    "fr": "Période couverte par cette série."
+  },
+  "datasets.detail.tooltips.datasetSeriesApplicableLegislation": {
+    "en": "Legislation applicable to this dataset series.",
+    "fr": "Législation applicable à cette série de jeux de données."
+  },
+  "datasets.detail.tooltips.datasetCreated": {
+    "en": "Date when the dataset was created.",
+    "fr": "Date de création du jeu de données."
+  },
+  "datasets.detail.tooltips.datasetUpdated": {
+    "en": "Date when the dataset was last modified.",
+    "fr": "Date de dernière modification du jeu de données."
+  },
+  "datasets.detail.tooltips.datasetLanguages": {
+    "en": "Languages in which the dataset is available.",
+    "fr": "Langues dans lesquelles le jeu de données est disponible."
+  },
+  "datasets.detail.tooltips.datasetPublishers": {
+    "en": "Publishers to which the dataset belongs.",
+    "fr": "Éditeurs auxquels appartient ce jeu de données."
+  },
+  "datasets.detail.tooltips.datasetAccessRights": {
+    "en": "Information about access rights to the dataset.",
+    "fr": "Informations sur les droits d'accès au jeu de données."
+  },
+  "datasets.detail.tooltips.datasetIdentifier": {
+    "en": "Unique identifier for the dataset.",
+    "fr": "Identifiant unique du jeu de données."
+  },
+  "datasets.detail.tooltips.datasetDistributionCount": {
+    "en": "Number of distributions available for the dataset.",
+    "fr": "Nombre de distributions disponibles pour le jeu de données."
+  },
+  "datasets.detail.tooltips.datasetSeriesCount": {
+    "en": "Number of dataset series this dataset belongs to.",
+    "fr": "Nombre de séries de jeux de données auxquelles ce jeu de données appartient."
+  },
+  "datasets.detail.tooltips.datasetType": {
+    "en": "The type of the dataset.",
+    "fr": "Le type du jeu de données."
+  },
+  "datasets.detail.tooltips.datasetKeywords": {
+    "en": "Keywords associated with the dataset.",
+    "fr": "Mots-clés associés au jeu de données."
+  },
+  "datasets.detail.tooltips.relatedDatasetLink": {
+    "en": "Link to related dataset.",
+    "fr": "Lien vers le jeu de données associé."
+  },
+  "datasets.detail.tooltips.datasetDictionaryField": {
+    "en": "Information about the field.",
+    "fr": "Informations sur le champ."
+  },
+  "datasets.detail.tooltips.healthThemes": {
+    "en": "Health-related themes or topics covered by this dataset.",
+    "fr": "Thèmes ou sujets de santé couverts par ce jeu de données."
+  },
+  "datasets.detail.tooltips.healthCategories": {
+    "en": "Health data categories this dataset belongs to.",
+    "fr": "Catégories de données de santé auxquelles appartient ce jeu de données."
+  },
+  "datasets.detail.tooltips.populationCoverage": {
+    "en": "Description of the population covered by this dataset.",
+    "fr": "Description de la population couverte par ce jeu de données."
+  },
+  "datasets.detail.tooltips.numberOfRecords": {
+    "en": "Total number of records in the dataset.",
+    "fr": "Nombre total d'enregistrements dans le jeu de données."
+  },
+  "datasets.detail.tooltips.uniqueIndividuals": {
+    "en": "Number of unique individuals represented in the dataset.",
+    "fr": "Nombre d'individus uniques représentés dans le jeu de données."
+  },
+  "datasets.detail.tooltips.ageRange": {
+    "en": "Typical age range of individuals in the dataset.",
+    "fr": "Tranche d'âge typique des individus dans le jeu de données."
+  },
+  "datasets.detail.tooltips.datasetSpatialCoverage": {
+    "en": "Geographic regions covered by this dataset.",
+    "fr": "Régions géographiques couvertes par ce jeu de données."
+  },
+  "datasets.detail.tooltips.datasetTemporalCoverage": {
+    "en": "Time period covered by the data in this dataset.",
+    "fr": "Période couverte par les données de ce jeu de données."
+  },
+  "datasets.detail.tooltips.temporalResolution": {
+    "en": "Minimum time period resolvable in the dataset.",
+    "fr": "Plus petite période temporelle discernable dans le jeu de données."
+  },
+  "datasets.detail.tooltips.spatialResolution": {
+    "en": "Minimum spatial separation resolvable in the dataset, measured in meters.",
+    "fr": "Plus petite séparation spatiale discernable dans le jeu de données, mesurée en mètres."
+  },
+  "datasets.detail.tooltips.legalBasis": {
+    "en": "Legal basis under which this dataset is processed.",
+    "fr": "Base légale selon laquelle ce jeu de données est traité."
+  },
+  "datasets.detail.tooltips.datasetApplicableLegislation": {
+    "en": "Legislation applicable to this dataset.",
+    "fr": "Législation applicable à ce jeu de données."
+  },
+  "datasets.detail.tooltips.purpose": {
+    "en": "Purpose for which the data was collected or is being processed.",
+    "fr": "Finalité pour laquelle les données ont été collectées ou sont traitées."
+  },
+  "datasets.detail.tooltips.personalDataTypes": {
+    "en": "Types of personal data contained in this dataset.",
+    "fr": "Types de données personnelles contenus dans ce jeu de données."
+  },
+  "datasets.detail.tooltips.publisherNote": {
+    "en": "Additional notes from the data publisher.",
+    "fr": "Notes complémentaires de l'éditeur des données."
+  },
+  "datasets.detail.tooltips.publisherType": {
+    "en": "Type of organization publishing this dataset.",
+    "fr": "Type d'organisation publiant ce jeu de données."
+  },
+  "datasets.detail.tooltips.creators": {
+    "en": "Entities responsible for creating this dataset.",
+    "fr": "Entités responsables de la création de ce jeu de données."
+  },
+  "datasets.detail.tooltips.trustedDataHolder": {
+    "en": "Indicates whether the data holder is a trusted entity.",
+    "fr": "Indique si le détenteur des données est une entité de confiance."
+  },
+  "datasets.detail.tooltips.healthDataAccessBody": {
+    "en": "Health Data Access Body responsible for granting access to this dataset.",
+    "fr": "Organisme d'accès aux données de santé chargé d'accorder l'accès à ce jeu de données."
+  },
+  "datasets.detail.tooltips.codingSystems": {
+    "en": "Coding systems or standards used in this dataset (e.g., ICD-10, SNOMED CT).",
+    "fr": "Systèmes de codification ou standards utilisés dans ce jeu de données (par ex. ICD-10, SNOMED CT)."
+  },
+  "datasets.detail.tooltips.codeValues": {
+    "en": "Specific code values used within the coding systems.",
+    "fr": "Valeurs de code spécifiques utilisées dans les systèmes de codification."
+  },
+  "datasets.detail.tooltips.retentionPeriod": {
+    "en": "Period during which the data will be retained.",
+    "fr": "Période pendant laquelle les données seront conservées."
+  },
+  "datasets.detail.tooltips.homepage": {
+    "en": "Homepage URL for more information about this dataset.",
+    "fr": "URL de la page d'accueil pour plus d'informations sur ce jeu de données."
+  },
+  "datasets.detail.tooltips.documentation": {
+    "en": "Links to documentation about this dataset.",
+    "fr": "Liens vers la documentation concernant ce jeu de données."
+  },
+  "datasets.detail.tooltips.referencedBy": {
+    "en": "Resources that reference this dataset.",
+    "fr": "Ressources qui référencent ce jeu de données."
+  },
+  "datasets.detail.tooltips.version": {
+    "en": "Version number or designation of this dataset.",
+    "fr": "Numéro ou désignation de version de ce jeu de données."
+  },
+  "datasets.detail.tooltips.datasetUpdateFrequency": {
+    "en": "How often the dataset is updated.",
+    "fr": "Fréquence de mise à jour du jeu de données."
+  },
+  "datasets.detail.tooltips.versionNotes": {
+    "en": "Notes about this version of the dataset.",
+    "fr": "Notes concernant cette version du jeu de données."
+  },
+  "datasets.detail.tooltips.analytics": {
+    "en": "Analytics capabilities or methods available for this dataset.",
+    "fr": "Capacités ou méthodes analytiques disponibles pour ce jeu de données."
+  },
   "themes.title": {
     "en": "Themes",
     "fr": "Thèmes"

@@ -7,6 +7,7 @@ import Chip from "@/components/Chip";
 import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
 import Sidebar from "@/components/Sidebar";
+import { getTranslations } from "next-intl/server";
 import axios from "axios";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,6 +27,7 @@ export default async function Page({
   params,
   searchParams,
 }: DatasetDetailsPageProps) {
+  const t = await getTranslations("datasets.detail");
   const _params = await params;
   const _searchParams = await searchParams;
   let dataset: Awaited<ReturnType<typeof retrieveDatasetApi>>;
@@ -82,6 +84,16 @@ export default async function Page({
 
   const relationships = dataset.datasetRelationships || [];
   const dictionary = dataset.dataDictionary || [];
+  const sidebarTranslations = {
+    requestDataAccess: t("requestDataAccess"),
+    externalRequestUnavailable: t("externalRequestUnavailable"),
+    externalRequestPortal: t("externalRequestPortal"),
+    noExternalLinkAvailable: t("noExternalLinkAvailable"),
+    exportMetadataIn: t("exportMetadataIn"),
+    contactPoints: t("contactPoints"),
+    noContactProvided: t("noContactProvided"),
+    noEmailProvided: t("noEmailProvided"),
+  };
   const headingClasses = [
     "flex flex-col gap-y-5 gap-x-3 justify-between",
     dataset.isSeries || (dataset.themes?.length && dataset.themes.length < 2)
@@ -101,9 +113,9 @@ export default async function Page({
                 <li className="tracking-widest uppercase flex items-center relative group">
                   <Chip
                     className="flex justify-center items-center w-24 md:w-32 h-12 text-[10px] md:text-xs text-center px-1 md:px-2"
-                    chip="Dataset series"
+                    chip={t("datasetSeriesTag")}
                   />
-                  <Tooltip message="This page describes a dataset series." />
+                  <Tooltip message={t("tooltips.datasetSeriesDescription")} />
                 </li>
               )}
               {!dataset.isSeries &&
@@ -121,7 +133,7 @@ export default async function Page({
                         className="flex justify-center items-center w-24 md:w-32 h-12 text-[10px] md:text-xs text-center px-1 md:px-2"
                         chip={theme.label}
                       />
-                      <Tooltip message="Theme associated with the dataset." />
+                      <Tooltip message={t("tooltips.themeAssociated")} />
                     </li>
                   ))}
             </ul>
@@ -130,7 +142,7 @@ export default async function Page({
           {dataset.conformsTo && dataset.conformsTo.length > 0 ? (
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-sm font-semibold text-gray-700 whitespace-nowrap">
-                Conforms to:
+                {t("conformsTo")}:
               </span>
               {dataset.conformsTo
                 ?.filter(
@@ -156,7 +168,7 @@ export default async function Page({
                 icon={faCircleInfo}
                 className="w-4 h-4 shrink-0"
               />
-              <span>Conforms to: Not specified for this dataset</span>
+              <span>{t("conformsToUnspecified")}</span>
             </div>
           )}
 
@@ -167,7 +179,9 @@ export default async function Page({
           <div className="h-[2px] bg-secondary opacity-80"></div>
 
           <div className="w-full lg:hidden">
-            <Sidebar items={createDatasetSidebarItems(dataset)} />
+            <Sidebar
+              items={createDatasetSidebarItems(dataset, sidebarTranslations)}
+            />
           </div>
 
           <div className="h-[2px] bg-secondary opacity-80 lg:hidden"></div>
@@ -182,7 +196,9 @@ export default async function Page({
           </div>
         </div>
         <div className="lg:w-1/3 hidden lg:block">
-          <Sidebar items={createDatasetSidebarItems(dataset)} />
+          <Sidebar
+            items={createDatasetSidebarItems(dataset, sidebarTranslations)}
+          />
         </div>
       </div>
     </PageContainer>

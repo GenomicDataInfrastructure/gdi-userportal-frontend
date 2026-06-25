@@ -23,6 +23,7 @@ interface ContentConfig {
   showBasketAndLogin: boolean;
   addParticipantsEnabled: boolean;
   showAlleleFrequency: boolean;
+  multilingualEnabled: boolean;
   enableAllVariantSearch: boolean;
   contactUsEnabled: boolean;
   footerLogos?: Array<{ src: string; alt: string }>;
@@ -63,6 +64,8 @@ const contentConfig: ContentConfig = {
   addParticipantsEnabled:
     env("NEXT_PUBLIC_FEATURE_ADD_PARTICIPANTS") !== "false",
   showAlleleFrequency: env("NEXT_PUBLIC_SHOW_ALLELE_FREQUENCY") !== "false",
+  multilingualEnabled:
+    env("NEXT_PUBLIC_ENABLE_MULTILINGUAL")?.toLowerCase() === "true",
   enableAllVariantSearch:
     env("NEXT_PUBLIC_ENABLE_ALL_VARIANT_SEARCH")?.toLowerCase() === "true",
   contactUsEnabled:

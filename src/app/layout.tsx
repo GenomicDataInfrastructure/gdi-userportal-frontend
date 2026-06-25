@@ -21,7 +21,7 @@ import { FilterProvider } from "@/providers/filters/FilterProvider";
 import { getFlatMessages, getMessages } from "@/i18n/messages";
 
 function isValidLocale(locale: string): locale is AppLocale {
-  return routing.locales.includes(locale as AppLocale);
+  return (routing.locales as readonly string[]).includes(locale);
 }
 
 export default async function RootLayout({

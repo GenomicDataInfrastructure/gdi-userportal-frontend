@@ -22,7 +22,14 @@ jest.mock("next-intl/routing", () => ({
 }));
 
 describe("i18n request config", () => {
+  afterEach(() => {
+    delete process.env.NEXT_PUBLIC_ENABLE_MULTILINGUAL;
+    jest.resetModules();
+  });
+
   it("returns locale specific messages for a supported locale", async () => {
+    process.env.NEXT_PUBLIC_ENABLE_MULTILINGUAL = "true";
+
     const requestConfig = (await import("@/i18n/request")).default;
 
     const result = (await requestConfig({
@@ -36,11 +43,11 @@ describe("i18n request config", () => {
     expect(result.messages.auth.login).toBe("Connexion");
   });
 
-  it("falls back to the default locale for unsupported locales", async () => {
+  it("falls back to english when multilingual is disabled", async () => {
     const requestConfig = (await import("@/i18n/request")).default;
 
     const result = (await requestConfig({
-      requestLocale: Promise.resolve("de"),
+      requestLocale: Promise.resolve("fr"),
     })) as {
       locale: string;
       messages: { nav: { home: string } };

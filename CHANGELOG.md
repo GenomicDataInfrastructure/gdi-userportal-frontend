@@ -12,6 +12,44 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+## [v1.7.5] - 2026-06-24
+
+### Added
+- feat: add locale-prefixed i18n with next-intl (#1024) by @Inderpal Singh in 8a1f11a2
+- feat: enhance variant handling in GVariants components (#1010) by @Kacem Bechka in b23bd32b
+
+
+### Changed
+- chore(deps): update actions/checkout action to v7 (#1020) by @LNDS-Sysadmins in 30a591a3
+- chore(deps): bump undici (#1021) by @dependabot[bot] in edbc0b11
+- chore(deps): bump dompurify from 3.4.10 to 3.4.11 in /documentation (#1022) by @dependabot[bot] in 77277d0a
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1782220748 (#1025) by @LNDS-Sysadmins in 50082b6e
+- chore(deps): update oras-project/setup-oras digest to 4aa197c by @Renovate Bot in 9021f3ec
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1781562225 (#1017) by @LNDS-Sysadmins in b991e2b8
+- chore(deps): bump ws in /documentation (#1018) by @dependabot[bot] in a93bb3b6
+- chore(deps): bump launch-editor from 2.12.0 to 2.14.1 in /documentation (#1019) by @dependabot[bot] in 4e029bf0
+- chore(deps): bump @grpc/grpc-js from 1.14.3 to 1.14.4 (#1012) by @dependabot[bot] in 820b860c
+- chore(deps): bump shell-quote from 1.8.3 to 1.8.4 in /documentation (#1014) by @dependabot[bot] in b8c8a1f9
+- chore(deps): bump form-data from 4.0.5 to 4.0.6 (#1015) by @dependabot[bot] in 03b6b52e
+- chore(deps): bump dompurify from 3.4.0 to 3.4.10 in /documentation (#1016) by @dependabot[bot] in c93e8be2
+- chore(deps): update oras-project/setup-oras digest to 82faa22 by @Renovate Bot in 7705307e
+- chore(deps): update oras-project/setup-oras digest to f8710a5 by @Renovate Bot in 57629573
+- chore(deps): bump shell-quote from 1.8.3 to 1.8.4 (#1008) by @dependabot[bot] in 04341983
+- chore(deps): update dependency eslint-config-next to v16.2.9 by @Renovate Bot in 5e0ed16b
+- doc: update CHANGELOG.md for v1.7.4 (#1007) by @github-actions[bot] in 560ccd2f
+
+
+### Fixed
+- fix: e2e test (#1030) by @Inderpal Singh in 836e49d4
+- fix: override protobufjs vulnerability (#1027) by @Inderpal Singh in acaec268
+- fix: translation (#1028) by @RaniaHamdani2 in a25c9263
+- fix(deps): update opentelemetry-js monorepo (#1011) by @LNDS-Sysadmins in 62b681ed
+- fix(deps): update dependency undici to v8.5.0 [security] (#1023) by @LNDS-Sysadmins in d6aec7af
+- fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.77.0 (#1013) by @LNDS-Sysadmins in e974ccc6
+- fix(deps): update dependency sharp to ^0.35.0 (#1009) by @LNDS-Sysadmins in f5cb963f
+- fix(deps): update dependency next to v16.2.9 by @Renovate Bot in 2eaf5627
+
+
 ## [v1.7.4] - 2026-06-10
 
 ### Added

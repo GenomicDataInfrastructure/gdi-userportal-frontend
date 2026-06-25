@@ -4,10 +4,14 @@
 
 import { defineRouting } from "next-intl/routing";
 
+const multilingualEnabled =
+  process.env.NEXT_PUBLIC_ENABLE_MULTILINGUAL?.toLowerCase() === "true";
+
 export const routing = defineRouting({
-  locales: ["en", "fr"],
+  locales: multilingualEnabled ? ["en", "fr"] : ["en"],
   defaultLocale: "en",
-  localePrefix: "always",
+  localePrefix: multilingualEnabled ? "always" : "never",
 });
 
 export type AppLocale = (typeof routing.locales)[number];
+export const isMultilingualEnabled = multilingualEnabled;

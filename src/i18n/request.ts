@@ -7,7 +7,7 @@ import { getMessages } from "./messages";
 import { routing, type AppLocale } from "./routing";
 
 function isValidLocale(locale: string): locale is AppLocale {
-  return routing.locales.includes(locale as AppLocale);
+  return (routing.locales as readonly string[]).includes(locale);
 }
 
 export default getRequestConfig(async ({ requestLocale }) => {

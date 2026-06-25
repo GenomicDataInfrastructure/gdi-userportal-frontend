@@ -9,6 +9,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
   const publicPaths = ["/", "/datasets", "/themes", "/publishers", "/about"];
 
+  if (routing.locales.length === 1) {
+    return publicPaths.map((path) => ({
+      url: `${baseUrl}${path === "/" ? "" : path}`,
+      priority: path === "/" ? 1 : 0.8,
+    }));
+  }
+
   return routing.locales.flatMap((locale) =>
     publicPaths.map((path) => ({
       url: `${baseUrl}/${locale}${path === "/" ? "" : path}`,

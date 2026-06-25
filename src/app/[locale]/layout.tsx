@@ -12,7 +12,7 @@ type LocaleLayoutProps = {
 };
 
 function isValidLocale(locale: string): locale is AppLocale {
-  return routing.locales.includes(locale as AppLocale);
+  return (routing.locales as readonly string[]).includes(locale);
 }
 
 export function generateStaticParams() {

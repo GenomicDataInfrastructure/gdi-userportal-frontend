@@ -201,9 +201,11 @@ function Footer() {
                 {contentConfig.email}
               </a>
             )}
-            <div className="mt-2 max-w-[180px]">
-              <LocaleSwitcher />
-            </div>
+            {contentConfig.multilingualEnabled && (
+              <div className="mt-2 max-w-[180px]">
+                <LocaleSwitcher />
+              </div>
+            )}
             {contentConfig.contactUsEnabled && <ContactUsModal />}
           </div>
         </div>

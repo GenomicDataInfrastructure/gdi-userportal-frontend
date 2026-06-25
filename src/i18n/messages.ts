@@ -3,15 +3,17 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import messageCatalog from "./messages.json";
-import { routing, type AppLocale } from "./routing";
 
-type FlatMessageCatalog = Record<string, Record<AppLocale, string>>;
+const messageLocales = ["en", "fr"] as const;
+
+type MessageLocale = (typeof messageLocales)[number];
+type FlatMessageCatalog = Record<string, Record<MessageLocale, string>>;
 type FlatMessages = Record<string, string>;
 type NestedMessages = Record<string, unknown>;
 
 const typedCatalog = messageCatalog as FlatMessageCatalog;
 
-function toLocaleMessages(locale: AppLocale): FlatMessages {
+function toLocaleMessages(locale: MessageLocale): FlatMessages {
   return Object.fromEntries(
     Object.entries(typedCatalog).map(([key, translations]) => [
       key,
@@ -48,20 +50,20 @@ function toNestedMessages(messages: FlatMessages): NestedMessages {
 }
 
 const flatMessages = Object.fromEntries(
-  routing.locales.map((locale) => [locale, toLocaleMessages(locale)])
-) as Record<AppLocale, FlatMessages>;
+  messageLocales.map((locale) => [locale, toLocaleMessages(locale)])
+) as Record<MessageLocale, FlatMessages>;
 
 const nestedMessages = Object.fromEntries(
-  routing.locales.map((locale) => [
+  messageLocales.map((locale) => [
     locale,
     toNestedMessages(flatMessages[locale]),
   ])
-) as Record<AppLocale, NestedMessages>;
+) as Record<MessageLocale, NestedMessages>;
 
-export function getMessages(locale: AppLocale): NestedMessages {
+export function getMessages(locale: MessageLocale): NestedMessages {
   return nestedMessages[locale];
 }
 
-export function getFlatMessages(locale: AppLocale): FlatMessages {
+export function getFlatMessages(locale: MessageLocale): FlatMessages {
   return flatMessages[locale];
 }

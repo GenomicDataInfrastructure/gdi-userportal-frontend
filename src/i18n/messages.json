@@ -263,6 +263,14 @@
     "en": "Access External Dataset",
     "fr": "Accéder au jeu de données externe"
   },
+  "datasets.detail.externalLinkNotAvailable": {
+    "en": "External link not available",
+    "fr": "Lien externe non disponible"
+  },
+  "datasets.detail.noDescriptionAvailable": {
+    "en": "No description available",
+    "fr": "Aucune description disponible"
+  },
   "datasets.detail.notProvided": {
     "en": "Not provided",
     "fr": "Non renseigné"
@@ -1114,5 +1122,377 @@
   "contact.validation.message": {
     "en": "Please enter a message.",
     "fr": "Veuillez saisir un message."
+  },
+  "common.loading": {
+    "en": "Loading...",
+    "fr": "Chargement..."
+  },
+  "common.cancel": {
+    "en": "Cancel",
+    "fr": "Annuler"
+  },
+  "common.send": {
+    "en": "Send",
+    "fr": "Envoyer"
+  },
+  "common.externalDataset": {
+    "en": "External Dataset",
+    "fr": "Jeu de données externe"
+  },
+  "common.externalDatasetWarning": {
+    "en": "You are about to be redirected to an external website. This dataset is not available for direct access through the GDI User Portal and must be requested through the external data provider.",
+    "fr": "Vous êtes sur le point d'être redirigé vers un site web externe. Ce jeu de données n'est pas accessible directement via le portail utilisateur GDI et doit être demandé auprès du fournisseur de données externe."
+  },
+  "common.continueToExternalSite": {
+    "en": "Continue to External Site",
+    "fr": "Accéder au site externe"
+  },
+  "common.viewExternal": {
+    "en": "View External →",
+    "fr": "Voir l'externe →"
+  },
+  "datasets.filters.noResultsFound": {
+    "en": "No results found.",
+    "fr": "Aucun résultat trouvé."
+  },
+  "datasets.activeFilters": {
+    "en": "Active Filters",
+    "fr": "Filtres actifs"
+  },
+  "datasets.beaconErrorTitle": {
+    "en": "Individual-level data discovery unavailable",
+    "fr": "Découverte de données au niveau individuel indisponible"
+  },
+  "application.addParticipant": {
+    "en": "Add Participant",
+    "fr": "Ajouter un participant"
+  },
+  "application.namePlaceholder": {
+    "en": "Name",
+    "fr": "Nom"
+  },
+  "application.emailPlaceholder": {
+    "en": "Email",
+    "fr": "E-mail"
+  },
+  "application.invitationSentSuccessfully": {
+    "en": "Invitation sent successfully",
+    "fr": "Invitation envoyée avec succès"
+  },
+  "application.failedToInviteMember": {
+    "en": "Failed to invite member",
+    "fr": "Échec de l'invitation du membre"
+  },
+  "alleleFrequency.searching": {
+    "en": "Searching and preparing results...",
+    "fr": "Recherche et préparation des résultats..."
+  },
+  "alleleFrequency.noResults": {
+    "en": "No results found",
+    "fr": "Aucun résultat trouvé"
+  },
+  "alleleFrequency.searchForYourVariant": {
+    "en": "Search for your variant:",
+    "fr": "Recherchez votre variant :"
+  },
+  "alleleFrequency.refGenome": {
+    "en": "Ref Genome",
+    "fr": "Génome de référence"
+  },
+  "alleleFrequency.selectReferenceGenome": {
+    "en": "Select reference genome",
+    "fr": "Sélectionner le génome de référence"
+  },
+  "alleleFrequency.variant": {
+    "en": "Variant",
+    "fr": "Variant"
+  },
+  "alleleFrequency.variantPlaceholder": {
+    "en": "e.g. 21-9411449 or 21-9411449-G-T",
+    "fr": "ex. 21-9411449 ou 21-9411449-G-T"
+  },
+  "alleleFrequency.variantTooltip": {
+    "en": "Supported formats: chromosome-position (e.g. 21-9411449) or chromosome-position-reference-alternate (e.g. 21-9411449-G-T). Position is interpreted as 1-based.",
+    "fr": "Formats supportés : chromosome-position (ex. 21-9411449) ou chromosome-position-référence-alternatif (ex. 21-9411449-G-T). La position est interprétée en base 1."
+  },
+  "alleleFrequency.sex": {
+    "en": "Sex",
+    "fr": "Sexe"
+  },
+  "alleleFrequency.selectSex": {
+    "en": "Select sex",
+    "fr": "Sélectionner le sexe"
+  },
+  "alleleFrequency.male": {
+    "en": "Male",
+    "fr": "Masculin"
+  },
+  "alleleFrequency.female": {
+    "en": "Female",
+    "fr": "Féminin"
+  },
+  "alleleFrequency.countryOfBirth": {
+    "en": "Country of Birth",
+    "fr": "Pays de naissance"
+  },
+  "alleleFrequency.selectCountry": {
+    "en": "Select country",
+    "fr": "Sélectionner un pays"
+  },
+  "alleleFrequency.datasetType": {
+    "en": "Dataset Type",
+    "fr": "Type de jeu de données"
+  },
+  "alleleFrequency.search": {
+    "en": "Search",
+    "fr": "Rechercher"
+  },
+  "alleleFrequency.disabledSearchTooltip": {
+    "en": "First select the reference genome, then provide the variant. Position is entered as 1-based and converted to 0-based for the query.",
+    "fr": "Sélectionnez d'abord le génome de référence, puis indiquez le variant. La position est saisie en base 1 et convertie en base 0 pour la requête."
+  },
+  "alleleFrequency.incorrectVariant": {
+    "en": "Incorrect variant information",
+    "fr": "Informations de variant incorrectes"
+  },
+  "alleleFrequency.variantExample": {
+    "en": "Variant Example: ",
+    "fr": "Exemple de variant : "
+  },
+  "alleleFrequency.notAvailable": {
+    "en": "not available",
+    "fr": "non disponible"
+  },
+  "alleleFrequency.summaryForCurrentFilter": {
+    "en": "Summary for current filter",
+    "fr": "Résumé du filtre actuel"
+  },
+  "alleleFrequency.scope": {
+    "en": "Scope",
+    "fr": "Portée"
+  },
+  "alleleFrequency.population": {
+    "en": "Population",
+    "fr": "Population"
+  },
+  "alleleFrequency.alleleCount": {
+    "en": "Allele Count",
+    "fr": "Nombre d'allèles"
+  },
+  "alleleFrequency.alleleNumber": {
+    "en": "Allele Number",
+    "fr": "Numéro d'allèle"
+  },
+  "alleleFrequency.frequency": {
+    "en": "Frequency",
+    "fr": "Fréquence"
+  },
+  "alleleFrequency.allVisibleDatasets": {
+    "en": "All visible matching datasets",
+    "fr": "Tous les jeux de données correspondants visibles"
+  },
+  "alleleFrequency.detailedResults": {
+    "en": "Detailed results",
+    "fr": "Résultats détaillés"
+  },
+  "alleleFrequency.variantLabel": {
+    "en": "Variant: ",
+    "fr": "Variant : "
+  },
+  "alleleFrequency.dataset": {
+    "en": "Dataset",
+    "fr": "Jeu de données"
+  },
+  "alleleFrequency.homozygous": {
+    "en": "Homozygous",
+    "fr": "Homozygote"
+  },
+  "alleleFrequency.heterozygous": {
+    "en": "Heterozygous",
+    "fr": "Hétérozygote"
+  },
+  "alleleFrequency.hemizygous": {
+    "en": "Hemizygous",
+    "fr": "Hémizygote"
+  },
+  "alleleFrequency.actions": {
+    "en": "Actions",
+    "fr": "Actions"
+  },
+  "alleleFrequency.beacon": {
+    "en": "Beacon: ",
+    "fr": "Beacon : "
+  },
+  "alleleFrequency.accessExternalDataset": {
+    "en": "Access external dataset",
+    "fr": "Accéder au jeu de données externe"
+  },
+  "alleleFrequency.externalLinkNotAvailable": {
+    "en": "External link not available",
+    "fr": "Lien externe non disponible"
+  },
+  "datasets.filters.clearFilters": {
+    "en": "Clear Filters",
+    "fr": "Effacer les filtres"
+  },
+  "datasets.filters.activeCount": {
+    "en": "({count, plural, one {# filter active} other {# filters active}})",
+    "fr": "({count, plural, one {# filtre actif} other {# filtres actifs}})"
+  },
+  "datasets.filters.valueLabel": {
+    "en": "Value",
+    "fr": "Valeur"
+  },
+  "datasets.filters.operatorLabel": {
+    "en": "Operator",
+    "fr": "Opérateur"
+  },
+  "datasets.filters.dateLabel": {
+    "en": "Date",
+    "fr": "Date"
+  },
+  "datasets.filters.numberLabel": {
+    "en": "Number",
+    "fr": "Nombre"
+  },
+  "datasets.filters.valuePlaceholder": {
+    "en": "Enter a value",
+    "fr": "Saisir une valeur"
+  },
+  "datasets.filters.numberPlaceholder": {
+    "en": "Enter a number",
+    "fr": "Saisir un nombre"
+  },
+  "datasets.filters.operatorPlaceholder": {
+    "en": "Select an operator",
+    "fr": "Sélectionner un opérateur"
+  },
+  "datasets.filters.addFilter": {
+    "en": "Add filter",
+    "fr": "Ajouter un filtre"
+  },
+  "datasets.filters.removeFilter": {
+    "en": "Remove filter",
+    "fr": "Supprimer le filtre"
+  },
+  "datasets.filters.apply": {
+    "en": "Apply",
+    "fr": "Appliquer"
+  },
+  "datasets.filters.valueAndOperatorError": {
+    "en": "Value and operator must not be empty",
+    "fr": "La valeur et l'opérateur ne doivent pas être vides"
+  },
+  "datasets.filters.dateAndOperatorError": {
+    "en": "Date and operator must not be empty",
+    "fr": "La date et l'opérateur ne doivent pas être vides"
+  },
+  "datasets.filters.numberAndOperatorError": {
+    "en": "Number and operator must not be empty",
+    "fr": "Le nombre et l'opérateur ne doivent pas être vides"
+  },
+  "datasets.filters.allFieldsError": {
+    "en": "All fields must be filled",
+    "fr": "Tous les champs doivent être remplis"
+  },
+  "application.fields.optional": {
+    "en": "(Optional)",
+    "fr": "(Facultatif)"
+  },
+  "application.fields.emailPlaceholder": {
+    "en": "Enter your email address",
+    "fr": "Saisir votre adresse e-mail"
+  },
+  "application.fields.uploadFile": {
+    "en": "Upload File",
+    "fr": "Téléverser un fichier"
+  },
+  "application.terms.noTermsDefined": {
+    "en": "No terms and conditions have been defined.",
+    "fr": "Aucune condition générale n'a été définie."
+  },
+  "application.terms.readMore": {
+    "en": "Read more",
+    "fr": "Lire la suite"
+  },
+  "application.terms.accepted": {
+    "en": "Accepted",
+    "fr": "Accepté"
+  },
+  "application.terms.notAccepted": {
+    "en": "Not Accepted",
+    "fr": "Non accepté"
+  },
+  "application.terms.acceptAll": {
+    "en": "Accept All",
+    "fr": "Tout accepter"
+  },
+  "common.searchCountry": {
+    "en": "Search country...",
+    "fr": "Rechercher un pays..."
+  },
+  "common.noCountryFound": {
+    "en": "No country found.",
+    "fr": "Aucun pays trouvé."
+  },
+  "application.fields.addRow": {
+    "en": "Add Row",
+    "fr": "Ajouter une ligne"
+  },
+  "application.fields.selectAnOption": {
+    "en": "Select an option",
+    "fr": "Sélectionner une option"
+  },
+  "application.fields.noOptionsAvailable": {
+    "en": "No options available",
+    "fr": "Aucune option disponible"
+  },
+  "auth.missing-terms.title": {
+    "en": "Login blocked",
+    "fr": "Connexion bloquée"
+  },
+  "auth.missing-terms.message": {
+    "en": "You must accept the terms and conditions before you can access the portal.",
+    "fr": "Vous devez accepter les conditions générales avant de pouvoir accéder au portail."
+  },
+  "datasets.card.createdOn": {
+    "en": "Created on {date}",
+    "fr": "Créé le {date}"
+  },
+  "datasets.card.modifiedOn": {
+    "en": "Modified on {date}",
+    "fr": "Modifié le {date}"
+  },
+  "datasets.card.publishedBy": {
+    "en": "Published by {names}",
+    "fr": "Publié par {names}"
+  },
+  "datasets.card.distributionCount": {
+    "en": "{count, plural, one {# Distribution} other {# Distributions}}",
+    "fr": "{count, plural, one {# distribution} other {# distributions}}"
+  },
+  "datasets.card.datasetSeriesCount": {
+    "en": "{count, plural, one {# Dataset series} other {# Dataset series}}",
+    "fr": "{count, plural, one {# Série de données} other {# Séries de données}}"
+  },
+  "datasets.card.recordsCount": {
+    "en": "{count, plural, one {# Record} other {# Records}}",
+    "fr": "{count, plural, one {# Enregistrement} other {# Enregistrements}}"
+  },
+  "datasets.card.temporalCoveragePresent": {
+    "en": "Present",
+    "fr": "Présent"
+  },
+  "datasets.card.temporalCoverageNA": {
+    "en": "N/A",
+    "fr": "N/D"
+  },
+  "datasets.card.entitlementStart": {
+    "en": "Start: {date}",
+    "fr": "Début : {date}"
+  },
+  "datasets.card.entitlementEnd": {
+    "en": "End: {date}",
+    "fr": "Fin : {date}"
   }
 }

@@ -10,6 +10,7 @@ import { faInfoCircle, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import Tooltip from "../datasets/[id]/Tooltip";
+import { useTranslations } from "next-intl";
 
 type FormFieldProps = {
   fieldKey: string;
@@ -94,21 +95,6 @@ export type SearchInputData = {
   datasetType: string;
 };
 
-const REFERENCE_OPTIONS = [
-  { value: "", label: "Select reference genome" },
-  { value: "GRCh37", label: "GRCh37" },
-  { value: "GRCh38", label: "GRCh38" },
-];
-
-const SEX_OPTIONS = [
-  { value: "", label: "Select sex" },
-  { value: "All", label: "All" },
-  { value: "M", label: "Male" },
-  { value: "F", label: "Female" },
-];
-
-const DISABLED_SEARCH_TOOLTIP =
-  "First select the reference genome, then provide the variant. Position is entered as 1-based and converted to 0-based for the query.";
 const ALL_VARIANT_SEARCH_ENABLED = contentConfig.enableAllVariantSearch;
 
 export default function GVariantsSearchBar({
@@ -116,6 +102,23 @@ export default function GVariantsSearchBar({
   loading,
   datasetTypeOptions,
 }: GVariantsSearchBarProps) {
+  const t = useTranslations("alleleFrequency");
+
+  const REFERENCE_OPTIONS = [
+    { value: "", label: t("selectReferenceGenome") },
+    { value: "GRCh37", label: "GRCh37" },
+    { value: "GRCh38", label: "GRCh38" },
+  ];
+
+  const SEX_OPTIONS = [
+    { value: "", label: t("selectSex") },
+    { value: "All", label: "All" },
+    { value: "M", label: t("male") },
+    { value: "F", label: t("female") },
+  ];
+
+  const DISABLED_SEARCH_TOOLTIP = t("disabledSearchTooltip");
+
   const [searchFilterInput, setSearchFilterInput] = useState<SearchInputData>({
     variant: "",
     refGenome: "",
@@ -172,10 +175,10 @@ export default function GVariantsSearchBar({
           ? ""
           : normalizedVariant.toLowerCase() === "all" &&
               !ALL_VARIANT_SEARCH_ENABLED
-            ? "Incorrect variant information"
+            ? t("incorrectVariant")
             : isVariantValid(normalizedVariant)
               ? ""
-              : "Incorrect variant information"
+              : t("incorrectVariant")
       );
       return updatedState;
     });
@@ -201,12 +204,14 @@ export default function GVariantsSearchBar({
   };
   return (
     <div className="mb-6">
-      <h2 className="text-lg font-semibold mb-2">Search for your variant:</h2>
+      <h2 className="text-lg font-semibold mb-2">
+        {t("searchForYourVariant")}
+      </h2>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 items-end">
         <FormField
           fieldKey="refGenome"
-          label="Ref Genome"
+          label={t("refGenome")}
           type="select"
           value={searchFilterInput.refGenome}
           onChange={(value) => updateData("refGenome", value)}
@@ -216,19 +221,19 @@ export default function GVariantsSearchBar({
         {canShowVariant && (
           <FormField
             fieldKey="variant"
-            label="Variant"
+            label={t("variant")}
             type="text"
             value={searchFilterInput.variant}
             onChange={(value) => updateData("variant", value)}
-            placeholder="e.g. 21-9411449 or 21-9411449-G-T"
-            tooltip="Supported formats: chromosome-position (e.g. 21-9411449) or chromosome-position-reference-alternate (e.g. 21-9411449-G-T). Position is interpreted as 1-based."
+            placeholder={t("variantPlaceholder")}
+            tooltip={t("variantTooltip")}
           />
         )}
 
         {canShowSex && (
           <FormField
             fieldKey="sex"
-            label="Sex"
+            label={t("sex")}
             type="select"
             value={searchFilterInput.sex}
             onChange={(value) => updateData("sex", value)}
@@ -239,12 +244,12 @@ export default function GVariantsSearchBar({
         {canShowCountry && (
           <FormField
             fieldKey="countryOfBirth"
-            label="Country of Birth"
+            label={t("countryOfBirth")}
             type="select"
             value={searchFilterInput.countryOfBirth}
             onChange={(value) => updateData("countryOfBirth", value)}
             options={[
-              { value: "", label: "Select country" },
+              { value: "", label: t("selectCountry") },
               { value: "All", label: "All" },
               ...COUNTRY_OPTIONS,
             ]}
@@ -254,7 +259,7 @@ export default function GVariantsSearchBar({
         {canShowVariant && (
           <FormField
             fieldKey="datasetType"
-            label="Dataset Type"
+            label={t("datasetType")}
             type="select"
             value={searchFilterInput.datasetType}
             onChange={(value) => updateData("datasetType", value)}
@@ -273,7 +278,7 @@ export default function GVariantsSearchBar({
             disabled={isSearchDisabled}
             icon={faSearch}
             onClick={search}
-            text="Search"
+            text={t("search")}
             type="primary"
             className="text-center"
             props={
@@ -285,7 +290,7 @@ export default function GVariantsSearchBar({
 
       {canShowVariant && (
         <div className="text-md flex items-end gap-2 mt-2">
-          <span className="text-black text-md">Variant Example: </span>
+          <span className="text-black text-md">{t("variantExample")}</span>
           <Button
             className="text-info hover:underline p-0 m-0"
             text="21-9411449-G-T"

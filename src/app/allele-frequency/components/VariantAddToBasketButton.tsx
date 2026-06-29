@@ -9,6 +9,7 @@ import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 import { ExternalDatasetConfirmationDialog } from "@/components/ExternalDatasetCardLink";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { useTranslations } from "next-intl";
 
 type VariantAddToBasketButtonProps = {
   datasetId: string;
@@ -25,6 +26,7 @@ export default function VariantAddToBasketButton({
   externalAccessUrl,
   disabled = false,
 }: VariantAddToBasketButtonProps) {
+  const t = useTranslations("alleleFrequency");
   if (isExternal) {
     if (externalAccessUrl) {
       return (
@@ -38,7 +40,7 @@ export default function VariantAddToBasketButton({
               }}
               className="text-sm text-primary hover:text-info underline hover:no-underline font-semibold transition-colors duration-200 cursor-pointer inline-flex items-center gap-1"
             >
-              <span>Access external dataset</span>
+              <span>{t("accessExternalDataset")}</span>
               <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
             </button>
           )}
@@ -48,7 +50,7 @@ export default function VariantAddToBasketButton({
 
     return (
       <span className="text-sm text-gray-400 cursor-not-allowed">
-        External link not available
+        {t("externalLinkNotAvailable")}
       </span>
     );
   }

@@ -9,6 +9,7 @@ import { DisclosurePanel } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import { FilterItemProps } from "./FilterItem";
 import { useFilters } from "@/providers/filters/FilterProvider";
+import { useTranslations } from "next-intl";
 import { Operator } from "@/app/api/discovery/open-api/schemas";
 import { ActiveFilter } from "@/providers/filters/FilterProvider.types";
 
@@ -26,6 +27,7 @@ const initialDateTimeFormItem = {
 export default function DateTimeFilterContent({
   filter,
 }: DateTimeFilterContentProps) {
+  const t = useTranslations("datasets.filters");
   const { activeFilters, addActiveFilter } = useFilters();
   const [openedDropdown, setOpenedDropdown] = useState<number | null>(null);
   const [items, setItems] = useState<DateTimeFormItem[]>([
@@ -115,7 +117,7 @@ export default function DateTimeFilterContent({
             className="flex flex-col gap-y-3"
           >
             <div className="flex gap-x-8 justify-between items-center w-full">
-              <label className="w-24">Date</label>
+              <label className="w-24">{t("dateLabel")}</label>
               <input
                 type="date"
                 id={`${filter.key}-${index}-value`}
@@ -134,7 +136,7 @@ export default function DateTimeFilterContent({
               />
             </div>
             <div className="flex items-center w-full gap-x-8 justify-between">
-              <label className="w-24">Operator</label>
+              <label className="w-24">{t("operatorLabel")}</label>
               <div className="relative w-full">
                 <div
                   onClick={() => toggleDropdown(index)}
@@ -146,7 +148,7 @@ export default function DateTimeFilterContent({
                     id={`${filter.key}-${index}-operator-display`}
                     className={item.operator ? "" : "text-[#a0a0a0]"}
                   >
-                    {item.operator || "Select an operator"}
+                    {item.operator || t("operatorPlaceholder")}
                   </span>
                 </div>
                 {index === openedDropdown && (
@@ -173,13 +175,11 @@ export default function DateTimeFilterContent({
           </div>
         ))}
         {showError && (
-          <span className="text-red-500">
-            Date and operator must not be empty
-          </span>
+          <span className="text-red-500">{t("dateAndOperatorError")}</span>
         )}
         <div className="flex w-full justify-between">
           <Button
-            text="Add filter"
+            text={t("addFilter")}
             icon={faPlusCircle}
             type="primary"
             flex={true}
@@ -192,7 +192,7 @@ export default function DateTimeFilterContent({
             className="bg-primary text-white hover:bg-secondary rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide cursor-pointer flex items-center justify-between text-[14px]"
           >
             <FontAwesomeIcon icon={faCheck} className="mr-2" />
-            <span>Apply</span>
+            <span>{t("apply")}</span>
           </button>
         </div>
       </form>

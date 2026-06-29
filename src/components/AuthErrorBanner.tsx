@@ -2,24 +2,25 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+"use client";
+
+import { useTranslations } from "next-intl";
+
 type AuthErrorBannerProps = {
   authError?: string;
 };
 
-const authErrorMessages: Record<string, { title: string; message: string }> = {
-  "missing-terms": {
-    title: "Login blocked",
-    message:
-      "You must accept the terms and conditions before you can access the portal.",
-  },
-};
+const KNOWN_AUTH_ERRORS = ["missing-terms"];
 
 const AuthErrorBanner = ({ authError }: AuthErrorBannerProps) => {
-  if (!authError || !(authError in authErrorMessages)) {
+  const t = useTranslations("auth");
+
+  if (!authError || !KNOWN_AUTH_ERRORS.includes(authError)) {
     return null;
   }
 
-  const { title, message } = authErrorMessages[authError];
+  const title = t(`${authError}.title`);
+  const message = t(`${authError}.message`);
 
   return (
     <div

@@ -6,6 +6,7 @@
 
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Listbox } from "@headlessui/react";
@@ -30,6 +31,7 @@ function OptionFormField({
   editable,
   validationWarning,
 }: OptionFormFieldProps) {
+  const t = useTranslations("application.fields");
   const { updateInputFields } = useApplicationDetails();
   const [selectedOption, setSelectedOption] = useState(field.value || "");
 
@@ -53,7 +55,7 @@ function OptionFormField({
     <div className="flex flex-col py-2">
       <div className="flex flex-col justify-between">
         <h3 className="text-lg sm:text-xl">
-          {title} {field.optional ? "(Optional)" : ""}
+          {title} {field.optional ? t("optional") : ""}
         </h3>
         <div className="relative">
           <Listbox
@@ -74,8 +76,8 @@ function OptionFormField({
                       (option: FormFieldOption) => option.key === selectedOption
                     )
                     ?.label.find((label: Label) => label.language === "en")
-                    ?.name || "Select an option"
-                : "Select an option"}
+                    ?.name || t("selectAnOption")
+                : t("selectAnOption")}
               <FontAwesomeIcon
                 icon={faChevronDown}
                 className={`absolute right-3 top-1/2 transform -translate-y-1/5 ${
@@ -113,7 +115,9 @@ function OptionFormField({
                   </Listbox.Option>
                 ))
               ) : (
-                <div className="text-center py-2">No options available</div>
+                <div className="text-center py-2">
+                  {t("noOptionsAvailable")}
+                </div>
               )}
             </Listbox.Options>
           </Listbox>

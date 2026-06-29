@@ -4,6 +4,7 @@
 
 import Button from "@/components/Button";
 import { useFilters } from "@/providers/filters/FilterProvider";
+import { useTranslations } from "next-intl";
 import { faCheck, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DisclosurePanel } from "@headlessui/react";
@@ -21,6 +22,7 @@ type EntryFormItem = {
 export default function EntriesFilterContent({
   filter,
 }: EntriesFilterContentProps) {
+  const t = useTranslations("datasets.filters");
   const { activeFilters, addActiveFilter, removeActiveFilter } = useFilters();
 
   const correspondingActiveFilter = activeFilters.find(
@@ -92,7 +94,7 @@ export default function EntriesFilterContent({
               <label className="w-56">{entry.label}</label>
               <input
                 className="border rounded-md p-2 w-full"
-                placeholder="Enter a value"
+                placeholder={t("valuePlaceholder")}
                 value={entry.value}
                 onChange={(event) =>
                   setEntries(
@@ -108,11 +110,11 @@ export default function EntriesFilterContent({
           ))}
         </div>
         {showError && (
-          <span className="text-red-500">All fields must be filled</span>
+          <span className="text-red-500">{t("allFieldsError")}</span>
         )}
         <div className="flex w-full justify-between">
           <Button
-            text="Remove filter "
+            text={t("removeFilter")}
             icon={faXmarkCircle}
             type="primary"
             flex={true}
@@ -124,7 +126,7 @@ export default function EntriesFilterContent({
             className="bg-primary text-white hover:bg-secondary rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide cursor-pointer flex items-center justify-between text-[14px]"
           >
             <FontAwesomeIcon icon={faCheck} className="mr-2" />
-            <span>Apply</span>
+            <span>{t("apply")}</span>
           </button>
         </div>
       </form>

@@ -7,6 +7,7 @@ import { FilterType } from "@/app/api/discovery/additional-types";
 import { Filter } from "@/app/api/discovery/open-api/schemas";
 import { useFilters } from "@/providers/filters/FilterProvider";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { useTranslations } from "next-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Disclosure } from "@headlessui/react";
 import { default as DropdownFilterContent } from "./DropdownFilterContent";
@@ -20,6 +21,7 @@ export type FilterItemProps = {
 };
 
 function FilterItem({ filter }: FilterItemProps) {
+  const t = useTranslations("datasets.filters");
   const { activeFilters } = useFilters();
 
   const correspondingActiveFilter = activeFilters.find(
@@ -60,7 +62,7 @@ function FilterItem({ filter }: FilterItemProps) {
                   <span className="text-base px-1.5">{filter.label}</span>
                   <span className="text-base text-info">
                     {isFilterActive &&
-                      `(${nbActiveValues} ${nbActiveValues > 1 ? "filters" : "filter"} active)`}
+                      t("activeCount", { count: nbActiveValues })}
                   </span>
                 </div>
                 <FontAwesomeIcon

@@ -4,6 +4,7 @@
 
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { useTranslations } from "next-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FileUploaded from "./FileUploaded";
 import { RetrievedApplicationFormField } from "@/app/api/access-management/open-api/schemas";
@@ -23,6 +24,7 @@ function FileUploadFormField({
   editable,
   validationWarning,
 }: FileUploadFormFieldProps) {
+  const t = useTranslations("application.fields");
   const { application, isLoading, addAttachment } = useApplicationDetails();
 
   async function onFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -38,7 +40,7 @@ function FileUploadFormField({
       <div className="flex justify-between">
         <div>
           <h3 className="text-lg sm:text-xl">{`${title} ${
-            field.optional ? "(Optional)" : ""
+            field.optional ? t("optional") : ""
           }`}</h3>
         </div>
         <>
@@ -58,7 +60,7 @@ function FileUploadFormField({
             }`}
           >
             <FontAwesomeIcon icon={faPlusCircle} className="mr-2 text-sm" />
-            <span className="text-sm">Upload File</span>
+            <span className="text-sm">{t("uploadFile")}</span>
           </label>
         </>
       </div>

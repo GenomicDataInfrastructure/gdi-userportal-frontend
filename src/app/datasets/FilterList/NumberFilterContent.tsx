@@ -9,6 +9,7 @@ import { DisclosurePanel } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import { FilterItemProps } from "./FilterItem";
 import { useFilters } from "@/providers/filters/FilterProvider";
+import { useTranslations } from "next-intl";
 import { Operator } from "@/app/api/discovery/open-api/schemas";
 import { ActiveFilter } from "@/providers/filters/FilterProvider.types";
 
@@ -26,6 +27,7 @@ const initialNumberFormItem = {
 export default function NumberFilterContent({
   filter,
 }: NumberFilterContentProps) {
+  const t = useTranslations("datasets.filters");
   const { activeFilters, addActiveFilter } = useFilters();
   const [openedDropdown, setOpenedDropdown] = useState<number | null>(null);
   const [items, setItems] = useState<NumberFormItem[]>([initialNumberFormItem]);
@@ -113,13 +115,13 @@ export default function NumberFilterContent({
             className="flex flex-col gap-y-3"
           >
             <div className="flex gap-x-8 justify-between items-center w-full">
-              <label className="w-24">Number</label>
+              <label className="w-24">{t("numberLabel")}</label>
               <input
                 type="number"
                 id={`${filter.key}-${index}-value`}
                 name={`${filter.key}-${index}-value`}
                 className="border rounded-md p-2 w-full"
-                placeholder="Enter a number"
+                placeholder={t("numberPlaceholder")}
                 value={item.value}
                 onChange={(event) => {
                   setItems((items) =>
@@ -133,7 +135,7 @@ export default function NumberFilterContent({
               />
             </div>
             <div className="flex items-center w-full gap-x-8 justify-between">
-              <label className="w-24">Operator</label>
+              <label className="w-24">{t("operatorLabel")}</label>
               <div className="relative w-full">
                 <div
                   onClick={() => toggleDropdown(index)}
@@ -145,7 +147,7 @@ export default function NumberFilterContent({
                     id={`${filter.key}-${index}-operator-display`}
                     className={item.operator ? "" : "text-[#a0a0a0]"}
                   >
-                    {item.operator || "Select an operator"}
+                    {item.operator || t("operatorPlaceholder")}
                   </span>
                 </div>
                 {index === openedDropdown && (
@@ -173,12 +175,12 @@ export default function NumberFilterContent({
         ))}
         {showError && (
           <span className="text-red-500">
-            Number and operator must not be empty
+            {t("numberAndOperatorError")}
           </span>
         )}
         <div className="flex w-full justify-between">
           <Button
-            text="Add filter"
+            text={t("addFilter")}
             icon={faPlusCircle}
             type="primary"
             flex={true}
@@ -191,7 +193,7 @@ export default function NumberFilterContent({
             className="bg-primary text-white hover:bg-secondary rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide cursor-pointer flex items-center justify-between text-[14px]"
           >
             <FontAwesomeIcon icon={faCheck} className="mr-2" />
-            <span>Apply</span>
+            <span>{t("apply")}</span>
           </button>
         </div>
       </form>

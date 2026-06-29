@@ -27,6 +27,7 @@ import {
 } from "@/utils/datasetHelpers";
 import { isAxiosError } from "axios";
 import { use, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
 type AlleleFrequencyPageProps = {
   searchParams: Promise<UrlSearchParams>;
@@ -43,6 +44,7 @@ const ALL_VARIANT_SEARCH_ENABLED = contentConfig.enableAllVariantSearch;
 export default function AlleleFrequencyPage({
   searchParams,
 }: AlleleFrequencyPageProps) {
+  const t = useTranslations("alleleFrequency");
   const [results, setResults] = useState<GVariantsSearchResponse[]>([]);
   const [showSummary, setShowSummary] = useState(false);
   const [datasetActions, setDatasetActions] = useState<
@@ -332,12 +334,12 @@ export default function AlleleFrequencyPage({
 
       {loading && (
         <p className="text-center text-gray-500">
-          Searching and preparing results...
+          {t("searching")}
         </p>
       )}
 
       {!loading && triedSearching && results.length == 0 && (
-        <p className="text-center text-gray-500">No results found</p>
+        <p className="text-center text-gray-500">{t("noResults")}</p>
       )}
 
       {!loading && results.length > 0 && (

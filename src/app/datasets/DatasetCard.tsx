@@ -38,6 +38,7 @@ function DatasetCard({
   displayBasketButton = true,
 }: Readonly<DatasetCardProps>) {
   const t = useTranslations("basket");
+  const tDetail = useTranslations("datasets.detail");
   const screenSize = useWindowSize();
   const truncatedDesc = dataset.description
     ? truncateDescription(dataset.description, screenSize)
@@ -113,7 +114,7 @@ function DatasetCard({
                 }}
                 className="text-xs sm:text-base text-primary hover:text-info underline hover:no-underline font-semibold transition-colors duration-200 cursor-pointer shrink-0 inline-flex items-center gap-1"
               >
-                <span>Access external dataset</span>
+                <span>{tDetail("accessExternalDataset")}</span>
                 <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
               </button>
             )}
@@ -127,7 +128,7 @@ function DatasetCard({
             }}
             className="text-xs sm:text-base text-gray-400 cursor-not-allowed inline-flex items-center gap-1"
           >
-            <span>External link not available</span>
+            <span>{tDetail("externalLinkNotAvailable")}</span>
             <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
           </button>
         )}
@@ -165,14 +166,14 @@ function DatasetCard({
     () => dataset.keywords?.filter((kw): kw is string => !!kw),
     [dataset.keywords]
   );
-  const entityLabel = dataset.isSeries ? "Dataset series" : undefined;
+  const entityLabel = dataset.isSeries ? tDetail("datasetSeriesTag") : undefined;
 
   return (
     <Card
       url={`/datasets/${dataset.id}`}
       title={dataset.title}
       subTitles={subTitles}
-      description={truncatedDesc || "No description available"}
+      description={truncatedDesc || tDetail("noDescriptionAvailable")}
       cardItems={cardItems}
       keywords={keywords}
       externalUrl={isExternal ? externalAccessUrl : undefined}

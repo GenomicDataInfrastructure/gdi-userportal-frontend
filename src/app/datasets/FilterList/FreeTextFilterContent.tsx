@@ -9,6 +9,7 @@ import { DisclosurePanel } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import { FilterItemProps } from "./FilterItem";
 import { useFilters } from "@/providers/filters/FilterProvider";
+import { useTranslations } from "next-intl";
 import { Operator } from "@/app/api/discovery/open-api/schemas";
 import { ActiveFilter } from "@/providers/filters/FilterProvider.types";
 
@@ -26,6 +27,7 @@ const initialFreeTextFormItem = {
 export default function FreeTextFilterContent({
   filter,
 }: FreeTextFilterContentProps) {
+  const t = useTranslations("datasets.filters");
   const { activeFilters, addActiveFilter } = useFilters();
   const [openedDropdown, setOpenedDropdown] = useState<number | null>(null);
   const [items, setItems] = useState<FreeTextFormItem[]>([
@@ -115,12 +117,12 @@ export default function FreeTextFilterContent({
             className="flex flex-col gap-y-3"
           >
             <div className="flex gap-x-8 justify-between items-center w-full">
-              <label className="w-24">Value</label>
+              <label className="w-24">{t("valueLabel")}</label>
               <input
                 id={`${filter.key}-${index}-value`}
                 name={`${filter.key}-${index}-value`}
                 className="border rounded-md p-2 w-full"
-                placeholder="Enter a value"
+                placeholder={t("valuePlaceholder")}
                 value={item.value}
                 onChange={(event) => {
                   setItems((items) =>
@@ -134,7 +136,7 @@ export default function FreeTextFilterContent({
               />
             </div>
             <div className="flex items-center w-full gap-x-8 justify-between">
-              <label className="w-24">Operator</label>
+              <label className="w-24">{t("operatorLabel")}</label>
               <div className="relative w-full">
                 <div
                   onClick={() => toggleDropdown(index)}
@@ -146,7 +148,7 @@ export default function FreeTextFilterContent({
                     id={`${filter.key}-${index}-operator-display`}
                     className={item.operator ? "" : "text-[#a0a0a0]"}
                   >
-                    {item.operator || "Select an operator"}
+                    {item.operator || t("operatorPlaceholder")}
                   </span>
                 </div>
                 {index === openedDropdown && (
@@ -174,12 +176,12 @@ export default function FreeTextFilterContent({
         ))}
         {showError && (
           <span className="text-red-500">
-            Value and operator must not be empty
+            {t("valueAndOperatorError")}
           </span>
         )}
         <div className="flex w-full justify-between">
           <Button
-            text="Add filter"
+            text={t("addFilter")}
             icon={faPlusCircle}
             type="primary"
             flex={true}
@@ -192,7 +194,7 @@ export default function FreeTextFilterContent({
             className="bg-primary text-white hover:bg-secondary rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide cursor-pointer flex items-center justify-between text-[14px]"
           >
             <FontAwesomeIcon icon={faCheck} className="mr-2" />
-            <span>Apply</span>
+            <span>{t("apply")}</span>
           </button>
         </div>
       </form>

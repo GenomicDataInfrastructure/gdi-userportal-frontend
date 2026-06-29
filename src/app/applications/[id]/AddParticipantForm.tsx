@@ -14,12 +14,15 @@ import { inviteMemberApi } from "../../api/access-management";
 import { useAlert } from "@/providers/AlertProvider";
 import { useState } from "react";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { useTranslations } from "next-intl";
 
 const AddParticipantForm = ({
   application,
 }: {
   application: RetrievedApplication;
 }) => {
+  const t = useTranslations("application");
+  const tCommon = useTranslations("common");
   const [isAddParticipantFormShown, showAddParticipantForm] = useState(false);
   const [currentAddParticipantName, setCurrentAddParticipantName] =
     useState("");
@@ -55,14 +58,14 @@ const AddParticipantForm = ({
 
       setAlert({
         type: "success",
-        message: "Invitation sent successfully",
+        message: t("invitationSentSuccessfully"),
       });
       closeForm();
     } catch (error: Error | unknown) {
       const err = error as Error;
       setAlert({
         type: "error",
-        message: "Failed to invite member",
+        message: t("failedToInviteMember"),
         details: err.message === "Failed to invite member" ? "" : err.message,
       });
     }
@@ -73,7 +76,7 @@ const AddParticipantForm = ({
       {!isAddParticipantFormShown && (
         <Button
           type="primary"
-          text="Add Participant"
+          text={t("addParticipant")}
           icon={faUserPlus}
           onClick={() => toggleShowParticipantForm()}
         />
@@ -84,25 +87,25 @@ const AddParticipantForm = ({
             value={currentAddParticipantName}
             onChange={(e) => setCurrentAddParticipantName(e.target.value)}
             type="text"
-            placeholder="Name"
+            placeholder={t("namePlaceholder")}
           />
           <Input
             value={currentAddParticipantEmail}
             onChange={(e) => setCurrentAddParticipantEmail(e.target.value)}
             type="text"
-            placeholder="Email"
+            placeholder={t("emailPlaceholder")}
           />
           <div className="flex gap-2 self-end">
             {isAddParticipantFormShown && (
               <Button
                 type="primary"
-                text="Cancel"
+                text={tCommon("cancel")}
                 onClick={() => closeForm()}
               />
             )}
             <Button
               type="primary"
-              text="Send"
+              text={tCommon("send")}
               onClick={() => handleInviteMember()}
             />
           </div>

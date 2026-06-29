@@ -7,6 +7,7 @@
 import Alert, { AlertState } from "@/components/Alert";
 import Button from "@/components/Button";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
+import { useTranslations } from "next-intl";
 import { getLabelName } from "@/utils/getLabelName";
 import {
   faArrowUpRightFromSquare,
@@ -16,6 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
 export default function TermsAcceptance() {
+  const t = useTranslations("application.terms");
   const [alert, setAlert] = useState<AlertState | null>(null);
   const { application, acceptTerms, clearError } = useApplicationDetails();
   const [expandedLicenseId, setExpandedLicenseId] = useState<string | null>(
@@ -53,7 +55,7 @@ export default function TermsAcceptance() {
   };
 
   if (!application?.licenses || application?.licenses.length === 0) {
-    return <p>No terms and conditions have been defined.</p>;
+    return <p>{t("noTermsDefined")}</p>;
   }
 
   return (
@@ -90,7 +92,7 @@ export default function TermsAcceptance() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Read more
+                {t("readMore")}
                 <FontAwesomeIcon
                   className="ml-2"
                   icon={faArrowUpRightFromSquare}
@@ -99,9 +101,9 @@ export default function TermsAcceptance() {
             )}
             <p>
               {license.acceptedByCurrentUser ? (
-                <span className="text-green-600">Accepted</span>
+                <span className="text-green-600">{t("accepted")}</span>
               ) : (
-                <span className="text-red-600">Not Accepted</span>
+                <span className="text-red-600">{t("notAccepted")}</span>
               )}
             </p>
           </div>
@@ -111,7 +113,7 @@ export default function TermsAcceptance() {
         <div className="flex justify-end mt-4">
           <Button
             type="primary"
-            text="Accept All"
+            text={t("acceptAll")}
             icon={faCheckCircle}
             onClick={handleAcceptTerms}
           />

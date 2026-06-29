@@ -6,12 +6,14 @@
 
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTranslations } from "next-intl";
 
 type BeaconErrorAlertProps = {
   error: string;
 };
 
 export default function BeaconErrorAlert({ error }: BeaconErrorAlertProps) {
+  const t = useTranslations("datasets");
   const formattedError = error.trim();
   const needsPeriod = !/[.!?]$/.test(formattedError);
 
@@ -24,7 +26,7 @@ export default function BeaconErrorAlert({ error }: BeaconErrorAlertProps) {
         />
         <div className="flex-1">
           <div className="font-semibold text-base mb-1">
-            Individual-level data discovery unavailable
+            {t("beaconErrorTitle")}
           </div>
           <p className="text-sm text-gray-700">
             {formattedError}

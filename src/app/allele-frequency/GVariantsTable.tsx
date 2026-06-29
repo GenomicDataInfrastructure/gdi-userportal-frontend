@@ -11,6 +11,7 @@ import VariantAddToBasketButton from "./components/VariantAddToBasketButton";
 import { GVariantsTableUtils } from "@/utils/GVariantsTableUtils";
 import { findDatasetByIdentifier } from "@/utils/datasetEntitlements";
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 type GVariantsTableProps = {
   results: GVariantsSearchResponse[];
@@ -26,11 +27,11 @@ type DatasetActionInfo = {
 
 const NOT_AVAILABLE = GVariantsTableUtils.NOT_AVAILABLE;
 
-const renderCell = (value: unknown) =>
+const renderCell = (value: unknown, notAvailableLabel: string) =>
   value != null && (typeof value === "string" || typeof value === "number") ? (
     value
   ) : (
-    <span className="text-xs text-gray-400">not available</span>
+    <span className="text-xs text-gray-400">{notAvailableLabel}</span>
   );
 
 export default function GVariantsTable({
@@ -38,6 +39,8 @@ export default function GVariantsTable({
   datasetActions,
   showSummary = false,
 }: GVariantsTableProps) {
+  const t = useTranslations("alleleFrequency");
+  const notAvailableLabel = t("notAvailable");
   const [expandedDatasets, setExpandedDatasets] = useState<
     Record<string, boolean>
   >({});
@@ -138,33 +141,33 @@ export default function GVariantsTable({
       {showSummary && summaryData && beaconIds.length > 1 && (
         <div>
           <h3 className="text-base sm:text-lg font-semibold mb-2">
-            Summary for current filter
+            {t("summaryForCurrentFilter")}
           </h3>
           <div className="overflow-x-auto">
             <table className="min-w-[1100px] lg:min-w-full border border-surface shadow-lg rounded-xl overflow-hidden table-fixed text-xs sm:text-sm">
               <thead>
                 <tr className="bg-primary text-surface">
                   <th className="px-3 py-2 text-left whitespace-nowrap">
-                    Scope
+                    {t("scope")}
                   </th>
                   <th className="px-3 py-2 text-left whitespace-nowrap">
-                    Population
+                    {t("population")}
                   </th>
                   <th className="px-3 py-2 text-left whitespace-nowrap">
-                    Allele Count
+                    {t("alleleCount")}
                   </th>
                   <th className="px-3 py-2 text-left whitespace-nowrap">
-                    Allele Number
+                    {t("alleleNumber")}
                   </th>
                   <th className="px-3 py-2 text-left whitespace-nowrap">
-                    Frequency
+                    {t("frequency")}
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr className="bg-surface border border-secondary">
                   <td className="px-3 py-2 whitespace-nowrap">
-                    All visible matching datasets
+                    {t("allVisibleDatasets")}
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap">
                     {summaryData.population}
@@ -172,17 +175,17 @@ export default function GVariantsTable({
                   <td className="px-3 py-2 whitespace-nowrap">
                     {summaryData.alleleCount != null
                       ? summaryData.alleleCount.toLocaleString()
-                      : renderCell(undefined)}
+                      : renderCell(undefined, notAvailableLabel)}
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap">
                     {summaryData.alleleNumber != null
                       ? summaryData.alleleNumber.toLocaleString()
-                      : renderCell(undefined)}
+                      : renderCell(undefined, notAvailableLabel)}
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap">
                     {summaryData.frequency != null
                       ? summaryData.frequency.toFixed(4)
-                      : renderCell(undefined)}
+                      : renderCell(undefined, notAvailableLabel)}
                   </td>
                 </tr>
               </tbody>
@@ -193,7 +196,7 @@ export default function GVariantsTable({
 
       <div>
         <h3 className="text-base sm:text-lg font-semibold mb-2">
-          Detailed results
+          {t("detailedResults")}
         </h3>
         <div className="space-y-6">
           {variantGroups.map((variantGroup) => {
@@ -205,7 +208,7 @@ export default function GVariantsTable({
               <div key={variantGroup.key} className="space-y-2">
                 {showVariantTitle && (
                   <p className="text-base sm:text-lg font-semibold">
-                    Variant:{" "}
+                    {t("variantLabel")}
                     <span className="text-info break-all">
                       {variantGroup.label}
                     </span>
@@ -216,34 +219,34 @@ export default function GVariantsTable({
                     <thead>
                       <tr className="bg-primary text-surface">
                         <th className="px-3 py-2 text-left whitespace-nowrap">
-                          Dataset
+                          {t("dataset")}
                         </th>
                         <th className="px-3 py-2 text-left whitespace-nowrap">
-                          Dataset Type
+                          {t("datasetType")}
                         </th>
                         <th className="px-3 py-2 text-left whitespace-nowrap">
-                          Population
+                          {t("population")}
                         </th>
                         <th className="px-3 py-2 text-left whitespace-nowrap">
-                          Allele Count
+                          {t("alleleCount")}
                         </th>
                         <th className="px-3 py-2 text-left whitespace-nowrap">
-                          Allele Number
+                          {t("alleleNumber")}
                         </th>
                         <th className="px-3 py-2 text-left whitespace-nowrap">
-                          Homozygous
+                          {t("homozygous")}
                         </th>
                         <th className="px-3 py-2 text-left whitespace-nowrap">
-                          Heterozygous
+                          {t("heterozygous")}
                         </th>
                         <th className="px-3 py-2 text-left whitespace-nowrap">
-                          Hemizygous
+                          {t("hemizygous")}
                         </th>
                         <th className="px-3 py-2 text-left whitespace-nowrap">
-                          Frequency
+                          {t("frequency")}
                         </th>
                         <th className="px-3 py-2 text-left w-[220px] whitespace-nowrap">
-                          Actions
+                          {t("actions")}
                         </th>
                       </tr>
                     </thead>
@@ -269,7 +272,7 @@ export default function GVariantsTable({
                                 colSpan={10}
                                 className="px-3 py-2 text-base sm:text-lg font-bold"
                               >
-                                Beacon: {beaconId}
+                                {t("beacon")}{beaconId}
                                 {beaconCountryLabel
                                   ? ` (${beaconCountryLabel})`
                                   : ""}
@@ -330,31 +333,34 @@ export default function GVariantsTable({
                                     </td>
                                     <td className="px-3 py-2 whitespace-nowrap" />
                                     <td className="px-3 py-2 whitespace-nowrap">
-                                      {renderCell(totals?.alleleCount)}
+                                      {renderCell(totals?.alleleCount, notAvailableLabel)}
                                     </td>
                                     <td className="px-3 py-2 whitespace-nowrap">
-                                      {renderCell(totals?.alleleNumber)}
+                                      {renderCell(totals?.alleleNumber, notAvailableLabel)}
                                     </td>
                                     <td className="px-3 py-2 whitespace-nowrap">
                                       {renderCell(
-                                        totals?.alleleCountHomozygous
+                                        totals?.alleleCountHomozygous,
+                                        notAvailableLabel
                                       )}
                                     </td>
                                     <td className="px-3 py-2 whitespace-nowrap">
                                       {renderCell(
-                                        totals?.alleleCountHeterozygous
+                                        totals?.alleleCountHeterozygous,
+                                        notAvailableLabel
                                       )}
                                     </td>
                                     <td className="px-3 py-2 whitespace-nowrap">
                                       {renderCell(
-                                        totals?.alleleCountHemizygous
+                                        totals?.alleleCountHemizygous,
+                                        notAvailableLabel
                                       )}
                                     </td>
                                     <td className="px-3 py-2 whitespace-nowrap">
                                       {typeof totals?.alleleFrequency ===
                                       "number"
                                         ? totals.alleleFrequency.toFixed(4)
-                                        : renderCell(undefined)}
+                                        : renderCell(undefined, notAvailableLabel)}
                                     </td>
                                     <td className="px-3 py-2 w-[220px] whitespace-nowrap">
                                       <div className="w-[220px]">
@@ -392,30 +398,33 @@ export default function GVariantsTable({
                                           {variant.population || "-"}
                                         </td>
                                         <td className="px-3 py-2 whitespace-nowrap">
-                                          {renderCell(variant.alleleCount)}
+                                          {renderCell(variant.alleleCount, notAvailableLabel)}
                                         </td>
                                         <td className="px-3 py-2 whitespace-nowrap">
-                                          {renderCell(variant.alleleNumber)}
+                                          {renderCell(variant.alleleNumber, notAvailableLabel)}
                                         </td>
                                         <td className="px-3 py-2 whitespace-nowrap">
                                           {renderCell(
-                                            variant.alleleCountHomozygous
+                                            variant.alleleCountHomozygous,
+                                            notAvailableLabel
                                           )}
                                         </td>
                                         <td className="px-3 py-2 whitespace-nowrap">
                                           {renderCell(
-                                            variant.alleleCountHeterozygous
+                                            variant.alleleCountHeterozygous,
+                                            notAvailableLabel
                                           )}
                                         </td>
                                         <td className="px-3 py-2 whitespace-nowrap">
                                           {renderCell(
-                                            variant.alleleCountHemizygous
+                                            variant.alleleCountHemizygous,
+                                            notAvailableLabel
                                           )}
                                         </td>
                                         <td className="px-3 py-2 whitespace-nowrap">
                                           {variant.alleleFrequency != null
                                             ? variant.alleleFrequency.toFixed(4)
-                                            : renderCell(undefined)}
+                                            : renderCell(undefined, notAvailableLabel)}
                                         </td>
                                         <td className="px-3 py-2 w-[220px] whitespace-nowrap" />
                                       </tr>

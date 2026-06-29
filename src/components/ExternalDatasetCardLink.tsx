@@ -15,6 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/shadcn/dialog";
+import { useTranslations } from "next-intl";
 
 type ExternalDatasetConfirmationDialogProps = {
   url: string;
@@ -29,6 +30,7 @@ export function ExternalDatasetConfirmationDialog({
   onOpenChange,
   children,
 }: ExternalDatasetConfirmationDialogProps) {
+  const t = useTranslations("common");
   const [showDialog, setShowDialog] = useState(false);
 
   const handleConfirm = () => {
@@ -54,22 +56,20 @@ export function ExternalDatasetConfirmationDialog({
       >
         <DialogContent className="sm:max-w-md bg-white">
           <DialogHeader>
-            <DialogTitle>External Dataset</DialogTitle>
+            <DialogTitle>{t("externalDataset")}</DialogTitle>
             <DialogDescription className="pt-2">
-              You are about to be redirected to an external website. This
-              dataset is not available for direct access through the GDI User
-              Portal and must be requested through the external data provider.
+              {t("externalDatasetWarning")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex gap-2 sm:justify-end">
             <Button
-              text="Cancel"
+              text={t("cancel")}
               onClick={() => setShowDialog(false)}
               type="secondary"
               className="mt-2"
             />
             <Button
-              text="Continue to External Site"
+              text={t("continueToExternalSite")}
               onClick={handleConfirm}
               type="primary"
               icon={faExternalLinkAlt}
@@ -92,6 +92,7 @@ type ExternalDatasetCardLinkProps = {
 export default function ExternalDatasetCardLink({
   url,
 }: ExternalDatasetCardLinkProps) {
+  const t = useTranslations("common");
   return (
     <ExternalDatasetConfirmationDialog url={url}>
       {({ onClick }) => (
@@ -99,7 +100,7 @@ export default function ExternalDatasetCardLink({
           onClick={onClick}
           className="text-xs rounded-md px-3 py-1.5 font-semibold bg-info text-white hover:bg-secondary transition-colors duration-200 shrink-0 whitespace-nowrap cursor-pointer"
         >
-          View External →
+          {t("viewExternal")}
         </button>
       )}
     </ExternalDatasetConfirmationDialog>

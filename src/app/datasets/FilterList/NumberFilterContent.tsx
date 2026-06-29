@@ -174,9 +174,7 @@ export default function NumberFilterContent({
           </div>
         ))}
         {showError && (
-          <span className="text-red-500">
-            {t("numberAndOperatorError")}
-          </span>
+          <span className="text-red-500">{t("numberAndOperatorError")}</span>
         )}
         <div className="flex w-full justify-between">
           <Button

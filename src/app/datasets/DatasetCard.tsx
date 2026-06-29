@@ -166,7 +166,9 @@ function DatasetCard({
     () => dataset.keywords?.filter((kw): kw is string => !!kw),
     [dataset.keywords]
   );
-  const entityLabel = dataset.isSeries ? tDetail("datasetSeriesTag") : undefined;
+  const entityLabel = dataset.isSeries
+    ? tDetail("datasetSeriesTag")
+    : undefined;
 
   return (
     <Card

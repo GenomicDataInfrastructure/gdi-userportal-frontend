@@ -175,9 +175,7 @@ export default function DateTimeFilterContent({
           </div>
         ))}
         {showError && (
-          <span className="text-red-500">
-            {t("dateAndOperatorError")}
-          </span>
+          <span className="text-red-500">{t("dateAndOperatorError")}</span>
         )}
         <div className="flex w-full justify-between">
           <Button

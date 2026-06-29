@@ -115,7 +115,9 @@ function OptionFormField({
                   </Listbox.Option>
                 ))
               ) : (
-                <div className="text-center py-2">{t("noOptionsAvailable")}</div>
+                <div className="text-center py-2">
+                  {t("noOptionsAvailable")}
+                </div>
               )}
             </Listbox.Options>
           </Listbox>

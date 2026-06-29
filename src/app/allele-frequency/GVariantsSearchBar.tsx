@@ -204,7 +204,9 @@ export default function GVariantsSearchBar({
   };
   return (
     <div className="mb-6">
-      <h2 className="text-lg font-semibold mb-2">{t("searchForYourVariant")}</h2>
+      <h2 className="text-lg font-semibold mb-2">
+        {t("searchForYourVariant")}
+      </h2>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 items-end">
         <FormField

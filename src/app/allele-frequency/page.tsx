@@ -332,11 +332,7 @@ export default function AlleleFrequencyPage({
         datasetTypeOptions={datasetTypeOptions}
       />
 
-      {loading && (
-        <p className="text-center text-gray-500">
-          {t("searching")}
-        </p>
-      )}
+      {loading && <p className="text-center text-gray-500">{t("searching")}</p>}
 
       {!loading && triedSearching && results.length == 0 && (
         <p className="text-center text-gray-500">{t("noResults")}</p>

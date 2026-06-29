@@ -272,7 +272,8 @@ export default function GVariantsTable({
                                 colSpan={10}
                                 className="px-3 py-2 text-base sm:text-lg font-bold"
                               >
-                                {t("beacon")}{beaconId}
+                                {t("beacon")}
+                                {beaconId}
                                 {beaconCountryLabel
                                   ? ` (${beaconCountryLabel})`
                                   : ""}
@@ -333,10 +334,16 @@ export default function GVariantsTable({
                                     </td>
                                     <td className="px-3 py-2 whitespace-nowrap" />
                                     <td className="px-3 py-2 whitespace-nowrap">
-                                      {renderCell(totals?.alleleCount, notAvailableLabel)}
+                                      {renderCell(
+                                        totals?.alleleCount,
+                                        notAvailableLabel
+                                      )}
                                     </td>
                                     <td className="px-3 py-2 whitespace-nowrap">
-                                      {renderCell(totals?.alleleNumber, notAvailableLabel)}
+                                      {renderCell(
+                                        totals?.alleleNumber,
+                                        notAvailableLabel
+                                      )}
                                     </td>
                                     <td className="px-3 py-2 whitespace-nowrap">
                                       {renderCell(
@@ -360,7 +367,10 @@ export default function GVariantsTable({
                                       {typeof totals?.alleleFrequency ===
                                       "number"
                                         ? totals.alleleFrequency.toFixed(4)
-                                        : renderCell(undefined, notAvailableLabel)}
+                                        : renderCell(
+                                            undefined,
+                                            notAvailableLabel
+                                          )}
                                     </td>
                                     <td className="px-3 py-2 w-[220px] whitespace-nowrap">
                                       <div className="w-[220px]">
@@ -398,10 +408,16 @@ export default function GVariantsTable({
                                           {variant.population || "-"}
                                         </td>
                                         <td className="px-3 py-2 whitespace-nowrap">
-                                          {renderCell(variant.alleleCount, notAvailableLabel)}
+                                          {renderCell(
+                                            variant.alleleCount,
+                                            notAvailableLabel
+                                          )}
                                         </td>
                                         <td className="px-3 py-2 whitespace-nowrap">
-                                          {renderCell(variant.alleleNumber, notAvailableLabel)}
+                                          {renderCell(
+                                            variant.alleleNumber,
+                                            notAvailableLabel
+                                          )}
                                         </td>
                                         <td className="px-3 py-2 whitespace-nowrap">
                                           {renderCell(
@@ -424,7 +440,10 @@ export default function GVariantsTable({
                                         <td className="px-3 py-2 whitespace-nowrap">
                                           {variant.alleleFrequency != null
                                             ? variant.alleleFrequency.toFixed(4)
-                                            : renderCell(undefined, notAvailableLabel)}
+                                            : renderCell(
+                                                undefined,
+                                                notAvailableLabel
+                                              )}
                                         </td>
                                         <td className="px-3 py-2 w-[220px] whitespace-nowrap" />
                                       </tr>

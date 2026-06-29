@@ -175,9 +175,7 @@ export default function FreeTextFilterContent({
           </div>
         ))}
         {showError && (
-          <span className="text-red-500">
-            {t("valueAndOperatorError")}
-          </span>
+          <span className="text-red-500">{t("valueAndOperatorError")}</span>
         )}
         <div className="flex w-full justify-between">
           <Button

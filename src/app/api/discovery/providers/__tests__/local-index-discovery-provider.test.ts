@@ -118,6 +118,18 @@ describe("LocalIndexDiscoveryProvider", () => {
   });
 
   test("searchDatasets maps a canonical dataset fixture and applies defaults", async () => {
+    mockStore.retrieveFilterValues.mockImplementation(async (key) => {
+      if (key === "theme") {
+        return [{ value: "Health", label: "Health", count: 2 }];
+      }
+
+      if (key === "publisherName") {
+        return [{ value: "LNDS", label: "LNDS", count: 2 }];
+      }
+
+      return [];
+    });
+
     mockStore.searchDatasets.mockResolvedValueOnce({
       count: 2,
       results: [
@@ -147,6 +159,20 @@ describe("LocalIndexDiscoveryProvider", () => {
       )
     ).resolves.toEqual({
       count: 2,
+      facets: expect.arrayContaining([
+        expect.objectContaining({
+          source: "local-index",
+          key: "theme",
+          type: "DROPDOWN",
+          values: [{ value: "Health", label: "Health", count: 2 }],
+        }),
+        expect.objectContaining({
+          source: "local-index",
+          key: "publisherName",
+          type: "DROPDOWN",
+          values: [{ value: "LNDS", label: "LNDS", count: 2 }],
+        }),
+      ]),
       results: [
         {
           id: "a",

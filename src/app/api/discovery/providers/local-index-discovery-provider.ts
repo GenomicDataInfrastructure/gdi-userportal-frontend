@@ -152,17 +152,20 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
 
   async searchDatasets(
     options: DiscoveryDatasetSearchQuery,
-    _headers: Record<string, string>
+    headers: Record<string, string>
   ): Promise<DiscoveryDatasetsSearchResponse> {
     await this.store.ensureInitialized();
-    const response = await this.store.searchDatasets({
-      query: options.query,
-      facets: options.facets?.map(({ source: _source, ...facet }) => facet),
-      sort: options.sort,
-      start: options.start,
-      rows: options.rows,
-      operator: options.operator,
-    });
+    const [response, facets] = await Promise.all([
+      this.store.searchDatasets({
+        query: options.query,
+        facets: options.facets?.map(({ source: _source, ...facet }) => facet),
+        sort: options.sort,
+        start: options.start,
+        rows: options.rows,
+        operator: options.operator,
+      }),
+      this.retrieveFilters(headers),
+    ]);
 
     return {
       count: response.count,
@@ -170,6 +173,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
         ...this.mapLocalDataset(dataset),
         distributionsCount: dataset.distributionsCount,
       })),
+      facets,
     };
   }
 

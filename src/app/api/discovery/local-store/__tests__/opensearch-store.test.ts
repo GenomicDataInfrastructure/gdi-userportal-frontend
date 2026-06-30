@@ -157,6 +157,41 @@ describe("OpenSearchDiscoveryStore", () => {
     ]);
   });
 
+  test("hasFilterValues returns true when the field exists in indexed documents", async () => {
+    const store = createStore();
+    mockClient.post.mockResolvedValueOnce({
+      data: { count: 4 },
+    });
+
+    await expect(
+      store.hasFilterValues("numberOfUniqueIndividuals")
+    ).resolves.toBe(true);
+    expect(mockClient.post).toHaveBeenCalledWith("/discovery_datasets/_count", {
+      query: {
+        exists: {
+          field: "numberOfUniqueIndividuals",
+        },
+      },
+    });
+  });
+
+  test("hasFilterValues returns false when the field is missing in indexed documents", async () => {
+    const store = createStore();
+    mockClient.post.mockResolvedValueOnce({
+      data: { count: 0 },
+    });
+
+    await expect(
+      store.hasFilterValues("numberOfUniqueIndividuals")
+    ).resolves.toBe(false);
+  });
+
+  test("hasFilterValues returns false for unsupported keys", async () => {
+    const store = createStore();
+
+    await expect(store.hasFilterValues("unknown")).resolves.toBe(false);
+  });
+
   test("retrieveFilterValues returns empty list for unsupported keys", async () => {
     const store = createStore();
 

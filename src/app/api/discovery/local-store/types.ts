@@ -186,6 +186,7 @@ export interface LocalDiscoveryStore {
   readonly key: string;
   ensureInitialized: () => Promise<void>;
   clearDatasets: () => Promise<void>;
+  hasFilterValues: (key: string) => Promise<boolean>;
   retrieveFilterValues: (key: string) => Promise<LocalDiscoveryValueLabel[]>;
   searchDatasets: (
     options: LocalDiscoverySearchOptions

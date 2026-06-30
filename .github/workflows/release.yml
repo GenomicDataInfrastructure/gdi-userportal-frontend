@@ -32,11 +32,12 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
-      - uses: oss-review-toolkit/ort-ci-github-action@086d928d24ef1653dc0777296b312fda5faaaf52 # v1
-        with:
-          allow-dynamic-versions: "true"
-          fail-on: "issues"
-          run: "cache-dependencies,cache-scan-results,labels,analyzer,evaluator,advisor,reporter,upload-results"
+      # Temporarily disabled while the upstream ORT image is failing at startup.
+      # - uses: oss-review-toolkit/ort-ci-github-action@086d928d24ef1653dc0777296b312fda5faaaf52 # v1
+      #   with:
+      #     allow-dynamic-versions: "true"
+      #     fail-on: "issues"
+      #     run: "cache-dependencies,cache-scan-results,labels,analyzer,evaluator,advisor,reporter,upload-results"
 
   e2e-tests:
     runs-on: ubuntu-latest

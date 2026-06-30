@@ -16,6 +16,26 @@ export default function FilterList() {
   const { filters } = useFilters();
   const searchParams = useSearchParams();
 
+  const hasRenderableContent = (filter: (typeof filters)[number]) => {
+    if (filter.type === "DROPDOWN") {
+      return (
+        filter.values?.some((value) =>
+          Boolean(value.value?.trim() || value.label?.trim())
+        ) ?? false
+      );
+    }
+
+    if (filter.type === "ENTRIES") {
+      return (
+        filter.entries?.some((entry) =>
+          Boolean(entry.key?.trim() && entry.label?.trim())
+        ) ?? false
+      );
+    }
+
+    return true;
+  };
+
   // Check if Beacon is enabled via URL parameter
   const includeBeacon = searchParams.get("beacon") === "true";
 
@@ -30,10 +50,9 @@ export default function FilterList() {
       // Only show Beacon filters if:
       // 1. User has Beacon access AND
       // 2. Beacon toggle is ON
-      return includeBeacon && hasBeaconAccess;
+      return includeBeacon && hasBeaconAccess && hasRenderableContent(filter);
     }
-    // Always show CKAN filters
-    return true;
+    return hasRenderableContent(filter);
   });
 
   // Group filters by source

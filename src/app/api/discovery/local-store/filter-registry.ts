@@ -18,6 +18,7 @@ type LocalFilterAggregation = {
 };
 
 export type LocalFilterDefinition = LocalDiscoveryFilter & {
+  field?: string;
   aggregation?: LocalFilterAggregation;
 };
 
@@ -53,6 +54,7 @@ const createDropdownFilter = ({
   type: "DROPDOWN",
   key,
   label,
+  field,
   aggregation: {
     field,
     mapBucket,
@@ -76,6 +78,7 @@ const createOperatorFilter = ({
   type,
   key,
   label,
+  field: key,
   operators,
 });
 

@@ -127,19 +127,29 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     _headers: Record<string, string>
   ): Promise<DiscoveryFilter[]> {
     const localFilters = listLocalFilters();
-
-    return Promise.all(
+    const resolvedFilters = await Promise.all(
       localFilters.map(async (filter) => {
         if (filter.type !== "DROPDOWN") {
-          return { ...filter, source: this.key };
+          return (await this.store.hasFilterValues(filter.key))
+            ? { ...filter, source: this.key }
+            : null;
+        }
+
+        const values = await this.store.retrieveFilterValues(filter.key);
+        if (!values.length) {
+          return null;
         }
 
         return {
           ...filter,
           source: this.key,
-          values: await this.store.retrieveFilterValues(filter.key),
+          values,
         };
       })
+    );
+
+    return resolvedFilters.filter(
+      (filter): filter is DiscoveryFilter => filter !== null
     );
   }
 

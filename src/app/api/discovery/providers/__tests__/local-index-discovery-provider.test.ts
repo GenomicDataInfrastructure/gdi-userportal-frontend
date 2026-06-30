@@ -13,6 +13,7 @@ import { parseRdfXmlToQuads } from "@/app/api/discovery/harvester/rdf-quad-loade
 const mockStore = {
   key: "opensearch",
   ensureInitialized: jest.fn<() => Promise<void>>(),
+  hasFilterValues: jest.fn<(_key: string) => Promise<boolean>>(),
   retrieveFilterValues: jest.fn<(_key: string) => Promise<unknown[]>>(),
   searchDatasets:
     jest.fn<(_options: unknown) => Promise<LocalDiscoverySearchResult>>(),
@@ -66,6 +67,7 @@ describe("LocalIndexDiscoveryProvider", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     provider = new LocalIndexDiscoveryProvider();
+    mockStore.hasFilterValues.mockResolvedValue(true);
     mockStore.retrieveFilterValues.mockResolvedValue([]);
   });
 
@@ -88,6 +90,9 @@ describe("LocalIndexDiscoveryProvider", () => {
 
       return [];
     });
+    mockStore.hasFilterValues.mockImplementation(
+      async (key) => key === "modified"
+    );
 
     await expect(provider.retrieveFilters({})).resolves.toEqual(
       expect.arrayContaining([
@@ -129,6 +134,7 @@ describe("LocalIndexDiscoveryProvider", () => {
 
       return [];
     });
+    mockStore.hasFilterValues.mockResolvedValue(true);
 
     mockStore.searchDatasets.mockResolvedValueOnce({
       count: 2,
@@ -323,6 +329,9 @@ describe("LocalIndexDiscoveryProvider", () => {
     });
 
     expect(mockStore.ensureInitialized).toHaveBeenCalled();
+    expect(mockStore.hasFilterValues).toHaveBeenCalledWith(
+      "numberOfUniqueIndividuals"
+    );
     expect(mockStore.searchDatasets).toHaveBeenCalledWith({
       query: "Dataset",
       facets: [

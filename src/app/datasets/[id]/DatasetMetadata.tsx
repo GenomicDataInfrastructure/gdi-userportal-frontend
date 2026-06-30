@@ -763,9 +763,10 @@ const DatasetMetadata = ({
 
       {(dataset.publisherNote ||
         (dataset.publisherType && dataset.publisherType.length > 0) ||
-        (dataset.hdab && dataset.hdab.length > 0) ||
         (dataset.creators && dataset.creators.length > 0) ||
-        dataset.trustedDataHolder !== undefined) && (
+        (hasHealthTheme &&
+          ((dataset.hdab && dataset.hdab.length > 0) ||
+            dataset.trustedDataHolder !== undefined))) && (
         <MetadataSection
           title={t("publisherAndDataGovernance")}
           icon={faUserShield}
@@ -824,56 +825,62 @@ const DatasetMetadata = ({
               )}
               <Tooltip message={t("tooltips.creators")} />
             </div>
-            <div className="flex items-center gap-2 relative group">
-              <FontAwesomeIcon
-                icon={faCheckCircle}
-                className={
-                  dataset.trustedDataHolder ? "text-info" : "text-gray-400"
-                }
-              />
-              <span className="font-medium">{t("trustedDataHolder")}:</span>
-              <span
-                className={
-                  dataset.trustedDataHolder ? "text-info font-medium" : ""
-                }
-              >
-                {dataset.trustedDataHolder !== undefined ? (
-                  dataset.trustedDataHolder ? (
-                    t("yes")
-                  ) : (
-                    t("no")
-                  )
-                ) : (
-                  <NotProvided label={notProvidedLabel} />
-                )}
-              </span>
-              <Tooltip message={t("tooltips.trustedDataHolder")} />
-            </div>
-            <div className="flex items-center gap-2 flex-wrap relative group">
-              <FontAwesomeIcon
-                icon={faBuilding}
-                className="text-primary text-xs"
-              />
-              <span className="font-medium shrink-0">
-                {t("healthDataAccessBody")}:
-              </span>
-              {dataset.hdab && dataset.hdab.length > 0 ? (
-                dataset.hdab.map((agent, index) => (
-                  <span key={index} className="flex items-center gap-1">
-                    <span>
-                      {agent.name}
-                      {agent.email && (
-                        <span className="ml-1 text-info">({agent.email})</span>
-                      )}
-                    </span>
-                    {index < dataset.hdab!.length - 1 && ","}
+            {hasHealthTheme && (
+              <>
+                <div className="flex items-center gap-2 relative group">
+                  <FontAwesomeIcon
+                    icon={faCheckCircle}
+                    className={
+                      dataset.trustedDataHolder ? "text-info" : "text-gray-400"
+                    }
+                  />
+                  <span className="font-medium">{t("trustedDataHolder")}:</span>
+                  <span
+                    className={
+                      dataset.trustedDataHolder ? "text-info font-medium" : ""
+                    }
+                  >
+                    {dataset.trustedDataHolder !== undefined ? (
+                      dataset.trustedDataHolder ? (
+                        t("yes")
+                      ) : (
+                        t("no")
+                      )
+                    ) : (
+                      <NotProvided label={notProvidedLabel} />
+                    )}
                   </span>
-                ))
-              ) : (
-                <NotProvided label={notProvidedLabel} />
-              )}
-              <Tooltip message={t("tooltips.healthDataAccessBody")} />
-            </div>
+                  <Tooltip message={t("tooltips.trustedDataHolder")} />
+                </div>
+                <div className="flex items-center gap-2 flex-wrap relative group">
+                  <FontAwesomeIcon
+                    icon={faBuilding}
+                    className="text-primary text-xs"
+                  />
+                  <span className="font-medium shrink-0">
+                    {t("healthDataAccessBody")}:
+                  </span>
+                  {dataset.hdab && dataset.hdab.length > 0 ? (
+                    dataset.hdab.map((agent, index) => (
+                      <span key={index} className="flex items-center gap-1">
+                        <span>
+                          {agent.name}
+                          {agent.email && (
+                            <span className="ml-1 text-info">
+                              ({agent.email})
+                            </span>
+                          )}
+                        </span>
+                        {index < dataset.hdab!.length - 1 && ","}
+                      </span>
+                    ))
+                  ) : (
+                    <NotProvided label={notProvidedLabel} />
+                  )}
+                  <Tooltip message={t("tooltips.healthDataAccessBody")} />
+                </div>
+              </>
+            )}
           </div>
         </MetadataSection>
       )}

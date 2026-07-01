@@ -12,6 +12,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+## [v1.7.6] - 2026-07-01
+
+### Added
+- feat(i18n): localize dataset detail page and metadata UI (#1032) by @Inderpal Singh in 4cd0bf9c
+
+
+### Changed
+- Fix ORT job: pin Docker image to 89.2.0 to avoid broken latest (#1034) by @Copilot in ff855dac
+- chore(deps): update oras-project/setup-oras digest to fb503f0 by @Renovate Bot in e8179f17
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1782410493 (#1035) by @LNDS-Sysadmins in 5914d21a
+- chore(deps): update actions/cache digest to 55cc834 by @Renovate Bot in 7ef92e2d
+- chore(deps): bump webpack-dev-server in /documentation (#1026) by @dependabot[bot] in 819a0711
+- chore(deps): update dependency protobufjs to v8 (#1029) by @LNDS-Sysadmins in caebd0b0
+- doc: update CHANGELOG.md for v1.7.5 (#1031) by @github-actions[bot] in b1912a58
+
+
+### Fixed
+- fix: pin ORT image in release and vuln scan (#1042) by @Inderpal Singh in 2358ac4f
+- fix: gate health dataset metadata by @Inderpal Singh in 7bb79972
+- fix: hide empty local-index filters by @Inderpal Singh in 90cba547
+- fix: return local-index filters in search by @Inderpal Singh in 78dc9144
+- fix: format by @Rania Hamdani in 7ef4ea61
+- fix: add french translations by @Rania Hamdani in 7815bcac
+- fix: e2e (#1033) by @Inderpal Singh in 35a9c391
+
+
 ## [v1.7.5] - 2026-06-24
 
 ### Added

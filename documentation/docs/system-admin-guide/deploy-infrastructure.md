@@ -27,16 +27,15 @@ Choose a deployment approach that aligns with your infrastructure requirements a
 - **Access Management Service (AMS):** Handles access requests, user permissions, and integration with external systems like REMS. Installation guide: [Access Management Service README](https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service?tab=readme-ov-file#gdi-user-portal---access-management-service)<sup>↗</sup>
 
 - **CKAN Extensions:** The platform uses several custom CKAN extensions that must be properly integrated:
-
-    - **[GDI Userportal Ckanext](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-gdi-userportal)** - Adds a DCAT-AP 3 compatible schema with HealthDCAT support and fields such as `issued`, `modified`, `has_version`, and `temporal_start`. It also provides enhanced parsing for creators in the DCAT profile, adds support for OpenID Connect with PKCE, introduces new fields to `scheming_package_show`, and links CKAN harvest views for admin users. Additionally, it offers endpoints for listing unique values and simplifies integration with CKAN-based datasets for the User Portal.
-    - **[DCAT Ckanext](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-dcat)** - Responsible for mapping DCAT-AP 3 and HealthDCAT to CKAN
-    - **[Fair Datapoint Ckanext](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-fairdatapoint)** - FAIR principles support
-    - **[Harvest Ckanext](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-harvest)** - Data harvesting capabilities
+  - **[GDI Userportal Ckanext](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-gdi-userportal)** - Adds a DCAT-AP 3 compatible schema with HealthDCAT support and fields such as `issued`, `modified`, `has_version`, and `temporal_start`. It also provides enhanced parsing for creators in the DCAT profile, adds support for OpenID Connect with PKCE, introduces new fields to `scheming_package_show`, and links CKAN harvest views for admin users. Additionally, it offers endpoints for listing unique values and simplifies integration with CKAN-based datasets for the User Portal.
+  - **[DCAT Ckanext](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-dcat)** - Responsible for mapping DCAT-AP 3 and HealthDCAT to CKAN
+  - **[Fair Datapoint Ckanext](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-fairdatapoint)** - FAIR principles support
+  - **[Harvest Ckanext](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-harvest)** - Data harvesting capabilities
 
     <br/>
 
-    :::tip CKAN extension integration
+  :::tip CKAN extension integration
 
-    To contribute to a CKAN extension and run it on your local machine, integrate it into the Docker build that will run as your backend service, connected to your DDS instance. For a detailed guide on how to integrate the extension, see [Installing new extensions](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckan-docker?tab=readme-ov-file#5-installing-new-extensions) in the [CKAN Docker repository](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckan-docker).
+  To contribute to a CKAN extension and run it on your local machine, integrate it into the Docker build that will run as your backend service, connected to your DDS instance. For a detailed guide on how to integrate the extension, see [Installing new extensions](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckan-docker?tab=readme-ov-file#5-installing-new-extensions) in the [CKAN Docker repository](https://github.com/GenomicDataInfrastructure/gdi-userportal-ckan-docker).
 
-    :::
+  :::

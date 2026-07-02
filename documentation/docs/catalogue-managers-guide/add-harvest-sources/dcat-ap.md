@@ -55,6 +55,4 @@ If you're experiencing harvesting issues, verify the `rdf_format` in your config
 - [Monitor harvest sources](../monitor-harvest-sources.md)
 - [Manage harvest sources](../manage-harvest-sources.md)
 
-
 ---
-

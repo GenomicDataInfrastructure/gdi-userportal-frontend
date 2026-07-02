@@ -8,27 +8,25 @@ sidebar_position: 2
 
 The **GDI platform** consists of the following components that work together to provide federated access to genomic datasets across Europe.
 
-
-
 ```mermaid
 ---
 title: GDI platform architecture overview
 ---
 graph LR
     Users[<b>Data users <br/></b> *Researchers, etc.*]
-    
+
     Frontend[<b>User Portal frontend</b><br/><i>Next.js web interface</i>]
-    
+
     Backend[<b>Backend services</b><br/><i>DDS & AMS</i>]
-    
+
     CKAN[<b>CKAN data catalogue</b><br/><i>Dataset management <br/>and search</i>]
-    
+
     Keycloak[<b>Keycloak</b><br/><i>Authentication <br/>and authorisation</i>]
-    
+
     External[<b>External services</b><br/><i>LS-AAI, REMS, <br/>FAIR Data Points</i>]
-    
+
     Infrastructure[(<b>Supporting infrastructure</b><br/><i>PostgreSQL, Elasticsearch, <br/>Redis</i>)]
-    
+
     Users --> Frontend
     Frontend --> Backend
     Frontend --> Keycloak
@@ -38,7 +36,7 @@ graph LR
     Keycloak --> Infrastructure
     CKAN -.harvests.-> External
     Keycloak -.federates.-> External
-    
+
     style Users fill:#e1f5ff
     style Frontend fill:#bbdefb
     style Backend fill:#90caf9

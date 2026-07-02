@@ -153,4 +153,3 @@ After configuring LS-AAI in Keycloak:
 - [Monitor and maintain the system](/system-admin-guide/monitor-maintain): Set up monitoring and logging.
 
 :::
-

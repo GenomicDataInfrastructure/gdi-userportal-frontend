@@ -82,7 +82,7 @@ For detailed architecture diagrams and component interactions, see: GDI applicat
 | ----------- | -------------- | ----------- |
 | Frontend    | Next.js 14     | TypeScript  |
 | DDS/AMS     | Quarkus        | Java 17+    |
-| CKAN        | CKAN 2.10      | Python 3.9+ |
+| CKAN        | CKAN 2.11.3    | Python 3.9+ |
 | API Gateway | Kong           | Lua/Docker  |
 | Database    | PostgreSQL 14+ | SQL         |
 | Search      | Apache Solr 8+ | -           |

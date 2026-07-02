@@ -586,7 +586,7 @@ describe("LocalIndexDiscoveryProvider", () => {
         {
           id: "distribution-1",
           title: "Population Registry CSV",
-          description: "",
+          description: "Distribution-level CSV extract for registry data",
           format: {
             value:
               "http://publications.europa.eu/resource/authority/file-type/CSV",
@@ -804,7 +804,7 @@ describe("LocalIndexDiscoveryProvider", () => {
         {
           id: "distribution-1",
           title: "Population Registry CSV",
-          description: "",
+          description: "Distribution-level CSV extract for registry data",
           format: {
             value:
               "http://publications.europa.eu/resource/authority/file-type/CSV",

@@ -215,6 +215,7 @@ describe("DcatHarvesterService", () => {
           {
             id: "distribution-1",
             title: "Population Registry CSV",
+            description: "Distribution-level CSV extract for registry data",
             format: {
               value:
                 "http://publications.europa.eu/resource/authority/file-type/CSV",

@@ -14,6 +14,8 @@ const DCAT_DOWNLOAD_URL = "http://www.w3.org/ns/dcat#downloadURL"; // NOSONAR
 const DCT_IDENTIFIER = "http://purl.org/dc/terms/identifier"; // NOSONAR
 const DCT_TITLE = "http://purl.org/dc/terms/title"; // NOSONAR
 const DC_TITLE = "http://purl.org/dc/elements/1.1/title"; // NOSONAR
+const DCT_DESCRIPTION = "http://purl.org/dc/terms/description"; // NOSONAR
+const DC_DESCRIPTION = "http://purl.org/dc/elements/1.1/description"; // NOSONAR
 const DCT_FORMAT = "http://purl.org/dc/terms/format"; // NOSONAR
 const DCAT_MEDIA_TYPE = "http://www.w3.org/ns/dcat#mediaType"; // NOSONAR
 const DCT_LICENSE = "http://purl.org/dc/terms/license"; // NOSONAR
@@ -80,6 +82,7 @@ const mapDistribution = (
   return {
     id: id || `${datasetId}-distribution-${index + 1}`,
     title,
+    description: getDistributionDescription(distributionSubject, graph),
     format: getDistributionFormat(distributionSubject, graph),
     mediaType: getDistributionMediaType(distributionSubject, graph),
     license: getDistributionLicense(distributionSubject, graph),
@@ -113,6 +116,18 @@ const getDistributionTitle = (
   accessUrl ||
   downloadUrl ||
   "";
+
+const getDistributionDescription = (
+  distributionSubject: RDF.Term,
+  graph: RdfGraph
+): string | undefined => {
+  const description = graph.getFirstLiteral(distributionSubject, [
+    DCT_DESCRIPTION,
+    DC_DESCRIPTION,
+  ]);
+
+  return description || undefined;
+};
 
 const getDistributionFormat = (
   distributionSubject: RDF.Term,

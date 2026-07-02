@@ -111,7 +111,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     return dataset.distributions?.map((distribution) => ({
       id: distribution.id,
       title: distribution.title,
-      description: "",
+      description: distribution.description ?? "",
       format: distribution.format,
       mediaType: distribution.mediaType,
       license: distribution.license,

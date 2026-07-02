@@ -24,6 +24,7 @@ export interface LocalAgent {
 export interface LocalDiscoveryDistribution {
   id: string;
   title: string;
+  description?: string;
   format?: { value: string; label: string };
   mediaType?: { value: string; label: string };
   license?: { value: string; label: string };

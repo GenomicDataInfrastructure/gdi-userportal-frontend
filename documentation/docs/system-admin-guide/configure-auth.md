@@ -1,78 +1,80 @@
 ---
 slug: /system-admin-guide/configure-auth
-sidebar_label: "Set up authentication "
-sidebar_position: 4
+sidebar_label: "Set up authentication"
+sidebar_position: 5
+description: "Configure Keycloak authentication and LS-AAI integration"
 ---
 
 # Set up authentication and authorisation
 
-The GDI User Portal uses Keycloak for authentication and authorisation, with integration to LS-AAI (Life Science Authentication and Authorisation Infrastructure) for federated access across European research infrastructures.
+Configure **Keycloak** for authentication and authorisation, with integration to LS-AAI (Life Science Authentication and Authorisation Infrastructure) for federated access across European research infrastructures.
+
+## Prerequisites
+
+- Keycloak instance deployed and accessible
+- Admin access to Keycloak
+- LS-AAI service registration approved (if using LS-AAI)
+- Azure AD configuration (if using Azure AD integration)
 
 ## Authentication architecture
 
-### Keycloak configuration
+The GDI User Portal uses Keycloak as the central authentication provider, managing user sessions, roles, and permissions across all platform components:
 
-Keycloak serves as the central authentication provider, managing user sessions, roles, and permissions across all platform components.
+- **Keycloak configuration:** Keycloak serves as the central authentication provider with realm configuration, client settings, and security policies.
+- **LS-AAI integration:** Integration with LS-AAI enables users to authenticate using their existing institutional credentials through the European research federation.
+- **User role management:** Configure role-based access control to ensure appropriate permissions for different user types (data users, catalogue managers, system administrators).
 
-### LS-AAI integration
+## Configure Keycloak realm
 
-Integration with LS-AAI enables users to authenticate using their existing institutional credentials through the European research federation.
+Set up your Keycloak instance with proper realm configuration, client settings, and security policies:
 
-### User role management
+1. **Access Keycloak admin console:** Log in to your Keycloak instance using admin credentials.
+2. **Create or configure realm:** Set up a realm for the GDI User Portal (typically named `gdi` or `ckan`).
+3. **Configure realm settings:** Set up security policies, token lifetimes, and session management.
 
-Configure role-based access control to ensure appropriate permissions for different user types (data users, catalogue managers, system administrators).
+## Configure identity providers
 
-## Configuration tasks
+Set up identity providers (IdPs) to enable federated authentication. When configuring identity providers, you will need:
 
-### Configure Keycloak
-
-Set up Keycloak instance with proper realm configuration, client settings, and security policies.
-
-### Integrate with LS-AAI
-
-Configure LS-AAI as an identity provider in Keycloak, including OpenID Connect settings and attribute mapping.
-
-### Manage user roles
-
-Define and manage user roles and permissions to control access to different platform features and data.
-
-## Identity providers configuration
-
-When configuring identity providers (IdPs), you'll need:
-
-- **ClientSecret** - Provided by the IdP during registration
-- **ClientId** - Unique identifier for your application
-- **Token URL** - OAuth2 token endpoint
-- **Authorisation URL** - OAuth2 authorisation endpoint
-- **Redirect URI** - Keycloak callback URL
+- **ClientSecret:** Provided by the IdP during registration
+- **ClientId:** Unique identifier for your application
+- **Token URL:** OAuth2 token endpoint
+- **Authorisation URL:** OAuth2 authorisation endpoint
+- **Redirect URI:** Keycloak callback URL
 
 ### Azure AD integration
 
-Configure Azure Active Directory as an identity provider for organisational authentication.
+Configure Azure Active Directory as an identity provider for organisational authentication. For detailed Azure AD configuration steps, see [Configure LS-AAI in Keycloak](/system-admin-guide/configure-ls-aai-in-keycloak).
 
-### LS-AAI integration details
+### LS-AAI integration
+
+Configure LS-AAI as an identity provider in Keycloak with the following settings:
 
 - **Discovery endpoint:** `https://login.elixir-czech.org/oidc/.well-known/openid-configuration`
 - **Required scopes:** `openid`, `profile`, `email`, `elixir_id`
 - **Sync mode:** Import (not force)
 - **Token storage:** Enabled for Beacon Network integration
 
+For detailed LS-AAI setup and registration steps, see [Configure LS-AAI in Keycloak](/system-admin-guide/configure-ls-aai-in-keycloak).
+
+## Configure user roles and permissions
+
+Define and manage user roles and permissions to control access to different platform features and data. For detailed role management procedures, see [Manage user roles and permissions](/system-admin-guide/manage-user-roles).
+
 ## Security considerations
 
-### Token management
+Configure security settings to protect your authentication infrastructure.
 
-Proper configuration of token storage and refresh to enable secure API access across services.
+- **Token management:** Configure token storage and refresh settings to enable secure API access across services.
+- **Access control:** Implement access control policies to protect sensitive data and administrative functions.
+- **Audit and monitoring:** Set up logging and monitoring for authentication events and security incidents.
 
-### Access control
+:::tip Next steps
 
-Implementation of proper access control policies to protect sensitive data and administrative functions.
+After configuring authentication:
 
-### Audit and monitoring
-
-Set up logging and monitoring for authentication events and security incidents.
-
-:::info content in progress
-
-We are working on this guide.
+- [Configure LS-AAI in Keycloak](/system-admin-guide/configure-ls-aai-in-keycloak): Detailed IdP setup steps
+- [Manage user roles and permissions](/system-admin-guide/manage-user-roles): Configure user access levels
+- [Manage data and services](/system-admin-guide/manage-data-services): Set up CKAN and data sources
 
 :::

@@ -28,8 +28,8 @@ The local setup should match the versions used by the `gdi-userportal-ckan-docke
 
 | Component       | Version or source                                                              |
 | --------------- | ------------------------------------------------------------------------------ |
-| CKAN            | `2.11.4`                                                                       |
-| CKAN base image | `ckan/ckan-dev:2.11.4` for development, `ckan/ckan-base:2.11.4` for production |
+| CKAN            | `2.11.3`                                                                       |
+| CKAN base image | `ckan/ckan-dev:2.11.3` for development, `ckan/ckan-base:2.11.3` for production |
 | Python          | `3.10`                                                                         |
 | PostgreSQL      | `18-alpine`                                                                    |
 | Solr            | `10.0.0-slim`                                                                  |
@@ -56,9 +56,9 @@ The local setup should match the versions used by the `gdi-userportal-ckan-docke
 2. **Install CKAN as a package into your virtual environment:**
 
    ```commandline
-   pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.11.4#egg=ckan[requirements]'
+   pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.11.3#egg=ckan[requirements]'
    # For development purposes, include dev dependencies:
-   pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.11.4#egg=ckan[requirements,dev]'
+   pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.11.3#egg=ckan[requirements,dev]'
    ```
 
    :::tip Troubleshooting

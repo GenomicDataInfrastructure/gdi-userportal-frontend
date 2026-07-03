@@ -1,102 +1,100 @@
 ---
 slug: /system-admin-guide/manage-data-services
 sidebar_label: "Manage data and services"
-sidebar_position: 5
+sidebar_position: 8
 ---
 
 # Manage data and services
 
-:::info content in progress
+Administer core **data management services** including CKAN configuration, harvester management, and database maintenance. This guide covers ongoing administration tasks after initial platform deployment.
 
-We are working on this guide.
+:::tip Related guides
+
+For FAIR Data Point setup, see [Set up FAIR Data Point](/system-admin-guide/fdp). For metadata schema configuration, see [Configure metadata schemas](/system-admin-guide/configure-schemas).
 
 :::
 
-This section covers the administration of core data management services including CKAN administration, FAIR Data Point deployment, harvester configuration, and database management.
-
-## Data service components
-
-### Administer CKAN
-
-CKAN serves as the core data catalogue system. Learn about user management, organisation setup, dataset administration, and system maintenance.
-
-### Set up FAIR Data Points
-
-FAIR Data Points provide standardised metadata endpoints that support FAIR principles. Configure FDP instances with GDI-specific SHACL shapes and metadata requirements.
-
-### Configure harvesters
-
-Set up automated data harvesting from external sources including other CKAN instances, FAIR Data Points, and DCAT-AP endpoints.
-
-### Manage databases
-
-Maintain database performance, backups, and integrity across PostgreSQL instances used by CKAN and other services.
-
 ## CKAN administration
+
+Administer the CKAN data catalogue system through ongoing configuration, user management, and data lifecycle tasks.
 
 ### System configuration
 
-- Instance configuration and settings
-- Extension management and updates
-- Performance tuning and optimisation
-- Security configuration and updates
+Configure and maintain your CKAN instance:
+
+- **Instance configuration and settings**: Manage core CKAN settings and behaviour
+- **Extension management and updates**: Install, configure, and update CKAN extensions
+- **Performance tuning and optimisation**: Optimise system performance for your data catalogue
+- **Security configuration and updates**: Apply security patches and configure access controls
 
 ### User and organisation management
 
-- User account administration
-- Organisation setup and management
-- Permission and role assignment
-- API key management
+Manage CKAN users and organisational structures:
+
+- **User account administration**: Create and manage user accounts
+- **Organisation setup and management**: Configure organisations and their hierarchies
+- **Permission and role assignment**: Control user access levels (see [Manage user roles and permissions](/system-admin-guide/manage-user-roles))
+- **API key management**: Generate and manage API keys for programmatic access
 
 ### Data management
 
-- Dataset lifecycle management
-- Metadata quality assurance
-- Storage and backup procedures
-- Search index maintenance
+Maintain data quality and system integrity:
 
-## FAIR Data Point setup
+- **Dataset lifecycle management**: Manage datasets from creation to archival
+- **Metadata quality assurance**: Ensure metadata completeness and accuracy
+- **Storage and backup procedures**: Maintain data storage and implement backup strategies
+- **Search index maintenance**: Rebuild and optimise SOLR search indexes
 
-### Installation and configuration
+## Harvester configuration
 
-Deploy FDP instances with GDI-specific requirements and configure metadata schemas using SHACL shapes.
-
-### Metadata schema configuration
-
-Install and configure GDI-specific SHACL shapes for consistent metadata representation across the network.
-
-### Supported metadata fields
-
-Comprehensive coverage of dataset and distribution metadata fields including contact points, creators, themes, and access rights.
-
-## Harvesting configuration
+Configure automated data harvesting from external sources including other CKAN instances, FAIR Data Points, and DCAT-AP endpoints.
 
 ### Harvester setup
 
-- Configure harvest sources and schedules
-- Set up authentication for protected endpoints
-- Monitor harvest job performance
-- Troubleshoot harvest failures
+Manage harvest sources and scheduling:
+
+- **Configure harvest sources and schedules**: Define data sources and harvesting frequency
+- **Set up authentication for protected endpoints**: Configure credentials for secure data sources
+- **Monitor harvest job performance**: Track harvesting success rates and timing
+- **Troubleshoot harvest failures**: Diagnose and resolve harvesting issues
 
 ### Data source integration
 
-- FAIR Data Point harvesting
-- DCAT-AP endpoint harvesting
-- Custom API integration
-- Real-time vs. scheduled synchronisation
+Integrate different types of data sources:
+
+- **FAIR Data Point harvesting**: Harvest metadata from FDP endpoints (see [Set up FAIR Data Point](/system-admin-guide/fdp))
+- **DCAT-AP endpoint harvesting**: Integrate with DCAT-AP compliant catalogues
+- **Custom API integration**: Connect to custom data sources
+- **Real-time vs. scheduled synchronisation**: Choose appropriate update strategies
 
 ## Database management
 
+Maintain database performance, backups, and integrity across PostgreSQL instances used by CKAN and other services.
+
 ### Performance monitoring
 
-- Query performance analysis
-- Index optimisation
-- Connection pool management
-- Resource utilisation tracking
+Monitor and optimise database performance:
+
+- **Query performance analysis**: Identify and optimise slow queries
+- **Index optimisation**: Create and maintain database indexes
+- **Connection pool management**: Configure connection pooling for optimal performance
+- **Resource utilisation tracking**: Monitor CPU, memory, and disk usage
 
 ### Backup and recovery
 
-- Automated backup procedures
-- Point-in-time recovery
-- Disaster recovery planning
-- Data integrity verification
+Implement backup strategies and recovery procedures:
+
+- **Automated backup procedures**: Schedule regular database backups
+- **Point-in-time recovery**: Restore databases to specific timestamps
+- **Disaster recovery planning**: Prepare for system failures and data loss scenarios
+- **Data integrity verification**: Validate backup completeness and data consistency
+
+:::tip Next steps
+
+After configuring data and services:
+
+- [Configure metadata schemas](/system-admin-guide/configure-schemas): Define dataset fields and validation rules.
+- [Set up FAIR Data Point](/system-admin-guide/fdp): Deploy FDP instances with GDI-specific requirements.
+- [Monitor and maintain the system](/system-admin-guide/monitor-maintain): Set up ongoing monitoring and maintenance.
+
+:::

@@ -1,16 +1,16 @@
 ---
 slug: /system-admin-guide/configure-schemas
 sidebar_label: "Configure metadata schemas"
-sidebar_position: 7
+sidebar_position: 9
 ---
 
 # Configure metadata schemas
 
-Configure and manage CKAN metadata schemas to define dataset fields, validation rules, and data entry forms. This guide covers schema development, deployment, and maintenance for system administrators.
+Configure and manage CKAN **metadata schemas** to define dataset fields, validation rules, and data entry forms. This guide covers schema development, deployment, and maintenance for system administrators.
 
 ## Schema structure and format
 
-CKAN schemas can be defined as JSON or YAML files that specify dataset metadata fields and their properties.
+Define CKAN schemas as JSON or YAML files that specify dataset metadata fields and their properties.
 
 ### Example field definition
 
@@ -31,18 +31,39 @@ CKAN schemas can be defined as JSON or YAML files that specify dataset metadata 
 
 Configure field behaviour using these properties:
 
-- **field_name**: CKAN field identifier
-- **label**: UI field representation for end users
-- **help_text**: Explanatory text appearing under field in UI
-- **choices**: For dropdown menus - list of dictionaries with value and label
-- **choices_helper**: Form dropdowns dynamically from API
-- **presets**: Values like `radio`, `multiple_checkbox`, `date` for automatic checks
-- **form_snippet**: Defines field representation for data input (jinja2 format)
-- **display_snippet**: Defines how data is shown in UI
-- **validators**: Data validation functions
-- **output_validators**: Convert complex data structures from database
+- **field_name**: CKAN field identifier that defines the field in the database
+- **label**: UI field representation that displays to end users
+- **help_text**: Explanatory text that appears under the field in the UI
+- **choices**: List of dictionaries with value and label for dropdown menus
+- **choices_helper**: Generates form dropdowns dynamically from API endpoints
+- **presets**: Validation presets like `radio`, `multiple_checkbox`, and `date` for automatic checks
+- **form_snippet**: Defines field representation for data input in Jinja2 format
+- **display_snippet**: Defines how the system displays data in the UI
+- **validators**: Data validation functions that enforce field requirements
+- **output_validators**: Functions that convert complex data structures from the database
+- **repeating_subfields**: Handles cardinality requirements for multi-value fields
+- **start_form_page**: Controls which form page displays the field
+- **display_property**: Overrides the DCAT mapping representation for a field
+
+Example with `display_property`:
+
+```json
+{
+  "field_name": "author",
+  "label": "Author",
+  "display_property": "dc:creator"
+}
+```
+
+:::info Default validation
+
+Default validation includes `ignore_missing` and `unicode`. When you specify custom validators, include these explicitly if you need them.
+
+:::
 
 ## Schema configuration
+
+Configure your CKAN instance to use the defined schemas for dataset metadata management.
 
 ### Single schema setup
 
@@ -85,18 +106,26 @@ Reference the multi-schema file in `ckan.ini`:
 scheming.dataset_multi_schemas = ckanext.healthri:scheming/schemas/multi_schemas.json
 ```
 
+### Schema merging behaviour
+
+The system handles schema merging differently based on the implementation:
+
+- **Core CKAN**: The latest schema with the same `dataset_type` takes precedence over earlier definitions
+- **GDI implementation**: The system merges schemas with the same type, and field order follows the schema order in the configuration
+- **Field merging**: The `ckanext.scheming.overwrite_fields` parameter controls how the system merges individual fields
+
 ## Schema deployment
 
 ### Update running CKAN instance
 
-To change schema in a running Docker container:
+Change the schema in a running Docker container:
 
 ```bash
 docker exec -it ckan /bin/sh
 vi /srv/app/ckan.ini # change the schema
 ```
 
-Changes to `ckan.ini` trigger automatic CKAN updates.
+The system automatically updates CKAN when you make changes to `ckan.ini`.
 
 ### Schema path format
 
@@ -106,7 +135,7 @@ Example: `ckanext.healthri:scheming/schemas/gdi_userportal.json`
 
 ## Schema management APIs
 
-Use CKAN APIs to manage schemas programmatically:
+Manage schemas programmatically using CKAN APIs:
 
 ```bash
 # List all dataset schema types
@@ -118,26 +147,30 @@ GET http(s)://<ckan-host>/api/action/scheming_dataset_schema_show?type=<dataset_
 
 ## Best practices
 
+Follow these practices when designing and deploying schemas.
+
 ### Schema design
 
-- Follow DCAT-AP standards for interoperability
-- Design for user experience, not just technical requirements
-- Include comprehensive help text for complex fields
-- Test schemas with real users before deployment
+- **Follow DCAT-AP standards**: Ensure interoperability with other data catalogues
+- **Design for user experience**: Prioritise usability over technical complexity
+- **Include comprehensive help text**: Provide clear guidance for complex fields
+- **Test with real users**: Validate schemas with actual users before deployment
 
 ### Deployment
 
-- Test schema changes in development environment first
-- Document all schema modifications
-- Consider migration impact on existing datasets
-- Backup data before major schema updates
+- **Test in development first**: Validate schema changes in a development environment before production
+- **Document modifications**: Record all schema changes for audit trails and troubleshooting
+- **Consider migration impact**: Assess how schema changes affect existing datasets
+- **Back up data**: Create backups before applying major schema updates
 
 For comprehensive schema development, see the [CKAN scheming documentation](https://github.com/ckan/ckanext-scheming/tree/release-3.0.0#field-keys).
 
-## Next steps
+:::tip Next steps
 
 After configuring schemas:
 
-- [Manage user roles and permissions](/system-admin-guide/manage-user-roles) - Control access to schema management
-- [Manage data and services](/system-admin-guide/manage-data-services) - Configure data workflows
-- [Monitor and maintain the system](/system-admin-guide/monitor-maintain) - Track schema usage and performance
+- [Manage user roles and permissions](/system-admin-guide/manage-user-roles): Control access to schema management
+- [Manage data and services](/system-admin-guide/manage-data-services): Configure data workflows
+- [Monitor and maintain the system](/system-admin-guide/monitor-maintain): Track schema usage and performance
+
+:::

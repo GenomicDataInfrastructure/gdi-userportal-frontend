@@ -12,6 +12,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.3.9] - 2025-04-04
+## [v1.7.7] - 2026-07-06
+
+### Added
+- feat: Extract distribution descriptions for local-index datasets (#1047) by @Inderpal Singh in 023e44e0
+
+
+### Changed
+- chore(deps): update docker/login-action action to v4.4.0 (#1050) by @LNDS-Sysadmins in 546d685d
+- chore(deps): update astral-sh/setup-uv action to v8.3.0 (#1051) by @LNDS-Sysadmins in 434d8890
+- Docs/art 25614/enhance sys admin guide (#994) by @Rose Pasigna in 3d51b66a
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1782826354 (#1041) by @LNDS-Sysadmins in b18b2372
+- doc: update CHANGELOG.md for v1.7.6 (#1043) by @github-actions[bot] in fd424ea8
+- chore(deps): update docker/build-push-action action to v7.3.0 (#1044) by @LNDS-Sysadmins in e8183ec6
+- chore(deps): update docker/login-action action to v4.3.0 (#1045) by @LNDS-Sysadmins in 2972ff63
+- chore(deps): update docker/metadata-action action to v6.2.0 (#1046) by @LNDS-Sysadmins in 7712ba0d
+- chore(deps): update dependency eslint-config-next to v16.2.10 by @Renovate Bot in fdf6ef04
+
+
+### Fixed
+- fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.78.0 (#1049) by @LNDS-Sysadmins in 8acdfa7b
+- fix(deps): update dependency next to v16.2.10 by @Renovate Bot in 86a71616
+
+
 ## [v1.7.6] - 2026-07-01
 
 ### Added

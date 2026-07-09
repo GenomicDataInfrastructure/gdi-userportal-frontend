@@ -6,11 +6,12 @@
 import { FilterType } from "@/app/api/discovery/additional-types";
 import { Filter } from "@/app/api/discovery/open-api/schemas";
 import { useFilters } from "@/providers/filters/FilterProvider";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { useTranslations } from "next-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Disclosure } from "@headlessui/react";
 import { default as DropdownFilterContent } from "./DropdownFilterContent";
+import Tooltip from "@/app/datasets/[id]/Tooltip";
 import EntriesFilterContent from "./EntriesFilterContent";
 import FreeTextFilterContent from "./FreeTextFilterContent";
 import DateTimeFilterContent from "./DateTimeFilterContent";
@@ -59,7 +60,22 @@ function FilterItem({ filter }: FilterItemProps) {
             <>
               <Disclosure.Button className="flex w-full justify-between px-4 py-2 text-left">
                 <div>
-                  <span className="text-base px-1.5">{filter.label}</span>
+                  <span className="relative inline-flex items-center gap-x-2 group">
+                    <span className="text-base px-1.5">{filter.label}</span>
+                    {filter.helpText && (
+                      <span
+                        tabIndex={0}
+                        aria-label={filter.helpText}
+                        className="relative group inline-flex items-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info"
+                      >
+                        <FontAwesomeIcon
+                          icon={faInfoCircle}
+                          className="h-4 w-4 text-info"
+                        />
+                        <Tooltip message={filter.helpText} />
+                      </span>
+                    )}
+                  </span>
                   <span className="text-base text-info">
                     {isFilterActive &&
                       t("activeCount", { count: nbActiveValues })}

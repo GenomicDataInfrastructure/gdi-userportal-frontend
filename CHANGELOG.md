@@ -12,6 +12,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.7.7] - 2026-07-06
+## [v1.7.8] - 2026-07-09
+
+### Changed
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1783399083 (#1053) by @LNDS-Sysadmins in 8b10502f
+- doc: update CHANGELOG.md for v1.7.7 (#1052) by @github-actions[bot] in 4de900a5
+- doc: update CHANGELOG.md for v1.7.2 (#983) by @github-actions[bot] in 1ea12002
+- refactor(GVariantsSearchBar): update sex and countryOfBirth defaults to "All" and improve country filter options; enhance GVariantsTableUtils to promote aggregate totals (#1057) by @Kacem Bechka in b16b0e4a
+- chore(deps): update astral-sh/setup-uv action to v8.3.2 by @Renovate Bot in 0c116629
+- chore(deps): update astral-sh/setup-uv action to v8.3.1 by @Renovate Bot in 91fc818a
+- chore(deps): update oras-project/setup-oras digest to 6f3b32c by @Renovate Bot in ca7a7f37
+
+
 
 ### Added
 - feat: Extract distribution descriptions for local-index datasets (#1047) by @Inderpal Singh in 023e44e0

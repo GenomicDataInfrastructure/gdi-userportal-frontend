@@ -84,6 +84,10 @@ describe("LocalIndexDiscoveryProvider", () => {
         return [{ value: "Health", label: "Health", count: 3 }];
       }
 
+      if (key === "keywords") {
+        return [{ value: "oncology", label: "oncology", count: 4 }];
+      }
+
       if (key === "publisherName") {
         return [{ value: "LNDS", label: "LNDS", count: 2 }];
       }
@@ -110,6 +114,12 @@ describe("LocalIndexDiscoveryProvider", () => {
         }),
         expect.objectContaining({
           source: "local-index",
+          key: "keywords",
+          type: "DROPDOWN",
+          values: [{ value: "oncology", label: "oncology", count: 4 }],
+        }),
+        expect.objectContaining({
+          source: "local-index",
           key: "modified",
           type: "DATETIME",
           operators: ["=", ">", "<", ">=", "<=", "!"],
@@ -126,6 +136,10 @@ describe("LocalIndexDiscoveryProvider", () => {
     mockStore.retrieveFilterValues.mockImplementation(async (key) => {
       if (key === "theme") {
         return [{ value: "Health", label: "Health", count: 2 }];
+      }
+
+      if (key === "keywords") {
+        return [{ value: "oncology", label: "oncology", count: 1 }];
       }
 
       if (key === "publisherName") {
@@ -177,6 +191,12 @@ describe("LocalIndexDiscoveryProvider", () => {
           key: "publisherName",
           type: "DROPDOWN",
           values: [{ value: "LNDS", label: "LNDS", count: 2 }],
+        }),
+        expect.objectContaining({
+          source: "local-index",
+          key: "keywords",
+          type: "DROPDOWN",
+          values: [{ value: "oncology", label: "oncology", count: 1 }],
         }),
       ]),
       results: [

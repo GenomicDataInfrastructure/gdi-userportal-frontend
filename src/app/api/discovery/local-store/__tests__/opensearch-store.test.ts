@@ -157,6 +157,35 @@ describe("OpenSearchDiscoveryStore", () => {
     ]);
   });
 
+  test("retrieveFilterValues returns aggregated keyword values", async () => {
+    const store = createStore();
+    mockClient.post.mockResolvedValueOnce({
+      data: {
+        aggregations: {
+          values: {
+            buckets: [{ key: "oncology", doc_count: 4 }],
+          },
+        },
+      },
+    });
+
+    await expect(store.retrieveFilterValues("keywords")).resolves.toEqual([
+      { value: "oncology", label: "oncology", count: 4 },
+    ]);
+    expect(mockClient.post).toHaveBeenCalledWith(
+      "/discovery_datasets/_search",
+      expect.objectContaining({
+        aggs: {
+          values: {
+            terms: expect.objectContaining({
+              field: "keywords",
+            }),
+          },
+        },
+      })
+    );
+  });
+
   test("hasFilterValues returns true when the field exists in indexed documents", async () => {
     const store = createStore();
     mockClient.post.mockResolvedValueOnce({

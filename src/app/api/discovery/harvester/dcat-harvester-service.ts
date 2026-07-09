@@ -16,7 +16,10 @@ import {
   buildHarvestRequestInit,
   harvestFetch,
 } from "@/app/api/discovery/harvester/fetch-options";
-import { parseRdfXmlToQuads } from "@/app/api/discovery/harvester/rdf-quad-loader";
+import {
+  parseRdfToQuads,
+  detectContentTypeFromUrl,
+} from "@/app/api/discovery/harvester/rdf-quad-loader";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 
 type FetchLike = (input: string | URL, init?: RequestInit) => Promise<Response>;
@@ -32,10 +35,20 @@ export class DcatHarvesterService {
   }
 
   async parseDatasetsFromRdf(
-    xmlText: string,
-    sourceUrl?: string
+    rdfText: string,
+    sourceUrl?: string,
+    contentType?: string
   ): Promise<LocalDiscoveryDataset[]> {
-    const quads = await parseRdfXmlToQuads(xmlText, sourceUrl);
+    const resolvedContentType =
+      (contentType as Parameters<typeof parseRdfToQuads>[1]) ??
+      (sourceUrl
+        ? detectContentTypeFromUrl(sourceUrl)
+        : ("application/rdf+xml" as const));
+    const quads = await parseRdfToQuads(
+      rdfText,
+      resolvedContentType,
+      sourceUrl
+    );
     const graph = new RdfGraph(quads);
     const fallbackCatalogue = getFallbackCatalogue(graph);
 
@@ -105,10 +118,14 @@ export class DcatHarvesterService {
     }
 
     try {
-      return await this.parseDatasetsFromRdf(xmlText, url);
+      return await this.parseDatasetsFromRdf(
+        xmlText,
+        url,
+        detectContentTypeFromUrl(url)
+      );
     } catch (error) {
       throw wrapError(
-        `Failed to parse RDF/XML from ${url}: ${formatErrorDetails(error)}`,
+        `Failed to parse RDF from ${url}: ${formatErrorDetails(error)}`,
         error
       );
     }

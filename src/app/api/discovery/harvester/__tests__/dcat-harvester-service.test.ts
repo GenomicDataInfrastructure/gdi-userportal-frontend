@@ -1020,7 +1020,7 @@ describe("DcatHarvesterService", () => {
     await expect(
       service.harvestFromUrl("https://example.org/catalogue.rdf")
     ).rejects.toThrow(
-      "Failed to parse RDF/XML from https://example.org/catalogue.rdf: invalid RDF payload"
+      "Failed to parse RDF from https://example.org/catalogue.rdf: invalid RDF payload"
     );
   });
 

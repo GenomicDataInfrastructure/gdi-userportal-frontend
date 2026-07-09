@@ -6,12 +6,27 @@ import { Readable } from "node:stream";
 import type * as RDF from "@rdfjs/types";
 import { rdfParser } from "rdf-parse";
 
-export const parseRdfXmlToQuads = async (
-  xmlText: string,
+export const RDF_CONTENT_TYPES = {
+  rdfxml: "application/rdf+xml",
+  turtle: "text/turtle",
+} as const;
+
+export type RdfContentType =
+  (typeof RDF_CONTENT_TYPES)[keyof typeof RDF_CONTENT_TYPES];
+
+export const detectContentTypeFromUrl = (url: string): RdfContentType => {
+  const pathname = new URL(url).pathname;
+  if (pathname.endsWith(".ttl")) return RDF_CONTENT_TYPES.turtle;
+  return RDF_CONTENT_TYPES.rdfxml;
+};
+
+export const parseRdfToQuads = async (
+  rdfText: string,
+  contentType: RdfContentType,
   baseIRI?: string
 ): Promise<RDF.Quad[]> => {
-  const quadStream = rdfParser.parse(Readable.from([xmlText]), {
-    contentType: "application/rdf+xml",
+  const quadStream = rdfParser.parse(Readable.from([rdfText]), {
+    contentType,
     baseIRI,
   });
 
@@ -26,3 +41,10 @@ export const parseRdfXmlToQuads = async (
 
   return quads;
 };
+
+/** @deprecated Use parseRdfToQuads with RDF_CONTENT_TYPES.rdfxml instead */
+export const parseRdfXmlToQuads = async (
+  xmlText: string,
+  baseIRI?: string
+): Promise<RDF.Quad[]> =>
+  parseRdfToQuads(xmlText, RDF_CONTENT_TYPES.rdfxml, baseIRI);

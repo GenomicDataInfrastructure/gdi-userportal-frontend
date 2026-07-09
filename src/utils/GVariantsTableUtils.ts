@@ -95,7 +95,7 @@ export class GVariantsTableUtils {
   static groupByBeacon(
     sortedResults: GVariantsSearchResponse[]
   ): Record<string, BeaconGroup> {
-    const grouped = sortedResults.reduce(
+    return sortedResults.reduce(
       (acc, variant) => {
         const datasetId = GVariantsTableUtils.getDisplayText(variant.datasetId);
         const beaconId = GVariantsTableUtils.getDisplayText(variant.beacon);
@@ -125,8 +125,6 @@ export class GVariantsTableUtils {
       },
       {} as Record<string, BeaconGroup>
     );
-
-    return GVariantsTableUtils.promoteAggregateTotals(grouped);
   }
 
   static getSortedBeaconIds(groupedByBeacon: Record<string, BeaconGroup>) {
@@ -247,61 +245,6 @@ export class GVariantsTableUtils {
 
   private static isNumber(value: unknown): value is number {
     return typeof value === "number" && Number.isFinite(value);
-  }
-
-  private static promoteAggregateTotals(
-    groupedByBeacon: Record<string, BeaconGroup>
-  ): Record<string, BeaconGroup> {
-    Object.values(groupedByBeacon).forEach((beaconGroup) => {
-      Object.values(beaconGroup.datasets).forEach((datasetGroup) => {
-        if (datasetGroup.totalVariant) {
-          return;
-        }
-
-        const countrySexRows = datasetGroup.variants.filter(
-          (variant) =>
-            GVariantsTableUtils.populationShape(variant.population) ===
-            "country-sex"
-        );
-        if (countrySexRows.length === 0) {
-          return;
-        }
-
-        const aggregateRows = datasetGroup.variants.filter((variant) => {
-          const shape = GVariantsTableUtils.populationShape(variant.population);
-          return shape === "country-only" || shape === "sex-only";
-        });
-
-        if (aggregateRows.length !== 1) {
-          return;
-        }
-
-        const aggregateVariant = aggregateRows[0];
-        datasetGroup.totalVariant = aggregateVariant;
-        datasetGroup.variants = datasetGroup.variants.filter(
-          (variant) => variant !== aggregateVariant
-        );
-      });
-    });
-
-    return groupedByBeacon;
-  }
-
-  private static populationShape(
-    population: string | undefined
-  ): "country-sex" | "country-only" | "sex-only" | "other" {
-    const normalized =
-      GVariantsTableUtils.getDisplayText(population).toUpperCase();
-    if (/^(M|F|MALE|FEMALE)$/.test(normalized)) {
-      return "sex-only";
-    }
-    if (/^[A-Z]{2}$/.test(normalized)) {
-      return "country-only";
-    }
-    if (/^[A-Z]{2}_(M|F|MALE|FEMALE)$/.test(normalized)) {
-      return "country-sex";
-    }
-    return "other";
   }
 
   private static formatPopulationSummary(populations: string[]): string {

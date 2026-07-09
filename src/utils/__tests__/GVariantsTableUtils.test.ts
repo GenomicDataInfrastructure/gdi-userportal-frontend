@@ -91,32 +91,17 @@ describe("GVariantsTableUtils", () => {
         grouped["Beacon B"].datasets["DS-3"].totalVariant?.population
       ).toBe("total");
     });
-
-    test("promotes a single country/sex aggregate row to totalVariant", () => {
+    test("keeps non-total aggregate rows as expandable variants", () => {
       const grouped = GVariantsTableUtils.groupByBeacon([
         variant({ beacon: "Beacon A", datasetId: "DS-1", population: "M" }),
         variant({ beacon: "Beacon A", datasetId: "DS-1", population: "ES_M" }),
         variant({ beacon: "Beacon A", datasetId: "DS-1", population: "FR_M" }),
       ]);
 
-      expect(
-        grouped["Beacon A"].datasets["DS-1"].totalVariant?.population
-      ).toBe("M");
+      expect(grouped["Beacon A"].datasets["DS-1"].totalVariant).toBeUndefined();
       expect(
         grouped["Beacon A"].datasets["DS-1"].variants.map((it) => it.population)
-      ).toEqual(["ES_M", "FR_M"]);
-    });
-
-    test("does not promote aggregate row when multiple aggregate candidates exist", () => {
-      const grouped = GVariantsTableUtils.groupByBeacon([
-        variant({ beacon: "Beacon A", datasetId: "DS-1", population: "M" }),
-        variant({ beacon: "Beacon A", datasetId: "DS-1", population: "F" }),
-        variant({ beacon: "Beacon A", datasetId: "DS-1", population: "ES_M" }),
-        variant({ beacon: "Beacon A", datasetId: "DS-1", population: "ES_F" }),
-      ]);
-
-      expect(grouped["Beacon A"].datasets["DS-1"].totalVariant).toBeUndefined();
-      expect(grouped["Beacon A"].datasets["DS-1"].variants).toHaveLength(4);
+      ).toEqual(["M", "ES_M", "FR_M"]);
     });
   });
 

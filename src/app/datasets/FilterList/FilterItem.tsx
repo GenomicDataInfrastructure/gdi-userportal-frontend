@@ -70,7 +70,7 @@ function FilterItem({ filter }: FilterItemProps) {
                       >
                         <FontAwesomeIcon
                           icon={faInfoCircle}
-                          className="h-4 w-4 text-gray-500"
+                          className="h-4 w-4 text-info"
                         />
                         <Tooltip message={filter.helpText} />
                       </span>

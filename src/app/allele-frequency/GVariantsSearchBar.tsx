@@ -111,10 +111,13 @@ export default function GVariantsSearchBar({
   ];
 
   const SEX_OPTIONS = [
-    { value: "", label: t("selectSex") },
-    { value: "All", label: "All" },
+    { value: "All", label: "Total" },
     { value: "M", label: t("male") },
     { value: "F", label: t("female") },
+  ];
+  const COUNTRY_FILTER_OPTIONS = [
+    { value: "All", label: "All" },
+    ...COUNTRY_OPTIONS,
   ];
 
   const DISABLED_SEARCH_TOOLTIP = t("disabledSearchTooltip");
@@ -122,8 +125,8 @@ export default function GVariantsSearchBar({
   const [searchFilterInput, setSearchFilterInput] = useState<SearchInputData>({
     variant: "",
     refGenome: "",
-    sex: "",
-    countryOfBirth: "",
+    sex: "All",
+    countryOfBirth: "All",
     datasetType: "All",
   });
   const [errorMessage, setErrorMessage] = useState("");
@@ -160,14 +163,14 @@ export default function GVariantsSearchBar({
 
       if (field === "refGenome" && !value) {
         updatedState.variant = "";
-        updatedState.sex = "";
-        updatedState.countryOfBirth = "";
+        updatedState.sex = "All";
+        updatedState.countryOfBirth = "All";
         updatedState.datasetType = "All";
       }
 
       if (field === "variant" && (!normalizedVariant || variantIsAllKeyword)) {
-        updatedState.sex = "";
-        updatedState.countryOfBirth = "";
+        updatedState.sex = "All";
+        updatedState.countryOfBirth = "All";
       }
 
       setErrorMessage(() =>
@@ -248,11 +251,7 @@ export default function GVariantsSearchBar({
             type="select"
             value={searchFilterInput.countryOfBirth}
             onChange={(value) => updateData("countryOfBirth", value)}
-            options={[
-              { value: "", label: t("selectCountry") },
-              { value: "All", label: "All" },
-              ...COUNTRY_OPTIONS,
-            ]}
+            options={COUNTRY_FILTER_OPTIONS}
           />
         )}
 

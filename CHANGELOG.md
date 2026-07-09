@@ -11,7 +11,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v1.3.9] - 2025-04-04
 ## [v1.7.7] - 2026-07-06
 
 ### Added
@@ -151,6 +150,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix(deps): update dependency axios to v1.16.0 [security] (#998) by @LNDS-Sysadmins in ec39934f
 - fix(deps): update dependency npm-run-all2 to v9 (#985) by @LNDS-Sysadmins in a6250fa7
 - fix(deps): update opentelemetry-js monorepo to ^0.218.0 (#980) by @LNDS-Sysadmins in d9159720
+
+## [v1.7.2] - 2026-05-18
+
+### Added
+- feat: enhance GVariantsSearchBar and GVariantsTable for improved user experience (#982) by @Kacem Bechka in e680e013
+- feat: enhance GVariantsTable with dataset actions and improve data handling (#978) by @Kacem Bechka in 83842ce1
+
+
+### Changed
+- chore(deps): bump protobufjs, @opentelemetry/auto-instrumentations-node, @opentelemetry/exporter-logs-otlp-http, @opentelemetry/exporter-metrics-otlp-proto, @opentelemetry/exporter-trace-otlp-http and @opentelemetry/sdk-node (#981) by @dependabot[bot] in 099cb573
+- chore(deps): bump @protobufjs/utf8 from 1.1.0 to 1.1.1 (#977) by @dependabot[bot] in ddef9bcf
+- chore(deps): bump mermaid from 11.12.3 to 11.15.0 in /documentation (#976) by @dependabot[bot] in cc1bf0fd
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v9.7-1778604972 by @Renovate Bot in d1200c3a
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v9.7-1778504592 by @Renovate Bot in 9bb2578f
+- chore(deps): update oras-project/setup-oras digest to 9dd04ea by @Renovate Bot in 0d293003
+- doc: update CHANGELOG.md for v1.7.1 (#975) by @github-actions[bot] in 036a0bcc
+
+
+### Fixed
+- fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.75.0 (#966) by @LNDS-Sysadmins in 0e7ef312
 
 
 ## [v1.7.1] - 2026-05-11

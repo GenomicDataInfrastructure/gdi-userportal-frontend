@@ -12,6 +12,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.7.7] - 2026-07-06
+## [v1.7.10] - 2026-07-09
+
+### Added
+- feat: allow the harvester to harvest turtle format too by @Alessandro in 9f71cc8f
+- feat:ART-27431 info icon color changed by @Mohammed Aslam Vattaparambil in 50e5b303
+- feat:ART-27431 filter helper text tooltip by @Mohammed Aslam Vattaparambil in e520342f
+
+
+### Changed
+- Add local-index keyword filter (#1061) by @Inderpal Singh in ff1b344c
+- doc: update CHANGELOG.md for v1.7.9 (#1059) by @github-actions[bot] in c8724431
+
+
 ## [v1.7.9] - 2026-07-09
 
 ### Changed

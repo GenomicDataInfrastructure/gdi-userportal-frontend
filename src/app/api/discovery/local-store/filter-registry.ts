@@ -116,6 +116,13 @@ const localFilterDefinitions: LocalFilterDefinition[] = [
     field: "catalogue",
   }),
   createDropdownFilter({
+    group: "Catalogue",
+    key: "keywords",
+    label: "Keywords",
+    field: "keywords",
+    mapBucket: mapBucketToValueLabel,
+  }),
+  createDropdownFilter({
     group: "Access",
     key: "accessRights",
     label: "Access rights",

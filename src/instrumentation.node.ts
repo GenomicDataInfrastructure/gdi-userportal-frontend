@@ -21,7 +21,9 @@ const sdk = new NodeSDK({
   resource: resourceFromAttributes({
     [ATTR_SERVICE_NAME]: process.env.OTEL_SERVICE_NAME,
   }),
-  logRecordProcessors: [new BatchLogRecordProcessor(new OTLPLogExporter())],
+  logRecordProcessors: [
+    new BatchLogRecordProcessor({ exporter: new OTLPLogExporter() }),
+  ],
   instrumentations: [getNodeAutoInstrumentations()],
   spanProcessors: [new BatchSpanProcessor(new OTLPTraceExporter())],
   metricReader: new PeriodicExportingMetricReader({

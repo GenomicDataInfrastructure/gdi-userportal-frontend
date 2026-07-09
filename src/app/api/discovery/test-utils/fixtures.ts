@@ -189,6 +189,7 @@ export const canonicalDiscoveryRdf = `
         <dcat:Distribution rdf:about="https://example.org/distributions/population-registry-csv">
           <dct:identifier>distribution-1</dct:identifier>
           <dct:title>Population Registry CSV</dct:title>
+          <dct:description>Distribution-level CSV extract for registry data</dct:description>
           <dct:format rdf:resource="http://publications.europa.eu/resource/authority/file-type/CSV" />
           <dcat:mediaType>
             <dct:MediaType rdf:about="http://www.iana.org/assignments/media-types/text/csv">
@@ -324,6 +325,7 @@ export const buildLocalDiscoveryDataset = (
     {
       id: "distribution-1",
       title: "Population Registry CSV",
+      description: "Distribution-level CSV extract for registry data",
       format: {
         value: "http://publications.europa.eu/resource/authority/file-type/CSV", // NOSONAR
         label: "CSV",

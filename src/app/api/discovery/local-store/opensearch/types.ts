@@ -28,3 +28,7 @@ export interface SearchBackendTermsAggregationResponse {
     };
   };
 }
+
+export interface SearchBackendCountResponse {
+  count?: number;
+}

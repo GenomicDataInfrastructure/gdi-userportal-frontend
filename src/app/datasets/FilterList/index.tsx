@@ -6,13 +6,35 @@
 
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import FilterItem from "./FilterItem";
 import { useFilters } from "@/providers/filters/FilterProvider";
 
 export default function FilterList() {
+  const t = useTranslations("datasets");
   const { data: session } = useSession();
   const { filters } = useFilters();
   const searchParams = useSearchParams();
+
+  const hasRenderableContent = (filter: (typeof filters)[number]) => {
+    if (filter.type === "DROPDOWN") {
+      return (
+        filter.values?.some((value) =>
+          Boolean(value.value?.trim() || value.label?.trim())
+        ) ?? false
+      );
+    }
+
+    if (filter.type === "ENTRIES") {
+      return (
+        filter.entries?.some((entry) =>
+          Boolean(entry.key?.trim() && entry.label?.trim())
+        ) ?? false
+      );
+    }
+
+    return true;
+  };
 
   // Check if Beacon is enabled via URL parameter
   const includeBeacon = searchParams.get("beacon") === "true";
@@ -28,10 +50,9 @@ export default function FilterList() {
       // Only show Beacon filters if:
       // 1. User has Beacon access AND
       // 2. Beacon toggle is ON
-      return includeBeacon && hasBeaconAccess;
+      return includeBeacon && hasBeaconAccess && hasRenderableContent(filter);
     }
-    // Always show CKAN filters
-    return true;
+    return hasRenderableContent(filter);
   });
 
   // Group filters by source
@@ -46,7 +67,7 @@ export default function FilterList() {
       {catalogueFilters.length > 0 && (
         <section>
           <h3 className="text-sm font-semibold text-gray-500 uppercase mb-4 tracking-wide">
-            Catalogue Filters
+            {t("catalogueFilters")}
           </h3>
           <ul className="flex flex-col gap-y-6">
             {catalogueFilters.map((filter) => (
@@ -63,10 +84,10 @@ export default function FilterList() {
         <section>
           <div className="border-t pt-6">
             <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2 tracking-wide">
-              Individual-level data discovery Filters
+              {t("individualFilters")}
             </h3>
             <p className="text-xs text-gray-600 mb-4">
-              Filter by individual-level data characteristics
+              {t("individualFiltersDescription")}
             </p>
             <ul className="flex flex-col gap-y-6">
               {beaconFilters.map((filter) => (

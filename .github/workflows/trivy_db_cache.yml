@@ -18,7 +18,7 @@ jobs:
       contents: read
     steps:
       - name: Setup oras
-        uses: oras-project/setup-oras@9dd04eaa209f9a97aaa39ce146f0bea6c29ffadc
+        uses: oras-project/setup-oras@6f3b32cab70d211df6de905aad60b8611f11cffc
 
       - name: Get current date
         id: date
@@ -39,7 +39,7 @@ jobs:
           rm javadb.tar.gz
 
       - name: Cache DBs
-        uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: ${{ github.workspace }}/.cache/trivy
           key: cache-trivy-${{ steps.date.outputs.date }}

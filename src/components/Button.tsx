@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/utils/tailwindMerge";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +13,9 @@ interface ButtonProps {
   type?: "primary" | "secondary" | "info" | "warning";
   icon?: IconDefinition;
   href?: string;
-  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+  onClick?: (
+    e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>
+  ) => void;
   disabled?: boolean;
   className?: string;
   props?: React.ComponentPropsWithoutRef<"a">;
@@ -48,7 +51,9 @@ const Button: React.FC<ButtonProps> = ({
     : "";
   const flexClasses = flex ? "shrink-0" : "sm:w-auto";
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleClick = (
+    e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>
+  ) => {
     if (disabled) {
       e.preventDefault();
       e.stopPropagation();
@@ -59,9 +64,37 @@ const Button: React.FC<ButtonProps> = ({
     }
   };
 
+  const content = (
+    <>
+      {icon && <FontAwesomeIcon icon={icon} className="mr-2" />}
+      <span>{text}</span>
+      {children}
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className={cn(
+          classes[type!] || "",
+          common,
+          flexClasses,
+          className,
+          disabledClasses
+        )}
+        onClick={handleClick}
+        aria-disabled={disabled}
+        {...props}
+      >
+        {content}
+      </Link>
+    );
+  }
+
   return (
-    <a
-      href={href}
+    <button
+      type="button"
       className={cn(
         classes[type!] || "",
         common,
@@ -70,13 +103,10 @@ const Button: React.FC<ButtonProps> = ({
         disabledClasses
       )}
       onClick={handleClick}
-      aria-disabled={disabled}
-      {...props}
+      disabled={disabled}
     >
-      {icon && <FontAwesomeIcon icon={icon} className="mr-2" />}
-      <span>{text}</span>
-      {children}
-    </a>
+      {content}
+    </button>
   );
 };
 

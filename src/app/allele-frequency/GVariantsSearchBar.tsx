@@ -5,10 +5,12 @@
 
 import Button from "@/components/Button";
 import { COUNTRY_OPTIONS } from "@/app/api/discovery/additional-types";
+import contentConfig from "@/config/contentConfig";
 import { faInfoCircle, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import Tooltip from "../datasets/[id]/Tooltip";
+import { useTranslations } from "next-intl";
 
 type FormFieldProps = {
   fieldKey: string;
@@ -82,6 +84,7 @@ const FormField: React.FC<FormFieldProps> = ({
 type GVariantsSearchBarProps = {
   onSearchAction: (inputData: SearchInputData) => void;
   loading: boolean;
+  datasetTypeOptions: string[];
 };
 
 export type SearchInputData = {
@@ -89,81 +92,110 @@ export type SearchInputData = {
   refGenome: string;
   sex: string;
   countryOfBirth: string;
+  datasetType: string;
 };
 
-const REFERENCE_OPTIONS = [
-  { value: "", label: "Select reference genome" },
-  { value: "GRCh37", label: "GRCh37" },
-  { value: "GRCh38", label: "GRCh38" },
-];
-
-const SEX_OPTIONS = [
-  { value: "", label: "Select sex" },
-  { value: "All", label: "All" },
-  { value: "M", label: "Male" },
-  { value: "F", label: "Female" },
-];
-
-const DISABLED_SEARCH_TOOLTIP =
-  "First select the reference genome, then provide the variant. Position is entered as 1-based and converted to 0-based for the query.";
+const ALL_VARIANT_SEARCH_ENABLED = contentConfig.enableAllVariantSearch;
 
 export default function GVariantsSearchBar({
   onSearchAction,
   loading,
+  datasetTypeOptions,
 }: GVariantsSearchBarProps) {
+  const t = useTranslations("alleleFrequency");
+
+  const REFERENCE_OPTIONS = [
+    { value: "", label: t("selectReferenceGenome") },
+    { value: "GRCh37", label: "GRCh37" },
+    { value: "GRCh38", label: "GRCh38" },
+  ];
+
+  const SEX_OPTIONS = [
+    { value: "All", label: "Total" },
+    { value: "M", label: t("male") },
+    { value: "F", label: t("female") },
+  ];
+  const COUNTRY_FILTER_OPTIONS = [
+    { value: "All", label: "All" },
+    ...COUNTRY_OPTIONS,
+  ];
+
+  const DISABLED_SEARCH_TOOLTIP = t("disabledSearchTooltip");
+
   const [searchFilterInput, setSearchFilterInput] = useState<SearchInputData>({
     variant: "",
     refGenome: "",
-    sex: "",
+    sex: "All",
     countryOfBirth: "All",
+    datasetType: "All",
   });
   const [errorMessage, setErrorMessage] = useState("");
 
+  function isAllVariantKeyword(variant: string) {
+    return ALL_VARIANT_SEARCH_ENABLED && variant.trim().toLowerCase() === "all";
+  }
+
   function isVariantValid(variant: string) {
-    const variantPattern =
+    const normalizedVariant = variant.trim().toLowerCase();
+    if (normalizedVariant === "all") {
+      return ALL_VARIANT_SEARCH_ENABLED;
+    }
+
+    if (isAllVariantKeyword(variant)) {
+      return true;
+    }
+
+    const fullVariantPattern =
       /^(?:[1-9]|1[0-9]|2[0-2]|X|Y)-[1-9]\d*-[ACGT]+-[ACGT]+$/i;
-    return variantPattern.test(variant);
+    const positionOnlyPattern = /^(?:[1-9]|1[0-9]|2[0-2]|X|Y)-[1-9]\d*$/i;
+
+    return (
+      fullVariantPattern.test(normalizedVariant) ||
+      positionOnlyPattern.test(normalizedVariant)
+    );
   }
 
   const updateData = (field: keyof SearchInputData, value: string) => {
     setSearchFilterInput((prev) => {
       const updatedState = { ...prev, [field]: value };
+      const normalizedVariant = updatedState.variant.trim();
+      const variantIsAllKeyword = isAllVariantKeyword(normalizedVariant);
 
       if (field === "refGenome" && !value) {
         updatedState.variant = "";
-        updatedState.sex = "";
+        updatedState.sex = "All";
         updatedState.countryOfBirth = "All";
+        updatedState.datasetType = "All";
       }
 
-      if (field === "variant" && !value.trim()) {
-        updatedState.sex = "";
-        updatedState.countryOfBirth = "All";
-      }
-
-      if (field === "sex" && !value) {
+      if (field === "variant" && (!normalizedVariant || variantIsAllKeyword)) {
+        updatedState.sex = "All";
         updatedState.countryOfBirth = "All";
       }
 
       setErrorMessage(() =>
-        !updatedState.variant.trim() ||
-        isVariantValid(updatedState.variant.trim())
+        !normalizedVariant
           ? ""
-          : "Incorrect variant information"
+          : normalizedVariant.toLowerCase() === "all" &&
+              !ALL_VARIANT_SEARCH_ENABLED
+            ? t("incorrectVariant")
+            : isVariantValid(normalizedVariant)
+              ? ""
+              : t("incorrectVariant")
       );
       return updatedState;
     });
   };
 
-  const variantEntered = searchFilterInput.variant.trim().length > 0;
-  const variantIsValid =
-    variantEntered && isVariantValid(searchFilterInput.variant.trim());
+  const normalizedVariant = searchFilterInput.variant.trim();
+  const variantEntered = normalizedVariant.length > 0;
+  const variantIsAllKeyword = isAllVariantKeyword(normalizedVariant);
+  const variantIsValid = variantEntered && isVariantValid(normalizedVariant);
   const canShowVariant = searchFilterInput.refGenome !== "";
-  const canShowSex = canShowVariant && variantEntered;
-  const canShowCountry = canShowSex && searchFilterInput.sex !== "";
-  const isSearchComplete =
-    searchFilterInput.refGenome !== "" &&
-    variantIsValid &&
-    searchFilterInput.sex !== "";
+  const canShowSex = canShowVariant && variantEntered && !variantIsAllKeyword;
+  const canShowCountry =
+    canShowVariant && variantEntered && !variantIsAllKeyword;
+  const isSearchComplete = searchFilterInput.refGenome !== "" && variantIsValid;
   const isSearchDisabled = loading || !isSearchComplete;
 
   const search = () => {
@@ -175,12 +207,14 @@ export default function GVariantsSearchBar({
   };
   return (
     <div className="mb-6">
-      <h2 className="text-lg font-semibold mb-2">Search for your variant:</h2>
+      <h2 className="text-lg font-semibold mb-2">
+        {t("searchForYourVariant")}
+      </h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-end">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 items-end">
         <FormField
           fieldKey="refGenome"
-          label="Ref Genome"
+          label={t("refGenome")}
           type="select"
           value={searchFilterInput.refGenome}
           onChange={(value) => updateData("refGenome", value)}
@@ -190,19 +224,19 @@ export default function GVariantsSearchBar({
         {canShowVariant && (
           <FormField
             fieldKey="variant"
-            label="Variant"
+            label={t("variant")}
             type="text"
             value={searchFilterInput.variant}
             onChange={(value) => updateData("variant", value)}
-            placeholder="e.g. 21-9411449-G-T"
-            tooltip="Format: chromosome-position-reference-alternate (e.g. 21-9411449-G-T). Position is interpreted as 1-based."
+            placeholder={t("variantPlaceholder")}
+            tooltip={t("variantTooltip")}
           />
         )}
 
         {canShowSex && (
           <FormField
             fieldKey="sex"
-            label="Sex"
+            label={t("sex")}
             type="select"
             value={searchFilterInput.sex}
             onChange={(value) => updateData("sex", value)}
@@ -213,11 +247,28 @@ export default function GVariantsSearchBar({
         {canShowCountry && (
           <FormField
             fieldKey="countryOfBirth"
-            label="Country of Birth"
+            label={t("countryOfBirth")}
             type="select"
             value={searchFilterInput.countryOfBirth}
             onChange={(value) => updateData("countryOfBirth", value)}
-            options={[{ value: "All", label: "All" }, ...COUNTRY_OPTIONS]}
+            options={COUNTRY_FILTER_OPTIONS}
+          />
+        )}
+
+        {canShowVariant && (
+          <FormField
+            fieldKey="datasetType"
+            label={t("datasetType")}
+            type="select"
+            value={searchFilterInput.datasetType}
+            onChange={(value) => updateData("datasetType", value)}
+            options={[
+              { value: "All", label: "All" },
+              ...datasetTypeOptions.map((datasetType) => ({
+                value: datasetType,
+                label: datasetType,
+              })),
+            ]}
           />
         )}
 
@@ -226,7 +277,7 @@ export default function GVariantsSearchBar({
             disabled={isSearchDisabled}
             icon={faSearch}
             onClick={search}
-            text="Search"
+            text={t("search")}
             type="primary"
             className="text-center"
             props={
@@ -238,7 +289,7 @@ export default function GVariantsSearchBar({
 
       {canShowVariant && (
         <div className="text-md flex items-end gap-2 mt-2">
-          <span className="text-black text-md">Variant Example: </span>
+          <span className="text-black text-md">{t("variantExample")}</span>
           <Button
             className="text-info hover:underline p-0 m-0"
             text="21-9411449-G-T"

@@ -11,6 +11,7 @@ import { retrieveFilterValuesApi } from "../api/discovery";
 import { ValueLabel } from "@/app/api/discovery/open-api/schemas";
 import { FilterValueType } from "@/app/api/discovery/additional-types";
 import { UrlSearchParams } from "@/app/params";
+import { getTranslations } from "next-intl/server";
 
 async function getPublishers(): Promise<ValueLabel[]> {
   try {
@@ -28,6 +29,7 @@ type PublishersPageProps = {
 export default async function PublishersPage({
   searchParams,
 }: PublishersPageProps) {
+  const t = await getTranslations("publishers");
   const _searchParams = await searchParams;
   let publishers: ValueLabel[];
 
@@ -45,7 +47,7 @@ export default async function PublishersPage({
     >
       <div className="my-8 flex items-center gap-2 px-4 sm:px-6 lg:px-8">
         <h1 className="text-left font-title text-2xl sm:text-3xl">
-          Publishers
+          {t("title")}
         </h1>
         <span className="bg-info text-white text-sm px-2 py-1 rounded-full">
           {publishers.length}
@@ -54,7 +56,7 @@ export default async function PublishersPage({
       <Suspense
         fallback={
           <LoadingContainer
-            text="Retrieving publishers. This may take a few moments."
+            text={t("loading")}
             className="mt-4 px-4 text-center sm:mt-8 sm:px-8"
           />
         }
@@ -63,10 +65,10 @@ export default async function PublishersPage({
           <ValueList
             items={publishers}
             filterKey={FilterValueType.PUBLISHER}
-            title="Publishers"
+            title={t("title")}
           />
         ) : (
-          <p className="text-center text-sm text-info">No publishers found.</p>
+          <p className="text-center text-sm text-info">{t("empty")}</p>
         )}
       </Suspense>
     </PageContainer>

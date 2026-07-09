@@ -8,6 +8,7 @@ import GVariantsSearchBar, {
 } from "@/app/allele-frequency/GVariantsSearchBar";
 import GVariantsTable from "@/app/allele-frequency/GVariantsTable";
 import {
+  retrieveFilterValuesApi,
   retrieveDatasetApi,
   searchDatasetsApi,
   searchGVariantsApi,
@@ -19,12 +20,14 @@ import {
 import ErrorComponent from "@/app/error";
 import { UrlSearchParams } from "@/app/params";
 import PageContainer from "@/components/PageContainer";
+import contentConfig from "@/config/contentConfig";
 import {
   getExternalDatasetInfo,
   getFirstAccessUrl,
 } from "@/utils/datasetHelpers";
 import { isAxiosError } from "axios";
-import { use, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
 type AlleleFrequencyPageProps = {
   searchParams: Promise<UrlSearchParams>;
@@ -36,15 +39,20 @@ type DatasetActionInfo = {
   externalAccessUrl?: string;
 };
 
+const ALL_VARIANT_SEARCH_ENABLED = contentConfig.enableAllVariantSearch;
+
 export default function AlleleFrequencyPage({
   searchParams,
 }: AlleleFrequencyPageProps) {
+  const t = useTranslations("alleleFrequency");
   const [results, setResults] = useState<GVariantsSearchResponse[]>([]);
+  const [showSummary, setShowSummary] = useState(false);
   const [datasetActions, setDatasetActions] = useState<
     Record<string, DatasetActionInfo>
   >({});
   const [loading, setLoading] = useState(false);
   const [triedSearching, setTriedSearching] = useState(false);
+  const [datasetTypeOptions, setDatasetTypeOptions] = useState<string[]>([]);
   const _searchParams = use(searchParams);
   const [error, setError] = useState<{
     statusCode: number;
@@ -137,13 +145,74 @@ export default function AlleleFrequencyPage({
     );
   };
 
+  const filterResultsByDatasetType = (
+    gvariantsResults: GVariantsSearchResponse[],
+    actions: Record<string, DatasetActionInfo>,
+    selectedDatasetType: string
+  ) => {
+    if (!selectedDatasetType || selectedDatasetType === "All") {
+      return gvariantsResults;
+    }
+
+    return gvariantsResults.filter((row) => {
+      const datasetId = row.datasetId?.trim();
+      if (!datasetId) {
+        return false;
+      }
+
+      return (
+        actions[datasetId]?.dataset?.datasetType?.trim() === selectedDatasetType
+      );
+    });
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadDatasetTypeOptions = async () => {
+      try {
+        const values = await retrieveFilterValuesApi("dcat_type");
+        const options = Array.from(
+          new Set(
+            values
+              .map((valueLabel) => valueLabel.label?.trim())
+              .filter((label): label is string => !!label)
+          )
+        ).sort((a, b) =>
+          a.localeCompare(b, undefined, {
+            sensitivity: "base",
+            numeric: true,
+          })
+        );
+
+        if (isMounted) {
+          setDatasetTypeOptions(options);
+        }
+      } catch {
+        if (isMounted) {
+          setDatasetTypeOptions([]);
+        }
+      }
+    };
+
+    void loadDatasetTypeOptions();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const handleSearch = async (props: SearchInputData) => {
     setLoading(true);
     setResults([]);
+    setShowSummary(false);
     setDatasetActions({});
     setError(null);
 
     try {
+      const hasSpecificFilterSelected =
+        (!!props.sex && props.sex !== "All") ||
+        (!!props.countryOfBirth && props.countryOfBirth !== "All");
       const params: {
         referenceName?: string;
         start?: number[];
@@ -157,8 +226,25 @@ export default function AlleleFrequencyPage({
 
       const variant = props.variant.trim();
       if (!variant) throw new Error("Variant is required");
+      if (ALL_VARIANT_SEARCH_ENABLED && variant.toLowerCase() === "all") {
+        const response = await searchGVariantsApi({ params: {} });
+        const actions = await buildDatasetActions(response);
+        const filteredResponse = filterResultsByDatasetType(
+          response,
+          actions,
+          props.datasetType
+        );
+        setResults(filteredResponse);
+        setShowSummary(hasSpecificFilterSelected);
+        setDatasetActions(actions);
+        setTriedSearching(true);
+        return;
+      }
+
       const parts = variant.split("-");
-      if (parts.length !== 4) throw new Error("Invalid variant format");
+      if (parts.length !== 2 && parts.length !== 4) {
+        throw new Error("Invalid variant format");
+      }
       const [referenceName, start, referenceBases, alternateBases] = parts;
       const startNum = parseInt(start, 10);
       if (isNaN(startNum) || startNum <= 0)
@@ -169,23 +255,39 @@ export default function AlleleFrequencyPage({
 
       params.referenceName = referenceName;
       params.start = startPosition;
-      params.end = null;
-      params.referenceBases = referenceBases;
-      params.alternateBases = alternateBases;
+
+      if (parts.length === 4) {
+        params.end = null;
+        params.referenceBases = referenceBases;
+        params.alternateBases = alternateBases;
+      } else {
+        // Single-base range query around the requested position.
+        params.end = [startNum];
+      }
 
       if (props.refGenome) {
         params.assemblyId = props.refGenome;
       }
-      if (props.sex && props.sex !== "All") {
+      if (props.sex === "All") {
+        params.sex = "ALL";
+      } else if (props.sex) {
         params.sex = props.sex;
       }
-      if (props.countryOfBirth && props.countryOfBirth !== "All") {
+      if (props.countryOfBirth === "All") {
+        params.countryOfBirth = "ALL";
+      } else if (props.countryOfBirth) {
         params.countryOfBirth = props.countryOfBirth;
       }
 
       const response = await searchGVariantsApi({ params });
       const actions = await buildDatasetActions(response);
-      setResults(response);
+      const filteredResponse = filterResultsByDatasetType(
+        response,
+        actions,
+        props.datasetType
+      );
+      setResults(filteredResponse);
+      setShowSummary(hasSpecificFilterSelected);
       setDatasetActions(actions);
       setTriedSearching(true);
     } catch (error) {
@@ -224,20 +326,24 @@ export default function AlleleFrequencyPage({
       searchParams={_searchParams}
       className="container mx-auto px-4 pt-5"
     >
-      <GVariantsSearchBar onSearchAction={handleSearch} loading={loading} />
+      <GVariantsSearchBar
+        onSearchAction={handleSearch}
+        loading={loading}
+        datasetTypeOptions={datasetTypeOptions}
+      />
 
-      {loading && (
-        <p className="text-center text-gray-500">
-          Searching and preparing results...
-        </p>
-      )}
+      {loading && <p className="text-center text-gray-500">{t("searching")}</p>}
 
       {!loading && triedSearching && results.length == 0 && (
-        <p className="text-center text-gray-500">No results found</p>
+        <p className="text-center text-gray-500">{t("noResults")}</p>
       )}
 
       {!loading && results.length > 0 && (
-        <GVariantsTable results={results} datasetActions={datasetActions} />
+        <GVariantsTable
+          results={results}
+          datasetActions={datasetActions}
+          showSummary={showSummary}
+        />
       )}
     </PageContainer>
   );

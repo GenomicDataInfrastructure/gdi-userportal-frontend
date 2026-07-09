@@ -111,7 +111,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     return dataset.distributions?.map((distribution) => ({
       id: distribution.id,
       title: distribution.title,
-      description: "",
+      description: distribution.description ?? "",
       format: distribution.format,
       mediaType: distribution.mediaType,
       license: distribution.license,
@@ -127,19 +127,29 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     _headers: Record<string, string>
   ): Promise<DiscoveryFilter[]> {
     const localFilters = listLocalFilters();
-
-    return Promise.all(
+    const resolvedFilters = await Promise.all(
       localFilters.map(async (filter) => {
         if (filter.type !== "DROPDOWN") {
-          return { ...filter, source: this.key };
+          return (await this.store.hasFilterValues(filter.key))
+            ? { ...filter, source: this.key }
+            : null;
+        }
+
+        const values = await this.store.retrieveFilterValues(filter.key);
+        if (!values.length) {
+          return null;
         }
 
         return {
           ...filter,
           source: this.key,
-          values: await this.store.retrieveFilterValues(filter.key),
+          values,
         };
       })
+    );
+
+    return resolvedFilters.filter(
+      (filter): filter is DiscoveryFilter => filter !== null
     );
   }
 
@@ -152,17 +162,20 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
 
   async searchDatasets(
     options: DiscoveryDatasetSearchQuery,
-    _headers: Record<string, string>
+    headers: Record<string, string>
   ): Promise<DiscoveryDatasetsSearchResponse> {
     await this.store.ensureInitialized();
-    const response = await this.store.searchDatasets({
-      query: options.query,
-      facets: options.facets?.map(({ source: _source, ...facet }) => facet),
-      sort: options.sort,
-      start: options.start,
-      rows: options.rows,
-      operator: options.operator,
-    });
+    const [response, facets] = await Promise.all([
+      this.store.searchDatasets({
+        query: options.query,
+        facets: options.facets?.map(({ source: _source, ...facet }) => facet),
+        sort: options.sort,
+        start: options.start,
+        rows: options.rows,
+        operator: options.operator,
+      }),
+      this.retrieveFilters(headers),
+    ]);
 
     return {
       count: response.count,
@@ -170,6 +183,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
         ...this.mapLocalDataset(dataset),
         distributionsCount: dataset.distributionsCount,
       })),
+      facets,
     };
   }
 

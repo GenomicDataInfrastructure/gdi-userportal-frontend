@@ -12,6 +12,7 @@ import EntitlementsList from "./EntitlementsList";
 import LoadingContainer from "@/components/LoadingContainer";
 import Error from "@/app/error";
 import axios from "axios";
+import { useTranslations } from "next-intl";
 import { EmptyEntitlements } from "./EmptyEntitlements";
 import { retrieveEntitlementsApi } from "../../api/access-management";
 import { ErrorResponse } from "@/app/api/access-management/open-api/schemas";
@@ -24,6 +25,7 @@ interface EntitlementsResponse {
 }
 
 function EntitlementsPage() {
+  const t = useTranslations();
   const [response, setResponse] = useState<EntitlementsResponse>({
     status: "loading",
   });
@@ -65,7 +67,7 @@ function EntitlementsPage() {
   if (response.status === "loading") {
     return (
       <LoadingContainer
-        text="Retrieving entitlements..."
+        text={t("requests.entitlements.loading")}
         className="text-center"
       />
     );
@@ -83,8 +85,10 @@ function EntitlementsPage() {
 
   return (
     <div className="pt-5 md:pt-10">
-      <PageHeading className="mb-4">Entitlements</PageHeading>
-      <span>View your entitlements</span>
+      <PageHeading className="mb-4">
+        {t("requests.entitlements.title")}
+      </PageHeading>
+      <span>{t("requests.entitlements.subtitle")}</span>
       <ListContainer>
         {hasEntitlements ? (
           <EntitlementsList entitlements={response.datasetEntitlements ?? []} />

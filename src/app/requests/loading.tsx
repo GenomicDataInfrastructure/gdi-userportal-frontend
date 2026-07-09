@@ -3,9 +3,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import LoadingContainer from "@/components/LoadingContainer";
+import { getTranslations } from "next-intl/server";
 
-function Loading() {
-  return <LoadingContainer text="Loading..." />;
+async function Loading() {
+  const t = await getTranslations("common");
+  return <LoadingContainer text={t("loading")} />;
 }
 
 export default Loading;

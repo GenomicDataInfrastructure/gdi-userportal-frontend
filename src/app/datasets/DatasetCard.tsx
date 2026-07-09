@@ -24,6 +24,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card, { CardItem } from "../../components/Card";
 import { useEffect, useState, useRef, useMemo } from "react";
 import { ExternalDatasetConfirmationDialog } from "@/components/ExternalDatasetCardLink";
+import { useTranslations } from "next-intl";
 
 type DatasetCardProps = {
   dataset: SearchedDataset;
@@ -36,6 +37,8 @@ function DatasetCard({
   cardItems,
   displayBasketButton = true,
 }: Readonly<DatasetCardProps>) {
+  const t = useTranslations("basket");
+  const tDetail = useTranslations("datasets.detail");
   const screenSize = useWindowSize();
   const truncatedDesc = dataset.description
     ? truncateDescription(dataset.description, screenSize)
@@ -111,7 +114,7 @@ function DatasetCard({
                 }}
                 className="text-xs sm:text-base text-primary hover:text-info underline hover:no-underline font-semibold transition-colors duration-200 cursor-pointer shrink-0 inline-flex items-center gap-1"
               >
-                <span>Access external dataset</span>
+                <span>{tDetail("accessExternalDataset")}</span>
                 <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
               </button>
             )}
@@ -125,7 +128,7 @@ function DatasetCard({
             }}
             className="text-xs sm:text-base text-gray-400 cursor-not-allowed inline-flex items-center gap-1"
           >
-            <span>External link not available</span>
+            <span>{tDetail("externalLinkNotAvailable")}</span>
             <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
           </button>
         )}
@@ -147,7 +150,7 @@ function DatasetCard({
           icon={isInBasket ? faMinusCircle : faPlusCircle}
           className="mr-2"
         />
-        <span>{isInBasket ? "Remove from basket" : "Add to basket"}</span>
+        <span>{isInBasket ? t("removeFromBasket") : t("addToBasket")}</span>
       </button>
     );
 
@@ -163,14 +166,16 @@ function DatasetCard({
     () => dataset.keywords?.filter((kw): kw is string => !!kw),
     [dataset.keywords]
   );
-  const entityLabel = dataset.isSeries ? "Dataset series" : undefined;
+  const entityLabel = dataset.isSeries
+    ? tDetail("datasetSeriesTag")
+    : undefined;
 
   return (
     <Card
       url={`/datasets/${dataset.id}`}
       title={dataset.title}
       subTitles={subTitles}
-      description={truncatedDesc || "No description available"}
+      description={truncatedDesc || tDetail("noDescriptionAvailable")}
       cardItems={cardItems}
       keywords={keywords}
       externalUrl={isExternal ? externalAccessUrl : undefined}

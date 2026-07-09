@@ -4,21 +4,21 @@
 
 import Button from "@/components/Button";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { useTranslations } from "next-intl";
 
 export function EmptyEntitlements() {
+  const t = useTranslations();
+
   return (
     <div className="mb-7 flex w-full flex-col items-center justify-center gap-4">
       <p className="text-md text-center text-primary">
-        <span>You don&apos;t have any entitlement yet.</span>
+        <span>{t("requests.entitlements.empty").split("\n")[0]}</span>
         <br />
-        <span>
-          Wait for your application(s) to be approved, or submit a new
-          application.
-        </span>
+        <span>{t("requests.entitlements.empty").split("\n")[1]}</span>
       </p>
       <Button
         icon={faPlusCircle}
-        text="Add datasets"
+        text={t("requests.applications.addDatasets")}
         href="/datasets"
         type="primary"
         className="text-xs"

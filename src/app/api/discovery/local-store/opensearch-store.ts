@@ -12,6 +12,7 @@ import {
   LocalDiscoveryStore,
 } from "@/app/api/discovery/local-store/types";
 import {
+  SearchBackendCountResponse,
   SearchBackendTermsAggregationResponse,
   SearchBackendDocumentResponse,
   SearchBackendSearchResponse,
@@ -144,6 +145,34 @@ export class OpenSearchDiscoveryStore implements LocalDiscoveryStore {
       `/${this.indexName}/_delete_by_query`,
       buildClearBody()
     );
+  }
+
+  async hasFilterValues(key: string): Promise<boolean> {
+    await this.ensureInitialized();
+
+    const filterDefinition = getLocalFilterDefinition(key);
+    const field = filterDefinition?.field;
+    if (!field) {
+      return false;
+    }
+
+    let response;
+    try {
+      response = await this.client.post<SearchBackendCountResponse>(
+        `/${this.indexName}/_count`,
+        {
+          query: {
+            exists: {
+              field,
+            },
+          },
+        }
+      );
+    } catch (error) {
+      throw new Error(formatSearchBackendError(error));
+    }
+
+    return Boolean(response.data.count);
   }
 
   async retrieveFilterValues(key: string): Promise<LocalDiscoveryValueLabel[]> {

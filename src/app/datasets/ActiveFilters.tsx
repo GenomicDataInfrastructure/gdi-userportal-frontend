@@ -13,8 +13,10 @@ import {
   ActiveFilter,
   ActiveFilterEntry,
 } from "@/providers/filters/FilterProvider.types";
+import { useTranslations } from "next-intl";
 
 export default function ActiveFilters() {
+  const t = useTranslations("datasets");
   const { activeFilters, addActiveFilter, removeActiveFilter } = useFilters();
 
   if (!activeFilters.length) {
@@ -47,7 +49,7 @@ export default function ActiveFilters() {
   return (
     <div className="mb-4">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-subheading">Active Filters</h3>
+        <h3 className="text-lg font-subheading">{t("activeFilters")}</h3>
         <ClearFilterButton />
       </div>
       <div className="flex flex-wrap gap-2">

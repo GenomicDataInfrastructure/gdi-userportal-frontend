@@ -7,6 +7,7 @@ import Button from "@/components/Button";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
+import { useTranslations } from "next-intl";
 
 type AddToBasketButtonProps = {
   dataset: SearchedDataset | null;
@@ -17,6 +18,7 @@ function AddToBasketButton({
   dataset,
   disabled: isDisabledProp = false,
 }: Readonly<AddToBasketButtonProps>) {
+  const t = useTranslations("basket");
   const { basket, addDatasetToBasket, removeDatasetFromBasket, isLoading } =
     useDatasetBasket();
 
@@ -33,7 +35,7 @@ function AddToBasketButton({
 
   return (
     <Button
-      text={isInBasket ? "Remove from basket" : "Add to basket"}
+      text={isInBasket ? t("removeFromBasket") : t("addToBasket")}
       icon={isInBasket ? faMinusCircle : faPlusCircle}
       onClick={toggleDatasetInBasket}
       type={isInBasket ? "warning" : "primary"}

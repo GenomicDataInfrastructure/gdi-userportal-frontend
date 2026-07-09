@@ -13,22 +13,22 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "./shadcn/pagination";
+import { usePathname } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 
 type PaginationProps = {
   datasetCount: number;
   datasetPerPage: number;
-  pathname: string;
   currentPage: number;
 };
 
 function PaginationContainer({
   datasetCount,
   datasetPerPage,
-  pathname,
   currentPage,
 }: Readonly<PaginationProps>) {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const lastPageNb = Math.ceil(datasetCount / datasetPerPage) || 1;
 
   function createHref(page: number) {

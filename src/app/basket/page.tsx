@@ -15,28 +15,30 @@ import { signIn, useSession } from "next-auth/react";
 import DatasetList from "../datasets/DatasetList";
 import { AxiosError } from "axios";
 import { createApplicationApi } from "../api/access-management";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { UrlSearchParams } from "@/app/params";
 import { use } from "react";
+import { useTranslations } from "next-intl";
 
 type BasketPageProps = {
   searchParams: Promise<UrlSearchParams>;
 };
 
 export default function Page({ searchParams }: BasketPageProps) {
+  const t = useTranslations();
   const _searchParams = use(searchParams);
   const { basket, isLoading, emptyBasket } = useDatasetBasket();
   const { setAlert } = useAlert();
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  let heading = "Your Basket";
+  let heading = t("basket.title");
   if (basket.length > 0) {
-    heading = `Your Basket (${basket.length})`;
+    heading = t("basket.titleWithCount", { count: basket.length });
   }
 
   if (isLoading || status === "loading") {
-    return <LoadingContainer text="Loading your basket..." />;
+    return <LoadingContainer text={t("basket.loading")} />;
   }
 
   const requestNow = async () => {
@@ -70,7 +72,7 @@ export default function Page({ searchParams }: BasketPageProps) {
       actionBtn = (
         <Button
           icon={faPaperPlane}
-          text="Login to request"
+          text={t("basket.loginToRequest")}
           onClick={() => signIn("keycloak")}
           type="primary"
         />
@@ -79,7 +81,7 @@ export default function Page({ searchParams }: BasketPageProps) {
       actionBtn = (
         <Button
           icon={faPaperPlane}
-          text="Request now"
+          text={t("basket.requestNow")}
           type="primary"
           onClick={requestNow}
         />
@@ -95,7 +97,7 @@ export default function Page({ searchParams }: BasketPageProps) {
           {basket.length > 0 && (
             <Button
               icon={faPlusCircle}
-              text="Continue adding"
+              text={t("basket.continueAdding")}
               href="/datasets"
               type="info"
             />
@@ -107,11 +109,11 @@ export default function Page({ searchParams }: BasketPageProps) {
         ) : (
           <div className="flex w-full flex-col items-center justify-center gap-4">
             <p className="text-center text-lg text-primary">
-              Your basket is empty.
+              {t("basket.empty")}
             </p>
             <Button
               icon={faPlusCircle}
-              text="Add datasets"
+              text={t("basket.addDatasets")}
               href="/datasets"
               type="primary"
             />

@@ -9,6 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { forwardRef, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 import { Button } from "./shadcn/button";
@@ -83,6 +84,7 @@ const CountrySelect = ({
   onChange,
   options,
 }: CountrySelectProps) => {
+  const t = useTranslations("common");
   const handleSelect = useCallback(
     (country: RPNInput.Country) => {
       onChange(country);
@@ -115,8 +117,8 @@ const CountrySelect = ({
         <Command>
           <CommandList>
             <ScrollArea className="h-72">
-              <CommandInput placeholder="Search country..." />
-              <CommandEmpty>No country found.</CommandEmpty>
+              <CommandInput placeholder={t("searchCountry")} />
+              <CommandEmpty>{t("noCountryFound")}</CommandEmpty>
               <CommandGroup>
                 {options
                   .filter((x) => x.value)

@@ -11,7 +11,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v1.3.9] - 2025-04-04
 ## [v1.7.2] - 2026-05-18
 
 ### Added
@@ -31,6 +30,122 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.75.0 (#966) by @LNDS-Sysadmins in 0e7ef312
+## [v1.7.6] - 2026-07-01
+
+### Added
+- feat(i18n): localize dataset detail page and metadata UI (#1032) by @Inderpal Singh in 4cd0bf9c
+
+
+### Changed
+- Fix ORT job: pin Docker image to 89.2.0 to avoid broken latest (#1034) by @Copilot in ff855dac
+- chore(deps): update oras-project/setup-oras digest to fb503f0 by @Renovate Bot in e8179f17
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1782410493 (#1035) by @LNDS-Sysadmins in 5914d21a
+- chore(deps): update actions/cache digest to 55cc834 by @Renovate Bot in 7ef92e2d
+- chore(deps): bump webpack-dev-server in /documentation (#1026) by @dependabot[bot] in 819a0711
+- chore(deps): update dependency protobufjs to v8 (#1029) by @LNDS-Sysadmins in caebd0b0
+- doc: update CHANGELOG.md for v1.7.5 (#1031) by @github-actions[bot] in b1912a58
+
+
+### Fixed
+- fix: pin ORT image in release and vuln scan (#1042) by @Inderpal Singh in 2358ac4f
+- fix: gate health dataset metadata by @Inderpal Singh in 7bb79972
+- fix: hide empty local-index filters by @Inderpal Singh in 90cba547
+- fix: return local-index filters in search by @Inderpal Singh in 78dc9144
+- fix: format by @Rania Hamdani in 7ef4ea61
+- fix: add french translations by @Rania Hamdani in 7815bcac
+- fix: e2e (#1033) by @Inderpal Singh in 35a9c391
+
+
+## [v1.7.5] - 2026-06-24
+
+### Added
+- feat: add locale-prefixed i18n with next-intl (#1024) by @Inderpal Singh in 8a1f11a2
+- feat: enhance variant handling in GVariants components (#1010) by @Kacem Bechka in b23bd32b
+
+
+### Changed
+- chore(deps): update actions/checkout action to v7 (#1020) by @LNDS-Sysadmins in 30a591a3
+- chore(deps): bump undici (#1021) by @dependabot[bot] in edbc0b11
+- chore(deps): bump dompurify from 3.4.10 to 3.4.11 in /documentation (#1022) by @dependabot[bot] in 77277d0a
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1782220748 (#1025) by @LNDS-Sysadmins in 50082b6e
+- chore(deps): update oras-project/setup-oras digest to 4aa197c by @Renovate Bot in 9021f3ec
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1781562225 (#1017) by @LNDS-Sysadmins in b991e2b8
+- chore(deps): bump ws in /documentation (#1018) by @dependabot[bot] in a93bb3b6
+- chore(deps): bump launch-editor from 2.12.0 to 2.14.1 in /documentation (#1019) by @dependabot[bot] in 4e029bf0
+- chore(deps): bump @grpc/grpc-js from 1.14.3 to 1.14.4 (#1012) by @dependabot[bot] in 820b860c
+- chore(deps): bump shell-quote from 1.8.3 to 1.8.4 in /documentation (#1014) by @dependabot[bot] in b8c8a1f9
+- chore(deps): bump form-data from 4.0.5 to 4.0.6 (#1015) by @dependabot[bot] in 03b6b52e
+- chore(deps): bump dompurify from 3.4.0 to 3.4.10 in /documentation (#1016) by @dependabot[bot] in c93e8be2
+- chore(deps): update oras-project/setup-oras digest to 82faa22 by @Renovate Bot in 7705307e
+- chore(deps): update oras-project/setup-oras digest to f8710a5 by @Renovate Bot in 57629573
+- chore(deps): bump shell-quote from 1.8.3 to 1.8.4 (#1008) by @dependabot[bot] in 04341983
+- chore(deps): update dependency eslint-config-next to v16.2.9 by @Renovate Bot in 5e0ed16b
+- doc: update CHANGELOG.md for v1.7.4 (#1007) by @github-actions[bot] in 560ccd2f
+
+
+### Fixed
+- fix: e2e test (#1030) by @Inderpal Singh in 836e49d4
+- fix: override protobufjs vulnerability (#1027) by @Inderpal Singh in acaec268
+- fix: translation (#1028) by @RaniaHamdani2 in a25c9263
+- fix(deps): update opentelemetry-js monorepo (#1011) by @LNDS-Sysadmins in 62b681ed
+- fix(deps): update dependency undici to v8.5.0 [security] (#1023) by @LNDS-Sysadmins in d6aec7af
+- fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.77.0 (#1013) by @LNDS-Sysadmins in e974ccc6
+- fix(deps): update dependency sharp to ^0.35.0 (#1009) by @LNDS-Sysadmins in f5cb963f
+- fix(deps): update dependency next to v16.2.9 by @Renovate Bot in 2eaf5627
+
+
+## [v1.7.4] - 2026-06-10
+
+### Added
+- feat: add summary feature to GVariantsTable and AlleleFrequencyPage (#1004) by @Kacem Bechka in 565416cb
+
+
+### Changed
+- chore(deps): update astral-sh/setup-uv action to v8.2.0 (#1000) by @LNDS-Sysadmins in 1ae0bd27
+- chore(deps): update sonarsource/sonarqube-scan-action action to v8.2.0 (#1006) by @LNDS-Sysadmins in faf6f93d
+- chore(deps): update oras-project/setup-oras digest to ce8d0d5 by @Renovate Bot in 8fd24ede
+- doc: update CHANGELOG.md for v1.7.3 (#1002) by @github-actions[bot] in 9f419500
+- chore(deps): update dependency @types/react to v19.2.17 by @Renovate Bot in 5fa4ab23
+
+
+### Fixed
+- fix: sonar (#1005) by @Kacem Bechka in bf012f05
+
+
+## [v1.7.3] - 2026-06-04
+
+### Added
+- fix: enable all variant search feature in environment configuration (#996) by @Kacem Bechka in 2e5838d1
+- feat: add support for enabling all variant search (#995) by @Kacem Bechka in e217d63f
+- feat: enhance GVariantsSearchBar and GVariantsTable with dataset type functionality (#986) by @Kacem Bechka in 08f65364
+
+
+### Changed
+- chore(deps): update @playwright/test and related dependencies to version 1.60.0 (#1001) by @Kacem Bechka in cb439484
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1779831333 (#999) by @LNDS-Sysadmins in 83671afc
+- chore(deps): update react monorepo by @Renovate Bot in fa693110
+- chore(deps): update actions/checkout action to v6.0.3 by @Renovate Bot in 3d7b60d6
+- chore(deps): update dependency eslint-config-next to v16.2.7 by @Renovate Bot in 2ce62083
+- chore(deps): update oras-project/setup-oras digest to ae76689 by @Renovate Bot in 1f006b76
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v9.8-1779831271 by @Renovate Bot in 80eef982
+- chore(deps): bump brace-expansion from 5.0.5 to 5.0.6 in /documentation (#984) by @dependabot[bot] in 0d58ca77
+- chore(deps): update sonarsource/sonarqube-scan-action action to v8.1.0 (#987) by @LNDS-Sysadmins in 9715ec32
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v9.8-1779719601 (#988) by @LNDS-Sysadmins in 6c5979bf
+- chore(deps): bump webpack-dev-server in /documentation (#989) by @dependabot[bot] in bbd6ef32
+- chore(deps): update docker/build-push-action action to v7.2.0 (#990) by @LNDS-Sysadmins in d36dec62
+- chore(deps): update docker/login-action action to v4.2.0 (#991) by @LNDS-Sysadmins in b2ffbfce
+- chore(deps): update docker/metadata-action action to v6.1.0 (#992) by @LNDS-Sysadmins in 3d756bed
+- chore(deps): bump qs and express in /documentation (#993) by @dependabot[bot] in 84408907
+- chore(deps): update oras-project/setup-oras digest to 94695ea by @Renovate Bot in 7bb1bc6d
+- chore(deps): update dependency @types/react to v19.2.15 by @Renovate Bot in a2211811
+- chore(deps): update oras-project/setup-oras digest to f0d18da by @Renovate Bot in d9031840
+
+
+### Fixed
+- fix(deps): update dependency next to v16.2.7 by @Renovate Bot in be3dd8b2
+- fix(deps): update dependency axios to v1.16.0 [security] (#998) by @LNDS-Sysadmins in ec39934f
+- fix(deps): update dependency npm-run-all2 to v9 (#985) by @LNDS-Sysadmins in a6250fa7
+- fix(deps): update opentelemetry-js monorepo to ^0.218.0 (#980) by @LNDS-Sysadmins in d9159720
 
 
 ## [v1.7.1] - 2026-05-11

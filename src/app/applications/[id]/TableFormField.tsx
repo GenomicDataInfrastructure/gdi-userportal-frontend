@@ -6,6 +6,7 @@
 
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -28,6 +29,7 @@ function TableFormField({
   editable,
   validationWarning,
 }: TableFormFieldProps) {
+  const t = useTranslations("application.fields");
   const { updateInputFields } = useApplicationDetails();
   const [tableValues, setTableValues] = useState<FormFieldTableValue[][]>(
     field.tableValues || [[]]
@@ -74,14 +76,14 @@ function TableFormField({
     <div className="flex flex-col py-2">
       <div className="flex justify-between items-center">
         <h3 className="text-lg sm:text-xl">
-          {title} {field.optional ? "(Optional)" : ""}
+          {title} {field.optional ? t("optional") : ""}
         </h3>
         <button
           onClick={addRow}
           disabled={isDisabled}
           className="ml-4 mt-2 py-2 px-4 bg-primary text-white rounded-md disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Add Row
+          {t("addRow")}
         </button>
       </div>
       <table className="mt-4 border-collapse">

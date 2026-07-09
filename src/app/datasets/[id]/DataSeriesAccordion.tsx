@@ -5,7 +5,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronDown,
@@ -18,6 +18,7 @@ import {
 import { formatDate } from "@/utils/formatDate";
 import { DatasetSeries } from "@/app/api/discovery/open-api/schemas";
 import Tooltip from "./Tooltip";
+import { useTranslations } from "next-intl";
 
 type DataSeriesAccordionProps = {
   series: DatasetSeries[];
@@ -34,8 +35,10 @@ const resolveSeriesHref = (seriesItem: DatasetSeries): string =>
 export default function DataSeriesAccordion({
   series,
 }: DataSeriesAccordionProps) {
+  const t = useTranslations("datasets.detail");
   const [openIndex, setOpenIndex] = useState<null | number>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const notAvailableLabel = t("notAvailable");
 
   useEffect(() => {
     contentRefs.current = contentRefs.current.slice(0, series.length);
@@ -87,7 +90,7 @@ export default function DataSeriesAccordion({
                     </Link>
                   )}
                 </span>
-                <Tooltip message="Open dataset series details." />
+                <Tooltip message={t("tooltips.openDatasetSeriesDetails")} />
               </span>
               <FontAwesomeIcon
                 icon={openIndex === index ? faChevronUp : faChevronDown}
@@ -111,9 +114,11 @@ export default function DataSeriesAccordion({
               <div className="px-2 pb-4 text-sm">
                 <div className="ml-3 border-l-2 border-primary/20 pl-4">
                   <div className="mb-2 relative group">
-                    <strong>Description: </strong>
-                    <span>{seriesItem.description || "NA"}</span>
-                    <Tooltip message="Description of the dataset series." />
+                    <strong>{t("description")}: </strong>
+                    <span>{seriesItem.description || notAvailableLabel}</span>
+                    <Tooltip
+                      message={t("tooltips.datasetSeriesDescriptionField")}
+                    />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="flex items-center gap-2 relative group">
@@ -121,48 +126,50 @@ export default function DataSeriesAccordion({
                         icon={faCalendarAlt}
                         className="text-primary align-middle"
                       />
-                      <strong>Issued:</strong>
+                      <strong>{t("issued")}:</strong>
                       <span>
                         {seriesItem.issued
                           ? formatDate(seriesItem.issued)
-                          : "NA"}
+                          : notAvailableLabel}
                       </span>
-                      <Tooltip message="Date when the dataset series was issued." />
+                      <Tooltip message={t("tooltips.datasetSeriesIssued")} />
                     </div>
                     <div className="flex items-center gap-2 relative group">
                       <FontAwesomeIcon
                         icon={faCalendarAlt}
                         className="text-primary align-middle"
                       />
-                      <strong>Modified:</strong>
+                      <strong>{t("modified")}:</strong>
                       <span>
                         {seriesItem.modified
                           ? formatDate(seriesItem.modified)
-                          : "NA"}
+                          : notAvailableLabel}
                       </span>
-                      <Tooltip message="Date when the dataset series was last modified." />
+                      <Tooltip message={t("tooltips.datasetSeriesModified")} />
                     </div>
                     <div className="flex items-center gap-2 relative group">
                       <FontAwesomeIcon
                         icon={faClock}
                         className="text-primary align-middle"
                       />
-                      <strong>Frequency:</strong>
-                      <span>{seriesItem.frequency?.label || "NA"}</span>
-                      <Tooltip message="Update frequency for the dataset series." />
+                      <strong>{t("frequency")}:</strong>
+                      <span>
+                        {seriesItem.frequency?.label || notAvailableLabel}
+                      </span>
+                      <Tooltip message={t("tooltips.datasetSeriesFrequency")} />
                     </div>
                     <div className="flex items-center gap-2 relative group">
                       <FontAwesomeIcon
                         icon={faBuilding}
                         className="text-primary align-middle"
                       />
-                      <strong>Publisher:</strong>
+                      <strong>{t("publisher")}:</strong>
                       <span>
                         {seriesItem.publishers
                           ?.map((publisher) => publisher.name)
-                          .join(", ") || "NA"}
+                          .join(", ") || notAvailableLabel}
                       </span>
-                      <Tooltip message="Publishers responsible for the dataset series." />
+                      <Tooltip message={t("tooltips.datasetSeriesPublisher")} />
                     </div>
                   </div>
                 </div>

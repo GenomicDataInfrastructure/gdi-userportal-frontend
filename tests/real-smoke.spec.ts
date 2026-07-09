@@ -29,11 +29,11 @@ test("Real backend smoke: datasets list and detail", async ({ page }) => {
     return;
   }
 
-  const datasetLink = page.locator('a[href^="/datasets/"]:not([href*="?"])');
+  const datasetLink = page.locator('a[href*="/datasets/"]:not([href*="?"])');
   await expect(datasetLink.first()).toBeVisible({ timeout: 15000 });
 
   await datasetLink.first().click();
-  await expect(page).toHaveURL(/\/datasets\/[^/?]+$/);
+  await expect(page).toHaveURL(/\/(?:(en|fr)\/)?datasets\/[^/?]+$/);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible({
     timeout: 15000,
   });
@@ -44,11 +44,11 @@ test("Real backend smoke: basket page", async ({ page }) => {
 
   await page.goto("/datasets?page=1");
 
-  const datasetLink = page.locator('a[href^="/datasets/"]:not([href*="?"])');
+  const datasetLink = page.locator('a[href*="/datasets/"]:not([href*="?"])');
   if (await datasetLink.count()) {
     await datasetLink.first().click();
 
-    const addButton = page.locator("a", { hasText: /add to basket/i });
+    const addButton = page.getByRole("button", { name: /add to basket/i });
     if (await addButton.count()) {
       await addButton.click();
     }

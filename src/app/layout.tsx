@@ -4,10 +4,13 @@
 
 import Header from "@/components/Header";
 import Navbar from "@/components/Navbar";
+import { routing, type AppLocale } from "@/i18n/routing";
 import { DatasetBasketProvider } from "@/providers/DatasetBasketProvider";
 import { AlertProvider } from "@/providers/AlertProvider";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import { NextIntlClientProvider } from "next-intl";
+import { headers } from "next/headers";
 import { PublicEnvScript } from "next-runtime-env";
 import Footer from "./Footer";
 import SessionProviderWrapper from "./SessionProviderWrapper";
@@ -15,18 +18,35 @@ import "./globals.css";
 config.autoAddCss = false;
 import contentConfig from "@/config/contentConfig";
 import { FilterProvider } from "@/providers/filters/FilterProvider";
+import { getFlatMessages, getMessages } from "@/i18n/messages";
 
-export default function RootLayout({
+function isValidLocale(locale: string): locale is AppLocale {
+  return (routing.locales as readonly string[]).includes(locale);
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const requestHeaders = await headers();
+  const headerLocale = requestHeaders.get("x-next-intl-locale");
+  const locale =
+    headerLocale && isValidLocale(headerLocale)
+      ? headerLocale
+      : routing.defaultLocale;
+  const messages = getMessages(locale);
+  const flatMessages = getFlatMessages(locale);
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
-        <title>{contentConfig.siteTitle}</title>
+        <title>{flatMessages["metadata.siteTitle"]}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content={contentConfig.siteDescription} />
+        <meta
+          name="description"
+          content={flatMessages["metadata.siteDescription"]}
+        />
         <link rel="icon" href={contentConfig.favicon} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -43,22 +63,24 @@ export default function RootLayout({
         <link rel="stylesheet" href={"/fonts.css"} />
       </head>
       <body>
-        <AlertProvider>
-          <DatasetBasketProvider>
-            <div className="grid h-screen w-full grid-rows-[auto_1fr_auto]">
-              <SessionProviderWrapper>
-                <div>
-                  <Header />
-                </div>
-                <FilterProvider>
-                  <div>{children}</div>
-                </FilterProvider>
-                <Navbar />
-                <Footer />
-              </SessionProviderWrapper>
-            </div>
-          </DatasetBasketProvider>
-        </AlertProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <AlertProvider>
+            <DatasetBasketProvider>
+              <div className="grid h-screen w-full grid-rows-[auto_1fr_auto]">
+                <SessionProviderWrapper>
+                  <div>
+                    <Header />
+                  </div>
+                  <FilterProvider>
+                    <div>{children}</div>
+                  </FilterProvider>
+                  <Navbar />
+                  <Footer />
+                </SessionProviderWrapper>
+              </div>
+            </DatasetBasketProvider>
+          </AlertProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

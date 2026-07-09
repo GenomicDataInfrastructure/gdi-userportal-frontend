@@ -6,14 +6,16 @@
 
 import Button from "@/components/Button";
 import { useFilters } from "@/providers/filters/FilterProvider";
+import { useTranslations } from "next-intl";
 
 export default function ClearFilterButton() {
+  const t = useTranslations("datasets.filters");
   const { clearActiveFilters } = useFilters();
 
   return (
     <div className="flex justify-end">
       <Button
-        text="Clear Filters"
+        text={t("clearFilters")}
         type="warning"
         onClick={clearActiveFilters}
       />

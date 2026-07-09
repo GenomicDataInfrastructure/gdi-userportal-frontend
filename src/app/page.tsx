@@ -3,6 +3,7 @@
 
 "use client";
 
+import { Link } from "@/i18n/navigation";
 import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
 import { use, useEffect, useState } from "react";
@@ -11,8 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { useAlert } from "@/providers/AlertProvider";
 import { AxiosError } from "axios";
-import contentConfig from "@/config/contentConfig";
 import ValueList from "@/components/ValueList";
+import { useTranslations } from "next-intl";
 import {
   retrieveFilterValuesApi,
   searchDatasetsApi,
@@ -29,6 +30,7 @@ type HomePageProps = {
 };
 
 const HomePage = ({ searchParams }: HomePageProps) => {
+  const t = useTranslations();
   const [datasets, setDatasets] = useState<SearchedDataset[]>([]);
   const [themes, setThemes] = useState<ValueLabel[]>([]);
   const { setAlert } = useAlert();
@@ -85,14 +87,11 @@ const HomePage = ({ searchParams }: HomePageProps) => {
       className="container mx-auto px-4 pt-5 text-center"
     >
       <div className="my-8">
-        <h1 className="font-bold text-4xl font-title">
-          {contentConfig.homepageTitle}
-        </h1>
-        <h2 className="text-xl mt-4 font-body">
-          {contentConfig.homepageSubtitle}
-        </h2>
+        <h1 className="font-bold text-4xl font-title">{t("home.title")}</h1>
+        <h2 className="text-xl mt-4 font-body">{t("home.subtitle")}</h2>
       </div>
-      {contentConfig.homeNoticeEnabled && contentConfig.homeNoticeMessage && (
+      {process.env.NEXT_PUBLIC_HOME_NOTICE_ENABLED?.toLowerCase() ===
+        "true" && (
         <div
           className="mx-auto mb-10 w-full max-w-4xl rounded-lg border-l-4 border-l-warning bg-warning/10 p-4 text-left shadow-lg"
           role="status"
@@ -105,10 +104,10 @@ const HomePage = ({ searchParams }: HomePageProps) => {
             />
             <div>
               <h3 className="mb-1 text-lg font-semibold">
-                {contentConfig.homeNoticeTitle}
+                {t("home.noticeTitle")}
               </h3>
               <p className="text-sm leading-6 md:text-base">
-                {contentConfig.homeNoticeMessage}
+                {t("home.noticeMessage")}
               </p>
             </div>
           </div>
@@ -123,7 +122,7 @@ const HomePage = ({ searchParams }: HomePageProps) => {
         <ValueList
           items={themes}
           filterKey={FilterValueType.THEME}
-          title="Themes"
+          title={t("home.themesSectionTitle")}
         />
       )}
       <div className="mb-20 relative text-left flex items-center py-8">
@@ -137,26 +136,26 @@ const HomePage = ({ searchParams }: HomePageProps) => {
           }}
         ></div>
         <div className="relative z-10 w-full md:w-3/4 lg:w-2/3 xl:w-3/5">
-          <h3 className="mb-4 text-2xl">About the data portal</h3>
+          <h3 className="mb-4 text-2xl">{t("home.aboutPortal")}</h3>
           <p
             className="text-lg"
             dangerouslySetInnerHTML={{
-              __html: contentConfig.aboutContent.replace(/\n/g, "<br />"),
+              __html: t("home.aboutContent").replace(/\n/g, "<br />"),
             }}
           />
           <br />
-          <a
+          <Link
             className="link-arrow text-primary hover:text-hover-color"
             href="/about"
           >
-            Read more
-          </a>
+            {t("home.readMore")}
+          </Link>
         </div>
       </div>
 
       <div className="text-left flex items-center">
         <div className="relative z-10 w-full my-8">
-          <h3 className="mb-4 text-2xl">Most Recent Datasets</h3>
+          <h3 className="mb-4 text-2xl">{t("home.recentDatasets")}</h3>
           <RecentDatasets datasets={datasets} />
         </div>
       </div>

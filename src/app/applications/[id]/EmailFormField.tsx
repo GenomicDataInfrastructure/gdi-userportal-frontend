@@ -6,6 +6,7 @@
 
 import GenericInputFormField from "./GenericInputFormField";
 import { RetrievedApplicationFormField } from "@/app/api/access-management/open-api/schemas";
+import { useTranslations } from "next-intl";
 
 type EmailFormFieldProps = {
   field: RetrievedApplicationFormField;
@@ -22,12 +23,13 @@ function EmailFormField({
   editable,
   validationWarning,
 }: EmailFormFieldProps) {
+  const t = useTranslations("application.fields");
   return (
     <GenericInputFormField
       field={field}
       formId={formId}
       type="email"
-      placeholder="Enter your email address"
+      placeholder={t("emailPlaceholder")}
       title={title}
       editable={editable}
       validationWarning={validationWarning}

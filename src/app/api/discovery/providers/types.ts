@@ -232,6 +232,11 @@ export interface DiscoveryGVariantSearchResult {
   dataset?: string;
   datasetId?: string;
   population?: string;
+  referenceName?: string;
+  start?: number;
+  end?: number;
+  referenceBases?: string;
+  alternateBases?: string;
   sex?: string;
   countryOfBirth?: string;
   alleleCount?: number;

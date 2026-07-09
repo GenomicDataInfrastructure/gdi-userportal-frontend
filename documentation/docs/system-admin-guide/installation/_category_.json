@@ -1,6 +1,6 @@
 {
-  "label": "Installation guides",
-  "position": 10,
+  "label": "Install the platform",
+  "position": 4,
   "link": {
     "type": "generated-index"
   }

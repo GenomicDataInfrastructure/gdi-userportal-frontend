@@ -6,6 +6,7 @@
 
 import Button from "@/components/Button";
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
+import { useTranslations } from "next-intl";
 
 interface ErrorBoundaryProps {
   errorTitle?: string;
@@ -20,9 +21,9 @@ export default function ErrorBoundary({
   stack,
   statusCode,
 }: Readonly<ErrorBoundaryProps>) {
-  let heading = "Something Went Wrong";
-  let message =
-    "Our apologies, but our server has encountered an internal error that prevents it from fulfilling your request. This is a temporary issue, and we're on the case to get it fixed. Please try again in a little while.";
+  const t = useTranslations("error");
+  let heading = t("genericHeading");
+  let message = t("genericMessage");
 
   if (errorTitle && errorDetail) {
     heading = errorTitle;
@@ -31,14 +32,12 @@ export default function ErrorBoundary({
 
   switch (statusCode) {
     case 404:
-      heading = "Page Not Found";
-      message =
-        "The page you're looking for doesn't seem to exist. It might have been moved or deleted.";
+      heading = t("notFoundHeading");
+      message = t("notFoundMessage");
       break;
     case 401:
-      heading = "Unauthorized";
-      message =
-        "You're not authorized to access this page. Please log in and try again.";
+      heading = t("unauthorizedHeading");
+      message = t("unauthorizedMessage");
       break;
   }
 
@@ -58,7 +57,7 @@ export default function ErrorBoundary({
           <div className="mt-6">
             <Button
               href="/"
-              text="Take me home"
+              text={t("takeMeHome")}
               icon={faHouse}
               type="primary"
             />

@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { Input } from "@/components/shadcn/input";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
+import { useTranslations } from "next-intl";
 import { RetrievedApplicationFormField } from "@/app/api/access-management/open-api/schemas";
 
 type GenericInputFormFieldProps = {
@@ -30,6 +31,7 @@ function GenericInputFormField({
   children,
   validationWarning,
 }: GenericInputFormFieldProps) {
+  const t = useTranslations("application.fields");
   const { updateInputFields } = useApplicationDetails();
   const [inputValue, setInputValue] = useState(field.value!);
 
@@ -57,7 +59,7 @@ function GenericInputFormField({
       <div className="flex flex-col justify-between">
         <div>
           <h3 className="text-lg sm:text-xl">{`${title} ${
-            field.optional ? "(Optional)" : ""
+            field.optional ? t("optional") : ""
           }`}</h3>
         </div>
         <div className="mt-4 flex items-center">

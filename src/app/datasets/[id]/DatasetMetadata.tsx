@@ -35,9 +35,10 @@ import {
 import { formatDate } from "@/utils/formatDate";
 import DistributionAccordion from "./DistributionAccordion";
 import DataSeriesAccordion from "./DataSeriesAccordion";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Tooltip from "./Tooltip";
 import Chips from "@/components/Chips";
+import { useTranslations } from "next-intl";
 import {
   DatasetDictionaryEntry,
   DatasetRelationEntry,
@@ -83,7 +84,9 @@ const MetadataField = ({
   </div>
 );
 
-const NotProvided = () => <span className="text-primary">Not provided</span>;
+const NotProvided = ({ label }: { label: string }) => (
+  <span className="text-primary">{label}</span>
+);
 
 type ExtendedRetrievedDataset = RetrievedDataset & {
   publisherType?: ValueLabel[];
@@ -105,7 +108,13 @@ const DatasetMetadata = ({
   dictionary: DatasetDictionaryEntry[];
   seriesMembers?: SearchedDataset[];
 }) => {
+  const t = useTranslations("datasets.detail");
   const [userTimezone, setUserTimezone] = useState<string | null>(null);
+  const notProvidedLabel = t("notProvided");
+  const notAvailableLabel = t("notAvailable");
+  const presentLabel = t("present");
+  const indefiniteLabel = t("indefinite");
+  const unknownLabel = t("unknown");
   const temporalCoverageCandidate = dataset.temporalCoverage as unknown;
   const temporalCoverageSource = Array.isArray(temporalCoverageCandidate)
     ? (temporalCoverageCandidate as Array<{ start?: string; end?: string }>)
@@ -126,13 +135,13 @@ const DatasetMetadata = ({
       .filter((entry): entry is string => Boolean(entry)) ?? [];
   const renderTemporalCoverage = () => {
     if (!hasTemporalCoverage) {
-      return <NotProvided />;
+      return <NotProvided label={notProvidedLabel} />;
     }
 
     const temporalCoverageLabel = temporalCoverage
       .map(
         (coverage) =>
-          `${coverage.start ? formatDate(coverage.start) : "N/A"} — ${coverage.end ? formatDate(coverage.end) : "Present"}`
+          `${coverage.start ? formatDate(coverage.start) : notAvailableLabel} — ${coverage.end ? formatDate(coverage.end) : presentLabel}`
       )
       .join(", ");
 
@@ -163,9 +172,9 @@ const DatasetMetadata = ({
                 className="align-middle text-primary"
               />
               <span className="align-middle">
-                Created on {formatDate(dataset.createdAt)}
+                {t("createdOn")} {formatDate(dataset.createdAt)}
               </span>
-              <Tooltip message="Date when this dataset series was created." />
+              <Tooltip message={t("tooltips.datasetSeriesCreated")} />
             </span>
           )}
           {dataset.createdAt && dataset.modifiedAt && (
@@ -178,9 +187,9 @@ const DatasetMetadata = ({
                 className="align-middle text-primary"
               />
               <span className="align-middle">
-                Modified on {formatDate(dataset.modifiedAt)}
+                {t("modifiedOn")} {formatDate(dataset.modifiedAt)}
               </span>
-              <Tooltip message="Date when this dataset series was last modified." />
+              <Tooltip message={t("tooltips.datasetSeriesUpdated")} />
             </span>
           )}
           {dataset.identifier && (
@@ -192,32 +201,36 @@ const DatasetMetadata = ({
                   className="align-middle text-primary"
                 />
                 <span className="align-middle">
-                  Identifier: {dataset.identifier}
+                  {t("identifier")}: {dataset.identifier}
                 </span>
-                <Tooltip message="Unique identifier for this dataset series." />
+                <Tooltip message={t("tooltips.datasetSeriesIdentifier")} />
               </span>
             </>
           )}
         </div>
 
-        <MetadataSection title="Series Overview" icon={faLayerGroup}>
+        <MetadataSection title={t("seriesOverview")} icon={faLayerGroup}>
           <div className="flex flex-col gap-3 text-sm">
             <MetadataField
-              label="Update Frequency"
+              label={t("updateFrequency")}
               icon={faSyncAlt}
-              tooltip="How often this series is updated."
+              tooltip={t("tooltips.datasetSeriesUpdateFrequency")}
             >
-              {dataset.frequency?.label || <NotProvided />}
+              {dataset.frequency?.label || (
+                <NotProvided label={notProvidedLabel} />
+              )}
             </MetadataField>
             <MetadataField
-              label="Access Rights"
+              label={t("accessRights")}
               icon={faTag}
-              tooltip="Access policy applied to this series."
+              tooltip={t("tooltips.datasetSeriesAccessRights")}
             >
-              {dataset.accessRights?.label || <NotProvided />}
+              {dataset.accessRights?.label || (
+                <NotProvided label={notProvidedLabel} />
+              )}
             </MetadataField>
             <div className="flex items-center gap-2 flex-wrap relative group">
-              <span className="font-medium shrink-0">URI:</span>
+              <span className="font-medium shrink-0">{t("uri")}:</span>
               {dataset.uri ? (
                 <a
                   href={dataset.uri}
@@ -228,44 +241,46 @@ const DatasetMetadata = ({
                   {dataset.uri}
                 </a>
               ) : (
-                <NotProvided />
+                <NotProvided label={notProvidedLabel} />
               )}
-              <Tooltip message="Canonical URI of this dataset series." />
+              <Tooltip message={t("tooltips.datasetSeriesUri")} />
             </div>
           </div>
         </MetadataSection>
 
-        <MetadataSection title="Coverage" icon={faGlobe}>
+        <MetadataSection title={t("coverage")} icon={faGlobe}>
           <div className="flex flex-col gap-3 text-sm">
             <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">Spatial Coverage:</span>
+              <span className="font-medium shrink-0">
+                {t("spatialCoverage")}:
+              </span>
               {dataset.spatialCoverage && dataset.spatialCoverage.length > 0 ? (
                 <Chips
                   chips={dataset.spatialCoverage.map(
                     (coverage) =>
-                      coverage.text || coverage.uri?.label || "Unknown"
+                      coverage.text || coverage.uri?.label || unknownLabel
                   )}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
               ) : (
-                <NotProvided />
+                <NotProvided label={notProvidedLabel} />
               )}
-              <Tooltip message="Geographic area covered by this series." />
+              <Tooltip message={t("tooltips.datasetSeriesSpatialCoverage")} />
             </div>
             <MetadataField
-              label="Temporal Coverage"
-              tooltip="Time window covered by this series."
+              label={t("temporalCoverage")}
+              tooltip={t("tooltips.datasetSeriesTemporalCoverage")}
             >
               {renderTemporalCoverage()}
             </MetadataField>
           </div>
         </MetadataSection>
 
-        <MetadataSection title="Legal & Compliance" icon={faGavel}>
+        <MetadataSection title={t("legalAndCompliance")} icon={faGavel}>
           <div className="flex flex-col gap-3 text-sm">
             <div className="flex flex-wrap gap-2 items-center relative group">
               <span className="font-medium shrink-0">
-                Applicable Legislation:
+                {t("applicableLegislation")}:
               </span>
               {dataset.applicableLegislation &&
               dataset.applicableLegislation.length > 0 ? (
@@ -276,14 +291,16 @@ const DatasetMetadata = ({
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
               ) : (
-                <NotProvided />
+                <NotProvided label={notProvidedLabel} />
               )}
-              <Tooltip message="Legislation applicable to this dataset series." />
+              <Tooltip
+                message={t("tooltips.datasetSeriesApplicableLegislation")}
+              />
             </div>
           </div>
         </MetadataSection>
 
-        <MetadataSection title="Member Datasets" icon={faDatabase}>
+        <MetadataSection title={t("memberDatasets")} icon={faDatabase}>
           <div className="flex flex-col gap-3 text-sm">
             {seriesMembers.length > 0 ? (
               seriesMembers.map((member) => (
@@ -305,7 +322,7 @@ const DatasetMetadata = ({
                 </div>
               ))
             ) : (
-              <span className="text-primary">No member datasets found.</span>
+              <span className="text-primary">{t("noMemberDatasetsFound")}</span>
             )}
           </div>
         </MetadataSection>
@@ -323,9 +340,9 @@ const DatasetMetadata = ({
               className="align-middle text-primary"
             />
             <span className="align-middle">
-              Created on {formatDate(dataset.createdAt)}
+              {t("createdOn")} {formatDate(dataset.createdAt)}
             </span>
-            <Tooltip message="Date when the dataset was created." />
+            <Tooltip message={t("tooltips.datasetCreated")} />
           </span>
         )}
         {dataset.createdAt && dataset.modifiedAt && (
@@ -338,9 +355,9 @@ const DatasetMetadata = ({
               className="align-middle text-primary"
             />
             <span className="align-middle">
-              Modified on {formatDate(dataset.modifiedAt)}
+              {t("modifiedOn")} {formatDate(dataset.modifiedAt)}
             </span>
-            <Tooltip message="Date when the dataset was last modified." />
+            <Tooltip message={t("tooltips.datasetUpdated")} />
           </span>
         )}
         {dataset.languages && dataset.languages.length > 0 && (
@@ -352,10 +369,10 @@ const DatasetMetadata = ({
                 className="align-middle text-primary"
               />
               <span className="align-middle">
-                Languages:{" "}
+                {t("languages")}:{" "}
                 {dataset.languages.map((lang) => lang.label).join(", ")}
               </span>
-              <Tooltip message="Languages in which the dataset is available." />
+              <Tooltip message={t("tooltips.datasetLanguages")} />
             </span>
           </>
         )}
@@ -368,19 +385,19 @@ const DatasetMetadata = ({
                 className="align-middle text-primary"
               />
               <span className="flex flex-wrap gap-1 items-center">
-                <span className="align-middle">Published by</span>
+                <span className="align-middle">{t("publishedBy")}</span>
                 {dataset.publishers.map((publisher, index) => (
                   <span key={publisher.name}>
                     <Link
                       href={`/datasets?page=1&ckan-publisherName=${publisher.name}`}
                     >
-                      {publisher.name || "No title"}
+                      {publisher.name || t("noTitle")}
                     </Link>
                     {index < dataset.publishers!.length - 1 && ", "}
                   </span>
                 ))}
               </span>
-              <Tooltip message="Publishers to which the dataset belongs." />
+              <Tooltip message={t("tooltips.datasetPublishers")} />
             </span>
           </>
         )}
@@ -393,10 +410,10 @@ const DatasetMetadata = ({
                 className="align-middle text-primary"
               />
               <span className="align-middle">
-                Access rights:{" "}
-                {dataset.accessRights.label || "No access rights information."}
+                {t("accessRights")}:{" "}
+                {dataset.accessRights.label || t("noAccessRightsInformation")}
               </span>
-              <Tooltip message="Information about access rights to the dataset." />
+              <Tooltip message={t("tooltips.datasetAccessRights")} />
             </span>
           </>
         )}
@@ -409,9 +426,9 @@ const DatasetMetadata = ({
                 className="align-middle text-primary"
               />
               <span className="align-middle">
-                Identifier: {dataset.identifier}
+                {t("identifier")}: {dataset.identifier}
               </span>
-              <Tooltip message="Unique identifier for the dataset." />
+              <Tooltip message={t("tooltips.datasetIdentifier")} />
             </span>
           </>
         )}
@@ -424,11 +441,11 @@ const DatasetMetadata = ({
                 className="align-middle text-primary"
               />
               <span className="align-middle">
-                {dataset.distributions.length === 1
-                  ? "1 Distribution"
-                  : `${dataset.distributions.length} Distributions`}
+                {t("distributionCount", {
+                  count: dataset.distributions.length,
+                })}
               </span>
-              <Tooltip message="Number of distributions available for the dataset." />
+              <Tooltip message={t("tooltips.datasetDistributionCount")} />
             </span>
           </>
         )}
@@ -441,11 +458,11 @@ const DatasetMetadata = ({
                 className="align-middle text-primary"
               />
               <span className="align-middle">
-                {dataset.inSeries.length === 1
-                  ? "1 Dataset series"
-                  : `${dataset.inSeries.length} Dataset series`}
+                {t("datasetSeriesCount", {
+                  count: dataset.inSeries.length,
+                })}
               </span>
-              <Tooltip message="Number of dataset series this dataset belongs to." />
+              <Tooltip message={t("tooltips.datasetSeriesCount")} />
             </span>
           </>
         )}
@@ -458,9 +475,9 @@ const DatasetMetadata = ({
                 className="align-middle text-primary"
               />
               <span className="align-middle">
-                Type: {dataset.dcatType.label}
+                {t("type")}: {dataset.dcatType.label}
               </span>
-              <Tooltip message="The type of the dataset" />
+              <Tooltip message={t("tooltips.datasetType")} />
             </span>
           </>
         )}
@@ -472,7 +489,7 @@ const DatasetMetadata = ({
               icon={faKey}
               className="align-middle text-primary"
             />
-            <span className="align-middle">Keywords:</span>
+            <span className="align-middle">{t("keywords")}:</span>
             <div className="flex flex-wrap gap-1">
               {dataset.keywords.map((keyword) => (
                 <span
@@ -483,12 +500,12 @@ const DatasetMetadata = ({
                 </span>
               ))}
             </div>
-            <Tooltip message="Keywords associated with the dataset." />
+            <Tooltip message={t("tooltips.datasetKeywords")} />
           </span>
         </div>
       )}
       {relationships && relationships.length > 0 && (
-        <MetadataSection title="Dataset Relations" icon={faLink}>
+        <MetadataSection title={t("datasetRelations")} icon={faLink}>
           <div className="flex flex-col gap-3 text-sm">
             {relationships.map((relationship, index) => (
               <div
@@ -502,9 +519,9 @@ const DatasetMetadata = ({
                   href={`/@${dataset.publishers?.map((p) => p.name).join(",")}/${relationship.target}`}
                   className="text-info hover:text-hover-color hover:underline break-all"
                 >
-                  Dataset
+                  {t("datasetLink")}
                 </Link>
-                <Tooltip message="Link to related dataset." />
+                <Tooltip message={t("tooltips.relatedDatasetLink")} />
               </div>
             ))}
           </div>
@@ -513,7 +530,7 @@ const DatasetMetadata = ({
       {dictionary && dictionary.length > 0 && (
         <div className="mt-4">
           <h2 className="text-[18px] font-semibold py-2.5">
-            Dataset Dictionary
+            {t("datasetDictionary")}
           </h2>
           <div className="flex flex-col gap-2">
             {dictionary.map((entry, index) => (
@@ -532,7 +549,7 @@ const DatasetMetadata = ({
                 <p className="text-sm font-normal text-gray text-[15px] m-0">
                   {entry.description}
                 </p>
-                <Tooltip message="Information about the field." />
+                <Tooltip message={t("tooltips.datasetDictionaryField")} />
               </div>
             ))}
           </div>
@@ -542,81 +559,87 @@ const DatasetMetadata = ({
       {hasHealthTheme &&
         ((dataset.healthTheme && dataset.healthTheme.length > 0) ||
           (dataset.healthCategory && dataset.healthCategory.length > 0)) && (
-          <MetadataSection title="Health Information" icon={faHeartPulse}>
+          <MetadataSection title={t("healthInformation")} icon={faHeartPulse}>
             <div className="flex flex-col gap-3 text-sm">
               <div className="flex flex-wrap gap-2 items-center relative group">
-                <span className="font-medium shrink-0">Health Themes:</span>
+                <span className="font-medium shrink-0">
+                  {t("healthThemes")}:
+                </span>
                 {dataset.healthTheme && dataset.healthTheme.length > 0 ? (
                   <Chips
                     chips={dataset.healthTheme.map((item) => item.label)}
                     className="bg-primary/10 text-primary rounded-full py-1"
                   />
                 ) : (
-                  <NotProvided />
+                  <NotProvided label={notProvidedLabel} />
                 )}
-                <Tooltip message="Health-related themes or topics covered by this dataset." />
+                <Tooltip message={t("tooltips.healthThemes")} />
               </div>
               <div className="flex flex-wrap gap-2 items-center relative group">
-                <span className="font-medium shrink-0">Health Categories:</span>
+                <span className="font-medium shrink-0">
+                  {t("healthCategories")}:
+                </span>
                 {dataset.healthCategory && dataset.healthCategory.length > 0 ? (
                   <Chips
                     chips={dataset.healthCategory.map((item) => item.label)}
                     className="bg-primary/10 text-primary rounded-full py-1"
                   />
                 ) : (
-                  <NotProvided />
+                  <NotProvided label={notProvidedLabel} />
                 )}
-                <Tooltip message="Health data categories this dataset belongs to." />
+                <Tooltip message={t("tooltips.healthCategories")} />
               </div>
             </div>
           </MetadataSection>
         )}
 
       {hasHealthTheme && (
-        <MetadataSection title="Population & Demographics" icon={faUsers}>
+        <MetadataSection title={t("populationAndDemographics")} icon={faUsers}>
           <div className="flex flex-col gap-3 text-sm">
             <MetadataField
-              label="Population Coverage"
-              tooltip="Description of the population covered by this dataset."
+              label={t("populationCoverage")}
+              tooltip={t("tooltips.populationCoverage")}
             >
-              {dataset.populationCoverage || <NotProvided />}
+              {dataset.populationCoverage || (
+                <NotProvided label={notProvidedLabel} />
+              )}
             </MetadataField>
             <div className="flex items-center gap-4 flex-wrap">
               <MetadataField
-                label="Number of Records"
+                label={t("numberOfRecords")}
                 icon={faChartBar}
-                tooltip="Total number of records in the dataset."
+                tooltip={t("tooltips.numberOfRecords")}
               >
                 {dataset.numberOfRecords !== undefined ? (
                   dataset.numberOfRecords.toLocaleString()
                 ) : (
-                  <NotProvided />
+                  <NotProvided label={notProvidedLabel} />
                 )}
               </MetadataField>
               <MetadataField
-                label="Unique Individuals"
+                label={t("uniqueIndividuals")}
                 icon={faUsers}
-                tooltip="Number of unique individuals represented in the dataset."
+                tooltip={t("tooltips.uniqueIndividuals")}
               >
                 {dataset.numberOfUniqueIndividuals !== undefined ? (
                   dataset.numberOfUniqueIndividuals.toLocaleString()
                 ) : (
-                  <NotProvided />
+                  <NotProvided label={notProvidedLabel} />
                 )}
               </MetadataField>
               <MetadataField
-                label="Age Range"
+                label={t("ageRange")}
                 icon={faCalendarAlt}
-                tooltip="Typical age range of individuals in the dataset."
+                tooltip={t("tooltips.ageRange")}
               >
                 {dataset.minTypicalAge !== undefined ||
                 dataset.maxTypicalAge !== undefined ? (
                   <>
-                    {dataset.minTypicalAge ?? "N/A"} -{" "}
-                    {dataset.maxTypicalAge ?? "N/A"} years
+                    {dataset.minTypicalAge ?? notAvailableLabel} -{" "}
+                    {dataset.maxTypicalAge ?? notAvailableLabel} {t("years")}
                   </>
                 ) : (
-                  <NotProvided />
+                  <NotProvided label={notProvidedLabel} />
                 )}
               </MetadataField>
             </div>
@@ -624,43 +647,49 @@ const DatasetMetadata = ({
         </MetadataSection>
       )}
 
-      <MetadataSection title="Coverage" icon={faGlobe}>
+      <MetadataSection title={t("coverage")} icon={faGlobe}>
         <div className="flex flex-col gap-3 text-sm">
           <div className="flex flex-wrap gap-2 items-center relative group">
-            <span className="font-medium shrink-0">Spatial Coverage:</span>
+            <span className="font-medium shrink-0">
+              {t("spatialCoverage")}:
+            </span>
             {dataset.spatialCoverage && dataset.spatialCoverage.length > 0 ? (
               <Chips
                 chips={dataset.spatialCoverage.map(
                   (coverage) =>
-                    coverage.text || coverage.uri?.label || "Unknown"
+                    coverage.text || coverage.uri?.label || unknownLabel
                 )}
                 className="bg-primary/10 text-primary rounded-full py-1"
               />
             ) : (
-              <NotProvided />
+              <NotProvided label={notProvidedLabel} />
             )}
-            <Tooltip message="Geographic regions covered by this dataset." />
+            <Tooltip message={t("tooltips.datasetSpatialCoverage")} />
           </div>
           <MetadataField
-            label="Temporal Coverage"
-            tooltip="Time period covered by the data in this dataset."
+            label={t("temporalCoverage")}
+            tooltip={t("tooltips.datasetTemporalCoverage")}
           >
             {renderTemporalCoverage()}
           </MetadataField>
           <MetadataField
-            label="Temporal Resolution"
-            tooltip="Minimum time period resolvable in the dataset."
+            label={t("temporalResolution")}
+            tooltip={t("tooltips.temporalResolution")}
           >
-            {dataset.temporalResolution || <NotProvided />}
+            {dataset.temporalResolution || (
+              <NotProvided label={notProvidedLabel} />
+            )}
           </MetadataField>
           <MetadataField
-            label="Spatial Resolution"
-            tooltip="Minimum spatial separation resolvable in the dataset, measured in meters."
+            label={t("spatialResolution")}
+            tooltip={t("tooltips.spatialResolution")}
           >
             {dataset.spatialResolutionInMeters !== undefined ? (
-              <>{dataset.spatialResolutionInMeters} meters</>
+              <>
+                {dataset.spatialResolutionInMeters} {t("meters")}
+              </>
             ) : (
-              <NotProvided />
+              <NotProvided label={notProvidedLabel} />
             )}
           </MetadataField>
         </div>
@@ -671,23 +700,23 @@ const DatasetMetadata = ({
           dataset.applicableLegislation.length > 0) ||
         (dataset.purpose && dataset.purpose.length > 0) ||
         (dataset.personalData && dataset.personalData.length > 0)) && (
-        <MetadataSection title="Legal & Compliance" icon={faGavel}>
+        <MetadataSection title={t("legalAndCompliance")} icon={faGavel}>
           <div className="flex flex-col gap-3 text-sm">
             <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">Legal Basis:</span>
+              <span className="font-medium shrink-0">{t("legalBasis")}:</span>
               {dataset.legalBasis && dataset.legalBasis.length > 0 ? (
                 <Chips
                   chips={dataset.legalBasis.map((item) => item.label)}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
               ) : (
-                <NotProvided />
+                <NotProvided label={notProvidedLabel} />
               )}
-              <Tooltip message="Legal basis under which this dataset is processed." />
+              <Tooltip message={t("tooltips.legalBasis")} />
             </div>
             <div className="flex flex-wrap gap-2 items-center relative group">
               <span className="font-medium shrink-0">
-                Applicable Legislation:
+                {t("applicableLegislation")}:
               </span>
               {dataset.applicableLegislation &&
               dataset.applicableLegislation.length > 0 ? (
@@ -698,33 +727,35 @@ const DatasetMetadata = ({
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
               ) : (
-                <NotProvided />
+                <NotProvided label={notProvidedLabel} />
               )}
-              <Tooltip message="Legislation applicable to this dataset." />
+              <Tooltip message={t("tooltips.datasetApplicableLegislation")} />
             </div>
             <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">Purpose:</span>
+              <span className="font-medium shrink-0">{t("purpose")}:</span>
               {dataset.purpose && dataset.purpose.length > 0 ? (
                 <Chips
                   chips={dataset.purpose.map((item) => item.label)}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
               ) : (
-                <NotProvided />
+                <NotProvided label={notProvidedLabel} />
               )}
-              <Tooltip message="Purpose for which the data was collected or is being processed." />
+              <Tooltip message={t("tooltips.purpose")} />
             </div>
             <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">Personal Data Types:</span>
+              <span className="font-medium shrink-0">
+                {t("personalDataTypes")}:
+              </span>
               {dataset.personalData && dataset.personalData.length > 0 ? (
                 <Chips
                   chips={dataset.personalData.map((item) => item.label)}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
               ) : (
-                <NotProvided />
+                <NotProvided label={notProvidedLabel} />
               )}
-              <Tooltip message="Types of personal data contained in this dataset." />
+              <Tooltip message={t("tooltips.personalDataTypes")} />
             </div>
           </div>
         </MetadataSection>
@@ -732,11 +763,12 @@ const DatasetMetadata = ({
 
       {(dataset.publisherNote ||
         (dataset.publisherType && dataset.publisherType.length > 0) ||
-        (dataset.hdab && dataset.hdab.length > 0) ||
         (dataset.creators && dataset.creators.length > 0) ||
-        dataset.trustedDataHolder !== undefined) && (
+        (hasHealthTheme &&
+          ((dataset.hdab && dataset.hdab.length > 0) ||
+            dataset.trustedDataHolder !== undefined))) && (
         <MetadataSection
-          title="Publisher & Data Governance"
+          title={t("publisherAndDataGovernance")}
           icon={faUserShield}
         >
           <div className="flex flex-col gap-3 text-sm">
@@ -745,29 +777,37 @@ const DatasetMetadata = ({
                 icon={faNoteSticky}
                 className="text-primary text-xs"
               />
-              <span className="font-medium shrink-0">Publisher Note:</span>
-              <span>{dataset.publisherNote || <NotProvided />}</span>
-              <Tooltip message="Additional notes from the data publisher." />
+              <span className="font-medium shrink-0">
+                {t("publisherNote")}:
+              </span>
+              <span>
+                {dataset.publisherNote || (
+                  <NotProvided label={notProvidedLabel} />
+                )}
+              </span>
+              <Tooltip message={t("tooltips.publisherNote")} />
             </div>
             <div className="flex items-center gap-2 flex-wrap relative group">
               <FontAwesomeIcon icon={faUser} className="text-primary text-xs" />
-              <span className="font-medium shrink-0">Publisher Type:</span>
+              <span className="font-medium shrink-0">
+                {t("publisherType")}:
+              </span>
               {dataset.publisherType && dataset.publisherType.length > 0 ? (
                 <Chips
                   chips={dataset.publisherType.map((item) => item.label)}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
               ) : (
-                <NotProvided />
+                <NotProvided label={notProvidedLabel} />
               )}
-              <Tooltip message="Type of organization publishing this dataset." />
+              <Tooltip message={t("tooltips.publisherType")} />
             </div>
             <div className="flex items-center gap-2 flex-wrap relative group">
               <FontAwesomeIcon
                 icon={faBuilding}
                 className="text-primary text-xs"
               />
-              <span className="font-medium shrink-0">Creators:</span>
+              <span className="font-medium shrink-0">{t("creators")}:</span>
               {dataset.creators && dataset.creators.length > 0 ? (
                 dataset.creators.map((agent, index) => (
                   <span key={index} className="flex items-center gap-1">
@@ -781,60 +821,66 @@ const DatasetMetadata = ({
                   </span>
                 ))
               ) : (
-                <NotProvided />
+                <NotProvided label={notProvidedLabel} />
               )}
-              <Tooltip message="Entities responsible for creating this dataset." />
+              <Tooltip message={t("tooltips.creators")} />
             </div>
-            <div className="flex items-center gap-2 relative group">
-              <FontAwesomeIcon
-                icon={faCheckCircle}
-                className={
-                  dataset.trustedDataHolder ? "text-info" : "text-gray-400"
-                }
-              />
-              <span className="font-medium">Trusted Data Holder:</span>
-              <span
-                className={
-                  dataset.trustedDataHolder ? "text-info font-medium" : ""
-                }
-              >
-                {dataset.trustedDataHolder !== undefined ? (
-                  dataset.trustedDataHolder ? (
-                    "Yes"
-                  ) : (
-                    "No"
-                  )
-                ) : (
-                  <NotProvided />
-                )}
-              </span>
-              <Tooltip message="Indicates whether the data holder is a trusted entity." />
-            </div>
-            <div className="flex items-center gap-2 flex-wrap relative group">
-              <FontAwesomeIcon
-                icon={faBuilding}
-                className="text-primary text-xs"
-              />
-              <span className="font-medium shrink-0">
-                Health Data Access Body (HDAB):
-              </span>
-              {dataset.hdab && dataset.hdab.length > 0 ? (
-                dataset.hdab.map((agent, index) => (
-                  <span key={index} className="flex items-center gap-1">
-                    <span>
-                      {agent.name}
-                      {agent.email && (
-                        <span className="ml-1 text-info">({agent.email})</span>
-                      )}
-                    </span>
-                    {index < dataset.hdab!.length - 1 && ","}
+            {hasHealthTheme && (
+              <>
+                <div className="flex items-center gap-2 relative group">
+                  <FontAwesomeIcon
+                    icon={faCheckCircle}
+                    className={
+                      dataset.trustedDataHolder ? "text-info" : "text-gray-400"
+                    }
+                  />
+                  <span className="font-medium">{t("trustedDataHolder")}:</span>
+                  <span
+                    className={
+                      dataset.trustedDataHolder ? "text-info font-medium" : ""
+                    }
+                  >
+                    {dataset.trustedDataHolder !== undefined ? (
+                      dataset.trustedDataHolder ? (
+                        t("yes")
+                      ) : (
+                        t("no")
+                      )
+                    ) : (
+                      <NotProvided label={notProvidedLabel} />
+                    )}
                   </span>
-                ))
-              ) : (
-                <NotProvided />
-              )}
-              <Tooltip message="Health Data Access Body responsible for granting access to this dataset." />
-            </div>
+                  <Tooltip message={t("tooltips.trustedDataHolder")} />
+                </div>
+                <div className="flex items-center gap-2 flex-wrap relative group">
+                  <FontAwesomeIcon
+                    icon={faBuilding}
+                    className="text-primary text-xs"
+                  />
+                  <span className="font-medium shrink-0">
+                    {t("healthDataAccessBody")}:
+                  </span>
+                  {dataset.hdab && dataset.hdab.length > 0 ? (
+                    dataset.hdab.map((agent, index) => (
+                      <span key={index} className="flex items-center gap-1">
+                        <span>
+                          {agent.name}
+                          {agent.email && (
+                            <span className="ml-1 text-info">
+                              ({agent.email})
+                            </span>
+                          )}
+                        </span>
+                        {index < dataset.hdab!.length - 1 && ","}
+                      </span>
+                    ))
+                  ) : (
+                    <NotProvided label={notProvidedLabel} />
+                  )}
+                  <Tooltip message={t("tooltips.healthDataAccessBody")} />
+                </div>
+              </>
+            )}
           </div>
         </MetadataSection>
       )}
@@ -842,31 +888,33 @@ const DatasetMetadata = ({
       {hasHealthTheme &&
         ((dataset.codingSystem && dataset.codingSystem.length > 0) ||
           (dataset.codeValues && dataset.codeValues.length > 0)) && (
-          <MetadataSection title="Coding & Standards" icon={faCode}>
+          <MetadataSection title={t("codingAndStandards")} icon={faCode}>
             <div className="flex flex-col gap-3 text-sm">
               <div className="flex flex-wrap gap-2 items-center relative group">
-                <span className="font-medium shrink-0">Coding Systems:</span>
+                <span className="font-medium shrink-0">
+                  {t("codingSystems")}:
+                </span>
                 {dataset.codingSystem && dataset.codingSystem.length > 0 ? (
                   <Chips
                     chips={dataset.codingSystem.map((item) => item.label)}
                     className="bg-primary/10 text-primary rounded-full py-1"
                   />
                 ) : (
-                  <NotProvided />
+                  <NotProvided label={notProvidedLabel} />
                 )}
-                <Tooltip message="Coding systems or standards used in this dataset (e.g., ICD-10, SNOMED CT)." />
+                <Tooltip message={t("tooltips.codingSystems")} />
               </div>
               <div className="flex flex-wrap gap-2 items-center relative group">
-                <span className="font-medium shrink-0">Code Values:</span>
+                <span className="font-medium shrink-0">{t("codeValues")}:</span>
                 {dataset.codeValues && dataset.codeValues.length > 0 ? (
                   <Chips
                     chips={dataset.codeValues.map((item) => item.label)}
                     className="bg-primary/10 text-primary rounded-full py-1"
                   />
                 ) : (
-                  <NotProvided />
+                  <NotProvided label={notProvidedLabel} />
                 )}
-                <Tooltip message="Specific code values used within the coding systems." />
+                <Tooltip message={t("tooltips.codeValues")} />
               </div>
             </div>
           </MetadataSection>
@@ -875,21 +923,23 @@ const DatasetMetadata = ({
       {hasHealthTheme &&
         dataset.retentionPeriod &&
         dataset.retentionPeriod.length > 0 && (
-          <MetadataSection title="Retention Period" icon={faClock}>
+          <MetadataSection title={t("retentionPeriod")} icon={faClock}>
             <div className="flex flex-col gap-2 text-sm relative group">
               {dataset.retentionPeriod && dataset.retentionPeriod.length > 0 ? (
                 dataset.retentionPeriod.map((period, index) => (
                   <div key={index} className="flex items-center gap-2">
                     <span>
-                      {period.start ? formatDate(period.start) : "N/A"} -{" "}
-                      {period.end ? formatDate(period.end) : "Indefinite"}
+                      {period.start
+                        ? formatDate(period.start)
+                        : notAvailableLabel}{" "}
+                      - {period.end ? formatDate(period.end) : indefiniteLabel}
                     </span>
                   </div>
                 ))
               ) : (
-                <NotProvided />
+                <NotProvided label={notProvidedLabel} />
               )}
-              <Tooltip message="Period during which the data will be retained." />
+              <Tooltip message={t("tooltips.retentionPeriod")} />
             </div>
           </MetadataSection>
         )}
@@ -897,11 +947,11 @@ const DatasetMetadata = ({
       {(!!dataset.homepage ||
         (!!dataset.documentation && dataset.documentation.length > 0) ||
         (!!dataset.isReferencedBy && dataset.isReferencedBy.length > 0)) && (
-        <MetadataSection title="Links & References" icon={faLink}>
+        <MetadataSection title={t("linksAndReferences")} icon={faLink}>
           <div className="flex flex-col gap-2 text-sm">
             {dataset.homepage && (
               <div className="flex items-center gap-2 flex-wrap relative group">
-                <span className="font-medium shrink-0">Homepage:</span>
+                <span className="font-medium shrink-0">{t("homepage")}:</span>
                 <a
                   href={dataset.homepage}
                   target="_blank"
@@ -910,12 +960,14 @@ const DatasetMetadata = ({
                 >
                   {dataset.homepage}
                 </a>
-                <Tooltip message="Homepage URL for more information about this dataset." />
+                <Tooltip message={t("tooltips.homepage")} />
               </div>
             )}
             {dataset.documentation && dataset.documentation.length > 0 && (
               <div className="flex items-center gap-2 flex-wrap relative group">
-                <span className="font-medium shrink-0">Documentation:</span>
+                <span className="font-medium shrink-0">
+                  {t("documentation")}:
+                </span>
                 {dataset.documentation.map((doc, index) => (
                   <a
                     key={index}
@@ -927,16 +979,18 @@ const DatasetMetadata = ({
                     {doc}
                   </a>
                 ))}
-                <Tooltip message="Links to documentation about this dataset." />
+                <Tooltip message={t("tooltips.documentation")} />
               </div>
             )}
             {dataset.isReferencedBy && dataset.isReferencedBy.length > 0 && (
               <div className="flex items-center gap-2 flex-wrap relative group">
-                <span className="font-medium shrink-0">Referenced By:</span>
+                <span className="font-medium shrink-0">
+                  {t("referencedBy")}:
+                </span>
                 {dataset.isReferencedBy.map((ref, index) => (
                   <span key={index}>{ref}</span>
                 ))}
-                <Tooltip message="Resources that reference this dataset." />
+                <Tooltip message={t("tooltips.referencedBy")} />
               </div>
             )}
           </div>
@@ -944,31 +998,34 @@ const DatasetMetadata = ({
       )}
 
       {(dataset.version || dataset.versionNotes || dataset.frequency) && (
-        <MetadataSection title="Version Information" icon={faInfoCircle}>
+        <MetadataSection title={t("versionInformation")} icon={faInfoCircle}>
           <div className="flex flex-col gap-2 text-sm">
-            <MetadataField
-              label="Version"
-              tooltip="Version number or designation of this dataset."
-            >
-              {dataset.version || <NotProvided />}
+            <MetadataField label={t("version")} tooltip={t("tooltips.version")}>
+              {dataset.version || <NotProvided label={notProvidedLabel} />}
             </MetadataField>
             <MetadataField
-              label="Update Frequency"
-              tooltip="How often the dataset is updated."
+              label={t("updateFrequency")}
+              tooltip={t("tooltips.datasetUpdateFrequency")}
             >
-              {dataset.frequency?.label || <NotProvided />}
+              {dataset.frequency?.label || (
+                <NotProvided label={notProvidedLabel} />
+              )}
             </MetadataField>
             <div className="flex items-center gap-2 flex-wrap relative group">
-              <span className="font-medium shrink-0">Version Notes:</span>
-              <span>{dataset.versionNotes || <NotProvided />}</span>
-              <Tooltip message="Notes about this version of the dataset." />
+              <span className="font-medium shrink-0">{t("versionNotes")}:</span>
+              <span>
+                {dataset.versionNotes || (
+                  <NotProvided label={notProvidedLabel} />
+                )}
+              </span>
+              <Tooltip message={t("tooltips.versionNotes")} />
             </div>
           </div>
         </MetadataSection>
       )}
 
       {hasHealthTheme && analytics.length > 0 && (
-        <MetadataSection title="Analytics" icon={faChartBar}>
+        <MetadataSection title={t("analytics")} icon={faChartBar}>
           <div className="relative group">
             {analytics.length > 0 ? (
               <Chips
@@ -976,21 +1033,21 @@ const DatasetMetadata = ({
                 className="bg-primary/10 text-primary rounded-full py-1"
               />
             ) : (
-              <NotProvided />
+              <NotProvided label={notProvidedLabel} />
             )}
-            <Tooltip message="Analytics capabilities or methods available for this dataset." />
+            <Tooltip message={t("tooltips.analytics")} />
           </div>
         </MetadataSection>
       )}
 
       {dataset.inSeries && dataset.inSeries.length > 0 && (
-        <MetadataSection title="Data Series" icon={faLayerGroup}>
+        <MetadataSection title={t("dataSeries")} icon={faLayerGroup}>
           <DataSeriesAccordion series={dataset.inSeries} />
         </MetadataSection>
       )}
 
       {dataset.distributions && dataset.distributions.length > 0 && (
-        <MetadataSection title="Distributions" icon={faFile}>
+        <MetadataSection title={t("distributions")} icon={faFile}>
           <DistributionAccordion distributions={dataset.distributions} />
         </MetadataSection>
       )}

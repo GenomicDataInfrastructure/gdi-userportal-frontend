@@ -5,12 +5,14 @@
 import { useFilters } from "@/providers/filters/FilterProvider";
 import { DisclosurePanel } from "@headlessui/react";
 import { FilterItemProps } from "./FilterItem";
+import { useTranslations } from "next-intl";
 
 type DropdownFilterContentProps = FilterItemProps;
 
 export default function DropdownFilterContent({
   filter,
 }: DropdownFilterContentProps) {
+  const t = useTranslations("datasets.filters");
   const { activeFilters, addActiveFilter, removeActiveFilter } = useFilters();
 
   const correspondingActiveFilter = activeFilters.find(
@@ -100,7 +102,7 @@ export default function DropdownFilterContent({
             </div>
           ))
       ) : (
-        <div className="text-center">No results found.</div>
+        <div className="text-center">{t("noResultsFound")}</div>
       )}
     </DisclosurePanel>
   );

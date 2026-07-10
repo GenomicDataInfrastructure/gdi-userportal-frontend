@@ -116,7 +116,12 @@ export default async function Page({
                     className="flex justify-center items-center w-24 md:w-32 h-12 text-[10px] md:text-xs text-center px-1 md:px-2"
                     chip={t("datasetSeriesTag")}
                   />
-                  <Tooltip message={helpText?.["isSeries"] ?? t("tooltips.datasetSeriesDescription")} />
+                  <Tooltip
+                    message={
+                      helpText?.["isSeries"] ??
+                      t("tooltips.datasetSeriesDescription")
+                    }
+                  />
                 </li>
               )}
               {!dataset.isSeries &&
@@ -134,7 +139,11 @@ export default async function Page({
                         className="flex justify-center items-center w-24 md:w-32 h-12 text-[10px] md:text-xs text-center px-1 md:px-2"
                         chip={theme.label}
                       />
-                      <Tooltip message={helpText?.["themes"] ?? t("tooltips.themeAssociated")} />
+                      <Tooltip
+                        message={
+                          helpText?.["themes"] ?? t("tooltips.themeAssociated")
+                        }
+                      />
                     </li>
                   ))}
             </ul>

@@ -521,11 +521,7 @@ const DatasetMetadata = ({
                   count: dataset.inSeries.length,
                 })}
               </span>
-              <Tooltip
-                message={
-                  helpText?.["inSeries"] ?? t("tooltips.datasetSeriesCount")
-                }
-              />
+              <Tooltip message={t("tooltips.datasetSeriesCount")} />
             </span>
           </>
         )}

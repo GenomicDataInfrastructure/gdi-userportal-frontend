@@ -983,6 +983,22 @@
     "en": "Submit",
     "fr": "Soumettre"
   },
+  "application.options.label": {
+    "en": "Options",
+    "fr": "Options"
+  },
+  "application.options.exportToWord": {
+    "en": "Export to Word",
+    "fr": "Exporter vers Word"
+  },
+  "application.options.discardChanges": {
+    "en": "Discard changes",
+    "fr": "Annuler les modifications"
+  },
+  "application.options.discardApplication": {
+    "en": "Discard application",
+    "fr": "Supprimer la demande"
+  },
   "application.savingChanges": {
     "en": "Saving Changes...",
     "fr": "Enregistrement des modifications..."

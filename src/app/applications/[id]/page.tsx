@@ -14,6 +14,7 @@ import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
 import Sidebar from "@/components/Sidebar";
 import { useRouter } from "@/i18n/navigation";
+import contentConfig from "@/config/contentConfig";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import {
   formatApplicationProp,
@@ -30,6 +31,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
 import { use, useEffect, useState } from "react";
+import ApplicationOptionsMenu from "./ApplicationOptionsMenu";
 import FormContainer from "./FormContainer";
 import { createApplicationSidebarItems } from "./sidebarItems";
 import { UrlSearchParams } from "@/app/params";
@@ -144,7 +146,7 @@ export default function ApplicationDetailsPage({
                 />
               )}
             </div>
-            <div className="mt-4 flex gap-x-3 sm:mt-0">
+            <div className="mt-4 flex items-center gap-x-3 sm:mt-0">
               {isDraft && (
                 <Button
                   type="warning"
@@ -152,6 +154,8 @@ export default function ApplicationDetailsPage({
                   icon={faXmarkCircle}
                   disabled={isLoading}
                   onClick={handleDelete}
+                  flex={true}
+                  className="h-10 text-sm"
                 />
               )}
               {editable && (
@@ -161,7 +165,12 @@ export default function ApplicationDetailsPage({
                   icon={faPaperPlane}
                   disabled={isLoading}
                   onClick={handleSubmission}
+                  flex={true}
+                  className="h-10 text-sm"
                 />
+              )}
+              {contentConfig.showApplicationOptions && (
+                <ApplicationOptionsMenu disabled={isLoading} />
               )}
             </div>
           </div>

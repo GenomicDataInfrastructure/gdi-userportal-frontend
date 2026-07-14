@@ -12,6 +12,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.7.7] - 2026-07-06
+## [v1.7.11] - 2026-07-14
+
+### Added
+- feat: use dataset helpText for property tooltips with i18n fallback by @Mohammed Aslam Vattaparambil in c9ab79a2
+
+
+### Changed
+- chore(deps): update actions/setup-node action to v7 (#1066) by @LNDS-Sysadmins in 63ce2f91
+- chore(deps): update oras-project/setup-oras digest to 32907e5 by @Renovate Bot in 3bb2f914
+- ART-27431 reverted inseries description helpText by @Mohammed Aslam Vattaparambil in 1579853d
+- ART-27431 reverted series description helpText by @Mohammed Aslam Vattaparambil in 119f54f6
+- doc: update CHANGELOG.md for v1.7.10 (#1062) by @github-actions[bot] in 7fc054fb
+
+
+### Fixed
+- ART-27431 lint fix by @Mohammed Aslam Vattaparambil in be814d0a
+
+
 ## [v1.7.10] - 2026-07-09
 
 ### Added

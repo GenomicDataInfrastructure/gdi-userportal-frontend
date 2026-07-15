@@ -13,7 +13,7 @@ interface TooltipProps {
 const Tooltip: React.FC<TooltipProps> = ({ message }) => {
   if (!message) return null;
   return (
-    <div className="absolute left-0 top-full mt-1 hidden group-hover:flex group-focus:flex items-center bg-info text-white text-xs rounded-2xl py-1 px-2 z-10 whitespace-nowrap">
+    <div className="absolute left-0 top-full mt-1 hidden group-hover:flex group-focus:flex items-center bg-info text-white text-xs rounded-2xl py-1 px-2 z-50 whitespace-nowrap">
       <FontAwesomeIcon icon={faInfoCircle} className="mr-1" />
       {message}
     </div>

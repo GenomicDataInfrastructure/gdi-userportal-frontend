@@ -37,6 +37,7 @@ export default function DataSeriesAccordion({
 }: DataSeriesAccordionProps) {
   const t = useTranslations("datasets.detail");
   const [openIndex, setOpenIndex] = useState<null | number>(null);
+  const [fullyOpenIndex, setFullyOpenIndex] = useState<null | number>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
   const notAvailableLabel = t("notAvailable");
 
@@ -46,6 +47,7 @@ export default function DataSeriesAccordion({
 
   const toggleItem = (index: number) => {
     setOpenIndex((current) => (current === index ? null : index));
+    setFullyOpenIndex(null);
   };
 
   return (
@@ -101,15 +103,17 @@ export default function DataSeriesAccordion({
               ref={(el: HTMLDivElement | null) => {
                 contentRefs.current[index] = el;
               }}
+              onTransitionEnd={() => {
+                if (openIndex === index) setFullyOpenIndex(index);
+              }}
               style={{
                 maxHeight:
                   openIndex === index
                     ? `${contentRefs.current[index]?.scrollHeight}px`
                     : "0",
-                overflow: "hidden",
+                overflow: fullyOpenIndex === index ? "visible" : "hidden",
                 transition: "max-height 0.5s ease",
               }}
-              className="overflow-hidden"
             >
               <div className="px-2 pb-4 text-sm">
                 <div className="ml-3 border-l-2 border-primary/20 pl-4">

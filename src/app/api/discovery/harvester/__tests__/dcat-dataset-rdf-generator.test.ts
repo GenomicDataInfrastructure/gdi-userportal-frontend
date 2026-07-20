@@ -162,7 +162,9 @@ describe("DCAT dataset export generators", () => {
     expect(turtle).toContain('dct:title "Population \\"Registry\\""');
     expect(turtle).toContain('dct:description "Line 1\\nLine 2"');
     expect(turtle).toContain("dct:provenance");
-    expect(turtle).toContain("healthdcatap:numberOfRecords 50000");
+    expect(turtle).toContain(
+      'healthdcatap:numberOfRecords "50000"^^xsd:nonNegativeInteger'
+    );
     expect(turtle).toContain(
       "<https://example.org/datasets/export-1#distribution-1>"
     );

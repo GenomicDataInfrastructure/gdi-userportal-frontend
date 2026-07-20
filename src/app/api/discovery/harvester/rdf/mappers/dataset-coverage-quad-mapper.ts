@@ -25,7 +25,7 @@ export const addDatasetCoverageQuads = ({
     store.add(
       datasetNode,
       ns.health("numberOfRecords"),
-      createIntegerLiteral(dataset.numberOfRecords)
+      createNonNegativeIntegerLiteral(dataset.numberOfRecords)
     );
   }
   if (typeof dataset.numberOfUniqueIndividuals === "number") {

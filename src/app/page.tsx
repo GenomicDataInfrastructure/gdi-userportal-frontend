@@ -24,6 +24,7 @@ import {
 } from "@/app/api/discovery/open-api/schemas";
 import { FilterValueType } from "@/app/api/discovery/additional-types";
 import { UrlSearchParams } from "@/app/params";
+import contentConfig from "@/config/contentConfig";
 
 type HomePageProps = {
   searchParams: Promise<UrlSearchParams>;
@@ -88,7 +89,9 @@ const HomePage = ({ searchParams }: HomePageProps) => {
     >
       <div className="my-8">
         <h1 className="font-bold text-4xl font-title">{t("home.title")}</h1>
-        <h2 className="text-xl mt-4 font-body">{t("home.subtitle")}</h2>
+        <h2 className="text-xl mt-4 font-body">
+          {contentConfig.homepageSubtitle}
+        </h2>
       </div>
       {process.env.NEXT_PUBLIC_HOME_NOTICE_ENABLED?.toLowerCase() ===
         "true" && (
@@ -140,7 +143,7 @@ const HomePage = ({ searchParams }: HomePageProps) => {
           <p
             className="text-lg"
             dangerouslySetInnerHTML={{
-              __html: t("home.aboutContent").replace(/\n/g, "<br />"),
+              __html: contentConfig.aboutContent.replace(/\n/g, "<br />"),
             }}
           />
           <br />

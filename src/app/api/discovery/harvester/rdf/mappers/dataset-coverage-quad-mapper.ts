@@ -10,6 +10,7 @@ import {
   createDurationLiteral,
   createIntegerLiteral,
   createNamedNode,
+  createNonNegativeIntegerLiteral,
   createNestedNode,
   isNonEmptyString,
   ns,
@@ -31,7 +32,7 @@ export const addDatasetCoverageQuads = ({
     store.add(
       datasetNode,
       ns.health("numberOfUniqueIndividuals"),
-      createIntegerLiteral(dataset.numberOfUniqueIndividuals)
+      createNonNegativeIntegerLiteral(dataset.numberOfUniqueIndividuals)
     );
   }
   if (typeof dataset.maxTypicalAge === "number") {

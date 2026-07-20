@@ -198,6 +198,31 @@ describe("DCAT dataset export generators", () => {
     ).toBe(true);
   });
 
+  test("encodes numberOfUniqueIndividuals as xsd:nonNegativeInteger", async () => {
+    const XSD_NON_NEGATIVE_INTEGER =
+      "http://www.w3.org/2001/XMLSchema#nonNegativeInteger";
+    const HEALTH_NUMBER_OF_UNIQUE_INDIVIDUALS =
+      "http://healthdataportal.eu/ns/health#numberOfUniqueIndividuals";
+
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      numberOfUniqueIndividuals: 25000,
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    const quad = quads.find(
+      (q) => q.predicate.value === HEALTH_NUMBER_OF_UNIQUE_INDIVIDUALS
+    );
+    expect(quad).toBeDefined();
+    expect(quad!.object.termType).toBe("Literal");
+    expect(quad!.object.value).toBe("25000");
+    expect((quad!.object as any).datatype?.value).toBe(
+      XSD_NON_NEGATIVE_INTEGER
+    );
+  });
+
   test("facade dispatches serializers and MIME types for all supported formats", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",

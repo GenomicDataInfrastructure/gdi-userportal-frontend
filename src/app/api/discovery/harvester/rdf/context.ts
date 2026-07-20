@@ -66,6 +66,12 @@ export const createLanguageLiteral = (value: string, language: string) =>
 export const createIntegerLiteral = (value: number) =>
   createLiteral(String(value), `${DATASET_EXPORT_PREFIXES.xsd}integer`);
 
+export const createNonNegativeIntegerLiteral = (value: number) =>
+  createLiteral(
+    String(value),
+    `${DATASET_EXPORT_PREFIXES.xsd}nonNegativeInteger`
+  );
+
 export const createDecimalLiteral = (value: number) =>
   createLiteral(String(value), `${DATASET_EXPORT_PREFIXES.xsd}decimal`);
 

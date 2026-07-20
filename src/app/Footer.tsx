@@ -44,24 +44,55 @@ function Footer() {
           {/* First column: About the project */}
           <div className="flex flex-col items-start gap-4 w-full md:w-3/5">
             <div className="flex items-center gap-4">
-              <Image
-                src={"/footer-logo.png"}
-                alt="Footer logo"
-                width={150}
-                height={100}
-              />
+              {contentConfig.websiteUrl ? (
+                <a
+                  href={contentConfig.websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src={"/footer-logo.png"}
+                    alt="Footer logo"
+                    width={150}
+                    height={100}
+                  />
+                </a>
+              ) : (
+                <Image
+                  src={"/footer-logo.png"}
+                  alt="Footer logo"
+                  width={150}
+                  height={100}
+                />
+              )}
               {contentConfig.footerLogos &&
                 contentConfig.footerLogos.length > 0 && (
                   <div className="flex gap-4 items-center">
-                    {contentConfig.footerLogos.map((logo) => (
-                      <div key={logo.alt} className="flex items-center">
+                    {contentConfig.footerLogos.map((logo) => {
+                      const image = (
                         <Image
                           src={logo.src}
                           alt={logo.alt}
                           className="object-contain"
                         />
-                      </div>
-                    ))}
+                      );
+
+                      return (
+                        <div key={logo.alt} className="flex items-center">
+                          {logo.url ? (
+                            <a
+                              href={logo.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {image}
+                            </a>
+                          ) : (
+                            image
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               <Image

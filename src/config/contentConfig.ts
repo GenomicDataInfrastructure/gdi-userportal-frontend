@@ -27,7 +27,7 @@ interface ContentConfig {
   enableAllVariantSearch: boolean;
   contactUsEnabled: boolean;
   showApplicationOptions: boolean;
-  footerLogos?: Array<{ src: string; alt: string }>;
+  footerLogos?: Array<{ src: string; alt: string; url?: string }>;
   favicon: string;
   headerLogoUrl: string;
 }

@@ -24,6 +24,7 @@ import {
 } from "@/app/api/discovery/open-api/schemas";
 import { FilterValueType } from "@/app/api/discovery/additional-types";
 import { UrlSearchParams } from "@/app/params";
+import contentConfig from "@/config/contentConfig";
 
 type HomePageProps = {
   searchParams: Promise<UrlSearchParams>;
@@ -88,7 +89,9 @@ const HomePage = ({ searchParams }: HomePageProps) => {
     >
       <div className="my-8">
         <h1 className="font-bold text-4xl font-title">{t("home.title")}</h1>
-        <h2 className="text-xl mt-4 font-body">{t("home.subtitle")}</h2>
+        <h2 className="text-xl mt-4 font-body">
+          {contentConfig.homepageSubtitle || t("home.subtitle")}
+        </h2>
       </div>
       {process.env.NEXT_PUBLIC_HOME_NOTICE_ENABLED?.toLowerCase() ===
         "true" && (
@@ -137,12 +140,16 @@ const HomePage = ({ searchParams }: HomePageProps) => {
         ></div>
         <div className="relative z-10 w-full md:w-3/4 lg:w-2/3 xl:w-3/5">
           <h3 className="mb-4 text-2xl">{t("home.aboutPortal")}</h3>
-          <p
-            className="text-lg"
-            dangerouslySetInnerHTML={{
-              __html: t("home.aboutContent").replace(/\n/g, "<br />"),
-            }}
-          />
+          <p className="text-lg">
+            {(contentConfig.aboutContent || t("home.aboutContent"))
+              .split("\n")
+              .map((line, index, lines) => (
+                <span key={index}>
+                  {line}
+                  {index < lines.length - 1 && <br />}
+                </span>
+              ))}
+          </p>
           <br />
           <Link
             className="link-arrow text-primary hover:text-hover-color"

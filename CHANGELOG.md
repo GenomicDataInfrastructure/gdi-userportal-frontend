@@ -12,6 +12,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.7.7] - 2026-07-06
+## [v1.7.12] - 2026-07-20
+
+### Added
+- feat: add applications options menu by @Rania Hamdani in 79536ec7
+
+
+### Changed
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1784131207 (#1070) by @LNDS-Sysadmins in 4feb819a
+- chore(deps): update actions/cache digest to 3edfce9 by @Renovate Bot in b73d940b
+- chore(deps): update sonarsource/sonarqube-scan-action action to v8.2.1 by @Renovate Bot in b39c7894
+- doc: update CHANGELOG.md for v1.7.11 (#1067) by @github-actions[bot] in f3113fc6
+
+
+### Fixed
+- fix: correct dataset page title, tooltip clipping, and scroll-to-top on navigation by @Emiliana in f8cb4499
+
+
 ## [v1.7.11] - 2026-07-14
 
 ### Added

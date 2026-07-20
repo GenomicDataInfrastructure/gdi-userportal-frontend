@@ -90,7 +90,9 @@ const HomePage = ({ searchParams }: HomePageProps) => {
       <div className="my-8">
         <h1 className="font-bold text-4xl font-title">{t("home.title")}</h1>
         <h2 className="text-xl mt-4 font-body">
-          {contentConfig.homepageSubtitle}
+          {contentConfig.multilingualEnabled
+            ? t("home.subtitle")
+            : contentConfig.homepageSubtitle}
         </h2>
       </div>
       {process.env.NEXT_PUBLIC_HOME_NOTICE_ENABLED?.toLowerCase() ===
@@ -140,12 +142,19 @@ const HomePage = ({ searchParams }: HomePageProps) => {
         ></div>
         <div className="relative z-10 w-full md:w-3/4 lg:w-2/3 xl:w-3/5">
           <h3 className="mb-4 text-2xl">{t("home.aboutPortal")}</h3>
-          <p
-            className="text-lg"
-            dangerouslySetInnerHTML={{
-              __html: contentConfig.aboutContent.replace(/\n/g, "<br />"),
-            }}
-          />
+          <p className="text-lg">
+            {(contentConfig.multilingualEnabled
+              ? t("home.aboutContent")
+              : contentConfig.aboutContent
+            )
+              .split("\n")
+              .map((line, index, lines) => (
+                <span key={index}>
+                  {line}
+                  {index < lines.length - 1 && <br />}
+                </span>
+              ))}
+          </p>
           <br />
           <Link
             className="link-arrow text-primary hover:text-hover-color"

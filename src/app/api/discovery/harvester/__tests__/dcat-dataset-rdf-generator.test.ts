@@ -670,4 +670,41 @@ describe("DCAT dataset export generators", () => {
     );
     expect(rdfXml).not.toContain("<healthdcatap:hasCodeValues rdf:resource=");
   });
+
+  test("emits applicableLegislation as nested eli:LegalResource element with rdfs:label in RDF/XML", async () => {
+    const legislationUri = "http://data.europa.eu/eli/reg/2016/679";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      applicableLegislation: [{ value: legislationUri, label: "GDPR" }],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(turtle).toContain("dcatap:applicableLegislation");
+    expect(turtle).toContain(legislationUri);
+    expect(turtle).toContain('"GDPR"@eng');
+
+    expect(rdfXml).toContain(
+      `<eli:LegalResource rdf:about="${legislationUri}">`
+    );
+    expect(rdfXml).toContain(`<rdfs:label xml:lang="eng">GDPR</rdfs:label>`);
+
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    const isTypedAsLegalResource = quads.some(
+      (q) =>
+        q.subject.value === legislationUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === "http://data.europa.eu/eli/ontology#LegalResource"
+    );
+    expect(isTypedAsLegalResource).toBe(true);
+
+    const labelQuad = quads.find(
+      (q) =>
+        q.subject.value === legislationUri &&
+        q.predicate.value === "http://www.w3.org/2000/01/rdf-schema#label"
+    );
+    expect(labelQuad?.object.value).toBe("GDPR");
+  });
 });

@@ -1199,7 +1199,7 @@ describe("LocalIndexDiscoveryProvider", () => {
     expect(
       hasQuad(quads, {
         subject: "http://data.europa.eu/eli/reg/2016/679",
-        predicate: "http://www.w3.org/2004/02/skos/core#prefLabel",
+        predicate: "http://www.w3.org/2000/01/rdf-schema#label",
         object: "GDPR",
         objectTermType: "Literal",
       })

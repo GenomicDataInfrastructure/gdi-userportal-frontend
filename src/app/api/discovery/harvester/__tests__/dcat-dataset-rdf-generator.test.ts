@@ -539,14 +539,19 @@ describe("DCAT dataset export generators", () => {
     expect(turtle).toContain("wikidata.org/entity/Q9006342");
     expect(turtle).toContain("wikidata.org/entity/Q5969475");
 
-    // RDF/XML must use the nested typed-node form, not rdf:resource shorthand
+    // rdflib emits the Standard nodes as separate top-level blocks
     expect(rdfXml).toContain(
-      '<healthdcatap:hasCodingSystem>\n      <dct:Standard rdf:about="https://www.wikidata.org/entity/Q9006342"/>\n    </healthdcatap:hasCodingSystem>'
+      '<healthdcatap:hasCodingSystem rdf:resource="https://www.wikidata.org/entity/Q9006342"/>'
     );
     expect(rdfXml).toContain(
-      '<healthdcatap:hasCodingSystem>\n      <dct:Standard rdf:about="https://www.wikidata.org/entity/Q5969475"/>\n    </healthdcatap:hasCodingSystem>'
+      '<healthdcatap:hasCodingSystem rdf:resource="https://www.wikidata.org/entity/Q5969475"/>'
     );
-    expect(rdfXml).not.toContain("<healthdcatap:hasCodingSystem rdf:resource=");
+    expect(rdfXml).toContain(
+      '<dct:Standard rdf:about="https://www.wikidata.org/entity/Q9006342">'
+    );
+    expect(rdfXml).toContain(
+      '<dct:Standard rdf:about="https://www.wikidata.org/entity/Q5969475">'
+    );
 
     // Each value must be typed as dct:Standard when round-tripped
     const quads = await parseRdfXmlToQuads(rdfXml);

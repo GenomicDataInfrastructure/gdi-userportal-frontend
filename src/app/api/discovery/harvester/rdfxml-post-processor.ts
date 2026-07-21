@@ -10,22 +10,11 @@
  *
  * Several HealthDCAT-AP predicates require a *typed nested element* instead.
  * These functions rewrite the serialized XML string into the required shape.
- */
-
-/**
- * Rewrites `hasCodingSystem` shorthand references into typed nested elements:
  *
- *   Before: <healthdcatap:hasCodingSystem rdf:resource="URI"/>
- *   After:  <healthdcatap:hasCodingSystem>
- *             <dct:Standard rdf:about="URI"/>
- *           </healthdcatap:hasCodingSystem>
+ * Note: predicates whose object nodes already carry outgoing triples (e.g. a
+ * rdf:type triple) are inlined by rdflib automatically and do NOT need a
+ * post-processing rewrite (e.g. hasCodingSystem → dct:Standard).
  */
-export const rewriteCodingSystemNodes = (xml: string): string =>
-  xml.replace(
-    /<healthdcatap:hasCodingSystem rdf:resource="([^"]+)"\/>/g,
-    (_, uri) =>
-      `<healthdcatap:hasCodingSystem>\n      <dct:Standard rdf:about="${uri}"/>\n    </healthdcatap:hasCodingSystem>`
-  );
 
 /**
  * Rewrites `foaf:page` shorthand references into typed nested elements:
@@ -46,4 +35,4 @@ export const rewriteDocumentationNodes = (xml: string): string =>
  * Applies all RDF/XML post-processing rewrites in the correct order.
  */
 export const applyRdfXmlPostProcessing = (xml: string): string =>
-  rewriteDocumentationNodes(rewriteCodingSystemNodes(xml));
+  rewriteDocumentationNodes(xml);

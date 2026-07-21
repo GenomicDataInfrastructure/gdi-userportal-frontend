@@ -20,6 +20,7 @@ export const DATASET_EXPORT_PREFIXES = {
   foaf: "http://xmlns.com/foaf/0.1/", // NOSONAR
   vcard: "http://www.w3.org/2006/vcard/ns#", // NOSONAR
   xsd: "http://www.w3.org/2001/XMLSchema#", // NOSONAR
+  eli: "http://data.europa.eu/eli/ontology#", // NOSONAR
 } as const;
 
 export const escapeXml = (value: string): string =>

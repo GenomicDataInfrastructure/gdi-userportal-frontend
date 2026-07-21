@@ -21,13 +21,19 @@ export const addDatasetGovernanceQuads = ({
   datasetNode,
 }: DatasetRdfContext): void => {
   if (dataset.frequency) {
-    addConcept(
-      store,
-      datasetNode,
-      ns.dct("accrualPeriodicity"),
-      dataset.frequency.value,
-      dataset.frequency.label
-    );
+    const { value, label } = dataset.frequency;
+    if (isNonEmptyString(value) && isAbsoluteUri(value)) {
+      const frequencyNode = createNamedNode(value);
+      store.add(datasetNode, ns.dct("accrualPeriodicity"), frequencyNode);
+      store.add(frequencyNode, ns.rdf("type"), ns.dct("Frequency"));
+      if (isNonEmptyString(label)) {
+        store.add(
+          frequencyNode,
+          ns.skos("prefLabel"),
+          createLanguageLiteral(label, "eng")
+        );
+      }
+    }
   }
 
   dataset.legalBasis?.forEach((entry, index) => {

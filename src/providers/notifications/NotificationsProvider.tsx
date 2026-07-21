@@ -61,6 +61,9 @@ export const NotificationsProvider = ({
     if (sessionStatus === "loading") return;
 
     if (sessionStatus !== "authenticated") {
+      setEnabled(false);
+      setNotifications([]);
+      setUnreadCount(0);
       setIsLoading(false);
       return;
     }

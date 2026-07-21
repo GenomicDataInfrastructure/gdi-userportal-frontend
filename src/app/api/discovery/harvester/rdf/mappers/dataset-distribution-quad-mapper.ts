@@ -7,10 +7,12 @@ import {
   addConcept,
   addLiteral,
   addNamedNode,
+  createLanguageLiteral,
   createLiteral,
   createNamedNode,
   createNestedNode,
   isAbsoluteUri,
+  isNonEmptyString,
   ns,
 } from "@/app/api/discovery/harvester/rdf/context";
 import { DATASET_EXPORT_PREFIXES } from "@/app/api/discovery/harvester/dcat-dataset-rdf-shared";
@@ -44,13 +46,19 @@ export const addDatasetDistributionQuads = ({
     }
 
     if (distribution.mediaType) {
-      addConcept(
-        store,
-        distributionNode,
-        ns.dcat("mediaType"),
-        distribution.mediaType.value,
-        distribution.mediaType.label
-      );
+      const { value, label } = distribution.mediaType;
+      if (isNonEmptyString(value) && isAbsoluteUri(value)) {
+        const mediaTypeNode = createNamedNode(value);
+        store.add(distributionNode, ns.dcat("mediaType"), mediaTypeNode);
+        store.add(mediaTypeNode, ns.rdf("type"), ns.dct("MediaType"));
+        if (isNonEmptyString(label)) {
+          store.add(
+            mediaTypeNode,
+            ns.skos("prefLabel"),
+            createLanguageLiteral(label, "eng")
+          );
+        }
+      }
     }
 
     if (distribution.license) {

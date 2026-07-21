@@ -1510,5 +1510,25 @@
   "datasets.card.entitlementEnd": {
     "en": "End: {date}",
     "fr": "Fin : {date}"
+  },
+  "notifications.label": {
+    "en": "Notifications",
+    "fr": "Notifications"
+  },
+  "notifications.empty": {
+    "en": "You have no notifications",
+    "fr": "Vous n'avez aucune notification"
+  },
+  "notifications.loading": {
+    "en": "Loading notifications…",
+    "fr": "Chargement des notifications…"
+  },
+  "notifications.markRead": {
+    "en": "Mark as read",
+    "fr": "Marquer comme lu"
+  },
+  "notifications.delete": {
+    "en": "Delete notification",
+    "fr": "Supprimer la notification"
   }
 }

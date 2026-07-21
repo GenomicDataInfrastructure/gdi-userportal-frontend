@@ -573,6 +573,37 @@ describe("DCAT dataset export generators", () => {
     ]);
   });
 
+  test("emits accrualPeriodicity as nested dct:Frequency element with skos:prefLabel in RDF/XML", async () => {
+    const frequencyUri =
+      "http://publications.europa.eu/resource/authority/frequency/ANNUAL";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      frequency: { value: frequencyUri, label: "Annual" },
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(turtle).toContain("dct:accrualPeriodicity");
+    expect(turtle).toContain(frequencyUri);
+    expect(turtle).toContain('"Annual"@eng');
+
+    expect(rdfXml).toContain(`<dct:Frequency rdf:about="${frequencyUri}">`);
+    expect(rdfXml).toContain(
+      `<skos:prefLabel xml:lang="eng">Annual</skos:prefLabel>`
+    );
+
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    const isTypedAsFrequency = quads.some(
+      (q) =>
+        q.subject.value === frequencyUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === "http://purl.org/dc/terms/Frequency"
+    );
+    expect(isTypedAsFrequency).toBe(true);
+  });
+
   test("emits documentation as nested foaf:Document element with rdf:about in RDF/XML", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",
@@ -620,7 +651,7 @@ describe("DCAT dataset export generators", () => {
     ]);
   });
 
-  test("emits hasCodeValues as language-tagged literal with xml:lang='en' in RDF/XML", async () => {
+  test("emits documentation as nested foaf:Document element with rdf:about in RDF/XML", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",
       codeValues: [

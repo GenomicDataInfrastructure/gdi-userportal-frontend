@@ -25,6 +25,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Button from "../Button";
 import Avatar from "./Avatar";
+import NotificationBell from "./Notifications/NotificationBell";
 import RequestIcon from "./RequestIcon";
 
 function Header() {
@@ -103,6 +104,7 @@ function Header() {
   if (status !== "loading" && contentConfig.showBasketAndLogin) {
     loginBtn = session ? (
       <>
+        <NotificationBell />
         <RequestIcon isActive={!!activeTab?.includes("requests")} />
         <Avatar user={session.user as User} />
       </>

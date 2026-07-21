@@ -61,6 +61,15 @@ OPENSEARCH_PASSWORD=<your-password>
 OPENSEARCH_TLS_INSECURE=true
 ```
 
+## Notification Provider Setup
+
+The notification bell in the header is backed by a `NotificationProvider` selected via `NOTIFICATION_PROVIDER` in `.env.local`.
+
+- `NOTIFICATION_PROVIDER=noop` (default) — no backend wired up; the bell is hidden.
+- Any other value must be registered in `src/app/api/notifications/providers/factory.ts`. Project-specific providers (e.g. a mirrored repo's own backend integration) are added there without changing the generic contract, the provider interface, or any React component.
+
+The bell only renders once a non-`noop` provider is configured — there is no separate feature flag to toggle.
+
 To run OpenSearch locally:
 
 ```bash

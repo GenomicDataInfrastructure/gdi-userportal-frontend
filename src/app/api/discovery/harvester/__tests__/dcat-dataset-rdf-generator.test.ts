@@ -604,6 +604,42 @@ describe("DCAT dataset export generators", () => {
     expect(isTypedAsFrequency).toBe(true);
   });
 
+  test("emits distribution mediaType as nested dct:MediaType element with skos:prefLabel in RDF/XML", async () => {
+    const mediaTypeUri = "http://www.iana.org/assignments/media-types/text/csv";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      distributions: [
+        {
+          id: "distribution-1",
+          title: "CSV Distribution",
+          mediaType: { value: mediaTypeUri, label: "CSV" },
+        },
+      ],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(turtle).toContain("dcat:mediaType");
+    expect(turtle).toContain(mediaTypeUri);
+    expect(turtle).toContain('"CSV"@eng');
+
+    expect(rdfXml).toContain(`<dct:MediaType rdf:about="${mediaTypeUri}">`);
+    expect(rdfXml).toContain(
+      `<skos:prefLabel xml:lang="eng">CSV</skos:prefLabel>`
+    );
+
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    const isTypedAsMediaType = quads.some(
+      (q) =>
+        q.subject.value === mediaTypeUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === "http://purl.org/dc/terms/MediaType"
+    );
+    expect(isTypedAsMediaType).toBe(true);
+  });
+
   test("emits documentation as nested foaf:Document element with rdf:about in RDF/XML", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",

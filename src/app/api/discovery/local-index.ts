@@ -59,6 +59,7 @@ export const seedLocalIndexFromDdsApi = async (
         distributionsCount: dataset.distributionsCount,
         maxTypicalAge: dataset.maxTypicalAge,
         minTypicalAge: dataset.minTypicalAge,
+        hasStructuredData: dataset.hasStructuredData,
         publishers: dataset.publishers ?? [],
         hdab: [],
         creators: [],

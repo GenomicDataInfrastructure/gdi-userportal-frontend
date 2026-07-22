@@ -55,7 +55,12 @@ describe("opensearch/queries", () => {
           },
           isReferencedBy: { type: "keyword" },
           documentation: { type: "keyword" },
-          languages: { type: "keyword" },
+          languages: {
+            properties: {
+              value: { type: "keyword" },
+              label: { type: "keyword" },
+            },
+          },
           createdAt: { type: "date" },
           modifiedAt: { type: "date" },
           version: { type: "keyword" },
@@ -71,6 +76,7 @@ describe("opensearch/queries", () => {
           numberOfUniqueIndividuals: { type: "integer" },
           maxTypicalAge: { type: "integer" },
           minTypicalAge: { type: "integer" },
+          hasStructuredData: { type: "boolean" },
           populationCoverage: { type: "text" },
           spatialCoverage: { type: "object" },
           spatialResolutionInMeters: { type: "float" },

@@ -91,6 +91,7 @@ export interface DiscoveryDatasetBase {
   numberOfUniqueIndividuals?: number;
   maxTypicalAge?: number;
   minTypicalAge?: number;
+  hasStructuredData?: boolean;
   temporalCoverage?: DiscoveryTimeWindow;
   populationCoverage?: string;
   spatialCoverage?: DiscoverySpatialCoverage[];

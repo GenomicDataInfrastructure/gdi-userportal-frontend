@@ -225,6 +225,54 @@ describe("DCAT dataset export generators", () => {
     );
   });
 
+  test("encodes maxTypicalAge as xsd:nonNegativeInteger", async () => {
+    const XSD_NON_NEGATIVE_INTEGER =
+      "http://www.w3.org/2001/XMLSchema#nonNegativeInteger";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      maxTypicalAge: 95,
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    const quad = quads.find(
+      (q) =>
+        q.predicate.value ===
+        "http://healthdataportal.eu/ns/health#maxTypicalAge"
+    );
+    expect(quad).toBeDefined();
+    expect(quad!.object.termType).toBe("Literal");
+    expect(quad!.object.value).toBe("95");
+    expect((quad!.object as any).datatype?.value).toBe(
+      XSD_NON_NEGATIVE_INTEGER
+    );
+  });
+
+  test("encodes minTypicalAge as xsd:nonNegativeInteger", async () => {
+    const XSD_NON_NEGATIVE_INTEGER =
+      "http://www.w3.org/2001/XMLSchema#nonNegativeInteger";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      minTypicalAge: 18,
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    const quad = quads.find(
+      (q) =>
+        q.predicate.value ===
+        "http://healthdataportal.eu/ns/health#minTypicalAge"
+    );
+    expect(quad).toBeDefined();
+    expect(quad!.object.termType).toBe("Literal");
+    expect(quad!.object.value).toBe("18");
+    expect((quad!.object as any).datatype?.value).toBe(
+      XSD_NON_NEGATIVE_INTEGER
+    );
+  });
+
   test("facade dispatches serializers and MIME types for all supported formats", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",
@@ -539,14 +587,19 @@ describe("DCAT dataset export generators", () => {
     expect(turtle).toContain("wikidata.org/entity/Q9006342");
     expect(turtle).toContain("wikidata.org/entity/Q5969475");
 
-    // RDF/XML must use the nested typed-node form, not rdf:resource shorthand
+    // rdflib emits the Standard nodes as separate top-level blocks
     expect(rdfXml).toContain(
-      '<healthdcatap:hasCodingSystem>\n      <dct:Standard rdf:about="https://www.wikidata.org/entity/Q9006342"/>\n    </healthdcatap:hasCodingSystem>'
+      '<healthdcatap:hasCodingSystem rdf:resource="https://www.wikidata.org/entity/Q9006342"/>'
     );
     expect(rdfXml).toContain(
-      '<healthdcatap:hasCodingSystem>\n      <dct:Standard rdf:about="https://www.wikidata.org/entity/Q5969475"/>\n    </healthdcatap:hasCodingSystem>'
+      '<healthdcatap:hasCodingSystem rdf:resource="https://www.wikidata.org/entity/Q5969475"/>'
     );
-    expect(rdfXml).not.toContain("<healthdcatap:hasCodingSystem rdf:resource=");
+    expect(rdfXml).toContain(
+      '<dct:Standard rdf:about="https://www.wikidata.org/entity/Q9006342">'
+    );
+    expect(rdfXml).toContain(
+      '<dct:Standard rdf:about="https://www.wikidata.org/entity/Q5969475">'
+    );
 
     // Each value must be typed as dct:Standard when round-tripped
     const quads = await parseRdfXmlToQuads(rdfXml);
@@ -557,7 +610,9 @@ describe("DCAT dataset export generators", () => {
             (q) =>
               q.predicate.value ===
                 "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
-              q.object.value === "http://purl.org/dc/terms/Standard"
+              q.object.value === "http://purl.org/dc/terms/Standard" &&
+              (q.subject.value === "https://www.wikidata.org/entity/Q9006342" ||
+                q.subject.value === "https://www.wikidata.org/entity/Q5969475")
           )
           .map((q) => q.subject.value)
       ),
@@ -566,6 +621,73 @@ describe("DCAT dataset export generators", () => {
       "https://www.wikidata.org/entity/Q5969475",
       "https://www.wikidata.org/entity/Q9006342",
     ]);
+  });
+
+  test("emits accrualPeriodicity as nested dct:Frequency element with skos:prefLabel in RDF/XML", async () => {
+    const frequencyUri =
+      "http://publications.europa.eu/resource/authority/frequency/ANNUAL";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      frequency: { value: frequencyUri, label: "Annual" },
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(turtle).toContain("dct:accrualPeriodicity");
+    expect(turtle).toContain(frequencyUri);
+    expect(turtle).toContain('"Annual"@eng');
+
+    expect(rdfXml).toContain(`<dct:Frequency rdf:about="${frequencyUri}">`);
+    expect(rdfXml).toContain(
+      `<skos:prefLabel xml:lang="eng">Annual</skos:prefLabel>`
+    );
+
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    const isTypedAsFrequency = quads.some(
+      (q) =>
+        q.subject.value === frequencyUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === "http://purl.org/dc/terms/Frequency"
+    );
+    expect(isTypedAsFrequency).toBe(true);
+  });
+
+  test("emits distribution mediaType as nested dct:MediaType element with skos:prefLabel in RDF/XML", async () => {
+    const mediaTypeUri = "http://www.iana.org/assignments/media-types/text/csv";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      distributions: [
+        {
+          id: "distribution-1",
+          title: "CSV Distribution",
+          mediaType: { value: mediaTypeUri, label: "CSV" },
+        },
+      ],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(turtle).toContain("dcat:mediaType");
+    expect(turtle).toContain(mediaTypeUri);
+    expect(turtle).toContain('"CSV"@eng');
+
+    expect(rdfXml).toContain(`<dct:MediaType rdf:about="${mediaTypeUri}">`);
+    expect(rdfXml).toContain(
+      `<skos:prefLabel xml:lang="eng">CSV</skos:prefLabel>`
+    );
+
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    const isTypedAsMediaType = quads.some(
+      (q) =>
+        q.subject.value === mediaTypeUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === "http://purl.org/dc/terms/MediaType"
+    );
+    expect(isTypedAsMediaType).toBe(true);
   });
 
   test("emits documentation as nested foaf:Document element with rdf:about in RDF/XML", async () => {
@@ -615,7 +737,7 @@ describe("DCAT dataset export generators", () => {
     ]);
   });
 
-  test("emits hasCodeValues as language-tagged literal with xml:lang='en' in RDF/XML", async () => {
+  test("emits documentation as nested foaf:Document element with rdf:about in RDF/XML", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",
       codeValues: [
@@ -633,5 +755,70 @@ describe("DCAT dataset export generators", () => {
       '<healthdcatap:hasCodeValues xml:lang="en">https://www.wikidata.org/entity/Q67890</healthdcatap:hasCodeValues>'
     );
     expect(rdfXml).not.toContain("<healthdcatap:hasCodeValues rdf:resource=");
+  });
+
+  test("emits applicableLegislation as nested eli:LegalResource element with rdfs:label in RDF/XML", async () => {
+    const legislationUri = "http://data.europa.eu/eli/reg/2016/679";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      applicableLegislation: [{ value: legislationUri, label: "GDPR" }],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(turtle).toContain("dcatap:applicableLegislation");
+    expect(turtle).toContain(legislationUri);
+    expect(turtle).toContain('"GDPR"@eng');
+
+    expect(rdfXml).toContain(
+      `<eli:LegalResource rdf:about="${legislationUri}">`
+    );
+    expect(rdfXml).toContain(`<rdfs:label xml:lang="eng">GDPR</rdfs:label>`);
+
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    const isTypedAsLegalResource = quads.some(
+      (q) =>
+        q.subject.value === legislationUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === "http://data.europa.eu/eli/ontology#LegalResource"
+    );
+    expect(isTypedAsLegalResource).toBe(true);
+
+    const labelQuad = quads.find(
+      (q) =>
+        q.subject.value === legislationUri &&
+        q.predicate.value === "http://www.w3.org/2000/01/rdf-schema#label"
+    );
+    expect(labelQuad?.object.value).toBe("GDPR");
+  });
+
+  test("emits conformsTo as nested dct:Standard element with rdf:about in RDF/XML", async () => {
+    const standardUri = "https://example.org/spec/healthdcat-ap-v6";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      conformsTo: [{ value: standardUri, label: "HealthDCAT-AP v6" }],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(turtle).toContain("dct:conformsTo");
+    expect(turtle).toContain(standardUri);
+
+    // rdflib emits the Standard node as a separate top-level block (same as hasCodingSystem)
+    expect(rdfXml).toContain(`<dct:conformsTo rdf:resource="${standardUri}"/>`);
+    expect(rdfXml).toContain(`<dct:Standard rdf:about="${standardUri}">`);
+
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    const isTypedAsStandard = quads.some(
+      (q) =>
+        q.subject.value === standardUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === "http://purl.org/dc/terms/Standard"
+    );
+    expect(isTypedAsStandard).toBe(true);
   });
 });

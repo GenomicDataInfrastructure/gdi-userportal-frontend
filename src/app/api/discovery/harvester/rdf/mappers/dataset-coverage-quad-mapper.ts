@@ -8,7 +8,6 @@ import {
   createDateTimeLiteral,
   createDecimalLiteral,
   createDurationLiteral,
-  createIntegerLiteral,
   createNamedNode,
   createNonNegativeIntegerLiteral,
   createNestedNode,
@@ -39,14 +38,14 @@ export const addDatasetCoverageQuads = ({
     store.add(
       datasetNode,
       ns.health("maxTypicalAge"),
-      createIntegerLiteral(dataset.maxTypicalAge)
+      createNonNegativeIntegerLiteral(dataset.maxTypicalAge)
     );
   }
   if (typeof dataset.minTypicalAge === "number") {
     store.add(
       datasetNode,
       ns.health("minTypicalAge"),
-      createIntegerLiteral(dataset.minTypicalAge)
+      createNonNegativeIntegerLiteral(dataset.minTypicalAge)
     );
   }
 

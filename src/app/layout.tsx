@@ -8,6 +8,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { DatasetBasketProvider } from "@/providers/DatasetBasketProvider";
 import { AlertProvider } from "@/providers/AlertProvider";
+import { NotificationsProvider } from "@/providers/notifications/NotificationsProvider";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { NextIntlClientProvider } from "next-intl";
@@ -66,14 +67,16 @@ export default async function RootLayout({
             <DatasetBasketProvider>
               <div className="grid h-screen w-full grid-rows-[auto_1fr_auto]">
                 <SessionProviderWrapper>
-                  <div>
-                    <Header />
-                  </div>
-                  <FilterProvider>
-                    <div>{children}</div>
-                  </FilterProvider>
-                  <Navbar />
-                  <Footer />
+                  <NotificationsProvider>
+                    <div>
+                      <Header />
+                    </div>
+                    <FilterProvider>
+                      <div>{children}</div>
+                    </FilterProvider>
+                    <Navbar />
+                    <Footer />
+                  </NotificationsProvider>
                 </SessionProviderWrapper>
               </div>
             </DatasetBasketProvider>

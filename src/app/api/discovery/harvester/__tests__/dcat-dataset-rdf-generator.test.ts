@@ -794,6 +794,49 @@ describe("DCAT dataset export generators", () => {
     expect(labelQuad?.object.value).toBe("GDPR");
   });
 
+  test("emits distribution license as nested dct:LicenseDocument element with skos:prefLabel in RDF/XML", async () => {
+    const licenseUri = "https://creativecommons.org/licenses/by/4.0/legalcode";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      distributions: [
+        {
+          id: "distribution-1",
+          title: "CSV Distribution",
+          license: { value: licenseUri, label: "Legalcode" },
+        },
+      ],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(turtle).toContain("dct:license");
+    expect(turtle).toContain(licenseUri);
+    expect(turtle).toContain('"Legalcode"@eng');
+
+    expect(rdfXml).toContain(`<dct:LicenseDocument rdf:about="${licenseUri}">`);
+    expect(rdfXml).toContain(
+      `<skos:prefLabel xml:lang="eng">Legalcode</skos:prefLabel>`
+    );
+
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    const isTypedAsLicenseDocument = quads.some(
+      (q) =>
+        q.subject.value === licenseUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === "http://purl.org/dc/terms/LicenseDocument"
+    );
+    expect(isTypedAsLicenseDocument).toBe(true);
+
+    const labelQuad = quads.find(
+      (q) =>
+        q.subject.value === licenseUri &&
+        q.predicate.value === "http://www.w3.org/2004/02/skos/core#prefLabel"
+    );
+    expect(labelQuad?.object.value).toBe("Legalcode");
+  });
+
   test("emits conformsTo as nested dct:Standard element with rdf:about in RDF/XML", async () => {
     const standardUri = "https://example.org/spec/healthdcat-ap-v6";
     const dataset = buildLocalDiscoveryDataset({
@@ -808,6 +851,87 @@ describe("DCAT dataset export generators", () => {
     expect(turtle).toContain(standardUri);
 
     // rdflib emits the Standard node as a separate top-level block (same as hasCodingSystem)
+    expect(rdfXml).toContain(`<dct:conformsTo rdf:resource="${standardUri}"/>`);
+    expect(rdfXml).toContain(`<dct:Standard rdf:about="${standardUri}">`);
+
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    const isTypedAsStandard = quads.some(
+      (q) =>
+        q.subject.value === standardUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === "http://purl.org/dc/terms/Standard"
+    );
+    expect(isTypedAsStandard).toBe(true);
+  });
+
+  test("emits distribution format as nested dct:MediaTypeOrExtent element with skos:prefLabel in RDF/XML", async () => {
+    const formatUri =
+      "http://publications.europa.eu/resource/authority/file-type/7Z";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      distributions: [
+        {
+          id: "distribution-1",
+          title: "7Z Distribution",
+          format: { value: formatUri, label: "7Z" },
+        },
+      ],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(turtle).toContain("dct:format");
+    expect(turtle).toContain(formatUri);
+    expect(turtle).toContain('"7Z"@eng');
+
+    expect(rdfXml).toContain(
+      `<dct:MediaTypeOrExtent rdf:about="${formatUri}">`
+    );
+    expect(rdfXml).toContain(
+      `<skos:prefLabel xml:lang="eng">7Z</skos:prefLabel>`
+    );
+
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    const isTypedAsMediaTypeOrExtent = quads.some(
+      (q) =>
+        q.subject.value === formatUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === "http://purl.org/dc/terms/MediaTypeOrExtent"
+    );
+    expect(isTypedAsMediaTypeOrExtent).toBe(true);
+
+    const labelQuad = quads.find(
+      (q) =>
+        q.subject.value === formatUri &&
+        q.predicate.value === "http://www.w3.org/2004/02/skos/core#prefLabel"
+    );
+    expect(labelQuad?.object.value).toBe("7Z");
+  });
+
+  test("emits distribution conformsTo as nested dct:Standard element with rdf:about in RDF/XML", async () => {
+    const standardUri =
+      "https://hdeu-dcat.acceptance.data.health.europa.eu/resource/authority/standard/CDA";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      distributions: [
+        {
+          id: "distribution-1",
+          title: "CDA Distribution",
+          conformsTo: [{ value: standardUri, label: "CDA" }],
+        },
+      ],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(turtle).toContain("dct:conformsTo");
+    expect(turtle).toContain(standardUri);
+
+    // rdflib emits the Standard node as a separate top-level block
     expect(rdfXml).toContain(`<dct:conformsTo rdf:resource="${standardUri}"/>`);
     expect(rdfXml).toContain(`<dct:Standard rdf:about="${standardUri}">`);
 

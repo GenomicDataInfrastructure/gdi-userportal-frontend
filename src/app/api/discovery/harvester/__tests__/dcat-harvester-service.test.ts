@@ -19,8 +19,12 @@ describe("DcatHarvesterService", () => {
         description: "National & regional data",
         catalogue: "Main Catalogue",
         languages: [
-          "http://publications.europa.eu/resource/authority/language/ENG",
-          "DEU",
+          {
+            value:
+              "http://publications.europa.eu/resource/authority/language/ENG",
+            label: "English",
+          },
+          { value: "DEU", label: "German" },
         ],
         createdAt: "2023-06-15T00:00:00.000Z",
         modifiedAt: "2024-02-20T14:30:00.000Z",
@@ -479,7 +483,10 @@ describe("DcatHarvesterService", () => {
 
     const datasets = await service.parseDatasetsFromRdf(rdf);
     expect(datasets[0].languages).toEqual([
-      "http://publications.europa.eu/resource/authority/language/ENG",
+      {
+        value: "http://publications.europa.eu/resource/authority/language/ENG",
+        label: "English",
+      },
     ]);
   });
 

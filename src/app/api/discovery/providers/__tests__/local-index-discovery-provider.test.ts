@@ -406,7 +406,11 @@ describe("LocalIndexDiscoveryProvider", () => {
         id: "retrieve-id",
         identifier: "IDENT-R",
         languages: [
-          "http://publications.europa.eu/resource/authority/language/FRA",
+          {
+            value:
+              "http://publications.europa.eu/resource/authority/language/FRA",
+            label: "French",
+          },
         ],
         spatialCoverage: [
           {
@@ -686,7 +690,9 @@ describe("LocalIndexDiscoveryProvider", () => {
         identifier: undefined,
         description: undefined,
         catalogue: undefined,
-        languages: ["custom-language-code"],
+        languages: [
+          { value: "custom-language-code", label: "custom-language-code" },
+        ],
         spatialCoverage: [{ text: "Luxembourg" }],
         populationCoverage: undefined,
         spatialResolutionInMeters: undefined,

@@ -368,7 +368,9 @@ export const createIndexMappings = () => ({
       },
       description: { type: "text" },
       catalogue: { type: "keyword" },
-      languages: { type: "keyword" },
+      languages: {
+        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      },
       createdAt: { type: "date" },
       modifiedAt: { type: "date" },
       version: { type: "keyword" },
@@ -381,6 +383,7 @@ export const createIndexMappings = () => ({
       numberOfUniqueIndividuals: { type: "integer" },
       maxTypicalAge: { type: "integer" },
       minTypicalAge: { type: "integer" },
+      hasStructuredData: { type: "boolean" },
       populationCoverage: { type: "text" },
       spatialCoverage: { type: "object" },
       spatialResolutionInMeters: { type: "float" },

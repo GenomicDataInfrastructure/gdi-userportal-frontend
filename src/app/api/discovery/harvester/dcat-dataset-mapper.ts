@@ -44,6 +44,8 @@ const HEALTHDCATAP_MAX_TYPICAL_AGE =
   "http://healthdataportal.eu/ns/health#maxTypicalAge"; // NOSONAR
 const HEALTHDCATAP_MIN_TYPICAL_AGE =
   "http://healthdataportal.eu/ns/health#minTypicalAge"; // NOSONAR
+const HEALTHDCATAP_HAS_STRUCTURED_DATA =
+  "http://healthdataportal.eu/ns/health#hasStructuredData"; // NOSONAR
 const HEALTHDCATAP_POPULATION_COVERAGE =
   "http://healthdataportal.eu/ns/health#populationCoverage"; // NOSONAR
 const DCAT_SPATIAL_RESOLUTION_IN_METERS =
@@ -141,6 +143,11 @@ export const mapDataset = (
       datasetSubject,
       graph,
       HEALTHDCATAP_MIN_TYPICAL_AGE
+    ),
+    hasStructuredData: extractBooleanLiteral(
+      datasetSubject,
+      graph,
+      HEALTHDCATAP_HAS_STRUCTURED_DATA
     ),
     spatialCoverage: extractSpatialCoverage(datasetSubject, graph),
     populationCoverage: extractPopulationCoverage(datasetSubject, graph),
@@ -288,6 +295,17 @@ const extractNumericLiteral = (
   if (!value) return undefined;
   const parsed = Number.parseInt(value, 10);
   return Number.isNaN(parsed) ? undefined : parsed;
+};
+
+const extractBooleanLiteral = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph,
+  predicate: string
+): boolean | undefined => {
+  const value = graph.getLiteral(datasetSubject, predicate);
+  if (value === "true") return true;
+  if (value === "false") return false;
+  return undefined;
 };
 
 const extractPopulationCoverage = (

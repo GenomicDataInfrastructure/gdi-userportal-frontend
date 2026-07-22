@@ -82,6 +82,9 @@ export const createDateTimeLiteral = (value: string) =>
 export const createDurationLiteral = (value: string) =>
   createLiteral(value, `${DATASET_EXPORT_PREFIXES.xsd}duration`);
 
+export const createBooleanLiteral = (value: boolean) =>
+  createLiteral(String(value), `${DATASET_EXPORT_PREFIXES.xsd}boolean`);
+
 export const addLiteral = (
   store: RdfStore,
   subject: RdfNamedNode,

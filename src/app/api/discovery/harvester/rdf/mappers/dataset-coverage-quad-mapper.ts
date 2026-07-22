@@ -5,6 +5,7 @@
 import {
   DatasetRdfContext,
   addLiteral,
+  createBooleanLiteral,
   createDateTimeLiteral,
   createDecimalLiteral,
   createDurationLiteral,
@@ -46,6 +47,13 @@ export const addDatasetCoverageQuads = ({
       datasetNode,
       ns.health("minTypicalAge"),
       createNonNegativeIntegerLiteral(dataset.minTypicalAge)
+    );
+  }
+  if (typeof dataset.hasStructuredData === "boolean") {
+    store.add(
+      datasetNode,
+      ns.health("hasStructuredData"),
+      createBooleanLiteral(dataset.hasStructuredData)
     );
   }
 

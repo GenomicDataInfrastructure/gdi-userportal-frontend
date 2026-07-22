@@ -945,4 +945,52 @@ describe("DCAT dataset export generators", () => {
     );
     expect(isTypedAsStandard).toBe(true);
   });
+
+  test("emits hasStructuredData as xsd:boolean literal in RDF/XML", async () => {
+    const XSD_BOOLEAN = "http://www.w3.org/2001/XMLSchema#boolean";
+    const HEALTH_HAS_STRUCTURED_DATA =
+      "http://healthdataportal.eu/ns/health#hasStructuredData";
+
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      hasStructuredData: true,
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    expect(turtle).toContain("healthdcatap:hasStructuredData");
+    expect(turtle).toContain("true");
+
+    const quad = quads.find(
+      (q) => q.predicate.value === HEALTH_HAS_STRUCTURED_DATA
+    );
+    expect(quad).toBeDefined();
+    expect(quad!.object.termType).toBe("Literal");
+    expect(quad!.object.value).toBe("true");
+    expect((quad!.object as any).datatype?.value).toBe(XSD_BOOLEAN);
+  });
+
+  test("emits hasStructuredData false as xsd:boolean literal in RDF/XML", async () => {
+    const XSD_BOOLEAN = "http://www.w3.org/2001/XMLSchema#boolean";
+    const HEALTH_HAS_STRUCTURED_DATA =
+      "http://healthdataportal.eu/ns/health#hasStructuredData";
+
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      hasStructuredData: false,
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    const quad = quads.find(
+      (q) => q.predicate.value === HEALTH_HAS_STRUCTURED_DATA
+    );
+    expect(quad).toBeDefined();
+    expect(quad!.object.termType).toBe("Literal");
+    expect(quad!.object.value).toBe("false");
+    expect((quad!.object as any).datatype?.value).toBe(XSD_BOOLEAN);
+  });
 });

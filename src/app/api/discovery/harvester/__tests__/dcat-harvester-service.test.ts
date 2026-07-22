@@ -242,6 +242,13 @@ describe("DcatHarvesterService", () => {
                 label: "standard-1",
               },
             ],
+            applicableLegislation: [
+              {
+                value:
+                  "http://data.legilux.public.lu/eli/etat/leg/rgd/2022/04/07/a180/jo",
+                label: "jo",
+              },
+            ],
             byteSize: 2048,
             accessUrl: "https://example.org/access/population-registry",
             downloadUrl: "https://example.org/download/population-registry.csv",

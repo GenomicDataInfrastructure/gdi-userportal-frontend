@@ -60,7 +60,7 @@ export interface LocalDiscoveryDataset {
   title: string;
   description?: string;
   catalogue?: string;
-  languages?: string[];
+  languages?: Array<{ value: string; label: string }>;
   createdAt?: string;
   modifiedAt?: string;
   version?: string;

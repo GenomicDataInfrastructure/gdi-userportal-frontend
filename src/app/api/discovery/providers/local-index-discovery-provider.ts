@@ -19,7 +19,6 @@ import {
   DiscoveryRetrievedDataset,
   DiscoveryValueLabel,
 } from "@/app/api/discovery/providers/types";
-import formatDatasetLanguage from "@/utils/formatDatasetLanguage";
 
 export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvider {
   readonly key = "local-index";
@@ -32,16 +31,10 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
 
   private readonly store = getLocalDiscoveryStore();
 
-  private mapDatasetLanguages(languages?: string[]): DiscoveryValueLabel[] {
-    return (
-      languages?.map((language) => ({
-        value: language,
-        label:
-          formatDatasetLanguage(language) ??
-          language.split("/").pop() ??
-          language,
-      })) ?? []
-    );
+  private mapDatasetLanguages(
+    languages?: Array<{ value: string; label: string }>
+  ): DiscoveryValueLabel[] {
+    return languages?.map(({ value, label }) => ({ value, label })) ?? [];
   }
 
   private mapAgent(

@@ -14,6 +14,7 @@ import { extractDatasetRelations } from "@/app/api/discovery/harvester/dcat-data
 import { extractDistributions } from "@/app/api/discovery/harvester/dcat-distribution-mapper";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 import { normalizeDate } from "@/app/api/discovery/harvester/date-utils";
+import formatDatasetLanguage from "@/utils/formatDatasetLanguage";
 
 export const DCAT_DATASET = "http://www.w3.org/ns/dcat#Dataset";
 export const DCAT_CATALOG = "http://www.w3.org/ns/dcat#Catalog";
@@ -232,7 +233,11 @@ const getDatasetDescription = (
 const getDatasetLanguages = (
   datasetSubject: RDF.Term,
   graph: RdfGraph
-): string[] => graph.getObjectValues(datasetSubject, DCT_LANGUAGE);
+): Array<{ value: string; label: string }> =>
+  graph.getObjectValues(datasetSubject, DCT_LANGUAGE).map((uri) => ({
+    value: uri,
+    label: formatDatasetLanguage(uri) ?? uri.split("/").pop() ?? uri,
+  }));
 
 const getDatasetCatalogue = (
   datasetSubject: RDF.Term,

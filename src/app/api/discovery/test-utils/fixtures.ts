@@ -237,7 +237,10 @@ export const buildLocalDiscoveryDataset = (
   description: "desc-a",
   catalogue: "catalogue-a",
   languages: [
-    "http://publications.europa.eu/resource/authority/language/ENG", // NOSONAR
+    {
+      value: "http://publications.europa.eu/resource/authority/language/ENG", // NOSONAR
+      label: "English",
+    },
   ],
   createdAt: "2024-01-01T00:00:00.000Z",
   modifiedAt: "2024-03-10T00:00:00.000Z",

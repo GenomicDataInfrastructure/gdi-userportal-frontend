@@ -7,6 +7,7 @@ import {
   addLiteral,
   addNamedNode,
   createDateTimeLiteral,
+  createLanguageLiteral,
   createLiteral,
   createNamedNode,
   createNestedNode,
@@ -26,17 +27,26 @@ export const addDatasetCoreQuads = ({
   addLiteral(store, datasetNode, ns.dct("description"), dataset.description);
   addNamedNode(store, datasetNode, ns.dcat("inCatalog"), dataset.catalogue);
 
-  dataset.languages?.forEach((language) => {
-    if (!isNonEmptyString(language)) {
+  dataset.languages?.forEach(({ value, label }) => {
+    if (!isNonEmptyString(value)) {
       return;
     }
 
-    if (isAbsoluteUri(language)) {
-      store.add(datasetNode, ns.dct("language"), createNamedNode(language));
+    if (isAbsoluteUri(value)) {
+      const langNode = createNamedNode(value);
+      store.add(datasetNode, ns.dct("language"), langNode);
+      store.add(langNode, ns.rdf("type"), ns.dct("LinguisticSystem"));
+      if (isNonEmptyString(label)) {
+        store.add(
+          langNode,
+          ns.skos("prefLabel"),
+          createLanguageLiteral(label, "eng")
+        );
+      }
       return;
     }
 
-    store.add(datasetNode, ns.dct("language"), createLiteral(language));
+    store.add(datasetNode, ns.dct("language"), createLiteral(value));
   });
 
   if (isNonEmptyString(dataset.createdAt)) {

@@ -37,6 +37,7 @@ export const ns = {
   vcard: rdf.Namespace(DATASET_EXPORT_PREFIXES.vcard),
   xsd: rdf.Namespace(DATASET_EXPORT_PREFIXES.xsd),
   eli: rdf.Namespace(DATASET_EXPORT_PREFIXES.eli),
+  cv: rdf.Namespace(DATASET_EXPORT_PREFIXES.cv),
 } as const;
 
 export const createDatasetRdfContext = (

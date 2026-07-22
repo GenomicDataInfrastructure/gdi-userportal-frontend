@@ -74,6 +74,10 @@ const DCT_PUBLISHER = "http://purl.org/dc/terms/publisher"; // NOSONAR
 const DCT_CREATOR = "http://purl.org/dc/terms/creator"; // NOSONAR
 const FOAF_NAME = "http://xmlns.com/foaf/0.1/name"; // NOSONAR
 const FOAF_MBOX = "http://xmlns.com/foaf/0.1/mbox"; // NOSONAR
+const CV_CONTACT_POINT = "http://data.europa.eu/m8g/contactPoint"; // NOSONAR
+const CV_EMAIL = "http://data.europa.eu/m8g/email"; // NOSONAR
+const VCARD_FN = "http://www.w3.org/2006/vcard/ns#fn"; // NOSONAR
+const VCARD_HAS_EMAIL = "http://www.w3.org/2006/vcard/ns#hasEmail"; // NOSONAR
 const FOAF_HOMEPAGE = "http://xmlns.com/foaf/0.1/homepage"; // NOSONAR
 const FOAF_URL = "http://xmlns.com/foaf/0.1/workInfoHomepage"; // NOSONAR
 const HEALTHDCATAP_HDAB = "http://healthdataportal.eu/ns/health#hdab"; // NOSONAR
@@ -567,6 +571,29 @@ const extractAgent = (
     }
   }
 
+  // cv:contactPoint → extract name and email
+  const contactPointObjects = graph.getObjects(agentSubject, CV_CONTACT_POINT);
+  const contactPoints =
+    contactPointObjects.length > 0
+      ? contactPointObjects
+          .map((cp) => {
+            const cpName = graph.getLiteral(cp, VCARD_FN) || undefined;
+            const hasEmailObjects = graph.getObjects(cp, VCARD_HAS_EMAIL);
+            const rawHasEmail = hasEmailObjects[0]?.value?.trim() ?? "";
+            const cpEmail =
+              (rawHasEmail.startsWith("mailto:")
+                ? rawHasEmail.slice("mailto:".length)
+                : rawHasEmail) ||
+              graph.getLiteral(cp, CV_EMAIL) ||
+              undefined;
+            return {
+              ...(cpName && { name: cpName }),
+              ...(cpEmail && { email: cpEmail }),
+            };
+          })
+          .filter((cp) => cp.name || cp.email)
+      : undefined;
+
   return {
     name,
     ...(email && { email }),
@@ -575,6 +602,7 @@ const extractAgent = (
     ...(homepage && { homepage }),
     ...(type && { type }),
     ...(identifier && { identifier }),
+    ...(contactPoints?.length && { contactPoints }),
   };
 };
 

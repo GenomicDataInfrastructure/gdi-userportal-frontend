@@ -993,4 +993,139 @@ describe("DCAT dataset export generators", () => {
     expect(quad!.object.value).toBe("false");
     expect((quad!.object as any).datatype?.value).toBe(XSD_BOOLEAN);
   });
+
+  test("emits cv:contactPoint nested inside healthdcatap:hdab foaf:Agent node", async () => {
+    const CV_NS = "http://data.europa.eu/m8g/";
+    const VCARD_NS = "http://www.w3.org/2006/vcard/ns#";
+    const FOAF_NS = "http://xmlns.com/foaf/0.1/";
+    const HEALTH_HDAB = "http://healthdataportal.eu/ns/health#hdab";
+
+    const agentUri = "https://health.data.lu/hdab/luxembourg";
+    const contactName = "HDAB Contact Point";
+    const contactEmail = "hdab@health.lu";
+
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      hdab: [
+        {
+          name: "Health Data Access Body Luxembourg",
+          uri: agentUri,
+          contactPoints: [{ name: contactName, email: contactEmail }],
+        },
+      ],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    // Turtle should mention cv:contactPoint
+    expect(turtle).toContain("cv:contactPoint");
+    expect(turtle).toContain(contactName);
+    expect(turtle).toContain(contactEmail);
+
+    // RDF/XML should contain the cv:ContactPoint type element
+    expect(rdfXml).toContain("cv:contactPoint");
+
+    // The agent node should be typed as foaf:Organization
+    const agentTypeQuad = quads.find(
+      (q) =>
+        q.subject.value === agentUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === `${FOAF_NS}Organization`
+    );
+    expect(agentTypeQuad).toBeDefined();
+
+    // The dataset should have a healthdcatap:hdab triple pointing to the agent
+    const hdabQuad = quads.find(
+      (q) => q.predicate.value === HEALTH_HDAB && q.object.value === agentUri
+    );
+    expect(hdabQuad).toBeDefined();
+
+    // There should be a cv:contactPoint triple from the agent node
+    const cpQuad = quads.find(
+      (q) =>
+        q.subject.value === agentUri &&
+        q.predicate.value === `${CV_NS}contactPoint`
+    );
+    expect(cpQuad).toBeDefined();
+    const cpNodeUri = cpQuad!.object.value;
+
+    // The contact point node should be typed as cv:ContactPoint (primary) and vcard:Kind (secondary)
+    const cpTypeQuad = quads.find(
+      (q) =>
+        q.subject.value === cpNodeUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === `${CV_NS}ContactPoint`
+    );
+    expect(cpTypeQuad).toBeDefined();
+    const cpKindTypeQuad = quads.find(
+      (q) =>
+        q.subject.value === cpNodeUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === `${VCARD_NS}Kind`
+    );
+    expect(cpKindTypeQuad).toBeDefined();
+
+    // The contact point should have vcard:fn with the contact name
+    const fnQuad = quads.find(
+      (q) =>
+        q.subject.value === cpNodeUri && q.predicate.value === `${VCARD_NS}fn`
+    );
+    expect(fnQuad).toBeDefined();
+    expect(fnQuad!.object.value).toBe(contactName);
+
+    // The contact point should have vcard:hasEmail pointing to a mailto: URI
+    const hasEmailQuad = quads.find(
+      (q) =>
+        q.subject.value === cpNodeUri &&
+        q.predicate.value === `${VCARD_NS}hasEmail`
+    );
+    expect(hasEmailQuad).toBeDefined();
+    expect(hasEmailQuad!.object.value).toBe(`mailto:${contactEmail}`);
+
+    // The contact point should have cv:email with the raw email string
+    const cvEmailQuad = quads.find(
+      (q) =>
+        q.subject.value === cpNodeUri && q.predicate.value === `${CV_NS}email`
+    );
+    expect(cvEmailQuad).toBeDefined();
+    expect(cvEmailQuad!.object.value).toBe(contactEmail);
+  });
+
+  test("emits healthdcatap:hdab agent typed as foaf:Organization and publishers as foaf:Agent", async () => {
+    const FOAF_NS = "http://xmlns.com/foaf/0.1/";
+    const publisherUri = "https://example.org/publisher/1";
+    const hdabUri = "https://example.org/hdab/1";
+
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      publishers: [{ name: "Publisher One", uri: publisherUri }],
+      hdab: [{ name: "HDAB One", uri: hdabUri }],
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    const publisherTypeQuad = quads.find(
+      (q) =>
+        q.subject.value === publisherUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === `${FOAF_NS}Agent`
+    );
+    expect(publisherTypeQuad).toBeDefined();
+
+    const hdabTypeQuad = quads.find(
+      (q) =>
+        q.subject.value === hdabUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === `${FOAF_NS}Organization`
+    );
+    expect(hdabTypeQuad).toBeDefined();
+  });
 });

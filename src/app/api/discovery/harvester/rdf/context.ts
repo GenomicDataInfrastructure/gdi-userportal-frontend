@@ -36,6 +36,7 @@ export const ns = {
   foaf: rdf.Namespace(DATASET_EXPORT_PREFIXES.foaf),
   vcard: rdf.Namespace(DATASET_EXPORT_PREFIXES.vcard),
   xsd: rdf.Namespace(DATASET_EXPORT_PREFIXES.xsd),
+  eli: rdf.Namespace(DATASET_EXPORT_PREFIXES.eli),
 } as const;
 
 export const createDatasetRdfContext = (

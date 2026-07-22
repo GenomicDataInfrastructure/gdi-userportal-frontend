@@ -21,13 +21,19 @@ export const addDatasetGovernanceQuads = ({
   datasetNode,
 }: DatasetRdfContext): void => {
   if (dataset.frequency) {
-    addConcept(
-      store,
-      datasetNode,
-      ns.dct("accrualPeriodicity"),
-      dataset.frequency.value,
-      dataset.frequency.label
-    );
+    const { value, label } = dataset.frequency;
+    if (isNonEmptyString(value) && isAbsoluteUri(value)) {
+      const frequencyNode = createNamedNode(value);
+      store.add(datasetNode, ns.dct("accrualPeriodicity"), frequencyNode);
+      store.add(frequencyNode, ns.rdf("type"), ns.dct("Frequency"));
+      if (isNonEmptyString(label)) {
+        store.add(
+          frequencyNode,
+          ns.skos("prefLabel"),
+          createLanguageLiteral(label, "eng")
+        );
+      }
+    }
   }
 
   dataset.legalBasis?.forEach((entry, index) => {
@@ -49,15 +55,19 @@ export const addDatasetGovernanceQuads = ({
     );
   });
 
-  dataset.applicableLegislation?.forEach((entry) =>
-    addConcept(
-      store,
-      datasetNode,
-      ns.dcatap("applicableLegislation"),
-      entry.value,
-      entry.label
-    )
-  );
+  dataset.applicableLegislation?.forEach((entry) => {
+    if (!isNonEmptyString(entry.value) || !isAbsoluteUri(entry.value)) return;
+    const legislationNode = createNamedNode(entry.value);
+    store.add(datasetNode, ns.dcatap("applicableLegislation"), legislationNode);
+    store.add(legislationNode, ns.rdf("type"), ns.eli("LegalResource"));
+    if (isNonEmptyString(entry.label)) {
+      store.add(
+        legislationNode,
+        ns.rdfs("label"),
+        createLanguageLiteral(entry.label, "eng")
+      );
+    }
+  });
 
   dataset.personalData?.forEach((entry) =>
     addNamedNode(store, datasetNode, ns.dpv("hasPersonalData"), entry.value)

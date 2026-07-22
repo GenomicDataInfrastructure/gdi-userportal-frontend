@@ -5,7 +5,11 @@
 import {
   DatasetRdfContext,
   addConcept,
+  createLanguageLiteral,
   createLiteral,
+  createNamedNode,
+  isAbsoluteUri,
+  isNonEmptyString,
   ns,
 } from "@/app/api/discovery/harvester/rdf/context";
 
@@ -48,21 +52,24 @@ export const addDatasetClassificationQuads = ({
     )
   );
   if (dataset.accessRights) {
-    addConcept(
-      store,
-      datasetNode,
-      ns.dct("accessRights"),
-      dataset.accessRights.value,
-      dataset.accessRights.label
-    );
+    const { value, label } = dataset.accessRights;
+    if (value) {
+      const rightsNode = createNamedNode(value);
+      store.add(datasetNode, ns.dct("accessRights"), rightsNode);
+      store.add(rightsNode, ns.rdf("type"), ns.dct("RightsStatement"));
+      if (label) {
+        store.add(
+          rightsNode,
+          ns.skos("prefLabel"),
+          createLanguageLiteral(label, "eng")
+        );
+      }
+    }
   }
-  dataset.conformsTo?.forEach((entry) =>
-    addConcept(
-      store,
-      datasetNode,
-      ns.dct("conformsTo"),
-      entry.value,
-      entry.label
-    )
-  );
+  dataset.conformsTo?.forEach((entry) => {
+    if (!isNonEmptyString(entry.value) || !isAbsoluteUri(entry.value)) return;
+    const standardNode = createNamedNode(entry.value);
+    store.add(datasetNode, ns.dct("conformsTo"), standardNode);
+    store.add(standardNode, ns.rdf("type"), ns.dct("Standard"));
+  });
 };

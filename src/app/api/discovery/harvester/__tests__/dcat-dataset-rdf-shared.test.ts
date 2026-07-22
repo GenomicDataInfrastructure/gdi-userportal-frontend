@@ -68,6 +68,7 @@ describe("dcat dataset rdf shared helpers", () => {
       foaf: "http://xmlns.com/foaf/0.1/",
       vcard: "http://www.w3.org/2006/vcard/ns#",
       xsd: "http://www.w3.org/2001/XMLSchema#",
+      eli: "http://data.europa.eu/eli/ontology#",
     });
   });
 });

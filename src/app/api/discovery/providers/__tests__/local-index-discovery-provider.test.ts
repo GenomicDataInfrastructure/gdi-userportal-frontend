@@ -1167,9 +1167,9 @@ describe("LocalIndexDiscoveryProvider", () => {
     expect(
       hasQuad(quads, {
         subject: "https://example.org/spec/healthdcat-ap-v6",
-        predicate: "http://www.w3.org/2004/02/skos/core#prefLabel",
-        object: "HealthDCAT-AP v6",
-        objectTermType: "Literal",
+        predicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        object: "http://purl.org/dc/terms/Standard",
+        objectTermType: "NamedNode",
       })
     ).toBe(true);
     expect(

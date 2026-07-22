@@ -225,6 +225,54 @@ describe("DCAT dataset export generators", () => {
     );
   });
 
+  test("encodes maxTypicalAge as xsd:nonNegativeInteger", async () => {
+    const XSD_NON_NEGATIVE_INTEGER =
+      "http://www.w3.org/2001/XMLSchema#nonNegativeInteger";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      maxTypicalAge: 95,
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    const quad = quads.find(
+      (q) =>
+        q.predicate.value ===
+        "http://healthdataportal.eu/ns/health#maxTypicalAge"
+    );
+    expect(quad).toBeDefined();
+    expect(quad!.object.termType).toBe("Literal");
+    expect(quad!.object.value).toBe("95");
+    expect((quad!.object as any).datatype?.value).toBe(
+      XSD_NON_NEGATIVE_INTEGER
+    );
+  });
+
+  test("encodes minTypicalAge as xsd:nonNegativeInteger", async () => {
+    const XSD_NON_NEGATIVE_INTEGER =
+      "http://www.w3.org/2001/XMLSchema#nonNegativeInteger";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      minTypicalAge: 18,
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    const quad = quads.find(
+      (q) =>
+        q.predicate.value ===
+        "http://healthdataportal.eu/ns/health#minTypicalAge"
+    );
+    expect(quad).toBeDefined();
+    expect(quad!.object.termType).toBe("Literal");
+    expect(quad!.object.value).toBe("18");
+    expect((quad!.object as any).datatype?.value).toBe(
+      XSD_NON_NEGATIVE_INTEGER
+    );
+  });
+
   test("facade dispatches serializers and MIME types for all supported formats", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",
@@ -562,7 +610,9 @@ describe("DCAT dataset export generators", () => {
             (q) =>
               q.predicate.value ===
                 "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
-              q.object.value === "http://purl.org/dc/terms/Standard"
+              q.object.value === "http://purl.org/dc/terms/Standard" &&
+              (q.subject.value === "https://www.wikidata.org/entity/Q9006342" ||
+                q.subject.value === "https://www.wikidata.org/entity/Q5969475")
           )
           .map((q) => q.subject.value)
       ),
@@ -742,5 +792,33 @@ describe("DCAT dataset export generators", () => {
         q.predicate.value === "http://www.w3.org/2000/01/rdf-schema#label"
     );
     expect(labelQuad?.object.value).toBe("GDPR");
+  });
+
+  test("emits conformsTo as nested dct:Standard element with rdf:about in RDF/XML", async () => {
+    const standardUri = "https://example.org/spec/healthdcat-ap-v6";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      conformsTo: [{ value: standardUri, label: "HealthDCAT-AP v6" }],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    expect(turtle).toContain("dct:conformsTo");
+    expect(turtle).toContain(standardUri);
+
+    // rdflib emits the Standard node as a separate top-level block (same as hasCodingSystem)
+    expect(rdfXml).toContain(`<dct:conformsTo rdf:resource="${standardUri}"/>`);
+    expect(rdfXml).toContain(`<dct:Standard rdf:about="${standardUri}">`);
+
+    const quads = await parseRdfXmlToQuads(rdfXml);
+    const isTypedAsStandard = quads.some(
+      (q) =>
+        q.subject.value === standardUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === "http://purl.org/dc/terms/Standard"
+    );
+    expect(isTypedAsStandard).toBe(true);
   });
 });

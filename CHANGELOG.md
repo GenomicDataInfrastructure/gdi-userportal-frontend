@@ -12,6 +12,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.7.7] - 2026-07-06
+## [v1.7.13] - 2026-07-21
+
+### Changed
+- refactor code to consider translations by @Emiliana in 0fbb0dc2
+
+
+### Fixed
+- correct fix by @Emiliana in f8dbfcaa
+- fix: make number of recors as non negative integer by @Alessandro in a993677f
+- fix: make numberOfUniqueIndivuduals in rdf encoded as non negative integer by @Alessandro in f6e97310
+- fix: footer link redirects to ext website by @Emiliana in c26bec22
+- fix: fix text sentence undert the title and in the about of homepage by @Emiliana in 2ad2209c
 ## [v1.7.12] - 2026-07-20
 
 ### Added

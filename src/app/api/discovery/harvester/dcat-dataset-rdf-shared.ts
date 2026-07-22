@@ -21,6 +21,7 @@ export const DATASET_EXPORT_PREFIXES = {
   vcard: "http://www.w3.org/2006/vcard/ns#", // NOSONAR
   xsd: "http://www.w3.org/2001/XMLSchema#", // NOSONAR
   eli: "http://data.europa.eu/eli/ontology#", // NOSONAR
+  cv: "http://data.europa.eu/m8g/", // NOSONAR
 } as const;
 
 export const escapeXml = (value: string): string =>

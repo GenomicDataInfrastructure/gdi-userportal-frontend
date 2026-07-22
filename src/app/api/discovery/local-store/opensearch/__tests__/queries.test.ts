@@ -17,7 +17,10 @@ const canonicalDataset = buildLocalDiscoveryDataset({
   title: "A",
   description: "D1",
   catalogue: "catalogue-1",
-  languages: ["ENG", "FRA"],
+  languages: [
+    { value: "ENG", label: "English" },
+    { value: "FRA", label: "French" },
+  ],
   populationCoverage: undefined,
   spatialCoverage: undefined,
   spatialResolutionInMeters: undefined,
@@ -523,7 +526,9 @@ describe("opensearch/queries", () => {
     expect(body).toContain('"identifier":"IDENT-1"');
     expect(body).toContain('"title":"A"');
     expect(body).toContain('"catalogue":"catalogue-1"');
-    expect(body).toContain('"languages":["ENG","FRA"]');
+    expect(body).toContain(
+      '"languages":[{"value":"ENG","label":"English"},{"value":"FRA","label":"French"}]'
+    );
     expect(body).toContain('"createdAt":"2024-01-01T00:00:00.000Z"');
     expect(body).toContain('"version":"1.0.0"');
     expect(body).toContain(

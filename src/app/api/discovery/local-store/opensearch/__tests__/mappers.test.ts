@@ -14,7 +14,7 @@ const canonicalSource = buildLocalDiscoveryDataset({
   title: "A",
   description: "desc-a",
   catalogue: "catalogue-a",
-  languages: ["ENG"],
+  languages: [{ value: "ENG", label: "English" }],
   populationCoverage: undefined,
   spatialCoverage: undefined,
   spatialResolutionInMeters: undefined,

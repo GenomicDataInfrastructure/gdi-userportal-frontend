@@ -4,7 +4,6 @@
 
 import {
   DatasetRdfContext,
-  addConcept,
   addLiteral,
   addNamedNode,
   createLanguageLiteral,
@@ -36,13 +35,19 @@ export const addDatasetDistributionQuads = ({
     addLiteral(store, distributionNode, ns.dct("title"), distribution.title);
 
     if (distribution.format) {
-      addConcept(
-        store,
-        distributionNode,
-        ns.dct("format"),
-        distribution.format.value,
-        distribution.format.label
-      );
+      const { value, label } = distribution.format;
+      if (isNonEmptyString(value) && isAbsoluteUri(value)) {
+        const formatNode = createNamedNode(value);
+        store.add(distributionNode, ns.dct("format"), formatNode);
+        store.add(formatNode, ns.rdf("type"), ns.dct("MediaTypeOrExtent"));
+        if (isNonEmptyString(label)) {
+          store.add(
+            formatNode,
+            ns.skos("prefLabel"),
+            createLanguageLiteral(label, "eng")
+          );
+        }
+      }
     }
 
     if (distribution.mediaType) {
@@ -62,18 +67,28 @@ export const addDatasetDistributionQuads = ({
     }
 
     if (distribution.license) {
-      addConcept(
-        store,
-        distributionNode,
-        ns.dct("license"),
-        distribution.license.value,
-        distribution.license.label
-      );
+      const { value, label } = distribution.license;
+      if (isNonEmptyString(value) && isAbsoluteUri(value)) {
+        const licenseNode = createNamedNode(value);
+        store.add(distributionNode, ns.dct("license"), licenseNode);
+        store.add(licenseNode, ns.rdf("type"), ns.dct("LicenseDocument"));
+        if (isNonEmptyString(label)) {
+          store.add(
+            licenseNode,
+            ns.skos("prefLabel"),
+            createLanguageLiteral(label, "eng")
+          );
+        }
+      }
     }
 
-    distribution.conformsTo?.forEach((entry) =>
-      addNamedNode(store, distributionNode, ns.dct("conformsTo"), entry.value)
-    );
+    distribution.conformsTo?.forEach((entry) => {
+      if (isNonEmptyString(entry.value) && isAbsoluteUri(entry.value)) {
+        const standardNode = createNamedNode(entry.value);
+        store.add(distributionNode, ns.dct("conformsTo"), standardNode);
+        store.add(standardNode, ns.rdf("type"), ns.dct("Standard"));
+      }
+    });
 
     if (distribution.byteSize !== undefined) {
       store.add(

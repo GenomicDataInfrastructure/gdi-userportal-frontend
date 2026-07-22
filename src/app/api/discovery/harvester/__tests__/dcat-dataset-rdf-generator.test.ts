@@ -1095,4 +1095,37 @@ describe("DCAT dataset export generators", () => {
     expect(cvEmailQuad).toBeDefined();
     expect(cvEmailQuad!.object.value).toBe(contactEmail);
   });
+
+  test("emits healthdcatap:hdab agent typed as foaf:Organization and publishers as foaf:Agent", async () => {
+    const FOAF_NS = "http://xmlns.com/foaf/0.1/";
+    const publisherUri = "https://example.org/publisher/1";
+    const hdabUri = "https://example.org/hdab/1";
+
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      publishers: [{ name: "Publisher One", uri: publisherUri }],
+      hdab: [{ name: "HDAB One", uri: hdabUri }],
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    const publisherTypeQuad = quads.find(
+      (q) =>
+        q.subject.value === publisherUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === `${FOAF_NS}Agent`
+    );
+    expect(publisherTypeQuad).toBeDefined();
+
+    const hdabTypeQuad = quads.find(
+      (q) =>
+        q.subject.value === hdabUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === `${FOAF_NS}Organization`
+    );
+    expect(hdabTypeQuad).toBeDefined();
+  });
 });

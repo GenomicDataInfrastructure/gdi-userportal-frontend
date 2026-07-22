@@ -17,7 +17,8 @@ export const canonicalDiscoveryRdf = `
            xmlns:dpv="http://www.w3.org/ns/dpv#"
            xmlns:csvw="http://www.w3.org/ns/csvw#"
            xmlns:foaf="http://xmlns.com/foaf/0.1/"
-           xmlns:vcard="http://www.w3.org/2006/vcard/ns#">
+           xmlns:vcard="http://www.w3.org/2006/vcard/ns#"
+           xmlns:cv="http://data.europa.eu/m8g/">
     <dcat:Catalog rdf:about="https://example.org/catalogues/main">
       <dct:title>Main Catalogue</dct:title>
     </dcat:Catalog>
@@ -162,6 +163,14 @@ export const canonicalDiscoveryRdf = `
         <foaf:Agent rdf:about="https://health.data.lu/hdab/luxembourg">
           <foaf:name xml:lang="eng">Health Data Access Body Luxembourg</foaf:name>
           <foaf:mbox rdf:resource="mailto:hdab@health.lu"/>
+          <cv:contactPoint>
+            <cv:ContactPoint rdf:nodeID="NhdabContactPoint1">
+              <rdf:type rdf:resource="http://www.w3.org/2006/vcard/ns#Kind"/>
+              <vcard:fn>HDAB Contact Point</vcard:fn>
+              <vcard:hasEmail rdf:resource="mailto:hdab@health.lu"/>
+              <cv:email>hdab@health.lu</cv:email>
+            </cv:ContactPoint>
+          </cv:contactPoint>
         </foaf:Agent>
       </healthdcatap:hdab>
       <dct:creator>

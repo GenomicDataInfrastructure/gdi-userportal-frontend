@@ -81,6 +81,9 @@ describe("DcatHarvesterService", () => {
             name: "Health Data Access Body Luxembourg",
             email: "hdab@health.lu",
             uri: "https://health.data.lu/hdab/luxembourg",
+            contactPoints: [
+              { name: "HDAB Contact Point", email: "hdab@health.lu" },
+            ],
           },
         ],
         creators: [

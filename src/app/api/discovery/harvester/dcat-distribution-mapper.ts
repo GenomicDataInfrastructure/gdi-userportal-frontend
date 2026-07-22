@@ -215,11 +215,12 @@ const getDistributionLicense = (
   return { value, label };
 };
 
-const getDistributionConformsTo = (
+const getDistributionValueLabelArray = (
   distributionSubject: RDF.Term,
-  graph: RdfGraph
-): LocalDiscoveryDistribution["conformsTo"] => {
-  const objects = graph.getObjects(distributionSubject, DCT_CONFORMS_TO);
+  graph: RdfGraph,
+  predicate: string
+): Array<{ value: string; label: string }> | undefined => {
+  const objects = graph.getObjects(distributionSubject, predicate);
   if (!objects.length) return undefined;
 
   const result = objects
@@ -236,31 +237,22 @@ const getDistributionConformsTo = (
 
   return result.length > 0 ? result : undefined;
 };
+
+const getDistributionConformsTo = (
+  distributionSubject: RDF.Term,
+  graph: RdfGraph
+): LocalDiscoveryDistribution["conformsTo"] =>
+  getDistributionValueLabelArray(distributionSubject, graph, DCT_CONFORMS_TO);
 
 const getDistributionApplicableLegislation = (
   distributionSubject: RDF.Term,
   graph: RdfGraph
-): LocalDiscoveryDistribution["applicableLegislation"] => {
-  const objects = graph.getObjects(
+): LocalDiscoveryDistribution["applicableLegislation"] =>
+  getDistributionValueLabelArray(
     distributionSubject,
+    graph,
     DCATAP_APPLICABLE_LEGISLATION
   );
-  if (!objects.length) return undefined;
-
-  const result = objects
-    .map((obj) => {
-      const value = graph.getNamedNodeValue(obj) || obj.value.trim();
-      if (!value) return null;
-      const label =
-        graph.getFirstLiteral(obj, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
-        value.split("/").pop() ||
-        value;
-      return { value, label };
-    })
-    .filter((item): item is { value: string; label: string } => item !== null);
-
-  return result.length > 0 ? result : undefined;
-};
 
 const getDistributionByteSize = (
   distributionSubject: RDF.Term,

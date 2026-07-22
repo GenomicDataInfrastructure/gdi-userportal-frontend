@@ -18,7 +18,8 @@ export const canonicalDiscoveryRdf = `
            xmlns:csvw="http://www.w3.org/ns/csvw#"
            xmlns:foaf="http://xmlns.com/foaf/0.1/"
            xmlns:vcard="http://www.w3.org/2006/vcard/ns#"
-           xmlns:cv="http://data.europa.eu/m8g/">
+           xmlns:cv="http://data.europa.eu/m8g/"
+           xmlns:r5r="http://data.europa.eu/r5r/">
     <dcat:Catalog rdf:about="https://example.org/catalogues/main">
       <dct:title>Main Catalogue</dct:title>
     </dcat:Catalog>
@@ -211,6 +212,7 @@ export const canonicalDiscoveryRdf = `
             </dct:LicenseDocument>
           </dct:license>
           <dct:conformsTo rdf:resource="https://example.org/spec/standard-1" />
+          <r5r:applicableLegislation rdf:resource="http://data.legilux.public.lu/eli/etat/leg/rgd/2022/04/07/a180/jo"/>
           <dcat:byteSize rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2048</dcat:byteSize>
           <dcat:accessURL rdf:resource="https://example.org/access/population-registry" />
           <dcat:downloadURL rdf:resource="https://example.org/download/population-registry.csv" />

@@ -1128,4 +1128,78 @@ describe("DCAT dataset export generators", () => {
     );
     expect(hdabTypeQuad).toBeDefined();
   });
+
+  test("emits distribution applicableLegislation as nested eli:LegalResource element in RDF/XML", async () => {
+    const legislationUri =
+      "http://data.legilux.public.lu/eli/etat/leg/rgd/2022/04/07/a180/jo";
+    const ELI_LEGAL_RESOURCE =
+      "http://data.europa.eu/eli/ontology#LegalResource";
+    const DCATAP_APPLICABLE_LEGISLATION =
+      "http://data.europa.eu/r5r/applicableLegislation";
+
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      distributions: [
+        {
+          id: "distribution-1",
+          title: "Test Distribution",
+          applicableLegislation: [
+            { value: legislationUri, label: "RGD 2022/04/07" },
+          ],
+        },
+      ],
+    });
+
+    const turtle = await serializeDatasetAsTurtle(dataset);
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    // Turtle should mention applicableLegislation and the URI
+    expect(turtle).toContain("dcatap:applicableLegislation");
+    expect(turtle).toContain(legislationUri);
+    expect(turtle).toContain('"RGD 2022/04/07"@eng');
+
+    // RDF/XML should contain the eli:LegalResource element
+    expect(rdfXml).toContain(
+      `<eli:LegalResource rdf:about="${legislationUri}">`
+    );
+    expect(rdfXml).toContain(
+      `<rdfs:label xml:lang="eng">RGD 2022/04/07</rdfs:label>`
+    );
+
+    // The distribution node should have a dcatap:applicableLegislation triple
+    const distributionUri = quads.find(
+      (q) =>
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === "http://www.w3.org/ns/dcat#Distribution"
+    )?.subject.value;
+    expect(distributionUri).toBeDefined();
+
+    const legislationQuad = quads.find(
+      (q) =>
+        q.subject.value === distributionUri &&
+        q.predicate.value === DCATAP_APPLICABLE_LEGISLATION &&
+        q.object.value === legislationUri
+    );
+    expect(legislationQuad).toBeDefined();
+
+    // The legislation node should be typed as eli:LegalResource
+    const typeQuad = quads.find(
+      (q) =>
+        q.subject.value === legislationUri &&
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.value === ELI_LEGAL_RESOURCE
+    );
+    expect(typeQuad).toBeDefined();
+
+    // The legislation node should have an rdfs:label
+    const labelQuad = quads.find(
+      (q) =>
+        q.subject.value === legislationUri &&
+        q.predicate.value === "http://www.w3.org/2000/01/rdf-schema#label"
+    );
+    expect(labelQuad?.object.value).toBe("RGD 2022/04/07");
+  });
 });

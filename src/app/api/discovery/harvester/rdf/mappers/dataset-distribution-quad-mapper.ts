@@ -90,6 +90,25 @@ export const addDatasetDistributionQuads = ({
       }
     });
 
+    distribution.applicableLegislation?.forEach((entry) => {
+      if (isNonEmptyString(entry.value) && isAbsoluteUri(entry.value)) {
+        const legislationNode = createNamedNode(entry.value);
+        store.add(
+          distributionNode,
+          ns.dcatap("applicableLegislation"),
+          legislationNode
+        );
+        store.add(legislationNode, ns.rdf("type"), ns.eli("LegalResource"));
+        if (isNonEmptyString(entry.label)) {
+          store.add(
+            legislationNode,
+            ns.rdfs("label"),
+            createLanguageLiteral(entry.label, "eng")
+          );
+        }
+      }
+    });
+
     if (distribution.byteSize !== undefined) {
       store.add(
         distributionNode,

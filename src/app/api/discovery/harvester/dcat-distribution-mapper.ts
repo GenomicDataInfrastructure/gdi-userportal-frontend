@@ -20,6 +20,8 @@ const DCT_FORMAT = "http://purl.org/dc/terms/format"; // NOSONAR
 const DCAT_MEDIA_TYPE = "http://www.w3.org/ns/dcat#mediaType"; // NOSONAR
 const DCT_LICENSE = "http://purl.org/dc/terms/license"; // NOSONAR
 const DCT_CONFORMS_TO = "http://purl.org/dc/terms/conformsTo"; // NOSONAR
+const DCATAP_APPLICABLE_LEGISLATION =
+  "http://data.europa.eu/r5r/applicableLegislation"; // NOSONAR
 const DCAT_BYTE_SIZE = "http://www.w3.org/ns/dcat#byteSize"; // NOSONAR
 const SKOS_PREF_LABEL = "http://www.w3.org/2004/02/skos/core#prefLabel"; // NOSONAR
 const RDFS_LABEL = "http://www.w3.org/2000/01/rdf-schema#label"; // NOSONAR
@@ -87,6 +89,10 @@ const mapDistribution = (
     mediaType: getDistributionMediaType(distributionSubject, graph),
     license: getDistributionLicense(distributionSubject, graph),
     conformsTo: getDistributionConformsTo(distributionSubject, graph),
+    applicableLegislation: getDistributionApplicableLegislation(
+      distributionSubject,
+      graph
+    ),
     byteSize: getDistributionByteSize(distributionSubject, graph),
     accessUrl,
     downloadUrl,
@@ -209,11 +215,12 @@ const getDistributionLicense = (
   return { value, label };
 };
 
-const getDistributionConformsTo = (
+const getDistributionValueLabelArray = (
   distributionSubject: RDF.Term,
-  graph: RdfGraph
-): LocalDiscoveryDistribution["conformsTo"] => {
-  const objects = graph.getObjects(distributionSubject, DCT_CONFORMS_TO);
+  graph: RdfGraph,
+  predicate: string
+): Array<{ value: string; label: string }> | undefined => {
+  const objects = graph.getObjects(distributionSubject, predicate);
   if (!objects.length) return undefined;
 
   const result = objects
@@ -230,6 +237,22 @@ const getDistributionConformsTo = (
 
   return result.length > 0 ? result : undefined;
 };
+
+const getDistributionConformsTo = (
+  distributionSubject: RDF.Term,
+  graph: RdfGraph
+): LocalDiscoveryDistribution["conformsTo"] =>
+  getDistributionValueLabelArray(distributionSubject, graph, DCT_CONFORMS_TO);
+
+const getDistributionApplicableLegislation = (
+  distributionSubject: RDF.Term,
+  graph: RdfGraph
+): LocalDiscoveryDistribution["applicableLegislation"] =>
+  getDistributionValueLabelArray(
+    distributionSubject,
+    graph,
+    DCATAP_APPLICABLE_LEGISLATION
+  );
 
 const getDistributionByteSize = (
   distributionSubject: RDF.Term,

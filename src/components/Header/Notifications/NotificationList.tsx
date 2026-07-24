@@ -26,10 +26,15 @@ const NotificationRow = ({
 
   const content = (
     <div className="flex flex-1 flex-col gap-y-1 min-w-0">
-      <span className={cn("text-sm", !notification.read && "font-semibold")}>
+      <span
+        className={cn(
+          "text-sm text-primary",
+          !notification.read && "font-semibold"
+        )}
+      >
         {notification.title}
       </span>
-      <span className="text-sm text-info line-clamp-2">
+      <span className="text-sm text-black line-clamp-2">
         {notification.message}
       </span>
       <span className="text-xs text-info opacity-70">
@@ -75,7 +80,7 @@ const NotificationRow = ({
           aria-label={t("notifications.delete")}
           title={t("notifications.delete")}
           onClick={() => remove([notification.id])}
-          className="p-1 text-info hover:text-secondary transition-colors"
+          className="p-1 text-secondary hover:opacity-75 transition-opacity"
         >
           <FontAwesomeIcon icon={faTrash} />
         </button>

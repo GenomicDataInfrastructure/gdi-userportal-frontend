@@ -22,6 +22,7 @@ export const DATASET_EXPORT_PREFIXES = {
   xsd: "http://www.w3.org/2001/XMLSchema#", // NOSONAR
   eli: "http://data.europa.eu/eli/ontology#", // NOSONAR
   cv: "http://data.europa.eu/m8g/", // NOSONAR
+  prov: "http://www.w3.org/ns/prov#", // NOSONAR
 } as const;
 
 export const escapeXml = (value: string): string =>

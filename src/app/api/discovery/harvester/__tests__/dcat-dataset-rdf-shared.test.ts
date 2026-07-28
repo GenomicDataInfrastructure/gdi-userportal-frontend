@@ -70,6 +70,7 @@ describe("dcat dataset rdf shared helpers", () => {
       xsd: "http://www.w3.org/2001/XMLSchema#",
       eli: "http://data.europa.eu/eli/ontology#",
       cv: "http://data.europa.eu/m8g/",
+      prov: "http://www.w3.org/ns/prov#",
     });
   });
 });

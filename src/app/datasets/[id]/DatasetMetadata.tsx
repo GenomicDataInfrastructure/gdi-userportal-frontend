@@ -631,7 +631,9 @@ const DatasetMetadata = ({
 
       {hasHealthTheme &&
         ((dataset.healthTheme && dataset.healthTheme.length > 0) ||
-          (dataset.healthCategory && dataset.healthCategory.length > 0)) && (
+          (dataset.healthCategory && dataset.healthCategory.length > 0) ||
+          (dataset.provenanceActivity &&
+            dataset.provenanceActivity.length > 0)) && (
           <MetadataSection title={t("healthInformation")} icon={faHeartPulse}>
             <div className="flex flex-col gap-3 text-sm">
               <div className="flex flex-wrap gap-2 items-center relative group">
@@ -671,6 +673,28 @@ const DatasetMetadata = ({
                   }
                 />
               </div>
+              {dataset.provenanceActivity &&
+                dataset.provenanceActivity.length > 0 && (
+                  <div className="flex flex-wrap gap-2 items-center relative group">
+                    <span className="font-medium shrink-0">
+                      {t("wasGeneratedBy")}:
+                    </span>
+                    <Chips
+                      chips={
+                        dataset.provenanceActivity
+                          .map((a) => a.label)
+                          .filter(Boolean) as string[]
+                      }
+                      className="bg-primary/10 text-primary rounded-full py-1"
+                    />
+                    <Tooltip
+                      message={
+                        helpText?.["wasGeneratedBy"] ??
+                        t("tooltips.wasGeneratedBy")
+                      }
+                    />
+                  </div>
+                )}
             </div>
           </MetadataSection>
         )}

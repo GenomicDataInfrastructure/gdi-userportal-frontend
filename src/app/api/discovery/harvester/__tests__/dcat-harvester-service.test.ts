@@ -809,6 +809,50 @@ describe("DcatHarvesterService", () => {
     );
   });
 
+  test("extracts wasGeneratedBy activity type from prov:wasGeneratedBy", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:prov="http://www.w3.org/ns/prov#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <prov:wasGeneratedBy>
+            <prov:Activity>
+              <dct:type rdf:resource="https://healthdata.eu/activity/ADMINISTRATIVE_PROCESSES"/>
+            </prov:Activity>
+          </prov:wasGeneratedBy>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].wasGeneratedBy).toEqual([
+      {
+        activityType: "https://healthdata.eu/activity/ADMINISTRATIVE_PROCESSES",
+      },
+    ]);
+  });
+
+  test("returns undefined wasGeneratedBy when no prov:wasGeneratedBy triples", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].wasGeneratedBy).toBeUndefined();
+  });
+
   test("maps spatial coverage without labels when only the URI exists", async () => {
     const service = new DcatHarvesterService();
     const rdf = `

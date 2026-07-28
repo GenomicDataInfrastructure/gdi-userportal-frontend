@@ -211,9 +211,13 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       codingSystem: dataset.codingSystem,
       isReferencedBy: dataset.isReferencedBy,
       documentation: dataset.documentation,
-      provenanceActivity: dataset.wasGeneratedBy?.map((a) => ({
-        dct_type: a.activityType,
-      })),
+      provenanceActivity: dataset.wasGeneratedBy?.map((a) => {
+        const raw = a.activityType ?? "";
+        const label = (raw.split("/").pop() ?? raw)
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (c) => c.toUpperCase());
+        return { dct_type: a.activityType, label };
+      }),
     };
   }
 

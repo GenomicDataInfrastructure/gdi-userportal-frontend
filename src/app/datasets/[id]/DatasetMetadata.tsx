@@ -680,15 +680,11 @@ const DatasetMetadata = ({
                       {t("wasGeneratedBy")}:
                     </span>
                     <Chips
-                      chips={dataset.provenanceActivity
-                        .map((a) => {
-                          const raw = a.dct_type ?? "";
-                          const lastSegment = raw.split("/").pop() ?? raw;
-                          return lastSegment
-                            .replace(/_/g, " ")
-                            .replace(/\b\w/g, (c) => c.toUpperCase());
-                        })
-                        .filter(Boolean)}
+                      chips={
+                        dataset.provenanceActivity
+                          .map((a) => a.label)
+                          .filter(Boolean) as string[]
+                      }
                       className="bg-primary/10 text-primary rounded-full py-1"
                     />
                     <Tooltip

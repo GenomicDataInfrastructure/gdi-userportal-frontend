@@ -411,6 +411,12 @@ export const createIndexMappings = () => ({
       },
       isReferencedBy: { type: "keyword" },
       documentation: { type: "keyword" },
+      wasGeneratedBy: {
+        type: "object",
+        properties: {
+          activityType: { type: "keyword" },
+        },
+      },
       dcatType: {
         properties: { value: { type: "keyword" }, label: { type: "keyword" } },
       },

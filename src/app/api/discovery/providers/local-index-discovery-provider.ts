@@ -211,6 +211,9 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       codingSystem: dataset.codingSystem,
       isReferencedBy: dataset.isReferencedBy,
       documentation: dataset.documentation,
+      provenanceActivity: dataset.wasGeneratedBy?.map((a) => ({
+        dct_type: a.activityType,
+      })),
     };
   }
 

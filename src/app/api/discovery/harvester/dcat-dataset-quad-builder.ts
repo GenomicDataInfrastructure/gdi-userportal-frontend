@@ -17,6 +17,7 @@ import { addDatasetDictionaryQuads } from "@/app/api/discovery/harvester/rdf/map
 import { addDatasetDistributionQuads } from "@/app/api/discovery/harvester/rdf/mappers/dataset-distribution-quad-mapper";
 import { addDatasetGovernanceQuads } from "@/app/api/discovery/harvester/rdf/mappers/dataset-governance-quad-mapper";
 import { addDatasetRelationQuads } from "@/app/api/discovery/harvester/rdf/mappers/dataset-relation-quad-mapper";
+import { addDatasetProvenanceActivityQuads } from "@/app/api/discovery/harvester/rdf/mappers/dataset-provenance-quad-mapper";
 
 export const buildDatasetRdfStore = (
   dataset: LocalDiscoveryDataset
@@ -32,6 +33,7 @@ export const buildDatasetRdfStore = (
   addDatasetDictionaryQuads(context);
   addDatasetRelationQuads(context);
   addDatasetDistributionQuads(context);
+  addDatasetProvenanceActivityQuads(context);
 
   return context.store;
 };

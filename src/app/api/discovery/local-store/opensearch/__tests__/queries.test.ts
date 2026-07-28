@@ -55,6 +55,12 @@ describe("opensearch/queries", () => {
           },
           isReferencedBy: { type: "keyword" },
           documentation: { type: "keyword" },
+          wasGeneratedBy: {
+            type: "object",
+            properties: {
+              activityType: { type: "keyword" },
+            },
+          },
           languages: {
             properties: {
               value: { type: "keyword" },

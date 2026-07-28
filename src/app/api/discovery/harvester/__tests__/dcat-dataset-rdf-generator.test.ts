@@ -481,6 +481,47 @@ describe("DCAT dataset export generators", () => {
     ).toBe(true);
   });
 
+  test("emits prov:wasGeneratedBy with prov:Activity and dct:type in RDF/XML", async () => {
+    const activityTypeUri =
+      "https://healthdata.eu/activity/ADMINISTRATIVE_PROCESSES";
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      wasGeneratedBy: [{ activityType: activityTypeUri }],
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+
+    // rdflib encodes rdf:type via the element name and dct:type as a child element.
+    // These XML string checks are the authoritative structural assertions.
+    expect(rdfXml).toContain("prov:wasGeneratedBy");
+    expect(rdfXml).toContain("prov:Activity");
+    expect(rdfXml).toContain(`<dct:type rdf:resource="${activityTypeUri}"/>`);
+
+    const quads = await parseRdfXmlToQuads(rdfXml);
+
+    // prov:wasGeneratedBy must link to a blank node (inline activity)
+    const activityBlankNodeIds = quads
+      .filter(
+        (q) =>
+          q.subject.value === "https://example.org/datasets/export-1" &&
+          q.predicate.value === "http://www.w3.org/ns/prov#wasGeneratedBy" &&
+          q.object.termType === "BlankNode"
+      )
+      .map((q) => q.object.value);
+
+    expect(activityBlankNodeIds).toHaveLength(1);
+  });
+
+  test("omits prov:wasGeneratedBy when wasGeneratedBy is undefined", async () => {
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      wasGeneratedBy: undefined,
+    });
+
+    const rdfXml = await serializeDatasetAsRdfXml(dataset);
+    expect(rdfXml).not.toContain("prov:wasGeneratedBy");
+  });
+
   test("emits dpv:hasPersonalData as plain rdf:resource references in RDF/XML", async () => {
     const dataset = buildLocalDiscoveryDataset({
       id: "https://example.org/datasets/export-1",

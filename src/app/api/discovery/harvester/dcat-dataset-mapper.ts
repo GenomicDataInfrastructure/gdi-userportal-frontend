@@ -87,6 +87,8 @@ const HEALTHDCATAP_HAS_CODING_SYSTEM =
   "http://healthdataportal.eu/ns/health#hasCodingSystem"; // NOSONAR
 const DCT_IS_REFERENCED_BY = "http://purl.org/dc/terms/isReferencedBy"; // NOSONAR
 const FOAF_PAGE = "http://xmlns.com/foaf/0.1/page"; // NOSONAR
+const PROV_WAS_GENERATED_BY = "http://www.w3.org/ns/prov#wasGeneratedBy"; // NOSONAR
+const PROV_DCT_TYPE = "http://purl.org/dc/terms/type"; // alias for reuse
 
 export const getFallbackCatalogue = (graph: RdfGraph): string => {
   const namedCatalogs = graph
@@ -207,6 +209,7 @@ export const mapDataset = (
     ),
     isReferencedBy: extractIsReferencedBy(datasetSubject, graph),
     documentation: extractDocumentation(datasetSubject, graph),
+    wasGeneratedBy: extractWasGeneratedBy(datasetSubject, graph),
   };
 };
 
@@ -661,4 +664,24 @@ const extractDocumentation = (
     .map((obj) => graph.getNamedNodeValue(obj))
     .filter(Boolean);
   return values.length > 0 ? values : undefined;
+};
+
+const extractWasGeneratedBy = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): Array<{ activityType?: string }> | undefined => {
+  const activities = graph.getObjects(datasetSubject, PROV_WAS_GENERATED_BY);
+  if (!activities.length) return undefined;
+
+  const result = activities
+    .map((activity) => {
+      const typeObj = graph.getObjects(activity, PROV_DCT_TYPE)[0];
+      const activityType = typeObj
+        ? graph.getNamedNodeValue(typeObj) || typeObj.value.trim() || undefined
+        : undefined;
+      return { activityType };
+    })
+    .filter((entry) => entry.activityType !== undefined);
+
+  return result.length > 0 ? result : undefined;
 };

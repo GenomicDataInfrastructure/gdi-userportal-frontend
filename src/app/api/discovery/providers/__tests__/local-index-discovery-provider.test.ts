@@ -912,6 +912,62 @@ describe("LocalIndexDiscoveryProvider", () => {
     });
   });
 
+  test("retrieveDataset maps wasGeneratedBy to provenanceActivity with label derivation", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce(
+      buildLocalDiscoveryDataset({
+        id: "prov-id",
+        wasGeneratedBy: [
+          { activityType: "http://example.org/activity/clinical_research" },
+          {
+            activityType:
+              "http://example.org/activity/administrative_data_collection",
+          },
+        ],
+      })
+    );
+
+    const result = await provider.retrieveDataset("prov-id");
+
+    expect(result.provenanceActivity).toEqual([
+      {
+        dct_type: "http://example.org/activity/clinical_research",
+        label: "Clinical Research",
+      },
+      {
+        dct_type: "http://example.org/activity/administrative_data_collection",
+        label: "Administrative Data Collection",
+      },
+    ]);
+  });
+
+  test("retrieveDataset maps wasGeneratedBy entry with no activityType to empty label", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce(
+      buildLocalDiscoveryDataset({
+        id: "prov-id-empty",
+        wasGeneratedBy: [{ activityType: undefined }],
+      })
+    );
+
+    const result = await provider.retrieveDataset("prov-id-empty");
+
+    expect(result.provenanceActivity).toEqual([
+      { dct_type: undefined, label: "" },
+    ]);
+  });
+
+  test("retrieveDataset returns undefined provenanceActivity when wasGeneratedBy is absent", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce(
+      buildLocalDiscoveryDataset({
+        id: "prov-id-none",
+        wasGeneratedBy: undefined,
+      })
+    );
+
+    const result = await provider.retrieveDataset("prov-id-none");
+
+    expect(result.provenanceActivity).toBeUndefined();
+  });
+
   test("retrieveDatasetInFormat serializes full local-store datasets to RDF", async () => {
     mockStore.retrieveDataset.mockResolvedValueOnce(
       buildLocalDiscoveryDataset({

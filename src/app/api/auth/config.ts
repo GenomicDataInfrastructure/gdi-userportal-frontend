@@ -43,7 +43,7 @@ export const authOptions: NextAuthOptions = {
         params: {
           scope:
             process.env.KEYCLOAK_CLIENT_SCOPE ??
-            "openid profile email elixir_id",
+            "openid profile email elixir_id ga4gh_passport_v1",
         },
       },
     }),

@@ -46,6 +46,8 @@ const HEALTHDCATAP_MIN_TYPICAL_AGE =
   "http://healthdataportal.eu/ns/health#minTypicalAge"; // NOSONAR
 const HEALTHDCATAP_HAS_STRUCTURED_DATA =
   "http://healthdataportal.eu/ns/health#hasStructuredData"; // NOSONAR
+const DATASET_TYPE_STRUCTURED_DATA =
+  "http://publications.europa.eu/resource/authority/dataset-type/STRUCTURED_DATA"; // NOSONAR
 const HEALTHDCATAP_POPULATION_COVERAGE =
   "http://healthdataportal.eu/ns/health#populationCoverage"; // NOSONAR
 const DCAT_SPATIAL_RESOLUTION_IN_METERS =
@@ -150,11 +152,12 @@ export const mapDataset = (
       graph,
       HEALTHDCATAP_MIN_TYPICAL_AGE
     ),
-    hasStructuredData: extractBooleanLiteral(
-      datasetSubject,
-      graph,
-      HEALTHDCATAP_HAS_STRUCTURED_DATA
-    ),
+    hasStructuredData:
+      extractBooleanLiteral(
+        datasetSubject,
+        graph,
+        HEALTHDCATAP_HAS_STRUCTURED_DATA
+      ) ?? hasStructuredDataTypeConcept(datasetSubject, graph),
     spatialCoverage: extractSpatialCoverage(datasetSubject, graph),
     populationCoverage: extractPopulationCoverage(datasetSubject, graph),
     spatialResolutionInMeters: extractSpatialResolutionInMeters(
@@ -313,6 +316,19 @@ const extractBooleanLiteral = (
   if (value === "true") return true;
   if (value === "false") return false;
   return undefined;
+};
+
+const hasStructuredDataTypeConcept = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): boolean | undefined => {
+  const isStructuredData = graph
+    .getObjects(datasetSubject, DCT_TYPE)
+    .some(
+      (type) => graph.getNamedNodeValue(type) === DATASET_TYPE_STRUCTURED_DATA
+    );
+
+  return isStructuredData ? true : undefined;
 };
 
 const extractPopulationCoverage = (

@@ -379,6 +379,30 @@ describe("DcatHarvesterService", () => {
     ]);
   });
 
+  test("derives hasStructuredData from dct:type STRUCTURED_DATA concept when no boolean literal is present", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/"
+               xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dct:type>
+            <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/dataset-type/TEST_DATA"/>
+          </dct:type>
+          <dct:type>
+            <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/dataset-type/STRUCTURED_DATA"/>
+          </dct:type>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].hasStructuredData).toBe(true);
+  });
+
   test("parses distributions exposed under healthdcatap analytics", async () => {
     const service = new DcatHarvesterService();
     const rdf = `

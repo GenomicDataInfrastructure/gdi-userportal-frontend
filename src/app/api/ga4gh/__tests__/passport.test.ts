@@ -17,7 +17,7 @@ function mockFetch(
   responses: Array<{ ok: boolean; status?: number; body: object }>
 ): void {
   let callIndex = 0;
-  global.fetch = jest.fn(() => {
+  global.fetch = jest.fn((): Promise<Response> => {
     const resp = responses[callIndex++] ?? responses[responses.length - 1];
     return Promise.resolve({
       ok: resp.ok,
@@ -25,7 +25,7 @@ function mockFetch(
       statusText: resp.ok ? "OK" : "Internal Server Error",
       json: () => Promise.resolve(resp.body),
     } as Response);
-  }) as jest.Mock;
+  }) as typeof global.fetch;
 }
 
 const KEYCLOAK_TOKEN = "keycloak-access-token";

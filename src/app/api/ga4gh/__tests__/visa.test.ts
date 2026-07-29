@@ -79,7 +79,12 @@ describe("decodeVisaPayload", () => {
   });
 
   test("returns null when ga4gh_visa_v1 claim is absent", () => {
-    const jwt = makeVisaJwt({ iss: "https://example.org", sub: "user", iat: 0, exp: 0 });
+    const jwt = makeVisaJwt({
+      iss: "https://example.org",
+      sub: "user",
+      iat: 0,
+      exp: 0,
+    });
     expect(decodeVisaPayload(jwt)).toBeNull();
   });
 });

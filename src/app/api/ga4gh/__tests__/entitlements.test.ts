@@ -87,7 +87,9 @@ describe("retrieveEntitlementsV2", () => {
     const { entitlements } = await retrieveEntitlementsV2();
 
     expect(entitlements[0].start).toBe(
-      new Date(CONTROLLED_ACCESS_VISA.ga4gh_visa_v1.asserted * 1000).toISOString()
+      new Date(
+        CONTROLLED_ACCESS_VISA.ga4gh_visa_v1.asserted * 1000
+      ).toISOString()
     );
   });
 

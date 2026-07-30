@@ -9,23 +9,24 @@ export type Ga4ghVisaV1 = {
   value: string;
   source: string;
   by: string;
-  asserted: number;
+  iat?: number;
+  exp?: number;
 };
 
 export type Ga4ghVisaPayload = {
   iss: string;
   sub: string;
-  iat: number;
-  exp: number;
+  iat?: number;
+  exp?: number;
   ga4gh_visa_v1: Ga4ghVisaV1;
 };
 
 export type ControlledAccessGrant = {
   datasetId: string;
+  iat?: number;
   source: string;
   by: string;
-  asserted: number;
-  exp: number;
+  exp?: number;
 };
 
 const CONTROLLED_ACCESS_GRANTS = "ControlledAccessGrants";
@@ -67,9 +68,9 @@ export function extractControlledAccessGrants(
     )
     .map((visa) => ({
       datasetId: visa.ga4gh_visa_v1.value,
+      iat: visa.ga4gh_visa_v1.iat ?? visa.iat,
       source: visa.ga4gh_visa_v1.source,
       by: visa.ga4gh_visa_v1.by,
-      asserted: visa.ga4gh_visa_v1.asserted,
-      exp: visa.exp,
+      exp: visa.ga4gh_visa_v1.exp ?? visa.exp,
     }));
 }

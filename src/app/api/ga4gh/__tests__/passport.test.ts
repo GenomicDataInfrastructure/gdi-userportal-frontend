@@ -31,6 +31,7 @@ function mockFetch(
 const KEYCLOAK_TOKEN = "keycloak-access-token";
 const LS_AAI_TOKEN = "ls-aai-access-token";
 const VISA_JWT = "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ1c2VyIn0.sig";
+const LS_AAI_USERINFO_URL = "https://login.aai.lifescience-ri.eu/oidc/userinfo";
 
 // ---------------------------------------------------------------------------
 // Tests
@@ -39,6 +40,11 @@ const VISA_JWT = "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ1c2VyIn0.sig";
 describe("fetchGa4ghPassport", () => {
   beforeEach(() => {
     jest.resetAllMocks();
+    process.env.LS_AAI_USERINFO_URL = LS_AAI_USERINFO_URL;
+  });
+
+  afterEach(() => {
+    delete process.env.LS_AAI_USERINFO_URL;
   });
 
   describe("when user is unauthenticated", () => {
@@ -103,10 +109,7 @@ describe("fetchGa4ghPassport", () => {
       await fetchGa4ghPassport();
 
       const userinfoCall = (global.fetch as jest.Mock).mock.calls[1];
-      const userinfoUrl =
-        process.env.LS_AAI_USERINFO_URL ??
-        "https://login.aai.lifescience-ri.eu/oidc/userinfo";
-      expect(userinfoCall[0]).toBe(userinfoUrl);
+      expect(userinfoCall[0]).toBe(LS_AAI_USERINFO_URL);
       expect((userinfoCall[1] as RequestInit).method).toBe("POST");
       expect((userinfoCall[1] as RequestInit).headers).toMatchObject({
         Authorization: `Bearer ${LS_AAI_TOKEN}`,
@@ -146,6 +149,30 @@ describe("fetchGa4ghPassport", () => {
 
       await expect(fetchGa4ghPassport()).rejects.toThrow(
         "LS-AAI userinfo request failed: 403"
+      );
+    });
+  });
+
+  describe("missing required environment variables", () => {
+    it("throws when KEYCLOAK_ISSUER_URL is not set", async () => {
+      const original = process.env.KEYCLOAK_ISSUER_URL;
+      delete process.env.KEYCLOAK_ISSUER_URL;
+      mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
+
+      await expect(fetchGa4ghPassport()).rejects.toThrow(
+        "Missing required environment variable: KEYCLOAK_ISSUER_URL"
+      );
+
+      process.env.KEYCLOAK_ISSUER_URL = original;
+    });
+
+    it("throws when LS_AAI_USERINFO_URL is not set", async () => {
+      delete process.env.LS_AAI_USERINFO_URL;
+      mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
+      mockFetch([{ ok: true, body: { access_token: LS_AAI_TOKEN } }]);
+
+      await expect(fetchGa4ghPassport()).rejects.toThrow(
+        "Missing required environment variable: LS_AAI_USERINFO_URL"
       );
     });
   });

@@ -33,7 +33,6 @@ const CONTROLLED_ACCESS_VISA = {
     value: "GDID-12345678-11se",
     source: "https://daam.portal.dev.gdi.lu/",
     by: "dac",
-    asserted: 1784905094,
   },
 };
 
@@ -47,7 +46,6 @@ const RESEARCHER_STATUS_VISA = {
     value: "https://doi.org/10.1038/s41431-018-0219-y",
     source: "https://other-issuer.example.org/",
     by: "peer",
-    asserted: 1784905094,
   },
 };
 
@@ -79,7 +77,7 @@ describe("retrieveEntitlementsV2", () => {
     expect(result.entitlements[0].datasetId).toBe("GDID-12345678-11se");
   });
 
-  it("converts asserted Unix timestamp to ISO 8601 start date", async () => {
+  it("converts iat Unix timestamp to ISO 8601 start date", async () => {
     mockedFetchGa4ghPassport.mockResolvedValueOnce([
       makeVisaJwt(CONTROLLED_ACCESS_VISA),
     ]);
@@ -87,10 +85,17 @@ describe("retrieveEntitlementsV2", () => {
     const { entitlements } = await retrieveEntitlementsV2();
 
     expect(entitlements[0].start).toBe(
-      new Date(
-        CONTROLLED_ACCESS_VISA.ga4gh_visa_v1.asserted * 1000
-      ).toISOString()
+      new Date(CONTROLLED_ACCESS_VISA.iat * 1000).toISOString()
     );
+  });
+
+  it("uses empty string for start when visa iat is absent", async () => {
+    const visaWithoutIat = { ...CONTROLLED_ACCESS_VISA, iat: undefined };
+    mockedFetchGa4ghPassport.mockResolvedValueOnce([makeVisaJwt(visaWithoutIat)]);
+
+    const { entitlements } = await retrieveEntitlementsV2();
+
+    expect(entitlements[0].start).toBe("");
   });
 
   it("converts exp Unix timestamp to ISO 8601 end date", async () => {
@@ -134,7 +139,6 @@ describe("retrieveEntitlementsV2", () => {
       ga4gh_visa_v1: {
         ...CONTROLLED_ACCESS_VISA.ga4gh_visa_v1,
         value: "GDID-99999999-xyz",
-        asserted: 1785000000,
       },
     };
 
@@ -150,6 +154,20 @@ describe("retrieveEntitlementsV2", () => {
       "GDID-12345678-11se",
       "GDID-99999999-xyz",
     ]);
+  });
+
+  it("uses empty string for end when visa exp is absent", async () => {
+    const visaWithoutExp = {
+      ...CONTROLLED_ACCESS_VISA,
+      exp: undefined,
+    };
+    mockedFetchGa4ghPassport.mockResolvedValueOnce([
+      makeVisaJwt(visaWithoutExp),
+    ]);
+
+    const { entitlements } = await retrieveEntitlementsV2();
+
+    expect(entitlements[0].end).toBe("");
   });
 
   it("propagates errors thrown by fetchGa4ghPassport", async () => {

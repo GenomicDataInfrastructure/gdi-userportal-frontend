@@ -32,7 +32,11 @@ type UserinfoResponse = {
 async function exchangeKeycloakTokenForLsAai(
   keycloakAccessToken: string
 ): Promise<string> {
-  const brokerUrl = `${process.env.KEYCLOAK_ISSUER_URL}/broker/LSAAI/token`;
+  const keycloakIssuerUrl = process.env.KEYCLOAK_ISSUER_URL;
+  if (!keycloakIssuerUrl) {
+    throw new Error("Missing required environment variable: KEYCLOAK_ISSUER_URL");
+  }
+  const brokerUrl = `${keycloakIssuerUrl}/broker/LSAAI/token`;
 
   const response = await fetch(brokerUrl, {
     method: "GET",
@@ -70,9 +74,10 @@ async function exchangeKeycloakTokenForLsAai(
 async function fetchPassportFromLsAai(
   lsAaiAccessToken: string
 ): Promise<string[]> {
-  const userinfoUrl =
-    process.env.LS_AAI_USERINFO_URL ??
-    "https://login.aai.lifescience-ri.eu/oidc/userinfo";
+  const userinfoUrl = process.env.LS_AAI_USERINFO_URL;
+  if (!userinfoUrl) {
+    throw new Error("Missing required environment variable: LS_AAI_USERINFO_URL");
+  }
 
   const response = await fetch(userinfoUrl, {
     method: "POST",

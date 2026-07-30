@@ -23,8 +23,8 @@ export const retrieveEntitlementsV2 =
 
     const entitlements = grants.map((grant) => ({
       datasetId: grant.datasetId,
-      start: new Date(grant.asserted * 1000).toISOString(),
-      end: new Date(grant.exp * 1000).toISOString(),
+      start: grant.iat ? new Date(grant.iat * 1000).toISOString() : "",
+      end: grant.exp ? new Date(grant.exp * 1000).toISOString() : "",
     }));
 
     return { entitlements };

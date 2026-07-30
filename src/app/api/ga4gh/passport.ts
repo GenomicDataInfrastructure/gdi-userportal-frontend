@@ -49,8 +49,15 @@ async function exchangeKeycloakTokenForLsAai(
   });
 
   if (!response.ok) {
+    let detail = response.statusText;
+    try {
+      const errorBody = await response.json();
+      if (errorBody.error) detail = errorBody.error;
+    } catch {
+      // non-JSON body — keep statusText
+    }
     throw new Error(
-      `LS-AAI token exchange failed: ${response.status} ${response.statusText}`
+      `LS-AAI token exchange failed: ${response.status} ${detail}`
     );
   }
 
@@ -92,8 +99,15 @@ async function fetchPassportFromLsAai(
   });
 
   if (!response.ok) {
+    let detail = response.statusText;
+    try {
+      const errorBody = await response.json();
+      if (errorBody.error) detail = errorBody.error;
+    } catch {
+      // non-JSON body — keep statusText
+    }
     throw new Error(
-      `LS-AAI userinfo request failed: ${response.status} ${response.statusText}`
+      `LS-AAI userinfo request failed: ${response.status} ${detail}`
     );
   }
 

@@ -96,6 +96,14 @@ describe("fetchGa4ghPassport", () => {
         "LS-AAI token exchange returned no access_token"
       );
     });
+    it("includes error field from broker JSON body in thrown message", async () => {
+      mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
+      mockFetch([{ ok: false, status: 401, body: { error: "invalid_token" } }]);
+
+      await expect(fetchGa4ghPassport()).rejects.toThrow(
+        "LS-AAI token exchange failed: 401 invalid_token"
+      );
+    });
   });
 
   describe("Step 2 — LS-AAI userinfo passport fetch", () => {
@@ -149,6 +157,18 @@ describe("fetchGa4ghPassport", () => {
 
       await expect(fetchGa4ghPassport()).rejects.toThrow(
         "LS-AAI userinfo request failed: 403"
+      );
+    });
+
+    it("includes error field from userinfo JSON body in thrown message", async () => {
+      mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
+      mockFetch([
+        { ok: true, body: { access_token: LS_AAI_TOKEN } },
+        { ok: false, status: 401, body: { error: "invalid_token" } },
+      ]);
+
+      await expect(fetchGa4ghPassport()).rejects.toThrow(
+        "LS-AAI userinfo request failed: 401 invalid_token"
       );
     });
   });

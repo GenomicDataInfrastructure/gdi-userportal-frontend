@@ -89,7 +89,7 @@ describe("retrieveEntitlementsV2", () => {
     );
   });
 
-  it("uses empty string for start when visa iat is absent", async () => {
+  it("omits start date when visa iat is absent", async () => {
     const visaWithoutIat = { ...CONTROLLED_ACCESS_VISA, iat: undefined };
     mockedFetchGa4ghPassport.mockResolvedValueOnce([
       makeVisaJwt(visaWithoutIat),

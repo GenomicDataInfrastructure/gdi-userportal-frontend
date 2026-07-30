@@ -16,7 +16,13 @@ const fullTextSearchFields = [
   "versionNotes",
 ];
 
-const keywordSearchFields = ["id", "identifier", "catalogue", "version"];
+const keywordSearchFields = [
+  "id",
+  "identifier",
+  "catalogue",
+  "version",
+  "keywords",
+];
 
 const phrasePrefixFields = [
   "title^4",

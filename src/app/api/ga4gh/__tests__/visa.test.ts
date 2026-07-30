@@ -130,7 +130,9 @@ describe("extractControlledAccessGrants", () => {
         iat: 1111111111,
       },
     };
-    const [grant] = extractControlledAccessGrants([makeVisaJwt(visaWithInnerIat)]);
+    const [grant] = extractControlledAccessGrants([
+      makeVisaJwt(visaWithInnerIat),
+    ]);
 
     expect(grant.iat).toBe(1111111111);
   });
@@ -143,7 +145,9 @@ describe("extractControlledAccessGrants", () => {
         exp: 9999999999,
       },
     };
-    const [grant] = extractControlledAccessGrants([makeVisaJwt(visaWithInnerExp)]);
+    const [grant] = extractControlledAccessGrants([
+      makeVisaJwt(visaWithInnerExp),
+    ]);
 
     expect(grant.exp).toBe(9999999999);
   });

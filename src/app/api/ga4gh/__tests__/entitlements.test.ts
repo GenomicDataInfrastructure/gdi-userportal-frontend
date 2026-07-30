@@ -91,11 +91,13 @@ describe("retrieveEntitlementsV2", () => {
 
   it("uses empty string for start when visa iat is absent", async () => {
     const visaWithoutIat = { ...CONTROLLED_ACCESS_VISA, iat: undefined };
-    mockedFetchGa4ghPassport.mockResolvedValueOnce([makeVisaJwt(visaWithoutIat)]);
+    mockedFetchGa4ghPassport.mockResolvedValueOnce([
+      makeVisaJwt(visaWithoutIat),
+    ]);
 
     const { entitlements } = await retrieveEntitlementsV2();
 
-    expect(entitlements[0].start).toBe("");
+    expect(entitlements[0].start).toBeUndefined();
   });
 
   it("converts exp Unix timestamp to ISO 8601 end date", async () => {
@@ -156,7 +158,7 @@ describe("retrieveEntitlementsV2", () => {
     ]);
   });
 
-  it("uses empty string for end when visa exp is absent", async () => {
+  it("omits end date when visa exp is absent", async () => {
     const visaWithoutExp = {
       ...CONTROLLED_ACCESS_VISA,
       exp: undefined,
@@ -167,7 +169,7 @@ describe("retrieveEntitlementsV2", () => {
 
     const { entitlements } = await retrieveEntitlementsV2();
 
-    expect(entitlements[0].end).toBe("");
+    expect(entitlements[0].end).toBeUndefined();
   });
 
   it("propagates errors thrown by fetchGa4ghPassport", async () => {

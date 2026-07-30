@@ -13,7 +13,7 @@ import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 
 export function createEntitlementCardItems(
   dataset: SearchedDataset,
-  start: string,
+  start?: string,
   end?: string
 ): CardItem[] {
   return [

@@ -34,7 +34,9 @@ async function exchangeKeycloakTokenForLsAai(
 ): Promise<string> {
   const keycloakIssuerUrl = process.env.KEYCLOAK_ISSUER_URL;
   if (!keycloakIssuerUrl) {
-    throw new Error("Missing required environment variable: KEYCLOAK_ISSUER_URL");
+    throw new Error(
+      "Missing required environment variable: KEYCLOAK_ISSUER_URL"
+    );
   }
   const brokerUrl = `${keycloakIssuerUrl}/broker/LSAAI/token`;
 
@@ -46,13 +48,13 @@ async function exchangeKeycloakTokenForLsAai(
     cache: "no-store",
   });
 
-  const data: LsAaiTokenResponse = await response.json();
-
   if (!response.ok) {
     throw new Error(
-      `LS-AAI token exchange failed: ${response.status} ${data.error ?? response.statusText}`
+      `LS-AAI token exchange failed: ${response.status} ${response.statusText}`
     );
   }
+
+  const data: LsAaiTokenResponse = await response.json();
 
   if (!data.access_token) {
     throw new Error("LS-AAI token exchange returned no access_token");
@@ -76,7 +78,9 @@ async function fetchPassportFromLsAai(
 ): Promise<string[]> {
   const userinfoUrl = process.env.LS_AAI_USERINFO_URL;
   if (!userinfoUrl) {
-    throw new Error("Missing required environment variable: LS_AAI_USERINFO_URL");
+    throw new Error(
+      "Missing required environment variable: LS_AAI_USERINFO_URL"
+    );
   }
 
   const response = await fetch(userinfoUrl, {
@@ -87,13 +91,13 @@ async function fetchPassportFromLsAai(
     cache: "no-store",
   });
 
-  const data: UserinfoResponse = await response.json();
-
   if (!response.ok) {
     throw new Error(
-      `LS-AAI userinfo request failed: ${response.status} ${data.error ?? response.statusText}`
+      `LS-AAI userinfo request failed: ${response.status} ${response.statusText}`
     );
   }
+
+  const data: UserinfoResponse = await response.json();
 
   return data.ga4gh_passport_v1 ?? [];
 }

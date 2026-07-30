@@ -5,7 +5,6 @@
 "use server";
 
 import { fetchGa4ghPassport } from "./passport";
-import { RetrieveGrantedDatasetIdentifiers } from "@/app/api/access-management/open-api/schemas";
 import { extractControlledAccessGrants } from "./visa";
 
 /**
@@ -16,16 +15,15 @@ import { extractControlledAccessGrants } from "./visa";
  * TODO (ART-27610): validate Visa JWT signatures.
  * TODO (ART-27611): handle visa expiry / refresh.
  */
-export const retrieveEntitlementsV2 =
-  async (): Promise<RetrieveGrantedDatasetIdentifiers> => {
-    const visaJwts = await fetchGa4ghPassport();
-    const grants = extractControlledAccessGrants(visaJwts);
+export const retrieveEntitlementsV2 = async () => {
+  const visaJwts = await fetchGa4ghPassport();
+  const grants = extractControlledAccessGrants(visaJwts);
 
-    const entitlements = grants.map((grant) => ({
-      datasetId: grant.datasetId,
-      start: grant.iat ? new Date(grant.iat * 1000).toISOString() : "",
-      end: grant.exp ? new Date(grant.exp * 1000).toISOString() : "",
-    }));
+  const entitlements = grants.map((grant) => ({
+    datasetId: grant.datasetId,
+    start: grant.iat ? new Date(grant.iat * 1000).toISOString() : undefined,
+    end: grant.exp ? new Date(grant.exp * 1000).toISOString() : undefined,
+  }));
 
-    return { entitlements };
-  };
+  return { entitlements };
+};

@@ -38,8 +38,14 @@ export enum LicenseType {
   TEXT = "custom",
 }
 
+export type Entitlement = {
+  datasetId: string;
+  start?: string;
+  end?: string;
+};
+
 export type DatasetEntitlement = {
   dataset: SearchedDataset;
-  start: string;
+  start?: string;
   end?: string;
 };

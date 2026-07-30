@@ -111,6 +111,7 @@
   },
   "overrides": {
     "protobufjs": "^8.0.0",
+    "sharp": "^0.35.0",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3"
   }

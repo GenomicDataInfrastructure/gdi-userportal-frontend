@@ -95,6 +95,9 @@ type ExtendedRetrievedDataset = RetrievedDataset & {
     | RetrievedDataset["temporalCoverage"]
     | { start?: string; end?: string };
   analytics?: RetrievedDataset["analytics"] | string[];
+  // Populated only by the local-index provider, which can surface every
+  // DCAT/MDC dataset type instead of the single value the DDS contract carries.
+  dcatTypes?: ValueLabel[];
 };
 
 const DatasetMetadata = ({
@@ -526,24 +529,37 @@ const DatasetMetadata = ({
           </>
         )}
       </div>
-      {dataset.dcatType && dataset.dcatType.length > 0 && (
-        <div className="mt-4">
-          <span className="flex flex-wrap gap-2 items-center relative group">
-            <FontAwesomeIcon
-              icon={faDatabase}
-              className="align-middle text-primary"
-            />
-            <span className="align-middle shrink-0">{t("type")}:</span>
-            <Chips
-              chips={dataset.dcatType.map((type) => type.label)}
-              className="bg-primary/10 text-primary rounded-full py-1"
-            />
-            <Tooltip
-              message={helpText?.["dcatType"] ?? t("tooltips.datasetType")}
-            />
-          </span>
-        </div>
-      )}
+      {(() => {
+        const dcatTypeLabels =
+          dataset.dcatTypes && dataset.dcatTypes.length > 0
+            ? dataset.dcatTypes.map((type) => type.label)
+            : dataset.dcatType
+              ? [dataset.dcatType.label]
+              : [];
+
+        return (
+          dcatTypeLabels.length > 0 && (
+            <div className="mt-4">
+              <span className="flex flex-wrap gap-2 items-center relative group">
+                <FontAwesomeIcon
+                  icon={faDatabase}
+                  className="align-middle text-primary"
+                />
+                <span className="align-middle shrink-0">{t("type")}:</span>
+                <Chips
+                  chips={dcatTypeLabels}
+                  className="bg-primary/10 text-primary rounded-full py-1"
+                />
+                <Tooltip
+                  message={
+                    helpText?.["dcatType"] ?? t("tooltips.datasetType")
+                  }
+                />
+              </span>
+            </div>
+          )
+        );
+      })()}
       {dataset.keywords && dataset.keywords.length > 0 && (
         <div className="mt-4">
           <span className="flex gap-2 items-center relative group">

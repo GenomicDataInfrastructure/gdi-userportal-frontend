@@ -19,6 +19,7 @@ module.exports = {
   },
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
+    "^server-only$": "<rootDir>/src/__mocks__/server-only.ts",
   },
   transformIgnorePatterns: ["/node_modules/(?!(iso-639-3)/)"],
   testPathIgnorePatterns: [

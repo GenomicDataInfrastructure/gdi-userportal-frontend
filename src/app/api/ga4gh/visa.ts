@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import "server-only";
 import { jwtDecode } from "jwt-decode";
 
 export type Ga4ghVisaV1 = {

@@ -175,9 +175,6 @@ export interface DiscoveryRetrievedDataset extends DiscoveryDatasetBase {
   spatial?: DiscoveryValueLabel;
   distributions?: DiscoveryRetrievedDistribution[];
   dcatType?: DiscoveryValueLabel;
-  // Local-index only: full list of dataset types when DCAT/MDC exposes more
-  // than one. The DDS-facing contract in discovery.yml only carries a single
-  // dcatType, so this is populated exclusively by LocalIndexDiscoveryProvider.
   dcatTypes?: DiscoveryValueLabel[];
   healthTheme?: DiscoveryValueLabel[];
   healthCategory?: DiscoveryValueLabel[];

@@ -188,9 +188,6 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     if (!dataset) {
       throw new Error(`Dataset not found in local index: ${id}`);
     }
-    // The DDS-facing contract only supports a single dcatType, so we keep
-    // that field for compatibility and additionally expose the full list
-    // (dcatTypes) so the UI can render every type DCAT/MDC provided.
     const dcatType = dataset.dcatType?.[0];
 
     return {

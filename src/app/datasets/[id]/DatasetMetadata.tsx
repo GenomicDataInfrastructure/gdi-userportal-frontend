@@ -95,8 +95,6 @@ type ExtendedRetrievedDataset = RetrievedDataset & {
     | RetrievedDataset["temporalCoverage"]
     | { start?: string; end?: string };
   analytics?: RetrievedDataset["analytics"] | string[];
-  // Populated only by the local-index provider, which can surface every
-  // DCAT/MDC dataset type instead of the single value the DDS contract carries.
   dcatTypes?: ValueLabel[];
 };
 

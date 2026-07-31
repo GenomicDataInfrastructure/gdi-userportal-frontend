@@ -549,9 +549,7 @@ const DatasetMetadata = ({
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
                 <Tooltip
-                  message={
-                    helpText?.["dcatType"] ?? t("tooltips.datasetType")
-                  }
+                  message={helpText?.["dcatType"] ?? t("tooltips.datasetType")}
                 />
               </span>
             </div>

@@ -526,6 +526,16 @@ describe("LocalIndexDiscoveryProvider", () => {
         value: "http://example.org/dataset-type/STATISTICAL",
         label: "STATISTICAL",
       },
+      dcatTypes: [
+        {
+          value: "http://example.org/dataset-type/STATISTICAL",
+          label: "STATISTICAL",
+        },
+        {
+          value: "http://example.org/dataset-type/CODE_LIST",
+          label: "CODE_LIST",
+        },
+      ],
       contacts: [
         {
           name: "Jane Doe",
@@ -746,6 +756,7 @@ describe("LocalIndexDiscoveryProvider", () => {
       healthTheme: [],
       healthCategory: [],
       dcatType: undefined,
+      dcatTypes: [],
       contacts: [
         {
           name: "Jane Doe",

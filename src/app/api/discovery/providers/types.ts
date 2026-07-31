@@ -174,7 +174,7 @@ export interface DiscoveryRetrievedDataset extends DiscoveryDatasetBase {
   provenance?: string;
   spatial?: DiscoveryValueLabel;
   distributions?: DiscoveryRetrievedDistribution[];
-  dcatType?: DiscoveryValueLabel;
+  dcatType?: DiscoveryValueLabel[];
   healthTheme?: DiscoveryValueLabel[];
   healthCategory?: DiscoveryValueLabel[];
   publisherNote?: string;

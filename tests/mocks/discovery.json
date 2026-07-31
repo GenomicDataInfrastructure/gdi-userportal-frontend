@@ -333,10 +333,16 @@
         "label": "Restricted"
       },
       "keywords": ["oncology", "cohort", "imaging"],
-      "dcatType": {
-        "value": "dataset",
-        "label": "Dataset"
-      },
+      "dcatType": [
+        {
+          "value": "dataset",
+          "label": "Dataset"
+        },
+        {
+          "value": "code_list",
+          "label": "Code list"
+        }
+      ],
       "contacts": [
         {
           "name": "Dr. Ada Lovelace",
@@ -555,10 +561,12 @@
         "label": "External"
       },
       "keywords": ["rare disease", "wgs"],
-      "dcatType": {
-        "value": "dataset",
-        "label": "Dataset"
-      },
+      "dcatType": [
+        {
+          "value": "dataset",
+          "label": "Dataset"
+        }
+      ],
       "contacts": [],
       "distributions": [
         {
@@ -685,10 +693,12 @@
         "value": "restricted",
         "label": "Restricted"
       },
-      "dcatType": {
-        "value": "dataset_series",
-        "label": "Dataset series"
-      },
+      "dcatType": [
+        {
+          "value": "dataset_series",
+          "label": "Dataset series"
+        }
+      ],
       "frequency": {
         "value": "monthly",
         "label": "Monthly"

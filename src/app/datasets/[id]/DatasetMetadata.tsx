@@ -525,24 +525,25 @@ const DatasetMetadata = ({
             </span>
           </>
         )}
-        {dataset.dcatType && (
-          <>
-            <div className="text-lightaccent hidden sm:inline-block">|</div>
-            <span className="flex gap-2 items-center relative group">
-              <FontAwesomeIcon
-                icon={faDatabase}
-                className="align-middle text-primary"
-              />
-              <span className="align-middle">
-                {t("type")}: {dataset.dcatType.label}
-              </span>
-              <Tooltip
-                message={helpText?.["dcatType"] ?? t("tooltips.datasetType")}
-              />
-            </span>
-          </>
-        )}
       </div>
+      {dataset.dcatType && dataset.dcatType.length > 0 && (
+        <div className="mt-4">
+          <span className="flex flex-wrap gap-2 items-center relative group">
+            <FontAwesomeIcon
+              icon={faDatabase}
+              className="align-middle text-primary"
+            />
+            <span className="align-middle shrink-0">{t("type")}:</span>
+            <Chips
+              chips={dataset.dcatType.map((type) => type.label)}
+              className="bg-primary/10 text-primary rounded-full py-1"
+            />
+            <Tooltip
+              message={helpText?.["dcatType"] ?? t("tooltips.datasetType")}
+            />
+          </span>
+        </div>
+      )}
       {dataset.keywords && dataset.keywords.length > 0 && (
         <div className="mt-4">
           <span className="flex gap-2 items-center relative group">

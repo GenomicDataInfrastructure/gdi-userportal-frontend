@@ -522,10 +522,16 @@ describe("LocalIndexDiscoveryProvider", () => {
           label: "Registries",
         },
       ],
-      dcatType: {
-        value: "http://example.org/dataset-type/STATISTICAL",
-        label: "STATISTICAL",
-      },
+      dcatType: [
+        {
+          value: "http://example.org/dataset-type/STATISTICAL",
+          label: "STATISTICAL",
+        },
+        {
+          value: "http://example.org/dataset-type/CODE_LIST",
+          label: "CODE_LIST",
+        },
+      ],
       contacts: [
         {
           name: "Jane Doe",
@@ -745,7 +751,7 @@ describe("LocalIndexDiscoveryProvider", () => {
       spatialResolutionInMeters: undefined,
       healthTheme: [],
       healthCategory: [],
-      dcatType: undefined,
+      dcatType: [],
       contacts: [
         {
           name: "Jane Doe",

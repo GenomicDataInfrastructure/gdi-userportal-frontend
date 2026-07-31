@@ -188,10 +188,6 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     if (!dataset) {
       throw new Error(`Dataset not found in local index: ${id}`);
     }
-    // DCAT can expose multiple dataset types, but the current UI and
-    // DDS-facing contract only support a single value.
-    const dcatType = dataset.dcatType?.[0];
-
     return {
       ...this.mapLocalDataset(dataset),
       contacts: dataset.contacts,
@@ -199,7 +195,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       dataDictionary: dataset.dataDictionary,
       healthTheme: dataset.healthTheme ?? [],
       healthCategory: dataset.healthCategory ?? [],
-      dcatType,
+      dcatType: dataset.dcatType ?? [],
       distributions: this.mapDistributions(dataset),
       numberOfRecords: dataset.numberOfRecords,
       provenance: dataset.provenance,

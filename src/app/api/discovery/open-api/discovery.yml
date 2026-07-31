@@ -531,7 +531,9 @@ components:
             $ref: "#/components/schemas/RetrievedDistribution"
           title: Distributions
         dcatType:
-          $ref: "#/components/schemas/ValueLabel"
+          type: array
+          items:
+            $ref: "#/components/schemas/ValueLabel"
         # Below are properties from HealthDCAT
         publisherCoverage:
           type: array

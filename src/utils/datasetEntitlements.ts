@@ -6,9 +6,11 @@ import {
   DatasetSearchQuery,
   SearchedDataset,
 } from "@/app/api/discovery/open-api/schemas";
-import { Entitlement } from "@/app/api/access-management/open-api/schemas";
 import { searchDatasetsApi } from "@/app/api/discovery";
-import { DatasetEntitlement } from "@/app/api/access-management/additional-types";
+import {
+  DatasetEntitlement,
+  Entitlement,
+} from "@/app/api/access-management/additional-types";
 import { QueryOperator } from "@/app/api/discovery/additional-types";
 
 export const mapToDatasetEntitlement = (

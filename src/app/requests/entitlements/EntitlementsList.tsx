@@ -7,15 +7,17 @@ import ListItem from "@/components/List/ListItem";
 import EntitlementCard from "./EntitlementCard";
 import {
   createEntitlementCardItems,
-  formatEntitlementEntityLabel,
+  formatEntitlementSourceLabel,
 } from "./entitlementCardItems";
 import { DatasetEntitlement } from "@/app/api/access-management/additional-types";
+import { useTranslations } from "next-intl";
 
 type EntitlementsListProps = {
   entitlements: DatasetEntitlement[];
 };
 
 function EntitlementsList({ entitlements }: Readonly<EntitlementsListProps>) {
+  const t = useTranslations("requests.entitlements");
   return (
     <List>
       {entitlements.map(
@@ -32,9 +34,10 @@ function EntitlementsList({ entitlements }: Readonly<EntitlementsListProps>) {
                   entitlement.start,
                   entitlement.end
                 )}
-                entityLabel={formatEntitlementEntityLabel(
+                sourceLabel={formatEntitlementSourceLabel(
                   entitlement.source,
-                  entitlement.by
+                  entitlement.by,
+                  { grantedBy: t("grantedBy"), source: t("source") }
                 )}
               />
             </ListItem>

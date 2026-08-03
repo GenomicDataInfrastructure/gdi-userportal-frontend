@@ -9,20 +9,20 @@ import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 type EntitlementCardProps = {
   dataset: SearchedDataset;
   cardItems: CardItem[];
-  entityLabel?: string;
+  sourceLabel?: string;
 };
 
 function EntitlementCard({
   dataset,
   cardItems,
-  entityLabel,
+  sourceLabel,
 }: Readonly<EntitlementCardProps>) {
   return (
     <DatasetCard
       dataset={dataset}
       cardItems={cardItems}
       displayBasketButton={false}
-      entityLabel={entityLabel}
+      sourceLabel={sourceLabel}
     />
   );
 }

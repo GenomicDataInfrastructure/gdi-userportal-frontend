@@ -35,17 +35,42 @@ describe("datasetEntitlements", () => {
         dataset: { identifier: "1", title: "Dataset 1" },
         start: "2021-01-01",
         end: "2021-12-31",
+        source: undefined,
+        by: undefined,
       },
       {
         dataset: { identifier: "2", title: "Dataset 2" },
         start: "2022-01-01",
         end: "2022-12-31",
+        source: undefined,
+        by: undefined,
       },
     ];
 
     const result = mapToDatasetEntitlement(datasets, entitlements);
 
     expect(result).toEqual(expected);
+  });
+
+  it("should map source and by fields from entitlements", () => {
+    const datasets: SearchedDataset[] = [
+      { identifier: "1", title: "Dataset 1" } as SearchedDataset,
+    ];
+
+    const entitlements: Entitlement[] = [
+      {
+        datasetId: "1",
+        start: "2021-01-01",
+        end: "2021-12-31",
+        source: "ckan",
+        by: "REMS",
+      } as Entitlement,
+    ];
+
+    const result = mapToDatasetEntitlement(datasets, entitlements);
+
+    expect(result[0].source).toBe("ckan");
+    expect(result[0].by).toBe("REMS");
   });
 
   it("should return an empty array if no match between datasets and entitlements", () => {

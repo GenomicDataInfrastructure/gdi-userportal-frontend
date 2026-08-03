@@ -2,7 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { createEntitlementCardItems } from "../entitlementCardItems";
+import {
+  createEntitlementCardItems,
+  formatEntitlementSourceLabel,
+} from "../entitlementCardItems";
 import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 
 describe("entitlementCardItems", () => {
@@ -47,5 +50,46 @@ describe("entitlementCardItems", () => {
     expect(items[6].text).toBe("");
     expect(items[7].text).toBe("Start: 23 June 2024");
     expect(items[8].text).toBe("End: N/A");
+  });
+});
+
+describe("formatEntitlementSourceLabel", () => {
+  it("returns undefined when both source and by are undefined", () => {
+    expect(formatEntitlementSourceLabel(undefined, undefined)).toBeUndefined();
+  });
+
+  it("returns undefined when both source and by are empty strings", () => {
+    expect(formatEntitlementSourceLabel("", "")).toBeUndefined();
+  });
+
+  it("returns only the by part when source is absent", () => {
+    expect(formatEntitlementSourceLabel(undefined, "REMS")).toBe(
+      "Granted by: REMS"
+    );
+  });
+
+  it("returns only the source part when by is absent", () => {
+    expect(formatEntitlementSourceLabel("ckan", undefined)).toBe(
+      "Source: ckan"
+    );
+  });
+
+  it("returns combined label when both source and by are present", () => {
+    expect(formatEntitlementSourceLabel("ckan", "REMS")).toBe(
+      "Granted by: REMS | Source: ckan"
+    );
+  });
+
+  it("uses translated messages when provided", () => {
+    const messages = { grantedBy: "Accordé par", source: "Source" };
+    expect(formatEntitlementSourceLabel("ckan", "REMS", messages)).toBe(
+      "Accordé par: REMS | Source: ckan"
+    );
+  });
+
+  it("falls back to English when messages are not provided", () => {
+    expect(formatEntitlementSourceLabel("ckan", "REMS")).toBe(
+      "Granted by: REMS | Source: ckan"
+    );
   });
 });

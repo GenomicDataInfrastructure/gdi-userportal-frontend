@@ -42,10 +42,14 @@ export type Entitlement = {
   datasetId: string;
   start?: string;
   end?: string;
+  source?: string;
+  by?: string;
 };
 
 export type DatasetEntitlement = {
   dataset: SearchedDataset;
   start?: string;
   end?: string;
+  source?: string;
+  by?: string;
 };

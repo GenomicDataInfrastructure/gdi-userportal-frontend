@@ -6,6 +6,7 @@ import {
   IconDefinition,
   faCircleInfo,
   faLayerGroup,
+  faStamp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "@/i18n/navigation";
@@ -30,6 +31,7 @@ type CardProps = {
   isExternal?: boolean;
   externalLabel?: string;
   entityLabel?: string;
+  sourceLabel?: string;
 };
 
 export default function Card({
@@ -44,6 +46,7 @@ export default function Card({
   isExternal: isExternalProp,
   externalLabel,
   entityLabel,
+  sourceLabel,
 }: CardProps) {
   const t = useTranslations();
   const isExternal = isExternalProp ?? !!externalUrl;
@@ -73,11 +76,21 @@ export default function Card({
             <div className="font-bold text-[20px] group-hover:text-info group-hover:underline">
               {title}
             </div>
-            {entityLabel && (
-              <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20 shrink-0">
-                <FontAwesomeIcon icon={faLayerGroup} className="w-3 h-3" />
-                {entityLabel}
-              </span>
+            {(entityLabel || sourceLabel) && (
+              <div className="inline-flex flex-wrap gap-1.5 shrink-0">
+                {entityLabel && (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20">
+                    <FontAwesomeIcon icon={faLayerGroup} className="w-3 h-3" />
+                    {entityLabel}
+                  </span>
+                )}
+                {sourceLabel && (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-info/10 text-info border border-info/20">
+                    <FontAwesomeIcon icon={faStamp} className="w-3 h-3" />
+                    {sourceLabel}
+                  </span>
+                )}
+              </div>
             )}
           </div>
 

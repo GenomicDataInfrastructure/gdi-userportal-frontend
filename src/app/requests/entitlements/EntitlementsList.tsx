@@ -5,7 +5,10 @@
 import List from "@/components/List";
 import ListItem from "@/components/List/ListItem";
 import EntitlementCard from "./EntitlementCard";
-import { createEntitlementCardItems } from "./entitlementCardItems";
+import {
+  createEntitlementCardItems,
+  formatEntitlementEntityLabel,
+} from "./entitlementCardItems";
 import { DatasetEntitlement } from "@/app/api/access-management/additional-types";
 
 type EntitlementsListProps = {
@@ -28,6 +31,10 @@ function EntitlementsList({ entitlements }: Readonly<EntitlementsListProps>) {
                   entitlement.dataset,
                   entitlement.start,
                   entitlement.end
+                )}
+                entityLabel={formatEntitlementEntityLabel(
+                  entitlement.source,
+                  entitlement.by
                 )}
               />
             </ListItem>

@@ -27,6 +27,8 @@ export const mapToDatasetEntitlement = (
       ) as SearchedDataset,
       start: e.start,
       end: e.end,
+      source: e.source,
+      by: e.by,
     }));
 };
 

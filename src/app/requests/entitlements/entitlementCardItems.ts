@@ -28,3 +28,15 @@ export function createEntitlementCardItems(
     },
   ];
 }
+
+export function formatEntitlementEntityLabel(
+  source?: string,
+  by?: string
+): string | undefined {
+  if (!source && !by) return undefined;
+  const parts = [
+    by ? `Granted by: ${by}` : null,
+    source ? `Source: ${source}` : null,
+  ].filter(Boolean);
+  return parts.join(" | ");
+}

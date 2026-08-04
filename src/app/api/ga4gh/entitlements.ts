@@ -23,6 +23,8 @@ export const retrieveEntitlementsV2 = async () => {
     datasetId: grant.datasetId,
     start: grant.iat ? new Date(grant.iat * 1000).toISOString() : undefined,
     end: grant.exp ? new Date(grant.exp * 1000).toISOString() : undefined,
+    source: grant.source,
+    by: grant.by,
   }));
 
   return { entitlements };

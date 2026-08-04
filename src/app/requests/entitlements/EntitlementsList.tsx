@@ -5,14 +5,19 @@
 import List from "@/components/List";
 import ListItem from "@/components/List/ListItem";
 import EntitlementCard from "./EntitlementCard";
-import { createEntitlementCardItems } from "./entitlementCardItems";
+import {
+  createEntitlementCardItems,
+  formatEntitlementSourceLabel,
+} from "./entitlementCardItems";
 import { DatasetEntitlement } from "@/app/api/access-management/additional-types";
+import { useTranslations } from "next-intl";
 
 type EntitlementsListProps = {
   entitlements: DatasetEntitlement[];
 };
 
 function EntitlementsList({ entitlements }: Readonly<EntitlementsListProps>) {
+  const t = useTranslations("requests.entitlements");
   return (
     <List>
       {entitlements.map(
@@ -28,6 +33,11 @@ function EntitlementsList({ entitlements }: Readonly<EntitlementsListProps>) {
                   entitlement.dataset,
                   entitlement.start,
                   entitlement.end
+                )}
+                sourceLabel={formatEntitlementSourceLabel(
+                  entitlement.source,
+                  entitlement.by,
+                  { grantedBy: t("grantedBy"), source: t("source") }
                 )}
               />
             </ListItem>

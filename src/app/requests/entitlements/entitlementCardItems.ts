@@ -28,3 +28,23 @@ export function createEntitlementCardItems(
     },
   ];
 }
+
+export type EntitlementLabelMessages = {
+  grantedBy: string;
+  source: string;
+};
+
+export function formatEntitlementSourceLabel(
+  source?: string,
+  by?: string,
+  messages?: EntitlementLabelMessages
+): string | undefined {
+  if (!source && !by) return undefined;
+  const grantedByLabel = messages?.grantedBy ?? "Granted by";
+  const sourceLabel = messages?.source ?? "Source";
+  const parts = [
+    by ? `${grantedByLabel}: ${by}` : null,
+    source ? `${sourceLabel}: ${source}` : null,
+  ].filter(Boolean) as string[];
+  return parts.join(" | ");
+}

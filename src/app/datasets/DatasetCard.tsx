@@ -30,12 +30,14 @@ type DatasetCardProps = {
   dataset: SearchedDataset;
   cardItems: CardItem[];
   displayBasketButton?: boolean;
+  sourceLabel?: string;
 };
 
 function DatasetCard({
   dataset,
   cardItems,
   displayBasketButton = true,
+  sourceLabel: sourceLabelProp,
 }: Readonly<DatasetCardProps>) {
   const t = useTranslations("basket");
   const tDetail = useTranslations("datasets.detail");
@@ -183,6 +185,7 @@ function DatasetCard({
       isExternal={isExternal}
       externalLabel={externalLabel}
       entityLabel={entityLabel}
+      sourceLabel={sourceLabelProp}
     />
   );
 }

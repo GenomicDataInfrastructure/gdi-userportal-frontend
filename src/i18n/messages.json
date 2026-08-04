@@ -979,6 +979,14 @@
     "en": "You don't have any entitlement yet.\nWait for your application(s) to be approved, or submit a new application.",
     "fr": "Vous n'avez encore aucune autorisation.\nAttendez l'approbation de votre ou vos demande(s), ou soumettez une nouvelle demande."
   },
+  "requests.entitlements.grantedBy": {
+    "en": "Granted by",
+    "fr": "Accordé par"
+  },
+  "requests.entitlements.source": {
+    "en": "Source",
+    "fr": "Source"
+  },
   "application.title": {
     "en": "Application {id}",
     "fr": "Demande {id}"

@@ -15,25 +15,44 @@ export interface NotificationsPoller {
   dispose: () => void;
 }
 
+/**
+ * Uses a self-rescheduling `setTimeout` rather than `setInterval`: the next
+ * tick is only scheduled once `refresh` settles, so a slow or failing
+ * refresh can never overlap with another one already in flight.
+ */
 export function createNotificationsPoller({
   refresh,
   intervalMs = DEFAULT_NOTIFICATIONS_POLL_INTERVAL_MS,
 }: NotificationsPollerOptions): NotificationsPoller {
-  let timer: ReturnType<typeof setInterval> | null = null;
+  let timer: ReturnType<typeof setTimeout> | null = null;
   let disposed = false;
+  let stopped = true;
+
+  const scheduleNext = () => {
+    if (disposed || stopped) return;
+    timer = setTimeout(runTick, intervalMs);
+  };
+
+  const runTick = () => {
+    timer = null;
+    Promise.resolve()
+      .then(() => refresh())
+      .catch(() => {})
+      .finally(scheduleNext);
+  };
 
   const stop = () => {
+    stopped = true;
     if (timer !== null) {
-      clearInterval(timer);
+      clearTimeout(timer);
       timer = null;
     }
   };
 
   const start = () => {
-    if (disposed || timer !== null) return;
-    timer = setInterval(() => {
-      void refresh();
-    }, intervalMs);
+    if (disposed || !stopped) return;
+    stopped = false;
+    scheduleNext();
   };
 
   const dispose = () => {

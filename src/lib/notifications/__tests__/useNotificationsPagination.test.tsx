@@ -177,9 +177,9 @@ describe("useNotificationsPagination", () => {
       latestState?.applyRemove(["extra-1"]);
     });
 
-    expect(
-      latestState?.notifications.some((n) => n.id === "extra-1")
-    ).toBe(false);
+    expect(latestState?.notifications.some((n) => n.id === "extra-1")).toBe(
+      false
+    );
   });
 
   test("de-duplicates ids shared between the base list and loaded-more pages", async () => {

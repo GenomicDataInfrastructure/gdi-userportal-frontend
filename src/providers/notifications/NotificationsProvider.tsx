@@ -31,6 +31,14 @@ interface NotificationsContextState {
   unreadCount: number;
   isLoading: boolean;
   error: boolean;
+  /**
+   * Bumped whenever `notifications` is replaced wholesale by a fresh server
+   * snapshot (a `refresh()` or a session change) rather than patched locally
+   * (`markRead`/`remove`). Consumers that layer client-side pagination on
+   * top of `notifications` (see `useNotificationsPagination`) key their
+   * reset-on-new-snapshot logic off this value.
+   */
+  snapshotVersion: number;
   refresh: (options?: RefreshOptions) => Promise<void>;
   markRead: (ids: string[]) => Promise<void>;
   remove: (ids: string[]) => Promise<void>;
@@ -51,6 +59,7 @@ export const NotificationsProvider = ({
   const [unreadCount, setUnreadCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [snapshotVersion, setSnapshotVersion] = useState(0);
 
   const refresh = useCallback(async (options?: RefreshOptions) => {
     const silent = options?.silent ?? false;
@@ -60,6 +69,7 @@ export const NotificationsProvider = ({
       setEnabled(snapshot.enabled);
       setNotifications(snapshot.list.items);
       setUnreadCount(snapshot.unreadCount);
+      setSnapshotVersion((version) => version + 1);
       if (!silent) setError(false);
     } catch (err) {
       console.error(err);
@@ -78,6 +88,7 @@ export const NotificationsProvider = ({
       setUnreadCount(0);
       setError(false);
       setIsLoading(false);
+      setSnapshotVersion((version) => version + 1);
       return;
     }
 
@@ -103,10 +114,7 @@ export const NotificationsProvider = ({
     document.addEventListener("visibilitychange", syncPollingToVisibility);
 
     return () => {
-      document.removeEventListener(
-        "visibilitychange",
-        syncPollingToVisibility
-      );
+      document.removeEventListener("visibilitychange", syncPollingToVisibility);
       poller.dispose();
     };
   }, [sessionStatus, enabled, refresh]);
@@ -151,6 +159,7 @@ export const NotificationsProvider = ({
         unreadCount,
         isLoading,
         error,
+        snapshotVersion,
         refresh,
         markRead,
         remove,

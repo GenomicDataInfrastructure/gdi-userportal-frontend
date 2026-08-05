@@ -19,6 +19,8 @@ interface UseAutoMarkAsViewedOptions {
  * re-render (only on unmount): a poll tick changes the `notifications`
  * array reference, and cancelling in-flight timers for ids already
  * recorded in `scheduledIdsRef` would mean they never get rescheduled.
+ * `scheduledIdsRef` entries are cleared once `markRead` settles (success
+ * or failure) so an id that becomes unread again later can be rescheduled.
  */
 export function useAutoMarkAsViewed(
   notifications: AppNotification[],
@@ -44,7 +46,7 @@ export function useAutoMarkAsViewed(
     idsToMark.forEach((id) => scheduledIdsRef.current.add(id));
     const timeoutId = setTimeout(() => {
       timeoutsRef.current.delete(timeoutId);
-      markRead(idsToMark).catch(() => {
+      markRead(idsToMark).finally(() => {
         idsToMark.forEach((id) => scheduledIdsRef.current.delete(id));
       });
     }, delayMs);

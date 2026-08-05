@@ -17,8 +17,15 @@ const LOAD_MORE_SCROLL_THRESHOLD_PX = 32;
 
 const NotificationList = () => {
   const t = useTranslations();
-  const { notifications, isLoading, error, refresh, markRead, remove } =
-    useNotifications();
+  const {
+    notifications,
+    isLoading,
+    error,
+    refresh,
+    markRead,
+    remove,
+    snapshotVersion,
+  } = useNotifications();
 
   const {
     notifications: allNotifications,
@@ -28,7 +35,7 @@ const NotificationList = () => {
     loadMore,
     applyMarkRead,
     applyRemove,
-  } = useNotificationsPagination(notifications);
+  } = useNotificationsPagination(notifications, snapshotVersion);
 
   const handleMarkRead = useCallback(
     async (ids: string[]) => {

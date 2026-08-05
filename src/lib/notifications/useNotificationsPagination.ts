@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { listNotificationsApi } from "@/app/api/notifications";
 import {
   AppNotification,
@@ -24,9 +24,15 @@ interface UseNotificationsPaginationResult {
  * shared provider's initial snapshot). Guards `loadMore` with refs, not just
  * state, since callers may invoke it repeatedly in quick succession (scroll
  * events) before a state update has re-rendered.
+ *
+ * `snapshotVersion` should change whenever `baseNotifications` is replaced
+ * by a fresh server snapshot (a refresh or a session change) rather than
+ * patched locally, so accumulated pages, `hasMore`, and errors are reset
+ * instead of going stale or pointing past the end of the new snapshot.
  */
 export function useNotificationsPagination(
-  baseNotifications: AppNotification[]
+  baseNotifications: AppNotification[],
+  snapshotVersion?: number
 ): UseNotificationsPaginationResult {
   const [extraNotifications, setExtraNotifications] = useState<
     AppNotification[]
@@ -41,6 +47,21 @@ export function useNotificationsPagination(
   const hasMoreRef = useRef(hasMore);
   hasMoreRef.current = hasMore;
   const isLoadingMoreRef = useRef(false);
+  const previousSnapshotVersionRef = useRef(snapshotVersion);
+
+  useEffect(() => {
+    if (
+      snapshotVersion === undefined ||
+      previousSnapshotVersionRef.current === snapshotVersion
+    ) {
+      return;
+    }
+    previousSnapshotVersionRef.current = snapshotVersion;
+    setExtraNotifications([]);
+    setPage(1);
+    setHasMore(true);
+    setLoadMoreError(false);
+  }, [snapshotVersion]);
 
   const loadMore = useCallback(async () => {
     if (isLoadingMoreRef.current || !hasMoreRef.current) return;

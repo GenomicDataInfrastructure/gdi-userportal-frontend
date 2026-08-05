@@ -230,7 +230,11 @@ describe("NotificationsProvider", () => {
     afterEach(() => {
       jest.useRealTimers();
       if (originalVisibilityState) {
-        Object.defineProperty(document, "visibilityState", originalVisibilityState);
+        Object.defineProperty(
+          document,
+          "visibilityState",
+          originalVisibilityState
+        );
       }
     });
 

@@ -20,8 +20,15 @@ type NotificationsPageProps = {
 function NotificationsPage({ searchParams }: NotificationsPageProps) {
   const t = useTranslations();
   const _searchParams = use(searchParams);
-  const { notifications, isLoading, error, refresh, markRead, remove } =
-    useNotifications();
+  const {
+    notifications,
+    isLoading,
+    error,
+    refresh,
+    markRead,
+    remove,
+    snapshotVersion,
+  } = useNotifications();
 
   const {
     notifications: allNotifications,
@@ -31,7 +38,7 @@ function NotificationsPage({ searchParams }: NotificationsPageProps) {
     loadMore,
     applyMarkRead,
     applyRemove,
-  } = useNotificationsPagination(notifications);
+  } = useNotificationsPagination(notifications, snapshotVersion);
 
   const handleMarkRead = useCallback(
     async (ids: string[]) => {

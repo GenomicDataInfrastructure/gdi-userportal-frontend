@@ -131,9 +131,7 @@ describe("NotificationList", () => {
     expect(retryButton).toBeTruthy();
 
     act(() => {
-      retryButton?.dispatchEvent(
-        new MouseEvent("click", { bubbles: true })
-      );
+      retryButton?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     expect(refresh).toHaveBeenCalled();
   });
@@ -144,7 +142,9 @@ describe("NotificationList", () => {
   });
 
   test("renders the notification list", () => {
-    render({ notifications: [notification("1", false), notification("2", true)] });
+    render({
+      notifications: [notification("1", false), notification("2", true)],
+    });
     expect(container.textContent).toContain("title-1");
     expect(container.textContent).toContain("title-2");
   });

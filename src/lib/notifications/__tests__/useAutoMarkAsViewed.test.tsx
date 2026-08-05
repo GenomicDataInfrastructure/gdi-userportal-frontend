@@ -12,10 +12,7 @@ import { jest } from "@jest/globals";
 import type { AppNotification } from "@/lib/notifications/types";
 import { useAutoMarkAsViewed } from "../useAutoMarkAsViewed";
 
-const notification = (
-  id: string,
-  read: boolean
-): AppNotification => ({
+const notification = (id: string, read: boolean): AppNotification => ({
   id,
   title: "title",
   message: "message",

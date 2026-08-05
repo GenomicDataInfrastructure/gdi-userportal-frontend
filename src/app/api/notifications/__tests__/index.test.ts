@@ -48,6 +48,13 @@ describe("notifications server actions", () => {
     expect(result).toEqual({ items: [], total: 0 });
   });
 
+  test("listNotificationsApi propagates provider errors", async () => {
+    list.mockRejectedValueOnce(new Error("down"));
+    const { listNotificationsApi } = await import("@/app/api/notifications");
+
+    await expect(listNotificationsApi({ page: 2 })).rejects.toThrow("down");
+  });
+
   test("markNotificationsReadApi forwards ids and headers", async () => {
     const { markNotificationsReadApi } =
       await import("@/app/api/notifications");
@@ -121,6 +128,15 @@ describe("notifications server actions", () => {
       const snapshot = await getNotificationsSnapshotApi();
 
       expect(snapshot.unreadCount).toBe(2);
+    });
+
+    test("propagates a list failure without calling unreadCount", async () => {
+      list.mockRejectedValueOnce(new Error("down"));
+      const { getNotificationsSnapshotApi } =
+        await import("@/app/api/notifications");
+
+      await expect(getNotificationsSnapshotApi()).rejects.toThrow("down");
+      expect(unreadCount).not.toHaveBeenCalled();
     });
   });
 });

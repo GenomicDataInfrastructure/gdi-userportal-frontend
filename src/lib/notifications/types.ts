@@ -31,3 +31,5 @@ export interface ListNotificationsResult {
   items: AppNotification[];
   total?: number;
 }
+
+export const NOTIFICATIONS_PAGE_SIZE = 20;

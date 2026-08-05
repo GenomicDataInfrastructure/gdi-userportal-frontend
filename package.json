@@ -102,6 +102,7 @@
     "eslint-config-next": "16.2.12",
     "eslint-config-prettier": "^10.0.0",
     "jest": "^30.0.4",
+    "jest-environment-jsdom": "^30.4.1",
     "openapi-zod-client": "^1.18.2",
     "postcss": "^8.5.18",
     "prettier": "^3.4.2",

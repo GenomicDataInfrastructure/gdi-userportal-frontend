@@ -71,14 +71,12 @@ export default function GVariantsTable({
     [datasetActions]
   );
 
-  const rowsForSummary = useMemo(
-    () => GVariantsTableUtils.getRowsForSummary(sortedResults),
-    [sortedResults]
-  );
-
   const summaryData = useMemo(
-    () => GVariantsTableUtils.buildSummaryData(rowsForSummary),
-    [rowsForSummary]
+    () =>
+      GVariantsTableUtils.buildSummaryData(
+        GVariantsTableUtils.getEffectiveTotals(groupedByBeacon)
+      ),
+    [groupedByBeacon]
   );
 
   const variantGroups = useMemo(
@@ -292,9 +290,9 @@ export default function GVariantsTable({
                                 NOT_AVAILABLE;
                               const totals =
                                 datasetGroup.totalVariant ??
-                                (datasetGroup.variants.length === 1
-                                  ? datasetGroup.variants[0]
-                                  : undefined);
+                                GVariantsTableUtils.aggregateVariants(
+                                  datasetGroup.variants
+                                );
                               const rowsToRender =
                                 datasetGroup.variants.length > 0
                                   ? datasetGroup.variants

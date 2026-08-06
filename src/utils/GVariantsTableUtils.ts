@@ -40,11 +40,6 @@ export class GVariantsTableUtils {
     return value?.trim() || GVariantsTableUtils.NOT_AVAILABLE;
   }
 
-  static isTotalPopulation(population?: string): boolean {
-    const p = population?.trim().toLowerCase();
-    return p === "total" || p === "m" || p === "f";
-  }
-
   static getBeaconCountryLabel(beaconId: string): string | undefined {
     const parts = beaconId
       .toUpperCase()
@@ -163,14 +158,6 @@ export class GVariantsTableUtils {
         sensitivity: "base",
         numeric: true,
       })
-    );
-  }
-
-  static getRowsForSummary(
-    sortedResults: GVariantsSearchResponse[]
-  ): GVariantsSearchResponse[] {
-    return sortedResults.filter(
-      (variant) => !GVariantsTableUtils.isTotalPopulation(variant.population)
     );
   }
 

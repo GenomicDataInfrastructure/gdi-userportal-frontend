@@ -281,26 +281,6 @@ describe("GVariantsTableUtils", () => {
     });
   });
 
-  describe("getRowsForSummary", () => {
-    test("excludes total rows from summary rows", () => {
-      const rows = GVariantsTableUtils.getRowsForSummary([
-        variant({ population: "total" }),
-        variant({ population: "FI_F" }),
-      ]);
-
-      expect(rows).toHaveLength(1);
-      expect(rows[0].population).toBe("FI_F");
-    });
-
-    test("returns an empty list when only totals exist", () => {
-      const rows = GVariantsTableUtils.getRowsForSummary([
-        variant({ population: "total" }),
-      ]);
-
-      expect(rows).toEqual([]);
-    });
-  });
-
   describe("buildVariantLabel", () => {
     test("builds full label using one-based display position", () => {
       expect(

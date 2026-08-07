@@ -74,7 +74,7 @@ function truncateText(value, limit = 400) {
 }
 
 async function requestHarvest(
-  { apiUrl, sourceUrl, secret, mode },
+  { apiUrl, sourceUrl, sourcePath, secret, mode },
   { fetchImpl = undiciFetch, timeoutMs = HARVEST_REQUEST_TIMEOUT_MS } = {}
 ) {
   const timeoutController = new AbortController();
@@ -89,7 +89,8 @@ async function requestHarvest(
         "x-harvest-secret": secret,
       },
       body: JSON.stringify({
-        url: sourceUrl,
+        ...(sourceUrl ? { url: sourceUrl } : {}),
+        ...(sourcePath ? { path: sourcePath } : {}),
         ...(mode ? { mode } : {}),
       }),
       signal: timeoutController.signal,
@@ -99,7 +100,9 @@ async function requestHarvest(
     throw new Error(
       [
         `Failed to call harvest API at ${apiUrl}`,
-        `requested catalogue URL: ${sourceUrl}`,
+        sourcePath
+          ? `requested catalogue file: ${sourcePath}`
+          : `requested catalogue URL: ${sourceUrl}`,
         `details: ${formatErrorDetails(error)}`,
       ].join("\n"),
       { cause: error }
@@ -116,7 +119,9 @@ async function requestHarvest(
       [
         `Failed to read harvest API response from ${apiUrl}`,
         `status: ${response.status} ${response.statusText}`,
-        `requested catalogue URL: ${sourceUrl}`,
+        sourcePath
+          ? `requested catalogue file: ${sourcePath}`
+          : `requested catalogue URL: ${sourceUrl}`,
         `details: ${formatErrorDetails(error)}`,
       ].join("\n"),
       { cause: error }
@@ -131,7 +136,9 @@ async function requestHarvest(
       [
         `Harvest API at ${apiUrl} returned invalid JSON`,
         `status: ${response.status} ${response.statusText}`,
-        `requested catalogue URL: ${sourceUrl}`,
+        sourcePath
+          ? `requested catalogue file: ${sourcePath}`
+          : `requested catalogue URL: ${sourceUrl}`,
         `body: ${truncateText(responseText) || "<empty>"}`,
         `details: ${formatErrorDetails(error)}`,
       ].join("\n"),
@@ -149,7 +156,9 @@ async function requestHarvest(
       [
         `Harvest trigger failed via ${apiUrl}`,
         `status: ${response.status} ${response.statusText}`,
-        `requested catalogue URL: ${sourceUrl}`,
+        sourcePath
+          ? `requested catalogue file: ${sourcePath}`
+          : `requested catalogue URL: ${sourceUrl}`,
         `error: ${responseError || response.statusText}`,
       ].join("\n")
     );

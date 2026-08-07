@@ -5,12 +5,15 @@
 const { buildHarvestApiUrl, requestHarvest } = require("./harvest-http");
 
 function parseArgs(argv) {
-  const args = { url: "", mode: "" };
+  const args = { url: "", file: "", mode: "" };
 
   for (let i = 0; i < argv.length; i += 1) {
     const token = argv[i];
     if (token === "--url") {
       args.url = argv[i + 1] || "";
+      i += 1;
+    } else if (token === "--file") {
+      args.file = argv[i + 1] || "";
       i += 1;
     } else if (token === "--secret") {
       args.secret = argv[i + 1] || "";
@@ -34,6 +37,7 @@ function printUsage() {
       "Usage:",
       "  npm run harvest:dcat -- --url <catalogue-rdf-url>",
       "  npm run harvest:dcat -- --url <catalogue-rdf-url> --secret <shared-secret>",
+      "  npm run harvest:dcat -- --file <catalogue-rdf-file> --secret <shared-secret>",
       "  npm run harvest:dcat -- --url <catalogue-rdf-url> --append",
       "",
       "Options:",
@@ -42,7 +46,7 @@ function printUsage() {
       "",
       "Example:",
       "  npm run harvest:dcat -- \\",
-      "    --url https://letzdata.public.lu/content/dam/dga/ctie/c/catalogue.rdf",
+      "    --file no-data-dict.rdf",
     ].join("\n")
   );
 }
@@ -59,7 +63,7 @@ async function main() {
     args.mode || process.env.HARVEST_MODE || "replace"
   ).trim();
 
-  if (args.help || !args.url) {
+  if (args.help || (!args.url && !args.file)) {
     printUsage();
     process.exit(args.help ? 0 : 1);
   }
@@ -77,13 +81,13 @@ async function main() {
   try {
     const count = await requestHarvest({
       apiUrl: endpoint,
-      sourceUrl: args.url,
+      ...(args.file ? { sourcePath: args.file } : { sourceUrl: args.url }),
       secret,
       mode,
     });
 
     console.log(
-      `Harvest completed: ${count} datasets indexed from ${args.url}`
+      `Harvest completed: ${count} datasets indexed from ${args.file || args.url}`
     );
   } catch (error) {
     throw new Error(
@@ -95,7 +99,13 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error(error instanceof Error ? error.message : String(error));
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((error) => {
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exit(1);
+  });
+}
+
+module.exports = {
+  parseArgs,
+};

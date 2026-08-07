@@ -6,9 +6,12 @@ import { jest } from "@jest/globals";
 
 const mockHarvestLocalIndexFromDcatUrlApi =
   jest.fn<(url: string, options?: { mode?: string }) => Promise<number>>();
+const mockHarvestLocalIndexFromDcatFileApi =
+  jest.fn<(path: string, options?: { mode?: string }) => Promise<number>>();
 
 jest.mock("@/app/api/discovery/local-index", () => ({
   harvestLocalIndexFromDcatUrlApi: mockHarvestLocalIndexFromDcatUrlApi,
+  harvestLocalIndexFromDcatFileApi: mockHarvestLocalIndexFromDcatFileApi,
 }));
 
 import { POST } from "@/app/api/discovery/harvest/route";
@@ -56,7 +59,7 @@ describe("POST /api/discovery/harvest", () => {
     await expect(response.json()).resolves.toEqual({ error: "Unauthorized" });
   });
 
-  test("returns 400 when url is missing", async () => {
+  test("returns 400 when both url and path are missing", async () => {
     process.env.HARVEST_INTERNAL_SECRET = "top-secret";
 
     const response = await POST(
@@ -71,8 +74,57 @@ describe("POST /api/discovery/harvest", () => {
 
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toEqual({
-      error: 'Missing required field "url"',
+      error: 'Missing required field "url" or "path"',
     });
+  });
+
+  test("returns 200 with count when harvesting from a file path", async () => {
+    process.env.HARVEST_INTERNAL_SECRET = "top-secret";
+    mockHarvestLocalIndexFromDcatFileApi.mockResolvedValueOnce(7);
+
+    const response = await POST(
+      new Request("http://localhost/api/discovery/harvest", {
+        method: "POST",
+        headers: {
+          "x-harvest-secret": "top-secret",
+        },
+        body: JSON.stringify({ path: "no-data-dict.rdf" }),
+      })
+    );
+
+    expect(mockHarvestLocalIndexFromDcatFileApi).toHaveBeenCalledWith(
+      "no-data-dict.rdf",
+      { mode: "replace" }
+    );
+    expect(mockHarvestLocalIndexFromDcatUrlApi).not.toHaveBeenCalled();
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toEqual({ count: 7 });
+  });
+
+  test("prefers the file path over the url when both are provided", async () => {
+    process.env.HARVEST_INTERNAL_SECRET = "top-secret";
+    mockHarvestLocalIndexFromDcatFileApi.mockResolvedValueOnce(2);
+
+    const response = await POST(
+      new Request("http://localhost/api/discovery/harvest", {
+        method: "POST",
+        headers: {
+          "x-harvest-secret": "top-secret",
+        },
+        body: JSON.stringify({
+          url: "https://example.org/catalogue.rdf",
+          path: "no-data-dict.rdf",
+        }),
+      })
+    );
+
+    expect(mockHarvestLocalIndexFromDcatFileApi).toHaveBeenCalledWith(
+      "no-data-dict.rdf",
+      { mode: "replace" }
+    );
+    expect(mockHarvestLocalIndexFromDcatUrlApi).not.toHaveBeenCalled();
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toEqual({ count: 2 });
   });
 
   test("returns 200 with count when harvest succeeds", async () => {

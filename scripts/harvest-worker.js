@@ -15,6 +15,9 @@ function parseArgs(argv) {
     if (token === "--url") {
       args.url = argv[i + 1] || "";
       i += 1;
+    } else if (token === "--file") {
+      args.file = argv[i + 1] || "";
+      i += 1;
     } else if (token === "--schedule") {
       args.schedule = argv[i + 1] || "";
       i += 1;
@@ -41,10 +44,11 @@ function printUsage() {
     [
       "Usage:",
       "  npm run harvest:worker",
-      "  npm run harvest:worker:once -- --url <catalogue-rdf-url> --secret <shared-secret>",
+      "  npm run harvest:worker:once -- --file <catalogue-rdf-file> --secret <shared-secret>",
       "",
       "Environment variables:",
       "  HARVEST_SOURCE_URL           Source DCAT catalogue URL",
+      "  HARVEST_SOURCE_FILE          Source DCAT catalogue file path inside the repo",
       "  HARVEST_BASE_URL             Base URL for the frontend app (default: http://gdi-userportal-frontend:3000)",
       "  HARVEST_INTERNAL_SECRET      Shared secret sent as x-harvest-secret",
       "  HARVEST_SCHEDULE             Cron expression for recurring runs",
@@ -65,6 +69,7 @@ function resolveWorkerConfig(argv = process.argv.slice(2), env = process.env) {
 
   const once = args.once;
   const sourceUrl = String(args.url || env.HARVEST_SOURCE_URL || "").trim();
+  const sourcePath = String(args.file || env.HARVEST_SOURCE_FILE || "").trim();
   const baseUrl = String(
     env.HARVEST_BASE_URL || DEFAULT_HARVEST_BASE_URL
   ).trim();
@@ -75,9 +80,11 @@ function resolveWorkerConfig(argv = process.argv.slice(2), env = process.env) {
   const mode = String(args.mode || env.HARVEST_MODE || "replace").trim();
 
   if (!sourceUrl) {
-    throw new Error(
-      "Missing harvest source URL. Provide HARVEST_SOURCE_URL or pass --url."
-    );
+    if (!sourcePath) {
+      throw new Error(
+        "Missing harvest source. Provide HARVEST_SOURCE_URL, HARVEST_SOURCE_FILE, --url, or --file."
+      );
+    }
   }
 
   if (!secret) {
@@ -105,6 +112,7 @@ function resolveWorkerConfig(argv = process.argv.slice(2), env = process.env) {
   return {
     once,
     sourceUrl,
+    sourcePath,
     apiUrl: buildHarvestApiUrl(baseUrl),
     secret,
     schedule,
@@ -132,13 +140,14 @@ function createHarvestWorker(config, dependencies = {}) {
 
     runInProgress = true;
     const startedAt = Date.now();
-    logger.log(`Starting harvest for ${config.sourceUrl}`);
+    const sourceLabel = config.sourcePath || config.sourceUrl;
+    logger.log(`Starting harvest for ${sourceLabel}`);
 
     try {
       const count = await triggerHarvest(config, { fetchImpl });
       const durationMs = Date.now() - startedAt;
       logger.log(
-        `Harvest completed for ${config.sourceUrl}: ${count} datasets indexed in ${durationMs}ms`
+        `Harvest completed for ${sourceLabel}: ${count} datasets indexed in ${durationMs}ms`
       );
       return count;
     } finally {
@@ -153,7 +162,7 @@ function createHarvestWorker(config, dependencies = {}) {
     }
 
     logger.log(
-      `Scheduling harvest for ${config.sourceUrl} with cron expression "${config.schedule}"`
+      `Scheduling harvest for ${config.sourcePath || config.sourceUrl} with cron expression "${config.schedule}"`
     );
 
     const task = cronModule.schedule(config.schedule, () => {

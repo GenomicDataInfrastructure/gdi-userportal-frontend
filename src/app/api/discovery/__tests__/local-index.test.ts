@@ -265,6 +265,20 @@ describe("local-index APIs", () => {
     );
   });
 
+  test("harvestLocalIndexFromDcatUrlApi skips clearing the index in append mode", async () => {
+    mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
+    mockHarvestFromUrl.mockResolvedValueOnce([
+      { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
+    ]);
+
+    await harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf", {
+      mode: "append",
+    });
+
+    expect(mockClearLocalDiscoveryDatasets).not.toHaveBeenCalled();
+    expect(mockUpsertLocalDiscoveryDatasets).toHaveBeenCalled();
+  });
+
   test("harvestLocalIndexFromDcatUrlApi wraps indexing failures", async () => {
     mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
     mockHarvestFromUrl.mockResolvedValueOnce([
@@ -324,5 +338,15 @@ describe("local-index APIs", () => {
     );
     expect(mockClearLocalDiscoveryDatasets).not.toHaveBeenCalled();
     expect(mockUpsertLocalDiscoveryDatasets).not.toHaveBeenCalled();
+  });
+
+  test("harvestLocalIndexFromDcatFileApi wraps non-Error harvest failures", async () => {
+    mockHarvestFromFilePath.mockRejectedValueOnce("disk offline");
+
+    await expect(
+      harvestLocalIndexFromDcatFileApi("missing.rdf")
+    ).rejects.toThrow(
+      "Failed to harvest datasets from file missing.rdf: disk offline"
+    );
   });
 });

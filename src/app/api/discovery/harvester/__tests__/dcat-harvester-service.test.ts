@@ -314,6 +314,17 @@ describe("DcatHarvesterService", () => {
     ]);
   });
 
+  test("infers the content type from sourceRef when contentType is not provided", async () => {
+    const service = new DcatHarvesterService();
+
+    const datasets = await service.parseDatasetsFromRdf(
+      canonicalDiscoveryRdf,
+      "https://example.org/catalogue.rdf"
+    );
+
+    expect(datasets[0]?.id).toBe("dataset-1");
+  });
+
   test("stores foaf:page documentation values as-is regardless of scheme", async () => {
     const service = new DcatHarvesterService();
     const rdf = `

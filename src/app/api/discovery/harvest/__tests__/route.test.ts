@@ -78,6 +78,25 @@ describe("POST /api/discovery/harvest", () => {
     });
   });
 
+  test("returns 400 when the JSON body is null", async () => {
+    process.env.HARVEST_INTERNAL_SECRET = "top-secret";
+
+    const response = await POST(
+      new Request("http://localhost/api/discovery/harvest", {
+        method: "POST",
+        headers: {
+          "x-harvest-secret": "top-secret",
+        },
+        body: JSON.stringify(null),
+      })
+    );
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toEqual({
+      error: 'Missing required field "url" or "path"',
+    });
+  });
+
   test("returns 200 with count when harvesting from a file path", async () => {
     process.env.HARVEST_INTERNAL_SECRET = "top-secret";
     mockHarvestLocalIndexFromDcatFileApi.mockResolvedValueOnce(7);

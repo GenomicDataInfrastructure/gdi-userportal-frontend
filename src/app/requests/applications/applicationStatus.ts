@@ -158,7 +158,7 @@ export function getChangeRequestDate(
     })
     .filter((date): date is string => Boolean(date));
 
-  return dates.sort().pop();
+  return dates.sort((a, b) => a.localeCompare(b)).pop();
 }
 
 export function getApplicationStatusFilterValue(

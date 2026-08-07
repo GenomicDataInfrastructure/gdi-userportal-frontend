@@ -24,6 +24,8 @@ const mockHarvestFromUrl =
       options?: { headers?: Record<string, string> }
     ) => Promise<LocalDiscoveryDataset[]>
   >();
+const mockHarvestFromFilePath =
+  jest.fn<(filePath: string) => Promise<LocalDiscoveryDataset[]>>();
 const mockGetAuthorizationHeaderIfConfigured =
   jest.fn<() => Promise<Record<string, string>>>();
 
@@ -45,6 +47,7 @@ jest.mock("@/app/api/discovery/providers/dds-discovery-provider", () => ({
 jest.mock("@/app/api/discovery/harvester/dcat-harvester-service", () => ({
   dcatHarvesterService: {
     harvestFromUrl: mockHarvestFromUrl,
+    harvestFromFilePath: mockHarvestFromFilePath,
   },
 }));
 
@@ -55,6 +58,7 @@ jest.mock("@/app/api/discovery/harvester/oidc-auth.service", () => ({
 }));
 
 import {
+  harvestLocalIndexFromDcatFileApi,
   harvestLocalIndexFromDcatUrlApi,
   seedLocalIndexFromDdsApi,
   upsertLocalIndexDatasetsApi,
@@ -261,6 +265,20 @@ describe("local-index APIs", () => {
     );
   });
 
+  test("harvestLocalIndexFromDcatUrlApi skips clearing the index in append mode", async () => {
+    mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
+    mockHarvestFromUrl.mockResolvedValueOnce([
+      { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
+    ]);
+
+    await harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf", {
+      mode: "append",
+    });
+
+    expect(mockClearLocalDiscoveryDatasets).not.toHaveBeenCalled();
+    expect(mockUpsertLocalDiscoveryDatasets).toHaveBeenCalled();
+  });
+
   test("harvestLocalIndexFromDcatUrlApi wraps indexing failures", async () => {
     mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
     mockHarvestFromUrl.mockResolvedValueOnce([
@@ -275,6 +293,60 @@ describe("local-index APIs", () => {
       harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf")
     ).rejects.toThrow(
       "Failed to index 2 harvested datasets from https://example.org/catalogue.rdf: bulk failed"
+    );
+  });
+
+  test("harvestLocalIndexFromDcatFileApi harvests and upserts datasets, clearing first in replace mode", async () => {
+    const harvested = [
+      { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
+    ];
+    mockHarvestFromFilePath.mockResolvedValueOnce(harvested);
+
+    const count = await harvestLocalIndexFromDcatFileApi("no-data-dict.rdf");
+
+    expect(mockHarvestFromFilePath).toHaveBeenCalledWith("no-data-dict.rdf");
+    expect(mockClearLocalDiscoveryDatasets).toHaveBeenCalled();
+    expect(
+      mockClearLocalDiscoveryDatasets.mock.invocationCallOrder[0]
+    ).toBeLessThan(
+      mockUpsertLocalDiscoveryDatasets.mock.invocationCallOrder[0]
+    );
+    expect(mockUpsertLocalDiscoveryDatasets).toHaveBeenCalledWith(harvested);
+    expect(count).toBe(1);
+  });
+
+  test("harvestLocalIndexFromDcatFileApi skips clearing the index in append mode", async () => {
+    mockHarvestFromFilePath.mockResolvedValueOnce([
+      { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
+    ]);
+
+    await harvestLocalIndexFromDcatFileApi("no-data-dict.rdf", {
+      mode: "append",
+    });
+
+    expect(mockClearLocalDiscoveryDatasets).not.toHaveBeenCalled();
+    expect(mockUpsertLocalDiscoveryDatasets).toHaveBeenCalled();
+  });
+
+  test("harvestLocalIndexFromDcatFileApi wraps harvest failures", async () => {
+    mockHarvestFromFilePath.mockRejectedValueOnce(new Error("read failed"));
+
+    await expect(
+      harvestLocalIndexFromDcatFileApi("missing.rdf")
+    ).rejects.toThrow(
+      "Failed to harvest datasets from file missing.rdf: read failed"
+    );
+    expect(mockClearLocalDiscoveryDatasets).not.toHaveBeenCalled();
+    expect(mockUpsertLocalDiscoveryDatasets).not.toHaveBeenCalled();
+  });
+
+  test("harvestLocalIndexFromDcatFileApi wraps non-Error harvest failures", async () => {
+    mockHarvestFromFilePath.mockRejectedValueOnce("disk offline");
+
+    await expect(
+      harvestLocalIndexFromDcatFileApi("missing.rdf")
+    ).rejects.toThrow(
+      "Failed to harvest datasets from file missing.rdf: disk offline"
     );
   });
 });

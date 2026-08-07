@@ -96,6 +96,9 @@ The `harvest:dcat` command calls the server route at
 CLI environment before running it. It uses `http://localhost:3000` by default,
 or `HARVEST_BASE_URL` if you need to point it somewhere else.
 
+Do not put harvest settings in `public/properties.json`. Set them as direct
+environment variables on the app/worker process instead.
+
 If the DCAT URL is protected by OIDC client-credentials, set:
 
 ```bash
@@ -135,6 +138,14 @@ For a single manual run through the same internal flow:
 ```bash
 npm run harvest:dcat -- \
   --url https://example.org/catalogue.rdf \
+  --secret <shared-secret>
+```
+
+To harvest the repo fixture instead, use:
+
+```bash
+npm run harvest:dcat -- \
+  --file no-data-dict.rdf \
   --secret <shared-secret>
 ```
 

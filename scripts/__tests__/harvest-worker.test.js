@@ -15,13 +15,13 @@ const HARVEST_ENDPOINT = buildHarvestApiUrl(
 describe("harvest-worker", () => {
   test("resolveWorkerConfig supports one-shot mode without a schedule", () => {
     const config = resolveWorkerConfig(["--once"], {
-      HARVEST_SOURCE_URL: "https://example.org/catalogue.rdf",
+      HARVEST_SOURCE_FILE: "no-data-dict.rdf",
       HARVEST_INTERNAL_SECRET: "top-secret",
     });
 
     expect(config).toMatchObject({
       once: true,
-      sourceUrl: "https://example.org/catalogue.rdf",
+      sourcePath: "no-data-dict.rdf",
       apiUrl: HARVEST_ENDPOINT,
       secret: "top-secret",
       mode: "replace",
@@ -30,7 +30,7 @@ describe("harvest-worker", () => {
 
   test("resolveWorkerConfig supports append mode", () => {
     const config = resolveWorkerConfig(["--once", "--append"], {
-      HARVEST_SOURCE_URL: "https://example.org/catalogue.rdf",
+      HARVEST_SOURCE_FILE: "no-data-dict.rdf",
       HARVEST_INTERNAL_SECRET: "top-secret",
     });
 
@@ -39,7 +39,7 @@ describe("harvest-worker", () => {
 
   test("resolveWorkerConfig uses HARVEST_BASE_URL when provided", () => {
     const config = resolveWorkerConfig(["--once"], {
-      HARVEST_SOURCE_URL: "https://example.org/catalogue.rdf",
+      HARVEST_SOURCE_FILE: "no-data-dict.rdf",
       HARVEST_BASE_URL: "http://localhost:3000/",
       HARVEST_INTERNAL_SECRET: "top-secret",
     });
@@ -47,10 +47,32 @@ describe("harvest-worker", () => {
     expect(config.apiUrl).toBe(buildHarvestApiUrl("http://localhost:3000/"));
   });
 
+  test("resolveWorkerConfig rejects when neither a source URL nor file is provided", () => {
+    expect(() =>
+      resolveWorkerConfig(["--once"], {
+        HARVEST_INTERNAL_SECRET: "top-secret",
+      })
+    ).toThrow(
+      "Missing harvest source. Provide HARVEST_SOURCE_URL, HARVEST_SOURCE_FILE, --url, or --file."
+    );
+  });
+
+  test("resolveWorkerConfig accepts a source URL without a file", () => {
+    const config = resolveWorkerConfig(["--once"], {
+      HARVEST_SOURCE_URL: "https://example.org/catalogue.rdf",
+      HARVEST_INTERNAL_SECRET: "top-secret",
+    });
+
+    expect(config).toMatchObject({
+      sourceUrl: "https://example.org/catalogue.rdf",
+      sourcePath: "",
+    });
+  });
+
   test("resolveWorkerConfig rejects an invalid recurring cron expression", () => {
     expect(() =>
       resolveWorkerConfig([], {
-        HARVEST_SOURCE_URL: "https://example.org/catalogue.rdf",
+        HARVEST_SOURCE_FILE: "no-data-dict.rdf",
         HARVEST_INTERNAL_SECRET: "top-secret",
         HARVEST_SCHEDULE: "not-a-cron",
       })
@@ -69,7 +91,7 @@ describe("harvest-worker", () => {
       triggerHarvest(
         {
           apiUrl: HARVEST_ENDPOINT,
-          sourceUrl: "https://example.org/catalogue.rdf",
+          sourcePath: "no-data-dict.rdf",
           secret: "top-secret",
           mode: "append",
         },
@@ -85,10 +107,7 @@ describe("harvest-worker", () => {
           "Content-Type": "application/json",
           "x-harvest-secret": "top-secret",
         }),
-        body: JSON.stringify({
-          url: "https://example.org/catalogue.rdf",
-          mode: "append",
-        }),
+        body: JSON.stringify({ path: "no-data-dict.rdf", mode: "append" }),
       })
     );
     expect(fetchImpl.mock.calls[0][1].dispatcher).toBeUndefined();
@@ -105,7 +124,7 @@ describe("harvest-worker", () => {
     await triggerHarvest(
       {
         apiUrl: "https://frontend.example/api/discovery/harvest",
-        sourceUrl: "https://example.org/catalogue.rdf",
+        sourcePath: "no-data-dict.rdf",
         secret: "top-secret",
       },
       { fetchImpl }
@@ -131,7 +150,7 @@ describe("harvest-worker", () => {
       triggerHarvest(
         {
           apiUrl: HARVEST_ENDPOINT,
-          sourceUrl: "https://example.org/catalogue.rdf",
+          sourcePath: "no-data-dict.rdf",
           secret: "top-secret",
         },
         { fetchImpl }
@@ -157,7 +176,7 @@ describe("harvest-worker", () => {
     const worker = createHarvestWorker(
       {
         once: false,
-        sourceUrl: "https://example.org/catalogue.rdf",
+        sourcePath: "no-data-dict.rdf",
         apiUrl: HARVEST_ENDPOINT,
         secret: "top-secret",
         schedule: "*/15 * * * *",
@@ -170,7 +189,7 @@ describe("harvest-worker", () => {
     expect(schedule).toHaveBeenCalledWith("*/15 * * * *", expect.any(Function));
     expect(fetchImpl).not.toHaveBeenCalled();
     expect(logger.log).toHaveBeenCalledWith(
-      'Scheduling harvest for https://example.org/catalogue.rdf with cron expression "*/15 * * * *"'
+      'Scheduling harvest for no-data-dict.rdf with cron expression "*/15 * * * *"'
     );
   });
 });

@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import {
   DCAT_DATASET,
@@ -16,16 +18,18 @@ import {
   buildHarvestRequestInit,
   harvestFetch,
 } from "@/app/api/discovery/harvester/fetch-options";
-import {
-  parseRdfToQuads,
-  detectContentTypeFromUrl,
-} from "@/app/api/discovery/harvester/rdf-quad-loader";
+import { parseRdfToQuads } from "@/app/api/discovery/harvester/rdf-quad-loader";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 
 type FetchLike = (input: string | URL, init?: RequestInit) => Promise<Response>;
 type HarvestOptions = {
   headers?: Record<string, string>;
 };
+
+const detectContentTypeFromSource = (source: string) =>
+  source.trim().toLowerCase().endsWith(".ttl")
+    ? "text/turtle"
+    : "application/rdf+xml";
 
 export class DcatHarvesterService {
   private readonly fetcher: FetchLike;
@@ -36,18 +40,20 @@ export class DcatHarvesterService {
 
   async parseDatasetsFromRdf(
     rdfText: string,
-    sourceUrl?: string,
+    sourceRef?: string,
     contentType?: string
   ): Promise<LocalDiscoveryDataset[]> {
     const resolvedContentType =
       (contentType as Parameters<typeof parseRdfToQuads>[1]) ??
-      (sourceUrl
-        ? detectContentTypeFromUrl(sourceUrl)
+      (sourceRef
+        ? (detectContentTypeFromSource(sourceRef) as Parameters<
+            typeof parseRdfToQuads
+          >[1])
         : ("application/rdf+xml" as const));
     const quads = await parseRdfToQuads(
       rdfText,
       resolvedContentType,
-      sourceUrl
+      sourceRef
     );
     const graph = new RdfGraph(quads);
     const fallbackCatalogue = getFallbackCatalogue(graph);
@@ -121,11 +127,41 @@ export class DcatHarvesterService {
       return await this.parseDatasetsFromRdf(
         xmlText,
         url,
-        detectContentTypeFromUrl(url)
+        detectContentTypeFromSource(url)
       );
     } catch (error) {
       throw wrapError(
         `Failed to parse RDF from ${url}: ${formatErrorDetails(error)}`,
+        error
+      );
+    }
+  }
+
+  async harvestFromFilePath(
+    filePath: string,
+    options: HarvestOptions = {}
+  ): Promise<LocalDiscoveryDataset[]> {
+    const resolvedPath = resolve(filePath);
+    let rdfText: string;
+
+    try {
+      rdfText = await readFile(resolvedPath, "utf8");
+    } catch (error) {
+      throw wrapError(
+        `Failed to read DCAT catalogue file from ${resolvedPath}: ${formatErrorDetails(error)}`,
+        error
+      );
+    }
+
+    try {
+      return await this.parseDatasetsFromRdf(
+        rdfText,
+        resolvedPath,
+        detectContentTypeFromSource(resolvedPath)
+      );
+    } catch (error) {
+      throw wrapError(
+        `Failed to parse RDF from ${resolvedPath}: ${formatErrorDetails(error)}`,
         error
       );
     }

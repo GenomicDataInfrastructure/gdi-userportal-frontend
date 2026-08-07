@@ -3,8 +3,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { jest } from "@jest/globals";
+import { resolve } from "node:path";
 import { canonicalDiscoveryRdf } from "@/app/api/discovery/test-utils/fixtures";
 import { DcatHarvesterService } from "@/app/api/discovery/harvester/dcat-harvester-service";
+
+const mockReadFile =
+  jest.fn<(path: string, encoding: string) => Promise<string>>();
+
+jest.mock("node:fs/promises", () => ({
+  readFile: (path: string, encoding: string) => mockReadFile(path, encoding),
+}));
 
 describe("DcatHarvesterService", () => {
   test("parses a canonical RDF fixture with discovery metadata", async () => {
@@ -304,6 +312,17 @@ describe("DcatHarvesterService", () => {
         distributions: undefined,
       },
     ]);
+  });
+
+  test("infers the content type from sourceRef when contentType is not provided", async () => {
+    const service = new DcatHarvesterService();
+
+    const datasets = await service.parseDatasetsFromRdf(
+      canonicalDiscoveryRdf,
+      "https://example.org/catalogue.rdf"
+    );
+
+    expect(datasets[0]?.id).toBe("dataset-1");
   });
 
   test("stores foaf:page documentation values as-is regardless of scheme", async () => {
@@ -1082,6 +1101,73 @@ describe("DcatHarvesterService", () => {
       service.harvestFromUrl("https://example.org/catalogue.rdf")
     ).rejects.toThrow(
       "Failed to parse RDF from https://example.org/catalogue.rdf: invalid RDF payload"
+    );
+  });
+
+  test("harvestFromFilePath reads the file and parses it as RDF/XML by default", async () => {
+    const resolvedPath = resolve("no-data-dict.rdf");
+    mockReadFile.mockResolvedValueOnce(
+      '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" />'
+    );
+
+    const service = new DcatHarvesterService();
+    const spy = jest
+      .spyOn(service, "parseDatasetsFromRdf")
+      .mockResolvedValueOnce([]);
+
+    await expect(
+      service.harvestFromFilePath("no-data-dict.rdf")
+    ).resolves.toEqual([]);
+
+    expect(mockReadFile).toHaveBeenCalledWith(resolvedPath, "utf8");
+    expect(spy).toHaveBeenCalledWith(
+      '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" />',
+      resolvedPath,
+      "application/rdf+xml"
+    );
+  });
+
+  test("harvestFromFilePath detects text/turtle for .ttl files", async () => {
+    mockReadFile.mockResolvedValueOnce(
+      "@prefix dcat: <http://www.w3.org/ns/dcat#> ."
+    );
+
+    const service = new DcatHarvesterService();
+    const spy = jest
+      .spyOn(service, "parseDatasetsFromRdf")
+      .mockResolvedValueOnce([]);
+
+    await service.harvestFromFilePath("catalogue.ttl");
+
+    expect(spy).toHaveBeenCalledWith(
+      expect.any(String),
+      resolve("catalogue.ttl"),
+      "text/turtle"
+    );
+  });
+
+  test("harvestFromFilePath wraps file read failures", async () => {
+    mockReadFile.mockRejectedValueOnce(new Error("ENOENT: no such file"));
+
+    const service = new DcatHarvesterService();
+
+    await expect(service.harvestFromFilePath("missing.rdf")).rejects.toThrow(
+      `Failed to read DCAT catalogue file from ${resolve("missing.rdf")}: ENOENT: no such file`
+    );
+  });
+
+  test("harvestFromFilePath wraps RDF parse failures", async () => {
+    mockReadFile.mockResolvedValueOnce("<rdf />");
+
+    const service = new DcatHarvesterService();
+    jest
+      .spyOn(service, "parseDatasetsFromRdf")
+      .mockRejectedValueOnce(new Error("invalid RDF payload"));
+
+    await expect(
+      service.harvestFromFilePath("no-data-dict.rdf")
+    ).rejects.toThrow(
+      `Failed to parse RDF from ${resolve("no-data-dict.rdf")}: invalid RDF payload`
     );
   });
 

@@ -3,7 +3,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { timingSafeEqual } from "node:crypto";
-import { harvestLocalIndexFromDcatUrlApi } from "@/app/api/discovery/local-index";
+import {
+  harvestLocalIndexFromDcatFileApi,
+  harvestLocalIndexFromDcatUrlApi,
+} from "@/app/api/discovery/local-index";
 import type { HarvestLocalIndexMode } from "@/app/api/discovery/local-index";
 
 const HARVEST_MODES = new Set<HarvestLocalIndexMode>(["replace", "append"]);
@@ -57,14 +60,16 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as {
       url?: string;
+      path?: string;
       mode?: HarvestLocalIndexMode;
     };
     const url = body?.url?.trim();
+    const path = body?.path?.trim();
     const mode = body?.mode ?? "replace";
 
-    if (!url) {
+    if (!url && !path) {
       return Response.json(
-        { error: 'Missing required field "url"' },
+        { error: 'Missing required field "url" or "path"' },
         { status: 400 }
       );
     }
@@ -76,7 +81,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const count = await harvestLocalIndexFromDcatUrlApi(url, { mode });
+    const count = path
+      ? await harvestLocalIndexFromDcatFileApi(path, { mode })
+      : await harvestLocalIndexFromDcatUrlApi(url as string, { mode });
     return Response.json({ count });
   } catch (error) {
     return Response.json(

@@ -95,7 +95,8 @@ export class GVariantsTableUtils {
   static groupByBeacon(
     sortedResults: GVariantsSearchResponse[]
   ): Record<string, BeaconGroup> {
-    return sortedResults.reduce(
+    // First pass: assign literal "total" rows to totalVariant; everything else to variants.
+    const result = sortedResults.reduce(
       (acc, variant) => {
         const datasetId = GVariantsTableUtils.getDisplayText(variant.datasetId);
         const beaconId = GVariantsTableUtils.getDisplayText(variant.beacon);
@@ -112,10 +113,8 @@ export class GVariantsTableUtils {
           };
         }
 
-        const population = GVariantsTableUtils.getDisplayText(
-          variant.population
-        ).toLowerCase();
-        if (population === "total") {
+        const population = variant.population?.trim();
+        if (population?.toLowerCase() === "total") {
           acc[beaconId].datasets[datasetId].totalVariant ??= variant;
           return acc;
         }
@@ -125,6 +124,32 @@ export class GVariantsTableUtils {
       },
       {} as Record<string, BeaconGroup>
     );
+
+    // Second pass: for groups that have no literal "total", promote the first
+    // country-code row (e.g. "FR") or sex-aggregate row ("m"/"f") to totalVariant.
+    // This avoids double-counting when a global "total" is also present.
+    for (const beaconGroup of Object.values(result)) {
+      for (const datasetGroup of Object.values(beaconGroup.datasets)) {
+        if (datasetGroup.totalVariant) continue;
+        const idx = datasetGroup.variants.findIndex((v) => {
+          const p = v.population?.trim();
+          const pu = p?.toUpperCase();
+          return (
+            p === "m" ||
+            p === "f" ||
+            p === "M" ||
+            p === "F" ||
+            (!!pu && GVariantsTableUtils.COUNTRY_BY_CODE.has(pu))
+          );
+        });
+        if (idx !== -1) {
+          datasetGroup.totalVariant = datasetGroup.variants[idx];
+          datasetGroup.variants.splice(idx, 1);
+        }
+      }
+    }
+
+    return result;
   }
 
   static getSortedBeaconIds(groupedByBeacon: Record<string, BeaconGroup>) {
@@ -136,13 +161,17 @@ export class GVariantsTableUtils {
     );
   }
 
-  static getRowsForSummary(
-    sortedResults: GVariantsSearchResponse[]
+  static getEffectiveTotals(
+    groupedByBeacon: Record<string, BeaconGroup>
   ): GVariantsSearchResponse[] {
-    return sortedResults.filter(
-      (variant) =>
-        GVariantsTableUtils.getDisplayText(variant.population).toLowerCase() !==
-        "total"
+    return Object.values(groupedByBeacon).flatMap((beaconGroup) =>
+      Object.values(beaconGroup.datasets)
+        .map(
+          (datasetGroup) =>
+            datasetGroup.totalVariant ??
+            GVariantsTableUtils.aggregateVariants(datasetGroup.variants)
+        )
+        .filter((v): v is GVariantsSearchResponse => v !== undefined)
     );
   }
 
@@ -240,6 +269,43 @@ export class GVariantsTableUtils {
         hasAlleleCount && hasAlleleNumber && alleleNumber > 0
           ? alleleCount / alleleNumber
           : null,
+    };
+  }
+
+  static aggregateVariants(
+    variants: GVariantsSearchResponse[]
+  ): GVariantsSearchResponse | undefined {
+    if (variants.length === 0) return undefined;
+    if (variants.length === 1) return variants[0];
+
+    let alleleCount = 0;
+    let alleleNumber = 0;
+    let hasAlleleCount = false;
+    let hasAlleleNumber = false;
+
+    for (const v of variants) {
+      if (GVariantsTableUtils.isNumber(v.alleleCount)) {
+        alleleCount += v.alleleCount;
+        hasAlleleCount = true;
+      }
+      if (GVariantsTableUtils.isNumber(v.alleleNumber)) {
+        alleleNumber += v.alleleNumber;
+        hasAlleleNumber = true;
+      }
+    }
+
+    return {
+      ...variants[0],
+      population: "total",
+      alleleCount: hasAlleleCount ? alleleCount : undefined,
+      alleleNumber: hasAlleleNumber ? alleleNumber : undefined,
+      alleleFrequency:
+        hasAlleleCount && hasAlleleNumber && alleleNumber > 0
+          ? alleleCount / alleleNumber
+          : undefined,
+      alleleCountHomozygous: undefined,
+      alleleCountHeterozygous: undefined,
+      alleleCountHemizygous: undefined,
     };
   }
 

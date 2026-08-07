@@ -91,17 +91,107 @@ describe("GVariantsTableUtils", () => {
         grouped["Beacon B"].datasets["DS-3"].totalVariant?.population
       ).toBe("total");
     });
-    test("keeps non-total aggregate rows as expandable variants", () => {
+    test("promotes sex-total row (M/F) to totalVariant and keeps country breakdowns as expandable variants", () => {
       const grouped = GVariantsTableUtils.groupByBeacon([
-        variant({ beacon: "Beacon A", datasetId: "DS-1", population: "M" }),
-        variant({ beacon: "Beacon A", datasetId: "DS-1", population: "ES_M" }),
-        variant({ beacon: "Beacon A", datasetId: "DS-1", population: "FR_M" }),
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "FI_M",
+          alleleCount: 120,
+        }),
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "FR_M",
+          alleleCount: 150,
+        }),
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "M",
+          alleleCount: 270,
+        }),
       ]);
 
-      expect(grouped["Beacon A"].datasets["DS-1"].totalVariant).toBeUndefined();
+      expect(
+        grouped["Beacon A"].datasets["DS-1"].totalVariant?.population
+      ).toBe("M");
+      expect(
+        grouped["Beacon A"].datasets["DS-1"].totalVariant?.alleleCount
+      ).toBe(270);
       expect(
         grouped["Beacon A"].datasets["DS-1"].variants.map((it) => it.population)
-      ).toEqual(["M", "ES_M", "FR_M"]);
+      ).toEqual(["FI_M", "FR_M"]);
+    });
+    test("treats country-code population as totalVariant to avoid double-counting with sex breakdowns", () => {
+      const grouped = GVariantsTableUtils.groupByBeacon([
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "FR",
+          alleleCount: 300,
+        }),
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "FR_M",
+          alleleCount: 150,
+        }),
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "FR_F",
+          alleleCount: 150,
+        }),
+      ]);
+
+      expect(
+        grouped["Beacon A"].datasets["DS-1"].totalVariant?.population
+      ).toBe("FR");
+      expect(
+        grouped["Beacon A"].datasets["DS-1"].totalVariant?.alleleCount
+      ).toBe(300);
+      expect(
+        grouped["Beacon A"].datasets["DS-1"].variants.map((it) => it.population)
+      ).toEqual(["FR_M", "FR_F"]);
+    });
+    test("prefers literal 'total' over country-code rows when both are present", () => {
+      const grouped = GVariantsTableUtils.groupByBeacon([
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "ES",
+          alleleCount: 80,
+        }),
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "FI",
+          alleleCount: 120,
+        }),
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "FR",
+          alleleCount: 200,
+        }),
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "total",
+          alleleCount: 400,
+        }),
+      ]);
+
+      expect(
+        grouped["Beacon A"].datasets["DS-1"].totalVariant?.population
+      ).toBe("total");
+      expect(
+        grouped["Beacon A"].datasets["DS-1"].totalVariant?.alleleCount
+      ).toBe(400);
+      expect(
+        grouped["Beacon A"].datasets["DS-1"].variants.map((it) => it.population)
+      ).toEqual(["ES", "FI", "FR"]);
     });
   });
 
@@ -117,23 +207,77 @@ describe("GVariantsTableUtils", () => {
     });
   });
 
-  describe("getRowsForSummary", () => {
-    test("excludes total rows from summary rows", () => {
-      const rows = GVariantsTableUtils.getRowsForSummary([
-        variant({ population: "total" }),
-        variant({ population: "FI_F" }),
+  describe("getEffectiveTotals", () => {
+    test("returns totalVariant for groups that have one", () => {
+      const grouped = GVariantsTableUtils.groupByBeacon([
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "FR",
+          alleleCount: 300,
+        }),
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "FR_M",
+          alleleCount: 150,
+        }),
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "FR_F",
+          alleleCount: 150,
+        }),
       ]);
 
-      expect(rows).toHaveLength(1);
-      expect(rows[0].population).toBe("FI_F");
+      const totals = GVariantsTableUtils.getEffectiveTotals(grouped);
+      expect(totals).toHaveLength(1);
+      expect(totals[0].population).toBe("FR");
+      expect(totals[0].alleleCount).toBe(300);
     });
 
-    test("returns an empty list when only totals exist", () => {
-      const rows = GVariantsTableUtils.getRowsForSummary([
-        variant({ population: "total" }),
+    test("aggregates variants when no totalVariant is available", () => {
+      const grouped = GVariantsTableUtils.groupByBeacon([
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "FR_M",
+          alleleCount: 150,
+          alleleNumber: 1000,
+        }),
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "FR_F",
+          alleleCount: 150,
+          alleleNumber: 1000,
+        }),
       ]);
 
-      expect(rows).toEqual([]);
+      const totals = GVariantsTableUtils.getEffectiveTotals(grouped);
+      expect(totals).toHaveLength(1);
+      expect(totals[0].alleleCount).toBe(300);
+    });
+
+    test("returns one entry per beacon+dataset group across beacons", () => {
+      const grouped = GVariantsTableUtils.groupByBeacon([
+        variant({
+          beacon: "Beacon A",
+          datasetId: "DS-1",
+          population: "total",
+          alleleCount: 400,
+        }),
+        variant({
+          beacon: "Beacon B",
+          datasetId: "DS-1",
+          population: "FR",
+          alleleCount: 200,
+        }),
+      ]);
+
+      const totals = GVariantsTableUtils.getEffectiveTotals(grouped);
+      expect(totals).toHaveLength(2);
+      expect(totals.map((t) => t.alleleCount).sort()).toEqual([200, 400]);
     });
   });
 

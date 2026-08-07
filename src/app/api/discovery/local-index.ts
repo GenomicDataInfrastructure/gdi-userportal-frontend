@@ -15,7 +15,6 @@ import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import { dcatHarvesterService } from "@/app/api/discovery/harvester/dcat-harvester-service";
 import { wrapError } from "@/app/api/discovery/harvester/error-utils";
 import { oidcAuthService } from "@/app/api/discovery/harvester/oidc-auth.service";
-import { syncHarvestedDatasetsWithNationalDispatcher } from "@/app/api/discovery/harvester/national-dispatcher-client";
 
 export type HarvestLocalIndexMode = "replace" | "append";
 
@@ -85,7 +84,6 @@ export const harvestLocalIndexFromDcatUrlApi = async (
   }
 
   await indexDatasets(catalogueRdfUrl, datasets);
-  await syncWithDispatcher(catalogueRdfUrl, datasets, mode);
 
   return datasets.length;
 };
@@ -103,7 +101,6 @@ export const harvestLocalIndexFromDcatFileApi = async (
   }
 
   await upsertLocalDiscoveryDatasets(datasets);
-  await syncHarvestedDatasetsWithNationalDispatcher(datasets, mode);
 
   return datasets.length;
 };
@@ -171,20 +168,6 @@ const indexDatasets = async (
     throw wrapError(
       `Failed to index ${datasets.length} harvested datasets from ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`,
       error
-    );
-  }
-};
-
-const syncWithDispatcher = async (
-  catalogueRdfUrl: string,
-  datasets: LocalDiscoveryDataset[],
-  mode: HarvestLocalIndexMode
-): Promise<void> => {
-  try {
-    await syncHarvestedDatasetsWithNationalDispatcher(datasets, mode);
-  } catch (error) {
-    console.error(
-      `[national-dispatcher] Sync failed for ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`
     );
   }
 };

@@ -30,8 +30,24 @@ export type JwksResolver = (jku: string) => Promise<JwksFetcher>;
 // Internal state
 // ---------------------------------------------------------------------------
 
-/** Module-level cache: jku URL → RemoteJWKSet function. */
+/**
+ * Module-level cache: jku URL → RemoteJWKSet function.
+ *
+ * Bounded to prevent unbounded memory growth from a large or attacker-controlled
+ * set of jku values. Oldest entry is evicted (FIFO) when the limit is reached.
+ */
+const MAX_JWKS_CACHE_SIZE = 100;
 const jwksCache = new Map<string, JwksFetcher>();
+
+function setCachedJwksFetcher(jku: string, fetcher: JwksFetcher): void {
+  if (!jwksCache.has(jku) && jwksCache.size >= MAX_JWKS_CACHE_SIZE) {
+    const oldestKey = jwksCache.keys().next().value as string | undefined;
+    if (oldestKey !== undefined) {
+      jwksCache.delete(oldestKey);
+    }
+  }
+  jwksCache.set(jku, fetcher);
+}
 
 /**
  * Validates a `jku` (JWK Set URL) from a JWT header.
@@ -76,7 +92,7 @@ export async function resolveJwksForJku(jku: string): Promise<JwksFetcher> {
   if (cached) return cached;
 
   const getKey = createRemoteJWKSet(new URL(jku));
-  jwksCache.set(jku, getKey);
+  setCachedJwksFetcher(jku, getKey);
   return getKey;
 }
 

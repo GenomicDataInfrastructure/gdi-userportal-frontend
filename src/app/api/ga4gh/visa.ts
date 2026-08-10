@@ -103,13 +103,14 @@ async function verifyVisaJwt(
   // Extract the jku from the JWT's protected header.
   let jku: string | undefined;
   try {
-    const header = await decodeProtectedHeader(jwt);
+    const header = decodeProtectedHeader(jwt);
     jku = header.jku;
-  } catch {
+  } catch (error) {
     console.error("[visa-validation] FAILED: could not decode JWT header", {
       iss,
       sub,
       visaType,
+      error,
     });
     return false;
   }

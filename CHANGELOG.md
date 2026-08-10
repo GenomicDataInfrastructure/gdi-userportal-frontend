@@ -12,6 +12,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.7.7] - 2026-07-06
+## [v1.7.15] - 2026-08-10
+
+### Added
+- feat: remove unused functions from applicationStatus.ts by @Haris Zenovic in 80c7491e
+- feat: improve date sorting in getChangeRequestDate function by @Haris Zenovic in 59602472
+- feat: add tests for harvesting APIs and update sonar exclusions by @Haris Zenovic in e0f53b93
+- feat: remove no-data-dict.rdf file from the project by @Haris Zenovic in 2a1091be
+- feat: update ListedApplicationListItem type to include catalogs and translation status by @Haris Zenovic in beec9eb3
+- feat: remove synchronization with national dispatcher from harvesting APIs by @Haris Zenovic in e6c75104
+- feat: add support for harvesting from local RDF files by @Haris Zenovic in 144f382f
+
+
+### Changed
+- chore(deps): update oras-project/setup-oras digest to 0d9191f by @Renovate Bot in a23dd5d3
+
+
 ## [v1.7.13] - 2026-07-21
 
 ### Changed

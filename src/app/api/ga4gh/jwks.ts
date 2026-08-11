@@ -35,9 +35,15 @@ export type JwksResolver = (jku: string) => Promise<JwksFetcher>;
  *
  * Bounded to prevent unbounded memory growth from a large or attacker-controlled
  * set of jku values. Oldest entry is evicted (FIFO) when the limit is reached.
+ * Entries expire after {@link JWKS_CACHE_TTL_MS} so that key rotation and
+ * revocation are picked up within a bounded window.
  */
 const MAX_JWKS_CACHE_SIZE = 100;
-const jwksCache = new Map<string, JwksFetcher>();
+/** 1 hour — balances performance with timely key-rotation pickup. */
+const JWKS_CACHE_TTL_MS = 60 * 60 * 1000;
+
+type CacheEntry = { fetcher: JwksFetcher; expiresAt: number };
+const jwksCache = new Map<string, CacheEntry>();
 
 function setCachedJwksFetcher(jku: string, fetcher: JwksFetcher): void {
   if (!jwksCache.has(jku) && jwksCache.size >= MAX_JWKS_CACHE_SIZE) {
@@ -46,7 +52,7 @@ function setCachedJwksFetcher(jku: string, fetcher: JwksFetcher): void {
       jwksCache.delete(oldestKey);
     }
   }
-  jwksCache.set(jku, fetcher);
+  jwksCache.set(jku, { fetcher, expiresAt: Date.now() + JWKS_CACHE_TTL_MS });
 }
 
 /**
@@ -82,14 +88,14 @@ export function validateJku(jku: string): void {
  * Trust is established through signature verification — only JWTs whose
  * signatures verify against the keys at `jku` will be accepted.
  *
- * Results are cached per `jku` URL for the lifetime of the Node.js process.
+ * Results are cached per `jku` URL for up to 1 hour (see {@link JWKS_CACHE_TTL_MS}).
  * Call {@link clearJwksCache} to invalidate the cache (e.g. in tests).
  */
 export async function resolveJwksForJku(jku: string): Promise<JwksFetcher> {
   validateJku(jku); // throws for invalid / non-HTTPS jku
 
-  const cached = jwksCache.get(jku);
-  if (cached) return cached;
+  const entry = jwksCache.get(jku);
+  if (entry && Date.now() < entry.expiresAt) return entry.fetcher;
 
   const getKey = createRemoteJWKSet(new URL(jku));
   setCachedJwksFetcher(jku, getKey);

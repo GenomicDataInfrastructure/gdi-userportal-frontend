@@ -315,18 +315,18 @@ describe("extractVerifiedControlledAccessGrants", () => {
 
   test("logs a validation attempt for each decoded visa", async () => {
     const jwt = await signVisaJwt(VISA_PAYLOAD, privateKeyA);
-    const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
+    const debugSpy = jest.spyOn(console, "debug").mockImplementation(() => {});
 
     await extractVerifiedControlledAccessGrants([jwt], resolverTrustingA);
 
-    expect(logSpy).toHaveBeenCalledWith(
+    expect(debugSpy).toHaveBeenCalledWith(
       "[visa-validation] attempt",
       expect.objectContaining({
         iss: "https://issuer-a.example.org",
         visaType: "ControlledAccessGrants",
       })
     );
-    logSpy.mockRestore();
+    debugSpy.mockRestore();
   });
 
   test("silently drops malformed JWTs without throwing", async () => {

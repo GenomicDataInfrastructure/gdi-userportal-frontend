@@ -98,7 +98,7 @@ async function verifyVisaJwt(
   const { iss, sub } = payload;
   const visaType = payload.ga4gh_visa_v1.type;
 
-  console.log("[visa-validation] attempt", { iss, sub, visaType });
+  console.debug("[visa-validation] attempt", { iss, sub, visaType });
 
   // Extract the jku from the JWT's protected header.
   let jku: string | undefined;

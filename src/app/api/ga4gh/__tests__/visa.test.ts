@@ -41,6 +41,8 @@ const CONTROLLED_ACCESS_VISA: Ga4ghVisaPayload = {
     value: "GDID-12345678-11se",
     source: "https://daam.portal.dev.gdi.lu/",
     by: "dac",
+    iat: 1785223779,
+    exp: 1816759779,
   },
 };
 
@@ -118,10 +120,10 @@ describe("extractControlledAccessGrants", () => {
     const [grant] = extractControlledAccessGrants([jwt]);
 
     expect(grant.datasetId).toBe(CONTROLLED_ACCESS_VISA.ga4gh_visa_v1.value);
-    expect(grant.iat).toBe(CONTROLLED_ACCESS_VISA.iat);
+    expect(grant.iat).toBe(CONTROLLED_ACCESS_VISA.ga4gh_visa_v1.iat);
     expect(grant.source).toBe(CONTROLLED_ACCESS_VISA.ga4gh_visa_v1.source);
     expect(grant.by).toBe(CONTROLLED_ACCESS_VISA.ga4gh_visa_v1.by);
-    expect(grant.exp).toBe(CONTROLLED_ACCESS_VISA.exp);
+    expect(grant.exp).toBe(CONTROLLED_ACCESS_VISA.ga4gh_visa_v1.exp);
   });
 
   test("returns empty array when passport contains no ControlledAccessGrants", () => {
@@ -133,34 +135,21 @@ describe("extractControlledAccessGrants", () => {
     expect(extractControlledAccessGrants([])).toEqual([]);
   });
 
-  test("prefers ga4gh_visa_v1.iat over outer JWT iat when present", () => {
-    const visaWithInnerIat: Ga4ghVisaPayload = {
+  test("returns undefined iat and exp when ga4gh_visa_v1 omits them", () => {
+    const visaWithoutTimestamps: Ga4ghVisaPayload = {
       ...CONTROLLED_ACCESS_VISA,
       ga4gh_visa_v1: {
-        ...CONTROLLED_ACCESS_VISA.ga4gh_visa_v1,
-        iat: 1111111111,
+        type: "ControlledAccessGrants",
+        value: "GDID-12345678-11se",
+        source: "https://daam.portal.dev.gdi.lu/",
+        by: "dac",
       },
     };
     const [grant] = extractControlledAccessGrants([
-      makeVisaJwt(visaWithInnerIat),
+      makeVisaJwt(visaWithoutTimestamps),
     ]);
-
-    expect(grant.iat).toBe(1111111111);
-  });
-
-  test("prefers ga4gh_visa_v1.exp over outer JWT exp when present", () => {
-    const visaWithInnerExp: Ga4ghVisaPayload = {
-      ...CONTROLLED_ACCESS_VISA,
-      ga4gh_visa_v1: {
-        ...CONTROLLED_ACCESS_VISA.ga4gh_visa_v1,
-        exp: 9999999999,
-      },
-    };
-    const [grant] = extractControlledAccessGrants([
-      makeVisaJwt(visaWithInnerExp),
-    ]);
-
-    expect(grant.exp).toBe(9999999999);
+    expect(grant.iat).toBeUndefined();
+    expect(grant.exp).toBeUndefined();
   });
 
   test("skips malformed JWTs without throwing", () => {
@@ -258,6 +247,8 @@ describe("extractVerifiedControlledAccessGrants", () => {
       value: "GDID-12345678-11se",
       source: "https://issuer-a.example.org",
       by: "dac",
+      iat: 1785223779,
+      exp: 9999999999,
     },
   };
 
@@ -431,8 +422,8 @@ describe("extractVerifiedControlledAccessGrants", () => {
     );
 
     expect(grant.datasetId).toBe(VISA_PAYLOAD.ga4gh_visa_v1.value);
-    expect(grant.iat).toBe(VISA_PAYLOAD.iat);
-    expect(grant.exp).toBe(VISA_PAYLOAD.exp);
+    expect(grant.iat).toBe(VISA_PAYLOAD.ga4gh_visa_v1.iat);
+    expect(grant.exp).toBe(VISA_PAYLOAD.ga4gh_visa_v1.exp);
     expect(grant.source).toBe(VISA_PAYLOAD.ga4gh_visa_v1.source);
     expect(grant.by).toBe(VISA_PAYLOAD.ga4gh_visa_v1.by);
   });

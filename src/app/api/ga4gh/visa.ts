@@ -71,10 +71,10 @@ export function extractControlledAccessGrants(
     )
     .map((visa) => ({
       datasetId: visa.ga4gh_visa_v1.value,
-      iat: visa.ga4gh_visa_v1.iat ?? visa.iat,
+      iat: visa.ga4gh_visa_v1.iat,
       source: visa.ga4gh_visa_v1.source,
       by: visa.ga4gh_visa_v1.by,
-      exp: visa.ga4gh_visa_v1.exp ?? visa.exp,
+      exp: visa.ga4gh_visa_v1.exp,
     }));
 }
 
@@ -189,10 +189,10 @@ export async function extractVerifiedControlledAccessGrants(
 
     verified.push({
       datasetId: payload.ga4gh_visa_v1.value,
-      iat: payload.ga4gh_visa_v1.iat ?? payload.iat,
+      iat: payload.ga4gh_visa_v1.iat,
       source: payload.ga4gh_visa_v1.source,
       by: payload.ga4gh_visa_v1.by,
-      exp: payload.ga4gh_visa_v1.exp ?? payload.exp,
+      exp: payload.ga4gh_visa_v1.exp,
     });
   }
 

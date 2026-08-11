@@ -5,19 +5,19 @@
 "use server";
 
 import { fetchGa4ghPassport } from "./passport";
-import { extractControlledAccessGrants } from "./visa";
+import { extractVerifiedControlledAccessGrants } from "./visa";
 
 /**
  * GA4GH Passport/Visa-based entitlement retrieval.
  *
  * Fetches raw Visa JWTs from the LS-AAI userinfo endpoint.
- * Decodes Visa JWTs and extracts ControlledAccessGrants visas.
- * TODO (ART-27610): validate Visa JWT signatures.
+ * Decodes and signature-validates Visa JWTs, keeping only
+ * ControlledAccessGrants visas from trusted issuers.
  * TODO (ART-27611): handle visa expiry / refresh.
  */
 export const retrieveEntitlementsV2 = async () => {
   const visaJwts = await fetchGa4ghPassport();
-  const grants = extractControlledAccessGrants(visaJwts);
+  const grants = await extractVerifiedControlledAccessGrants(visaJwts);
 
   const entitlements = grants.map((grant) => ({
     datasetId: grant.datasetId,

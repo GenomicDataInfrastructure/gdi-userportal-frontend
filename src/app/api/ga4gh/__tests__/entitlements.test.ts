@@ -4,12 +4,19 @@
 
 import { jest } from "@jest/globals";
 import { fetchGa4ghPassport } from "../passport";
+import { extractVerifiedControlledAccessGrants } from "../visa";
 import { retrieveEntitlementsV2 } from "../entitlements";
 
 jest.mock("../passport");
+jest.mock("../visa");
+
 const mockedFetchGa4ghPassport = fetchGa4ghPassport as jest.MockedFunction<
   typeof fetchGa4ghPassport
 >;
+const mockedExtractVerified =
+  extractVerifiedControlledAccessGrants as jest.MockedFunction<
+    typeof extractVerifiedControlledAccessGrants
+  >;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -53,6 +60,15 @@ const RESEARCHER_STATUS_VISA = {
 // Tests
 // ---------------------------------------------------------------------------
 
+/** A resolved ControlledAccessGrant returned by the mocked extractor. */
+const GRANT = {
+  datasetId: "GDID-12345678-11se",
+  iat: CONTROLLED_ACCESS_VISA.iat,
+  exp: CONTROLLED_ACCESS_VISA.exp,
+  source: CONTROLLED_ACCESS_VISA.ga4gh_visa_v1.source,
+  by: CONTROLLED_ACCESS_VISA.ga4gh_visa_v1.by,
+};
+
 describe("retrieveEntitlementsV2", () => {
   beforeEach(() => {
     jest.resetAllMocks();
@@ -60,16 +76,28 @@ describe("retrieveEntitlementsV2", () => {
 
   it("returns empty entitlements when passport contains no visas", async () => {
     mockedFetchGa4ghPassport.mockResolvedValueOnce([]);
+    mockedExtractVerified.mockResolvedValueOnce([]);
 
     const result = await retrieveEntitlementsV2();
 
     expect(result).toEqual({ entitlements: [] });
   });
 
+  it("passes raw passport JWTs to extractVerifiedControlledAccessGrants", async () => {
+    const rawJwt = makeVisaJwt(CONTROLLED_ACCESS_VISA);
+    mockedFetchGa4ghPassport.mockResolvedValueOnce([rawJwt]);
+    mockedExtractVerified.mockResolvedValueOnce([GRANT]);
+
+    await retrieveEntitlementsV2();
+
+    expect(mockedExtractVerified).toHaveBeenCalledWith([rawJwt]);
+  });
+
   it("maps a single ControlledAccessGrants visa to a dataset entitlement", async () => {
     mockedFetchGa4ghPassport.mockResolvedValueOnce([
       makeVisaJwt(CONTROLLED_ACCESS_VISA),
     ]);
+    mockedExtractVerified.mockResolvedValueOnce([GRANT]);
 
     const result = await retrieveEntitlementsV2();
 
@@ -81,6 +109,7 @@ describe("retrieveEntitlementsV2", () => {
     mockedFetchGa4ghPassport.mockResolvedValueOnce([
       makeVisaJwt(CONTROLLED_ACCESS_VISA),
     ]);
+    mockedExtractVerified.mockResolvedValueOnce([GRANT]);
 
     const { entitlements } = await retrieveEntitlementsV2();
 
@@ -90,10 +119,8 @@ describe("retrieveEntitlementsV2", () => {
   });
 
   it("omits start date when visa iat is absent", async () => {
-    const visaWithoutIat = { ...CONTROLLED_ACCESS_VISA, iat: undefined };
-    mockedFetchGa4ghPassport.mockResolvedValueOnce([
-      makeVisaJwt(visaWithoutIat),
-    ]);
+    mockedFetchGa4ghPassport.mockResolvedValueOnce([]);
+    mockedExtractVerified.mockResolvedValueOnce([{ ...GRANT, iat: undefined }]);
 
     const { entitlements } = await retrieveEntitlementsV2();
 
@@ -104,6 +131,7 @@ describe("retrieveEntitlementsV2", () => {
     mockedFetchGa4ghPassport.mockResolvedValueOnce([
       makeVisaJwt(CONTROLLED_ACCESS_VISA),
     ]);
+    mockedExtractVerified.mockResolvedValueOnce([GRANT]);
 
     const { entitlements } = await retrieveEntitlementsV2();
 
@@ -112,42 +140,28 @@ describe("retrieveEntitlementsV2", () => {
     );
   });
 
-  it("ignores non-ControlledAccessGrants visas", async () => {
+  it("ignores non-ControlledAccessGrants visas (extractor returns empty)", async () => {
     mockedFetchGa4ghPassport.mockResolvedValueOnce([
       makeVisaJwt(RESEARCHER_STATUS_VISA),
     ]);
+    mockedExtractVerified.mockResolvedValueOnce([]);
 
     const result = await retrieveEntitlementsV2();
 
     expect(result).toEqual({ entitlements: [] });
   });
 
-  it("extracts only ControlledAccessGrants from a mixed passport", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce([
-      makeVisaJwt(CONTROLLED_ACCESS_VISA),
-      makeVisaJwt(RESEARCHER_STATUS_VISA),
-    ]);
-
-    const { entitlements } = await retrieveEntitlementsV2();
-
-    expect(entitlements).toHaveLength(1);
-    expect(entitlements[0].datasetId).toBe("GDID-12345678-11se");
-  });
-
   it("maps multiple ControlledAccessGrants visas to multiple entitlements", async () => {
-    const second = {
-      ...CONTROLLED_ACCESS_VISA,
+    const secondGrant = {
+      ...GRANT,
+      datasetId: "GDID-99999999-xyz",
       exp: 1900000000,
-      ga4gh_visa_v1: {
-        ...CONTROLLED_ACCESS_VISA.ga4gh_visa_v1,
-        value: "GDID-99999999-xyz",
-      },
     };
 
     mockedFetchGa4ghPassport.mockResolvedValueOnce([
       makeVisaJwt(CONTROLLED_ACCESS_VISA),
-      makeVisaJwt(second),
     ]);
+    mockedExtractVerified.mockResolvedValueOnce([GRANT, secondGrant]);
 
     const { entitlements } = await retrieveEntitlementsV2();
 
@@ -159,13 +173,8 @@ describe("retrieveEntitlementsV2", () => {
   });
 
   it("omits end date when visa exp is absent", async () => {
-    const visaWithoutExp = {
-      ...CONTROLLED_ACCESS_VISA,
-      exp: undefined,
-    };
-    mockedFetchGa4ghPassport.mockResolvedValueOnce([
-      makeVisaJwt(visaWithoutExp),
-    ]);
+    mockedFetchGa4ghPassport.mockResolvedValueOnce([]);
+    mockedExtractVerified.mockResolvedValueOnce([{ ...GRANT, exp: undefined }]);
 
     const { entitlements } = await retrieveEntitlementsV2();
 

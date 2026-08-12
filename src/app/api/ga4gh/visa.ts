@@ -181,12 +181,36 @@ export async function extractVerifiedControlledAccessGrants(
         entry.payload.ga4gh_visa_v1.type === CONTROLLED_ACCESS_GRANTS
     );
 
+  // Drop visas whose access grant has already expired, before making any
+  // network calls for signature verification.
+  const nowSeconds = Math.floor(Date.now() / 1000);
+  const expiredByIssuer: Record<string, number> = {};
+  const active = candidates.filter(({ payload }) => {
+    const exp = payload.ga4gh_visa_v1.exp;
+    if (exp !== undefined && exp < nowSeconds) {
+      const key = payload.iss;
+      expiredByIssuer[key] = (expiredByIssuer[key] ?? 0) + 1;
+      return false;
+    }
+    return true;
+  });
+  const totalExpired = Object.values(expiredByIssuer).reduce(
+    (sum, n) => sum + n,
+    0
+  );
+  if (totalExpired > 0) {
+    console.warn("[visa-validation] SKIPPED expired visas", {
+      count: totalExpired,
+      byIssuer: expiredByIssuer,
+    });
+  }
+
   const verified: ControlledAccessGrant[] = [];
   // Aggregate rejected visas by issuer + visa type to avoid logging
   // per-visa sensitive data (sub, datasetId) at scale.
   const rejectedByIssuerAndType: Record<string, number> = {};
 
-  for (const { jwt, payload } of candidates) {
+  for (const { jwt, payload } of active) {
     const valid = await verifyVisaJwt(jwt, payload, jwksResolver);
     if (!valid) {
       const aggregateKey = `${payload.iss}|${payload.ga4gh_visa_v1.type}`;

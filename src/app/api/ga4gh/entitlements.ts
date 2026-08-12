@@ -16,13 +16,7 @@ import {
  * Fetches raw Visa JWTs from the LS-AAI userinfo endpoint.
  * Decodes and signature-validates Visa JWTs, keeping only
  * ControlledAccessGrants visas from trusted issuers.
- *
- * Degrades gracefully on failure: if passport fetching or visa extraction
- * fails for any reason, an empty entitlements list is returned and the
- * error is logged server-side only — no sensitive details are surfaced to
- * callers.
- *
- * TODO (ART-27611): handle visa expiry / refresh.
+ * Expired visas are filtered out before signature verification.
  */
 export const retrieveEntitlementsV2 = async (): Promise<{
   entitlements: {

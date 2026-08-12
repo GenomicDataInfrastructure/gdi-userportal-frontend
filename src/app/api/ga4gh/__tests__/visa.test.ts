@@ -427,4 +427,74 @@ describe("extractVerifiedControlledAccessGrants", () => {
     expect(grant.source).toBe(VISA_PAYLOAD.ga4gh_visa_v1.source);
     expect(grant.by).toBe(VISA_PAYLOAD.ga4gh_visa_v1.by);
   });
+
+  test("logs rejected visas via console.warn when visas fail signature verification", async () => {
+    // Signed with key-B but resolver only trusts key-A — will fail verification
+    const jwt = await signVisaJwt(VISA_PAYLOAD, privateKeyB, { kid: "key-b" });
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    await extractVerifiedControlledAccessGrants([jwt], resolverTrustingA);
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      "[visa-validation] REJECTED visas (failed signature verification)",
+      expect.objectContaining({
+        count: 1,
+        visas: expect.arrayContaining([
+          expect.objectContaining({
+            iss: "https://issuer-a.example.org",
+            visaType: "ControlledAccessGrants",
+            datasetId: "GDID-12345678-11se",
+          }),
+        ]),
+      })
+    );
+    warnSpy.mockRestore();
+    errorSpy.mockRestore();
+  });
+
+  test("logs all rejected visas in a single console.warn call", async () => {
+    const jwtBadSig = await signVisaJwt(VISA_PAYLOAD, privateKeyB, {
+      kid: "key-b",
+    });
+    const untrustedPayload = {
+      ...VISA_PAYLOAD,
+      iss: "https://untrusted.example.org",
+    };
+    const jwtUntrusted = await signVisaJwt(untrustedPayload, privateKeyA);
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    await extractVerifiedControlledAccessGrants(
+      [jwtBadSig, jwtUntrusted],
+      resolverTrustingA
+    );
+
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    expect(warnSpy).toHaveBeenCalledWith(
+      "[visa-validation] REJECTED visas (failed signature verification)",
+      expect.objectContaining({ count: 2 })
+    );
+    warnSpy.mockRestore();
+    errorSpy.mockRestore();
+  });
+
+  test("does not emit console.warn when all visas are accepted", async () => {
+    const jwt = await signVisaJwt(VISA_PAYLOAD, privateKeyA);
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    await extractVerifiedControlledAccessGrants([jwt], resolverTrustingA);
+
+    expect(warnSpy).not.toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  test("does not emit console.warn when passport is empty", async () => {
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    await extractVerifiedControlledAccessGrants([], resolverTrustingA);
+
+    expect(warnSpy).not.toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
 });

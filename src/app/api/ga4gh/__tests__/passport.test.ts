@@ -54,7 +54,7 @@ describe("fetchGa4ghPassport", () => {
 
       const result = await fetchGa4ghPassport();
 
-      expect(result).toEqual([]);
+      expect(result).toEqual({ visaJwts: [], passportPresent: false });
       expect(fetchSpy).not.toHaveBeenCalled();
     });
   });
@@ -133,19 +133,25 @@ describe("fetchGa4ghPassport", () => {
 
       const result = await fetchGa4ghPassport();
 
-      expect(result).toEqual([VISA_JWT]);
+      expect(result).toEqual({ visaJwts: [VISA_JWT], passportPresent: true });
     });
 
-    it("returns an empty array when userinfo contains no ga4gh_passport_v1", async () => {
+    it("returns passportPresent: false and empty visaJwts when userinfo contains no ga4gh_passport_v1", async () => {
       mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
       mockFetch([
         { ok: true, body: { access_token: LS_AAI_TOKEN } },
         { ok: true, body: { sub: "user123" } },
       ]);
+      const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
 
       const result = await fetchGa4ghPassport();
 
-      expect(result).toEqual([]);
+      expect(result).toEqual({ visaJwts: [], passportPresent: false });
+      expect(warnSpy).toHaveBeenCalledWith(
+        "[passport] ga4gh_passport_v1 claim absent from LS-AAI userinfo response",
+        expect.objectContaining({ sub: "user123" })
+      );
+      warnSpy.mockRestore();
     });
 
     it("throws when the userinfo endpoint returns a non-OK status", async () => {
@@ -209,7 +215,86 @@ describe("fetchGa4ghPassport", () => {
 
       const result = await fetchGa4ghPassport();
 
-      expect(result).toEqual([visa1, visa2]);
+      expect(result).toEqual({ visaJwts: [visa1, visa2], passportPresent: true });
+    });
+  });
+
+  describe("network timeouts and unreachable endpoints", () => {
+    function makeTimeoutError(): Error {
+      const err = new Error("signal timed out");
+      err.name = "TimeoutError";
+      return err;
+    }
+
+    it("throws a sanitized timeout error when the broker endpoint times out", async () => {
+      mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
+      jest.spyOn(global, "fetch").mockRejectedValueOnce(makeTimeoutError());
+
+      await expect(fetchGa4ghPassport()).rejects.toThrow(
+        "LS-AAI broker endpoint timed out"
+      );
+    });
+
+    it("throws a sanitized error when the broker endpoint is unreachable", async () => {
+      mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
+      jest
+        .spyOn(global, "fetch")
+        .mockRejectedValueOnce(new TypeError("fetch failed"));
+
+      await expect(fetchGa4ghPassport()).rejects.toThrow(
+        "LS-AAI broker endpoint unreachable"
+      );
+    });
+
+    it("throws a sanitized timeout error when the userinfo endpoint times out", async () => {
+      mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
+      jest
+        .spyOn(global, "fetch")
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          statusText: "OK",
+          json: () => Promise.resolve({ access_token: LS_AAI_TOKEN }),
+        } as Response)
+        .mockRejectedValueOnce(makeTimeoutError());
+
+      await expect(fetchGa4ghPassport()).rejects.toThrow(
+        "LS-AAI userinfo endpoint timed out"
+      );
+    });
+
+    it("throws a sanitized error when the userinfo endpoint is unreachable", async () => {
+      mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
+      jest
+        .spyOn(global, "fetch")
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          statusText: "OK",
+          json: () => Promise.resolve({ access_token: LS_AAI_TOKEN }),
+        } as Response)
+        .mockRejectedValueOnce(new TypeError("fetch failed"));
+
+      await expect(fetchGa4ghPassport()).rejects.toThrow(
+        "LS-AAI userinfo endpoint unreachable"
+      );
+    });
+
+    it("does not expose internal network error details in timeout messages", async () => {
+      mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
+      jest.spyOn(global, "fetch").mockRejectedValueOnce(makeTimeoutError());
+
+      let thrownMessage = "";
+      try {
+        await fetchGa4ghPassport();
+      } catch (err) {
+        thrownMessage = err instanceof Error ? err.message : String(err);
+      }
+
+      // Message must not contain internal stack traces, tokens, or URLs
+      expect(thrownMessage).not.toContain("Bearer");
+      expect(thrownMessage).not.toContain("keycloak");
+      expect(thrownMessage).toBe("LS-AAI broker endpoint timed out");
     });
   });
 });

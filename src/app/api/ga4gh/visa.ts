@@ -182,10 +182,24 @@ export async function extractVerifiedControlledAccessGrants(
     );
 
   const verified: ControlledAccessGrant[] = [];
+  const rejected: {
+    iss: string;
+    sub: string;
+    visaType: string;
+    datasetId: string;
+  }[] = [];
 
   for (const { jwt, payload } of candidates) {
     const valid = await verifyVisaJwt(jwt, payload, jwksResolver);
-    if (!valid) continue;
+    if (!valid) {
+      rejected.push({
+        iss: payload.iss,
+        sub: payload.sub,
+        visaType: payload.ga4gh_visa_v1.type,
+        datasetId: payload.ga4gh_visa_v1.value,
+      });
+      continue;
+    }
 
     verified.push({
       datasetId: payload.ga4gh_visa_v1.value,
@@ -194,6 +208,13 @@ export async function extractVerifiedControlledAccessGrants(
       by: payload.ga4gh_visa_v1.by,
       exp: payload.ga4gh_visa_v1.exp,
     });
+  }
+
+  if (rejected.length > 0) {
+    console.warn(
+      "[visa-validation] REJECTED visas (failed signature verification)",
+      { count: rejected.length, visas: rejected }
+    );
   }
 
   return verified;

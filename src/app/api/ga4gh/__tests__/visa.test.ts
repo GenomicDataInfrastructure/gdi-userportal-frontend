@@ -440,13 +440,9 @@ describe("extractVerifiedControlledAccessGrants", () => {
       "[visa-validation] REJECTED visas (failed signature verification)",
       expect.objectContaining({
         count: 1,
-        visas: expect.arrayContaining([
-          expect.objectContaining({
-            iss: "https://issuer-a.example.org",
-            visaType: "ControlledAccessGrants",
-            datasetId: "GDID-12345678-11se",
-          }),
-        ]),
+        byIssuerAndType: expect.objectContaining({
+          "https://issuer-a.example.org|ControlledAccessGrants": 1,
+        }),
       })
     );
     warnSpy.mockRestore();
@@ -473,7 +469,13 @@ describe("extractVerifiedControlledAccessGrants", () => {
     expect(warnSpy).toHaveBeenCalledTimes(1);
     expect(warnSpy).toHaveBeenCalledWith(
       "[visa-validation] REJECTED visas (failed signature verification)",
-      expect.objectContaining({ count: 2 })
+      expect.objectContaining({
+        count: 2,
+        byIssuerAndType: expect.objectContaining({
+          "https://issuer-a.example.org|ControlledAccessGrants": 1,
+          "https://untrusted.example.org|ControlledAccessGrants": 1,
+        }),
+      })
     );
     warnSpy.mockRestore();
     errorSpy.mockRestore();

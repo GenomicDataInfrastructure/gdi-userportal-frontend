@@ -9,6 +9,29 @@ import { getToken } from "@/app/api/auth/auth";
 /** Maximum time to wait for any single fetch in the passport pipeline. */
 const FETCH_TIMEOUT_MS = 10_000;
 
+/**
+ * Wraps `fetch` with an `AbortSignal` timeout and maps network/timeout errors
+ * to sanitized messages so no internal details leak to callers.
+ */
+async function fetchWithTimeout(
+  url: string,
+  options: RequestInit,
+  timeoutErrorMessage: string,
+  unreachableErrorMessage: string
+): Promise<Response> {
+  try {
+    return await fetch(url, {
+      ...options,
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+    });
+  } catch (err) {
+    if (err instanceof Error && err.name === "TimeoutError") {
+      throw new Error(timeoutErrorMessage);
+    }
+    throw new Error(unreachableErrorMessage);
+  }
+}
+
 type LsAaiTokenResponse = {
   access_token?: string;
   error?: string;
@@ -55,22 +78,16 @@ async function exchangeKeycloakTokenForLsAai(
   }
   const brokerUrl = `${keycloakIssuerUrl}/broker/LSAAI/token`;
 
-  let response: Response;
-  try {
-    response = await fetch(brokerUrl, {
+  const response = await fetchWithTimeout(
+    brokerUrl,
+    {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${keycloakAccessToken}`,
-      },
+      headers: { Authorization: `Bearer ${keycloakAccessToken}` },
       cache: "no-store",
-      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
-    });
-  } catch (err) {
-    if (err instanceof Error && err.name === "TimeoutError") {
-      throw new Error("LS-AAI broker endpoint timed out");
-    }
-    throw new Error("LS-AAI broker endpoint unreachable");
-  }
+    },
+    "LS-AAI broker endpoint timed out",
+    "LS-AAI broker endpoint unreachable"
+  );
 
   if (!response.ok) {
     let detail = response.statusText;
@@ -115,22 +132,16 @@ async function fetchPassportFromLsAai(
     );
   }
 
-  let response: Response;
-  try {
-    response = await fetch(userinfoUrl, {
+  const response = await fetchWithTimeout(
+    userinfoUrl,
+    {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${lsAaiAccessToken}`,
-      },
+      headers: { Authorization: `Bearer ${lsAaiAccessToken}` },
       cache: "no-store",
-      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
-    });
-  } catch (err) {
-    if (err instanceof Error && err.name === "TimeoutError") {
-      throw new Error("LS-AAI userinfo endpoint timed out");
-    }
-    throw new Error("LS-AAI userinfo endpoint unreachable");
-  }
+    },
+    "LS-AAI userinfo endpoint timed out",
+    "LS-AAI userinfo endpoint unreachable"
+  );
 
   if (!response.ok) {
     let detail = response.statusText;

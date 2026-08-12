@@ -179,4 +179,3 @@ export async function fetchGa4ghPassport(): Promise<PassportFetchResult> {
 
   return fetchPassportFromLsAai(lsAaiAccessToken);
 }
-

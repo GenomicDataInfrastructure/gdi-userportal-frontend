@@ -215,7 +215,10 @@ describe("fetchGa4ghPassport", () => {
 
       const result = await fetchGa4ghPassport();
 
-      expect(result).toEqual({ visaJwts: [visa1, visa2], passportPresent: true });
+      expect(result).toEqual({
+        visaJwts: [visa1, visa2],
+        passportPresent: true,
+      });
     });
   });
 

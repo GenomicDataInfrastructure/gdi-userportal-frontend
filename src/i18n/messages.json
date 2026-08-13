@@ -443,6 +443,10 @@
     "en": "Applicable Legislation",
     "fr": "Législation applicable"
   },
+  "datasets.detail.rights": {
+    "en": "Rights",
+    "fr": "Droits"
+  },
   "datasets.detail.purpose": {
     "en": "Purpose",
     "fr": "Finalité"
@@ -658,6 +662,14 @@
   "datasets.detail.tooltips.distributionConformsTo": {
     "en": "Standards or specifications the distribution conforms to.",
     "fr": "Normes ou spécifications auxquelles la distribution est conforme."
+  },
+  "datasets.detail.tooltips.distributionRights": {
+    "en": "Access rights that apply to this distribution.",
+    "fr": "Droits d'accès qui s'appliquent à cette distribution."
+  },
+  "datasets.detail.tooltips.distributionApplicableLegislation": {
+    "en": "Legislation applicable to this distribution.",
+    "fr": "Législation applicable à cette distribution."
   },
   "datasets.detail.tooltips.distributionAccessUrl": {
     "en": "Link to access the distribution.",

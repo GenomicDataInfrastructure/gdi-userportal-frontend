@@ -15,6 +15,7 @@ import {
   faBalanceScale,
   faCheckCircle,
   faDatabase,
+  faGavel,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
 import Tooltip from "./Tooltip";
@@ -191,6 +192,23 @@ const DistributionAccordion = ({
                       <Tooltip message={t("tooltips.distributionLicense")} />
                     </span>
                   </div>
+                  {distribution.rights && (
+                    <div className="flex items-center relative">
+                      <span className="group flex items-center">
+                        <FontAwesomeIcon
+                          icon={faGavel}
+                          className="text-primary align-middle mr-2"
+                        />
+                        <strong className="text-sm font-semibold">
+                          {t("rights")}:
+                        </strong>
+                        <span className="text-sm ml-2">
+                          {distribution.rights}
+                        </span>
+                        <Tooltip message={t("tooltips.distributionRights")} />
+                      </span>
+                    </div>
+                  )}
                   <div className="flex items-center relative">
                     <span className="group flex items-center">
                       <FontAwesomeIcon
@@ -232,6 +250,35 @@ const DistributionAccordion = ({
                           </span>
                           <Tooltip
                             message={t("tooltips.distributionConformsTo")}
+                          />
+                        </span>
+                      </div>
+                    )}
+                  {distribution.applicableLegislation &&
+                    distribution.applicableLegislation.length > 0 && (
+                      <div className="flex items-center relative">
+                        <span className="group flex items-center">
+                          <FontAwesomeIcon
+                            icon={faGavel}
+                            className="text-primary align-middle mr-2"
+                          />
+                          <strong className="text-sm font-semibold">
+                            {t("applicableLegislation")}:
+                          </strong>
+                          <span className="text-sm ml-2">
+                            {distribution.applicableLegislation
+                              .map(
+                                (l) =>
+                                  l.label ||
+                                  l.value?.split("/").pop() ||
+                                  l.value
+                              )
+                              .join(", ")}
+                          </span>
+                          <Tooltip
+                            message={t(
+                              "tooltips.distributionApplicableLegislation"
+                            )}
                           />
                         </span>
                       </div>

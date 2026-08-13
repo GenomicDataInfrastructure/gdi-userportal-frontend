@@ -250,6 +250,7 @@ describe("DcatHarvesterService", () => {
               value: "http://spdx.org/licenses/Apache-2.0",
               label: "Apache 2.0",
             },
+            rights: "Public",
             conformsTo: [
               {
                 value: "https://example.org/spec/standard-1",

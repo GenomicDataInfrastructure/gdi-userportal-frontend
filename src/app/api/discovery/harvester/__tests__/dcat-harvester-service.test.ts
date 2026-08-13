@@ -122,7 +122,7 @@ describe("DcatHarvesterService", () => {
         healthCategory: [
           {
             value: "http://healthdataportal.eu/ns/health-category/registries",
-            label: "registries",
+            label: "Electronic Health Data from EHRs",
           },
         ],
         dcatType: [

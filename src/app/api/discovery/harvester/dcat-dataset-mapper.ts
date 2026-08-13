@@ -15,6 +15,7 @@ import { extractDistributions } from "@/app/api/discovery/harvester/dcat-distrib
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 import { normalizeDate } from "@/app/api/discovery/harvester/date-utils";
 import formatDatasetLanguage from "@/utils/formatDatasetLanguage";
+import formatHealthCategoryLabel from "@/utils/healthCategoryLabels";
 
 export const DCAT_DATASET = "http://www.w3.org/ns/dcat#Dataset";
 export const DCAT_CATALOG = "http://www.w3.org/ns/dcat#Catalog";
@@ -179,10 +180,7 @@ export const mapDataset = (
       graph.getObjects(datasetSubject, HEALTHDCATAP_HEALTH_THEME),
       graph
     ),
-    healthCategory: resolveValueLabels(
-      graph.getObjects(datasetSubject, HEALTHDCATAP_HEALTH_CATEGORY),
-      graph
-    ),
+    healthCategory: extractHealthCategories(datasetSubject, graph),
     dcatType: resolveValueLabels(
       graph.getObjects(datasetSubject, DCT_TYPE),
       graph
@@ -229,6 +227,18 @@ const resolveValueLabels = (
     })
     .filter((item): item is { value: string; label: string } => item !== null);
 };
+
+const extractHealthCategories = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): Array<{ value: string; label: string }> =>
+  resolveValueLabels(
+    graph.getObjects(datasetSubject, HEALTHDCATAP_HEALTH_CATEGORY),
+    graph
+  ).map(({ value, label }) => ({
+    value,
+    label: formatHealthCategoryLabel(label) ?? label,
+  }));
 
 const getDatasetIdentifier = (
   datasetSubject: RDF.Term,

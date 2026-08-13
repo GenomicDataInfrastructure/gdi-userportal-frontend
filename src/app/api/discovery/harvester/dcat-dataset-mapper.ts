@@ -66,6 +66,7 @@ const HEALTHDCATAP_HEALTH_CATEGORY =
   "http://healthdataportal.eu/ns/health#healthCategory"; // NOSONAR
 const DCT_TYPE = "http://purl.org/dc/terms/type"; // NOSONAR
 const DCT_ACCESS_RIGHTS = "http://purl.org/dc/terms/accessRights"; // NOSONAR
+const DCT_CONFORMS_TO = "http://purl.org/dc/terms/conformsTo"; // NOSONAR
 const DPV_HAS_LEGAL_BASIS = "http://www.w3.org/ns/dpv#hasLegalBasis"; // NOSONAR
 const DPV_HAS_PURPOSE = "http://www.w3.org/ns/dpv#hasPurpose"; // NOSONAR
 const DPV_HAS_PERSONAL_DATA = "http://www.w3.org/ns/dpv#hasPersonalData"; // NOSONAR
@@ -183,6 +184,10 @@ export const mapDataset = (
     healthCategory: extractHealthCategories(datasetSubject, graph),
     dcatType: resolveValueLabels(
       graph.getObjects(datasetSubject, DCT_TYPE),
+      graph
+    ),
+    conformsTo: resolveValueLabels(
+      graph.getObjects(datasetSubject, DCT_CONFORMS_TO),
       graph
     ),
     contacts: extractContactPoints(datasetSubject, graph),

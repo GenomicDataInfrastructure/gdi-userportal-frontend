@@ -76,6 +76,11 @@ export const canonicalDiscoveryRdf = `
       <healthdcatap:healthTheme rdf:resource="http://healthdataportal.eu/ns/health-theme/cancer"/>
       <healthdcatap:healthCategory rdf:resource="http://healthdataportal.eu/ns/health-category/registries"/>
       <dct:type rdf:resource="http://publications.europa.eu/resource/authority/dataset-type/STATISTICAL"/>
+      <dct:conformsTo>
+        <dct:Standard rdf:about="https://example.org/spec/dataset-standard-1">
+          <skos:prefLabel xml:lang="eng">Dataset Standard 1</skos:prefLabel>
+        </dct:Standard>
+      </dct:conformsTo>
       <dct:accessRights>
         <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/access-right/PUBLIC">
           <skos:prefLabel xml:lang="eng">Public</skos:prefLabel>

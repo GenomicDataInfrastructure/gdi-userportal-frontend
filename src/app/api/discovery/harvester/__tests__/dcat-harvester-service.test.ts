@@ -132,6 +132,12 @@ describe("DcatHarvesterService", () => {
             label: "STATISTICAL",
           },
         ],
+        conformsTo: [
+          {
+            value: "https://example.org/spec/dataset-standard-1",
+            label: "Dataset Standard 1",
+          },
+        ],
         accessRights: {
           value:
             "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
@@ -298,6 +304,7 @@ describe("DcatHarvesterService", () => {
         healthTheme: [],
         healthCategory: [],
         dcatType: [],
+        conformsTo: [],
         accessRights: undefined,
         legalBasis: undefined,
         applicableLegislation: undefined,
@@ -649,6 +656,7 @@ describe("DcatHarvesterService", () => {
       healthTheme: [],
       healthCategory: [],
       dcatType: [],
+      conformsTo: [],
       personalData: undefined,
       purpose: undefined,
       codeValues: undefined,
@@ -949,6 +957,7 @@ describe("DcatHarvesterService", () => {
         healthTheme: [],
         healthCategory: [],
         dcatType: [],
+        conformsTo: [],
         personalData: undefined,
         purpose: undefined,
         codeValues: undefined,

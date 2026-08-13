@@ -923,6 +923,19 @@ describe("LocalIndexDiscoveryProvider", () => {
     });
   });
 
+  test("retrieveDataset joins multiple version notes with a newline instead of dropping all but the first", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce(
+      buildLocalDiscoveryDataset({
+        id: "version-notes-id",
+        versionNotes: ["Initial release", "Fixed typo in title"],
+      })
+    );
+
+    const result = await provider.retrieveDataset("version-notes-id");
+
+    expect(result.versionNotes).toBe("Initial release\nFixed typo in title");
+  });
+
   test("retrieveDataset maps wasGeneratedBy to provenanceActivity with label derivation", async () => {
     mockStore.retrieveDataset.mockResolvedValueOnce(
       buildLocalDiscoveryDataset({

@@ -645,6 +645,7 @@ const DatasetMetadata = ({
       {hasHealthTheme &&
         ((dataset.healthTheme && dataset.healthTheme.length > 0) ||
           (dataset.healthCategory && dataset.healthCategory.length > 0) ||
+          dataset.provenance ||
           (dataset.provenanceActivity &&
             dataset.provenanceActivity.length > 0)) && (
           <MetadataSection title={t("healthInformation")} icon={faHeartPulse}>
@@ -686,6 +687,19 @@ const DatasetMetadata = ({
                   }
                 />
               </div>
+              {dataset.provenance && (
+                <div className="flex flex-wrap gap-2 items-center relative group">
+                  <span className="font-medium shrink-0">
+                    {t("provenance")}:
+                  </span>
+                  <span>{dataset.provenance}</span>
+                  <Tooltip
+                    message={
+                      helpText?.["provenance"] ?? t("tooltips.provenance")
+                    }
+                  />
+                </div>
+              )}
               {dataset.provenanceActivity &&
                 dataset.provenanceActivity.length > 0 && (
                   <div className="flex flex-wrap gap-2 items-center relative group">
@@ -1209,13 +1223,17 @@ const DatasetMetadata = ({
                 <NotProvided label={notProvidedLabel} />
               )}
             </MetadataField>
-            <div className="flex items-center gap-2 flex-wrap relative group">
+            <div className="flex items-start gap-2 flex-wrap relative group">
               <span className="font-medium shrink-0">{t("versionNotes")}:</span>
-              <span>
-                {dataset.versionNotes || (
-                  <NotProvided label={notProvidedLabel} />
-                )}
-              </span>
+              {dataset.versionNotes ? (
+                <ul className="list-disc pl-4">
+                  {dataset.versionNotes.split("\n").map((note) => (
+                    <li key={note}>{note}</li>
+                  ))}
+                </ul>
+              ) : (
+                <NotProvided label={notProvidedLabel} />
+              )}
               <Tooltip
                 message={
                   helpText?.["versionNotes"] ?? t("tooltips.versionNotes")

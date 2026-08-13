@@ -2,12 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import {
-  faDatabase,
-  faExclamationTriangle,
-  faLink,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
+import { faDatabase, faLink, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
 
@@ -18,9 +13,9 @@ type FallbackEntitlementCardProps = {
 };
 
 /**
- * Renders minimal entitlement information when full dataset details cannot be
- * resolved from the catalogue.  Displays the raw visa fields (dataset ID,
- * granted-by, source) together with a user-facing fallback message.
+ * Minimal entitlement card shown when full dataset details cannot be resolved.
+ * Displays the raw visa fields (dataset ID, granted-by, source).
+ * A single consolidated notice is shown above the list — not repeated here.
  */
 export default function FallbackEntitlementCard({
   datasetId,
@@ -31,16 +26,9 @@ export default function FallbackEntitlementCard({
 
   return (
     <div className="w-full p-4">
-      {/* Warning banner */}
-      <div className="mb-3 flex items-start gap-2 rounded-lg border-l-4 border-l-warning bg-warning/10 p-3 shadow-lg">
-        <FontAwesomeIcon
-          icon={faExclamationTriangle}
-          className="mt-0.5 h-4 w-4 shrink-0 text-warning"
-        />
-        <p className="text-sm text-gray-800">{t("datasetUnavailable")}</p>
-      </div>
-
-      {/* Minimal grant info from the visa */}
+      <p className="mb-2 text-xs italic text-red-500">
+        {t("datasetUnavailable")}
+      </p>
       <div className="flex flex-col gap-2 text-sm text-gray-700">
         <div className="flex items-center gap-2">
           <FontAwesomeIcon icon={faDatabase} className="w-4 text-info" />

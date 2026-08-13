@@ -19,6 +19,7 @@ type EntitlementsListProps = {
 
 function EntitlementsList({ entitlements }: Readonly<EntitlementsListProps>) {
   const t = useTranslations("requests.entitlements");
+
   return (
     <List>
       {entitlements.map((entitlement, index) => {

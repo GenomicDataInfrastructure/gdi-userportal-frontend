@@ -1004,8 +1004,8 @@
     "fr": "Les détails du jeu de données sont temporairement indisponibles. Les informations sur les droits d'accès sont affichées à partir de votre autorisation d'accès. Veuillez réessayer ultérieurement ou contacter le support si le problème persiste."
   },
   "requests.entitlements.passportUnavailable": {
-    "en": "Unable to retrieve your GA4GH Passport. Your entitlements may not be available as a result. Please sign out and sign back in, or contact support if the issue persists.",
-    "fr": "Impossible de récupérer votre passeport GA4GH. Vos droits d'accès peuvent ne pas être disponibles en conséquence. Veuillez vous déconnecter et vous reconnecter, ou contacter le support si le problème persiste."
+    "en": "Your access entitlements could not be loaded (GA4GH Passport unavailable). Please contact support.",
+    "fr": "Vos droits d'accès n'ont pas pu être chargés (passeport GA4GH indisponible). Veuillez contacter le support."
   },
   "requests.entitlements.noValidGrants": {
     "en": "Your credentials were retrieved but no valid access grants were found. Your grants may have expired or are still awaiting approval.",

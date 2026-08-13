@@ -22,9 +22,8 @@ import { DatasetEntitlement } from "@/app/api/access-management/additional-types
 interface EntitlementsResponse {
   datasetEntitlements?: DatasetEntitlement[];
   /**
-   * `false`  — LS-AAI passport could not be fetched (show re-auth banner).
-   * `true`   — passport was fetched (entitlements may still be empty).
-   * `undefined` — V1 path; not applicable.
+   * `false` — LS-AAI passport could not be fetched (show re-auth banner).
+   * `true`  — passport was fetched (entitlements may still be empty).
    */
   passportPresent?: boolean;
   error?: ErrorResponse;

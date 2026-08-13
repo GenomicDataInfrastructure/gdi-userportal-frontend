@@ -8,9 +8,8 @@ import { useTranslations } from "next-intl";
 
 type EmptyEntitlementsProps = {
   /**
-   * When `true`, the passport was retrieved from LS-AAI successfully but
-   * contained no valid ControlledAccessGrants visas.  A different message is
-   * shown instead of the default "no entitlement yet" copy.
+   * Shows the "no valid grants" message instead of the default empty-state copy.
+   * Set when the passport was fetched but contained no ControlledAccessGrants visas.
    */
   noValidGrants?: boolean;
 };

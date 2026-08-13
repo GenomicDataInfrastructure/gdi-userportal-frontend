@@ -107,8 +107,11 @@ describe("datasetEntitlements", () => {
     expect(datasetEntitlements).toEqual([
       {
         dataset: { identifier: "2", title: "Dataset 2" },
+        datasetId: "2",
         start: "2022-01-01",
         end: "2022-12-31",
+        source: undefined,
+        by: undefined,
       },
     ]);
   });

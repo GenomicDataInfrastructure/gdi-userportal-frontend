@@ -14,12 +14,19 @@ import Error from "@/app/error";
 import axios from "axios";
 import { useTranslations } from "next-intl";
 import { EmptyEntitlements } from "./EmptyEntitlements";
+import PassportUnavailableBanner from "./PassportUnavailableBanner";
 import { retrieveEntitlementsApi } from "../../api/access-management";
 import { ErrorResponse } from "@/app/api/access-management/open-api/schemas";
 import { DatasetEntitlement } from "@/app/api/access-management/additional-types";
 
 interface EntitlementsResponse {
   datasetEntitlements?: DatasetEntitlement[];
+  /**
+   * `false`  — LS-AAI passport could not be fetched (show re-auth banner).
+   * `true`   — passport was fetched (entitlements may still be empty).
+   * `undefined` — V1 path; not applicable.
+   */
+  passportPresent?: boolean;
   error?: ErrorResponse;
   status: Status;
 }
@@ -33,13 +40,20 @@ function EntitlementsPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const { entitlements } = await retrieveEntitlementsApi();
+        const result = await retrieveEntitlementsApi();
+        const { entitlements } = result;
+        const passportPresent =
+          "passportPresent" in result &&
+          typeof result.passportPresent === "boolean"
+            ? result.passportPresent
+            : undefined;
 
         const datasetEntitlements =
           await createDatasetEntitlements(entitlements);
 
         setResponse({
-          datasetEntitlements: datasetEntitlements,
+          datasetEntitlements,
+          passportPresent,
           status: "success",
         });
       } catch (error) {
@@ -89,12 +103,21 @@ function EntitlementsPage() {
         {t("requests.entitlements.title")}
       </PageHeading>
       <span>{t("requests.entitlements.subtitle")}</span>
+
+      {response.passportPresent === false && (
+        <div className="mt-6">
+          <PassportUnavailableBanner />
+        </div>
+      )}
+
       <ListContainer>
         {hasEntitlements ? (
           <EntitlementsList entitlements={response.datasetEntitlements ?? []} />
-        ) : (
-          <EmptyEntitlements />
-        )}
+        ) : response.passportPresent !== false ? (
+          <EmptyEntitlements
+            noValidGrants={response.passportPresent === true}
+          />
+        ) : null}
       </ListContainer>
     </div>
   );

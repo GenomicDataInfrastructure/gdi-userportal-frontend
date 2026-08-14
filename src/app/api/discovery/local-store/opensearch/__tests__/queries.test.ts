@@ -28,31 +28,74 @@ const canonicalDataset = buildLocalDiscoveryDataset({
 
 describe("opensearch/queries", () => {
   test("createIndexMappings returns expected mapping structure", () => {
+    const wordBoundaryText = {
+      type: "text",
+      analyzer: "word_boundary_analyzer",
+    };
+    const valueLabel = {
+      properties: {
+        value: { type: "keyword" },
+        label: {
+          type: "text",
+          analyzer: "word_boundary_analyzer",
+          fields: { keyword: { type: "keyword" } },
+        },
+      },
+    };
+    const agent = {
+      type: "object",
+      properties: {
+        name: {
+          type: "text",
+          analyzer: "word_boundary_analyzer",
+          fields: { keyword: { type: "keyword" } },
+        },
+        email: { type: "keyword" },
+        url: { type: "keyword" },
+        uri: { type: "keyword" },
+        homepage: { type: "keyword" },
+        identifier: { type: "keyword" },
+        type: valueLabel,
+      },
+    };
+
     expect(createIndexMappings()).toEqual({
+      settings: {
+        analysis: {
+          tokenizer: {
+            word_boundary_tokenizer: {
+              type: "pattern",
+              pattern: "[^\\p{L}\\p{N}]+",
+            },
+          },
+          analyzer: {
+            word_boundary_analyzer: {
+              type: "custom",
+              tokenizer: "word_boundary_tokenizer",
+              filter: ["lowercase"],
+            },
+          },
+        },
+      },
       mappings: {
         properties: {
           id: { type: "keyword" },
           identifier: { type: "keyword" },
           title: {
             type: "text",
+            analyzer: "word_boundary_analyzer",
             fields: {
               keyword: { type: "keyword" },
             },
           },
-          description: { type: "text" },
-          catalogue: { type: "keyword" },
-          codeValues: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
+          description: wordBoundaryText,
+          catalogue: {
+            type: "text",
+            analyzer: "word_boundary_analyzer",
+            fields: { keyword: { type: "keyword" } },
           },
-          codingSystem: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
+          codeValues: valueLabel,
+          codingSystem: valueLabel,
           isReferencedBy: { type: "keyword" },
           documentation: { type: "keyword" },
           wasGeneratedBy: {
@@ -61,188 +104,105 @@ describe("opensearch/queries", () => {
               activityType: { type: "keyword" },
             },
           },
-          languages: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
+          languages: valueLabel,
           createdAt: { type: "date" },
           modifiedAt: { type: "date" },
           version: { type: "keyword" },
-          hasVersions: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
-          versionNotes: { type: "text" },
-          provenance: { type: "text" },
+          hasVersions: valueLabel,
+          versionNotes: wordBoundaryText,
+          provenance: wordBoundaryText,
           numberOfRecords: { type: "integer" },
           numberOfUniqueIndividuals: { type: "integer" },
           maxTypicalAge: { type: "integer" },
           minTypicalAge: { type: "integer" },
           hasStructuredData: { type: "boolean" },
-          populationCoverage: { type: "text" },
-          spatialCoverage: { type: "object" },
+          populationCoverage: wordBoundaryText,
+          spatialCoverage: {
+            type: "object",
+            properties: {
+              uri: { type: "keyword" },
+              text: wordBoundaryText,
+              geom: { type: "keyword" },
+              bbox: { type: "keyword" },
+              centroid: { type: "keyword" },
+            },
+          },
           spatialResolutionInMeters: { type: "float" },
           temporalCoverage: { type: "object" },
           retentionPeriod: { type: "object" },
           temporalResolution: { type: "keyword" },
-          frequency: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
-          themes: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
+          frequency: valueLabel,
+          themes: valueLabel,
           keywords: { type: "keyword" },
-          healthTheme: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
-          healthCategory: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
-          dcatType: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
-          publishers: {
-            type: "object",
-            properties: {
-              name: {
-                type: "text",
-                fields: {
-                  keyword: { type: "keyword" },
-                },
-              },
-              email: { type: "keyword" },
-              url: { type: "keyword" },
-              uri: { type: "keyword" },
-              homepage: { type: "keyword" },
-              identifier: { type: "keyword" },
-              type: {
-                properties: {
-                  value: { type: "keyword" },
-                  label: { type: "keyword" },
-                },
-              },
-            },
-          },
-          hdab: {
-            type: "object",
-            properties: {
-              name: {
-                type: "text",
-                fields: {
-                  keyword: { type: "keyword" },
-                },
-              },
-              email: { type: "keyword" },
-              url: { type: "keyword" },
-              uri: { type: "keyword" },
-              homepage: { type: "keyword" },
-              identifier: { type: "keyword" },
-              type: {
-                properties: {
-                  value: { type: "keyword" },
-                  label: { type: "keyword" },
-                },
-              },
-            },
-          },
-          creators: {
-            type: "object",
-            properties: {
-              name: {
-                type: "text",
-                fields: {
-                  keyword: { type: "keyword" },
-                },
-              },
-              email: { type: "keyword" },
-              url: { type: "keyword" },
-              uri: { type: "keyword" },
-              homepage: { type: "keyword" },
-              identifier: { type: "keyword" },
-              type: {
-                properties: {
-                  value: { type: "keyword" },
-                  label: { type: "keyword" },
-                },
-              },
-            },
-          },
-          publisherType: {
-            type: "object",
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
-          accessRights: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
-          conformsTo: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
-          legalBasis: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
-          applicableLegislation: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
+          healthTheme: valueLabel,
+          healthCategory: valueLabel,
+          dcatType: valueLabel,
+          publishers: agent,
+          hdab: agent,
+          creators: agent,
+          publisherType: valueLabel,
+          accessRights: valueLabel,
+          conformsTo: valueLabel,
+          legalBasis: valueLabel,
+          applicableLegislation: valueLabel,
           dataDictionary: {
             type: "object",
             properties: {
               name: {
                 type: "text",
-                fields: {
-                  keyword: { type: "keyword" },
-                },
+                analyzer: "word_boundary_analyzer",
+                fields: { keyword: { type: "keyword" } },
               },
               type: { type: "keyword" },
-              description: { type: "text" },
+              description: wordBoundaryText,
             },
           },
-          personalData: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
-          purpose: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
+          personalData: valueLabel,
+          purpose: valueLabel,
           distributionsCount: { type: "integer" },
+          distributions: {
+            type: "object",
+            properties: {
+              id: { type: "keyword" },
+              title: {
+                type: "text",
+                analyzer: "word_boundary_analyzer",
+                fields: { keyword: { type: "keyword" } },
+              },
+              description: wordBoundaryText,
+              format: valueLabel,
+              mediaType: valueLabel,
+              license: valueLabel,
+              rights: wordBoundaryText,
+              conformsTo: valueLabel,
+              applicableLegislation: valueLabel,
+              byteSize: { type: "long" },
+              accessUrl: { type: "keyword" },
+              downloadUrl: { type: "keyword" },
+              createdAt: { type: "date" },
+            },
+          },
+          contacts: {
+            type: "object",
+            properties: {
+              name: {
+                type: "text",
+                analyzer: "word_boundary_analyzer",
+                fields: { keyword: { type: "keyword" } },
+              },
+              email: { type: "keyword" },
+              uri: { type: "keyword" },
+              url: { type: "keyword" },
+              identifier: { type: "keyword" },
+            },
+          },
+          datasetRelationships: {
+            type: "object",
+            properties: {
+              relation: { type: "keyword" },
+              target: { type: "keyword" },
+            },
+          },
         },
       },
     });
@@ -277,7 +237,7 @@ describe("opensearch/queries", () => {
     });
   });
 
-  test("buildSearchBody uses fuzzy + phrase_prefix when query is provided", () => {
+  test("buildSearchBody uses cross_fields + fuzzy + keyword + phrase_prefix when query is provided", () => {
     const body = buildSearchBody({ query: "regis" });
     const shouldClauses = (body.query as any).bool.must[0].bool.should;
 
@@ -285,15 +245,60 @@ describe("opensearch/queries", () => {
     expect(body.size).toBe(20);
     expect(body.query).toHaveProperty("bool");
     expect((body.query as any).bool.must[0].bool.minimum_should_match).toBe(1);
-    expect(shouldClauses).toHaveLength(2);
-    expect(shouldClauses[0].multi_match.fields).toContain("identifier");
-    expect(shouldClauses[0].multi_match.fields).toContain("version");
-    expect(shouldClauses[0].multi_match.fields).toContain("versionNotes");
-    expect(shouldClauses[0].multi_match.fields).toContain("provenance");
-    expect(shouldClauses[1].multi_match.fields).not.toContain("identifier");
-    expect(shouldClauses[1].multi_match.fields).not.toContain("catalogue");
-    expect(shouldClauses[1].multi_match.fields).toContain("versionNotes");
-    expect(shouldClauses[1].multi_match.fields).toContain("provenance");
+    expect(shouldClauses).toHaveLength(4);
+
+    const [crossFields, fuzzyTextFields, fuzzyKeywordFields, phrasePrefix] =
+      shouldClauses;
+
+    expect(crossFields.multi_match.type).toBe("cross_fields");
+    expect(crossFields.multi_match.operator).toBe("and");
+    expect(crossFields.multi_match.fields).toContain("versionNotes");
+    expect(crossFields.multi_match.fields).toContain("provenance");
+    expect(crossFields.multi_match.fields).not.toContain("identifier");
+
+    expect(fuzzyTextFields.multi_match.fuzziness).toBe("AUTO");
+    expect(fuzzyTextFields.multi_match.minimum_should_match).toBe("100%");
+    expect(fuzzyTextFields.multi_match.fields).toContain("versionNotes");
+    expect(fuzzyTextFields.multi_match.fields).not.toContain("identifier");
+
+    expect(fuzzyKeywordFields.multi_match.fuzziness).toBe("AUTO");
+    expect(fuzzyKeywordFields.multi_match.fields).toContain("identifier");
+    expect(fuzzyKeywordFields.multi_match.fields).toContain("version");
+    expect(fuzzyKeywordFields.multi_match.fields).not.toContain("versionNotes");
+
+    expect(phrasePrefix.multi_match.type).toBe("phrase_prefix");
+    expect(phrasePrefix.multi_match.fields).not.toContain("identifier");
+    expect(phrasePrefix.multi_match.fields).not.toContain("catalogue");
+    expect(phrasePrefix.multi_match.fields).toContain("versionNotes");
+    expect(phrasePrefix.multi_match.fields).toContain("provenance");
+  });
+
+  test("buildSearchBody treats catalogue as free text, not an opaque keyword", () => {
+    const body = buildSearchBody({ query: "some words" });
+    const shouldClauses = (body.query as any).bool.must[0].bool.should;
+    const [crossFields, , fuzzyKeywordFields] = shouldClauses;
+
+    expect(crossFields.multi_match.fields).toContain("catalogue");
+    expect(fuzzyKeywordFields.multi_match.fields).not.toContain("catalogue");
+  });
+
+  test("buildSearchBody includes health theme and category labels in the cross-field search", () => {
+    const body = buildSearchBody({ query: "mental health" });
+    const shouldClauses = (body.query as any).bool.must[0].bool.should;
+    const [crossFields] = shouldClauses;
+
+    expect(crossFields.multi_match.fields).toContain("themes.label");
+    expect(crossFields.multi_match.fields).toContain("healthTheme.label");
+    expect(crossFields.multi_match.fields).toContain("healthCategory.label");
+  });
+
+  test("buildSearchBody requires every query term to match via cross_fields AND, avoiding loosely-related matches", () => {
+    const body = buildSearchBody({ query: "mental health" });
+    const shouldClauses = (body.query as any).bool.must[0].bool.should;
+    const [crossFields, fuzzyTextFields] = shouldClauses;
+
+    expect(crossFields.multi_match.operator).toBe("and");
+    expect(fuzzyTextFields.multi_match.minimum_should_match).toBe("100%");
   });
 
   test("buildSearchBody trims query before building clauses", () => {
@@ -412,7 +417,14 @@ describe("opensearch/queries", () => {
                         bool: {
                           should: [
                             { term: { "accessRights.value": "Public" } },
-                            { term: { "accessRights.label": "Public" } },
+                            {
+                              term: {
+                                "accessRights.label.keyword": "Public",
+                              },
+                            },
+                            {
+                              match_phrase: { "accessRights.label": "Public" },
+                            },
                           ],
                           minimum_should_match: 1,
                         },
@@ -427,6 +439,11 @@ describe("opensearch/queries", () => {
                             },
                             {
                               term: {
+                                "accessRights.label.keyword": "Restricted",
+                              },
+                            },
+                            {
+                              match_phrase: {
                                 "accessRights.label": "Restricted",
                               },
                             },
@@ -445,6 +462,56 @@ describe("opensearch/queries", () => {
         ],
       },
     });
+  });
+
+  test("buildSearchBody builds a matchable clause for the healthTheme dropdown filter", () => {
+    const body = buildSearchBody({
+      facets: [
+        {
+          type: "DROPDOWN",
+          key: "healthTheme",
+          value: "Mental Health",
+        },
+      ],
+    });
+
+    expect((body.query as any).bool.filter).toEqual([
+      {
+        bool: {
+          should: [
+            { term: { "healthTheme.value": "Mental Health" } },
+            { term: { "healthTheme.label.keyword": "Mental Health" } },
+            { match_phrase: { "healthTheme.label": "Mental Health" } },
+          ],
+          minimum_should_match: 1,
+        },
+      },
+    ]);
+  });
+
+  test("buildSearchBody builds a matchable clause for the healthCategory dropdown filter", () => {
+    const body = buildSearchBody({
+      facets: [
+        {
+          type: "DROPDOWN",
+          key: "healthCategory",
+          value: "Registries",
+        },
+      ],
+    });
+
+    expect((body.query as any).bool.filter).toEqual([
+      {
+        bool: {
+          should: [
+            { term: { "healthCategory.value": "Registries" } },
+            { term: { "healthCategory.label.keyword": "Registries" } },
+            { match_phrase: { "healthCategory.label": "Registries" } },
+          ],
+          minimum_should_match: 1,
+        },
+      },
+    ]);
   });
 
   test("buildSearchBody ignores malformed and unsupported facets", () => {

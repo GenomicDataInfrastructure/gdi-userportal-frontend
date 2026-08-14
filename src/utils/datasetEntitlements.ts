@@ -35,6 +35,8 @@ export const mapToDatasetEntitlement = (
 export const createDatasetEntitlements = async (
   entitlements: Entitlement[]
 ): Promise<DatasetEntitlement[]> => {
+  if (entitlements.length === 0) return [];
+
   const options: DatasetSearchQuery = {
     rows: 1000,
     facets: entitlements.map((e) => ({
@@ -46,9 +48,38 @@ export const createDatasetEntitlements = async (
     operator: QueryOperator.OR,
   };
 
-  const { results: datasets } = await searchDatasetsApi(options);
+  let datasets: SearchedDataset[] = [];
+  try {
+    const { results } = await searchDatasetsApi(options);
+    datasets = results ?? [];
+  } catch (error) {
+    console.warn("[entitlements] dataset search failed", { error });
+  }
 
-  return mapToDatasetEntitlement(datasets!, entitlements);
+  return entitlements.map((e) => {
+    const dataset = datasets.find((x) => x.identifier === e.datasetId);
+    if (!dataset) {
+      console.warn("[entitlements] dataset lookup failed", {
+        datasetId: e.datasetId,
+        reason: "No matching dataset found in catalog",
+      });
+      return {
+        datasetId: e.datasetId,
+        start: e.start,
+        end: e.end,
+        source: e.source,
+        by: e.by,
+      };
+    }
+    return {
+      dataset,
+      datasetId: e.datasetId,
+      start: e.start,
+      end: e.end,
+      source: e.source,
+      by: e.by,
+    };
+  });
 };
 
 export const findDatasetByIdentifier = async (

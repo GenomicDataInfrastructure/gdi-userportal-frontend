@@ -999,6 +999,18 @@
     "en": "Source",
     "fr": "Source"
   },
+  "requests.entitlements.datasetUnavailable": {
+    "en": "Dataset details are temporarily unavailable. Entitlement information is shown based on your access grant. Please try again later or contact support if the issue persists.",
+    "fr": "Les détails du jeu de données sont temporairement indisponibles. Les informations sur les droits d'accès sont affichées à partir de votre autorisation d'accès. Veuillez réessayer ultérieurement ou contacter le support si le problème persiste."
+  },
+  "requests.entitlements.passportUnavailable": {
+    "en": "Your access entitlements could not be loaded (GA4GH Passport unavailable). Please contact support.",
+    "fr": "Vos droits d'accès n'ont pas pu être chargés (passeport GA4GH indisponible). Veuillez contacter le support."
+  },
+  "requests.entitlements.noValidGrants": {
+    "en": "Your credentials were retrieved but no valid access grants were found. Your grants may have expired or are still awaiting approval.",
+    "fr": "Vos informations d'identification ont été récupérées, mais aucune autorisation d'accès valide n'a été trouvée. Vos autorisations ont peut-être expiré ou sont encore en attente d'approbation."
+  },
   "application.title": {
     "en": "Application {id}",
     "fr": "Demande {id}"

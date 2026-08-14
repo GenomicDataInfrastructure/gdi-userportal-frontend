@@ -427,4 +427,167 @@ describe("extractVerifiedControlledAccessGrants", () => {
     expect(grant.source).toBe(VISA_PAYLOAD.ga4gh_visa_v1.source);
     expect(grant.by).toBe(VISA_PAYLOAD.ga4gh_visa_v1.by);
   });
+
+  test("logs rejected visas via console.warn when visas fail signature verification", async () => {
+    // Signed with key-B but resolver only trusts key-A — will fail verification
+    const jwt = await signVisaJwt(VISA_PAYLOAD, privateKeyB, { kid: "key-b" });
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    await extractVerifiedControlledAccessGrants([jwt], resolverTrustingA);
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      "[visa-validation] REJECTED visas (failed signature verification)",
+      expect.objectContaining({
+        count: 1,
+        byIssuerAndType: expect.objectContaining({
+          "https://issuer-a.example.org|ControlledAccessGrants": 1,
+        }),
+      })
+    );
+    warnSpy.mockRestore();
+    errorSpy.mockRestore();
+  });
+
+  test("logs all rejected visas in a single console.warn call", async () => {
+    const jwtBadSig = await signVisaJwt(VISA_PAYLOAD, privateKeyB, {
+      kid: "key-b",
+    });
+    const untrustedPayload = {
+      ...VISA_PAYLOAD,
+      iss: "https://untrusted.example.org",
+    };
+    const jwtUntrusted = await signVisaJwt(untrustedPayload, privateKeyA);
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    await extractVerifiedControlledAccessGrants(
+      [jwtBadSig, jwtUntrusted],
+      resolverTrustingA
+    );
+
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    expect(warnSpy).toHaveBeenCalledWith(
+      "[visa-validation] REJECTED visas (failed signature verification)",
+      expect.objectContaining({
+        count: 2,
+        byIssuerAndType: expect.objectContaining({
+          "https://issuer-a.example.org|ControlledAccessGrants": 1,
+          "https://untrusted.example.org|ControlledAccessGrants": 1,
+        }),
+      })
+    );
+    warnSpy.mockRestore();
+    errorSpy.mockRestore();
+  });
+
+  test("does not emit console.warn when all visas are accepted", async () => {
+    const jwt = await signVisaJwt(VISA_PAYLOAD, privateKeyA);
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    await extractVerifiedControlledAccessGrants([jwt], resolverTrustingA);
+
+    expect(warnSpy).not.toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  test("does not emit console.warn when passport is empty", async () => {
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    await extractVerifiedControlledAccessGrants([], resolverTrustingA);
+
+    expect(warnSpy).not.toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  // ---------------------------------------------------------------------------
+  // Visa expiry filtering
+  // ---------------------------------------------------------------------------
+
+  test("filters out a visa whose ga4gh_visa_v1.exp is in the past", async () => {
+    const expiredPayload = {
+      ...VISA_PAYLOAD,
+      ga4gh_visa_v1: { ...VISA_PAYLOAD.ga4gh_visa_v1, exp: 1 }, // epoch+1s
+    };
+    const jwt = await signVisaJwt(expiredPayload, privateKeyA);
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    const grants = await extractVerifiedControlledAccessGrants(
+      [jwt],
+      resolverTrustingA
+    );
+
+    expect(grants).toHaveLength(0);
+    expect(warnSpy).toHaveBeenCalledWith(
+      "[visa-validation] SKIPPED expired visas",
+      expect.objectContaining({ count: 1 })
+    );
+    warnSpy.mockRestore();
+  });
+
+  test("keeps a visa with no exp field (no expiry set)", async () => {
+    const noExpPayload = {
+      ...VISA_PAYLOAD,
+      ga4gh_visa_v1: {
+        type: VISA_PAYLOAD.ga4gh_visa_v1.type,
+        value: VISA_PAYLOAD.ga4gh_visa_v1.value,
+        source: VISA_PAYLOAD.ga4gh_visa_v1.source,
+        by: VISA_PAYLOAD.ga4gh_visa_v1.by,
+        iat: VISA_PAYLOAD.ga4gh_visa_v1.iat,
+        // exp intentionally omitted
+      },
+    };
+    const jwt = await signVisaJwt(noExpPayload, privateKeyA);
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    const grants = await extractVerifiedControlledAccessGrants(
+      [jwt],
+      resolverTrustingA
+    );
+
+    expect(grants).toHaveLength(1);
+    expect(warnSpy).not.toHaveBeenCalledWith(
+      "[visa-validation] SKIPPED expired visas",
+      expect.anything()
+    );
+    warnSpy.mockRestore();
+  });
+
+  test("does not verify expired visas (no JWKS call made)", async () => {
+    const expiredPayload = {
+      ...VISA_PAYLOAD,
+      ga4gh_visa_v1: { ...VISA_PAYLOAD.ga4gh_visa_v1, exp: 1 },
+    };
+    const jwt = await signVisaJwt(expiredPayload, privateKeyA);
+    const resolverSpy = jest.fn(resolverTrustingA);
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    await extractVerifiedControlledAccessGrants([jwt], resolverSpy);
+
+    expect(resolverSpy).not.toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  test("returns only non-expired visas from a mixed passport", async () => {
+    const expiredPayload = {
+      ...VISA_PAYLOAD,
+      ga4gh_visa_v1: {
+        ...VISA_PAYLOAD.ga4gh_visa_v1,
+        value: "GDID-EXPIRED",
+        exp: 1,
+      },
+    };
+    const validJwt = await signVisaJwt(VISA_PAYLOAD, privateKeyA);
+    const expiredJwt = await signVisaJwt(expiredPayload, privateKeyA);
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    const grants = await extractVerifiedControlledAccessGrants(
+      [validJwt, expiredJwt],
+      resolverTrustingA
+    );
+
+    expect(grants).toHaveLength(1);
+    expect(grants[0].datasetId).toBe("GDID-12345678-11se");
+    warnSpy.mockRestore();
+  });
 });

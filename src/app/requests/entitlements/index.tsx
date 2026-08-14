@@ -109,13 +109,18 @@ function EntitlementsPage() {
         </div>
       )}
 
+      {!hasEntitlements && response.passportPresent === true && (
+        <div className="mt-6">
+          <EmptyEntitlements noValidGrants />
+        </div>
+      )}
+
       <ListContainer>
         {hasEntitlements ? (
           <EntitlementsList entitlements={response.datasetEntitlements ?? []} />
-        ) : response.passportPresent !== false ? (
-          <EmptyEntitlements
-            noValidGrants={response.passportPresent === true}
-          />
+        ) : response.passportPresent !== false &&
+          response.passportPresent !== true ? (
+          <EmptyEntitlements />
         ) : null}
       </ListContainer>
     </div>

@@ -467,6 +467,10 @@
     "en": "Creators",
     "fr": "Créateurs"
   },
+  "datasets.detail.publishers": {
+    "en": "Publishers",
+    "fr": "Éditeurs"
+  },
   "datasets.detail.trustedDataHolder": {
     "en": "Trusted Data Holder",
     "fr": "Détenteur de données de confiance"

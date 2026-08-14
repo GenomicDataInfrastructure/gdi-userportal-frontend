@@ -250,6 +250,7 @@ describe("DcatHarvesterService", () => {
               value: "http://spdx.org/licenses/Apache-2.0",
               label: "Apache 2.0",
             },
+            rights: "Public",
             conformsTo: [
               {
                 value: "https://example.org/spec/standard-1",
@@ -472,6 +473,55 @@ describe("DcatHarvesterService", () => {
         downloadUrl: undefined,
       },
     ]);
+  });
+
+  test("leaves distribution rights undefined when dct:rights is absent", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:identifier>dataset-1</dct:identifier>
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:distribution>
+            <dcat:Distribution rdf:nodeID="distribution-1">
+              <dct:identifier>dist-1</dct:identifier>
+              <dcat:accessURL rdf:resource="https://example.org/access/1"/>
+            </dcat:Distribution>
+          </dcat:distribution>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].distributions?.[0].rights).toBeUndefined();
+  });
+
+  test("falls back to the URI path segment for distribution rights when no label triple exists", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:identifier>dataset-1</dct:identifier>
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:distribution>
+            <dcat:Distribution rdf:nodeID="distribution-1">
+              <dct:identifier>dist-1</dct:identifier>
+              <dcat:accessURL rdf:resource="https://example.org/access/1"/>
+              <dct:rights rdf:resource="http://publications.europa.eu/resource/authority/access-right/PUBLIC"/>
+            </dcat:Distribution>
+          </dcat:distribution>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].distributions?.[0].rights).toEqual("PUBLIC");
   });
 
   test("deduplicates distributions referenced by both dcat distribution and healthdcatap analytics", async () => {

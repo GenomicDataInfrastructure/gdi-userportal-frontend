@@ -220,6 +220,11 @@ export const canonicalDiscoveryRdf = `
               <skos:prefLabel xml:lang="eng">Apache 2.0</skos:prefLabel>
             </dct:LicenseDocument>
           </dct:license>
+          <dct:rights>
+            <dct:RightsStatement rdf:about="http://publications.europa.eu/resource/authority/access-right/PUBLIC">
+              <skos:prefLabel xml:lang="eng">Public</skos:prefLabel>
+            </dct:RightsStatement>
+          </dct:rights>
           <dct:conformsTo rdf:resource="https://example.org/spec/standard-1" />
           <r5r:applicableLegislation rdf:resource="http://data.legilux.public.lu/eli/etat/leg/rgd/2022/04/07/a180/jo"/>
           <dcat:byteSize rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2048</dcat:byteSize>

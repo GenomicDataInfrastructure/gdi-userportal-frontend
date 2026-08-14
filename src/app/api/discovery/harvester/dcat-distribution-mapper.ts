@@ -6,6 +6,7 @@ import type * as RDF from "@rdfjs/types";
 import { LocalDiscoveryDistribution } from "@/app/api/discovery/local-store/types";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 import { normalizeDate } from "@/app/api/discovery/harvester/date-utils";
+import formatLicenseLabel from "@/utils/licenseLabels";
 
 const DCAT_DISTRIBUTION = "http://www.w3.org/ns/dcat#distribution"; // NOSONAR
 const HEALTHDCATAP_ANALYTICS = "http://healthdataportal.eu/ns/health#analytics"; // NOSONAR
@@ -19,6 +20,7 @@ const DC_DESCRIPTION = "http://purl.org/dc/elements/1.1/description"; // NOSONAR
 const DCT_FORMAT = "http://purl.org/dc/terms/format"; // NOSONAR
 const DCAT_MEDIA_TYPE = "http://www.w3.org/ns/dcat#mediaType"; // NOSONAR
 const DCT_LICENSE = "http://purl.org/dc/terms/license"; // NOSONAR
+const DCT_RIGHTS = "http://purl.org/dc/terms/rights"; // NOSONAR
 const DCT_CONFORMS_TO = "http://purl.org/dc/terms/conformsTo"; // NOSONAR
 const DCATAP_APPLICABLE_LEGISLATION =
   "http://data.europa.eu/r5r/applicableLegislation"; // NOSONAR
@@ -88,6 +90,7 @@ const mapDistribution = (
     format: getDistributionFormat(distributionSubject, graph),
     mediaType: getDistributionMediaType(distributionSubject, graph),
     license: getDistributionLicense(distributionSubject, graph),
+    rights: getDistributionRights(distributionSubject, graph),
     conformsTo: getDistributionConformsTo(distributionSubject, graph),
     applicableLegislation: getDistributionApplicableLegislation(
       distributionSubject,
@@ -208,11 +211,30 @@ const getDistributionLicense = (
   if (!value) return undefined;
 
   const label =
+    formatLicenseLabel(value) ||
     graph.getFirstLiteral(licenseSubject, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
     value.split("/").pop() ||
     value;
 
   return { value, label };
+};
+
+const getDistributionRights = (
+  distributionSubject: RDF.Term,
+  graph: RdfGraph
+): LocalDiscoveryDistribution["rights"] => {
+  const rightsSubject = graph.getObjects(distributionSubject, DCT_RIGHTS)[0];
+  if (!rightsSubject) return undefined;
+
+  const value =
+    graph.getNamedNodeValue(rightsSubject) || rightsSubject.value.trim();
+
+  return (
+    graph.getFirstLiteral(rightsSubject, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
+    value.split("/").pop() ||
+    value ||
+    undefined
+  );
 };
 
 const getDistributionValueLabelArray = (

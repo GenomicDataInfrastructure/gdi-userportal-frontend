@@ -431,7 +431,7 @@ const DatasetMetadata = ({
                 {dataset.publishers.map((publisher, index) => (
                   <span key={publisher.name}>
                     <Link
-                      href={`/datasets?page=1&ckan-publisherName=${publisher.name}`}
+                      href={`/datasets?page=1&ckan-publisherName=${encodeURIComponent(publisher.name)}`}
                     >
                       {publisher.name || t("noTitle")}
                     </Link>
@@ -951,7 +951,7 @@ const DatasetMetadata = ({
                 dataset.publishers.map((publisher, index) => (
                   <span key={publisher.name}>
                     <Link
-                      href={`/datasets?page=1&ckan-publisherName=${publisher.name}`}
+                      href={`/datasets?page=1&ckan-publisherName=${encodeURIComponent(publisher.name)}`}
                     >
                       {publisher.name || t("noTitle")}
                     </Link>

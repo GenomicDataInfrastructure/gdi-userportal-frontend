@@ -431,7 +431,7 @@ const DatasetMetadata = ({
                 {dataset.publishers.map((publisher, index) => (
                   <span key={publisher.name}>
                     <Link
-                      href={`/datasets?page=1&ckan-publisherName=${publisher.name}`}
+                      href={`/datasets?page=1&ckan-publisherName=${encodeURIComponent(publisher.name)}`}
                     >
                       {publisher.name || t("noTitle")}
                     </Link>
@@ -813,6 +813,21 @@ const DatasetMetadata = ({
             />
           </div>
           <MetadataField
+            label={t("spatialResolution")}
+            tooltip={
+              helpText?.["spatialResolutionInMeters"] ??
+              t("tooltips.spatialResolution")
+            }
+          >
+            {dataset.spatialResolutionInMeters !== undefined ? (
+              <>
+                {dataset.spatialResolutionInMeters} {t("meters")}
+              </>
+            ) : (
+              <NotProvided label={notProvidedLabel} />
+            )}
+          </MetadataField>
+          <MetadataField
             label={t("temporalCoverage")}
             tooltip={
               helpText?.["temporalCoverage"] ??
@@ -829,21 +844,6 @@ const DatasetMetadata = ({
             }
           >
             {dataset.temporalResolution || (
-              <NotProvided label={notProvidedLabel} />
-            )}
-          </MetadataField>
-          <MetadataField
-            label={t("spatialResolution")}
-            tooltip={
-              helpText?.["spatialResolutionInMeters"] ??
-              t("tooltips.spatialResolution")
-            }
-          >
-            {dataset.spatialResolutionInMeters !== undefined ? (
-              <>
-                {dataset.spatialResolutionInMeters} {t("meters")}
-              </>
-            ) : (
               <NotProvided label={notProvidedLabel} />
             )}
           </MetadataField>
@@ -930,6 +930,7 @@ const DatasetMetadata = ({
       )}
 
       {(dataset.publisherNote ||
+        (dataset.publishers && dataset.publishers.length > 0) ||
         (dataset.publisherType && dataset.publisherType.length > 0) ||
         (dataset.creators && dataset.creators.length > 0) ||
         (hasHealthTheme &&
@@ -940,6 +941,32 @@ const DatasetMetadata = ({
           icon={faUserShield}
         >
           <div className="flex flex-col gap-3 text-sm">
+            <div className="flex items-center gap-2 flex-wrap relative group">
+              <FontAwesomeIcon
+                icon={faBuilding}
+                className="text-primary text-xs"
+              />
+              <span className="font-medium shrink-0">{t("publishers")}:</span>
+              {dataset.publishers && dataset.publishers.length > 0 ? (
+                dataset.publishers.map((publisher, index) => (
+                  <span key={publisher.name}>
+                    <Link
+                      href={`/datasets?page=1&ckan-publisherName=${encodeURIComponent(publisher.name)}`}
+                    >
+                      {publisher.name || t("noTitle")}
+                    </Link>
+                    {index < dataset.publishers!.length - 1 && ", "}
+                  </span>
+                ))
+              ) : (
+                <NotProvided label={notProvidedLabel} />
+              )}
+              <Tooltip
+                message={
+                  helpText?.["publishers"] ?? t("tooltips.datasetPublishers")
+                }
+              />
+            </div>
             <div className="flex items-center gap-2 flex-wrap relative group">
               <FontAwesomeIcon
                 icon={faNoteSticky}

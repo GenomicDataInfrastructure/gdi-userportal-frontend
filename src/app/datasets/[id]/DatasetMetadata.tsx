@@ -33,7 +33,6 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
-import isHttpUrl from "@/utils/isHttpUrl";
 import DistributionAccordion from "./DistributionAccordion";
 import DataSeriesAccordion from "./DataSeriesAccordion";
 import { Link } from "@/i18n/navigation";
@@ -89,22 +88,16 @@ const NotProvided = ({ label }: { label: string }) => (
   <span className="text-primary">{label}</span>
 );
 
-const LegislationChip = ({ item }: { item: ValueLabel }) => {
-  const className = "bg-primary/10 text-primary rounded-full py-1 px-4";
-
-  return item.value && isHttpUrl(item.value) ? (
-    <a
-      href={item.value}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`${className} hover:underline`}
-    >
-      {item.label}
-    </a>
-  ) : (
-    <span className={className}>{item.label}</span>
-  );
-};
+const LegislationChip = ({ item }: { item: ValueLabel }) => (
+  <a
+    href={item.value}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="bg-primary/10 text-primary rounded-full py-1 px-4 hover:underline"
+  >
+    {item.label}
+  </a>
+);
 
 type ExtendedRetrievedDataset = RetrievedDataset & {
   publisherType?: ValueLabel[];

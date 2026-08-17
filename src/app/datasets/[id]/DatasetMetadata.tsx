@@ -88,17 +88,6 @@ const NotProvided = ({ label }: { label: string }) => (
   <span className="text-primary">{label}</span>
 );
 
-const LegislationChip = ({ item }: { item: ValueLabel }) => (
-  <a
-    href={item.value}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="bg-primary/10 text-primary rounded-full py-1 px-4 hover:underline"
-  >
-    {item.label}
-  </a>
-);
-
 type ExtendedRetrievedDataset = RetrievedDataset & {
   publisherType?: ValueLabel[];
   publisherNote?: string;
@@ -326,11 +315,15 @@ const DatasetMetadata = ({
               </span>
               {dataset.applicableLegislation &&
               dataset.applicableLegislation.length > 0 ? (
-                <div className="flex flex-wrap gap-2 text-xs sm:text-[14px] font-title">
-                  {dataset.applicableLegislation.map((item) => (
-                    <LegislationChip key={item.value} item={item} />
-                  ))}
-                </div>
+                <Chips
+                  chips={dataset.applicableLegislation.map(
+                    (item) => item.label
+                  )}
+                  hrefs={dataset.applicableLegislation.map(
+                    (item) => item.value
+                  )}
+                  className="bg-primary/10 text-primary rounded-full py-1"
+                />
               ) : (
                 <NotProvided label={notProvidedLabel} />
               )}
@@ -887,11 +880,15 @@ const DatasetMetadata = ({
               </span>
               {dataset.applicableLegislation &&
               dataset.applicableLegislation.length > 0 ? (
-                <div className="flex flex-wrap gap-2 text-xs sm:text-[14px] font-title">
-                  {dataset.applicableLegislation.map((item) => (
-                    <LegislationChip key={item.value} item={item} />
-                  ))}
-                </div>
+                <Chips
+                  chips={dataset.applicableLegislation.map(
+                    (item) => item.label
+                  )}
+                  hrefs={dataset.applicableLegislation.map(
+                    (item) => item.value
+                  )}
+                  className="bg-primary/10 text-primary rounded-full py-1"
+                />
               ) : (
                 <NotProvided label={notProvidedLabel} />
               )}

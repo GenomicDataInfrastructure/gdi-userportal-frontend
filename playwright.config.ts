@@ -23,6 +23,16 @@ if (isMocked) {
 const serverEnv = {
   ...process.env,
   MOCK_API_PORT: String(mockApiPort),
+  // Explicitly override values that .env.local may set, to ensure mocked tests
+  // always use the local mock infrastructure.
+  ...(isMocked
+    ? {
+        ALLOW_LOCALHOST_JKU: "true",
+        SKIP_VISA_SIGNATURE_VERIFICATION: "true",
+        KEYCLOAK_ISSUER_URL: `http://localhost:${mockApiPort}`,
+        LS_AAI_USERINFO_URL: `http://localhost:${mockApiPort}/userinfo`,
+      }
+    : {}),
 };
 
 const webServers = [
@@ -41,7 +51,8 @@ const webServers = [
     command: "npm run dev",
     url: "http://localhost:3000",
     timeout: 120 * 1000,
-    reuseExistingServer: true,
+    // In mocked mode, always start fresh so serverEnv overrides .env.local
+    reuseExistingServer: !isMocked,
     env: serverEnv,
   },
 ];

@@ -18,7 +18,7 @@ import {
  * ControlledAccessGrants visas from trusted issuers.
  * Expired visas are filtered out before signature verification.
  */
-export const retrieveEntitlementsV2 = async (): Promise<{
+export const retrieveEntitlements = async (): Promise<{
   entitlements: {
     datasetId: string;
     start?: string;

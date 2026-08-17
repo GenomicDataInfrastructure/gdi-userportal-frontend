@@ -5,7 +5,7 @@
 import { jest } from "@jest/globals";
 import { fetchGa4ghPassport } from "../passport";
 import { extractVerifiedControlledAccessGrants } from "../visa";
-import { retrieveEntitlementsV2 } from "../entitlements";
+import { retrieveEntitlements } from "../entitlements";
 
 jest.mock("../passport");
 jest.mock("../visa");
@@ -69,7 +69,7 @@ const GRANT = {
   by: CONTROLLED_ACCESS_VISA.ga4gh_visa_v1.by,
 };
 
-describe("retrieveEntitlementsV2", () => {
+describe("retrieveEntitlements", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
@@ -81,7 +81,7 @@ describe("retrieveEntitlementsV2", () => {
     });
     mockedExtractVerified.mockResolvedValueOnce([]);
 
-    const result = await retrieveEntitlementsV2();
+    const result = await retrieveEntitlements();
 
     expect(result).toEqual({ entitlements: [], passportPresent: true });
   });
@@ -94,7 +94,7 @@ describe("retrieveEntitlementsV2", () => {
     });
     mockedExtractVerified.mockResolvedValueOnce([GRANT]);
 
-    await retrieveEntitlementsV2();
+    await retrieveEntitlements();
 
     expect(mockedExtractVerified).toHaveBeenCalledWith([rawJwt]);
   });
@@ -106,7 +106,7 @@ describe("retrieveEntitlementsV2", () => {
     });
     mockedExtractVerified.mockResolvedValueOnce([GRANT]);
 
-    const result = await retrieveEntitlementsV2();
+    const result = await retrieveEntitlements();
 
     expect(result.entitlements).toHaveLength(1);
     expect(result.entitlements[0].datasetId).toBe("GDID-12345678-11se");
@@ -119,7 +119,7 @@ describe("retrieveEntitlementsV2", () => {
     });
     mockedExtractVerified.mockResolvedValueOnce([GRANT]);
 
-    const { entitlements } = await retrieveEntitlementsV2();
+    const { entitlements } = await retrieveEntitlements();
 
     expect(entitlements[0].start).toBe(
       new Date(CONTROLLED_ACCESS_VISA.iat * 1000).toISOString()
@@ -133,7 +133,7 @@ describe("retrieveEntitlementsV2", () => {
     });
     mockedExtractVerified.mockResolvedValueOnce([{ ...GRANT, iat: undefined }]);
 
-    const { entitlements } = await retrieveEntitlementsV2();
+    const { entitlements } = await retrieveEntitlements();
 
     expect(entitlements[0].start).toBeUndefined();
   });
@@ -145,7 +145,7 @@ describe("retrieveEntitlementsV2", () => {
     });
     mockedExtractVerified.mockResolvedValueOnce([GRANT]);
 
-    const { entitlements } = await retrieveEntitlementsV2();
+    const { entitlements } = await retrieveEntitlements();
 
     expect(entitlements[0].end).toBe(
       new Date(CONTROLLED_ACCESS_VISA.exp * 1000).toISOString()
@@ -159,7 +159,7 @@ describe("retrieveEntitlementsV2", () => {
     });
     mockedExtractVerified.mockResolvedValueOnce([]);
 
-    const result = await retrieveEntitlementsV2();
+    const result = await retrieveEntitlements();
 
     expect(result).toEqual({ entitlements: [], passportPresent: true });
   });
@@ -177,7 +177,7 @@ describe("retrieveEntitlementsV2", () => {
     });
     mockedExtractVerified.mockResolvedValueOnce([GRANT, secondGrant]);
 
-    const { entitlements } = await retrieveEntitlementsV2();
+    const { entitlements } = await retrieveEntitlements();
 
     expect(entitlements).toHaveLength(2);
     expect(entitlements.map((e) => e.datasetId)).toEqual([
@@ -193,7 +193,7 @@ describe("retrieveEntitlementsV2", () => {
     });
     mockedExtractVerified.mockResolvedValueOnce([{ ...GRANT, exp: undefined }]);
 
-    const { entitlements } = await retrieveEntitlementsV2();
+    const { entitlements } = await retrieveEntitlements();
 
     expect(entitlements[0].end).toBeUndefined();
   });
@@ -205,7 +205,7 @@ describe("retrieveEntitlementsV2", () => {
     });
     mockedExtractVerified.mockResolvedValueOnce([]);
 
-    const result = await retrieveEntitlementsV2();
+    const result = await retrieveEntitlements();
 
     expect(result).toEqual({ entitlements: [], passportPresent: false });
   });
@@ -220,7 +220,7 @@ describe("retrieveEntitlementsV2", () => {
       .spyOn(console, "error")
       .mockImplementation(() => {});
 
-    const result = await retrieveEntitlementsV2();
+    const result = await retrieveEntitlements();
 
     expect(result).toEqual({ entitlements: [], passportPresent: true });
     consoleSpy.mockRestore();
@@ -234,7 +234,7 @@ describe("retrieveEntitlementsV2", () => {
       .spyOn(console, "error")
       .mockImplementation(() => {});
 
-    const result = await retrieveEntitlementsV2();
+    const result = await retrieveEntitlements();
 
     expect(result).toEqual({ entitlements: [], passportPresent: false });
     expect(consoleSpy).toHaveBeenCalledWith(
@@ -252,7 +252,7 @@ describe("retrieveEntitlementsV2", () => {
       .spyOn(console, "error")
       .mockImplementation(() => {});
 
-    const result = await retrieveEntitlementsV2();
+    const result = await retrieveEntitlements();
 
     expect(result).toEqual({ entitlements: [], passportPresent: false });
     expect(consoleSpy).toHaveBeenCalledWith(
@@ -272,7 +272,7 @@ describe("retrieveEntitlementsV2", () => {
       .spyOn(console, "error")
       .mockImplementation(() => {});
 
-    const result = await retrieveEntitlementsV2();
+    const result = await retrieveEntitlements();
 
     expect(result).toEqual({ entitlements: [], passportPresent: true });
     expect(consoleSpy).toHaveBeenCalledWith(

@@ -18,6 +18,7 @@ import {
   faGavel,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
+import isHttpUrl from "@/utils/isHttpUrl";
 import Tooltip from "./Tooltip";
 import { RetrievedDistribution } from "@/app/api/discovery/open-api/schemas";
 import { useTranslations } from "next-intl";
@@ -266,14 +267,32 @@ const DistributionAccordion = ({
                             {t("applicableLegislation")}:
                           </strong>
                           <span className="text-sm ml-2">
-                            {distribution.applicableLegislation
-                              .map(
-                                (l) =>
+                            {distribution.applicableLegislation.map(
+                              (l, index, all) => {
+                                const label =
                                   l.label ||
                                   l.value?.split("/").pop() ||
-                                  l.value
-                              )
-                              .join(", ")}
+                                  l.value;
+                                const isLast = index === all.length - 1;
+                                return (
+                                  <span key={l.value ?? label}>
+                                    {l.value && isHttpUrl(l.value) ? (
+                                      <a
+                                        href={l.value}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary hover:underline break-all"
+                                      >
+                                        {label}
+                                      </a>
+                                    ) : (
+                                      label
+                                    )}
+                                    {!isLast && ", "}
+                                  </span>
+                                );
+                              }
+                            )}
                           </span>
                           <Tooltip
                             message={t(

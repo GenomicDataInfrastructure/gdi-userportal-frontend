@@ -72,7 +72,14 @@ export function validateJku(jku: string): void {
     throw new Error(`Invalid jku URL in visa JWT header: "${jku}"`);
   }
 
-  if (parsed.protocol !== "https:") {
+  // In test environments (ALLOW_LOCALHOST_JKU=true), allow HTTP for localhost
+  // so the mock API server can serve JWKS without TLS.
+  const isLocalhostHttp =
+    process.env.ALLOW_LOCALHOST_JKU === "true" &&
+    parsed.protocol === "http:" &&
+    (parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1");
+
+  if (parsed.protocol !== "https:" && !isLocalhostHttp) {
     throw new Error(`jku must use HTTPS scheme, got "${jku}"`);
   }
 }

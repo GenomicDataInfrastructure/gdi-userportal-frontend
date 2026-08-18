@@ -266,14 +266,26 @@ const DistributionAccordion = ({
                             {t("applicableLegislation")}:
                           </strong>
                           <span className="text-sm ml-2">
-                            {distribution.applicableLegislation
-                              .map(
-                                (l) =>
-                                  l.label ||
-                                  l.value?.split("/").pop() ||
-                                  l.value
-                              )
-                              .join(", ")}
+                            {distribution.applicableLegislation.map(
+                              (l, index, all) => {
+                                const label =
+                                  l.label || l.value?.split("/").pop();
+                                const isLast = index === all.length - 1;
+                                return (
+                                  <span key={l.value}>
+                                    <a
+                                      href={l.value}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-primary hover:underline break-all"
+                                    >
+                                      {label}
+                                    </a>
+                                    {!isLast && ", "}
+                                  </span>
+                                );
+                              }
+                            )}
                           </span>
                           <Tooltip
                             message={t(

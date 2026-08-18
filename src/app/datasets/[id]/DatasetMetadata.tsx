@@ -319,6 +319,9 @@ const DatasetMetadata = ({
                   chips={dataset.applicableLegislation.map(
                     (item) => item.label
                   )}
+                  hrefs={dataset.applicableLegislation.map(
+                    (item) => item.value
+                  )}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
               ) : (
@@ -880,6 +883,9 @@ const DatasetMetadata = ({
                 <Chips
                   chips={dataset.applicableLegislation.map(
                     (item) => item.label
+                  )}
+                  hrefs={dataset.applicableLegislation.map(
+                    (item) => item.value
                   )}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />

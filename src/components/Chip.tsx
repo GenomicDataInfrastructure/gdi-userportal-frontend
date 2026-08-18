@@ -9,10 +9,26 @@ import React from "react";
 interface ChipProps {
   chip: string;
   className?: string;
+  href?: string;
 }
 
-const Chip: React.FC<ChipProps> = ({ chip, className }) => (
-  <div className={cn("px-4 py-2 rounded-lg bg-warning", className)}>{chip}</div>
-);
+const Chip: React.FC<ChipProps> = ({ chip, className, href }) => {
+  const chipClassName = cn("px-4 py-2 rounded-lg bg-warning", className);
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cn(chipClassName, "hover:underline")}
+      >
+        {chip}
+      </a>
+    );
+  }
+
+  return <div className={chipClassName}>{chip}</div>;
+};
 
 export default Chip;

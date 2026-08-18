@@ -37,8 +37,8 @@ test("Basket flow adds dataset and shows it", async ({ page }) => {
 
   await page.goto("/datasets/ds-001");
 
-  const addButton = page.locator("a:visible", {
-    hasText: /add to basket/i,
+  const addButton = page.getByRole("button", {
+    name: /add to basket/i,
   });
   await expect(addButton).toBeVisible();
   await expect(addButton).toHaveAttribute("aria-disabled", "false");
@@ -52,7 +52,7 @@ test("Basket flow adds dataset and shows it", async ({ page }) => {
   await expect(page.getByText(/your basket\s*\(1\)/i)).toBeVisible();
   await expect(page.getByText(/cancer cohort study/i)).toBeVisible();
   await expect(
-    page.locator("a", { hasText: /login to request/i })
+    page.getByRole("button", { name: /login to request/i })
   ).toBeVisible();
 
   expect(consoleErrors).toHaveLength(0);

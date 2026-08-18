@@ -309,6 +309,10 @@
         {
           "value": "oncology",
           "label": "Oncology"
+        },
+        {
+          "value": "health",
+          "label": "Health"
         }
       ],
       "conformsTo": [
@@ -454,7 +458,10 @@
         "value": "monthly",
         "label": "Monthly"
       },
-      "analytics": ["GWAS", "Survival analysis"],
+      "analytics": [
+        { "title": "GWAS" },
+        { "title": "Survival analysis" }
+      ],
       "distributions": [
         {
           "id": "dist-001",

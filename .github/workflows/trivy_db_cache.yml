@@ -18,7 +18,7 @@ jobs:
       contents: read
     steps:
       - name: Setup oras
-        uses: oras-project/setup-oras@0d9191fa0dd41eaefe9e28b375a02290706ce51d
+        uses: oras-project/setup-oras@47a14f7d92f2b1452dac1e5acc200b1c1efd45a0
 
       - name: Get current date
         id: date

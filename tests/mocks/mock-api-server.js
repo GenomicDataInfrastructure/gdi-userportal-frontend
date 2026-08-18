@@ -23,7 +23,9 @@ const sendJson = (res, statusCode, payload) => {
 const readBody = (req) =>
   new Promise((resolve, reject) => {
     let body = "";
-    req.on("data", (chunk) => { body += chunk; });
+    req.on("data", (chunk) => {
+      body += chunk;
+    });
     req.on("end", () => resolve(body));
     req.on("error", reject);
   });
@@ -71,14 +73,30 @@ async function main() {
 
   const visaScenarios = {
     default: [
-      await createVisaJwt({ datasetId: "doi:10.1234/ds-001", source: "ckan", by: "REMS" }),
+      await createVisaJwt({
+        datasetId: "doi:10.1234/ds-001",
+        source: "ckan",
+        by: "REMS",
+      }),
     ],
     multiple: [
-      await createVisaJwt({ datasetId: "doi:10.1234/ds-001", source: "ckan", by: "REMS" }),
-      await createVisaJwt({ datasetId: "doi:10.1234/ds-002", source: "rems", by: "DAC" }),
+      await createVisaJwt({
+        datasetId: "doi:10.1234/ds-001",
+        source: "ckan",
+        by: "REMS",
+      }),
+      await createVisaJwt({
+        datasetId: "doi:10.1234/ds-002",
+        source: "rems",
+        by: "DAC",
+      }),
     ],
     fallback: [
-      await createVisaJwt({ datasetId: "unknown-dataset-id-999", source: "rems", by: "DAC" }),
+      await createVisaJwt({
+        datasetId: "unknown-dataset-id-999",
+        source: "rems",
+        by: "DAC",
+      }),
     ],
     empty: [],
   };
@@ -86,10 +104,17 @@ async function main() {
   const server = http.createServer(async (req, res) => {
     setCorsHeaders(res);
 
-    if (!req.url || !req.method) return sendJson(res, 400, { message: "Invalid request" });
-    if (req.method === "OPTIONS") { res.writeHead(204); return res.end(); }
+    if (!req.url || !req.method)
+      return sendJson(res, 400, { message: "Invalid request" });
+    if (req.method === "OPTIONS") {
+      res.writeHead(204);
+      return res.end();
+    }
 
-    const requestUrl = new URL(req.url, `http://${req.headers.host || "localhost"}`);
+    const requestUrl = new URL(
+      req.url,
+      `http://${req.headers.host || "localhost"}`
+    );
     const { pathname } = requestUrl;
 
     if (pathname === "/health") return sendJson(res, 200, { status: "ok" });
@@ -130,14 +155,19 @@ async function main() {
       return sendJson(res, 200, mockData.filters);
     }
 
-    const filterValuesMatch = pathname.match(/^\/api\/v1\/filters\/([^/]+)\/values$/);
+    const filterValuesMatch = pathname.match(
+      /^\/api\/v1\/filters\/([^/]+)\/values$/
+    );
     if (filterValuesMatch && req.method === "GET") {
       const key = decodeURIComponent(filterValuesMatch[1]);
       return sendJson(res, 200, mockData.filterValuesByKey[key] || []);
     }
 
     if (pathname === "/api/v1/datasets/search" && req.method === "POST") {
-      return sendJson(res, 200, { ...mockData.datasetSearchResponse, facets: mockData.filters });
+      return sendJson(res, 200, {
+        ...mockData.datasetSearchResponse,
+        facets: mockData.filters,
+      });
     }
 
     const datasetDetailMatch = pathname.match(/^\/api\/v1\/datasets\/([^/]+)$/);
@@ -150,9 +180,14 @@ async function main() {
       return sendJson(res, 404, { message: "Dataset not found", id });
     }
 
-    const datasetFormatMatch = pathname.match(/^\/api\/v1\/datasets\/([^/]+)\.(rdf|ttl|jsonld)$/);
+    const datasetFormatMatch = pathname.match(
+      /^\/api\/v1\/datasets\/([^/]+)\.(rdf|ttl|jsonld)$/
+    );
     if (datasetFormatMatch && req.method === "GET") {
-      return sendJson(res, 200, { id: decodeURIComponent(datasetFormatMatch[1]), format: datasetFormatMatch[2] });
+      return sendJson(res, 200, {
+        id: decodeURIComponent(datasetFormatMatch[1]),
+        format: datasetFormatMatch[2],
+      });
     }
 
     return sendJson(res, 404, { message: "Not found", path: pathname });

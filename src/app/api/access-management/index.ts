@@ -13,8 +13,7 @@ import { accessManagementClient } from "@/app/api/shared/client";
 import { createHeaders } from "@/app/api/shared/headers";
 import { AxiosError, isAxiosError } from "axios";
 import { ZodError } from "zod";
-import serverConfig from "@/config/serverConfig";
-import { retrieveEntitlementsV2 } from "@/app/api/ga4gh/entitlements";
+import { retrieveEntitlements } from "@/app/api/ga4gh/entitlements";
 
 export const createApplicationApi = async (createApplicationCommand: {
   datasetIds: string[];
@@ -140,15 +139,7 @@ export const submitApplicationApi = async (applicationId: number) => {
 };
 
 export const retrieveEntitlementsApi = async () => {
-  if (serverConfig.entitlementsV2Enabled) {
-    return retrieveEntitlementsV2();
-  }
-
-  // V1 path: REMS-based entitlements via DAAM
-  const headers = await createHeaders();
-  return accessManagementClient.retrieve_granted_dataset_identifiers({
-    headers,
-  });
+  return retrieveEntitlements();
 };
 
 export const inviteMemberApi = async (

@@ -192,9 +192,8 @@ test.describe("Entitlements page (GA4GH Passport flow)", () => {
     await setAuthCookieWithoutTokens(page);
     await page.goto("/requests?tab=entitlements");
 
-    await expect(
-      page.getByText(/ga4gh passport unavailable/i)
-    ).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText(/ga4gh passport unavailable/i)).toBeVisible({
+      timeout: 15000,
+    });
   });
 });
-

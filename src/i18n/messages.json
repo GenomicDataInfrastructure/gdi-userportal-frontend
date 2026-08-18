@@ -119,6 +119,10 @@
     "en": "Portal Links",
     "fr": "Liens du portail"
   },
+  "footer.documentation": {
+    "en": "Documentation",
+    "fr": "Documentation"
+  },
   "footer.contactUs": {
     "en": "Contact Us",
     "fr": "Nous contacter"

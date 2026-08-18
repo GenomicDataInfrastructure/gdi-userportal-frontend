@@ -151,6 +151,14 @@ function Footer() {
             <Link className="hover:text-info" href="/about">
               {t("nav.about")}
             </Link>
+            <a
+              className="hover:text-info"
+              href="https://genomicdatainfrastructure.github.io/gdi-userportal-frontend/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t("footer.documentation")}
+            </a>
           </div>
           {/* Fourth column: Contact us */}
           <div className="flex flex-col gap-2 text-left w-full md:w-1/3">

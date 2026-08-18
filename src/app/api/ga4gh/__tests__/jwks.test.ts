@@ -11,6 +11,18 @@ const JKU = "https://daam.portal.dev.gdi.lu/.well-known/jwks.json";
 // ---------------------------------------------------------------------------
 
 describe("validateJku", () => {
+  const originalNodeEnv = process.env.NODE_ENV;
+  const originalAllowLocalhostJku = process.env.ALLOW_LOCALHOST_JKU;
+
+  afterEach(() => {
+    process.env.NODE_ENV = originalNodeEnv;
+    if (originalAllowLocalhostJku === undefined) {
+      delete process.env.ALLOW_LOCALHOST_JKU;
+    } else {
+      process.env.ALLOW_LOCALHOST_JKU = originalAllowLocalhostJku;
+    }
+  });
+
   test("accepts a valid HTTPS jku", () => {
     expect(() => validateJku(JKU)).not.toThrow();
   });
@@ -31,6 +43,22 @@ describe("validateJku", () => {
     expect(() =>
       validateJku("http://daam.portal.dev.gdi.lu/jwks.json")
     ).toThrow("jku must use HTTPS scheme");
+  });
+
+  test("accepts localhost HTTP jku when explicitly enabled outside production", () => {
+    process.env.NODE_ENV = "test";
+    process.env.ALLOW_LOCALHOST_JKU = "true";
+
+    expect(() => validateJku("http://localhost:4010/jwks.json")).not.toThrow();
+  });
+
+  test("rejects localhost HTTP jku in production even when explicitly enabled", () => {
+    process.env.NODE_ENV = "production";
+    process.env.ALLOW_LOCALHOST_JKU = "true";
+
+    expect(() => validateJku("http://localhost:4010/jwks.json")).toThrow(
+      "jku must use HTTPS scheme"
+    );
   });
 });
 
@@ -70,6 +98,20 @@ describe("resolveJwksForJku", () => {
     clearJwksCache();
     const second = await resolveJwksForJku(JKU);
     expect(first).not.toBe(second);
+  });
+
+  test("evicts the oldest cached key-fetcher when the cache limit is reached", async () => {
+    const oldest = await resolveJwksForJku("https://issuer-0.example.org/jwks");
+
+    for (let i = 1; i <= 100; i += 1) {
+      await resolveJwksForJku(`https://issuer-${i}.example.org/jwks`);
+    }
+
+    const reloadedOldest = await resolveJwksForJku(
+      "https://issuer-0.example.org/jwks"
+    );
+
+    expect(reloadedOldest).not.toBe(oldest);
   });
 });
 

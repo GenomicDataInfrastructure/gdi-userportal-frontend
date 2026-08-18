@@ -188,6 +188,9 @@ describe("extractControlledAccessGrants", () => {
 // ---------------------------------------------------------------------------
 
 describe("extractVerifiedControlledAccessGrants", () => {
+  const originalSkipSignatureVerification =
+    process.env.SKIP_VISA_SIGNATURE_VERIFICATION;
+
   // Keypairs generated once per test-suite run (async beforeAll)
   let privateKeyA: KeyLike;
   let publicKeyA: KeyLike;
@@ -216,6 +219,15 @@ describe("extractVerifiedControlledAccessGrants", () => {
     rejectAllResolver = async (jku: string) => {
       throw new Error(`No JWKS for: ${jku}`);
     };
+  });
+
+  afterEach(() => {
+    if (originalSkipSignatureVerification === undefined) {
+      delete process.env.SKIP_VISA_SIGNATURE_VERIFICATION;
+    } else {
+      process.env.SKIP_VISA_SIGNATURE_VERIFICATION =
+        originalSkipSignatureVerification;
+    }
   });
 
   const ISSUER_JKU = "https://issuer-a.example.org/jwks.json";
@@ -376,6 +388,41 @@ describe("extractVerifiedControlledAccessGrants", () => {
     expect(grants).toHaveLength(0);
     expect(errorSpy).toHaveBeenCalledWith(
       "[visa-validation] FAILED: jku claim missing from JWT header",
+      expect.objectContaining({ iss: "https://issuer-a.example.org" })
+    );
+    errorSpy.mockRestore();
+  });
+
+  test("accepts visas without signature verification when explicitly disabled", async () => {
+    process.env.SKIP_VISA_SIGNATURE_VERIFICATION = "true";
+    const resolverSpy = jest.fn(resolverTrustingA);
+
+    const grants = await extractVerifiedControlledAccessGrants(
+      [makeVisaJwt(VISA_PAYLOAD)],
+      resolverSpy
+    );
+
+    expect(grants).toHaveLength(1);
+    expect(grants[0].datasetId).toBe("GDID-12345678-11se");
+    expect(resolverSpy).not.toHaveBeenCalled();
+  });
+
+  test("rejects a visa with an unreadable protected header", async () => {
+    const invalidHeaderJwt = `${Buffer.from("not-json").toString(
+      "base64url"
+    )}.${Buffer.from(JSON.stringify(VISA_PAYLOAD)).toString(
+      "base64url"
+    )}.signature`;
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+
+    const grants = await extractVerifiedControlledAccessGrants(
+      [invalidHeaderJwt],
+      resolverTrustingA
+    );
+
+    expect(grants).toEqual([]);
+    expect(errorSpy).toHaveBeenCalledWith(
+      "[visa-validation] FAILED: could not decode JWT header",
       expect.objectContaining({ iss: "https://issuer-a.example.org" })
     );
     errorSpy.mockRestore();

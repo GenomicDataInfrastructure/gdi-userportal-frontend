@@ -436,10 +436,12 @@
           }
         }
       ],
-      "temporalCoverage": {
-        "start": "2018-01-01T00:00:00Z",
-        "end": "2023-12-31T00:00:00Z"
-      },
+      "temporalCoverage": [
+        {
+          "start": "2018-01-01T00:00:00Z",
+          "end": "2023-12-31T00:00:00Z"
+        }
+      ],
       "temporalResolution": "Monthly",
       "spatialResolutionInMeters": 1000,
       "retentionPeriod": [
@@ -459,8 +461,16 @@
         "label": "Monthly"
       },
       "analytics": [
-        { "title": "GWAS" },
-        { "title": "Survival analysis" }
+        {
+          "id": "analytics-001",
+          "title": "GWAS",
+          "description": "Genome-wide association study workflow."
+        },
+        {
+          "id": "analytics-002",
+          "title": "Survival analysis",
+          "description": "Time-to-event analysis workflow."
+        }
       ],
       "distributions": [
         {

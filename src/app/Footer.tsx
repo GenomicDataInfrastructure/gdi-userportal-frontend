@@ -140,12 +140,18 @@ function Footer() {
           <div className="flex flex-col gap-2 text-left w-full md:w-1/6">
             <h3 className="text-lg font-bold">{t("footer.portalLinks")}</h3>
             <a
-              className="hover:text-info"
+              className="hover:text-info inline-flex items-center gap-1"
               href="https://genomicdatainfrastructure.github.io/gdi-userportal-frontend/"
               target="_blank"
               rel="noopener noreferrer"
             >
-              {t("footer.documentation")}
+              <span>{t("footer.documentation")}</span>
+              <span className="sr-only">{t("footer.opensInNewTab")}</span>
+              <FontAwesomeIcon
+                icon={faArrowRight}
+                aria-hidden="true"
+                className="text-xs"
+              />
             </a>
             <Link className="hover:text-info" href="/datasets">
               {t("nav.datasets")}

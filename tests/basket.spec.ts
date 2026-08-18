@@ -41,7 +41,7 @@ test("Basket flow adds dataset and shows it", async ({ page }) => {
     name: /add to basket/i,
   });
   await expect(addButton).toBeVisible();
-  await expect(addButton).toHaveAttribute("aria-disabled", "false");
+  await expect(addButton).toBeEnabled();
   await addButton.click();
 
   await page.goto("/basket");

@@ -444,9 +444,12 @@ describe("extractVerifiedControlledAccessGrants", () => {
     const jwt = await signVisaJwt(VISA_PAYLOAD, privateKeyA);
     const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
-    const grants = await extractVerifiedControlledAccessGrants([jwt], async () => {
-      throw "resolver failed";
-    });
+    const grants = await extractVerifiedControlledAccessGrants(
+      [jwt],
+      async () => {
+        throw "resolver failed";
+      }
+    );
 
     expect(grants).toEqual([]);
     expect(errorSpy).toHaveBeenCalledWith(
@@ -705,18 +708,29 @@ describe("extractVerifiedControlledAccessGrants", () => {
   test("aggregates repeated expired visas for the same issuer", async () => {
     const expiredPayloadA = {
       ...VISA_PAYLOAD,
-      ga4gh_visa_v1: { ...VISA_PAYLOAD.ga4gh_visa_v1, value: "GDID-EXPIRED-A", exp: 1 },
+      ga4gh_visa_v1: {
+        ...VISA_PAYLOAD.ga4gh_visa_v1,
+        value: "GDID-EXPIRED-A",
+        exp: 1,
+      },
     };
     const expiredPayloadB = {
       ...VISA_PAYLOAD,
-      ga4gh_visa_v1: { ...VISA_PAYLOAD.ga4gh_visa_v1, value: "GDID-EXPIRED-B", exp: 1 },
+      ga4gh_visa_v1: {
+        ...VISA_PAYLOAD.ga4gh_visa_v1,
+        value: "GDID-EXPIRED-B",
+        exp: 1,
+      },
     };
     const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
 
-    const grants = await extractVerifiedControlledAccessGrants([
-      await signVisaJwt(expiredPayloadA, privateKeyA),
-      await signVisaJwt(expiredPayloadB, privateKeyA),
-    ], resolverTrustingA);
+    const grants = await extractVerifiedControlledAccessGrants(
+      [
+        await signVisaJwt(expiredPayloadA, privateKeyA),
+        await signVisaJwt(expiredPayloadB, privateKeyA),
+      ],
+      resolverTrustingA
+    );
 
     expect(grants).toEqual([]);
     expect(warnSpy).toHaveBeenCalledWith(

@@ -29,8 +29,8 @@ This search tool allows you to:
    - **Chromosome and position:** For example, `21-9411449`.
    - **Chromosome, position, reference allele, and alternate allele:** For example, `21-9411449-G-T`.
 
-   Once you enter a variant, more fields appear to allow you to filter your search. If you enter an unsupported variant format, the application displays an error message and disables the search until you correct the value. 
-   
+   Once you enter a variant, more fields appear to allow you to filter your search. If you enter an unsupported variant format, the application displays an error message and disables the search until you correct the value.
+
 4. Optionally select one or more filters: **sex**, **country of birth**, and **dataset type**.
 
 <figure>
@@ -38,13 +38,13 @@ This search tool allows you to:
    <figcaption></figcaption>
 </figure>
       
-5. Select **Search** or **Enter**. The search results display matching datasets in a table. Select the > expand control to view its population-level rows.
+5. Select **Search** or press **Enter**. The search results display matching datasets in a table.
 <figure>
    <img src="img/explore-datasets/allele-frequency-result.png" alt="Screenshot showing Allele Frequency search results" width="900" />
    <figcaption></figcaption>
-</figure> 
+</figure>
 
-6. To view the population-level rows, select the expand icon (>) of the dataset.
+6. To view a dataset's population-level rows, select its expand control (`>`).
 
 <figure>
    <img src="img/explore-datasets/allele-frequency-result-details.png" alt="Screenshot showing allele frequency result details" width="900" />

@@ -6,6 +6,17 @@ import { clearJwksCache, resolveJwksForJku, validateJku } from "../jwks";
 
 const JKU = "https://daam.portal.dev.gdi.lu/.well-known/jwks.json";
 
+// NODE_ENV is typed as read-only by @types/node, so tests that need to
+// toggle it must go through Object.defineProperty rather than assignment.
+function setNodeEnv(value: string | undefined) {
+  Object.defineProperty(process.env, "NODE_ENV", {
+    value,
+    configurable: true,
+    enumerable: true,
+    writable: true,
+  });
+}
+
 // ---------------------------------------------------------------------------
 // validateJku
 // ---------------------------------------------------------------------------
@@ -15,7 +26,7 @@ describe("validateJku", () => {
   const originalAllowLocalhostJku = process.env.ALLOW_LOCALHOST_JKU;
 
   afterEach(() => {
-    process.env.NODE_ENV = originalNodeEnv;
+    setNodeEnv(originalNodeEnv);
     if (originalAllowLocalhostJku === undefined) {
       delete process.env.ALLOW_LOCALHOST_JKU;
     } else {
@@ -46,14 +57,14 @@ describe("validateJku", () => {
   });
 
   test("accepts localhost HTTP jku when explicitly enabled outside production", () => {
-    process.env.NODE_ENV = "test";
+    setNodeEnv("test");
     process.env.ALLOW_LOCALHOST_JKU = "true";
 
     expect(() => validateJku("http://localhost:4010/jwks.json")).not.toThrow();
   });
 
   test("rejects localhost HTTP jku in production even when explicitly enabled", () => {
-    process.env.NODE_ENV = "production";
+    setNodeEnv("production");
     process.env.ALLOW_LOCALHOST_JKU = "true";
 
     expect(() => validateJku("http://localhost:4010/jwks.json")).toThrow(

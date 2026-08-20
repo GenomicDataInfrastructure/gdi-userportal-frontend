@@ -47,7 +47,10 @@ describe("classifyHarvesterError", () => {
 
   test("classifies per-dataset mapping errors by the presence of a subjectId", () => {
     expect(
-      classifyHarvesterError("Cannot read properties of undefined", "dataset-42")
+      classifyHarvesterError(
+        "Cannot read properties of undefined",
+        "dataset-42"
+      )
     ).toBe("datasetMappingFailed");
   });
 

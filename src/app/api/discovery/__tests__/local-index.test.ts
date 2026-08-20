@@ -451,7 +451,9 @@ describe("local-index APIs", () => {
     mockHarvestFromUrl.mockResolvedValueOnce([
       { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
     ]);
-    mockWriteHarvesterRunLog.mockRejectedValueOnce(new Error("opensearch down"));
+    mockWriteHarvesterRunLog.mockRejectedValueOnce(
+      new Error("opensearch down")
+    );
 
     await expect(
       harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf")
@@ -466,10 +468,10 @@ describe("local-index APIs", () => {
 
     const count = await harvestLocalIndexFromDcatFileApi("no-data-dict.rdf");
 
-    expect(mockHarvestFromFilePath).toHaveBeenCalledWith(
-      "no-data-dict.rdf",
-      { mappingErrors: [], shaclViolations: undefined }
-    );
+    expect(mockHarvestFromFilePath).toHaveBeenCalledWith("no-data-dict.rdf", {
+      mappingErrors: [],
+      shaclViolations: undefined,
+    });
     expect(mockClearLocalDiscoveryDatasets).toHaveBeenCalled();
     expect(
       mockClearLocalDiscoveryDatasets.mock.invocationCallOrder[0]

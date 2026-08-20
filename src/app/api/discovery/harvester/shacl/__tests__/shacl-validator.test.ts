@@ -52,9 +52,7 @@ describe("validateHealthDcatAp", () => {
     const violations = await validateHealthDcatAp(quads);
 
     expect(violations.length).toBeGreaterThan(0);
-    expect(violations.every((v) => v.datasetTitle === "My Dataset")).toBe(
-      true
-    );
+    expect(violations.every((v) => v.datasetTitle === "My Dataset")).toBe(true);
   });
 
   test("reports a readable field name alongside the SHACL message for a wrong-type value", async () => {

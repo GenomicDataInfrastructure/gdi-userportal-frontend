@@ -5,7 +5,8 @@
 import { jest } from "@jest/globals";
 
 const mockIsHarvesterLoggingEnabled = jest.fn<() => boolean>();
-const mockGetServerSession = jest.fn<(...args: unknown[]) => Promise<unknown>>();
+const mockGetServerSession =
+  jest.fn<(...args: unknown[]) => Promise<unknown>>();
 const mockNotFound = jest.fn(() => {
   throw new Error("NEXT_NOT_FOUND");
 });
@@ -13,12 +14,9 @@ const mockRedirect = jest.fn((url: string) => {
   throw new Error(`NEXT_REDIRECT:${url}`);
 });
 
-jest.mock(
-  "@/app/api/discovery/local-store/harvester-logs/factory",
-  () => ({
-    isHarvesterLoggingEnabled: mockIsHarvesterLoggingEnabled,
-  })
-);
+jest.mock("@/app/api/discovery/local-store/harvester-logs/factory", () => ({
+  isHarvesterLoggingEnabled: mockIsHarvesterLoggingEnabled,
+}));
 
 jest.mock("next-auth", () => ({
   getServerSession: (...args: unknown[]) => mockGetServerSession(...args),

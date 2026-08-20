@@ -52,7 +52,9 @@ const contentConfig: ContentConfig = {
     env("NEXT_PUBLIC_HOME_NOTICE_MESSAGE") ||
     "Because of scheduled migration in our provider, the User portal could get service disruption on 19 February between 11:00 and 14:00.",
   aboutContent: env("NEXT_PUBLIC_HOMEPAGE_ABOUT_CONTENT") || undefined,
-  bannerLink: env("NEXT_PUBLIC_BANNER_LINK") || "/howto",
+  bannerLink:
+    env("NEXT_PUBLIC_BANNER_LINK") ||
+    "https://genomicdatainfrastructure.github.io/gdi-userportal-frontend/",
   siteTitle: env("NEXT_PUBLIC_SITE_TITLE") || "GDI - User Portal",
   siteDescription:
     env("NEXT_PUBLIC_SITE_DESCRIPTION") ||

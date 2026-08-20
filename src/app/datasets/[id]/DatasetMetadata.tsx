@@ -42,10 +42,12 @@ import { useTranslations } from "next-intl";
 import {
   DatasetDictionaryEntry,
   DatasetRelationEntry,
+  HelpText,
   RetrievedDataset,
   SearchedDataset,
   ValueLabel,
 } from "@/app/api/discovery/open-api/schemas";
+import { extractHelpTextMap } from "@/utils/datasetHelpers";
 
 const MetadataSection = ({
   title,
@@ -110,7 +112,9 @@ const DatasetMetadata = ({
   seriesMembers?: SearchedDataset[];
 }) => {
   const t = useTranslations("datasets.detail");
-  const helpText = dataset.helpText as Record<string, string> | undefined;
+  const helpText = extractHelpTextMap(
+    dataset.helpText as Record<string, HelpText> | undefined
+  );
   const [userTimezone, setUserTimezone] = useState<string | null>(null);
   const notProvidedLabel = t("notProvided");
   const notAvailableLabel = t("notAvailable");

@@ -44,7 +44,7 @@ This search tool allows you to:
    <figcaption></figcaption>
 </figure>
 
-6. To view a dataset's population-level rows, select its expand control (`>`).
+6. To view a dataset's population-level rows, select its expand control (>).
 
 <figure>
    <img src="img/explore-datasets/allele-frequency-result-details.png" alt="Screenshot showing allele frequency result details" width="900" />
@@ -58,7 +58,13 @@ The search results display datasets containing your specified variant in a table
 - **Beacon:** The identifier and, when available, country of the Beacon source. The portal uses Beacon technology to retrieve information about whether genomic databases contain specific variants.
 - **Dataset:** The identifier of the matching dataset. Select the identifier to open the dataset details in a new window.
 - **Dataset Type:** The category of the dataset.
-- **Population:** The population identifier from the dataset, in Genome of Europe (GoE) format.
+- **Population:** The population identifier from the dataset, in Genome of Europe (GoE) format. This shows the specific subpopulation for the variant data based on combinations of country of birth and sex. For example:
+  - `FR_M`: French males
+  - `ES_F`: Spanish females
+  - `FR`: All individuals born in France (all sexes)
+  - `M`: All males (all countries)
+  
+  Population identifiers use ISO3166 2-letter country codes (e.g., FR for France, ES for Spain) combined with sex (M for male, F for female).
 - **Allele Count:** The number of times the variant appears in the dataset.
 - **Allele Number:** The total number of alleles analysed in the dataset for this position.
 - **Homozygous:** The number of individuals with two copies of the variant.
@@ -67,6 +73,8 @@ The search results display datasets containing your specified variant in a table
 - **Frequency:** How common the variant is in that population, shown as a decimal rounded to four places.
 - **Actions:** Add an internal dataset to your basket. For an external dataset, select **Access external dataset** when a link is available.
 
-Results are grouped by Beacon and dataset. Select the expand control beside a dataset to view its population-level rows. When you select a sex or country-of-birth filter and results come from multiple Beacon sources, the page also displays a summary for the current filter.
+:::tip Tip
+Results are grouped by Beacon and dataset. Select the expand control (>) beside a dataset to view its population-level rows. When you select a sex or country-of-birth filter and results come from multiple Beacon sources, the page also displays a summary for the current filter.
+:::
 
-The application displays **Not available** when the discovery source does not provide a value. An external dataset may display **External link not available** when no access link is available.
+The system displays **Not available** when the discovery source does not provide a value. An external dataset may display **External link not available** when no access link is available.

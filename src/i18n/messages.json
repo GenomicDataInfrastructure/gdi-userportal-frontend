@@ -1720,8 +1720,8 @@
     "fr": "Avertissements"
   },
   "harvesterLogs.detail.fieldWarnings": {
-    "en": "Datasets with missing fields",
-    "fr": "Jeux de données avec des champs manquants"
+    "en": "Datasets with warnings",
+    "fr": "Jeux de données avec des avertissements"
   },
   "harvesterLogs.detail.missingFields": {
     "en": "Missing fields",

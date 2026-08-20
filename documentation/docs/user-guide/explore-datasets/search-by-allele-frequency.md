@@ -63,8 +63,9 @@ The search results display datasets containing your specified variant in a table
   - `ES_F`: Spanish females
   - `FR`: All individuals born in France (all sexes)
   - `M`: All males (all countries)
-  
+
   Population identifiers use ISO3166 2-letter country codes (e.g., FR for France, ES for Spain) combined with sex (M for male, F for female).
+
 - **Allele Count:** The number of times the variant appears in the dataset.
 - **Allele Number:** The total number of alleles analysed in the dataset for this position.
 - **Homozygous:** The number of individuals with two copies of the variant.

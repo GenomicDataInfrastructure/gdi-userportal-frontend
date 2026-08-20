@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import axios, { AxiosInstance } from "axios";
-import https from "node:https";
 import {
   LocalDiscoveryValueLabel,
   LocalDiscoveryDataset,
@@ -29,34 +28,15 @@ import {
   mapSearchResponse,
 } from "@/app/api/discovery/local-store/opensearch/mappers";
 import {
+  createOpenSearchClient,
+  formatSearchBackendError as formatOpenSearchError,
   isIndexAlreadyExistsError,
   isIndexCreateBlockedError,
 } from "@/app/api/discovery/local-store/opensearch/errors";
 import { getLocalFilterDefinition } from "@/app/api/discovery/local-store/filter-registry";
 
-const formatSearchBackendError = (error: unknown): string => {
-  if (!axios.isAxiosError(error)) {
-    return error instanceof Error ? error.message : String(error);
-  }
-
-  const status = error.response?.status;
-  const reason =
-    error.response?.data &&
-    typeof error.response.data === "object" &&
-    "error" in error.response.data
-      ? JSON.stringify((error.response.data as { error?: unknown }).error)
-      : null;
-
-  if (status && reason) {
-    return `OpenSearch search request failed (${status}): ${reason}`;
-  }
-
-  if (status) {
-    return `OpenSearch search request failed (${status}): ${error.message}`;
-  }
-
-  return error.message;
-};
+const formatSearchBackendError = (error: unknown): string =>
+  formatOpenSearchError(error, "OpenSearch search request");
 
 export class OpenSearchDiscoveryStore implements LocalDiscoveryStore {
   readonly key = "opensearch";
@@ -73,22 +53,7 @@ export class OpenSearchDiscoveryStore implements LocalDiscoveryStore {
     apiKey?: string;
     insecureTls?: boolean;
   }) {
-    const headers: Record<string, string> = {};
-    if (params.apiKey) {
-      headers.Authorization = `ApiKey ${params.apiKey}`;
-    }
-
-    this.client = axios.create({
-      baseURL: params.baseUrl,
-      headers,
-      httpsAgent: params.insecureTls
-        ? new https.Agent({ rejectUnauthorized: false })
-        : undefined,
-      auth:
-        params.username && params.password
-          ? { username: params.username, password: params.password }
-          : undefined,
-    });
+    this.client = createOpenSearchClient(params);
     this.indexName = params.indexName;
   }
 

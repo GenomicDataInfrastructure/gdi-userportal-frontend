@@ -1598,5 +1598,153 @@
   "notifications.loadMore": {
     "en": "Load more",
     "fr": "Charger plus"
+  },
+  "harvesterLogs.title": {
+    "en": "Harvester logs",
+    "fr": "Journaux du collecteur"
+  },
+  "harvesterLogs.subtitle": {
+    "en": "Monitor what the Harvester did in recent runs.",
+    "fr": "Surveillez les actions récentes du collecteur."
+  },
+  "harvesterLogs.empty": {
+    "en": "No harvester runs recorded yet.",
+    "fr": "Aucune exécution du collecteur enregistrée pour le moment."
+  },
+  "harvesterLogs.status.success": {
+    "en": "Success",
+    "fr": "Succès"
+  },
+  "harvesterLogs.status.partial": {
+    "en": "Partial",
+    "fr": "Partiel"
+  },
+  "harvesterLogs.status.failed": {
+    "en": "Failed",
+    "fr": "Échec"
+  },
+  "harvesterLogs.filter.status.label": {
+    "en": "Filter by status",
+    "fr": "Filtrer par statut"
+  },
+  "harvesterLogs.filter.status.all": {
+    "en": "All statuses",
+    "fr": "Tous les statuts"
+  },
+  "harvesterLogs.fields.runId": {
+    "en": "Run ID",
+    "fr": "ID d’exécution"
+  },
+  "harvesterLogs.fields.status": {
+    "en": "Status",
+    "fr": "Statut"
+  },
+  "harvesterLogs.fields.succeeded": {
+    "en": "Succeeded",
+    "fr": "Réussis"
+  },
+  "harvesterLogs.fields.failed": {
+    "en": "Failed",
+    "fr": "Échoués"
+  },
+  "harvesterLogs.fields.source": {
+    "en": "Source",
+    "fr": "Source"
+  },
+  "harvesterLogs.fields.mode": {
+    "en": "Mode",
+    "fr": "Mode"
+  },
+  "harvesterLogs.detail.title": {
+    "en": "Run details",
+    "fr": "Détails de l’exécution"
+  },
+  "harvesterLogs.detail.close": {
+    "en": "Close",
+    "fr": "Fermer"
+  },
+  "harvesterLogs.detail.notFound": {
+    "en": "This run could not be found.",
+    "fr": "Cette exécution est introuvable."
+  },
+  "harvesterLogs.detail.errorBreakdown": {
+    "en": "Error breakdown",
+    "fr": "Détail des erreurs"
+  },
+  "harvesterLogs.detail.occurrences": {
+    "en": "{count, plural, one {# occurrence} other {# occurrences}}",
+    "fr": "{count, plural, one {# occurrence} other {# occurrences}}"
+  },
+  "harvesterLogs.errorCategory.sourceUnreachable": {
+    "en": "The catalogue source could not be reached",
+    "fr": "La source du catalogue est injoignable"
+  },
+  "harvesterLogs.errorCategory.sourceNotFound": {
+    "en": "The catalogue file was not found",
+    "fr": "Le fichier du catalogue est introuvable"
+  },
+  "harvesterLogs.errorCategory.invalidXml": {
+    "en": "The catalogue file is not valid XML/RDF",
+    "fr": "Le fichier du catalogue n’est pas un XML/RDF valide"
+  },
+  "harvesterLogs.errorCategory.authorizationFailed": {
+    "en": "Authorization to the catalogue source failed",
+    "fr": "L’autorisation vers la source du catalogue a échoué"
+  },
+  "harvesterLogs.errorCategory.indexUnavailable": {
+    "en": "The search index could not be updated",
+    "fr": "L’index de recherche n’a pas pu être mis à jour"
+  },
+  "harvesterLogs.errorCategory.datasetMappingFailed": {
+    "en": "A dataset in the catalogue could not be processed",
+    "fr": "Un jeu de données du catalogue n’a pas pu être traité"
+  },
+  "harvesterLogs.errorCategory.unknown": {
+    "en": "An unexpected error occurred",
+    "fr": "Une erreur inattendue s’est produite"
+  },
+  "harvesterLogs.detail.affectedDataset": {
+    "en": "Affected dataset",
+    "fr": "Jeu de données concerné"
+  },
+  "harvesterLogs.detail.showTechnicalDetails": {
+    "en": "Show technical details",
+    "fr": "Afficher les détails techniques"
+  },
+  "harvesterLogs.detail.hideTechnicalDetails": {
+    "en": "Hide technical details",
+    "fr": "Masquer les détails techniques"
+  },
+  "harvesterLogs.fields.warnings": {
+    "en": "Warnings",
+    "fr": "Avertissements"
+  },
+  "harvesterLogs.detail.fieldWarnings": {
+    "en": "Datasets with missing fields",
+    "fr": "Jeux de données avec des champs manquants"
+  },
+  "harvesterLogs.detail.missingFields": {
+    "en": "Missing fields",
+    "fr": "Champs manquants"
+  },
+  "harvesterLogs.detail.untitledDataset": {
+    "en": "Untitled dataset",
+    "fr": "Jeu de données sans titre"
+  },
+  "harvesterLogs.detail.showSucceededDatasets": {
+    "en": "Show succeeded datasets ({count})",
+    "fr": "Afficher les jeux de données réussis ({count})"
+  },
+  "harvesterLogs.detail.hideSucceededDatasets": {
+    "en": "Hide succeeded datasets",
+    "fr": "Masquer les jeux de données réussis"
+  },
+  "harvesterLogs.warningType.missingFields": {
+    "en": "Missing fields",
+    "fr": "Champs manquants"
+  },
+  "harvesterLogs.warningType.healthDcatApCompliance": {
+    "en": "HealthDCAT-AP compliance",
+    "fr": "Conformité HealthDCAT-AP"
   }
 }

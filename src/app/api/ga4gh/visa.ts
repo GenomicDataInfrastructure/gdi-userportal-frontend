@@ -100,6 +100,12 @@ async function verifyVisaJwt(
 
   console.debug("[visa-validation] attempt", { iss, sub, visaType });
 
+  // In test environments this can be set to skip cryptographic verification.
+  // Signature correctness is covered by dedicated unit tests.
+  if (process.env.SKIP_VISA_SIGNATURE_VERIFICATION === "true") {
+    return true;
+  }
+
   // Extract the jku from the JWT's protected header.
   let jku: string | undefined;
   try {

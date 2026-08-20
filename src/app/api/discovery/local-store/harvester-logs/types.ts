@@ -10,7 +10,9 @@ export type HarvesterRunError = {
   stack?: string;
 };
 
-export type HarvesterRunWarningType = "missingFields" | "healthDcatApCompliance";
+export type HarvesterRunWarningType =
+  | "missingFields"
+  | "healthDcatApCompliance";
 
 export type HarvesterRunWarning = {
   subjectId: string;

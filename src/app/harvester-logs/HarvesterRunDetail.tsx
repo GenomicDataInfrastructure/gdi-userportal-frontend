@@ -5,7 +5,11 @@
 "use client";
 
 import { useMemo } from "react";
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from "@headlessui/react";
 import { useTranslations } from "next-intl";
 import {
   Dialog,
@@ -15,9 +19,7 @@ import {
 } from "@/components/shadcn/dialog";
 import { useHarvesterLogs } from "@/providers/harvester-logs/HarvesterLogsProvider";
 import HarvesterRunStatusBadge from "./HarvesterRunStatusBadge";
-import HarvesterErrorGroupItem, {
-  ErrorGroup,
-} from "./HarvesterErrorGroupItem";
+import HarvesterErrorGroupItem, { ErrorGroup } from "./HarvesterErrorGroupItem";
 import HarvesterPill from "./HarvesterPill";
 import HarvesterRunDetailField from "./HarvesterRunDetailField";
 
@@ -120,7 +122,10 @@ export default function HarvesterRunDetail() {
                 </h3>
                 <ul className="space-y-3">
                   {errorGroups.map((group) => (
-                    <HarvesterErrorGroupItem key={group.message} group={group} />
+                    <HarvesterErrorGroupItem
+                      key={group.message}
+                      group={group}
+                    />
                   ))}
                 </ul>
               </div>

@@ -4,7 +4,11 @@
 
 "use client";
 
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from "@headlessui/react";
 import { useTranslations } from "next-intl";
 import {
   classifyHarvesterError,
@@ -66,9 +70,7 @@ export default function HarvesterErrorGroupItem({
                 : t("harvesterLogs.detail.showTechnicalDetails")}
             </DisclosureButton>
             <DisclosurePanel className="mt-2">
-              <p className="text-xs text-gray-700 break-all">
-                {group.message}
-              </p>
+              <p className="text-xs text-gray-700 break-all">{group.message}</p>
               {group.stack && (
                 <pre className="mt-1 text-xs text-gray-600 whitespace-pre-wrap overflow-x-auto">
                   {group.stack}

@@ -23,9 +23,8 @@ describe("harvester-logs factory", () => {
   test("isHarvesterLoggingEnabled is false by default", async () => {
     delete process.env.HARVEST_LOGGING_ENABLED;
 
-    const { isHarvesterLoggingEnabled } = await import(
-      "@/app/api/discovery/local-store/harvester-logs/factory"
-    );
+    const { isHarvesterLoggingEnabled } =
+      await import("@/app/api/discovery/local-store/harvester-logs/factory");
 
     expect(isHarvesterLoggingEnabled()).toBe(false);
   });
@@ -33,17 +32,15 @@ describe("harvester-logs factory", () => {
   test("isHarvesterLoggingEnabled is true when set to 'true' (case-insensitive)", async () => {
     process.env.HARVEST_LOGGING_ENABLED = "True";
 
-    const { isHarvesterLoggingEnabled } = await import(
-      "@/app/api/discovery/local-store/harvester-logs/factory"
-    );
+    const { isHarvesterLoggingEnabled } =
+      await import("@/app/api/discovery/local-store/harvester-logs/factory");
 
     expect(isHarvesterLoggingEnabled()).toBe(true);
   });
 
   test("getHarvesterLogsStore returns a cached store", async () => {
-    const { getHarvesterLogsStore } = await import(
-      "@/app/api/discovery/local-store/harvester-logs/factory"
-    );
+    const { getHarvesterLogsStore } =
+      await import("@/app/api/discovery/local-store/harvester-logs/factory");
 
     const store1 = getHarvesterLogsStore();
     const store2 = getHarvesterLogsStore();
@@ -52,9 +49,8 @@ describe("harvester-logs factory", () => {
   });
 
   test("writeHarvesterRunLog forwards to the underlying store", async () => {
-    const { getHarvesterLogsStore, writeHarvesterRunLog } = await import(
-      "@/app/api/discovery/local-store/harvester-logs/factory"
-    );
+    const { getHarvesterLogsStore, writeHarvesterRunLog } =
+      await import("@/app/api/discovery/local-store/harvester-logs/factory");
 
     const store = getHarvesterLogsStore();
     const spy = jest.spyOn(store, "writeRunLog").mockResolvedValueOnce();
@@ -78,9 +74,8 @@ describe("harvester-logs factory", () => {
   });
 
   test("listHarvesterRuns forwards to the underlying store", async () => {
-    const { getHarvesterLogsStore, listHarvesterRuns } = await import(
-      "@/app/api/discovery/local-store/harvester-logs/factory"
-    );
+    const { getHarvesterLogsStore, listHarvesterRuns } =
+      await import("@/app/api/discovery/local-store/harvester-logs/factory");
 
     const store = getHarvesterLogsStore();
     const spy = jest
@@ -93,9 +88,8 @@ describe("harvester-logs factory", () => {
   });
 
   test("retrieveHarvesterRun forwards to the underlying store", async () => {
-    const { getHarvesterLogsStore, retrieveHarvesterRun } = await import(
-      "@/app/api/discovery/local-store/harvester-logs/factory"
-    );
+    const { getHarvesterLogsStore, retrieveHarvesterRun } =
+      await import("@/app/api/discovery/local-store/harvester-logs/factory");
 
     const store = getHarvesterLogsStore();
     const spy = jest.spyOn(store, "retrieveRun").mockResolvedValueOnce(null);

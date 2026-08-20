@@ -118,11 +118,15 @@ export class OpenSearchHarvesterLogsStore implements HarvesterLogsStore {
         .filter((hit): hit is { _id: string; _source: HarvesterRunLog } =>
           Boolean(hit._source)
         )
-        .map(({ _source: { errors, warnings, succeededDatasets, ...summary } }) => ({
-          ...summary,
-          errorCount: errors?.length ?? 0,
-          warningCount: warnings?.length ?? 0,
-        })),
+        .map(
+          ({
+            _source: { errors, warnings, succeededDatasets, ...summary },
+          }) => ({
+            ...summary,
+            errorCount: errors?.length ?? 0,
+            warningCount: warnings?.length ?? 0,
+          })
+        ),
     };
   }
 

@@ -42,7 +42,10 @@ export default function HarvesterRunListContainer({
 
   const statusFilter = (
     <div className="mb-4 flex items-center gap-2">
-      <label htmlFor="harvester-status-filter" className="text-sm text-gray-600">
+      <label
+        htmlFor="harvester-status-filter"
+        className="text-sm text-gray-600"
+      >
         {t("harvesterLogs.filter.status.label")}
       </label>
       <select

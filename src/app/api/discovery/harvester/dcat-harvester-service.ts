@@ -20,10 +20,25 @@ import {
 } from "@/app/api/discovery/harvester/fetch-options";
 import { parseRdfToQuads } from "@/app/api/discovery/harvester/rdf-quad-loader";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
+import {
+  ShaclViolation,
+  validateHealthDcatAp,
+} from "@/app/api/discovery/harvester/shacl/shacl-validator";
 
 type FetchLike = (input: string | URL, init?: RequestInit) => Promise<Response>;
 type HarvestOptions = {
   headers?: Record<string, string>;
+};
+
+export type DatasetMappingError = {
+  subjectId: string;
+  message: string;
+  stack?: string;
+};
+
+export type HarvestCollectors = {
+  mappingErrors: DatasetMappingError[];
+  shaclViolations?: ShaclViolation[];
 };
 
 const detectContentTypeFromSource = (source: string) =>
@@ -41,7 +56,8 @@ export class DcatHarvesterService {
   async parseDatasetsFromRdf(
     rdfText: string,
     sourceRef?: string,
-    contentType?: string
+    contentType?: string,
+    collectors?: HarvestCollectors
   ): Promise<LocalDiscoveryDataset[]> {
     const resolvedContentType =
       (contentType as Parameters<typeof parseRdfToQuads>[1]) ??
@@ -58,17 +74,41 @@ export class DcatHarvesterService {
     const graph = new RdfGraph(quads);
     const fallbackCatalogue = getFallbackCatalogue(graph);
 
+    if (collectors?.shaclViolations) {
+      try {
+        collectors.shaclViolations.push(...(await validateHealthDcatAp(quads)));
+      } catch (error) {
+        console.error(
+          `[HealthDCAT-AP validation] Failed to run SHACL validation: ${formatErrorDetails(error)}`
+        );
+      }
+    }
+
     return graph
       .getSubjectsOfType(DCAT_DATASET)
-      .map((datasetSubject, index) =>
-        mapDataset(datasetSubject, graph, fallbackCatalogue, index)
-      )
+      .flatMap((datasetSubject, index) => {
+        try {
+          return [mapDataset(datasetSubject, graph, fallbackCatalogue, index)];
+        } catch (error) {
+          if (!collectors) {
+            throw error;
+          }
+
+          collectors.mappingErrors.push({
+            subjectId: datasetSubject.value,
+            message: formatErrorDetails(error),
+            stack: error instanceof Error ? error.stack : undefined,
+          });
+          return [];
+        }
+      })
       .filter((dataset) => Boolean(dataset.title || dataset.description));
   }
 
   async harvestFromUrl(
     url: string,
-    options: HarvestOptions = {}
+    options: HarvestOptions = {},
+    collectors?: HarvestCollectors
   ): Promise<LocalDiscoveryDataset[]> {
     let response: Response;
     try {
@@ -127,7 +167,8 @@ export class DcatHarvesterService {
       return await this.parseDatasetsFromRdf(
         xmlText,
         url,
-        detectContentTypeFromSource(url)
+        detectContentTypeFromSource(url),
+        collectors
       );
     } catch (error) {
       throw wrapError(
@@ -139,7 +180,7 @@ export class DcatHarvesterService {
 
   async harvestFromFilePath(
     filePath: string,
-    options: HarvestOptions = {}
+    collectors?: HarvestCollectors
   ): Promise<LocalDiscoveryDataset[]> {
     const resolvedPath = resolve(filePath);
     let rdfText: string;
@@ -157,7 +198,8 @@ export class DcatHarvesterService {
       return await this.parseDatasetsFromRdf(
         rdfText,
         resolvedPath,
-        detectContentTypeFromSource(resolvedPath)
+        detectContentTypeFromSource(resolvedPath),
+        collectors
       );
     } catch (error) {
       throw wrapError(

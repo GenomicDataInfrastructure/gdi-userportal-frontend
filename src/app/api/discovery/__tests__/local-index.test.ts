@@ -28,9 +28,16 @@ const mockHarvestFromFilePath =
   jest.fn<(filePath: string) => Promise<LocalDiscoveryDataset[]>>();
 const mockGetAuthorizationHeaderIfConfigured =
   jest.fn<() => Promise<Record<string, string>>>();
+const mockWriteHarvesterRunLog = jest.fn<(log: unknown) => Promise<void>>();
+const mockIsHarvesterLoggingEnabled = jest.fn<() => boolean>();
 
 jest.mock("@/app/api/shared/headers", () => ({
   createHeaders: mockCreateHeaders,
+}));
+
+jest.mock("@/app/api/discovery/local-store/harvester-logs/factory", () => ({
+  writeHarvesterRunLog: mockWriteHarvesterRunLog,
+  isHarvesterLoggingEnabled: mockIsHarvesterLoggingEnabled,
 }));
 
 jest.mock("@/app/api/discovery/local-store/factory", () => ({
@@ -67,6 +74,7 @@ import {
 describe("local-index APIs", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockIsHarvesterLoggingEnabled.mockReturnValue(false);
   });
 
   test("upsertLocalIndexDatasetsApi forwards datasets to local store", async () => {
@@ -214,7 +222,8 @@ describe("local-index APIs", () => {
 
     expect(mockHarvestFromUrl).toHaveBeenCalledWith(
       "https://example.org/catalogue.rdf",
-      { headers: {} }
+      { headers: {} },
+      { mappingErrors: [], shaclViolations: undefined }
     );
     expect(mockClearLocalDiscoveryDatasets).toHaveBeenCalled();
     expect(
@@ -296,6 +305,161 @@ describe("local-index APIs", () => {
     );
   });
 
+  test("harvestLocalIndexFromDcatUrlApi does not write a run log when logging is disabled", async () => {
+    mockIsHarvesterLoggingEnabled.mockReturnValue(false);
+    mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
+    mockHarvestFromUrl.mockResolvedValueOnce([
+      { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
+    ]);
+
+    await harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf");
+
+    expect(mockWriteHarvesterRunLog).not.toHaveBeenCalled();
+  });
+
+  test("harvestLocalIndexFromDcatUrlApi skips SHACL validation (passes no collector) when logging is disabled", async () => {
+    mockIsHarvesterLoggingEnabled.mockReturnValue(false);
+    mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
+    mockHarvestFromUrl.mockResolvedValueOnce([
+      { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
+    ]);
+
+    await harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf");
+
+    expect(mockHarvestFromUrl).toHaveBeenCalledWith(
+      "https://example.org/catalogue.rdf",
+      { headers: {} },
+      { mappingErrors: [], shaclViolations: undefined }
+    );
+  });
+
+  test("harvestLocalIndexFromDcatUrlApi runs SHACL validation (passes a collector) when logging is enabled", async () => {
+    mockIsHarvesterLoggingEnabled.mockReturnValue(true);
+    mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
+    mockHarvestFromUrl.mockResolvedValueOnce([
+      { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
+    ]);
+
+    await harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf");
+
+    expect(mockHarvestFromUrl).toHaveBeenCalledWith(
+      "https://example.org/catalogue.rdf",
+      { headers: {} },
+      { mappingErrors: [], shaclViolations: [] }
+    );
+  });
+
+  test("harvestLocalIndexFromDcatUrlApi writes a success run log when logging is enabled", async () => {
+    mockIsHarvesterLoggingEnabled.mockReturnValue(true);
+    mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
+    mockHarvestFromUrl.mockResolvedValueOnce([
+      { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
+      { id: "d2", title: "Dataset 2", publishers: [], hdab: [], creators: [] },
+    ]);
+
+    await harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf");
+
+    expect(mockWriteHarvesterRunLog).toHaveBeenCalledTimes(1);
+    const loggedRun = mockWriteHarvesterRunLog.mock.calls[0][0] as {
+      status: string;
+      succeeded: number;
+      failed: number;
+      source: { url?: string };
+      errors: unknown[];
+      succeededDatasets: { subjectId: string; datasetTitle?: string }[];
+    };
+    expect(loggedRun.status).toBe("success");
+    expect(loggedRun.succeeded).toBe(2);
+    expect(loggedRun.failed).toBe(0);
+    expect(loggedRun.source).toEqual({
+      url: "https://example.org/catalogue.rdf",
+    });
+    expect(loggedRun.errors).toEqual([]);
+    expect(loggedRun.succeededDatasets).toEqual([
+      { subjectId: "d1", datasetTitle: "Dataset 1" },
+      { subjectId: "d2", datasetTitle: "Dataset 2" },
+    ]);
+  });
+
+  test("harvestLocalIndexFromDcatUrlApi logs field warnings for datasets missing required fields", async () => {
+    mockIsHarvesterLoggingEnabled.mockReturnValue(true);
+    mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
+    mockHarvestFromUrl.mockResolvedValueOnce([
+      {
+        id: "d1",
+        identifier: "d1",
+        title: "Complete Dataset",
+        description: "Has everything",
+        publishers: [{ name: "Org" }],
+        hdab: [],
+        creators: [],
+      },
+      {
+        id: "d2",
+        title: "Incomplete Dataset",
+        publishers: [],
+        hdab: [],
+        creators: [],
+      },
+    ]);
+
+    await harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf");
+
+    const loggedRun = mockWriteHarvesterRunLog.mock.calls[0][0] as {
+      warnings: {
+        subjectId: string;
+        datasetTitle?: string;
+        type: string;
+        details: string[];
+      }[];
+    };
+    expect(loggedRun.warnings).toEqual([
+      {
+        subjectId: "d2",
+        datasetTitle: "Incomplete Dataset",
+        type: "missingFields",
+        details: ["description", "identifier", "publisher"],
+      },
+    ]);
+  });
+
+  test("harvestLocalIndexFromDcatUrlApi writes a failed run log when the run throws, and still throws", async () => {
+    mockIsHarvesterLoggingEnabled.mockReturnValue(true);
+    mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
+    mockHarvestFromUrl.mockRejectedValueOnce(new Error("download failed"));
+
+    await expect(
+      harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf")
+    ).rejects.toThrow("download failed");
+
+    expect(mockWriteHarvesterRunLog).toHaveBeenCalledTimes(1);
+    const loggedRun = mockWriteHarvesterRunLog.mock.calls[0][0] as {
+      status: string;
+      succeeded: number;
+      failed: number;
+      errors: { message: string }[];
+    };
+    expect(loggedRun.status).toBe("failed");
+    expect(loggedRun.succeeded).toBe(0);
+    expect(loggedRun.failed).toBe(1);
+    expect(loggedRun.errors[0].message).toContain("download failed");
+  });
+
+  test("harvestLocalIndexFromDcatUrlApi does not fail the run when writing the log itself fails", async () => {
+    mockIsHarvesterLoggingEnabled.mockReturnValue(true);
+    mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
+    mockHarvestFromUrl.mockResolvedValueOnce([
+      { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
+    ]);
+    mockWriteHarvesterRunLog.mockRejectedValueOnce(
+      new Error("opensearch down")
+    );
+
+    await expect(
+      harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf")
+    ).resolves.toBe(1);
+  });
+
   test("harvestLocalIndexFromDcatFileApi harvests and upserts datasets, clearing first in replace mode", async () => {
     const harvested = [
       { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
@@ -304,7 +468,10 @@ describe("local-index APIs", () => {
 
     const count = await harvestLocalIndexFromDcatFileApi("no-data-dict.rdf");
 
-    expect(mockHarvestFromFilePath).toHaveBeenCalledWith("no-data-dict.rdf");
+    expect(mockHarvestFromFilePath).toHaveBeenCalledWith("no-data-dict.rdf", {
+      mappingErrors: [],
+      shaclViolations: undefined,
+    });
     expect(mockClearLocalDiscoveryDatasets).toHaveBeenCalled();
     expect(
       mockClearLocalDiscoveryDatasets.mock.invocationCallOrder[0]

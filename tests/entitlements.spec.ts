@@ -180,7 +180,7 @@ test.describe("Entitlements page (GA4GH Passport flow)", () => {
     await page.goto("/requests?tab=entitlements");
 
     await expect(
-      page.getByText(/no valid access grants were found/i)
+      page.getByText(/do not have any active entitlements/i)
     ).toBeVisible({ timeout: 15000 });
   });
 
@@ -192,7 +192,7 @@ test.describe("Entitlements page (GA4GH Passport flow)", () => {
     await setAuthCookieWithoutTokens(page);
     await page.goto("/requests?tab=entitlements");
 
-    await expect(page.getByText(/ga4gh passport unavailable/i)).toBeVisible({
+    await expect(page.getByText(/ga4gh passport is unavailable/i)).toBeVisible({
       timeout: 15000,
     });
   });

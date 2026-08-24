@@ -98,7 +98,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^24.10.4",
     "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.4",
+    "@types/react-dom": "19.2.5",
     "@typescript-eslint/eslint-plugin": "^8.18.2",
     "dotenv": "^17.1.0",
     "eslint": "^10.0.0",
@@ -118,6 +118,6 @@
     "protobufjs": "^8.0.0",
     "sharp": "^0.35.0",
     "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.4"
+    "@types/react-dom": "19.2.5"
   }
 }

@@ -174,6 +174,7 @@ describe("opensearch/queries", () => {
               mediaType: valueLabel,
               license: valueLabel,
               rights: wordBoundaryText,
+              status: valueLabel,
               conformsTo: valueLabel,
               applicableLegislation: valueLabel,
               byteSize: { type: "long" },

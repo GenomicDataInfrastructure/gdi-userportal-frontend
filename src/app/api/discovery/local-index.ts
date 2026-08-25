@@ -14,9 +14,9 @@ import {
 } from "@/app/api/discovery/local-store/factory";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import {
-  DatasetMappingError,
   dcatHarvesterService,
   HarvestCollectors,
+  MappingError,
 } from "@/app/api/discovery/harvester/dcat-harvester-service";
 import {
   formatErrorDetails,
@@ -221,12 +221,39 @@ const mapShaclViolationsToWarnings = (
   );
 };
 
+const mapDistributionIssuesToWarnings = (
+  mappingErrors: MappingError[]
+): HarvesterRunLog["warnings"] => {
+  const bySubject = new Map<string, string[]>();
+
+  for (const issue of mappingErrors) {
+    if (issue.scope !== "distribution") continue;
+
+    const label = issue.distributionId
+      ? `${issue.distributionId}: ${issue.message}`
+      : issue.message;
+
+    const existing = bySubject.get(issue.datasetId);
+    if (existing) {
+      existing.push(label);
+    } else {
+      bySubject.set(issue.datasetId, [label]);
+    }
+  }
+
+  return Array.from(bySubject.entries()).map(([subjectId, details]) => ({
+    subjectId,
+    type: "distributionIssue" as const,
+    details,
+  }));
+};
+
 const logHarvesterRun = async (params: {
   startedAt: string;
   source: { url?: string; path?: string };
   mode: HarvestLocalIndexMode;
   succeeded: number;
-  mappingErrors: DatasetMappingError[];
+  mappingErrors: MappingError[];
   warnings?: HarvesterRunLog["warnings"];
   succeededDatasets?: HarvesterRunLog["succeededDatasets"];
   runError?: unknown;
@@ -242,11 +269,18 @@ const logHarvesterRun = async (params: {
     runError,
   } = params;
 
-  const errors: HarvesterRunLog["errors"] = mappingErrors.map((error) => ({
-    subjectId: error.subjectId,
-    message: error.message,
-    stack: error.stack,
-  }));
+  const errors: HarvesterRunLog["errors"] = mappingErrors
+    .filter((issue) => issue.scope === "dataset")
+    .map((issue) => ({
+      subjectId: issue.subjectId,
+      message: issue.message,
+      stack: issue.stack,
+    }));
+
+  const allWarnings = [
+    ...warnings,
+    ...mapDistributionIssuesToWarnings(mappingErrors),
+  ];
 
   if (runError) {
     errors.push({
@@ -268,7 +302,7 @@ const logHarvesterRun = async (params: {
     succeeded,
     failed: errors.length,
     errors,
-    warnings,
+    warnings: allWarnings,
     succeededDatasets,
   };
 

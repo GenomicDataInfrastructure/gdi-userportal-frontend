@@ -591,6 +591,10 @@
     "en": "License",
     "fr": "Licence"
   },
+  "datasets.detail.status": {
+    "en": "Status",
+    "fr": "Statut"
+  },
   "datasets.detail.byteSize": {
     "en": "Byte Size",
     "fr": "Taille en octets"
@@ -670,6 +674,10 @@
   "datasets.detail.tooltips.distributionRights": {
     "en": "Access rights that apply to this distribution.",
     "fr": "Droits d'accès qui s'appliquent à cette distribution."
+  },
+  "datasets.detail.tooltips.distributionStatus": {
+    "en": "Maturity status of the distribution.",
+    "fr": "Statut de maturité de la distribution."
   },
   "datasets.detail.tooltips.distributionApplicableLegislation": {
     "en": "Legislation applicable to this distribution.",
@@ -1746,5 +1754,9 @@
   "harvesterLogs.warningType.healthDcatApCompliance": {
     "en": "HealthDCAT-AP compliance",
     "fr": "Conformité HealthDCAT-AP"
+  },
+  "harvesterLogs.warningType.distributionIssue": {
+    "en": "Distribution issue",
+    "fr": "Problème de distribution"
   }
 }

@@ -225,6 +225,11 @@ export const canonicalDiscoveryRdf = `
               <skos:prefLabel xml:lang="eng">Public</skos:prefLabel>
             </dct:RightsStatement>
           </dct:rights>
+          <adms:status>
+            <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/distribution-status/COMPLETED">
+              <skos:prefLabel xml:lang="eng">Completed</skos:prefLabel>
+            </skos:Concept>
+          </adms:status>
           <dct:conformsTo rdf:resource="https://example.org/spec/standard-1" />
           <r5r:applicableLegislation rdf:resource="http://data.legilux.public.lu/eli/etat/leg/rgd/2022/04/07/a180/jo"/>
           <dcat:byteSize rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2048</dcat:byteSize>
@@ -365,6 +370,11 @@ export const buildLocalDiscoveryDataset = (
       license: {
         value: "http://spdx.org/licenses/Apache-2.0", // NOSONAR
         label: "Apache 2.0",
+      },
+      status: {
+        value:
+          "http://publications.europa.eu/resource/authority/distribution-status/COMPLETED", // NOSONAR
+        label: "Completed",
       },
       conformsTo: [
         {

@@ -18,6 +18,7 @@ import {
   dcatHarvesterService,
   HarvestCollectors,
 } from "@/app/api/discovery/harvester/dcat-harvester-service";
+import { DistributionMappingError } from "@/app/api/discovery/harvester/dcat-distribution-mapper";
 import {
   formatErrorDetails,
   wrapError,
@@ -146,6 +147,7 @@ const runHarvestWithLogging = async (
   const startedAt = new Date().toISOString();
   const collectors: HarvestCollectors = {
     mappingErrors: [],
+    distributionWarnings: [],
     shaclViolations: loggingEnabled ? [] : undefined,
   };
 
@@ -162,6 +164,7 @@ const runHarvestWithLogging = async (
         warnings: [
           ...collectDatasetFieldWarnings(datasets),
           ...mapShaclViolationsToWarnings(collectors.shaclViolations ?? []),
+          ...mapDistributionWarnings(collectors.distributionWarnings ?? []),
         ],
         succeededDatasets: datasets.map((dataset) => ({
           subjectId: dataset.id,
@@ -219,6 +222,31 @@ const mapShaclViolationsToWarnings = (
       details,
     })
   );
+};
+
+const mapDistributionWarnings = (
+  distributionWarnings: DistributionMappingError[]
+): HarvesterRunLog["warnings"] => {
+  const bySubject = new Map<string, string[]>();
+
+  for (const warning of distributionWarnings) {
+    const label = warning.distributionId
+      ? `${warning.distributionId}: ${warning.message}`
+      : warning.message;
+
+    const existing = bySubject.get(warning.datasetId);
+    if (existing) {
+      existing.push(label);
+    } else {
+      bySubject.set(warning.datasetId, [label]);
+    }
+  }
+
+  return Array.from(bySubject.entries()).map(([subjectId, details]) => ({
+    subjectId,
+    type: "distributionIssue" as const,
+    details,
+  }));
 };
 
 const logHarvesterRun = async (params: {

@@ -10,6 +10,7 @@ import {
   DcatHarvesterService,
 } from "@/app/api/discovery/harvester/dcat-harvester-service";
 import * as datasetMapper from "@/app/api/discovery/harvester/dcat-dataset-mapper";
+import { DistributionMappingError } from "@/app/api/discovery/harvester/dcat-distribution-mapper";
 
 const mockReadFile =
   jest.fn<(path: string, encoding: string) => Promise<string>>();
@@ -261,6 +262,11 @@ describe("DcatHarvesterService", () => {
               label: "Apache 2.0",
             },
             rights: "Public",
+            status: {
+              value:
+                "http://publications.europa.eu/resource/authority/distribution-status/COMPLETED",
+              label: "Completed",
+            },
             conformsTo: [
               {
                 value: "https://example.org/spec/standard-1",
@@ -370,6 +376,78 @@ describe("DcatHarvesterService", () => {
     expect(collectors.mappingErrors[0].subjectId).toBeTruthy();
 
     mapDatasetSpy.mockRestore();
+  });
+
+  test("parseDatasetsFromRdf keeps the dataset and reports a distribution warning when one distribution fails to map", async () => {
+    const rdfWithTwoDistributions = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/two-distributions">
+          <dct:identifier>two-distributions</dct:identifier>
+          <dct:title>Dataset with two distributions</dct:title>
+          <dcat:distribution rdf:resource="https://example.org/distributions/good"/>
+          <dcat:distribution rdf:resource="https://example.org/distributions/bad"/>
+        </dcat:Dataset>
+        <dcat:Distribution rdf:about="https://example.org/distributions/good">
+          <dct:identifier>good-distribution</dct:identifier>
+          <dct:title>Good Distribution</dct:title>
+          <dct:issued>2024-01-01</dct:issued>
+        </dcat:Distribution>
+        <dcat:Distribution rdf:about="https://example.org/distributions/bad">
+          <dct:identifier>bad-distribution</dct:identifier>
+          <dct:title>Bad Distribution</dct:title>
+          <dct:issued>2024-02-01</dct:issued>
+        </dcat:Distribution>
+      </rdf:RDF>
+    `;
+
+    const rdfGraphModule = await import(
+      "@/app/api/discovery/harvester/rdf-graph"
+    );
+    const originalGetLiteral =
+      rdfGraphModule.RdfGraph.prototype.getLiteral;
+    const getLiteralSpy = jest
+      .spyOn(rdfGraphModule.RdfGraph.prototype, "getLiteral")
+      .mockImplementation(function (
+        this: InstanceType<typeof rdfGraphModule.RdfGraph>,
+        subject,
+        predicate
+      ) {
+        if (
+          subject.value === "https://example.org/distributions/bad" &&
+          predicate === "http://purl.org/dc/terms/identifier"
+        ) {
+          throw new Error("malformed distribution field");
+        }
+        return originalGetLiteral.call(this, subject, predicate);
+      });
+
+    const service = new DcatHarvesterService();
+    const collectors = {
+      mappingErrors: [] as DatasetMappingError[],
+      distributionWarnings: [] as DistributionMappingError[],
+    };
+
+    const datasets = await service.parseDatasetsFromRdf(
+      rdfWithTwoDistributions,
+      undefined,
+      undefined,
+      collectors
+    );
+
+    expect(datasets).toHaveLength(1);
+    expect(datasets[0].distributions).toHaveLength(1);
+    expect(datasets[0].distributions?.[0].id).toBe("good-distribution");
+    expect(collectors.mappingErrors).toHaveLength(0);
+    expect(collectors.distributionWarnings).toHaveLength(1);
+    expect(collectors.distributionWarnings[0]).toMatchObject({
+      datasetId: "two-distributions",
+      distributionId: "https://example.org/distributions/bad",
+      message: "malformed distribution field",
+    });
+
+    getLiteralSpy.mockRestore();
   });
 
   test("infers the content type from sourceRef when contentType is not provided", async () => {

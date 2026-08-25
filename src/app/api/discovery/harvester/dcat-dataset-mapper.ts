@@ -11,7 +11,10 @@ import {
 import { extractContactPoints } from "@/app/api/discovery/harvester/dcat-contact-point-mapper";
 import { extractDataDictionary } from "@/app/api/discovery/harvester/dcat-dataset-dictionary-mapper";
 import { extractDatasetRelations } from "@/app/api/discovery/harvester/dcat-dataset-relation-mapper";
-import { extractDistributions } from "@/app/api/discovery/harvester/dcat-distribution-mapper";
+import {
+  extractDistributions,
+  OnDistributionError,
+} from "@/app/api/discovery/harvester/dcat-distribution-mapper";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 import { normalizeDate } from "@/app/api/discovery/harvester/date-utils";
 import formatDatasetLanguage from "@/utils/formatDatasetLanguage";
@@ -108,7 +111,8 @@ export const mapDataset = (
   datasetSubject: RDF.Term,
   graph: RdfGraph,
   fallbackCatalogue: string,
-  index: number
+  index: number,
+  onDistributionError?: OnDistributionError
 ): LocalDiscoveryDataset => {
   const identifier = getDatasetIdentifier(datasetSubject, graph);
   const publishers = extractAgents(datasetSubject, graph, DCT_PUBLISHER);
@@ -193,7 +197,12 @@ export const mapDataset = (
     contacts: extractContactPoints(datasetSubject, graph),
     datasetRelationships: extractDatasetRelations(datasetSubject, graph),
     dataDictionary: extractDataDictionary(datasetSubject, graph),
-    distributions: extractDistributions(datasetSubject, graph, datasetId),
+    distributions: extractDistributions(
+      datasetSubject,
+      graph,
+      datasetId,
+      onDistributionError
+    ),
     publishers,
     publisherType: publisherTypes.length > 0 ? publisherTypes : undefined,
     hdab: extractAgents(datasetSubject, graph, HEALTHDCATAP_HDAB),

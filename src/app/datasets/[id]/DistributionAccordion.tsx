@@ -16,6 +16,7 @@ import {
   faCheckCircle,
   faDatabase,
   faGavel,
+  faCircleInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
 import Tooltip from "./Tooltip";
@@ -206,6 +207,24 @@ const DistributionAccordion = ({
                           {distribution.rights}
                         </span>
                         <Tooltip message={t("tooltips.distributionRights")} />
+                      </span>
+                    </div>
+                  )}
+                  {distribution.status && (
+                    <div className="flex items-center relative">
+                      <span className="group flex items-center">
+                        <FontAwesomeIcon
+                          icon={faCircleInfo}
+                          className="text-primary align-middle mr-2"
+                        />
+                        <strong className="text-sm font-semibold">
+                          {t("status")}:
+                        </strong>
+                        <span className="text-sm ml-2">
+                          {distribution.status.label ||
+                            distribution.status.value?.split("/").pop()}
+                        </span>
+                        <Tooltip message={t("tooltips.distributionStatus")} />
                       </span>
                     </div>
                   )}

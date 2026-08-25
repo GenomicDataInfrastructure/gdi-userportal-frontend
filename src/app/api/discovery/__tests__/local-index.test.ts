@@ -436,31 +436,33 @@ describe("local-index APIs", () => {
   test("harvestLocalIndexFromDcatUrlApi logs distribution warnings grouped by dataset", async () => {
     mockIsHarvesterLoggingEnabled.mockReturnValue(true);
     mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
-    mockHarvestFromUrl.mockImplementationOnce(async (_url, _options, collectors) => {
-      collectors?.distributionWarnings?.push(
-        {
-          datasetId: "d1",
-          distributionId: "https://example.org/distributions/bad",
-          message: "malformed distribution field",
-        },
-        {
-          datasetId: "d1",
-          distributionId: "https://example.org/distributions/worse",
-          message: "missing accessURL",
-        }
-      );
-      return [
-        {
-          id: "d1",
-          identifier: "d1",
-          title: "Dataset 1",
-          description: "Has everything",
-          publishers: [{ name: "Org" }],
-          hdab: [],
-          creators: [],
-        },
-      ];
-    });
+    mockHarvestFromUrl.mockImplementationOnce(
+      async (_url, _options, collectors) => {
+        collectors?.distributionWarnings?.push(
+          {
+            datasetId: "d1",
+            distributionId: "https://example.org/distributions/bad",
+            message: "malformed distribution field",
+          },
+          {
+            datasetId: "d1",
+            distributionId: "https://example.org/distributions/worse",
+            message: "missing accessURL",
+          }
+        );
+        return [
+          {
+            id: "d1",
+            identifier: "d1",
+            title: "Dataset 1",
+            description: "Has everything",
+            publishers: [{ name: "Org" }],
+            hdab: [],
+            creators: [],
+          },
+        ];
+      }
+    );
 
     await harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf");
 

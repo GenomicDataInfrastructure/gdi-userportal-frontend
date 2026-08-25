@@ -402,11 +402,9 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const rdfGraphModule = await import(
-      "@/app/api/discovery/harvester/rdf-graph"
-    );
-    const originalGetLiteral =
-      rdfGraphModule.RdfGraph.prototype.getLiteral;
+    const rdfGraphModule =
+      await import("@/app/api/discovery/harvester/rdf-graph");
+    const originalGetLiteral = rdfGraphModule.RdfGraph.prototype.getLiteral;
     const getLiteralSpy = jest
       .spyOn(rdfGraphModule.RdfGraph.prototype, "getLiteral")
       .mockImplementation(function (

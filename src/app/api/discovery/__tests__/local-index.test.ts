@@ -223,7 +223,11 @@ describe("local-index APIs", () => {
     expect(mockHarvestFromUrl).toHaveBeenCalledWith(
       "https://example.org/catalogue.rdf",
       { headers: {} },
-      { mappingErrors: [], distributionWarnings: [], shaclViolations: undefined }
+      {
+        mappingErrors: [],
+        distributionWarnings: [],
+        shaclViolations: undefined,
+      }
     );
     expect(mockClearLocalDiscoveryDatasets).toHaveBeenCalled();
     expect(
@@ -329,7 +333,11 @@ describe("local-index APIs", () => {
     expect(mockHarvestFromUrl).toHaveBeenCalledWith(
       "https://example.org/catalogue.rdf",
       { headers: {} },
-      { mappingErrors: [], distributionWarnings: [], shaclViolations: undefined }
+      {
+        mappingErrors: [],
+        distributionWarnings: [],
+        shaclViolations: undefined,
+      }
     );
   });
 

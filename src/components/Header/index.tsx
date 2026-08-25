@@ -15,6 +15,7 @@ import {
   faHome,
   faInfoCircle,
   faLineChart,
+  faServer,
   faShoppingCart,
   faUser,
   faWandSparkles,
@@ -73,6 +74,12 @@ function Header() {
       label: t("nav.about"),
       href: "/about",
       isActive: (activePath: string) => activePath === "/about",
+    },
+    {
+      icon: faServer,
+      label: t("nav.services"),
+      href: "/services",
+      isActive: (activePath: string) => activePath === "/services",
     },
   ];
 

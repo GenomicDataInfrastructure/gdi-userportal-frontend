@@ -7,8 +7,9 @@ import messageCatalog from "./messages.json";
 const messageLocales = ["en", "fr"] as const;
 
 type MessageLocale = (typeof messageLocales)[number];
-type FlatMessageCatalog = Record<string, Record<MessageLocale, string>>;
-type FlatMessages = Record<string, string>;
+type MessageValue = string | string[];
+type FlatMessageCatalog = Record<string, Record<MessageLocale, MessageValue>>;
+type FlatMessages = Record<string, MessageValue>;
 type NestedMessages = Record<string, unknown>;
 
 const typedCatalog = messageCatalog as FlatMessageCatalog;

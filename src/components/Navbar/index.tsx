@@ -12,6 +12,7 @@ import {
   faDatabase,
   faHome,
   faLineChart,
+  faServer,
   faWandSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -56,6 +57,12 @@ function Navbar() {
       label: t("nav.publishers"),
       href: "/publishers",
       isActive: (activePath: string) => activePath === "/publishers",
+    },
+    {
+      icon: faServer,
+      label: t("nav.services"),
+      href: "/services",
+      isActive: (activePath: string) => activePath === "/services",
     },
   ];
 

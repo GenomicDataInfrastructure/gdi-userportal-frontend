@@ -6,11 +6,10 @@ import { jest } from "@jest/globals";
 import { resolve } from "node:path";
 import { canonicalDiscoveryRdf } from "@/app/api/discovery/test-utils/fixtures";
 import {
-  DatasetMappingError,
   DcatHarvesterService,
+  MappingError,
 } from "@/app/api/discovery/harvester/dcat-harvester-service";
 import * as datasetMapper from "@/app/api/discovery/harvester/dcat-dataset-mapper";
-import { DistributionMappingError } from "@/app/api/discovery/harvester/dcat-distribution-mapper";
 
 const mockReadFile =
   jest.fn<(path: string, encoding: string) => Promise<string>>();
@@ -361,7 +360,7 @@ describe("DcatHarvesterService", () => {
         throw new Error("malformed dataset");
       });
 
-    const collectors = { mappingErrors: [] as DatasetMappingError[] };
+    const collectors = { mappingErrors: [] as MappingError[] };
 
     const datasets = await service.parseDatasetsFromRdf(
       canonicalDiscoveryRdf,
@@ -372,8 +371,12 @@ describe("DcatHarvesterService", () => {
 
     expect(datasets).toHaveLength(1);
     expect(collectors.mappingErrors).toHaveLength(1);
+    expect(collectors.mappingErrors[0].scope).toBe("dataset");
     expect(collectors.mappingErrors[0].message).toBe("malformed dataset");
-    expect(collectors.mappingErrors[0].subjectId).toBeTruthy();
+    expect(
+      collectors.mappingErrors[0].scope === "dataset" &&
+        collectors.mappingErrors[0].subjectId
+    ).toBeTruthy();
 
     mapDatasetSpy.mockRestore();
   });
@@ -422,10 +425,7 @@ describe("DcatHarvesterService", () => {
       });
 
     const service = new DcatHarvesterService();
-    const collectors = {
-      mappingErrors: [] as DatasetMappingError[],
-      distributionWarnings: [] as DistributionMappingError[],
-    };
+    const collectors = { mappingErrors: [] as MappingError[] };
 
     const datasets = await service.parseDatasetsFromRdf(
       rdfWithTwoDistributions,
@@ -437,9 +437,9 @@ describe("DcatHarvesterService", () => {
     expect(datasets).toHaveLength(1);
     expect(datasets[0].distributions).toHaveLength(1);
     expect(datasets[0].distributions?.[0].id).toBe("good-distribution");
-    expect(collectors.mappingErrors).toHaveLength(0);
-    expect(collectors.distributionWarnings).toHaveLength(1);
-    expect(collectors.distributionWarnings[0]).toMatchObject({
+    expect(collectors.mappingErrors).toHaveLength(1);
+    expect(collectors.mappingErrors[0]).toMatchObject({
+      scope: "distribution",
       datasetId: "two-distributions",
       distributionId: "https://example.org/distributions/bad",
       message: "malformed distribution field",

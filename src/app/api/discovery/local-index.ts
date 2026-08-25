@@ -14,11 +14,10 @@ import {
 } from "@/app/api/discovery/local-store/factory";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import {
-  DatasetMappingError,
   dcatHarvesterService,
   HarvestCollectors,
+  MappingError,
 } from "@/app/api/discovery/harvester/dcat-harvester-service";
-import { DistributionMappingError } from "@/app/api/discovery/harvester/dcat-distribution-mapper";
 import {
   formatErrorDetails,
   wrapError,
@@ -147,7 +146,6 @@ const runHarvestWithLogging = async (
   const startedAt = new Date().toISOString();
   const collectors: HarvestCollectors = {
     mappingErrors: [],
-    distributionWarnings: [],
     shaclViolations: loggingEnabled ? [] : undefined,
   };
 
@@ -164,7 +162,6 @@ const runHarvestWithLogging = async (
         warnings: [
           ...collectDatasetFieldWarnings(datasets),
           ...mapShaclViolationsToWarnings(collectors.shaclViolations ?? []),
-          ...mapDistributionWarnings(collectors.distributionWarnings ?? []),
         ],
         succeededDatasets: datasets.map((dataset) => ({
           subjectId: dataset.id,
@@ -224,21 +221,23 @@ const mapShaclViolationsToWarnings = (
   );
 };
 
-const mapDistributionWarnings = (
-  distributionWarnings: DistributionMappingError[]
+const mapDistributionIssuesToWarnings = (
+  mappingErrors: MappingError[]
 ): HarvesterRunLog["warnings"] => {
   const bySubject = new Map<string, string[]>();
 
-  for (const warning of distributionWarnings) {
-    const label = warning.distributionId
-      ? `${warning.distributionId}: ${warning.message}`
-      : warning.message;
+  for (const issue of mappingErrors) {
+    if (issue.scope !== "distribution") continue;
 
-    const existing = bySubject.get(warning.datasetId);
+    const label = issue.distributionId
+      ? `${issue.distributionId}: ${issue.message}`
+      : issue.message;
+
+    const existing = bySubject.get(issue.datasetId);
     if (existing) {
       existing.push(label);
     } else {
-      bySubject.set(warning.datasetId, [label]);
+      bySubject.set(issue.datasetId, [label]);
     }
   }
 
@@ -254,7 +253,7 @@ const logHarvesterRun = async (params: {
   source: { url?: string; path?: string };
   mode: HarvestLocalIndexMode;
   succeeded: number;
-  mappingErrors: DatasetMappingError[];
+  mappingErrors: MappingError[];
   warnings?: HarvesterRunLog["warnings"];
   succeededDatasets?: HarvesterRunLog["succeededDatasets"];
   runError?: unknown;
@@ -270,11 +269,18 @@ const logHarvesterRun = async (params: {
     runError,
   } = params;
 
-  const errors: HarvesterRunLog["errors"] = mappingErrors.map((error) => ({
-    subjectId: error.subjectId,
-    message: error.message,
-    stack: error.stack,
-  }));
+  const errors: HarvesterRunLog["errors"] = mappingErrors
+    .filter((issue) => issue.scope === "dataset")
+    .map((issue) => ({
+      subjectId: issue.subjectId,
+      message: issue.message,
+      stack: issue.stack,
+    }));
+
+  const allWarnings = [
+    ...warnings,
+    ...mapDistributionIssuesToWarnings(mappingErrors),
+  ];
 
   if (runError) {
     errors.push({
@@ -296,7 +302,7 @@ const logHarvesterRun = async (params: {
     succeeded,
     failed: errors.length,
     errors,
-    warnings,
+    warnings: allWarnings,
     succeededDatasets,
   };
 

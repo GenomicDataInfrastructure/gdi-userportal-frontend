@@ -24,7 +24,7 @@ import {
   ShaclViolation,
   validateHealthDcatAp,
 } from "@/app/api/discovery/harvester/shacl/shacl-validator";
-import { DistributionMappingError } from "@/app/api/discovery/harvester/dcat-distribution-mapper";
+import { DistributionMappingError as DistributionMappingErrorInput } from "@/app/api/discovery/harvester/dcat-distribution-mapper";
 
 type FetchLike = (input: string | URL, init?: RequestInit) => Promise<Response>;
 type HarvestOptions = {
@@ -32,14 +32,24 @@ type HarvestOptions = {
 };
 
 export type DatasetMappingError = {
+  scope: "dataset";
   subjectId: string;
   message: string;
   stack?: string;
 };
 
+export type DistributionMappingError = {
+  scope: "distribution";
+  datasetId: string;
+  distributionId?: string;
+  message: string;
+  stack?: string;
+};
+
+export type MappingError = DatasetMappingError | DistributionMappingError;
+
 export type HarvestCollectors = {
-  mappingErrors: DatasetMappingError[];
-  distributionWarnings?: DistributionMappingError[];
+  mappingErrors: MappingError[];
   shaclViolations?: ShaclViolation[];
 };
 
@@ -86,9 +96,12 @@ export class DcatHarvesterService {
       }
     }
 
-    const onDistributionError = collectors?.distributionWarnings
-      ? (distributionError: DistributionMappingError) =>
-          collectors.distributionWarnings?.push(distributionError)
+    const onDistributionError = collectors
+      ? (distributionError: DistributionMappingErrorInput) =>
+          collectors.mappingErrors.push({
+            scope: "distribution",
+            ...distributionError,
+          })
       : undefined;
 
     return graph
@@ -110,6 +123,7 @@ export class DcatHarvesterService {
           }
 
           collectors.mappingErrors.push({
+            scope: "dataset",
             subjectId: datasetSubject.value,
             message: formatErrorDetails(error),
             stack: error instanceof Error ? error.stack : undefined,

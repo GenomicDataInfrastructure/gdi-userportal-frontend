@@ -227,7 +227,6 @@ describe("local-index APIs", () => {
       { headers: {} },
       {
         mappingErrors: [],
-        distributionWarnings: [],
         shaclViolations: undefined,
       }
     );
@@ -337,7 +336,6 @@ describe("local-index APIs", () => {
       { headers: {} },
       {
         mappingErrors: [],
-        distributionWarnings: [],
         shaclViolations: undefined,
       }
     );
@@ -355,7 +353,7 @@ describe("local-index APIs", () => {
     expect(mockHarvestFromUrl).toHaveBeenCalledWith(
       "https://example.org/catalogue.rdf",
       { headers: {} },
-      { mappingErrors: [], distributionWarnings: [], shaclViolations: [] }
+      { mappingErrors: [], shaclViolations: [] }
     );
   });
 
@@ -438,13 +436,15 @@ describe("local-index APIs", () => {
     mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
     mockHarvestFromUrl.mockImplementationOnce(
       async (_url, _options, collectors) => {
-        collectors?.distributionWarnings?.push(
+        collectors?.mappingErrors.push(
           {
+            scope: "distribution",
             datasetId: "d1",
             distributionId: "https://example.org/distributions/bad",
             message: "malformed distribution field",
           },
           {
+            scope: "distribution",
             datasetId: "d1",
             distributionId: "https://example.org/distributions/worse",
             message: "missing accessURL",
@@ -532,7 +532,6 @@ describe("local-index APIs", () => {
 
     expect(mockHarvestFromFilePath).toHaveBeenCalledWith("no-data-dict.rdf", {
       mappingErrors: [],
-      distributionWarnings: [],
       shaclViolations: undefined,
     });
     expect(mockClearLocalDiscoveryDatasets).toHaveBeenCalled();

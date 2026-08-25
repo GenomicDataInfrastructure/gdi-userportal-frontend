@@ -161,46 +161,37 @@ const getDistributionDescription = (
   return description || undefined;
 };
 
-const getDistributionFormat = (
+const resolveDistributionConcept = (
   distributionSubject: RDF.Term,
-  graph: RdfGraph
-): LocalDiscoveryDistribution["format"] => {
-  const formatSubject = graph.getObjects(distributionSubject, DCT_FORMAT)[0];
-  if (!formatSubject) return undefined;
+  graph: RdfGraph,
+  predicate: string
+): { value: string; label: string } | undefined => {
+  const conceptSubject = graph.getObjects(distributionSubject, predicate)[0];
+  if (!conceptSubject) return undefined;
 
   const value =
-    graph.getNamedNodeValue(formatSubject) || formatSubject.value.trim();
+    graph.getNamedNodeValue(conceptSubject) || conceptSubject.value.trim();
   if (!value) return undefined;
 
   const label =
-    graph.getFirstLiteral(formatSubject, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
+    graph.getFirstLiteral(conceptSubject, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
     value.split("/").pop() ||
     value;
 
   return { value, label };
 };
+
+const getDistributionFormat = (
+  distributionSubject: RDF.Term,
+  graph: RdfGraph
+): LocalDiscoveryDistribution["format"] =>
+  resolveDistributionConcept(distributionSubject, graph, DCT_FORMAT);
 
 const getDistributionMediaType = (
   distributionSubject: RDF.Term,
   graph: RdfGraph
-): LocalDiscoveryDistribution["mediaType"] => {
-  const mediaTypeSubject = graph.getObjects(
-    distributionSubject,
-    DCAT_MEDIA_TYPE
-  )[0];
-  if (!mediaTypeSubject) return undefined;
-
-  const value =
-    graph.getNamedNodeValue(mediaTypeSubject) || mediaTypeSubject.value.trim();
-  if (!value) return undefined;
-
-  const label =
-    graph.getFirstLiteral(mediaTypeSubject, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
-    value.split("/").pop() ||
-    value;
-
-  return { value, label };
-};
+): LocalDiscoveryDistribution["mediaType"] =>
+  resolveDistributionConcept(distributionSubject, graph, DCAT_MEDIA_TYPE);
 
 const getDistributionAccessUrl = (
   distributionSubject: RDF.Term,
@@ -245,21 +236,8 @@ const getDistributionLicense = (
 const getDistributionStatus = (
   distributionSubject: RDF.Term,
   graph: RdfGraph
-): LocalDiscoveryDistribution["status"] => {
-  const statusSubject = graph.getObjects(distributionSubject, ADMS_STATUS)[0];
-  if (!statusSubject) return undefined;
-
-  const value =
-    graph.getNamedNodeValue(statusSubject) || statusSubject.value.trim();
-  if (!value) return undefined;
-
-  const label =
-    graph.getFirstLiteral(statusSubject, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
-    value.split("/").pop() ||
-    value;
-
-  return { value, label };
-};
+): LocalDiscoveryDistribution["status"] =>
+  resolveDistributionConcept(distributionSubject, graph, ADMS_STATUS);
 
 const getDistributionRights = (
   distributionSubject: RDF.Term,

@@ -14,7 +14,10 @@ import {
   faLineChart,
 } from "@fortawesome/free-solid-svg-icons";
 
+export type ServiceKey = "datasetDiscovery" | "alleleFrequency";
+
 export type Service = {
+  key: ServiceKey;
   name: string;
   shortName: string;
   usageCost: string;
@@ -27,11 +30,11 @@ type ServiceCardProps = {
   service: Service;
 };
 
-function getServiceIcon(shortName: string) {
-  if (shortName === "DDS") {
+function getServiceIcon(key: ServiceKey) {
+  if (key === "datasetDiscovery") {
     return faDatabase;
   }
-  if (shortName === "AF Browser") {
+  if (key === "alleleFrequency") {
     return faLineChart;
   }
   return undefined;
@@ -82,7 +85,7 @@ function FeatureList({ items }: { items: string[] }) {
 export default function ServiceCard({ service }: ServiceCardProps) {
   const t = useTranslations();
   const [isExpanded, setIsExpanded] = useState(false);
-  const icon = getServiceIcon(service.shortName);
+  const icon = getServiceIcon(service.key);
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
@@ -101,6 +104,10 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="text-lg font-semibold text-info">{service.name}</h2>
             <span className="text-xs text-gray-400">({service.shortName})</span>
+            <span className="text-xs text-gray-400">|</span>
+            <span className="text-xs text-gray-400">
+              {t("services.usageCost")}: {service.usageCost}
+            </span>
           </div>
           <p className="mt-3 text-sm leading-relaxed text-gray-700">
             {service.overview}

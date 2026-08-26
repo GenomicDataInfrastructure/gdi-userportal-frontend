@@ -7,7 +7,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import PageContainer from "@/components/PageContainer";
-import ServiceCard, { Service } from "@/components/ServiceCard";
+import ServiceCard, { Service, ServiceKey } from "@/components/ServiceCard";
 import { UrlSearchParams } from "@/app/params";
 import { getTranslations } from "next-intl/server";
 
@@ -15,15 +15,16 @@ type ServicesPageProps = {
   searchParams: Promise<UrlSearchParams>;
 };
 
+const serviceKeys: ServiceKey[] = ["datasetDiscovery", "alleleFrequency"];
+
 export default async function ServicesPage({
   searchParams,
 }: ServicesPageProps) {
   const t = await getTranslations("services");
   const _searchParams = await searchParams;
 
-  const serviceKeys = ["datasetDiscovery", "alleleFrequency"] as const;
-
   const services: Service[] = serviceKeys.map((key) => ({
+    key,
     name: t(`${key}.name`),
     shortName: t(`${key}.shortName`),
     usageCost: t(`${key}.usageCost`),
@@ -46,7 +47,7 @@ export default async function ServicesPage({
 
       <div className="flex flex-col gap-6 px-4 pb-12 sm:px-6 lg:px-8">
         {services.map((service) => (
-          <ServiceCard key={service.shortName} service={service} />
+          <ServiceCard key={service.key} service={service} />
         ))}
       </div>
     </PageContainer>

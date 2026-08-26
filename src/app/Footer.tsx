@@ -151,9 +151,11 @@ function Footer() {
             <Link className="hover:text-info" href="/about">
               {t("nav.about")}
             </Link>
-            <Link className="hover:text-info" href="/services">
-              {t("nav.services")}
-            </Link>
+            {contentConfig.showServices && (
+              <Link className="hover:text-info" href="/services">
+                {t("nav.services")}
+              </Link>
+            )}
           </div>
           {/* Fourth column: Contact us */}
           <div className="flex flex-col gap-2 text-left w-full md:w-1/3">

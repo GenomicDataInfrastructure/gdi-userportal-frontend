@@ -27,6 +27,7 @@ interface ContentConfig {
   enableAllVariantSearch: boolean;
   contactUsEnabled: boolean;
   showApplicationOptions: boolean;
+  showServices: boolean;
   footerLogos?: Array<{ src: string; alt: string; url?: string }>;
   favicon: string;
   headerLogoUrl: string;
@@ -71,6 +72,7 @@ const contentConfig: ContentConfig = {
     env("NEXT_PUBLIC_FEATURE_CONTACT_US")?.toLowerCase() === "true",
   showApplicationOptions:
     env("NEXT_PUBLIC_FEATURE_APPLICATION_OPTIONS")?.toLowerCase() === "true",
+  showServices: env("NEXT_PUBLIC_SHOW_SERVICES")?.toLowerCase() === "true",
   footerLogos: env("NEXT_PUBLIC_FOOTER_LOGOS")
     ? JSON.parse(env("NEXT_PUBLIC_FOOTER_LOGOS") || "[]")
     : undefined,

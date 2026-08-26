@@ -75,13 +75,16 @@ function Header() {
       href: "/about",
       isActive: (activePath: string) => activePath === "/about",
     },
-    {
+  ];
+
+  if (contentConfig.showServices) {
+    navItems.push({
       icon: faServer,
       label: t("nav.services"),
       href: "/services",
       isActive: (activePath: string) => activePath === "/services",
-    },
-  ];
+    });
+  }
 
   if (!contentConfig.showAlleleFrequency) {
     navItems = navItems.filter((item) => item.href !== "/allele-frequency");

@@ -20,7 +20,6 @@ export type Service = {
   key: ServiceKey;
   name: string;
   shortName: string;
-  usageCost: string;
   overview: string;
   intendedUsers: string;
   keyFeatures: string[];
@@ -104,10 +103,6 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="text-lg font-semibold text-info">{service.name}</h2>
             <span className="text-xs text-gray-400">({service.shortName})</span>
-            <span className="text-xs text-gray-400">|</span>
-            <span className="text-xs text-gray-400">
-              {t("services.usageCost")}: {service.usageCost}
-            </span>
           </div>
           <p className="mt-3 text-sm leading-relaxed text-gray-700">
             {service.overview}

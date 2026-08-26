@@ -27,7 +27,6 @@ export default async function ServicesPage({
     key,
     name: t(`${key}.name`),
     shortName: t(`${key}.shortName`),
-    usageCost: t(`${key}.usageCost`),
     overview: t(`${key}.overview`),
     intendedUsers: t(`${key}.intendedUsers`),
     keyFeatures: t.raw(`${key}.keyFeatures`) as string[],

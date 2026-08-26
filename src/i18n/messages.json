@@ -51,10 +51,6 @@
     "en": "DDS",
     "fr": "DDS"
   },
-  "services.datasetDiscovery.usageCost": {
-    "en": "Free",
-    "fr": "Gratuit"
-  },
   "services.datasetDiscovery.overview": {
     "en": "DDS provides a federated search interface for discovering genomic and health-related datasets across distributed GDI data sources. It harvests metadata from FAIR Data Points and other catalogues, indexes it, and enables you to search and explore datasets through the User Portal and APIs.",
     "fr": "DDS fournit une interface de recherche fédérée pour découvrir des jeux de données génomiques et liés à la santé au sein des sources de données GDI distribuées. Il collecte les métadonnées depuis les FAIR Data Points et d'autres catalogues, les indexe, et vous permet de rechercher et d'explorer des jeux de données via le portail utilisateur et des API."
@@ -85,10 +81,6 @@
     "en": "AF Browser",
     "fr": "Navigateur AF"
   },
-  "services.alleleFrequency.usageCost": {
-    "en": "Free",
-    "fr": "Gratuit"
-  },
   "services.alleleFrequency.overview": {
     "en": "The AF Browser allows you to query pre-computed, aggregated allele frequency statistics from federated genomic datasets through the User Portal or APIs. It features privacy-preserving discovery with variant-level screening, enabling you to assess dataset relevance before requesting controlled access to the underlying datasets.",
     "fr": "Le navigateur AF vous permet d'interroger des statistiques de fréquences alléliques agrégées et précalculées provenant de jeux de données génomiques fédérés via le portail utilisateur ou des API. Il offre une découverte préservant la vie privée avec un criblage au niveau des variants, vous permettant d'évaluer la pertinence d'un jeu de données avant de demander un accès contrôlé aux données sous-jacentes."
@@ -116,10 +108,6 @@
   "services.shortName": {
     "en": "Short name",
     "fr": "Nom abrégé"
-  },
-  "services.usageCost": {
-    "en": "Usage cost",
-    "fr": "Coût d'utilisation"
   },
   "services.overview": {
     "en": "Service overview",

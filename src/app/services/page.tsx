@@ -2,10 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// SPDX-FileCopyrightText: 2026 PNED G.I.E.
-//
-// SPDX-License-Identifier: Apache-2.0
-
 import PageContainer from "@/components/PageContainer";
 import ServiceCard, { Service, ServiceKey } from "@/components/ServiceCard";
 import { UrlSearchParams } from "@/app/params";

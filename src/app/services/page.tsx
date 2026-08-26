@@ -5,7 +5,9 @@
 import PageContainer from "@/components/PageContainer";
 import ServiceCard, { Service, ServiceKey } from "@/components/ServiceCard";
 import { UrlSearchParams } from "@/app/params";
+import contentConfig from "@/config/contentConfig";
 import { getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
 
 type ServicesPageProps = {
   searchParams: Promise<UrlSearchParams>;
@@ -16,6 +18,10 @@ const serviceKeys: ServiceKey[] = ["datasetDiscovery", "alleleFrequency"];
 export default async function ServicesPage({
   searchParams,
 }: ServicesPageProps) {
+  if (!contentConfig.showServices) {
+    notFound();
+  }
+
   const t = await getTranslations("services");
   const _searchParams = await searchParams;
 

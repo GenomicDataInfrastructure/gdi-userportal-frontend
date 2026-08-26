@@ -31,6 +31,92 @@
     "en": "About",
     "fr": "À propos"
   },
+  "nav.services": {
+    "en": "Services",
+    "fr": "Services"
+  },
+  "services.title": {
+    "en": "GDI Service Catalogue",
+    "fr": "Catalogue de services GDI"
+  },
+  "services.subtitle": {
+    "en": "The GDI Service Catalogue offers free services to the public through this User Portal, funded by the EU and GDI partner countries. This page lists the services available.",
+    "fr": "Le catalogue de services GDI offre des services gratuits au public via ce portail utilisateur, financés par l'UE et les pays partenaires du GDI. Cette page répertorie les services disponibles."
+  },
+  "services.datasetDiscovery.name": {
+    "en": "Dataset Discovery Service",
+    "fr": "Service de découverte de jeux de données"
+  },
+  "services.datasetDiscovery.shortName": {
+    "en": "DDS",
+    "fr": "DDS"
+  },
+  "services.datasetDiscovery.overview": {
+    "en": "DDS provides a federated search interface for discovering genomic and health-related datasets across distributed GDI data sources. It harvests metadata from FAIR Data Points and other catalogues, indexes it, and enables you to search and explore datasets through the User Portal and APIs.",
+    "fr": "DDS fournit une interface de recherche fédérée pour découvrir des jeux de données génomiques et liés à la santé au sein des sources de données GDI distribuées. Il collecte les métadonnées depuis les FAIR Data Points et d'autres catalogues, les indexe, et vous permet de rechercher et d'explorer des jeux de données via le portail utilisateur et des API."
+  },
+  "services.datasetDiscovery.intendedUsers": {
+    "en": "Researchers, bioinformaticians, data stewards, research infrastructures, health data infrastructures, and developers integrating discovery APIs.",
+    "fr": "Chercheurs, bioinformaticiens, gestionnaires de données, infrastructures de recherche, infrastructures de données de santé et développeurs intégrant des API de découverte."
+  },
+  "services.datasetDiscovery.keyFeatures": {
+    "en": [
+      "**Federated dataset search** improves discoverability and reuse across distributed GDI data sources.",
+      "**FAIR-aligned metadata harvesting** supports consistent discovery workflows.",
+      "**Cross-border and multi-institutional discovery** supports collaborative research.",
+      "**HealthDCAT interoperability** supports integration across infrastructures."
+    ],
+    "fr": [
+      "**Recherche fédérée de jeux de données** améliore la découvrabilité et la réutilisation des sources de données GDI distribuées.",
+      "**Collecte de métadonnées alignées FAIR** soutient des flux de travail de découverte cohérents.",
+      "**Découverte transfrontalière et multi-institutionnelle** soutient la recherche collaborative.",
+      "**Interopérabilité HealthDCAT** soutient l'intégration entre infrastructures."
+    ]
+  },
+  "services.alleleFrequency.name": {
+    "en": "Aggregated Allele Frequency Browser",
+    "fr": "Navigateur de fréquences alléliques agrégées"
+  },
+  "services.alleleFrequency.shortName": {
+    "en": "AF Browser",
+    "fr": "Navigateur AF"
+  },
+  "services.alleleFrequency.overview": {
+    "en": "The AF Browser allows you to query pre-computed, aggregated allele frequency statistics from federated genomic datasets through the User Portal or APIs. It features privacy-preserving discovery with variant-level screening, enabling you to assess dataset relevance before requesting controlled access to the underlying datasets.",
+    "fr": "Le navigateur AF vous permet d'interroger des statistiques de fréquences alléliques agrégées et précalculées provenant de jeux de données génomiques fédérés via le portail utilisateur ou des API. Il offre une découverte préservant la vie privée avec un criblage au niveau des variants, vous permettant d'évaluer la pertinence d'un jeu de données avant de demander un accès contrôlé aux données sous-jacentes."
+  },
+  "services.alleleFrequency.intendedUsers": {
+    "en": "Researchers searching for datasets with specific variants, and bioinformaticians and genetics experts performing variant-level screening.",
+    "fr": "Chercheurs recherchant des jeux de données contenant des variants spécifiques, ainsi que des bioinformaticiens et experts en génétique effectuant un criblage au niveau des variants."
+  },
+  "services.alleleFrequency.keyFeatures": {
+    "en": [
+      "**Privacy-preserving aggregated allele frequency search** supports more granular interpretation tasks.",
+      "**Variant-level screening** improves visibility of controlled-access datasets.",
+      "**Pre-screening before access requests** helps reduce unnecessary access requests.",
+      "**Federated discovery** supports cross-border research.",
+      "**GA4GH Beacon v2 alignment** supports interoperability standards."
+    ],
+    "fr": [
+      "**Recherche de fréquences alléliques agrégées préservant la vie privée** soutient des tâches d'interprétation plus granulaires.",
+      "**Criblage au niveau des variants** améliore la visibilité des jeux de données à accès contrôlé.",
+      "**Pré-criblage avant les demandes d'accès** permet de réduire les demandes d'accès inutiles.",
+      "**Découverte fédérée** soutient la recherche transfrontalière.",
+      "**Alignement avec GA4GH Beacon v2** soutient les standards d'interopérabilité."
+    ]
+  },
+  "services.overview": {
+    "en": "Service overview",
+    "fr": "Aperçu du service"
+  },
+  "services.intendedUsers": {
+    "en": "Intended users",
+    "fr": "Utilisateurs cibles"
+  },
+  "services.keyFeatures": {
+    "en": "Key features",
+    "fr": "Fonctionnalités clés"
+  },
   "nav.requests": {
     "en": "Requests",
     "fr": "Demandes"

@@ -4,16 +4,9 @@
 "use client";
 
 import { Link, usePathname } from "@/i18n/navigation";
-import contentConfig from "@/config/contentConfig";
 import debounce from "@/utils/debounce";
+import { getNavItems } from "@/utils/getNavItems";
 import { useTranslations } from "next-intl";
-import {
-  faBook,
-  faDatabase,
-  faHome,
-  faLineChart,
-  faWandSparkles,
-} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
 
@@ -25,43 +18,7 @@ function Navbar() {
     typeof window !== "undefined" ? window.scrollY : 0
   );
 
-  let navItems = [
-    {
-      icon: faHome,
-      label: t("nav.home"),
-      href: "/",
-      isActive: (activePath: string) => activePath === "/",
-    },
-    {
-      icon: faDatabase,
-      label: t("nav.datasets"),
-      href: "/datasets",
-      isActive: (activePath: string) => activePath.includes("/datasets"),
-    },
-    {
-      icon: faLineChart,
-      label: t("nav.alleleFrequency"),
-      href: "/allele-frequency",
-      isActive: (activePath: string) =>
-        activePath.includes("/allele-frequency"),
-    },
-    {
-      icon: faWandSparkles,
-      label: t("nav.themes"),
-      href: "/themes",
-      isActive: (activePath: string) => activePath === "/themes",
-    },
-    {
-      icon: faBook,
-      label: t("nav.publishers"),
-      href: "/publishers",
-      isActive: (activePath: string) => activePath === "/publishers",
-    },
-  ];
-
-  if (!contentConfig.showAlleleFrequency) {
-    navItems = navItems.filter((item) => item.href !== "/allele-frequency");
-  }
+  const navItems = getNavItems(t);
 
   useEffect(() => {
     const handleScroll = debounce(() => {

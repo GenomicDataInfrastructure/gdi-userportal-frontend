@@ -24,6 +24,7 @@ import {
   ShaclViolation,
   validateHealthDcatAp,
 } from "@/app/api/discovery/harvester/shacl/shacl-validator";
+import { DistributionMappingError as DistributionMappingErrorInput } from "@/app/api/discovery/harvester/dcat-distribution-mapper";
 
 type FetchLike = (input: string | URL, init?: RequestInit) => Promise<Response>;
 type HarvestOptions = {
@@ -31,13 +32,24 @@ type HarvestOptions = {
 };
 
 export type DatasetMappingError = {
+  scope: "dataset";
   subjectId: string;
   message: string;
   stack?: string;
 };
 
+export type DistributionMappingError = {
+  scope: "distribution";
+  datasetId: string;
+  distributionId?: string;
+  message: string;
+  stack?: string;
+};
+
+export type MappingError = DatasetMappingError | DistributionMappingError;
+
 export type HarvestCollectors = {
-  mappingErrors: DatasetMappingError[];
+  mappingErrors: MappingError[];
   shaclViolations?: ShaclViolation[];
 };
 
@@ -84,17 +96,34 @@ export class DcatHarvesterService {
       }
     }
 
+    const onDistributionError = collectors
+      ? (distributionError: DistributionMappingErrorInput) =>
+          collectors.mappingErrors.push({
+            scope: "distribution",
+            ...distributionError,
+          })
+      : undefined;
+
     return graph
       .getSubjectsOfType(DCAT_DATASET)
       .flatMap((datasetSubject, index) => {
         try {
-          return [mapDataset(datasetSubject, graph, fallbackCatalogue, index)];
+          return [
+            mapDataset(
+              datasetSubject,
+              graph,
+              fallbackCatalogue,
+              index,
+              onDistributionError
+            ),
+          ];
         } catch (error) {
           if (!collectors) {
             throw error;
           }
 
           collectors.mappingErrors.push({
+            scope: "dataset",
             subjectId: datasetSubject.value,
             message: formatErrorDetails(error),
             stack: error instanceof Error ? error.stack : undefined,

@@ -545,6 +545,7 @@ export const createIndexMappings = () => ({
           mediaType: valueLabelMapping(),
           license: valueLabelMapping(),
           rights: { type: "text", analyzer: "word_boundary_analyzer" },
+          status: valueLabelMapping(),
           conformsTo: valueLabelMapping(),
           applicableLegislation: valueLabelMapping(),
           byteSize: { type: "long" },

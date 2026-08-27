@@ -19,6 +19,7 @@ import {
   harvestFetch,
 } from "@/app/api/discovery/harvester/fetch-options";
 import { parseRdfToQuads } from "@/app/api/discovery/harvester/rdf-quad-loader";
+import { sanitizeRdfIris } from "@/app/api/discovery/harvester/rdf-iri-sanitizer";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 import {
   ShaclViolation,
@@ -79,7 +80,7 @@ export class DcatHarvesterService {
           >[1])
         : ("application/rdf+xml" as const));
     const quads = await parseRdfToQuads(
-      rdfText,
+      sanitizeRdfIris(rdfText, resolvedContentType),
       resolvedContentType,
       sourceRef
     );

@@ -51,6 +51,8 @@
     "@radix-ui/react-scroll-area": "^1.2.2",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-toast": "^1.2.4",
+    "@rdfjs/data-model": "^2.1.2",
+    "@rdfjs/dataset": "^2.0.3",
     "@zodios/core": "^10.9.6",
     "axios": "^1.15.0",
     "axios-mock-adapter": "^2.1.0",
@@ -63,7 +65,7 @@
     "iso-639-3": "^3.0.1",
     "jsonld-streaming-serializer": "^4.0.0",
     "jwt-decode": "^4.0.0",
-    "next": "16.2.12",
+    "next": "16.3.3",
     "next-auth": "^4.24.12",
     "next-intl": "^4.13.0",
     "next-runtime-env": "^3.3.0",
@@ -82,6 +84,7 @@
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.0",
     "server-only": "^0.0.1",
+    "shacl-engine": "^1.1.2",
     "sharp": "^0.35.0",
     "tailwind-merge": "^3.0.0",
     "tailwindcss-animate": "^1.0.7",
@@ -95,11 +98,11 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^24.10.4",
     "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.4",
+    "@types/react-dom": "19.2.5",
     "@typescript-eslint/eslint-plugin": "^8.18.2",
     "dotenv": "^17.1.0",
     "eslint": "^10.0.0",
-    "eslint-config-next": "16.2.12",
+    "eslint-config-next": "16.3.3",
     "eslint-config-prettier": "^10.0.0",
     "jest": "^30.0.4",
     "jest-environment-jsdom": "^30.4.1",
@@ -115,6 +118,6 @@
     "protobufjs": "^8.0.0",
     "sharp": "^0.35.0",
     "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.4"
+    "@types/react-dom": "19.2.5"
   }
 }

@@ -15,6 +15,8 @@ import {
   faBalanceScale,
   faCheckCircle,
   faDatabase,
+  faGavel,
+  faCircleInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
 import Tooltip from "./Tooltip";
@@ -191,6 +193,41 @@ const DistributionAccordion = ({
                       <Tooltip message={t("tooltips.distributionLicense")} />
                     </span>
                   </div>
+                  {distribution.rights && (
+                    <div className="flex items-center relative">
+                      <span className="group flex items-center">
+                        <FontAwesomeIcon
+                          icon={faGavel}
+                          className="text-primary align-middle mr-2"
+                        />
+                        <strong className="text-sm font-semibold">
+                          {t("rights")}:
+                        </strong>
+                        <span className="text-sm ml-2">
+                          {distribution.rights}
+                        </span>
+                        <Tooltip message={t("tooltips.distributionRights")} />
+                      </span>
+                    </div>
+                  )}
+                  {distribution.status && (
+                    <div className="flex items-center relative">
+                      <span className="group flex items-center">
+                        <FontAwesomeIcon
+                          icon={faCircleInfo}
+                          className="text-primary align-middle mr-2"
+                        />
+                        <strong className="text-sm font-semibold">
+                          {t("status")}:
+                        </strong>
+                        <span className="text-sm ml-2">
+                          {distribution.status.label ||
+                            distribution.status.value?.split("/").pop()}
+                        </span>
+                        <Tooltip message={t("tooltips.distributionStatus")} />
+                      </span>
+                    </div>
+                  )}
                   <div className="flex items-center relative">
                     <span className="group flex items-center">
                       <FontAwesomeIcon
@@ -232,6 +269,47 @@ const DistributionAccordion = ({
                           </span>
                           <Tooltip
                             message={t("tooltips.distributionConformsTo")}
+                          />
+                        </span>
+                      </div>
+                    )}
+                  {distribution.applicableLegislation &&
+                    distribution.applicableLegislation.length > 0 && (
+                      <div className="flex items-center relative">
+                        <span className="group flex items-center">
+                          <FontAwesomeIcon
+                            icon={faGavel}
+                            className="text-primary align-middle mr-2"
+                          />
+                          <strong className="text-sm font-semibold">
+                            {t("applicableLegislation")}:
+                          </strong>
+                          <span className="text-sm ml-2">
+                            {distribution.applicableLegislation.map(
+                              (l, index, all) => {
+                                const label =
+                                  l.label || l.value?.split("/").pop();
+                                const isLast = index === all.length - 1;
+                                return (
+                                  <span key={l.value}>
+                                    <a
+                                      href={l.value}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-primary hover:underline break-all"
+                                    >
+                                      {label}
+                                    </a>
+                                    {!isLast && ", "}
+                                  </span>
+                                );
+                              }
+                            )}
+                          </span>
+                          <Tooltip
+                            message={t(
+                              "tooltips.distributionApplicableLegislation"
+                            )}
                           />
                         </span>
                       </div>

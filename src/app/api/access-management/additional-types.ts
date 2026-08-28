@@ -47,7 +47,10 @@ export type Entitlement = {
 };
 
 export type DatasetEntitlement = {
-  dataset: SearchedDataset;
+  /** Resolved dataset details. `undefined` when the catalog lookup failed. */
+  dataset?: SearchedDataset;
+  /** Raw visa dataset ID — always present; used as the key when `dataset` is absent. */
+  datasetId?: string;
   start?: string;
   end?: string;
   source?: string;

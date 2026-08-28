@@ -58,8 +58,9 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     // current UI and DDS-facing contract only support a single number.
     const spatialResolutionInMeters = dataset.spatialResolutionInMeters?.[0];
     // HealthDCAT-AP can expose multiple version notes, but the current UI and
-    // DDS-facing contract only support a single string.
-    const versionNotes = dataset.versionNotes?.[0];
+    // DDS-facing contract only support a single string, so join them with a
+    // newline (rendered one-per-line) instead of dropping all but the first.
+    const versionNotes = dataset.versionNotes?.join("\n");
 
     return {
       id: dataset.id,
@@ -109,6 +110,8 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       format: distribution.format,
       mediaType: distribution.mediaType,
       license: distribution.license,
+      rights: distribution.rights,
+      status: distribution.status,
       conformsTo: distribution.conformsTo,
       applicableLegislation: distribution.applicableLegislation,
       byteSize: distribution.byteSize,

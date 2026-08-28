@@ -42,10 +42,12 @@ import { useTranslations } from "next-intl";
 import {
   DatasetDictionaryEntry,
   DatasetRelationEntry,
+  HelpText,
   RetrievedDataset,
   SearchedDataset,
   ValueLabel,
 } from "@/app/api/discovery/open-api/schemas";
+import { extractHelpTextMap } from "@/utils/datasetHelpers";
 
 const MetadataSection = ({
   title,
@@ -110,7 +112,9 @@ const DatasetMetadata = ({
   seriesMembers?: SearchedDataset[];
 }) => {
   const t = useTranslations("datasets.detail");
-  const helpText = dataset.helpText as Record<string, string> | undefined;
+  const helpText = extractHelpTextMap(
+    dataset.helpText as Record<string, HelpText> | undefined
+  );
   const [userTimezone, setUserTimezone] = useState<string | null>(null);
   const notProvidedLabel = t("notProvided");
   const notAvailableLabel = t("notAvailable");
@@ -319,6 +323,9 @@ const DatasetMetadata = ({
                   chips={dataset.applicableLegislation.map(
                     (item) => item.label
                   )}
+                  hrefs={dataset.applicableLegislation.map(
+                    (item) => item.value
+                  )}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
               ) : (
@@ -431,7 +438,7 @@ const DatasetMetadata = ({
                 {dataset.publishers.map((publisher, index) => (
                   <span key={publisher.name}>
                     <Link
-                      href={`/datasets?page=1&ckan-publisherName=${publisher.name}`}
+                      href={`/datasets?page=1&ckan-publisherName=${encodeURIComponent(publisher.name)}`}
                     >
                       {publisher.name || t("noTitle")}
                     </Link>
@@ -645,6 +652,7 @@ const DatasetMetadata = ({
       {hasHealthTheme &&
         ((dataset.healthTheme && dataset.healthTheme.length > 0) ||
           (dataset.healthCategory && dataset.healthCategory.length > 0) ||
+          dataset.provenance ||
           (dataset.provenanceActivity &&
             dataset.provenanceActivity.length > 0)) && (
           <MetadataSection title={t("healthInformation")} icon={faHeartPulse}>
@@ -686,6 +694,19 @@ const DatasetMetadata = ({
                   }
                 />
               </div>
+              {dataset.provenance && (
+                <div className="flex flex-wrap gap-2 items-center relative group">
+                  <span className="font-medium shrink-0">
+                    {t("provenance")}:
+                  </span>
+                  <span>{dataset.provenance}</span>
+                  <Tooltip
+                    message={
+                      helpText?.["provenance"] ?? t("tooltips.provenance")
+                    }
+                  />
+                </div>
+              )}
               {dataset.provenanceActivity &&
                 dataset.provenanceActivity.length > 0 && (
                   <div className="flex flex-wrap gap-2 items-center relative group">
@@ -799,6 +820,21 @@ const DatasetMetadata = ({
             />
           </div>
           <MetadataField
+            label={t("spatialResolution")}
+            tooltip={
+              helpText?.["spatialResolutionInMeters"] ??
+              t("tooltips.spatialResolution")
+            }
+          >
+            {dataset.spatialResolutionInMeters !== undefined ? (
+              <>
+                {dataset.spatialResolutionInMeters} {t("meters")}
+              </>
+            ) : (
+              <NotProvided label={notProvidedLabel} />
+            )}
+          </MetadataField>
+          <MetadataField
             label={t("temporalCoverage")}
             tooltip={
               helpText?.["temporalCoverage"] ??
@@ -815,21 +851,6 @@ const DatasetMetadata = ({
             }
           >
             {dataset.temporalResolution || (
-              <NotProvided label={notProvidedLabel} />
-            )}
-          </MetadataField>
-          <MetadataField
-            label={t("spatialResolution")}
-            tooltip={
-              helpText?.["spatialResolutionInMeters"] ??
-              t("tooltips.spatialResolution")
-            }
-          >
-            {dataset.spatialResolutionInMeters !== undefined ? (
-              <>
-                {dataset.spatialResolutionInMeters} {t("meters")}
-              </>
-            ) : (
               <NotProvided label={notProvidedLabel} />
             )}
           </MetadataField>
@@ -866,6 +887,9 @@ const DatasetMetadata = ({
                 <Chips
                   chips={dataset.applicableLegislation.map(
                     (item) => item.label
+                  )}
+                  hrefs={dataset.applicableLegislation.map(
+                    (item) => item.value
                   )}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
@@ -916,6 +940,7 @@ const DatasetMetadata = ({
       )}
 
       {(dataset.publisherNote ||
+        (dataset.publishers && dataset.publishers.length > 0) ||
         (dataset.publisherType && dataset.publisherType.length > 0) ||
         (dataset.creators && dataset.creators.length > 0) ||
         (hasHealthTheme &&
@@ -926,6 +951,32 @@ const DatasetMetadata = ({
           icon={faUserShield}
         >
           <div className="flex flex-col gap-3 text-sm">
+            <div className="flex items-center gap-2 flex-wrap relative group">
+              <FontAwesomeIcon
+                icon={faBuilding}
+                className="text-primary text-xs"
+              />
+              <span className="font-medium shrink-0">{t("publishers")}:</span>
+              {dataset.publishers && dataset.publishers.length > 0 ? (
+                dataset.publishers.map((publisher, index) => (
+                  <span key={publisher.name}>
+                    <Link
+                      href={`/datasets?page=1&ckan-publisherName=${encodeURIComponent(publisher.name)}`}
+                    >
+                      {publisher.name || t("noTitle")}
+                    </Link>
+                    {index < dataset.publishers!.length - 1 && ", "}
+                  </span>
+                ))
+              ) : (
+                <NotProvided label={notProvidedLabel} />
+              )}
+              <Tooltip
+                message={
+                  helpText?.["publishers"] ?? t("tooltips.datasetPublishers")
+                }
+              />
+            </div>
             <div className="flex items-center gap-2 flex-wrap relative group">
               <FontAwesomeIcon
                 icon={faNoteSticky}
@@ -1209,13 +1260,17 @@ const DatasetMetadata = ({
                 <NotProvided label={notProvidedLabel} />
               )}
             </MetadataField>
-            <div className="flex items-center gap-2 flex-wrap relative group">
+            <div className="flex items-start gap-2 flex-wrap relative group">
               <span className="font-medium shrink-0">{t("versionNotes")}:</span>
-              <span>
-                {dataset.versionNotes || (
-                  <NotProvided label={notProvidedLabel} />
-                )}
-              </span>
+              {dataset.versionNotes ? (
+                <ul className="list-disc pl-4">
+                  {dataset.versionNotes.split("\n").map((note) => (
+                    <li key={note}>{note}</li>
+                  ))}
+                </ul>
+              ) : (
+                <NotProvided label={notProvidedLabel} />
+              )}
               <Tooltip
                 message={
                   helpText?.["versionNotes"] ?? t("tooltips.versionNotes")

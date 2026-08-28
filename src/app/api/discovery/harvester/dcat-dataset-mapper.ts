@@ -11,10 +11,14 @@ import {
 import { extractContactPoints } from "@/app/api/discovery/harvester/dcat-contact-point-mapper";
 import { extractDataDictionary } from "@/app/api/discovery/harvester/dcat-dataset-dictionary-mapper";
 import { extractDatasetRelations } from "@/app/api/discovery/harvester/dcat-dataset-relation-mapper";
-import { extractDistributions } from "@/app/api/discovery/harvester/dcat-distribution-mapper";
+import {
+  extractDistributions,
+  OnDistributionError,
+} from "@/app/api/discovery/harvester/dcat-distribution-mapper";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 import { normalizeDate } from "@/app/api/discovery/harvester/date-utils";
 import formatDatasetLanguage from "@/utils/formatDatasetLanguage";
+import formatHealthCategoryLabel from "@/utils/healthCategoryLabels";
 
 export const DCAT_DATASET = "http://www.w3.org/ns/dcat#Dataset";
 export const DCAT_CATALOG = "http://www.w3.org/ns/dcat#Catalog";
@@ -65,6 +69,7 @@ const HEALTHDCATAP_HEALTH_CATEGORY =
   "http://healthdataportal.eu/ns/health#healthCategory"; // NOSONAR
 const DCT_TYPE = "http://purl.org/dc/terms/type"; // NOSONAR
 const DCT_ACCESS_RIGHTS = "http://purl.org/dc/terms/accessRights"; // NOSONAR
+const DCT_CONFORMS_TO = "http://purl.org/dc/terms/conformsTo"; // NOSONAR
 const DPV_HAS_LEGAL_BASIS = "http://www.w3.org/ns/dpv#hasLegalBasis"; // NOSONAR
 const DPV_HAS_PURPOSE = "http://www.w3.org/ns/dpv#hasPurpose"; // NOSONAR
 const DPV_HAS_PERSONAL_DATA = "http://www.w3.org/ns/dpv#hasPersonalData"; // NOSONAR
@@ -106,7 +111,8 @@ export const mapDataset = (
   datasetSubject: RDF.Term,
   graph: RdfGraph,
   fallbackCatalogue: string,
-  index: number
+  index: number,
+  onDistributionError?: OnDistributionError
 ): LocalDiscoveryDataset => {
   const identifier = getDatasetIdentifier(datasetSubject, graph);
   const publishers = extractAgents(datasetSubject, graph, DCT_PUBLISHER);
@@ -179,18 +185,24 @@ export const mapDataset = (
       graph.getObjects(datasetSubject, HEALTHDCATAP_HEALTH_THEME),
       graph
     ),
-    healthCategory: resolveValueLabels(
-      graph.getObjects(datasetSubject, HEALTHDCATAP_HEALTH_CATEGORY),
-      graph
-    ),
+    healthCategory: extractHealthCategories(datasetSubject, graph),
     dcatType: resolveValueLabels(
       graph.getObjects(datasetSubject, DCT_TYPE),
+      graph
+    ),
+    conformsTo: resolveValueLabels(
+      graph.getObjects(datasetSubject, DCT_CONFORMS_TO),
       graph
     ),
     contacts: extractContactPoints(datasetSubject, graph),
     datasetRelationships: extractDatasetRelations(datasetSubject, graph),
     dataDictionary: extractDataDictionary(datasetSubject, graph),
-    distributions: extractDistributions(datasetSubject, graph, datasetId),
+    distributions: extractDistributions(
+      datasetSubject,
+      graph,
+      datasetId,
+      onDistributionError
+    ),
     publishers,
     publisherType: publisherTypes.length > 0 ? publisherTypes : undefined,
     hdab: extractAgents(datasetSubject, graph, HEALTHDCATAP_HDAB),
@@ -229,6 +241,18 @@ const resolveValueLabels = (
     })
     .filter((item): item is { value: string; label: string } => item !== null);
 };
+
+const extractHealthCategories = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): Array<{ value: string; label: string }> =>
+  resolveValueLabels(
+    graph.getObjects(datasetSubject, HEALTHDCATAP_HEALTH_CATEGORY),
+    graph
+  ).map(({ value, label }) => ({
+    value,
+    label: formatHealthCategoryLabel(label) ?? label,
+  }));
 
 const getDatasetIdentifier = (
   datasetSubject: RDF.Term,

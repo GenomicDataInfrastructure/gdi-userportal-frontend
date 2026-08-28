@@ -8,21 +8,49 @@ import {
   LocalDiscoverySearchOptions,
 } from "@/app/api/discovery/local-store/types";
 
-const fullTextSearchFields = [
+// Analyzed text fields searched together via cross_fields.
+const crossFieldSearchFields = [
   "title^3",
   "description",
+  "catalogue",
   "populationCoverage",
   "provenance",
   "versionNotes",
+  "keywords",
+  "themes.label",
+  "healthTheme.label",
+  "healthCategory.label",
+  "dcatType.label",
+  "accessRights.label",
+  "conformsTo.label",
+  "legalBasis.label",
+  "applicableLegislation.label",
+  "publisherType.label",
+  "personalData.label",
+  "purpose.label",
+  "codeValues.label",
+  "codingSystem.label",
+  "frequency.label",
+  "hasVersions.label",
+  "languages.label",
+  "publishers.name",
+  "hdab.name",
+  "creators.name",
+  "spatialCoverage.text",
+  "dataDictionary.name",
+  "dataDictionary.description",
+  "distributions.title",
+  "distributions.description",
+  "distributions.format.label",
+  "distributions.mediaType.label",
+  "distributions.license.label",
+  "distributions.rights",
+  "distributions.conformsTo.label",
+  "distributions.applicableLegislation.label",
+  "contacts.name",
 ];
 
-const keywordSearchFields = [
-  "id",
-  "identifier",
-  "catalogue",
-  "version",
-  "keywords",
-];
+const keywordSearchFields = ["id", "identifier", "version"];
 
 const phrasePrefixFields = [
   "title^4",
@@ -57,13 +85,15 @@ const fieldConfigs: Record<string, FieldConfig> = {
   description: { textFields: ["description"] },
   provenance: { textFields: ["provenance"] },
   catalogue: {
-    exactFields: ["catalogue"],
+    exactFields: ["catalogue.keyword"],
     textFields: ["catalogue"],
-    sortField: "catalogue",
+    sortField: "catalogue.keyword",
   },
-  languages: { exactFields: ["languages"] },
+  languages: {
+    exactFields: ["languages.value", "languages.label.keyword"],
+  },
   theme: {
-    exactFields: ["themes.value", "themes.label"],
+    exactFields: ["themes.value", "themes.label.keyword"],
     textFields: ["themes.label"],
   },
   keywords: { exactFields: ["keywords"], textFields: ["keywords"] },
@@ -72,19 +102,27 @@ const fieldConfigs: Record<string, FieldConfig> = {
     textFields: ["publishers.name"],
   },
   accessRights: {
-    exactFields: ["accessRights.value", "accessRights.label"],
+    exactFields: ["accessRights.value", "accessRights.label.keyword"],
     textFields: ["accessRights.label"],
   },
   conformsTo: {
-    exactFields: ["conformsTo.value", "conformsTo.label"],
+    exactFields: ["conformsTo.value", "conformsTo.label.keyword"],
     textFields: ["conformsTo.label"],
   },
+  healthTheme: {
+    exactFields: ["healthTheme.value", "healthTheme.label.keyword"],
+    textFields: ["healthTheme.label"],
+  },
+  healthCategory: {
+    exactFields: ["healthCategory.value", "healthCategory.label.keyword"],
+    textFields: ["healthCategory.label"],
+  },
   frequency: {
-    exactFields: ["frequency.value", "frequency.label"],
+    exactFields: ["frequency.value", "frequency.label.keyword"],
     textFields: ["frequency.label"],
   },
   publisherType: {
-    exactFields: ["publisherType.value", "publisherType.label"],
+    exactFields: ["publisherType.value", "publisherType.label.keyword"],
     textFields: ["publisherType.label"],
   },
   createdAt: {
@@ -361,60 +399,106 @@ const buildSortClause = (sort?: string): OpenSearchSortClause[] => {
   ];
 };
 
+const valueLabelMapping = () => ({
+  properties: {
+    value: { type: "keyword" },
+    label: {
+      type: "text",
+      analyzer: "word_boundary_analyzer",
+      fields: { keyword: { type: "keyword" } },
+    },
+  },
+});
+
+const agentMapping = () => ({
+  type: "object",
+  properties: {
+    name: {
+      type: "text",
+      analyzer: "word_boundary_analyzer",
+      fields: { keyword: { type: "keyword" } },
+    },
+    email: { type: "keyword" },
+    url: { type: "keyword" },
+    uri: { type: "keyword" },
+    homepage: { type: "keyword" },
+    identifier: { type: "keyword" },
+    type: valueLabelMapping(),
+  },
+});
+
 export const createIndexMappings = () => ({
+  settings: {
+    analysis: {
+      tokenizer: {
+        word_boundary_tokenizer: {
+          type: "pattern",
+          pattern: "[^\\p{L}\\p{N}]+",
+        },
+      },
+      analyzer: {
+        word_boundary_analyzer: {
+          type: "custom",
+          tokenizer: "word_boundary_tokenizer",
+          filter: ["lowercase"],
+        },
+      },
+    },
+  },
   mappings: {
     properties: {
       id: { type: "keyword" },
       identifier: { type: "keyword" },
       title: {
         type: "text",
+        analyzer: "word_boundary_analyzer",
         fields: {
           keyword: { type: "keyword" },
         },
       },
-      description: { type: "text" },
-      catalogue: { type: "keyword" },
-      languages: {
-        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
+      description: { type: "text", analyzer: "word_boundary_analyzer" },
+      catalogue: {
+        type: "text",
+        analyzer: "word_boundary_analyzer",
+        fields: { keyword: { type: "keyword" } },
       },
+      languages: valueLabelMapping(),
       createdAt: { type: "date" },
       modifiedAt: { type: "date" },
       version: { type: "keyword" },
-      hasVersions: {
-        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
-      },
-      versionNotes: { type: "text" },
-      provenance: { type: "text" },
+      hasVersions: valueLabelMapping(),
+      versionNotes: { type: "text", analyzer: "word_boundary_analyzer" },
+      provenance: { type: "text", analyzer: "word_boundary_analyzer" },
       numberOfRecords: { type: "integer" },
       numberOfUniqueIndividuals: { type: "integer" },
       maxTypicalAge: { type: "integer" },
       minTypicalAge: { type: "integer" },
       hasStructuredData: { type: "boolean" },
-      populationCoverage: { type: "text" },
-      spatialCoverage: { type: "object" },
+      populationCoverage: {
+        type: "text",
+        analyzer: "word_boundary_analyzer",
+      },
+      spatialCoverage: {
+        type: "object",
+        properties: {
+          uri: { type: "keyword" },
+          text: { type: "text", analyzer: "word_boundary_analyzer" },
+          geom: { type: "keyword" },
+          bbox: { type: "keyword" },
+          centroid: { type: "keyword" },
+        },
+      },
       spatialResolutionInMeters: { type: "float" },
       temporalCoverage: { type: "object" },
       retentionPeriod: { type: "object" },
       temporalResolution: { type: "keyword" },
-      frequency: {
-        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
-      },
-      themes: {
-        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
-      },
+      frequency: valueLabelMapping(),
+      themes: valueLabelMapping(),
       keywords: { type: "keyword" },
-      healthTheme: {
-        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
-      },
-      healthCategory: {
-        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
-      },
-      codeValues: {
-        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
-      },
-      codingSystem: {
-        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
-      },
+      healthTheme: valueLabelMapping(),
+      healthCategory: valueLabelMapping(),
+      codeValues: valueLabelMapping(),
+      codingSystem: valueLabelMapping(),
       isReferencedBy: { type: "keyword" },
       documentation: { type: "keyword" },
       wasGeneratedBy: {
@@ -423,112 +507,74 @@ export const createIndexMappings = () => ({
           activityType: { type: "keyword" },
         },
       },
-      dcatType: {
-        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
-      },
-      publishers: {
-        type: "object",
-        properties: {
-          name: {
-            type: "text",
-            fields: {
-              keyword: { type: "keyword" },
-            },
-          },
-          email: { type: "keyword" },
-          url: { type: "keyword" },
-          uri: { type: "keyword" },
-          homepage: { type: "keyword" },
-          identifier: { type: "keyword" },
-          type: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
-        },
-      },
-      hdab: {
-        type: "object",
-        properties: {
-          name: {
-            type: "text",
-            fields: {
-              keyword: { type: "keyword" },
-            },
-          },
-          email: { type: "keyword" },
-          url: { type: "keyword" },
-          uri: { type: "keyword" },
-          homepage: { type: "keyword" },
-          identifier: { type: "keyword" },
-          type: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
-        },
-      },
-      creators: {
-        type: "object",
-        properties: {
-          name: {
-            type: "text",
-            fields: {
-              keyword: { type: "keyword" },
-            },
-          },
-          email: { type: "keyword" },
-          url: { type: "keyword" },
-          uri: { type: "keyword" },
-          homepage: { type: "keyword" },
-          identifier: { type: "keyword" },
-          type: {
-            properties: {
-              value: { type: "keyword" },
-              label: { type: "keyword" },
-            },
-          },
-        },
-      },
-      publisherType: {
-        type: "object",
-        properties: {
-          value: { type: "keyword" },
-          label: { type: "keyword" },
-        },
-      },
-      accessRights: {
-        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
-      },
-      conformsTo: {
-        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
-      },
-      legalBasis: {
-        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
-      },
-      applicableLegislation: {
-        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
-      },
+      dcatType: valueLabelMapping(),
+      publishers: agentMapping(),
+      hdab: agentMapping(),
+      creators: agentMapping(),
+      publisherType: valueLabelMapping(),
+      accessRights: valueLabelMapping(),
+      conformsTo: valueLabelMapping(),
+      legalBasis: valueLabelMapping(),
+      applicableLegislation: valueLabelMapping(),
       dataDictionary: {
         type: "object",
         properties: {
           name: {
             type: "text",
+            analyzer: "word_boundary_analyzer",
             fields: { keyword: { type: "keyword" } },
           },
           type: { type: "keyword" },
-          description: { type: "text" },
+          description: { type: "text", analyzer: "word_boundary_analyzer" },
         },
       },
-      personalData: {
-        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
-      },
-      purpose: {
-        properties: { value: { type: "keyword" }, label: { type: "keyword" } },
-      },
+      personalData: valueLabelMapping(),
+      purpose: valueLabelMapping(),
       distributionsCount: { type: "integer" },
+      distributions: {
+        type: "object",
+        properties: {
+          id: { type: "keyword" },
+          title: {
+            type: "text",
+            analyzer: "word_boundary_analyzer",
+            fields: { keyword: { type: "keyword" } },
+          },
+          description: { type: "text", analyzer: "word_boundary_analyzer" },
+          format: valueLabelMapping(),
+          mediaType: valueLabelMapping(),
+          license: valueLabelMapping(),
+          rights: { type: "text", analyzer: "word_boundary_analyzer" },
+          status: valueLabelMapping(),
+          conformsTo: valueLabelMapping(),
+          applicableLegislation: valueLabelMapping(),
+          byteSize: { type: "long" },
+          accessUrl: { type: "keyword" },
+          downloadUrl: { type: "keyword" },
+          createdAt: { type: "date" },
+        },
+      },
+      contacts: {
+        type: "object",
+        properties: {
+          name: {
+            type: "text",
+            analyzer: "word_boundary_analyzer",
+            fields: { keyword: { type: "keyword" } },
+          },
+          email: { type: "keyword" },
+          uri: { type: "keyword" },
+          url: { type: "keyword" },
+          identifier: { type: "keyword" },
+        },
+      },
+      datasetRelationships: {
+        type: "object",
+        properties: {
+          relation: { type: "keyword" },
+          target: { type: "keyword" },
+        },
+      },
     },
   },
 });
@@ -546,10 +592,28 @@ export const buildSearchBody = (options: LocalDiscoverySearchOptions) => {
     ? {
         bool: {
           should: [
+            // Requires every query word to appear somewhere across the
+            // fields (merged term stats)
             {
               multi_match: {
                 query,
-                fields: [...fullTextSearchFields, ...keywordSearchFields],
+                fields: crossFieldSearchFields,
+                type: "cross_fields",
+                operator: "and",
+              },
+            },
+            {
+              multi_match: {
+                query,
+                fields: crossFieldSearchFields,
+                fuzziness: "AUTO",
+                minimum_should_match: "100%",
+              },
+            },
+            {
+              multi_match: {
+                query,
+                fields: keywordSearchFields,
                 fuzziness: "AUTO",
               },
             },

@@ -82,6 +82,22 @@ export const addDatasetDistributionQuads = ({
       }
     }
 
+    if (distribution.status) {
+      const { value, label } = distribution.status;
+      if (isNonEmptyString(value) && isAbsoluteUri(value)) {
+        const statusNode = createNamedNode(value);
+        store.add(distributionNode, ns.adms("status"), statusNode);
+        store.add(statusNode, ns.rdf("type"), ns.skos("Concept"));
+        if (isNonEmptyString(label)) {
+          store.add(
+            statusNode,
+            ns.skos("prefLabel"),
+            createLanguageLiteral(label, "eng")
+          );
+        }
+      }
+    }
+
     distribution.conformsTo?.forEach((entry) => {
       if (isNonEmptyString(entry.value) && isAbsoluteUri(entry.value)) {
         const standardNode = createNamedNode(entry.value);

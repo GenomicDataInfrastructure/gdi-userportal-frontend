@@ -4,12 +4,19 @@
 
 import { jest } from "@jest/globals";
 import { fetchGa4ghPassport } from "../passport";
-import { retrieveEntitlementsV2 } from "../entitlements";
+import { extractVerifiedControlledAccessGrants } from "../visa";
+import { retrieveEntitlements } from "../entitlements";
 
 jest.mock("../passport");
+jest.mock("../visa");
+
 const mockedFetchGa4ghPassport = fetchGa4ghPassport as jest.MockedFunction<
   typeof fetchGa4ghPassport
 >;
+const mockedExtractVerified =
+  extractVerifiedControlledAccessGrants as jest.MockedFunction<
+    typeof extractVerifiedControlledAccessGrants
+  >;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -53,36 +60,66 @@ const RESEARCHER_STATUS_VISA = {
 // Tests
 // ---------------------------------------------------------------------------
 
-describe("retrieveEntitlementsV2", () => {
+/** A resolved ControlledAccessGrant returned by the mocked extractor. */
+const GRANT = {
+  datasetId: "GDID-12345678-11se",
+  iat: CONTROLLED_ACCESS_VISA.iat,
+  exp: CONTROLLED_ACCESS_VISA.exp,
+  source: CONTROLLED_ACCESS_VISA.ga4gh_visa_v1.source,
+  by: CONTROLLED_ACCESS_VISA.ga4gh_visa_v1.by,
+};
+
+describe("retrieveEntitlements", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
 
   it("returns empty entitlements when passport contains no visas", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce([]);
+    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+      visaJwts: [],
+      passportPresent: true,
+    });
+    mockedExtractVerified.mockResolvedValueOnce([]);
 
-    const result = await retrieveEntitlementsV2();
+    const result = await retrieveEntitlements();
 
-    expect(result).toEqual({ entitlements: [] });
+    expect(result).toEqual({ entitlements: [], passportPresent: true });
+  });
+
+  it("passes raw passport JWTs to extractVerifiedControlledAccessGrants", async () => {
+    const rawJwt = makeVisaJwt(CONTROLLED_ACCESS_VISA);
+    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+      visaJwts: [rawJwt],
+      passportPresent: true,
+    });
+    mockedExtractVerified.mockResolvedValueOnce([GRANT]);
+
+    await retrieveEntitlements();
+
+    expect(mockedExtractVerified).toHaveBeenCalledWith([rawJwt]);
   });
 
   it("maps a single ControlledAccessGrants visa to a dataset entitlement", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce([
-      makeVisaJwt(CONTROLLED_ACCESS_VISA),
-    ]);
+    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+      visaJwts: [makeVisaJwt(CONTROLLED_ACCESS_VISA)],
+      passportPresent: true,
+    });
+    mockedExtractVerified.mockResolvedValueOnce([GRANT]);
 
-    const result = await retrieveEntitlementsV2();
+    const result = await retrieveEntitlements();
 
     expect(result.entitlements).toHaveLength(1);
     expect(result.entitlements[0].datasetId).toBe("GDID-12345678-11se");
   });
 
   it("converts iat Unix timestamp to ISO 8601 start date", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce([
-      makeVisaJwt(CONTROLLED_ACCESS_VISA),
-    ]);
+    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+      visaJwts: [makeVisaJwt(CONTROLLED_ACCESS_VISA)],
+      passportPresent: true,
+    });
+    mockedExtractVerified.mockResolvedValueOnce([GRANT]);
 
-    const { entitlements } = await retrieveEntitlementsV2();
+    const { entitlements } = await retrieveEntitlements();
 
     expect(entitlements[0].start).toBe(
       new Date(CONTROLLED_ACCESS_VISA.iat * 1000).toISOString()
@@ -90,66 +127,57 @@ describe("retrieveEntitlementsV2", () => {
   });
 
   it("omits start date when visa iat is absent", async () => {
-    const visaWithoutIat = { ...CONTROLLED_ACCESS_VISA, iat: undefined };
-    mockedFetchGa4ghPassport.mockResolvedValueOnce([
-      makeVisaJwt(visaWithoutIat),
-    ]);
+    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+      visaJwts: [],
+      passportPresent: true,
+    });
+    mockedExtractVerified.mockResolvedValueOnce([{ ...GRANT, iat: undefined }]);
 
-    const { entitlements } = await retrieveEntitlementsV2();
+    const { entitlements } = await retrieveEntitlements();
 
     expect(entitlements[0].start).toBeUndefined();
   });
 
   it("converts exp Unix timestamp to ISO 8601 end date", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce([
-      makeVisaJwt(CONTROLLED_ACCESS_VISA),
-    ]);
+    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+      visaJwts: [makeVisaJwt(CONTROLLED_ACCESS_VISA)],
+      passportPresent: true,
+    });
+    mockedExtractVerified.mockResolvedValueOnce([GRANT]);
 
-    const { entitlements } = await retrieveEntitlementsV2();
+    const { entitlements } = await retrieveEntitlements();
 
     expect(entitlements[0].end).toBe(
       new Date(CONTROLLED_ACCESS_VISA.exp * 1000).toISOString()
     );
   });
 
-  it("ignores non-ControlledAccessGrants visas", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce([
-      makeVisaJwt(RESEARCHER_STATUS_VISA),
-    ]);
+  it("ignores non-ControlledAccessGrants visas (extractor returns empty)", async () => {
+    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+      visaJwts: [makeVisaJwt(RESEARCHER_STATUS_VISA)],
+      passportPresent: true,
+    });
+    mockedExtractVerified.mockResolvedValueOnce([]);
 
-    const result = await retrieveEntitlementsV2();
+    const result = await retrieveEntitlements();
 
-    expect(result).toEqual({ entitlements: [] });
-  });
-
-  it("extracts only ControlledAccessGrants from a mixed passport", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce([
-      makeVisaJwt(CONTROLLED_ACCESS_VISA),
-      makeVisaJwt(RESEARCHER_STATUS_VISA),
-    ]);
-
-    const { entitlements } = await retrieveEntitlementsV2();
-
-    expect(entitlements).toHaveLength(1);
-    expect(entitlements[0].datasetId).toBe("GDID-12345678-11se");
+    expect(result).toEqual({ entitlements: [], passportPresent: true });
   });
 
   it("maps multiple ControlledAccessGrants visas to multiple entitlements", async () => {
-    const second = {
-      ...CONTROLLED_ACCESS_VISA,
+    const secondGrant = {
+      ...GRANT,
+      datasetId: "GDID-99999999-xyz",
       exp: 1900000000,
-      ga4gh_visa_v1: {
-        ...CONTROLLED_ACCESS_VISA.ga4gh_visa_v1,
-        value: "GDID-99999999-xyz",
-      },
     };
 
-    mockedFetchGa4ghPassport.mockResolvedValueOnce([
-      makeVisaJwt(CONTROLLED_ACCESS_VISA),
-      makeVisaJwt(second),
-    ]);
+    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+      visaJwts: [makeVisaJwt(CONTROLLED_ACCESS_VISA)],
+      passportPresent: true,
+    });
+    mockedExtractVerified.mockResolvedValueOnce([GRANT, secondGrant]);
 
-    const { entitlements } = await retrieveEntitlementsV2();
+    const { entitlements } = await retrieveEntitlements();
 
     expect(entitlements).toHaveLength(2);
     expect(entitlements.map((e) => e.datasetId)).toEqual([
@@ -159,26 +187,98 @@ describe("retrieveEntitlementsV2", () => {
   });
 
   it("omits end date when visa exp is absent", async () => {
-    const visaWithoutExp = {
-      ...CONTROLLED_ACCESS_VISA,
-      exp: undefined,
-    };
-    mockedFetchGa4ghPassport.mockResolvedValueOnce([
-      makeVisaJwt(visaWithoutExp),
-    ]);
+    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+      visaJwts: [],
+      passportPresent: true,
+    });
+    mockedExtractVerified.mockResolvedValueOnce([{ ...GRANT, exp: undefined }]);
 
-    const { entitlements } = await retrieveEntitlementsV2();
+    const { entitlements } = await retrieveEntitlements();
 
     expect(entitlements[0].end).toBeUndefined();
   });
 
-  it("propagates errors thrown by fetchGa4ghPassport", async () => {
+  it("sets passportPresent: false when ga4gh_passport_v1 claim is absent", async () => {
+    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+      visaJwts: [],
+      passportPresent: false,
+    });
+    mockedExtractVerified.mockResolvedValueOnce([]);
+
+    const result = await retrieveEntitlements();
+
+    expect(result).toEqual({ entitlements: [], passportPresent: false });
+  });
+
+  it("preserves passportPresent: true when grant extraction throws", async () => {
+    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+      visaJwts: ["some-jwt"],
+      passportPresent: true,
+    });
+    mockedExtractVerified.mockRejectedValueOnce(new Error("JWKS fetch failed"));
+    const consoleSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    const result = await retrieveEntitlements();
+
+    expect(result).toEqual({ entitlements: [], passportPresent: true });
+    consoleSpy.mockRestore();
+  });
+
+  it("returns empty entitlements when passport fetch fails", async () => {
     mockedFetchGa4ghPassport.mockRejectedValueOnce(
       new Error("LS-AAI token exchange failed: 401")
     );
+    const consoleSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
 
-    await expect(retrieveEntitlementsV2()).rejects.toThrow(
-      "LS-AAI token exchange failed: 401"
+    const result = await retrieveEntitlements();
+
+    expect(result).toEqual({ entitlements: [], passportPresent: false });
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "[entitlements] Passport fetch failed; returning empty entitlements",
+      expect.objectContaining({ error: "LS-AAI token exchange failed: 401" })
     );
+    consoleSpy.mockRestore();
+  });
+
+  it("returns empty entitlements when passport fetch times out", async () => {
+    mockedFetchGa4ghPassport.mockRejectedValueOnce(
+      new Error("LS-AAI broker endpoint timed out")
+    );
+    const consoleSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    const result = await retrieveEntitlements();
+
+    expect(result).toEqual({ entitlements: [], passportPresent: false });
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "[entitlements] Passport fetch failed; returning empty entitlements",
+      expect.objectContaining({ error: "LS-AAI broker endpoint timed out" })
+    );
+    consoleSpy.mockRestore();
+  });
+
+  it("returns empty entitlements when visa grant extraction throws", async () => {
+    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+      visaJwts: ["some-jwt"],
+      passportPresent: true,
+    });
+    mockedExtractVerified.mockRejectedValueOnce(new Error("JWKS fetch failed"));
+    const consoleSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    const result = await retrieveEntitlements();
+
+    expect(result).toEqual({ entitlements: [], passportPresent: true });
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "[entitlements] Visa grant extraction failed; returning empty entitlements",
+      expect.objectContaining({ error: "JWKS fetch failed" })
+    );
+    consoleSpy.mockRestore();
   });
 });

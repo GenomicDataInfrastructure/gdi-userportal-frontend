@@ -5,13 +5,23 @@
 import { jest } from "@jest/globals";
 import { resolve } from "node:path";
 import { canonicalDiscoveryRdf } from "@/app/api/discovery/test-utils/fixtures";
-import { DcatHarvesterService } from "@/app/api/discovery/harvester/dcat-harvester-service";
+import {
+  DcatHarvesterService,
+  MappingError,
+} from "@/app/api/discovery/harvester/dcat-harvester-service";
+import * as datasetMapper from "@/app/api/discovery/harvester/dcat-dataset-mapper";
 
 const mockReadFile =
   jest.fn<(path: string, encoding: string) => Promise<string>>();
 
 jest.mock("node:fs/promises", () => ({
   readFile: (path: string, encoding: string) => mockReadFile(path, encoding),
+}));
+
+jest.mock("@/app/api/discovery/harvester/shacl/shacl-validator", () => ({
+  validateHealthDcatAp: jest.fn<() => Promise<unknown[]>>(() =>
+    Promise.resolve([])
+  ),
 }));
 
 describe("DcatHarvesterService", () => {
@@ -122,7 +132,7 @@ describe("DcatHarvesterService", () => {
         healthCategory: [
           {
             value: "http://healthdataportal.eu/ns/health-category/registries",
-            label: "registries",
+            label: "Electronic Health Data from EHRs",
           },
         ],
         dcatType: [
@@ -130,6 +140,12 @@ describe("DcatHarvesterService", () => {
             value:
               "http://publications.europa.eu/resource/authority/dataset-type/STATISTICAL",
             label: "STATISTICAL",
+          },
+        ],
+        conformsTo: [
+          {
+            value: "https://example.org/spec/dataset-standard-1",
+            label: "Dataset Standard 1",
           },
         ],
         accessRights: {
@@ -244,6 +260,12 @@ describe("DcatHarvesterService", () => {
               value: "http://spdx.org/licenses/Apache-2.0",
               label: "Apache 2.0",
             },
+            rights: "Public",
+            status: {
+              value:
+                "http://publications.europa.eu/resource/authority/distribution-status/COMPLETED",
+              label: "Completed",
+            },
             conformsTo: [
               {
                 value: "https://example.org/spec/standard-1",
@@ -298,6 +320,7 @@ describe("DcatHarvesterService", () => {
         healthTheme: [],
         healthCategory: [],
         dcatType: [],
+        conformsTo: [],
         accessRights: undefined,
         legalBasis: undefined,
         applicableLegislation: undefined,
@@ -312,6 +335,117 @@ describe("DcatHarvesterService", () => {
         distributions: undefined,
       },
     ]);
+  });
+
+  test("parseDatasetsFromRdf throws on the first mapping error when no error collector is given", async () => {
+    const service = new DcatHarvesterService();
+    const mapDatasetSpy = jest
+      .spyOn(datasetMapper, "mapDataset")
+      .mockImplementationOnce(() => {
+        throw new Error("malformed dataset");
+      });
+
+    await expect(
+      service.parseDatasetsFromRdf(canonicalDiscoveryRdf)
+    ).rejects.toThrow("malformed dataset");
+
+    mapDatasetSpy.mockRestore();
+  });
+
+  test("parseDatasetsFromRdf collects per-item mapping errors and keeps the successful datasets when a collector is given", async () => {
+    const service = new DcatHarvesterService();
+    const mapDatasetSpy = jest
+      .spyOn(datasetMapper, "mapDataset")
+      .mockImplementationOnce(() => {
+        throw new Error("malformed dataset");
+      });
+
+    const collectors = { mappingErrors: [] as MappingError[] };
+
+    const datasets = await service.parseDatasetsFromRdf(
+      canonicalDiscoveryRdf,
+      undefined,
+      undefined,
+      collectors
+    );
+
+    expect(datasets).toHaveLength(1);
+    expect(collectors.mappingErrors).toHaveLength(1);
+    expect(collectors.mappingErrors[0].scope).toBe("dataset");
+    expect(collectors.mappingErrors[0].message).toBe("malformed dataset");
+    expect(
+      collectors.mappingErrors[0].scope === "dataset" &&
+        collectors.mappingErrors[0].subjectId
+    ).toBeTruthy();
+
+    mapDatasetSpy.mockRestore();
+  });
+
+  test("parseDatasetsFromRdf keeps the dataset and reports a distribution warning when one distribution fails to map", async () => {
+    const rdfWithTwoDistributions = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/two-distributions">
+          <dct:identifier>two-distributions</dct:identifier>
+          <dct:title>Dataset with two distributions</dct:title>
+          <dcat:distribution rdf:resource="https://example.org/distributions/good"/>
+          <dcat:distribution rdf:resource="https://example.org/distributions/bad"/>
+        </dcat:Dataset>
+        <dcat:Distribution rdf:about="https://example.org/distributions/good">
+          <dct:identifier>good-distribution</dct:identifier>
+          <dct:title>Good Distribution</dct:title>
+          <dct:issued>2024-01-01</dct:issued>
+        </dcat:Distribution>
+        <dcat:Distribution rdf:about="https://example.org/distributions/bad">
+          <dct:identifier>bad-distribution</dct:identifier>
+          <dct:title>Bad Distribution</dct:title>
+          <dct:issued>2024-02-01</dct:issued>
+        </dcat:Distribution>
+      </rdf:RDF>
+    `;
+
+    const rdfGraphModule =
+      await import("@/app/api/discovery/harvester/rdf-graph");
+    const originalGetLiteral = rdfGraphModule.RdfGraph.prototype.getLiteral;
+    const getLiteralSpy = jest
+      .spyOn(rdfGraphModule.RdfGraph.prototype, "getLiteral")
+      .mockImplementation(function (
+        this: InstanceType<typeof rdfGraphModule.RdfGraph>,
+        subject,
+        predicate
+      ) {
+        if (
+          subject.value === "https://example.org/distributions/bad" &&
+          predicate === "http://purl.org/dc/terms/identifier"
+        ) {
+          throw new Error("malformed distribution field");
+        }
+        return originalGetLiteral.call(this, subject, predicate);
+      });
+
+    const service = new DcatHarvesterService();
+    const collectors = { mappingErrors: [] as MappingError[] };
+
+    const datasets = await service.parseDatasetsFromRdf(
+      rdfWithTwoDistributions,
+      undefined,
+      undefined,
+      collectors
+    );
+
+    expect(datasets).toHaveLength(1);
+    expect(datasets[0].distributions).toHaveLength(1);
+    expect(datasets[0].distributions?.[0].id).toBe("good-distribution");
+    expect(collectors.mappingErrors).toHaveLength(1);
+    expect(collectors.mappingErrors[0]).toMatchObject({
+      scope: "distribution",
+      datasetId: "two-distributions",
+      distributionId: "https://example.org/distributions/bad",
+      message: "malformed distribution field",
+    });
+
+    getLiteralSpy.mockRestore();
   });
 
   test("infers the content type from sourceRef when contentType is not provided", async () => {
@@ -465,6 +599,55 @@ describe("DcatHarvesterService", () => {
         downloadUrl: undefined,
       },
     ]);
+  });
+
+  test("leaves distribution rights undefined when dct:rights is absent", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:identifier>dataset-1</dct:identifier>
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:distribution>
+            <dcat:Distribution rdf:nodeID="distribution-1">
+              <dct:identifier>dist-1</dct:identifier>
+              <dcat:accessURL rdf:resource="https://example.org/access/1"/>
+            </dcat:Distribution>
+          </dcat:distribution>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].distributions?.[0].rights).toBeUndefined();
+  });
+
+  test("falls back to the URI path segment for distribution rights when no label triple exists", async () => {
+    const service = new DcatHarvesterService();
+    const rdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:identifier>dataset-1</dct:identifier>
+          <dct:title>Dataset A</dct:title>
+          <dct:description>Description A</dct:description>
+          <dcat:distribution>
+            <dcat:Distribution rdf:nodeID="distribution-1">
+              <dct:identifier>dist-1</dct:identifier>
+              <dcat:accessURL rdf:resource="https://example.org/access/1"/>
+              <dct:rights rdf:resource="http://publications.europa.eu/resource/authority/access-right/PUBLIC"/>
+            </dcat:Distribution>
+          </dcat:distribution>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(rdf);
+    expect(datasets[0].distributions?.[0].rights).toEqual("PUBLIC");
   });
 
   test("deduplicates distributions referenced by both dcat distribution and healthdcatap analytics", async () => {
@@ -649,6 +832,7 @@ describe("DcatHarvesterService", () => {
       healthTheme: [],
       healthCategory: [],
       dcatType: [],
+      conformsTo: [],
       personalData: undefined,
       purpose: undefined,
       codeValues: undefined,
@@ -949,6 +1133,7 @@ describe("DcatHarvesterService", () => {
         healthTheme: [],
         healthCategory: [],
         dcatType: [],
+        conformsTo: [],
         personalData: undefined,
         purpose: undefined,
         codeValues: undefined,
@@ -1123,7 +1308,8 @@ describe("DcatHarvesterService", () => {
     expect(spy).toHaveBeenCalledWith(
       '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" />',
       resolvedPath,
-      "application/rdf+xml"
+      "application/rdf+xml",
+      undefined
     );
   });
 
@@ -1142,7 +1328,8 @@ describe("DcatHarvesterService", () => {
     expect(spy).toHaveBeenCalledWith(
       expect.any(String),
       resolve("catalogue.ttl"),
-      "text/turtle"
+      "text/turtle",
+      undefined
     );
   });
 

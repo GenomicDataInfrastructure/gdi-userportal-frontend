@@ -22,7 +22,9 @@ module.exports = {
     "^server-only$": "<rootDir>/src/__mocks__/server-only.ts",
     "^next-intl$": "<rootDir>/src/__mocks__/next-intl.ts",
   },
-  transformIgnorePatterns: ["/node_modules/(?!(iso-639-3)/)"],
+  transformIgnorePatterns: [
+    "/node_modules/(?!(iso-639-3|@rdfjs|@comunica|@vocabulary|@zazuko|shacl-engine|rdf-validate-datatype|rdf-literal|rdf-validation|grapoi|clownface|is-graph-pointer|componentsjs|rdf-parse-n3|readable-stream)/)",
+  ],
   testPathIgnorePatterns: [
     "/.next/",
     "/node_modules/",

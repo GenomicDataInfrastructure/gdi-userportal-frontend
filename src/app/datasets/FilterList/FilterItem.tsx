@@ -34,6 +34,7 @@ function FilterItem({ filter }: FilterItemProps) {
     correspondingActiveFilter?.values?.length ||
     (correspondingActiveFilter?.entries && 1) ||
     0;
+  const helpText = filter.helpText?.text;
 
   const getFilterContent = (type: FilterType) => {
     switch (type) {
@@ -62,17 +63,17 @@ function FilterItem({ filter }: FilterItemProps) {
                 <div>
                   <span className="relative inline-flex items-center gap-x-2 group">
                     <span className="text-base px-1.5">{filter.label}</span>
-                    {filter.helpText && (
+                    {helpText && (
                       <span
                         tabIndex={0}
-                        aria-label={filter.helpText}
+                        aria-label={helpText}
                         className="relative group inline-flex items-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info"
                       >
                         <FontAwesomeIcon
                           icon={faInfoCircle}
                           className="h-4 w-4 text-info"
                         />
-                        <Tooltip message={filter.helpText} />
+                        <Tooltip message={helpText} />
                       </span>
                     )}
                   </span>

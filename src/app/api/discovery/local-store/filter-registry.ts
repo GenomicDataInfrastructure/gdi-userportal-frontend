@@ -87,7 +87,7 @@ const localFilterDefinitions: LocalFilterDefinition[] = [
     group: "Catalogue",
     key: "theme",
     label: "Theme",
-    field: "themes.label",
+    field: "themes.label.keyword",
     mapBucket: mapBucketToValueLabel,
   }),
   createDropdownFilter({
@@ -100,7 +100,7 @@ const localFilterDefinitions: LocalFilterDefinition[] = [
     group: "Catalogue",
     key: "languages",
     label: "Language",
-    field: "languages",
+    field: "languages.value",
     mapBucket: (bucketKey) => ({
       value: bucketKey,
       label:
@@ -113,7 +113,7 @@ const localFilterDefinitions: LocalFilterDefinition[] = [
     group: "Catalogue",
     key: "catalogue",
     label: "Catalogue",
-    field: "catalogue",
+    field: "catalogue.keyword",
   }),
   createDropdownFilter({
     group: "Catalogue",
@@ -126,28 +126,28 @@ const localFilterDefinitions: LocalFilterDefinition[] = [
     group: "Access",
     key: "accessRights",
     label: "Access rights",
-    field: "accessRights.label",
+    field: "accessRights.label.keyword",
     mapBucket: mapBucketToValueLabel,
   }),
   createDropdownFilter({
     group: "Standards",
     key: "conformsTo",
     label: "Conforms to",
-    field: "conformsTo.label",
+    field: "conformsTo.label.keyword",
     mapBucket: mapBucketToValueLabel,
   }),
   createDropdownFilter({
     group: "Health",
     key: "healthTheme",
     label: "Health theme",
-    field: "healthTheme.label",
+    field: "healthTheme.label.keyword",
     mapBucket: mapBucketToValueLabel,
   }),
   createDropdownFilter({
     group: "Health",
     key: "healthCategory",
     label: "Health category",
-    field: "healthCategory.label",
+    field: "healthCategory.label.keyword",
     mapBucket: mapBucketToValueLabel,
   }),
   createOperatorFilter({

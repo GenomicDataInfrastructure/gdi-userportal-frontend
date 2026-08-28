@@ -29,6 +29,8 @@ export interface LocalDiscoveryDistribution {
   format?: { value: string; label: string };
   mediaType?: { value: string; label: string };
   license?: { value: string; label: string };
+  rights?: string;
+  status?: { value: string; label: string };
   conformsTo?: Array<{ value: string; label: string }>;
   applicableLegislation?: Array<{ value: string; label: string }>;
   byteSize?: number;

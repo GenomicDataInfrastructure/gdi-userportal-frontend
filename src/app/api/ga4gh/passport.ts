@@ -6,6 +6,32 @@
 
 import { getToken } from "@/app/api/auth/auth";
 
+/** Maximum time to wait for any single fetch in the passport pipeline. */
+const FETCH_TIMEOUT_MS = 10_000;
+
+/**
+ * Wraps `fetch` with an `AbortSignal` timeout and maps network/timeout errors
+ * to sanitized messages so no internal details leak to callers.
+ */
+async function fetchWithTimeout(
+  url: string,
+  options: RequestInit,
+  timeoutErrorMessage: string,
+  unreachableErrorMessage: string
+): Promise<Response> {
+  try {
+    return await fetch(url, {
+      ...options,
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+    });
+  } catch (err) {
+    if (err instanceof Error && err.name === "TimeoutError") {
+      throw new Error(timeoutErrorMessage);
+    }
+    throw new Error(unreachableErrorMessage);
+  }
+}
+
 type LsAaiTokenResponse = {
   access_token?: string;
   error?: string;
@@ -17,6 +43,18 @@ type UserinfoResponse = {
   ga4gh_passport_v1?: string[];
   error?: string;
   [key: string]: unknown;
+};
+
+/**
+ * The result of fetching a GA4GH Passport.
+ *
+ * `passportPresent` is `true` when the LS-AAI userinfo response contained the
+ * `ga4gh_passport_v1` claim (even if it was an empty array). It is `false` when
+ * the user is unauthenticated or the claim was absent from the response.
+ */
+export type PassportFetchResult = {
+  visaJwts: string[];
+  passportPresent: boolean;
 };
 
 /**
@@ -40,13 +78,16 @@ async function exchangeKeycloakTokenForLsAai(
   }
   const brokerUrl = `${keycloakIssuerUrl}/broker/LSAAI/token`;
 
-  const response = await fetch(brokerUrl, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${keycloakAccessToken}`,
+  const response = await fetchWithTimeout(
+    brokerUrl,
+    {
+      method: "GET",
+      headers: { Authorization: `Bearer ${keycloakAccessToken}` },
+      cache: "no-store",
     },
-    cache: "no-store",
-  });
+    "LS-AAI broker endpoint timed out",
+    "LS-AAI broker endpoint unreachable"
+  );
 
   if (!response.ok) {
     let detail = response.statusText;
@@ -77,12 +118,13 @@ async function exchangeKeycloakTokenForLsAai(
  * POST `{LS_AAI_USERINFO_URL}`
  *
  * @param lsAaiAccessToken - A valid LS-AAI access token.
- * @returns Array of raw GA4GH Passport JWTs from the `ga4gh_passport_v1` claim.
+ * @returns Passport fetch result including visa JWTs and whether the
+ *   `ga4gh_passport_v1` claim was present.
  * @throws If the userinfo request fails with a non-OK status.
  */
 async function fetchPassportFromLsAai(
   lsAaiAccessToken: string
-): Promise<string[]> {
+): Promise<PassportFetchResult> {
   const userinfoUrl = process.env.LS_AAI_USERINFO_URL;
   if (!userinfoUrl) {
     throw new Error(
@@ -90,13 +132,16 @@ async function fetchPassportFromLsAai(
     );
   }
 
-  const response = await fetch(userinfoUrl, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${lsAaiAccessToken}`,
+  const response = await fetchWithTimeout(
+    userinfoUrl,
+    {
+      method: "POST",
+      headers: { Authorization: `Bearer ${lsAaiAccessToken}` },
+      cache: "no-store",
     },
-    cache: "no-store",
-  });
+    "LS-AAI userinfo endpoint timed out",
+    "LS-AAI userinfo endpoint unreachable"
+  );
 
   if (!response.ok) {
     let detail = response.statusText;
@@ -113,7 +158,15 @@ async function fetchPassportFromLsAai(
 
   const data: UserinfoResponse = await response.json();
 
-  return data.ga4gh_passport_v1 ?? [];
+  if (!data.ga4gh_passport_v1) {
+    console.warn(
+      "[passport] ga4gh_passport_v1 claim absent from LS-AAI userinfo response",
+      { sub: data.sub }
+    );
+    return { visaJwts: [], passportPresent: false };
+  }
+
+  return { visaJwts: data.ga4gh_passport_v1, passportPresent: true };
 }
 
 /**
@@ -121,15 +174,15 @@ async function fetchPassportFromLsAai(
  *  1. Exchange the Keycloak access token for an LS-AAI access token.
  *  2. Call the LS-AAI userinfo endpoint to retrieve `ga4gh_passport_v1`.
  *
- * @returns Array of raw Passport JWTs, or an empty array if the user is
- *   unauthenticated.
+ * @returns Passport fetch result. `passportPresent` is `false` when the user
+ *   is unauthenticated or the `ga4gh_passport_v1` claim is absent.
  * @throws If either the token exchange or the userinfo request fails.
  */
-export async function fetchGa4ghPassport(): Promise<string[]> {
+export async function fetchGa4ghPassport(): Promise<PassportFetchResult> {
   const keycloakAccessToken = await getToken("access_token");
 
   if (!keycloakAccessToken) {
-    return [];
+    return { visaJwts: [], passportPresent: false };
   }
 
   const lsAaiAccessToken =

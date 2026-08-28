@@ -5,19 +5,51 @@
 "use server";
 
 import { fetchGa4ghPassport } from "./passport";
-import { extractControlledAccessGrants } from "./visa";
+import {
+  ControlledAccessGrant,
+  extractVerifiedControlledAccessGrants,
+} from "./visa";
 
 /**
  * GA4GH Passport/Visa-based entitlement retrieval.
  *
  * Fetches raw Visa JWTs from the LS-AAI userinfo endpoint.
- * Decodes Visa JWTs and extracts ControlledAccessGrants visas.
- * TODO (ART-27610): validate Visa JWT signatures.
- * TODO (ART-27611): handle visa expiry / refresh.
+ * Decodes and signature-validates Visa JWTs, keeping only
+ * ControlledAccessGrants visas from trusted issuers.
+ * Expired visas are filtered out before signature verification.
  */
-export const retrieveEntitlementsV2 = async () => {
-  const visaJwts = await fetchGa4ghPassport();
-  const grants = extractControlledAccessGrants(visaJwts);
+export const retrieveEntitlements = async (): Promise<{
+  entitlements: {
+    datasetId: string;
+    start?: string;
+    end?: string;
+    source?: string;
+    by?: string;
+  }[];
+  passportPresent: boolean;
+}> => {
+  let visaJwts: string[];
+  let passportPresent: boolean;
+  try {
+    ({ visaJwts, passportPresent } = await fetchGa4ghPassport());
+  } catch (err) {
+    console.error(
+      "[entitlements] Passport fetch failed; returning empty entitlements",
+      { error: err instanceof Error ? err.message : String(err) }
+    );
+    return { entitlements: [], passportPresent: false };
+  }
+
+  let grants: ControlledAccessGrant[];
+  try {
+    grants = await extractVerifiedControlledAccessGrants(visaJwts);
+  } catch (err) {
+    console.error(
+      "[entitlements] Visa grant extraction failed; returning empty entitlements",
+      { error: err instanceof Error ? err.message : String(err) }
+    );
+    return { entitlements: [], passportPresent };
+  }
 
   const entitlements = grants.map((grant) => ({
     datasetId: grant.datasetId,
@@ -27,5 +59,5 @@ export const retrieveEntitlementsV2 = async () => {
     by: grant.by,
   }));
 
-  return { entitlements };
+  return { entitlements, passportPresent };
 };

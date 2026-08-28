@@ -634,6 +634,11 @@ describe("LocalIndexDiscoveryProvider", () => {
             value: "http://spdx.org/licenses/Apache-2.0",
             label: "Apache 2.0",
           },
+          status: {
+            value:
+              "http://publications.europa.eu/resource/authority/distribution-status/COMPLETED",
+            label: "Completed",
+          },
           conformsTo: [
             {
               value: "https://example.org/spec/standard-1",
@@ -854,6 +859,11 @@ describe("LocalIndexDiscoveryProvider", () => {
           license: {
             value: "http://spdx.org/licenses/Apache-2.0",
             label: "Apache 2.0",
+          },
+          status: {
+            value:
+              "http://publications.europa.eu/resource/authority/distribution-status/COMPLETED",
+            label: "Completed",
           },
           conformsTo: [
             {

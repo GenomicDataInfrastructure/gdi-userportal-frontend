@@ -12,7 +12,8 @@ export type HarvesterRunError = {
 
 export type HarvesterRunWarningType =
   | "missingFields"
-  | "healthDcatApCompliance";
+  | "healthDcatApCompliance"
+  | "distributionIssue";
 
 export type HarvesterRunWarning = {
   subjectId: string;

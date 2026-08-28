@@ -5,6 +5,7 @@
 import { jest } from "@jest/globals";
 import { buildDdsSearchedDataset } from "@/app/api/discovery/test-utils/fixtures";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
+import { HarvestCollectors } from "@/app/api/discovery/harvester/dcat-harvester-service";
 
 const mockCreateHeaders = jest.fn<() => Promise<Record<string, string>>>();
 const mockUpsertLocalDiscoveryDatasets =
@@ -21,7 +22,8 @@ const mockHarvestFromUrl =
   jest.fn<
     (
       url: string,
-      options?: { headers?: Record<string, string> }
+      options?: { headers?: Record<string, string> },
+      collectors?: HarvestCollectors
     ) => Promise<LocalDiscoveryDataset[]>
   >();
 const mockHarvestFromFilePath =
@@ -223,7 +225,10 @@ describe("local-index APIs", () => {
     expect(mockHarvestFromUrl).toHaveBeenCalledWith(
       "https://example.org/catalogue.rdf",
       { headers: {} },
-      { mappingErrors: [], shaclViolations: undefined }
+      {
+        mappingErrors: [],
+        shaclViolations: undefined,
+      }
     );
     expect(mockClearLocalDiscoveryDatasets).toHaveBeenCalled();
     expect(
@@ -329,7 +334,10 @@ describe("local-index APIs", () => {
     expect(mockHarvestFromUrl).toHaveBeenCalledWith(
       "https://example.org/catalogue.rdf",
       { headers: {} },
-      { mappingErrors: [], shaclViolations: undefined }
+      {
+        mappingErrors: [],
+        shaclViolations: undefined,
+      }
     );
   });
 
@@ -419,6 +427,60 @@ describe("local-index APIs", () => {
         datasetTitle: "Incomplete Dataset",
         type: "missingFields",
         details: ["description", "identifier", "publisher"],
+      },
+    ]);
+  });
+
+  test("harvestLocalIndexFromDcatUrlApi logs distribution warnings grouped by dataset", async () => {
+    mockIsHarvesterLoggingEnabled.mockReturnValue(true);
+    mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
+    mockHarvestFromUrl.mockImplementationOnce(
+      async (_url, _options, collectors) => {
+        collectors?.mappingErrors.push(
+          {
+            scope: "distribution",
+            datasetId: "d1",
+            distributionId: "https://example.org/distributions/bad",
+            message: "malformed distribution field",
+          },
+          {
+            scope: "distribution",
+            datasetId: "d1",
+            distributionId: "https://example.org/distributions/worse",
+            message: "missing accessURL",
+          }
+        );
+        return [
+          {
+            id: "d1",
+            identifier: "d1",
+            title: "Dataset 1",
+            description: "Has everything",
+            publishers: [{ name: "Org" }],
+            hdab: [],
+            creators: [],
+          },
+        ];
+      }
+    );
+
+    await harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf");
+
+    const loggedRun = mockWriteHarvesterRunLog.mock.calls[0][0] as {
+      warnings: {
+        subjectId: string;
+        type: string;
+        details: string[];
+      }[];
+    };
+    expect(loggedRun.warnings).toEqual([
+      {
+        subjectId: "d1",
+        type: "distributionIssue",
+        details: [
+          "https://example.org/distributions/bad: malformed distribution field",
+          "https://example.org/distributions/worse: missing accessURL",
+        ],
       },
     ]);
   });

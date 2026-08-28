@@ -10,14 +10,8 @@ import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { useTranslations } from "next-intl";
 import {
   faBars,
-  faBook,
-  faDatabase,
-  faHome,
-  faInfoCircle,
-  faLineChart,
   faShoppingCart,
   faUser,
-  faWandSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signIn, useSession } from "next-auth/react";
@@ -27,6 +21,7 @@ import Button from "../Button";
 import Avatar from "./Avatar";
 import NotificationBell from "./Notifications/NotificationBell";
 import RequestIcon from "./RequestIcon";
+import { getNavItems } from "@/utils/getNavItems";
 
 function Header() {
   const t = useTranslations();
@@ -36,49 +31,7 @@ function Header() {
   const { basket, isLoading } = useDatasetBasket();
   const isExternalHeaderLogo = contentConfig.headerLogoUrl.startsWith("http");
 
-  let navItems = [
-    {
-      icon: faHome,
-      label: t("nav.home"),
-      href: "/",
-      isActive: (activePath: string) => activePath === "/",
-    },
-    {
-      icon: faDatabase,
-      label: t("nav.datasets"),
-      href: "/datasets",
-      isActive: (activePath: string) => activePath.includes("/datasets"),
-    },
-    {
-      icon: faLineChart,
-      label: t("nav.alleleFrequency"),
-      href: "/allele-frequency",
-      isActive: (activePath: string) =>
-        activePath.includes("/allele-frequency"),
-    },
-    {
-      icon: faWandSparkles,
-      label: t("nav.themes"),
-      href: "/themes",
-      isActive: (activePath: string) => activePath === "/themes",
-    },
-    {
-      icon: faBook,
-      label: t("nav.publishers"),
-      href: "/publishers",
-      isActive: (activePath: string) => activePath === "/publishers",
-    },
-    {
-      icon: faInfoCircle,
-      label: t("nav.about"),
-      href: "/about",
-      isActive: (activePath: string) => activePath === "/about",
-    },
-  ];
-
-  if (!contentConfig.showAlleleFrequency) {
-    navItems = navItems.filter((item) => item.href !== "/allele-frequency");
-  }
+  const navItems = getNavItems(t, { includeAbout: true });
 
   const closeMenu = () => {
     setIsMenuOpen(false);

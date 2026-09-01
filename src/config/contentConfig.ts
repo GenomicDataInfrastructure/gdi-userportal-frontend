@@ -27,6 +27,7 @@ interface ContentConfig {
   enableAllVariantSearch: boolean;
   contactUsEnabled: boolean;
   showApplicationOptions: boolean;
+  showServices: boolean;
   footerLogos?: Array<{ src: string; alt: string; url?: string }>;
   favicon: string;
   headerLogoUrl: string;
@@ -52,7 +53,9 @@ const contentConfig: ContentConfig = {
     env("NEXT_PUBLIC_HOME_NOTICE_MESSAGE") ||
     "Because of scheduled migration in our provider, the User portal could get service disruption on 19 February between 11:00 and 14:00.",
   aboutContent: env("NEXT_PUBLIC_HOMEPAGE_ABOUT_CONTENT") || undefined,
-  bannerLink: env("NEXT_PUBLIC_BANNER_LINK") || "/howto",
+  bannerLink:
+    env("NEXT_PUBLIC_BANNER_LINK") ||
+    "https://genomicdatainfrastructure.github.io/gdi-userportal-frontend/",
   siteTitle: env("NEXT_PUBLIC_SITE_TITLE") || "GDI - User Portal",
   siteDescription:
     env("NEXT_PUBLIC_SITE_DESCRIPTION") ||
@@ -69,6 +72,7 @@ const contentConfig: ContentConfig = {
     env("NEXT_PUBLIC_FEATURE_CONTACT_US")?.toLowerCase() === "true",
   showApplicationOptions:
     env("NEXT_PUBLIC_FEATURE_APPLICATION_OPTIONS")?.toLowerCase() === "true",
+  showServices: env("NEXT_PUBLIC_SHOW_SERVICES")?.toLowerCase() === "true",
   footerLogos: env("NEXT_PUBLIC_FOOTER_LOGOS")
     ? JSON.parse(env("NEXT_PUBLIC_FOOTER_LOGOS") || "[]")
     : undefined,

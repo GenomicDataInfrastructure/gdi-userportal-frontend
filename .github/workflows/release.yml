@@ -246,6 +246,6 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    uses: ./.github/workflows/generate_changelog.yml
+    uses: $/.github/workflows/generate_changelog.yml
     with:
       tag: ${{ needs.versioning.outputs.new_tag }}

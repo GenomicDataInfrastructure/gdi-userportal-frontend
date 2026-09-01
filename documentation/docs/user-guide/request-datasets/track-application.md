@@ -25,6 +25,6 @@ To track your application:
     - **DRAFT**: Application is incomplete and has not been submitted yet. [Continue the application](continue-an-application).
     - **SUBMITTED**: Application is under review by the Data Access Committee.
     - **RETURNED**: Application requires additional information or documents. View the feedback and [continue the application](continue-an-application).
-    - **APPROVED**: Application has been approved and you can access the datasets. [Download the datasets](/download-datasets).
+    - **APPROVED**: Your application has been approved, [view your entitlements](/view-entitlements) to see the datasets you have access to, then [download the datasets](/download-datasets) from the Secure Processing Environment.
     - **REJECTED**: Application has been declined. Select the application to view feedback. To resubmit, create a new application.
     - **CLOSED**: Application is closed and no further action is required. Open the application to view details.

@@ -11,6 +11,7 @@ import {
   KeyLike,
   JWTPayload,
 } from "jose";
+import * as jose from "jose";
 import {
   decodeVisaPayload,
   extractControlledAccessGrants,
@@ -188,6 +189,9 @@ describe("extractControlledAccessGrants", () => {
 // ---------------------------------------------------------------------------
 
 describe("extractVerifiedControlledAccessGrants", () => {
+  const originalSkipSignatureVerification =
+    process.env.SKIP_VISA_SIGNATURE_VERIFICATION;
+
   // Keypairs generated once per test-suite run (async beforeAll)
   let privateKeyA: KeyLike;
   let publicKeyA: KeyLike;
@@ -216,6 +220,15 @@ describe("extractVerifiedControlledAccessGrants", () => {
     rejectAllResolver = async (jku: string) => {
       throw new Error(`No JWKS for: ${jku}`);
     };
+  });
+
+  afterEach(() => {
+    if (originalSkipSignatureVerification === undefined) {
+      delete process.env.SKIP_VISA_SIGNATURE_VERIFICATION;
+    } else {
+      process.env.SKIP_VISA_SIGNATURE_VERIFICATION =
+        originalSkipSignatureVerification;
+    }
   });
 
   const ISSUER_JKU = "https://issuer-a.example.org/jwks.json";
@@ -381,6 +394,71 @@ describe("extractVerifiedControlledAccessGrants", () => {
     errorSpy.mockRestore();
   });
 
+  test("accepts visas without signature verification when explicitly disabled", async () => {
+    process.env.SKIP_VISA_SIGNATURE_VERIFICATION = "true";
+    const resolverSpy = jest.fn(resolverTrustingA);
+
+    const grants = await extractVerifiedControlledAccessGrants(
+      [makeVisaJwt(VISA_PAYLOAD)],
+      resolverSpy
+    );
+
+    expect(grants).toHaveLength(1);
+    expect(grants[0].datasetId).toBe("GDID-12345678-11se");
+    expect(resolverSpy).not.toHaveBeenCalled();
+  });
+
+  test("accepts visas without passing an explicit resolver when signature verification is disabled", async () => {
+    process.env.SKIP_VISA_SIGNATURE_VERIFICATION = "true";
+
+    const grants = await extractVerifiedControlledAccessGrants([
+      makeVisaJwt(VISA_PAYLOAD),
+    ]);
+
+    expect(grants).toHaveLength(1);
+    expect(grants[0].datasetId).toBe("GDID-12345678-11se");
+  });
+
+  test("rejects a visa with an unreadable protected header", async () => {
+    const invalidHeaderJwt = `${Buffer.from("not-json").toString(
+      "base64url"
+    )}.${Buffer.from(JSON.stringify(VISA_PAYLOAD)).toString(
+      "base64url"
+    )}.signature`;
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+
+    const grants = await extractVerifiedControlledAccessGrants(
+      [invalidHeaderJwt],
+      resolverTrustingA
+    );
+
+    expect(grants).toEqual([]);
+    expect(errorSpy).toHaveBeenCalledWith(
+      "[visa-validation] FAILED: could not decode JWT header",
+      expect.objectContaining({ iss: "https://issuer-a.example.org" })
+    );
+    errorSpy.mockRestore();
+  });
+
+  test("logs string resolver failures when JWKS resolution rejects with a non-Error value", async () => {
+    const jwt = await signVisaJwt(VISA_PAYLOAD, privateKeyA);
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+
+    const grants = await extractVerifiedControlledAccessGrants(
+      [jwt],
+      async () => {
+        throw "resolver failed";
+      }
+    );
+
+    expect(grants).toEqual([]);
+    expect(errorSpy).toHaveBeenCalledWith(
+      "[visa-validation] FAILED: could not resolve JWKS",
+      expect.objectContaining({ error: "resolver failed" })
+    );
+    errorSpy.mockRestore();
+  });
+
   test("returns empty array when all issuers are untrusted", async () => {
     const jwt = await signVisaJwt(VISA_PAYLOAD, privateKeyA);
     const grants = await extractVerifiedControlledAccessGrants(
@@ -475,6 +553,42 @@ describe("extractVerifiedControlledAccessGrants", () => {
           "https://issuer-a.example.org|ControlledAccessGrants": 1,
           "https://untrusted.example.org|ControlledAccessGrants": 1,
         }),
+      })
+    );
+    warnSpy.mockRestore();
+    errorSpy.mockRestore();
+  });
+
+  test("aggregates repeated rejection counts for the same issuer", async () => {
+    const jwtBadSigA = await signVisaJwt(VISA_PAYLOAD, privateKeyB, {
+      kid: "key-b",
+    });
+    const jwtBadSigB = await signVisaJwt(
+      {
+        ...VISA_PAYLOAD,
+        ga4gh_visa_v1: {
+          ...VISA_PAYLOAD.ga4gh_visa_v1,
+          value: "GDID-OTHER",
+        },
+      },
+      privateKeyB,
+      { kid: "key-b" }
+    );
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    await extractVerifiedControlledAccessGrants(
+      [jwtBadSigA, jwtBadSigB],
+      resolverTrustingA
+    );
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      "[visa-validation] REJECTED visas (failed signature verification)",
+      expect.objectContaining({
+        count: 2,
+        byIssuerAndType: {
+          "https://issuer-a.example.org|ControlledAccessGrants": 2,
+        },
       })
     );
     warnSpy.mockRestore();
@@ -589,5 +703,64 @@ describe("extractVerifiedControlledAccessGrants", () => {
     expect(grants).toHaveLength(1);
     expect(grants[0].datasetId).toBe("GDID-12345678-11se");
     warnSpy.mockRestore();
+  });
+
+  test("aggregates repeated expired visas for the same issuer", async () => {
+    const expiredPayloadA = {
+      ...VISA_PAYLOAD,
+      ga4gh_visa_v1: {
+        ...VISA_PAYLOAD.ga4gh_visa_v1,
+        value: "GDID-EXPIRED-A",
+        exp: 1,
+      },
+    };
+    const expiredPayloadB = {
+      ...VISA_PAYLOAD,
+      ga4gh_visa_v1: {
+        ...VISA_PAYLOAD.ga4gh_visa_v1,
+        value: "GDID-EXPIRED-B",
+        exp: 1,
+      },
+    };
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    const grants = await extractVerifiedControlledAccessGrants(
+      [
+        await signVisaJwt(expiredPayloadA, privateKeyA),
+        await signVisaJwt(expiredPayloadB, privateKeyA),
+      ],
+      resolverTrustingA
+    );
+
+    expect(grants).toEqual([]);
+    expect(warnSpy).toHaveBeenCalledWith(
+      "[visa-validation] SKIPPED expired visas",
+      expect.objectContaining({
+        count: 2,
+        byIssuer: { "https://issuer-a.example.org": 2 },
+      })
+    );
+    warnSpy.mockRestore();
+  });
+
+  test("logs string signature verification failures when jwtVerify rejects with a non-Error value", async () => {
+    const jwt = await signVisaJwt(VISA_PAYLOAD, privateKeyA);
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    const jwtVerifySpy = jest
+      .spyOn(jose, "jwtVerify")
+      .mockRejectedValueOnce("bad signature");
+
+    const grants = await extractVerifiedControlledAccessGrants(
+      [jwt],
+      resolverTrustingA
+    );
+
+    expect(grants).toEqual([]);
+    expect(errorSpy).toHaveBeenCalledWith(
+      "[visa-validation] FAILED: signature verification error",
+      expect.objectContaining({ error: "bad signature" })
+    );
+    jwtVerifySpy.mockRestore();
+    errorSpy.mockRestore();
   });
 });

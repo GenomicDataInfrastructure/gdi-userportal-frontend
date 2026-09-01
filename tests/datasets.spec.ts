@@ -64,7 +64,9 @@ test("Dataset list renders filters and results", async ({ page }) => {
     name: /pan-cancer longitudinal series/i,
   });
   await expect(seriesCard).toBeVisible();
-  await expect(seriesCard.getByText(/dataset series/i)).toBeVisible();
+  await expect(
+    seriesCard.locator("span").getByText(/dataset series/i)
+  ).toBeVisible();
   await expect(page.getByText(/1 dataset series/i)).toBeVisible();
   await expect(page.getByText(/externally governed/i)).toBeVisible();
 

@@ -6,7 +6,17 @@ import type * as RDF from "@rdfjs/types";
 import { LocalDiscoveryDistribution } from "@/app/api/discovery/local-store/types";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 import { normalizeDate } from "@/app/api/discovery/harvester/date-utils";
+import { formatErrorDetails } from "@/app/api/discovery/harvester/error-utils";
 import formatLicenseLabel from "@/utils/licenseLabels";
+
+export type DistributionMappingError = {
+  datasetId: string;
+  distributionId?: string;
+  message: string;
+  stack?: string;
+};
+
+export type OnDistributionError = (error: DistributionMappingError) => void;
 
 const DCAT_DISTRIBUTION = "http://www.w3.org/ns/dcat#distribution"; // NOSONAR
 const HEALTHDCATAP_ANALYTICS = "http://healthdataportal.eu/ns/health#analytics"; // NOSONAR
@@ -20,6 +30,7 @@ const DC_DESCRIPTION = "http://purl.org/dc/elements/1.1/description"; // NOSONAR
 const DCT_FORMAT = "http://purl.org/dc/terms/format"; // NOSONAR
 const DCAT_MEDIA_TYPE = "http://www.w3.org/ns/dcat#mediaType"; // NOSONAR
 const DCT_LICENSE = "http://purl.org/dc/terms/license"; // NOSONAR
+const ADMS_STATUS = "http://www.w3.org/ns/adms#status"; // NOSONAR
 const DCT_RIGHTS = "http://purl.org/dc/terms/rights"; // NOSONAR
 const DCT_CONFORMS_TO = "http://purl.org/dc/terms/conformsTo"; // NOSONAR
 const DCATAP_APPLICABLE_LEGISLATION =
@@ -32,15 +43,26 @@ const DCT_ISSUED = "http://purl.org/dc/terms/issued"; // NOSONAR
 export const extractDistributions = (
   datasetSubject: RDF.Term,
   graph: RdfGraph,
-  datasetId: string
+  datasetId: string,
+  onDistributionError?: OnDistributionError
 ): LocalDiscoveryDistribution[] | undefined => {
   const distributionSubjects = getDistributionSubjects(datasetSubject, graph);
   if (!distributionSubjects.length) return undefined;
 
   const distributions = distributionSubjects
-    .map((distributionSubject, index) =>
-      mapDistribution(distributionSubject, graph, datasetId, index)
-    )
+    .map((distributionSubject, index) => {
+      try {
+        return mapDistribution(distributionSubject, graph, datasetId, index);
+      } catch (error) {
+        onDistributionError?.({
+          datasetId,
+          distributionId: graph.getNamedNodeValue(distributionSubject),
+          message: formatErrorDetails(error),
+          stack: error instanceof Error ? error.stack : undefined,
+        });
+        return undefined;
+      }
+    })
     .filter(
       (distribution): distribution is LocalDiscoveryDistribution =>
         distribution !== undefined
@@ -91,6 +113,7 @@ const mapDistribution = (
     mediaType: getDistributionMediaType(distributionSubject, graph),
     license: getDistributionLicense(distributionSubject, graph),
     rights: getDistributionRights(distributionSubject, graph),
+    status: getDistributionStatus(distributionSubject, graph),
     conformsTo: getDistributionConformsTo(distributionSubject, graph),
     applicableLegislation: getDistributionApplicableLegislation(
       distributionSubject,
@@ -138,46 +161,37 @@ const getDistributionDescription = (
   return description || undefined;
 };
 
-const getDistributionFormat = (
+const resolveDistributionConcept = (
   distributionSubject: RDF.Term,
-  graph: RdfGraph
-): LocalDiscoveryDistribution["format"] => {
-  const formatSubject = graph.getObjects(distributionSubject, DCT_FORMAT)[0];
-  if (!formatSubject) return undefined;
+  graph: RdfGraph,
+  predicate: string
+): { value: string; label: string } | undefined => {
+  const conceptSubject = graph.getObjects(distributionSubject, predicate)[0];
+  if (!conceptSubject) return undefined;
 
   const value =
-    graph.getNamedNodeValue(formatSubject) || formatSubject.value.trim();
+    graph.getNamedNodeValue(conceptSubject) || conceptSubject.value.trim();
   if (!value) return undefined;
 
   const label =
-    graph.getFirstLiteral(formatSubject, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
+    graph.getFirstLiteral(conceptSubject, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
     value.split("/").pop() ||
     value;
 
   return { value, label };
 };
+
+const getDistributionFormat = (
+  distributionSubject: RDF.Term,
+  graph: RdfGraph
+): LocalDiscoveryDistribution["format"] =>
+  resolveDistributionConcept(distributionSubject, graph, DCT_FORMAT);
 
 const getDistributionMediaType = (
   distributionSubject: RDF.Term,
   graph: RdfGraph
-): LocalDiscoveryDistribution["mediaType"] => {
-  const mediaTypeSubject = graph.getObjects(
-    distributionSubject,
-    DCAT_MEDIA_TYPE
-  )[0];
-  if (!mediaTypeSubject) return undefined;
-
-  const value =
-    graph.getNamedNodeValue(mediaTypeSubject) || mediaTypeSubject.value.trim();
-  if (!value) return undefined;
-
-  const label =
-    graph.getFirstLiteral(mediaTypeSubject, [SKOS_PREF_LABEL, RDFS_LABEL]) ||
-    value.split("/").pop() ||
-    value;
-
-  return { value, label };
-};
+): LocalDiscoveryDistribution["mediaType"] =>
+  resolveDistributionConcept(distributionSubject, graph, DCAT_MEDIA_TYPE);
 
 const getDistributionAccessUrl = (
   distributionSubject: RDF.Term,
@@ -218,6 +232,12 @@ const getDistributionLicense = (
 
   return { value, label };
 };
+
+const getDistributionStatus = (
+  distributionSubject: RDF.Term,
+  graph: RdfGraph
+): LocalDiscoveryDistribution["status"] =>
+  resolveDistributionConcept(distributionSubject, graph, ADMS_STATUS);
 
 const getDistributionRights = (
   distributionSubject: RDF.Term,

@@ -1,12 +1,18 @@
 ---
 slug: /download-datasets
 sidebar_label: "Download datasets"
-sidebar_position: 5
+sidebar_position: 2
 ---
 
 # Download datasets
 
 Once your application is **approved**, you'll receive an email with instructions to access the **Secure Processing Environment (SPE)** where you can securely download and work with your approved datasets.
+
+:::tip Automatic access recognition
+
+Once your application is approved , you can view datasets covered by your current access grants in the [Entitlements tab](/view-entitlements).
+
+:::
 
 To access and work with your approved datasets:
 
@@ -30,7 +36,7 @@ To view your approved datasets:
 
 1. Select the **folder icon** (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-5" style={{display: 'inline', width: '1em', height: '1em', verticalAlign: 'text-bottom'}}><path d="M4.75 3A1.75 1.75 0 0 0 3 4.75v2.752l.104-.002h13.792c.035 0 .07 0 .104.002V6.75A1.75 1.75 0 0 0 15.25 5h-3.836a.25.25 0 0 1-.177-.073L9.823 3.513A1.75 1.75 0 0 0 8.586 3H4.75ZM3.104 9a1.75 1.75 0 0 0-1.673 2.265l1.385 4.5A1.75 1.75 0 0 0 4.488 17h11.023a1.75 1.75 0 0 0 1.673-1.235l1.386-4.5A1.75 1.75 0 0 0 16.896 9H3.104Z"/></svg>) on your dashboard.
 
-2. Select the **Entitlements** tab to see the list of your approved datasets.
+2. Select the **Entitlements** tab to see the datasets covered by your current access grants.
 
 <figure>
 <img src="img/download-datasets/view-approved-datasets.png" alt="Screenshot of the View Approved Datasets page" width="900" />
@@ -38,3 +44,20 @@ To view your approved datasets:
 </figure>
 
 3. Select the dataset to view its details. This view only displays the metadata of your approved datasets. To download and work with the datasets, use the Secure Processing Environment (SPE) as instructed in your approval email.
+
+
+## Access your datasets
+
+Viewing entitlements in the portal shows you **metadata only**. To download and work with your approved datasets:
+
+1. Check your email for instructions from the data provider
+2. Follow the link to the **Secure Processing Environment (SPE)**
+3. Access your datasets within the SPE
+
+For detailed instructions, see: [Download datasets](/download-datasets)
+
+:::info Stay compliant
+
+Remember to **use data responsibly** according to the terms and agreements you signed during the application process. Your access is audited for compliance.
+
+:::

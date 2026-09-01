@@ -12,6 +12,188 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.7.7] - 2026-07-06
+## [v1.7.16] - 2026-08-28
+
+### Added
+- feat(services): ART-28609 add GDI Service Catalogue page (#1159) by @aslam-mohammed-vp in 9af3735a
+- feat: add distribution status and fix distribution under dev harvesting by @Rania Hamdani in b8d142c1
+- feat: add harvester logs and shacl validtion for the rdf by @Rania Hamdani in 75453ddb
+- ART-27608: Remove entitlements feature flag and make GA4GH Passport path the default by @Mohammed Aslam Vattaparambil in e3b3e5c2
+- feat: enhance search functionnality by @Rania Hamdani in 9f0ff608
+- feat: add license, rights and applicable legislation to distribution by @Rania Hamdani in a3c848d6
+- feat: display full labels in health categories by @Rania Hamdani in 907bd2fa
+- feat(ga4gh): ART-27610 validate visa JWT signatures against jku public keys by @Mohammed Aslam Vattaparambil in 20b1dff0
+- feat(ga4gh): ART-27610 validate visa JWT signatures against jku public keys by @Mohammed Aslam Vattaparambil in 3eefa5c0
+- feat(ga4gh): ART-27610 validate visa JWT signatures against jku public keys by @Mohammed Aslam Vattaparambil in 0f3dd19b
+- feat(ga4gh): ART-27610 validate visa JWT signatures against jku public keys by @Mohammed Aslam Vattaparambil in 57b8025e
+- feat(ga4gh): ART-27610 validate visa JWT signatures against jku public keys by @Mohammed Aslam Vattaparambil in aba9340f
+
+
+### Changed
+- doc: update CHANGELOG.md for v1.7.15 (#1135) by @github-actions[bot] in 2f88426f
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1787708478 (#1160) by @LNDS-Sysadmins in 4b204919
+- chore(deps): update dependency eslint-config-next to v16.3.3 by @Renovate Bot in ec20e540
+- chore(deps): update dependency @types/react-dom to v19.2.5 by @Renovate Bot in c013668b
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1787019036 by @Renovate Bot in 8ae780b0
+- chore(deps): update astral-sh/setup-uv action to v10 by @Renovate Bot in 04f47aee
+- chore(deps): update dependency eslint-config-next to v16.3.2 by @Renovate Bot in ec05f913
+- ART-28477: update error messages related to passports and entitlements by @Mohammed Aslam Vattaparambil in fae3193a
+- chore(deps): update dependency eslint-config-next to v16.3.1 by @Renovate Bot in 43d236ff
+- Add GA4GH coverage tests by @copilot-swe-agent[bot] in 443435e6
+- Fix frontend test workflow regressions by @copilot-swe-agent[bot] in 6981ebac
+- ART-27614 enabled e2e tests and addressed review comments by @Mohammed Aslam Vattaparambil in 398fbc82
+- ART-27614: Add e2e tests for GA4GH Passport entitlements flow by @Mohammed Aslam Vattaparambil in 55f37c86
+- add: licenses by @Rania Hamdani in 3b1e4394
+- ART-28441 addressed review comments by @Mohammed Aslam Vattaparambil in 4516e4e1
+- ART-28441 added GDI documentation link by @Mohammed Aslam Vattaparambil in 48c455b6
+- chore(deps): update oras-project/setup-oras digest to 47a14f7 by @Renovate Bot in 33d2b511
+- chore(deps): bump nanoid from 3.3.11 to 3.3.18 in /documentation by @dependabot[bot] in 9b42560c
+- ART-27613 user messages updated as per feedback by @Mohammed Aslam Vattaparambil in 0bb130be
+- ART-27613 cleanup by @Mohammed Aslam Vattaparambil in 197d097a
+- ART-27613 error messages for user by @Mohammed Aslam Vattaparambil in 35fc20d4
+- ART-27613 addressed review comments by @Mohammed Aslam Vattaparambil in 2b5bc0ea
+- ART-27613 error handling for GA4GH visa validation pipeline by @Mohammed Aslam Vattaparambil in e45d3313
+- chore(deps): bump dompurify from 3.4.12 to 3.4.13 in /documentation by @dependabot[bot] in 4628a6ba
+- doc: update CHANGELOG.md for v1.7.14 by @LNDS-Sysadmins in 7344aeb7
+- chore(deps): bump mermaid from 11.15.0 to 11.16.1 in /documentation by @dependabot[bot] in 6908a388
+- chore(deps-dev): bump fast-uri from 3.1.2 to 3.1.5 by @dependabot[bot] in 3a7e74e2
+
+
+### Fixed
+- chore: added harvester fix by @Haris Zenovic in ac2682e5
+- fix(deps): update dependency next to v16.3.3 by @Renovate Bot in 2cb3c9b8
+- fix: use a single collection to capture both dataset as well as distribution errors by @Rania Hamdani in 6394fda6
+- fix: formatting by @Rania Hamdani in 63d18aef
+- fix: add tests for cide coverage by @Rania Hamdani in 487d928d
+- fix: formatting by @Rania Hamdani in 6dbf6990
+- fix(deps): update dependency next to v16.3.2 by @Renovate Bot in 1ad43d16
+- fix(deps): update dependency next to v16.3.1 by @Renovate Bot in 53807096
+- ART-28441 documentation link fix by @Mohammed Aslam Vattaparambil in 091d70c5
+- ART-27614 test failure fix by @Mohammed Aslam Vattaparambil in 8620b69d
+- ART-27614 format fix by @Mohammed Aslam Vattaparambil in f09969f9
+- Validate Sonar coverage fix by @copilot-swe-agent[bot] in 1d386838
+- fix: correct E2E test failures - wrong locators and invalid mock data by @copilot-swe-agent[bot] in b023223e
+- ART-27614 format fix by @Mohammed Aslam Vattaparambil in 70f0bc52
+- ART-28441 documentation link fix by @Mohammed Aslam Vattaparambil in a5dfacfe
+- fix: format by @Rania Hamdani in eb4be434
+- fix: dataset with missing fields by @Rania Hamdani in 5e0cc249
+- ART-28460-dataset fixed discovery.yml by @Mohammed Aslam Vattaparambil in f15b2f5d
+- fix: modify the chip component to accept href and re-use it for applicable legislation by @Rania Hamdani in 1fb0454e
+- fix: no need to check if it is a url by @Rania Hamdani in 5e042164
+- fix: applicable legislation link by @Rania Hamdani in 2a535d1c
+- ART-27613 fixed spacing issue for info message by @Mohammed Aslam Vattaparambil in d69dfeba
+- ART-27613 fixed sonarqube failure by @Mohammed Aslam Vattaparambil in 8c676b67
+- ART-27613 fixed sonarqube failure by @Mohammed Aslam Vattaparambil in 258f102f
+- ART-27613 format fix by @Mohammed Aslam Vattaparambil in 025df008
+- fix: encode URI to prevent broken link by @Rania Hamdani in b91b8e70
+- fix: add publisher info and sort info in coverage by @Rania Hamdani in 16895e46
+- fix: add test by @Rania Hamdani in ba2871d8
+- fix: fix version notes and add provenance to dataset details by @Rania Hamdani in 6c59bb2b
+- fix: show the available comforms to value by @Rania Hamdani in cbdb155e
+
+
+## [v1.7.15] - 2026-08-10
+
+### Added
+- feat: remove unused functions from applicationStatus.ts by @Haris Zenovic in 80c7491e
+- feat: improve date sorting in getChangeRequestDate function by @Haris Zenovic in 59602472
+- feat: add tests for harvesting APIs and update sonar exclusions by @Haris Zenovic in e0f53b93
+- feat: remove no-data-dict.rdf file from the project by @Haris Zenovic in 2a1091be
+- feat: update ListedApplicationListItem type to include catalogs and translation status by @Haris Zenovic in beec9eb3
+- feat: remove synchronization with national dispatcher from harvesting APIs by @Haris Zenovic in e6c75104
+- feat: add support for harvesting from local RDF files by @Haris Zenovic in 144f382f
+
+
+### Changed
+- chore(deps): update oras-project/setup-oras digest to 0d9191f by @Renovate Bot in a23dd5d3
+## [v1.7.14] - 2026-08-07
+
+### Added
+- feat: enhance notifications handling with snapshot versioning and improved polling mechanism by @Haris Zenovic in c2e80ca0
+- feat: add NotificationRow component for displaying notifications by @Haris Zenovic in b29ad3d8
+- feat(ga4gh): implement GA4GH Passport/Visa-based entitlement listing … (#1111) by @aslam-mohammed-vp in faa8c4ed
+- feat: add notification component using no operation notificatoin provider by @Rania Hamdani in 044ab35b
+
+
+### Changed
+- Initial plan by @copilot-swe-agent[bot] in e6abe165
+- ART-28209 fx for allele freq filters by @Mohammed Aslam Vattaparambil in e00b007e
+- chore: add jest-environment-jsdom dependency and create manual mock for next-intl by @Haris Zenovic in e28a3105
+- ART-27612 added unit tests by @Mohammed Aslam Vattaparambil in d71432ce
+- ART-27612 addressed review comments by @Mohammed Aslam Vattaparambil in 07986d67
+- ART-27612 add source and by labels to entitlement cards by @Mohammed Aslam Vattaparambil in a33112e4
+- chore(deps): update oras-project/setup-oras digest to 4fb5323 by @Renovate Bot in 071d1e44
+- chore(deps): update react monorepo by @Renovate Bot in 7ac8f1e1
+- chore(deps): update package-lock.json with new dependencies (#1116) by @Kacem Bechka in 88a20d14
+- chore(deps): update sharp and related dependencies in package-lock.json (#1115) by @Kacem Bechka in de7a9d21
+- chore(deps): update docker/login-action action to v4.6.0 (#1112) by @LNDS-Sysadmins in e7468134
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1785358548 (#1114) by @LNDS-Sysadmins in edf8f725
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1785287462 (#1110) by @LNDS-Sysadmins in d75af0f6
+- chore(deps): update docker/login-action action to v4.5.2 (#1105) by @LNDS-Sysadmins in b77387c4
+- improve unit tests for build by @Alessandro in c5eadccb
+- move the split out from front end by @Alessandro in a00e889b
+- chore(deps): update dependency eslint-config-next to v16.2.12 by @Renovate Bot in 740aa72a
+- chore(deps): bump shell-quote from 1.8.4 to 1.10.0 in /documentation (#1104) by @dependabot[bot] in d0648c66
+- chore(deps-dev): bump postcss from 8.5.12 to 8.5.18 (#1108) by @dependabot[bot] in 8a7a492a
+- chore(deps): update dependency postcss to v8.5.12 [security] by @Renovate Bot in 4194b7fa
+- chore(deps): update dependency eslint-config-next to v16.2.11 by @Renovate Bot in eb923bcc
+- chore(deps): bump next from 16.2.10 to 16.2.11 (#1102) by @dependabot[bot] in 0da8d60f
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1784731381 (#1101) by @LNDS-Sysadmins in a757027e
+- chore(deps): update actions/checkout action to v7.0.1 by @Renovate Bot in 8c6e7204
+- add unit test for contact point by @Alessandro in 0fbf2b5d
+- add the logic to harvest hasStructuredData and encode it to the rdf by @Alessandro in ca39b5ce
+- chore(deps): bump webpack-dev-server in /documentation (#1093) by @dependabot[bot] in 53e2bdb9
+- chore(deps): bump body-parser from 1.20.5 to 1.20.6 in /documentation (#1096) by @dependabot[bot] in c1be83a3
+- chore(deps): bump websocket-driver from 0.7.4 to 0.7.5 in /documentation (#1071) by @dependabot[bot] in 9519828d
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1784637411 (#1087) by @LNDS-Sysadmins in a48e03c2
+- chore(deps): bump immutable from 5.1.5 to 5.1.9 (#1089) by @dependabot[bot] in 7570bac0
+- chore(deps-dev): bump fast-uri from 3.1.2 to 3.1.4 (#1090) by @dependabot[bot] in 29e9849a
+- chore(deps): bump dompurify from 3.4.11 to 3.4.12 in /documentation (#1092) by @dependabot[bot] in f9ef25a0
+- chore(deps): bump svgo from 3.3.3 to 3.3.4 in /documentation (#1091) by @dependabot[bot] in 7d1eec46
+- doc: update CHANGELOG.md for v1.7.13 (#1079) by @github-actions[bot] in 2644eb3c
+- doc: update CHANGELOG.md for v1.7.12 (#1072) by @github-actions[bot] in 5c22668b
+- chore(deps): bump shell-quote from 1.8.4 to 1.10.0 (#1080) by @dependabot[bot] in ba8f6068
+- chore(deps): update astral-sh/setup-uv action to v9 (#1086) by @LNDS-Sysadmins in 91b8825f
+- Remove access rights RDF/XML rewrite by @Inderpal Singh in 904b7c7c
+- chore(deps): update oras-project/setup-oras digest to 2334fe8 by @Renovate Bot in da9ddf71
+
+
+### Fixed
+- fix: upgrade undici to 8.10.0 to fix CVE-2026-13697 HIGH vulnerability by @copilot-swe-agent[bot] in 183efb22
+- fix: formatting by @Rania Hamdani in 06cdddd7
+- fix: formatting by @Rania Hamdani in f5a708ac
+- fix: prevent dds failure by @Rania Hamdani in 057a97bc
+- fix: support multiple dataset types by @Rania Hamdani in b72a3290
+- fix(deps): update dependency axios to v1.18.0 [security] (#1117) by @LNDS-Sysadmins in 88a575af
+- fix(deps): update dependency next-auth to v4.24.15 [security] by @Renovate Bot in 1f9662b9
+- fix: search by keywords by @Rania Hamdani in 4725e12d
+- fix(deps): update react monorepo to v19.2.8 by @Renovate Bot in b4395e71
+- fix: add harvesting, rendering and rdf export of wasGeneratedBy from MDC by @Alessandro in fef4b81a
+- fix(deps): update dependency next to v16.2.12 by @Renovate Bot in f16108ac
+- fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.79.0 (#1107) by @LNDS-Sysadmins in 4f1d3661
+- fix(deps): update dependency next-auth to v4.24.15 [security] by @Renovate Bot in 5db094f4
+- fix: UI by @Rania Hamdani in 673c5f98
+- fix code duplication by @Alessandro in 78d6f497
+- fix: add applicable legislation in distribution by @Alessandro in 4c2f886e
+- fix the hdab structure making as an instance of foaf:agent by @Alessandro in a4126fad
+- fix: encode format as instance of MediaTypeOrExtent by @Alessandro in 103a8636
+- fix pipeline failure by @Alessandro in e99ca545
+- fix: encode linguistic as instance of LinguisticSystem by @Alessandro in f5be5904
+- fix(deps): update dependency axios to v1.18.0 [security] (#1078) by @LNDS-Sysadmins in 6c57b6c2
+- fix(deps): update opentelemetry-js monorepo (#1085) by @LNDS-Sysadmins in c7d6864e
+- fix: max and min typical age non negative and conforms to as Standard by @Alessandro in cfe9e034
+- fix: media type to be encoded with an instance of MediaType by @Alessandro in 859745bf
+- fix: applicable legislation should be filled with an instance of LegalResource by @Alessandro in c42ab0eb
+- fix: fill accrualPeriodicity with an instance of Frquency by @Alessandro in dc6dcb11
+- fix: remove the rewriteCodeSystem to rely on rfflib by @Alessandro in a7f57969
+- fix: sonar security test by @Rania Hamdani in 6d7700d3
+- fix: make accessRight value an instance of RightStatements according to healthdcat by @Alessandro in c6c948b4
+
+
+### Removed
+- ART-28209 removed unused code by @Mohammed Aslam Vattaparambil in 8f1e5152
+
+
 ## [v1.7.13] - 2026-07-21
 
 ### Changed

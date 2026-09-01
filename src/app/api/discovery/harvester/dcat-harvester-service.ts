@@ -19,11 +19,39 @@ import {
   harvestFetch,
 } from "@/app/api/discovery/harvester/fetch-options";
 import { parseRdfToQuads } from "@/app/api/discovery/harvester/rdf-quad-loader";
+import { sanitizeRdfIris } from "@/app/api/discovery/harvester/rdf-iri-sanitizer";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
+import {
+  ShaclViolation,
+  validateHealthDcatAp,
+} from "@/app/api/discovery/harvester/shacl/shacl-validator";
+import { DistributionMappingError as DistributionMappingErrorInput } from "@/app/api/discovery/harvester/dcat-distribution-mapper";
 
 type FetchLike = (input: string | URL, init?: RequestInit) => Promise<Response>;
 type HarvestOptions = {
   headers?: Record<string, string>;
+};
+
+export type DatasetMappingError = {
+  scope: "dataset";
+  subjectId: string;
+  message: string;
+  stack?: string;
+};
+
+export type DistributionMappingError = {
+  scope: "distribution";
+  datasetId: string;
+  distributionId?: string;
+  message: string;
+  stack?: string;
+};
+
+export type MappingError = DatasetMappingError | DistributionMappingError;
+
+export type HarvestCollectors = {
+  mappingErrors: MappingError[];
+  shaclViolations?: ShaclViolation[];
 };
 
 const detectContentTypeFromSource = (source: string) =>
@@ -41,7 +69,8 @@ export class DcatHarvesterService {
   async parseDatasetsFromRdf(
     rdfText: string,
     sourceRef?: string,
-    contentType?: string
+    contentType?: string,
+    collectors?: HarvestCollectors
   ): Promise<LocalDiscoveryDataset[]> {
     const resolvedContentType =
       (contentType as Parameters<typeof parseRdfToQuads>[1]) ??
@@ -51,24 +80,65 @@ export class DcatHarvesterService {
           >[1])
         : ("application/rdf+xml" as const));
     const quads = await parseRdfToQuads(
-      rdfText,
+      sanitizeRdfIris(rdfText, resolvedContentType),
       resolvedContentType,
       sourceRef
     );
     const graph = new RdfGraph(quads);
     const fallbackCatalogue = getFallbackCatalogue(graph);
 
+    if (collectors?.shaclViolations) {
+      try {
+        collectors.shaclViolations.push(...(await validateHealthDcatAp(quads)));
+      } catch (error) {
+        console.error(
+          `[HealthDCAT-AP validation] Failed to run SHACL validation: ${formatErrorDetails(error)}`
+        );
+      }
+    }
+
+    const onDistributionError = collectors
+      ? (distributionError: DistributionMappingErrorInput) =>
+          collectors.mappingErrors.push({
+            scope: "distribution",
+            ...distributionError,
+          })
+      : undefined;
+
     return graph
       .getSubjectsOfType(DCAT_DATASET)
-      .map((datasetSubject, index) =>
-        mapDataset(datasetSubject, graph, fallbackCatalogue, index)
-      )
+      .flatMap((datasetSubject, index) => {
+        try {
+          return [
+            mapDataset(
+              datasetSubject,
+              graph,
+              fallbackCatalogue,
+              index,
+              onDistributionError
+            ),
+          ];
+        } catch (error) {
+          if (!collectors) {
+            throw error;
+          }
+
+          collectors.mappingErrors.push({
+            scope: "dataset",
+            subjectId: datasetSubject.value,
+            message: formatErrorDetails(error),
+            stack: error instanceof Error ? error.stack : undefined,
+          });
+          return [];
+        }
+      })
       .filter((dataset) => Boolean(dataset.title || dataset.description));
   }
 
   async harvestFromUrl(
     url: string,
-    options: HarvestOptions = {}
+    options: HarvestOptions = {},
+    collectors?: HarvestCollectors
   ): Promise<LocalDiscoveryDataset[]> {
     let response: Response;
     try {
@@ -127,7 +197,8 @@ export class DcatHarvesterService {
       return await this.parseDatasetsFromRdf(
         xmlText,
         url,
-        detectContentTypeFromSource(url)
+        detectContentTypeFromSource(url),
+        collectors
       );
     } catch (error) {
       throw wrapError(
@@ -139,7 +210,7 @@ export class DcatHarvesterService {
 
   async harvestFromFilePath(
     filePath: string,
-    options: HarvestOptions = {}
+    collectors?: HarvestCollectors
   ): Promise<LocalDiscoveryDataset[]> {
     const resolvedPath = resolve(filePath);
     let rdfText: string;
@@ -157,7 +228,8 @@ export class DcatHarvesterService {
       return await this.parseDatasetsFromRdf(
         rdfText,
         resolvedPath,
-        detectContentTypeFromSource(resolvedPath)
+        detectContentTypeFromSource(resolvedPath),
+        collectors
       );
     } catch (error) {
       throw wrapError(

@@ -11,7 +11,7 @@ import { encrypt } from "@/utils/encryption";
 import { GVariantSearchQuery } from "@/app/api/discovery/open-api/schemas";
 
 jest.mock("next-auth/next");
-jest.mock("@/app/api/ga4gh/beacon-authorization", () => ({
+jest.mock("@/app/api/ga4gh/beacon-authorization.actions", () => ({
   assertBeaconAuthorization: jest
     .fn<() => Promise<void>>()
     .mockResolvedValue(undefined),

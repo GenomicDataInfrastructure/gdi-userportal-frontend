@@ -79,7 +79,10 @@ async function fetchGa4ghVisas(
 
   try {
     const decodedToken = jwtDecode<DecodedAccessToken>(token);
-    if (decodedToken.ga4gh_visas !== undefined) {
+    if (
+      Array.isArray(decodedToken.ga4gh_visas) &&
+      decodedToken.ga4gh_visas.every((visaJwt) => typeof visaJwt === "string")
+    ) {
       return {
         visaJwts: decodedToken.ga4gh_visas.slice(0, MAX_VISA_JWTS),
         passportPresent: true,

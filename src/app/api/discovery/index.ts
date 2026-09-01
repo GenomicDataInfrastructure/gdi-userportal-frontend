@@ -16,7 +16,7 @@ import {
 import { DiscoveryGVariantSearchQuery } from "@/app/api/discovery/providers/types";
 import { getDiscoveryProvider } from "@/app/api/discovery/providers/factory";
 import { createHeaders } from "@/app/api/shared/headers";
-import { assertBeaconAuthorization } from "@/app/api/ga4gh/beacon-authorization";
+import { assertBeaconAuthorization } from "@/app/api/ga4gh/beacon-authorization.actions";
 
 const discoveryProvider = getDiscoveryProvider();
 

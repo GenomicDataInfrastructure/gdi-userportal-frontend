@@ -11,22 +11,10 @@ import { getServerSession } from "next-auth";
 import { encrypt } from "@/utils/encryption";
 
 jest.mock("next-auth/next");
-jest.mock("@/app/api/ga4gh/beacon-authorization", () => ({
+jest.mock("@/app/api/ga4gh/beacon-authorization.actions", () => ({
   assertBeaconAuthorization: jest
     .fn<() => Promise<void>>()
     .mockResolvedValue(undefined),
-  BeaconAuthorizationError: class extends Error {
-    readonly statusCode = 403;
-    readonly details: { hasResearcherStatus: boolean; hasAcceptedTC: boolean };
-    constructor(
-      message: string,
-      details: { hasResearcherStatus: boolean; hasAcceptedTC: boolean }
-    ) {
-      super(message);
-      this.name = "INSUFFICIENT_PERMISSIONS";
-      this.details = details;
-    }
-  },
 }));
 
 const mockedGetServerSession = getServerSession as jest.MockedFunction<
@@ -139,7 +127,7 @@ describe("Searching datasets", () => {
 
   test("does not call beacon authorization when includeBeacon is false", async () => {
     const { assertBeaconAuthorization } =
-      await import("@/app/api/ga4gh/beacon-authorization");
+      await import("@/app/api/ga4gh/beacon-authorization.actions");
     const encryptedToken = encrypt("decryptedToken");
     mockedGetServerSession.mockResolvedValueOnce({
       access_token: encryptedToken,
@@ -157,7 +145,7 @@ describe("Searching datasets", () => {
 
   test("calls beacon authorization when includeBeacon is true", async () => {
     const { assertBeaconAuthorization } =
-      await import("@/app/api/ga4gh/beacon-authorization");
+      await import("@/app/api/ga4gh/beacon-authorization.actions");
     const encryptedToken = encrypt("decryptedToken");
     mockedGetServerSession.mockResolvedValueOnce({
       access_token: encryptedToken,

@@ -8,26 +8,28 @@ import { useRouter } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
+import {
+  getBeaconAuthReason,
+  isBeaconAuthorized,
+  useBeaconAuthorization,
+} from "@/providers/beacon/BeaconAuthorizationProvider";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function BeaconToggle() {
   const t = useTranslations("datasets");
-  const { data: session } = useSession();
+  const { status: sessionStatus } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const authState = useBeaconAuthorization();
 
-  // Check if user is logged in
-  // TODO: Add role check later - only show for users with BEACON_USER role
-  // const userRoles = session?.user?.roles;
-  // const hasBeaconAccess = userRoles?.includes("BEACON_USER");
-  const hasBeaconAccess = !!session?.user; // Show for all logged-in users for now
+  const isLoading =
+    sessionStatus === "loading" || authState.status === "loading";
+  const isAuthenticated = authState.status !== "unauthenticated";
+  const authStatus = authState.status === "ready" ? authState.auth : undefined;
 
   // Get current state from URL parameter
   const includeBeacon = searchParams.get("beacon") === "true";
-
-  // Don't show toggle if user is not logged in
-  if (!hasBeaconAccess) {
-    return null;
-  }
 
   const handleToggle = (checked: boolean) => {
     const params = new URLSearchParams(searchParams);
@@ -45,36 +47,61 @@ export default function BeaconToggle() {
     router.push(`/datasets?${params.toString()}`);
   };
 
+  const canEnableBeacon = isBeaconAuthorized(authStatus);
+
+  const { hasResearcherStatus, hasAcceptedTC } = getBeaconAuthReason(authStatus);
+
+  const helperTextKey = (() => {
+    if (!isAuthenticated) return "beaconLoginRequired";
+    if (isLoading) return undefined;
+    if (!hasResearcherStatus && !hasAcceptedTC) return "beaconRequirementsMissing";
+    if (!hasResearcherStatus) return "beaconResearcherRequired";
+    if (!hasAcceptedTC) return "beaconTermsRequired";
+    return includeBeacon ? "beaconEnabled" : "beaconDisabled";
+  })();
+
   return (
     <div className="mb-6">
       <div className="shadow-lg rounded-lg border-l-4 border-l-info bg-info/5">
         <label
           htmlFor="beacon-toggle"
-          className="flex items-start gap-4 p-4 cursor-pointer"
+          className={`flex items-start gap-4 p-4 ${
+            canEnableBeacon ? "cursor-pointer" : "cursor-not-allowed"
+          }`}
         >
           <input
             type="checkbox"
             id="beacon-toggle"
             checked={includeBeacon}
-            onChange={(e) => handleToggle(e.target.checked)}
-            className="mt-1 h-4 w-4 border rounded-md checked:accent-warning flex-none cursor-pointer"
+            onChange={(e) => canEnableBeacon && handleToggle(e.target.checked)}
+            disabled={!canEnableBeacon}
+            className="mt-1 h-4 w-4 border rounded-md checked:accent-warning flex-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
           />
           <div className="flex-1">
             <div className="flex items-center gap-2 font-semibold text-base mb-1">
               <span>{t("beaconToggle")}</span>
-              {includeBeacon && (
+              {includeBeacon && canEnableBeacon && (
                 <span className="text-xs bg-warning text-black px-2 py-0.5 rounded-full font-normal">
                   {t("beaconActive")}
                 </span>
               )}
-            </div>
-            <div className="text-sm text-gray-600 font-normal">
-              {includeBeacon ? (
-                <>{t("beaconEnabled")}</>
-              ) : (
-                <>{t("beaconDisabled")}</>
+              {isLoading && (
+                <FontAwesomeIcon
+                  icon={faSpinner}
+                  spin
+                  className="h-4 w-4 text-info"
+                />
               )}
             </div>
+            {helperTextKey && (
+              <div
+                className={`text-sm font-normal ${
+                  canEnableBeacon ? "text-gray-600" : "text-warning"
+                }`}
+              >
+                {t(helperTextKey)}
+              </div>
+            )}
           </div>
         </label>
       </div>

@@ -11,6 +11,24 @@ import { getServerSession } from "next-auth";
 import { encrypt } from "@/utils/encryption";
 
 jest.mock("next-auth/next");
+jest.mock("@/app/api/ga4gh/beacon-authorization", () => ({
+  assertBeaconAuthorization: jest
+    .fn<() => Promise<void>>()
+    .mockResolvedValue(undefined),
+  BeaconAuthorizationError: class extends Error {
+    readonly statusCode = 403;
+    readonly details: { hasResearcherStatus: boolean; hasAcceptedTC: boolean };
+    constructor(
+      message: string,
+      details: { hasResearcherStatus: boolean; hasAcceptedTC: boolean }
+    ) {
+      super(message);
+      this.name = "INSUFFICIENT_PERMISSIONS";
+      this.details = details;
+    }
+  },
+}));
+
 const mockedGetServerSession = getServerSession as jest.MockedFunction<
   typeof getServerSession
 >;
@@ -117,5 +135,41 @@ describe("Searching datasets", () => {
         values: [{ value: "LNDS", label: "LNDS", count: 1 }],
       },
     ]);
+  });
+
+  test("does not call beacon authorization when includeBeacon is false", async () => {
+    const { assertBeaconAuthorization } =
+      await import("@/app/api/ga4gh/beacon-authorization");
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
+
+    mockDiscoveryAdapter.onPost("/api/v1/datasets/search").reply(200, {
+      count: 0,
+      results: [],
+    });
+
+    await searchDatasetsApi({ includeBeacon: false });
+
+    expect(assertBeaconAuthorization).not.toHaveBeenCalled();
+  });
+
+  test("calls beacon authorization when includeBeacon is true", async () => {
+    const { assertBeaconAuthorization } =
+      await import("@/app/api/ga4gh/beacon-authorization");
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
+
+    mockDiscoveryAdapter.onPost("/api/v1/datasets/search").reply(200, {
+      count: 0,
+      results: [],
+    });
+
+    await searchDatasetsApi({ includeBeacon: true });
+
+    expect(assertBeaconAuthorization).toHaveBeenCalled();
   });
 });

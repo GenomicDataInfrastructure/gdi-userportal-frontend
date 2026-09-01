@@ -16,6 +16,7 @@ import {
   decodeVisaPayload,
   extractControlledAccessGrants,
   extractVerifiedControlledAccessGrants,
+  extractVerifiedVisas,
   Ga4ghVisaPayload,
 } from "../visa";
 import { JwksResolver } from "../jwks";
@@ -762,5 +763,88 @@ describe("extractVerifiedControlledAccessGrants", () => {
     );
     jwtVerifySpy.mockRestore();
     errorSpy.mockRestore();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// extractVerifiedVisas — generic verification across visa types
+// ---------------------------------------------------------------------------
+
+describe("extractVerifiedVisas", () => {
+  let privateKeyA: KeyLike;
+  let publicKeyA: KeyLike;
+  let resolverTrustingA: JwksResolver;
+
+  beforeAll(async () => {
+    ({ privateKey: privateKeyA, publicKey: publicKeyA } =
+      await generateKeyPair("RS256"));
+
+    const jwkA = { ...(await exportJWK(publicKeyA)), kid: "key-a" };
+    const localJwksA = createLocalJWKSet({ keys: [jwkA] });
+    resolverTrustingA = async (jku: string) => {
+      if (new URL(jku).origin === "https://issuer-a.example.org")
+        return localJwksA;
+      throw new Error(`Untrusted jku: ${jku}`);
+    };
+  });
+
+  async function signVisaJwt(payload: object): Promise<string> {
+    return new SignJWT(payload as JWTPayload)
+      .setProtectedHeader({
+        alg: "RS256",
+        kid: "key-a",
+        jku: "https://issuer-a.example.org/jwks.json",
+      })
+      .sign(privateKeyA);
+  }
+
+  test("verifies visas regardless of visa type", async () => {
+    const researcherStatusPayload = {
+      iss: "https://issuer-a.example.org",
+      sub: "user@lifescience-ri.eu",
+      iat: 1785223779,
+      exp: 9999999999,
+      ga4gh_visa_v1: {
+        type: "ResearcherStatus",
+        value: "https://doi.org/10.1038/s41431-018-0219-y",
+        source: "https://issuer-a.example.org",
+        by: "so",
+        iat: 1785223779,
+        exp: 9999999999,
+      },
+    };
+
+    const jwt = await signVisaJwt(researcherStatusPayload);
+    const visas = await extractVerifiedVisas([jwt], resolverTrustingA);
+
+    expect(visas).toHaveLength(1);
+    expect(visas[0].payload.ga4gh_visa_v1.type).toBe("ResearcherStatus");
+  });
+
+  test("filters out expired visas before signature verification", async () => {
+    const expiredPayload = {
+      iss: "https://issuer-a.example.org",
+      sub: "user@lifescience-ri.eu",
+      iat: 1785223779,
+      exp: 9999999999,
+      ga4gh_visa_v1: {
+        type: "ResearcherStatus",
+        value: "https://doi.org/10.1038/s41431-018-0219-y",
+        source: "https://issuer-a.example.org",
+        by: "so",
+        iat: 1785223779,
+        exp: 1,
+      },
+    };
+
+    const jwt = await signVisaJwt(expiredPayload);
+    const resolverSpy = jest.fn(resolverTrustingA);
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    const visas = await extractVerifiedVisas([jwt], resolverSpy);
+
+    expect(visas).toHaveLength(0);
+    expect(resolverSpy).not.toHaveBeenCalled();
+    warnSpy.mockRestore();
   });
 });

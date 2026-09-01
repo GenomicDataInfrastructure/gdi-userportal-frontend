@@ -5,16 +5,19 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import FilterItem from "./FilterItem";
 import { useFilters } from "@/providers/filters/FilterProvider";
+import {
+  isBeaconAuthorized,
+  useBeaconAuthorization,
+} from "@/providers/beacon/BeaconAuthorizationProvider";
 
 export default function FilterList() {
   const t = useTranslations("datasets");
-  const { data: session } = useSession();
   const { filters } = useFilters();
   const searchParams = useSearchParams();
+  const authState = useBeaconAuthorization();
 
   const hasRenderableContent = (filter: (typeof filters)[number]) => {
     if (filter.type === "DROPDOWN") {
@@ -39,10 +42,9 @@ export default function FilterList() {
   // Check if Beacon is enabled via URL parameter
   const includeBeacon = searchParams.get("beacon") === "true";
 
-  // Check if user is logged in
-  // TODO: Add role check later - only show for users with BEACON_USER role
-  // const hasBeaconAccess = session?.user?.roles?.includes("BEACON_USER");
-  const hasBeaconAccess = !!session?.user; // Show for all logged-in users for now
+  // Beacon filters require active Researcher status and accepted T&Cs.
+  const hasBeaconAccess =
+    authState.status === "ready" && isBeaconAuthorized(authState.auth);
 
   // Filter what to show based on beacon toggle and user access
   const visibleFilters = filters.filter((filter) => {

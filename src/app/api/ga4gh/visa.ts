@@ -160,35 +160,37 @@ async function verifyVisaJwt(
   }
 }
 
+type VerifiedVisa = {
+  jwt: string;
+  payload: Ga4ghVisaPayload;
+};
+
 /**
  * Validates the JWT signature of each visa against its issuer's public keys,
- * then extracts `ControlledAccessGrants` visas from the verified set.
+ * then returns the decoded and verified visa payloads.
  *
  * Visas from untrusted or unknown issuers are silently dropped after being
  * logged for audit. Signature failures are also logged and dropped.
  *
- * @param passportJwts - Raw Visa JWT strings from the `ga4gh_passport_v1` claim.
+ * @param visaJwts - Raw Visa JWT strings from `ga4gh_visas` or
+ *   `ga4gh_passport_v1` claims.
  * @param jwksResolver - Injectable JWKS resolver (defaults to the production
- *   resolver backed by `TRUSTED_VISA_ISSUERS` and OIDC discovery).
- * @returns Structured `ControlledAccessGrant` objects for every
- *   `ControlledAccessGrants` visa whose signature was successfully verified.
+ *   resolver backed by signature verification against the JWT's `jku`).
+ * @returns Decoded, signature-verified visa payloads.
  */
-export async function extractVerifiedControlledAccessGrants(
-  passportJwts: string[],
+export async function extractVerifiedVisas(
+  visaJwts: string[],
   jwksResolver: JwksResolver = resolveJwksForJku
-): Promise<ControlledAccessGrant[]> {
-  // Decode and filter to ControlledAccessGrants *before* doing any network
-  // calls for signature verification — other visa types are ignored entirely.
-  const candidates = passportJwts
+): Promise<VerifiedVisa[]> {
+  const candidates = visaJwts
     .map((jwt) => ({ jwt, payload: decodeVisaPayload(jwt) }))
     .filter(
-      (entry): entry is { jwt: string; payload: Ga4ghVisaPayload } =>
-        entry.payload !== null &&
-        entry.payload.ga4gh_visa_v1.type === CONTROLLED_ACCESS_GRANTS
+      (entry): entry is VerifiedVisa =>
+        entry.payload !== null && entry.payload.ga4gh_visa_v1 !== null
     );
 
-  // Drop visas whose access grant has already expired, before making any
-  // network calls for signature verification.
+  // Drop expired visas before making any network calls for signature
+  // verification.
   const nowSeconds = Math.floor(Date.now() / 1000);
   const expiredByIssuer: Record<string, number> = {};
   const active = candidates.filter(({ payload }) => {
@@ -211,9 +213,7 @@ export async function extractVerifiedControlledAccessGrants(
     });
   }
 
-  const verified: ControlledAccessGrant[] = [];
-  // Aggregate rejected visas by issuer + visa type to avoid logging
-  // per-visa sensitive data (sub, datasetId) at scale.
+  const verified: VerifiedVisa[] = [];
   const rejectedByIssuerAndType: Record<string, number> = {};
 
   for (const { jwt, payload } of active) {
@@ -225,13 +225,7 @@ export async function extractVerifiedControlledAccessGrants(
       continue;
     }
 
-    verified.push({
-      datasetId: payload.ga4gh_visa_v1.value,
-      iat: payload.ga4gh_visa_v1.iat,
-      source: payload.ga4gh_visa_v1.source,
-      by: payload.ga4gh_visa_v1.by,
-      exp: payload.ga4gh_visa_v1.exp,
-    });
+    verified.push({ jwt, payload });
   }
 
   const totalRejected = Object.values(rejectedByIssuerAndType).reduce(
@@ -247,3 +241,37 @@ export async function extractVerifiedControlledAccessGrants(
 
   return verified;
 }
+
+/**
+ * Validates the JWT signature of each visa against its issuer's public keys,
+ * then extracts `ControlledAccessGrants` visas from the verified set.
+ *
+ * Visas from untrusted or unknown issuers are silently dropped after being
+ * logged for audit. Signature failures are also logged and dropped.
+ *
+ * @param passportJwts - Raw Visa JWT strings from the `ga4gh_passport_v1` claim.
+ * @param jwksResolver - Injectable JWKS resolver (defaults to the production
+ *   resolver backed by signature verification against the JWT's `jku`).
+ * @returns Structured `ControlledAccessGrant` objects for every
+ *   `ControlledAccessGrants` visa whose signature was successfully verified.
+ */
+export async function extractVerifiedControlledAccessGrants(
+  passportJwts: string[],
+  jwksResolver: JwksResolver = resolveJwksForJku
+): Promise<ControlledAccessGrant[]> {
+  const verified = await extractVerifiedVisas(passportJwts, jwksResolver);
+
+  return verified
+    .filter(
+      ({ payload }) => payload.ga4gh_visa_v1.type === CONTROLLED_ACCESS_GRANTS
+    )
+    .map(({ payload }) => ({
+      datasetId: payload.ga4gh_visa_v1.value,
+      iat: payload.ga4gh_visa_v1.iat,
+      source: payload.ga4gh_visa_v1.source,
+      by: payload.ga4gh_visa_v1.by,
+      exp: payload.ga4gh_visa_v1.exp,
+    }));
+}
+
+export type { VerifiedVisa };

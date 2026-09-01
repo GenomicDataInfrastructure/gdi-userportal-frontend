@@ -12,6 +12,86 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.7.7] - 2026-07-06
+## [v1.7.16] - 2026-08-28
+
+### Added
+- feat(services): ART-28609 add GDI Service Catalogue page (#1159) by @aslam-mohammed-vp in 9af3735a
+- feat: add distribution status and fix distribution under dev harvesting by @Rania Hamdani in b8d142c1
+- feat: add harvester logs and shacl validtion for the rdf by @Rania Hamdani in 75453ddb
+- ART-27608: Remove entitlements feature flag and make GA4GH Passport path the default by @Mohammed Aslam Vattaparambil in e3b3e5c2
+- feat: enhance search functionnality by @Rania Hamdani in 9f0ff608
+- feat: add license, rights and applicable legislation to distribution by @Rania Hamdani in a3c848d6
+- feat: display full labels in health categories by @Rania Hamdani in 907bd2fa
+- feat(ga4gh): ART-27610 validate visa JWT signatures against jku public keys by @Mohammed Aslam Vattaparambil in 20b1dff0
+- feat(ga4gh): ART-27610 validate visa JWT signatures against jku public keys by @Mohammed Aslam Vattaparambil in 3eefa5c0
+- feat(ga4gh): ART-27610 validate visa JWT signatures against jku public keys by @Mohammed Aslam Vattaparambil in 0f3dd19b
+- feat(ga4gh): ART-27610 validate visa JWT signatures against jku public keys by @Mohammed Aslam Vattaparambil in 57b8025e
+- feat(ga4gh): ART-27610 validate visa JWT signatures against jku public keys by @Mohammed Aslam Vattaparambil in aba9340f
+
+
+### Changed
+- doc: update CHANGELOG.md for v1.7.15 (#1135) by @github-actions[bot] in 2f88426f
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1787708478 (#1160) by @LNDS-Sysadmins in 4b204919
+- chore(deps): update dependency eslint-config-next to v16.3.3 by @Renovate Bot in ec20e540
+- chore(deps): update dependency @types/react-dom to v19.2.5 by @Renovate Bot in c013668b
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1787019036 by @Renovate Bot in 8ae780b0
+- chore(deps): update astral-sh/setup-uv action to v10 by @Renovate Bot in 04f47aee
+- chore(deps): update dependency eslint-config-next to v16.3.2 by @Renovate Bot in ec05f913
+- ART-28477: update error messages related to passports and entitlements by @Mohammed Aslam Vattaparambil in fae3193a
+- chore(deps): update dependency eslint-config-next to v16.3.1 by @Renovate Bot in 43d236ff
+- Add GA4GH coverage tests by @copilot-swe-agent[bot] in 443435e6
+- Fix frontend test workflow regressions by @copilot-swe-agent[bot] in 6981ebac
+- ART-27614 enabled e2e tests and addressed review comments by @Mohammed Aslam Vattaparambil in 398fbc82
+- ART-27614: Add e2e tests for GA4GH Passport entitlements flow by @Mohammed Aslam Vattaparambil in 55f37c86
+- add: licenses by @Rania Hamdani in 3b1e4394
+- ART-28441 addressed review comments by @Mohammed Aslam Vattaparambil in 4516e4e1
+- ART-28441 added GDI documentation link by @Mohammed Aslam Vattaparambil in 48c455b6
+- chore(deps): update oras-project/setup-oras digest to 47a14f7 by @Renovate Bot in 33d2b511
+- chore(deps): bump nanoid from 3.3.11 to 3.3.18 in /documentation by @dependabot[bot] in 9b42560c
+- ART-27613 user messages updated as per feedback by @Mohammed Aslam Vattaparambil in 0bb130be
+- ART-27613 cleanup by @Mohammed Aslam Vattaparambil in 197d097a
+- ART-27613 error messages for user by @Mohammed Aslam Vattaparambil in 35fc20d4
+- ART-27613 addressed review comments by @Mohammed Aslam Vattaparambil in 2b5bc0ea
+- ART-27613 error handling for GA4GH visa validation pipeline by @Mohammed Aslam Vattaparambil in e45d3313
+- chore(deps): bump dompurify from 3.4.12 to 3.4.13 in /documentation by @dependabot[bot] in 4628a6ba
+- doc: update CHANGELOG.md for v1.7.14 by @LNDS-Sysadmins in 7344aeb7
+- chore(deps): bump mermaid from 11.15.0 to 11.16.1 in /documentation by @dependabot[bot] in 6908a388
+- chore(deps-dev): bump fast-uri from 3.1.2 to 3.1.5 by @dependabot[bot] in 3a7e74e2
+
+
+### Fixed
+- chore: added harvester fix by @Haris Zenovic in ac2682e5
+- fix(deps): update dependency next to v16.3.3 by @Renovate Bot in 2cb3c9b8
+- fix: use a single collection to capture both dataset as well as distribution errors by @Rania Hamdani in 6394fda6
+- fix: formatting by @Rania Hamdani in 63d18aef
+- fix: add tests for cide coverage by @Rania Hamdani in 487d928d
+- fix: formatting by @Rania Hamdani in 6dbf6990
+- fix(deps): update dependency next to v16.3.2 by @Renovate Bot in 1ad43d16
+- fix(deps): update dependency next to v16.3.1 by @Renovate Bot in 53807096
+- ART-28441 documentation link fix by @Mohammed Aslam Vattaparambil in 091d70c5
+- ART-27614 test failure fix by @Mohammed Aslam Vattaparambil in 8620b69d
+- ART-27614 format fix by @Mohammed Aslam Vattaparambil in f09969f9
+- Validate Sonar coverage fix by @copilot-swe-agent[bot] in 1d386838
+- fix: correct E2E test failures - wrong locators and invalid mock data by @copilot-swe-agent[bot] in b023223e
+- ART-27614 format fix by @Mohammed Aslam Vattaparambil in 70f0bc52
+- ART-28441 documentation link fix by @Mohammed Aslam Vattaparambil in a5dfacfe
+- fix: format by @Rania Hamdani in eb4be434
+- fix: dataset with missing fields by @Rania Hamdani in 5e0cc249
+- ART-28460-dataset fixed discovery.yml by @Mohammed Aslam Vattaparambil in f15b2f5d
+- fix: modify the chip component to accept href and re-use it for applicable legislation by @Rania Hamdani in 1fb0454e
+- fix: no need to check if it is a url by @Rania Hamdani in 5e042164
+- fix: applicable legislation link by @Rania Hamdani in 2a535d1c
+- ART-27613 fixed spacing issue for info message by @Mohammed Aslam Vattaparambil in d69dfeba
+- ART-27613 fixed sonarqube failure by @Mohammed Aslam Vattaparambil in 8c676b67
+- ART-27613 fixed sonarqube failure by @Mohammed Aslam Vattaparambil in 258f102f
+- ART-27613 format fix by @Mohammed Aslam Vattaparambil in 025df008
+- fix: encode URI to prevent broken link by @Rania Hamdani in b91b8e70
+- fix: add publisher info and sort info in coverage by @Rania Hamdani in 16895e46
+- fix: add test by @Rania Hamdani in ba2871d8
+- fix: fix version notes and add provenance to dataset details by @Rania Hamdani in 6c59bb2b
+- fix: show the available comforms to value by @Rania Hamdani in cbdb155e
+
+
 ## [v1.7.15] - 2026-08-10
 
 ### Added

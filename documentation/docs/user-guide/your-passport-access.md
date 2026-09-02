@@ -17,6 +17,8 @@ Think of your GA4GH credentials like international travel documents:
 - **Passport**: A GA4GH credential carrying your identity assertions and relevant Visa authorisations, issued by or made available for retrieval through LS-AAI after it authenticates you
 - **Visas**: Digital certificates proving you have permission to access specific datasets, issued by data access committees. Your Passport may contain one or more Visas granting you access to datasets across the European genomic data network. 
 
+Your Passport can contain multiple Visas of different types. The GDI Portal uses active Visas that confirm your approved access to a specific dataset. Other Visa types may confirm your affiliation, researcher status, accepted terms, or linked identities. These support access decisions but do not appear as dataset entitlements.
+
 
 :::tip What is GA4GH?
 

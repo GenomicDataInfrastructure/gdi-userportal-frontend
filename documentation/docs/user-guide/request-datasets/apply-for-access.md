@@ -77,3 +77,11 @@ To apply for access to datasets:
    If you need more time, you can close or navigate away from the application page. The system automatically saves your progress as **draft**, and you or your collaborators can [continue later](/continue-an-application).
 
    :::
+
+## After approval
+
+Once your application is approved, you can then:
+
+- [View your entitlements](/view-entitlements) to see datasets covered by your current access grants
+- [Download datasets](/download-datasets) from the Secure Processing Environment (SPE)
+- [Track your application](/track-application) status and view approval details

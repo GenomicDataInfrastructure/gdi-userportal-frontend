@@ -44,7 +44,7 @@ This search tool allows you to:
    <figcaption></figcaption>
 </figure>
 
-6. To view a dataset's population-level rows, select its expand control (>).
+6. To view a dataset's population-level rows, select its expand control (`>`).
 
 <figure>
    <img src="img/explore-datasets/allele-frequency-result-details.png" alt="Screenshot showing allele frequency result details" width="900" />

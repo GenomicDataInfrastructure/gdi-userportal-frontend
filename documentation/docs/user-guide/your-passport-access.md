@@ -22,7 +22,7 @@ Your Passport can contain multiple Visas of different types. The GDI Portal uses
 
 :::tip What is GA4GH?
 
-GA4GH, the Global Alliance for Genomics and Health, develops standards for responsible genomic data sharing. Its Passport and Visa system lets the portal receive and verify your approved access information.
+GA4GH, the Global Alliance for Genomics and Health, develops standards for responsible genomic data sharing. Its Passport and Visa system lets the portal receive and verify your approved access information. For technical information about the standards behind GA4GH Passports, see [GA4GH Data Security](https://ga4gh.github.io/data-security/)<sup>↗</sup>.
 
 :::
 

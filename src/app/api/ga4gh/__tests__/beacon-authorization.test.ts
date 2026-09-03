@@ -17,7 +17,7 @@ jest.mock("@/app/api/auth/auth", () => ({
 }));
 
 jest.mock("../passport", () => ({
-  fetchGa4ghPassport: jest.fn(),
+  fetchGa4ghVisas: jest.fn(),
 }));
 
 jest.mock("../visa", () => {
@@ -29,12 +29,12 @@ jest.mock("../visa", () => {
 });
 
 import { getToken } from "@/app/api/auth/auth";
-import { fetchGa4ghPassport } from "../passport";
 import { extractVerifiedVisas } from "../visa";
+import { fetchGa4ghVisas } from "../passport";
 
 const mockedGetToken = getToken as jest.MockedFunction<typeof getToken>;
-const mockedFetchGa4ghPassport = fetchGa4ghPassport as jest.MockedFunction<
-  typeof fetchGa4ghPassport
+const mockedFetchGa4ghVisas = fetchGa4ghVisas as jest.MockedFunction<
+  typeof fetchGa4ghVisas
 >;
 const mockedExtractVerifiedVisas = extractVerifiedVisas as jest.MockedFunction<
   typeof extractVerifiedVisas
@@ -154,7 +154,7 @@ describe("checkBeaconAuthorization", () => {
 
   test("returns false for both when user is unauthenticated", async () => {
     mockedGetToken.mockResolvedValueOnce(null);
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [],
       passportPresent: false,
     });
@@ -165,7 +165,7 @@ describe("checkBeaconAuthorization", () => {
       hasResearcherStatus: false,
       hasAcceptedTC: false,
     });
-    expect(mockedFetchGa4ghPassport).not.toHaveBeenCalled();
+    expect(mockedFetchGa4ghVisas).toHaveBeenCalledWith(null);
   });
 
   test("extracts visas from access token ga4gh_visas claim when present", async () => {
@@ -174,6 +174,10 @@ describe("checkBeaconAuthorization", () => {
       ga4gh_visas: [makeVisaJwt(researcherStatusVisa)],
     });
     mockedGetToken.mockResolvedValueOnce(accessToken);
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
+      visaJwts: [makeVisaJwt(researcherStatusVisa)],
+      passportPresent: true,
+    });
     mockedExtractVerifiedVisas.mockResolvedValueOnce([
       { jwt: "jwt", payload: researcherStatusVisa },
     ]);
@@ -184,12 +188,12 @@ describe("checkBeaconAuthorization", () => {
       hasResearcherStatus: true,
       hasAcceptedTC: false,
     });
-    expect(mockedFetchGa4ghPassport).not.toHaveBeenCalled();
+    expect(mockedFetchGa4ghVisas).toHaveBeenCalledWith(accessToken);
   });
 
   test("falls back to LS-AAI passport when ga4gh_visas is absent", async () => {
     mockedGetToken.mockResolvedValueOnce("access-token");
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [
         makeVisaJwt(researcherStatusVisa),
         makeVisaJwt(acceptedTermsVisa),
@@ -211,7 +215,7 @@ describe("checkBeaconAuthorization", () => {
 
   test("returns false when passport is absent", async () => {
     mockedGetToken.mockResolvedValueOnce("access-token");
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [],
       passportPresent: false,
     });
@@ -236,7 +240,7 @@ describe("assertBeaconAuthorization", () => {
 
   test("does not throw when both visas are valid", async () => {
     mockedGetToken.mockResolvedValueOnce("access-token");
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [
         makeVisaJwt(researcherStatusVisa),
         makeVisaJwt(acceptedTermsVisa),
@@ -253,7 +257,7 @@ describe("assertBeaconAuthorization", () => {
 
   test("throws BeaconAuthorizationError when ResearcherStatus is missing", async () => {
     mockedGetToken.mockResolvedValueOnce("access-token");
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [makeVisaJwt(acceptedTermsVisa)],
       passportPresent: true,
     });
@@ -268,7 +272,7 @@ describe("assertBeaconAuthorization", () => {
 
   test("throws BeaconAuthorizationError when T&C is missing", async () => {
     mockedGetToken.mockResolvedValueOnce("access-token");
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [makeVisaJwt(researcherStatusVisa)],
       passportPresent: true,
     });

@@ -2,22 +2,16 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { jwtDecode } from "jwt-decode";
 import { createHash } from "node:crypto";
 import { getToken } from "@/app/api/auth/auth";
-import { fetchGa4ghPassport } from "./passport";
 import { extractVerifiedVisas, Ga4ghVisaPayload } from "./visa";
+import { fetchGa4ghVisas } from "./passport";
 import {
   BeaconAuthorizationStatus,
   BEACON_AUTHORIZATION_ERROR,
   BeaconAuthorizationError,
 } from "./beacon-authorization.types";
 
-type DecodedAccessToken = {
-  ga4gh_visas?: string[];
-};
-
-const MAX_VISA_JWTS = 100;
 const CACHE_TTL_MS = 60_000;
 
 const hasLoggedMissingEnv: Record<string, boolean> = {};
@@ -54,45 +48,6 @@ export function __resetBeaconAuthorizationCache(): void {
   for (const key of Object.keys(hasLoggedMissingEnv)) {
     delete hasLoggedMissingEnv[key];
   }
-}
-
-/**
- * Extracts raw GA4GH Visa JWTs for the current user.
- *
- * First checks the Keycloak access token for a `ga4gh_visas` claim. If the
- * claim is absent, falls back to the LS-AAI userinfo flow via the Keycloak
- * identity-provider token endpoint.
- *
- * @returns Visa JWT strings and whether any passport/visa claim was present.
- */
-async function fetchGa4ghVisas(
-  keycloakAccessToken?: string | null
-): Promise<{
-  visaJwts: string[];
-  passportPresent: boolean;
-}> {
-  const token = keycloakAccessToken ?? (await getToken("access_token"));
-
-  if (!token) {
-    return { visaJwts: [], passportPresent: false };
-  }
-
-  try {
-    const decodedToken = jwtDecode<DecodedAccessToken>(token);
-    if (
-      Array.isArray(decodedToken.ga4gh_visas) &&
-      decodedToken.ga4gh_visas.every((visaJwt) => typeof visaJwt === "string")
-    ) {
-      return {
-        visaJwts: decodedToken.ga4gh_visas.slice(0, MAX_VISA_JWTS),
-        passportPresent: true,
-      };
-    }
-  } catch {
-    // Malformed access token — fall through to LS-AAI userinfo flow.
-  }
-
-  return fetchGa4ghPassport();
 }
 
 /**

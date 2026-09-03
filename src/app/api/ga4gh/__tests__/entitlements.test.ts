@@ -3,15 +3,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { jest } from "@jest/globals";
-import { fetchGa4ghPassport } from "../passport";
 import { extractVerifiedControlledAccessGrants } from "../visa";
 import { retrieveEntitlements } from "../entitlements";
+import { fetchGa4ghVisas } from "../passport";
 
 jest.mock("../passport");
 jest.mock("../visa");
 
-const mockedFetchGa4ghPassport = fetchGa4ghPassport as jest.MockedFunction<
-  typeof fetchGa4ghPassport
+const mockedFetchGa4ghVisas = fetchGa4ghVisas as jest.MockedFunction<
+  typeof fetchGa4ghVisas
 >;
 const mockedExtractVerified =
   extractVerifiedControlledAccessGrants as jest.MockedFunction<
@@ -75,7 +75,7 @@ describe("retrieveEntitlements", () => {
   });
 
   it("returns empty entitlements when passport contains no visas", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [],
       passportPresent: true,
     });
@@ -88,7 +88,7 @@ describe("retrieveEntitlements", () => {
 
   it("passes raw passport JWTs to extractVerifiedControlledAccessGrants", async () => {
     const rawJwt = makeVisaJwt(CONTROLLED_ACCESS_VISA);
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [rawJwt],
       passportPresent: true,
     });
@@ -100,7 +100,7 @@ describe("retrieveEntitlements", () => {
   });
 
   it("maps a single ControlledAccessGrants visa to a dataset entitlement", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [makeVisaJwt(CONTROLLED_ACCESS_VISA)],
       passportPresent: true,
     });
@@ -113,7 +113,7 @@ describe("retrieveEntitlements", () => {
   });
 
   it("converts iat Unix timestamp to ISO 8601 start date", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [makeVisaJwt(CONTROLLED_ACCESS_VISA)],
       passportPresent: true,
     });
@@ -127,7 +127,7 @@ describe("retrieveEntitlements", () => {
   });
 
   it("omits start date when visa iat is absent", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [],
       passportPresent: true,
     });
@@ -139,7 +139,7 @@ describe("retrieveEntitlements", () => {
   });
 
   it("converts exp Unix timestamp to ISO 8601 end date", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [makeVisaJwt(CONTROLLED_ACCESS_VISA)],
       passportPresent: true,
     });
@@ -153,7 +153,7 @@ describe("retrieveEntitlements", () => {
   });
 
   it("ignores non-ControlledAccessGrants visas (extractor returns empty)", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [makeVisaJwt(RESEARCHER_STATUS_VISA)],
       passportPresent: true,
     });
@@ -171,7 +171,7 @@ describe("retrieveEntitlements", () => {
       exp: 1900000000,
     };
 
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [makeVisaJwt(CONTROLLED_ACCESS_VISA)],
       passportPresent: true,
     });
@@ -187,7 +187,7 @@ describe("retrieveEntitlements", () => {
   });
 
   it("omits end date when visa exp is absent", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [],
       passportPresent: true,
     });
@@ -199,7 +199,7 @@ describe("retrieveEntitlements", () => {
   });
 
   it("sets passportPresent: false when ga4gh_passport_v1 claim is absent", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: [],
       passportPresent: false,
     });
@@ -211,7 +211,7 @@ describe("retrieveEntitlements", () => {
   });
 
   it("preserves passportPresent: true when grant extraction throws", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: ["some-jwt"],
       passportPresent: true,
     });
@@ -227,7 +227,7 @@ describe("retrieveEntitlements", () => {
   });
 
   it("returns empty entitlements when passport fetch fails", async () => {
-    mockedFetchGa4ghPassport.mockRejectedValueOnce(
+    mockedFetchGa4ghVisas.mockRejectedValueOnce(
       new Error("LS-AAI token exchange failed: 401")
     );
     const consoleSpy = jest
@@ -238,14 +238,14 @@ describe("retrieveEntitlements", () => {
 
     expect(result).toEqual({ entitlements: [], passportPresent: false });
     expect(consoleSpy).toHaveBeenCalledWith(
-      "[entitlements] Passport fetch failed; returning empty entitlements",
+      "[entitlements] Visa fetch failed; returning empty entitlements",
       expect.objectContaining({ error: "LS-AAI token exchange failed: 401" })
     );
     consoleSpy.mockRestore();
   });
 
   it("returns empty entitlements when passport fetch times out", async () => {
-    mockedFetchGa4ghPassport.mockRejectedValueOnce(
+    mockedFetchGa4ghVisas.mockRejectedValueOnce(
       new Error("LS-AAI broker endpoint timed out")
     );
     const consoleSpy = jest
@@ -256,14 +256,14 @@ describe("retrieveEntitlements", () => {
 
     expect(result).toEqual({ entitlements: [], passportPresent: false });
     expect(consoleSpy).toHaveBeenCalledWith(
-      "[entitlements] Passport fetch failed; returning empty entitlements",
+      "[entitlements] Visa fetch failed; returning empty entitlements",
       expect.objectContaining({ error: "LS-AAI broker endpoint timed out" })
     );
     consoleSpy.mockRestore();
   });
 
   it("returns empty entitlements when visa grant extraction throws", async () => {
-    mockedFetchGa4ghPassport.mockResolvedValueOnce({
+    mockedFetchGa4ghVisas.mockResolvedValueOnce({
       visaJwts: ["some-jwt"],
       passportPresent: true,
     });

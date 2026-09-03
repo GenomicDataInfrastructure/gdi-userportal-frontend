@@ -12,6 +12,7 @@ import {
   isBeaconAuthorized,
   useBeaconAuthorization,
 } from "@/providers/beacon/BeaconAuthorizationProvider";
+import contentConfig from "@/config/contentConfig";
 
 export default function FilterList() {
   const t = useTranslations("datasets");
@@ -40,7 +41,9 @@ export default function FilterList() {
   };
 
   // Check if Beacon is enabled via URL parameter
-  const includeBeacon = searchParams.get("beacon") === "true";
+  const includeBeacon =
+    contentConfig.beaconSearchEnabled &&
+    searchParams.get("beacon") === "true";
 
   // Beacon filters require active Researcher status and accepted T&Cs.
   const hasBeaconAccess =

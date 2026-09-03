@@ -23,6 +23,7 @@ import { useSession } from "next-auth/react";
 import BeaconToggle from "./BeaconToggle";
 import BeaconErrorAlert from "./BeaconErrorAlert";
 import { BeaconAuthorizationProvider } from "@/providers/beacon/BeaconAuthorizationProvider";
+import contentConfig from "@/config/contentConfig";
 
 type DatasetsPageProps = {
   searchParams: Promise<UrlSearchParams>;
@@ -62,10 +63,11 @@ export default function DatasetsPage({ searchParams }: DatasetsPageProps) {
             <SearchBar searchParams={_searchParams} />
           </div>
 
-          {/* Beacon Toggle Component */}
-          <div className="mt-4 col-start-0 col-span-12 xl:col-span-10 xl:col-start-2">
-            <BeaconToggle />
-          </div>
+          {contentConfig.beaconSearchEnabled && (
+            <div className="mt-4 col-start-0 col-span-12 xl:col-span-10 xl:col-start-2">
+              <BeaconToggle />
+            </div>
+          )}
 
           <DatasetsProvider searchParams={_searchParams}>
             <BeaconErrorWrapper />

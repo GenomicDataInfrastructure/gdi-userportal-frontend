@@ -23,6 +23,7 @@ interface ContentConfig {
   showBasketAndLogin: boolean;
   addParticipantsEnabled: boolean;
   showAlleleFrequency: boolean;
+  beaconSearchEnabled: boolean;
   multilingualEnabled: boolean;
   enableAllVariantSearch: boolean;
   contactUsEnabled: boolean;
@@ -64,6 +65,8 @@ const contentConfig: ContentConfig = {
   addParticipantsEnabled:
     env("NEXT_PUBLIC_FEATURE_ADD_PARTICIPANTS") !== "false",
   showAlleleFrequency: env("NEXT_PUBLIC_SHOW_ALLELE_FREQUENCY") !== "false",
+  beaconSearchEnabled:
+    env("NEXT_PUBLIC_ENABLE_BEACON_SEARCH")?.toLowerCase() === "true",
   multilingualEnabled:
     env("NEXT_PUBLIC_ENABLE_MULTILINGUAL")?.toLowerCase() === "true",
   enableAllVariantSearch:

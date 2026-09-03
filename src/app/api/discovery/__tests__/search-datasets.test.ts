@@ -9,6 +9,7 @@ import { DatasetSearchQuery } from "@/app/api/discovery/open-api/schemas";
 import { jest } from "@jest/globals";
 import { getServerSession } from "next-auth";
 import { encrypt } from "@/utils/encryption";
+import contentConfig from "@/config/contentConfig";
 
 jest.mock("next-auth/next");
 jest.mock("@/app/api/ga4gh/beacon-authorization.actions", () => ({
@@ -26,6 +27,7 @@ describe("Searching datasets", () => {
 
   beforeEach(() => {
     jest.resetAllMocks();
+    contentConfig.beaconSearchEnabled = true;
   });
 
   test("Returns the relevant datasets for authenticated user", async () => {
@@ -159,5 +161,28 @@ describe("Searching datasets", () => {
     await searchDatasetsApi({ includeBeacon: true });
 
     expect(assertBeaconAuthorization).toHaveBeenCalled();
+  });
+
+  test("forces metadata-only search when Beacon search is disabled", async () => {
+    const { assertBeaconAuthorization } =
+      await import("@/app/api/ga4gh/beacon-authorization.actions");
+    const previousFlag = contentConfig.beaconSearchEnabled;
+    contentConfig.beaconSearchEnabled = false;
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
+
+    mockDiscoveryAdapter.onPost("/api/v1/datasets/search").reply((config) => {
+      expect(JSON.parse(config.data as string).includeBeacon).toBe(false);
+      return [200, { count: 0, results: [] }];
+    });
+
+    try {
+      await searchDatasetsApi({ includeBeacon: true });
+      expect(assertBeaconAuthorization).not.toHaveBeenCalled();
+    } finally {
+      contentConfig.beaconSearchEnabled = previousFlag;
+    }
   });
 });

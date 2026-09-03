@@ -32,6 +32,7 @@ import { useRouter } from "@/i18n/navigation";
 import { BeaconAuthorizationError } from "@/app/api/ga4gh/beacon-authorization.types";
 import { getBeaconAuthReason } from "@/providers/beacon/BeaconAuthorizationProvider";
 import { useTranslations } from "next-intl";
+import contentConfig from "@/config/contentConfig";
 
 function convertActiveFiltersToFacets(
   activeFilters: ActiveFilter[]
@@ -118,7 +119,8 @@ export default function DatasetsProvider({
 
   const formatBeaconAuthError = useCallback(
     (details: { hasResearcherStatus: boolean; hasAcceptedTC: boolean }) => {
-      const { hasResearcherStatus, hasAcceptedTC } = getBeaconAuthReason(details);
+      const { hasResearcherStatus, hasAcceptedTC } =
+        getBeaconAuthReason(details);
       if (!hasResearcherStatus && !hasAcceptedTC) {
         return t("beaconErrorResearcherAndTerms");
       }
@@ -134,7 +136,8 @@ export default function DatasetsProvider({
     dispatch({ type: DatasetsActionType.LOADING });
 
     // Get Beacon preference from URL parameter
-    const includeBeacon = beacon === "true";
+    const includeBeacon =
+      contentConfig.beaconSearchEnabled && beacon === "true";
 
     const options: DatasetSearchQuery = {
       query: q,

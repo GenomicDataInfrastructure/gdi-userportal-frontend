@@ -12,16 +12,16 @@ import {
   useState,
   ReactNode,
 } from "react";
+import contentConfig from "@/config/contentConfig";
 
-export function isBeaconAuthorized(
-  auth?: BeaconAuthorizationStatus
-): boolean {
+export function isBeaconAuthorized(auth?: BeaconAuthorizationStatus): boolean {
   return !!auth && auth.hasResearcherStatus && auth.hasAcceptedTC;
 }
 
-export function getBeaconAuthReason(
-  auth?: BeaconAuthorizationStatus
-): { hasResearcherStatus: boolean; hasAcceptedTC: boolean } {
+export function getBeaconAuthReason(auth?: BeaconAuthorizationStatus): {
+  hasResearcherStatus: boolean;
+  hasAcceptedTC: boolean;
+} {
   return {
     hasResearcherStatus: !!auth?.hasResearcherStatus,
     hasAcceptedTC: !!auth?.hasAcceptedTC,
@@ -49,6 +49,11 @@ export function BeaconAuthorizationProvider({
   });
 
   useEffect(() => {
+    if (!contentConfig.beaconSearchEnabled) {
+      setState({ status: "unauthenticated" });
+      return;
+    }
+
     if (!isAuthenticated) {
       setState({ status: "unauthenticated" });
       return;

@@ -15,6 +15,7 @@ import {
 } from "@/providers/beacon/BeaconAuthorizationProvider";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import contentConfig from "@/config/contentConfig";
 
 export default function BeaconToggle() {
   const t = useTranslations("datasets");
@@ -22,6 +23,8 @@ export default function BeaconToggle() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const authState = useBeaconAuthorization();
+
+  if (!contentConfig.beaconSearchEnabled) return null;
 
   const isLoading =
     sessionStatus === "loading" || authState.status === "loading";
@@ -49,12 +52,14 @@ export default function BeaconToggle() {
 
   const canEnableBeacon = isBeaconAuthorized(authStatus);
 
-  const { hasResearcherStatus, hasAcceptedTC } = getBeaconAuthReason(authStatus);
+  const { hasResearcherStatus, hasAcceptedTC } =
+    getBeaconAuthReason(authStatus);
 
   const helperTextKey = (() => {
     if (!isAuthenticated) return "beaconLoginRequired";
     if (isLoading) return undefined;
-    if (!hasResearcherStatus && !hasAcceptedTC) return "beaconRequirementsMissing";
+    if (!hasResearcherStatus && !hasAcceptedTC)
+      return "beaconRequirementsMissing";
     if (!hasResearcherStatus) return "beaconResearcherRequired";
     if (!hasAcceptedTC) return "beaconTermsRequired";
     return includeBeacon ? "beaconEnabled" : "beaconDisabled";

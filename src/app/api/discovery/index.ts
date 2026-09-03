@@ -17,6 +17,7 @@ import { DiscoveryGVariantSearchQuery } from "@/app/api/discovery/providers/type
 import { getDiscoveryProvider } from "@/app/api/discovery/providers/factory";
 import { createHeaders } from "@/app/api/shared/headers";
 import { assertBeaconAuthorization } from "@/app/api/ga4gh/beacon-authorization.actions";
+import contentConfig from "@/config/contentConfig";
 
 const discoveryProvider = getDiscoveryProvider();
 
@@ -42,13 +43,16 @@ export const retrieveFilterValuesApi = async (
 export const searchDatasetsApi = async (
   options: DatasetSearchQuery
 ): Promise<DatasetsSearchResponse> => {
-  if (options.includeBeacon) {
+  const includeBeacon =
+    contentConfig.beaconSearchEnabled && options.includeBeacon === true;
+
+  if (includeBeacon) {
     await assertBeaconAuthorization();
   }
 
   const headers = await createHeaders();
   const response = (await discoveryProvider.searchDatasets(
-    options,
+    { ...options, includeBeacon },
     headers
   )) as DatasetsSearchResponse;
   return response;

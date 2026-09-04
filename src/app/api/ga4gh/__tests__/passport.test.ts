@@ -4,7 +4,7 @@
 
 import { jest } from "@jest/globals";
 import { getToken } from "@/app/api/auth/auth";
-import { fetchGa4ghPassport } from "../passport";
+import { fetchGa4ghPassport, fetchGa4ghVisas } from "../passport";
 
 jest.mock("@/app/api/auth/auth");
 const mockedGetToken = getToken as jest.MockedFunction<typeof getToken>;
@@ -32,6 +32,14 @@ const KEYCLOAK_TOKEN = "keycloak-access-token";
 const LS_AAI_TOKEN = "ls-aai-access-token";
 const VISA_JWT = "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ1c2VyIn0.sig";
 const LS_AAI_USERINFO_URL = "https://login.aai.lifescience-ri.eu/oidc/userinfo";
+
+function makeJwt(payload: object): string {
+  const header = Buffer.from(JSON.stringify({ alg: "RS256" })).toString(
+    "base64url"
+  );
+  const body = Buffer.from(JSON.stringify(payload)).toString("base64url");
+  return `${header}.${body}.signature`;
+}
 
 // ---------------------------------------------------------------------------
 // Tests
@@ -299,5 +307,49 @@ describe("fetchGa4ghPassport", () => {
       expect(thrownMessage).not.toContain("keycloak");
       expect(thrownMessage).toBe("LS-AAI broker endpoint timed out");
     });
+  });
+});
+
+describe("fetchGa4ghVisas", () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+    process.env.LS_AAI_USERINFO_URL = LS_AAI_USERINFO_URL;
+  });
+
+  afterEach(() => {
+    delete process.env.LS_AAI_USERINFO_URL;
+  });
+
+  it("returns no passport when the user is unauthenticated", async () => {
+    mockedGetToken.mockResolvedValueOnce(null);
+
+    await expect(fetchGa4ghVisas()).resolves.toEqual({
+      visaJwts: [],
+      passportPresent: false,
+    });
+  });
+
+  it("prefers the access-token ga4gh_visas claim", async () => {
+    const visaJwts = ["visa-1", "visa-2"];
+    const fetchSpy = jest.spyOn(global, "fetch");
+
+    await expect(
+      fetchGa4ghVisas(makeJwt({ ga4gh_visas: visaJwts }))
+    ).resolves.toEqual({ visaJwts, passportPresent: true });
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(mockedGetToken).not.toHaveBeenCalled();
+  });
+
+  it("falls back to the LS-AAI passport when the claim is absent", async () => {
+    mockFetch([
+      { ok: true, body: { access_token: LS_AAI_TOKEN } },
+      { ok: true, body: { ga4gh_passport_v1: [VISA_JWT] } },
+    ]);
+
+    await expect(fetchGa4ghVisas(makeJwt({ sub: "user" }))).resolves.toEqual({
+      visaJwts: [VISA_JWT],
+      passportPresent: true,
+    });
+    expect(mockedGetToken).not.toHaveBeenCalled();
   });
 });

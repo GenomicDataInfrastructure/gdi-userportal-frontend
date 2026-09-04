@@ -5,6 +5,7 @@
 "use server";
 
 import { getToken } from "@/app/api/auth/auth";
+import { jwtDecode } from "jwt-decode";
 
 /** Maximum time to wait for any single fetch in the passport pipeline. */
 const FETCH_TIMEOUT_MS = 10_000;
@@ -44,6 +45,12 @@ type UserinfoResponse = {
   error?: string;
   [key: string]: unknown;
 };
+
+type DecodedAccessToken = {
+  ga4gh_visas?: string[];
+};
+
+const MAX_VISA_JWTS = 100;
 
 /**
  * The result of fetching a GA4GH Passport.
@@ -178,8 +185,10 @@ async function fetchPassportFromLsAai(
  *   is unauthenticated or the `ga4gh_passport_v1` claim is absent.
  * @throws If either the token exchange or the userinfo request fails.
  */
-export async function fetchGa4ghPassport(): Promise<PassportFetchResult> {
-  const keycloakAccessToken = await getToken("access_token");
+export async function fetchGa4ghPassport(
+  accessToken?: string | null
+): Promise<PassportFetchResult> {
+  const keycloakAccessToken = accessToken ?? (await getToken("access_token"));
 
   if (!keycloakAccessToken) {
     return { visaJwts: [], passportPresent: false };
@@ -189,4 +198,37 @@ export async function fetchGa4ghPassport(): Promise<PassportFetchResult> {
     await exchangeKeycloakTokenForLsAai(keycloakAccessToken);
 
   return fetchPassportFromLsAai(lsAaiAccessToken);
+}
+
+/**
+ * Resolves raw GA4GH Visa JWTs for the current user.
+ *
+ * The Keycloak access token's `ga4gh_visas` claim takes precedence. When that
+ * claim is absent or invalid, the visas are fetched from the LS-AAI passport.
+ */
+export async function fetchGa4ghVisas(
+  keycloakAccessToken?: string | null
+): Promise<PassportFetchResult> {
+  const token = keycloakAccessToken ?? (await getToken("access_token"));
+
+  if (!token) {
+    return { visaJwts: [], passportPresent: false };
+  }
+
+  try {
+    const decodedToken = jwtDecode<DecodedAccessToken>(token);
+    if (
+      Array.isArray(decodedToken.ga4gh_visas) &&
+      decodedToken.ga4gh_visas.every((visaJwt) => typeof visaJwt === "string")
+    ) {
+      return {
+        visaJwts: decodedToken.ga4gh_visas.slice(0, MAX_VISA_JWTS),
+        passportPresent: true,
+      };
+    }
+  } catch {
+    // Malformed access token — fall through to LS-AAI userinfo flow.
+  }
+
+  return fetchGa4ghPassport(token);
 }

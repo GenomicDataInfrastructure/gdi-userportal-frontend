@@ -19,8 +19,11 @@ import DatasetsProvider, {
 import Error from "@/app/error";
 import { UrlSearchParams } from "@/app/params";
 import { useLocale } from "next-intl";
+import { useSession } from "next-auth/react";
 import BeaconToggle from "./BeaconToggle";
 import BeaconErrorAlert from "./BeaconErrorAlert";
+import { BeaconAuthorizationProvider } from "@/providers/beacon/BeaconAuthorizationProvider";
+import contentConfig from "@/config/contentConfig";
 
 type DatasetsPageProps = {
   searchParams: Promise<UrlSearchParams>;
@@ -38,6 +41,7 @@ function BeaconErrorWrapper() {
 export default function DatasetsPage({ searchParams }: DatasetsPageProps) {
   const _searchParams = use(searchParams);
   const locale = useLocale();
+  const { data: session } = useSession();
 
   if (!_searchParams.page) {
     redirect({ href: "/datasets?page=1", locale });
@@ -52,37 +56,40 @@ export default function DatasetsPage({ searchParams }: DatasetsPageProps) {
   }
 
   return (
-    <PageContainer searchParams={_searchParams}>
-      <div className="grid grid-cols-12">
-        <div className="col-start-0 col-span-12 flex items-center justify-between xl:col-span-10 xl:col-start-2">
-          <SearchBar searchParams={_searchParams} />
-        </div>
+    <BeaconAuthorizationProvider isAuthenticated={!!session?.user}>
+      <PageContainer searchParams={_searchParams}>
+        <div className="grid grid-cols-12">
+          <div className="col-start-0 col-span-12 flex items-center justify-between xl:col-span-10 xl:col-start-2">
+            <SearchBar searchParams={_searchParams} />
+          </div>
 
-        {/* Beacon Toggle Component */}
-        <div className="mt-4 col-start-0 col-span-12 xl:col-span-10 xl:col-start-2">
-          <BeaconToggle />
-        </div>
+          {contentConfig.beaconSearchEnabled && (
+            <div className="mt-4 col-start-0 col-span-12 xl:col-span-10 xl:col-start-2">
+              <BeaconToggle />
+            </div>
+          )}
 
-        <DatasetsProvider searchParams={_searchParams}>
-          <BeaconErrorWrapper />
-          <DatasetCount />
-          <div className="col-start-0 col-span-12 flex flex-col gap-4 sm:block xl:hidden">
-            <div className="my-4 h-fit">
-              <FilterList />
+          <DatasetsProvider searchParams={_searchParams}>
+            <BeaconErrorWrapper />
+            <DatasetCount />
+            <div className="col-start-0 col-span-12 flex flex-col gap-4 sm:block xl:hidden">
+              <div className="my-4 h-fit">
+                <FilterList />
+              </div>
             </div>
-          </div>
-          <div className="col-start-0 col-span-4 flex flex-col gap-y-6">
-            <div className="col-start-0 col-span-4 mr-6 hidden h-fit xl:block px-6">
-              <FilterList />
+            <div className="col-start-0 col-span-4 flex flex-col gap-y-6">
+              <div className="col-start-0 col-span-4 mr-6 hidden h-fit xl:block px-6">
+                <FilterList />
+              </div>
             </div>
-          </div>
-          <div className="col-span-12 xl:col-span-8">
-            <ActiveFilters />
-            <NoDatasetMessage />
-            <DatasetListContainer currentPage={currentPage} />
-          </div>
-        </DatasetsProvider>
-      </div>
-    </PageContainer>
+            <div className="col-span-12 xl:col-span-8">
+              <ActiveFilters />
+              <NoDatasetMessage />
+              <DatasetListContainer currentPage={currentPage} />
+            </div>
+          </DatasetsProvider>
+        </div>
+      </PageContainer>
+    </BeaconAuthorizationProvider>
   );
 }

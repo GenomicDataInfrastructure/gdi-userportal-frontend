@@ -4,16 +4,16 @@
 
 "use server";
 
-import { fetchGa4ghPassport } from "./passport";
 import {
   ControlledAccessGrant,
   extractVerifiedControlledAccessGrants,
 } from "./visa";
+import { fetchGa4ghVisas } from "./passport";
 
 /**
  * GA4GH Passport/Visa-based entitlement retrieval.
  *
- * Fetches raw Visa JWTs from the LS-AAI userinfo endpoint.
+ * Resolves raw Visa JWTs from the Keycloak token or LS-AAI passport.
  * Decodes and signature-validates Visa JWTs, keeping only
  * ControlledAccessGrants visas from trusted issuers.
  * Expired visas are filtered out before signature verification.
@@ -31,10 +31,10 @@ export const retrieveEntitlements = async (): Promise<{
   let visaJwts: string[];
   let passportPresent: boolean;
   try {
-    ({ visaJwts, passportPresent } = await fetchGa4ghPassport());
+    ({ visaJwts, passportPresent } = await fetchGa4ghVisas());
   } catch (err) {
     console.error(
-      "[entitlements] Passport fetch failed; returning empty entitlements",
+      "[entitlements] Visa fetch failed; returning empty entitlements",
       { error: err instanceof Error ? err.message : String(err) }
     );
     return { entitlements: [], passportPresent: false };

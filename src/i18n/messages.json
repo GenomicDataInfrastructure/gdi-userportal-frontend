@@ -301,6 +301,34 @@
     "en": "Enable to filter by individual-level data characteristics and see record counts",
     "fr": "Activez cette option pour filtrer par caractéristiques de données au niveau individuel et afficher le nombre d'enregistrements"
   },
+  "datasets.beaconLoginRequired": {
+    "en": "Login is required to use individual-level data discovery.",
+    "fr": "La connexion est requise pour utiliser la découverte de données au niveau individuel."
+  },
+  "datasets.beaconResearcherRequired": {
+    "en": "Active Researcher status is required. Please complete your researcher registration.",
+    "fr": "Un statut de chercheur actif est requis. Veuillez finaliser votre inscription de chercheur."
+  },
+  "datasets.beaconTermsRequired": {
+    "en": "You must accept the Terms & Conditions to use individual-level data discovery.",
+    "fr": "Vous devez accepter les conditions générales pour utiliser la découverte de données au niveau individuel."
+  },
+  "datasets.beaconRequirementsMissing": {
+    "en": "Active Researcher status and acceptance of the Terms & Conditions are required.",
+    "fr": "Un statut de chercheur actif et l'acceptation des conditions générales sont requis."
+  },
+  "datasets.beaconErrorResearcher": {
+    "en": "Individual-level data discovery has been disabled because your Researcher status is missing or expired.",
+    "fr": "La découverte de données au niveau individuel a été désactivée car votre statut de chercheur est manquant ou expiré."
+  },
+  "datasets.beaconErrorTerms": {
+    "en": "Individual-level data discovery has been disabled because you have not accepted the Terms & Conditions.",
+    "fr": "La découverte de données au niveau individuel a été désactivée car vous n'avez pas accepté les conditions générales."
+  },
+  "datasets.beaconErrorResearcherAndTerms": {
+    "en": "Individual-level data discovery has been disabled because your Researcher status is missing and you have not accepted the Terms & Conditions.",
+    "fr": "La découverte de données au niveau individuel a été désactivée car votre statut de chercheur est manquant et vous n'avez pas accepté les conditions générales."
+  },
   "datasets.detail.datasetSeriesTag": {
     "en": "Dataset series",
     "fr": "Série de jeux de données"

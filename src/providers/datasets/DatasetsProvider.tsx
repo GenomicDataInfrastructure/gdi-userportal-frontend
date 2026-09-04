@@ -11,6 +11,7 @@ import React, {
   useContext,
   useEffect,
   useReducer,
+  useRef,
 } from "react";
 import {
   DatasetsAction,
@@ -27,6 +28,11 @@ import {
 import { ActiveFilter } from "@/providers/filters/FilterProvider.types";
 import { FilterType } from "@/app/api/discovery/additional-types";
 import { UrlSearchParams } from "@/app/params";
+import { useRouter } from "@/i18n/navigation";
+import { BeaconAuthorizationError } from "@/app/api/ga4gh/beacon-authorization.types";
+import { getBeaconAuthReason } from "@/providers/beacon/BeaconAuthorizationProvider";
+import { useTranslations } from "next-intl";
+import contentConfig from "@/config/contentConfig";
 
 function convertActiveFiltersToFacets(
   activeFilters: ActiveFilter[]
@@ -101,18 +107,37 @@ export default function DatasetsProvider({
   children,
   searchParams,
 }: DatasetsProviderProps) {
+  const t = useTranslations("datasets");
   const { activeFilters, setFilters } = useFilters();
+  const router = useRouter();
+  const pendingBeaconErrorRef = useRef<string | undefined>(undefined);
   const [
     { datasets, datasetCount, isLoading, errorCode, beaconError },
     dispatch,
   ] = useReducer(reducer, initialState);
   const { page, q, sort, beacon } = searchParams;
 
+  const formatBeaconAuthError = useCallback(
+    (details: { hasResearcherStatus: boolean; hasAcceptedTC: boolean }) => {
+      const { hasResearcherStatus, hasAcceptedTC } =
+        getBeaconAuthReason(details);
+      if (!hasResearcherStatus && !hasAcceptedTC) {
+        return t("beaconErrorResearcherAndTerms");
+      }
+      if (!hasResearcherStatus) {
+        return t("beaconErrorResearcher");
+      }
+      return t("beaconErrorTerms");
+    },
+    [t]
+  );
+
   const fetchDatasets = useCallback(async () => {
     dispatch({ type: DatasetsActionType.LOADING });
 
     // Get Beacon preference from URL parameter
-    const includeBeacon = beacon === "true";
+    const includeBeacon =
+      contentConfig.beaconSearchEnabled && beacon === "true";
 
     const options: DatasetSearchQuery = {
       query: q,
@@ -127,15 +152,28 @@ export default function DatasetsProvider({
       const data = await searchDatasetsApi(options);
       setFilters(data.facets ?? []);
 
+      const pendingBeaconError = pendingBeaconErrorRef.current;
+      pendingBeaconErrorRef.current = undefined;
+
       dispatch({
         type: DatasetsActionType.DATASETS_LOADED,
         payload: {
           datasets: data.results,
           datasetCount: data.count,
-          beaconError: data.beaconError,
+          beaconError: pendingBeaconError ?? data.beaconError,
         },
       });
     } catch (error) {
+      if (error instanceof BeaconAuthorizationError) {
+        // Uncheck Beacon and fall back to metadata-only search.
+        pendingBeaconErrorRef.current = formatBeaconAuthError(error.details);
+        const params = new URLSearchParams(window.location.search);
+        params.delete("beacon");
+        params.set("page", "1");
+        router.replace(`/datasets?${params.toString()}`);
+        return;
+      }
+
       const errorCode =
         error instanceof AxiosError ? error.response?.status : 500;
       dispatch({
@@ -144,7 +182,16 @@ export default function DatasetsProvider({
       });
       console.error(error);
     }
-  }, [activeFilters, page, q, sort, beacon, setFilters]);
+  }, [
+    activeFilters,
+    page,
+    q,
+    sort,
+    beacon,
+    setFilters,
+    router,
+    formatBeaconAuthError,
+  ]);
 
   useEffect(() => {
     fetchDatasets();

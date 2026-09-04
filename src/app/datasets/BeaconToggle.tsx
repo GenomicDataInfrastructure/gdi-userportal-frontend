@@ -101,7 +101,7 @@ export default function BeaconToggle() {
             {helperTextKey && (
               <div
                 className={`text-sm font-normal ${
-                  canEnableBeacon ? "text-gray-600" : "text-warning"
+                  canEnableBeacon ? "text-gray-600" : "text-gray-800"
                 }`}
               >
                 {t(helperTextKey)}

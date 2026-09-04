@@ -42,8 +42,7 @@ export default function FilterList() {
 
   // Check if Beacon is enabled via URL parameter
   const includeBeacon =
-    contentConfig.beaconSearchEnabled &&
-    searchParams.get("beacon") === "true";
+    contentConfig.beaconSearchEnabled && searchParams.get("beacon") === "true";
 
   // Beacon filters require active Researcher status and accepted T&Cs.
   const hasBeaconAccess =

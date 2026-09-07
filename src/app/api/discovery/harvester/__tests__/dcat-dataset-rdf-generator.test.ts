@@ -31,6 +31,7 @@ describe("DCAT dataset export generators", () => {
   const CSVW_TABLE_PROPERTY = "http://www.w3.org/ns/csvw#table";
   const CSVW_COLUMN = "http://www.w3.org/ns/csvw#column";
   const CSVW_NAME = "http://www.w3.org/ns/csvw#name";
+  const CSVW_TITLES = "http://www.w3.org/ns/csvw#titles";
   const CSVW_DATATYPE = "http://www.w3.org/ns/csvw#datatype";
   const DCT_DESCRIPTION = "http://purl.org/dc/terms/description";
 
@@ -417,7 +418,6 @@ describe("DCAT dataset export generators", () => {
           q.object.value === CSVW_TABLE_GROUP
       )
     ).toBe(true);
-
     const tableNodes = quads
       .filter(
         (q) =>
@@ -442,6 +442,16 @@ describe("DCAT dataset export generators", () => {
       )
       .map((q) => q.object.value);
     expect(columnNodes).toHaveLength(2);
+
+    expect(
+      quads.some(
+        (q) =>
+          columnNodes.includes(q.subject.value) &&
+          q.predicate.value === CSVW_TITLES &&
+          q.object.value === "Patient Id" &&
+          q.object.language === "en"
+      )
+    ).toBe(true);
 
     expect(
       quads.some(
@@ -473,6 +483,7 @@ describe("DCAT dataset export generators", () => {
     expect(turtle).toContain("csvw:TableGroup");
     expect(turtle).toContain("csvw:Table");
     expect(turtle).toContain('csvw:name "patient_id"');
+    expect(turtle).toContain('csvw:titles "Patient Id"@en');
     expect(turtle).toContain('csvw:datatype "string"');
 
     const graph = jsonLd["@graph"] as Array<Record<string, unknown>>;

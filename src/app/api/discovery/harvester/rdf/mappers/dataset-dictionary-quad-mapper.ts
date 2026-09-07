@@ -14,6 +14,13 @@ import {
 const toDictionaryDatatypeLiteral = (value: string): string =>
   value.split(/[/#]/).findLast(Boolean) || value;
 
+const toDictionaryColumnTitle = (value: string): string =>
+  value
+    .trim()
+    .replaceAll(/[_-]+/g, " ")
+    .replaceAll(/\s+/g, " ")
+    .replace(/\b\w/g, (character) => character.toUpperCase());
+
 export const addDatasetDictionaryQuads = ({
   dataset,
   store,
@@ -57,6 +64,11 @@ export const addDatasetDictionaryQuads = ({
     store.add(tableNode, ns.csvw("column"), columnNode);
     store.add(columnNode, ns.rdf("type"), ns.csvw("Column"));
     addLiteral(store, columnNode, ns.csvw("name"), entry.name);
+    store.add(
+      columnNode,
+      ns.csvw("titles"),
+      createLanguageLiteral(toDictionaryColumnTitle(entry.name), "en")
+    );
     addLiteral(
       store,
       columnNode,

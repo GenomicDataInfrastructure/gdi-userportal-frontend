@@ -31,6 +31,15 @@ describe("run-harvester", () => {
     ).toMatchObject({ secret: "top-secret", mode: "append" });
   });
 
+  test("parseArgs reads --content-type and --type", () => {
+    expect(parseArgs(["--content-type", "text/turtle"]).contentType).toBe(
+      "text/turtle"
+    );
+    expect(parseArgs(["--type", "application/rdf+xml"]).contentType).toBe(
+      "application/rdf+xml"
+    );
+  });
+
   test("parseArgs treats --append as a shortcut for --mode append", () => {
     expect(parseArgs(["--append"]).mode).toBe("append");
   });

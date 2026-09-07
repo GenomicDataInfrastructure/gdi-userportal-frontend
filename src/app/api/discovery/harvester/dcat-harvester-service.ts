@@ -18,7 +18,10 @@ import {
   buildHarvestRequestInit,
   harvestFetch,
 } from "@/app/api/discovery/harvester/fetch-options";
-import { parseRdfToQuads } from "@/app/api/discovery/harvester/rdf-quad-loader";
+import {
+  detectRdfContentType,
+  parseRdfToQuads,
+} from "@/app/api/discovery/harvester/rdf-quad-loader";
 import { sanitizeRdfIris } from "@/app/api/discovery/harvester/rdf-iri-sanitizer";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 import {
@@ -30,6 +33,7 @@ import { DistributionMappingError as DistributionMappingErrorInput } from "@/app
 type FetchLike = (input: string | URL, init?: RequestInit) => Promise<Response>;
 type HarvestOptions = {
   headers?: Record<string, string>;
+  contentType?: string;
 };
 
 export type DatasetMappingError = {
@@ -54,11 +58,6 @@ export type HarvestCollectors = {
   shaclViolations?: ShaclViolation[];
 };
 
-const detectContentTypeFromSource = (source: string) =>
-  source.trim().toLowerCase().endsWith(".ttl")
-    ? "text/turtle"
-    : "application/rdf+xml";
-
 export class DcatHarvesterService {
   private readonly fetcher: FetchLike;
 
@@ -72,13 +71,7 @@ export class DcatHarvesterService {
     contentType?: string,
     collectors?: HarvestCollectors
   ): Promise<LocalDiscoveryDataset[]> {
-    const resolvedContentType =
-      (contentType as Parameters<typeof parseRdfToQuads>[1]) ??
-      (sourceRef
-        ? (detectContentTypeFromSource(sourceRef) as Parameters<
-            typeof parseRdfToQuads
-          >[1])
-        : ("application/rdf+xml" as const));
+    const resolvedContentType = detectRdfContentType(sourceRef, contentType);
     const quads = await parseRdfToQuads(
       sanitizeRdfIris(rdfText, resolvedContentType),
       resolvedContentType,
@@ -183,6 +176,11 @@ export class DcatHarvesterService {
       throw new Error(details);
     }
 
+    const responseContentType =
+      options.contentType?.trim() ||
+      response.headers?.get("content-type") ||
+      undefined;
+
     let xmlText: string;
     try {
       xmlText = await response.text();
@@ -197,7 +195,7 @@ export class DcatHarvesterService {
       return await this.parseDatasetsFromRdf(
         xmlText,
         url,
-        detectContentTypeFromSource(url),
+        detectRdfContentType(url, responseContentType),
         collectors
       );
     } catch (error) {
@@ -210,7 +208,8 @@ export class DcatHarvesterService {
 
   async harvestFromFilePath(
     filePath: string,
-    collectors?: HarvestCollectors
+    collectors?: HarvestCollectors,
+    contentType?: string
   ): Promise<LocalDiscoveryDataset[]> {
     const resolvedPath = resolve(filePath);
     let rdfText: string;
@@ -228,7 +227,7 @@ export class DcatHarvesterService {
       return await this.parseDatasetsFromRdf(
         rdfText,
         resolvedPath,
-        detectContentTypeFromSource(resolvedPath),
+        detectRdfContentType(resolvedPath, contentType),
         collectors
       );
     } catch (error) {

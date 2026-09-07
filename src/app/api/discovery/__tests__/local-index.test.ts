@@ -22,12 +22,18 @@ const mockHarvestFromUrl =
   jest.fn<
     (
       url: string,
-      options?: { headers?: Record<string, string> },
+      options?: { headers?: Record<string, string>; contentType?: string },
       collectors?: HarvestCollectors
     ) => Promise<LocalDiscoveryDataset[]>
   >();
 const mockHarvestFromFilePath =
-  jest.fn<(filePath: string) => Promise<LocalDiscoveryDataset[]>>();
+  jest.fn<
+    (
+      filePath: string,
+      collectors?: HarvestCollectors,
+      contentType?: string
+    ) => Promise<LocalDiscoveryDataset[]>
+  >();
 const mockGetAuthorizationHeaderIfConfigured =
   jest.fn<() => Promise<Record<string, string>>>();
 const mockWriteHarvesterRunLog = jest.fn<(log: unknown) => Promise<void>>();
@@ -341,6 +347,27 @@ describe("local-index APIs", () => {
     );
   });
 
+  test("harvestLocalIndexFromDcatUrlApi passes explicit content type", async () => {
+    mockIsHarvesterLoggingEnabled.mockReturnValue(false);
+    mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
+    mockHarvestFromUrl.mockResolvedValueOnce([
+      { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
+    ]);
+
+    await harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue", {
+      contentType: "text/turtle",
+    });
+
+    expect(mockHarvestFromUrl).toHaveBeenCalledWith(
+      "https://example.org/catalogue",
+      { headers: {}, contentType: "text/turtle" },
+      {
+        mappingErrors: [],
+        shaclViolations: undefined,
+      }
+    );
+  });
+
   test("harvestLocalIndexFromDcatUrlApi runs SHACL validation (passes a collector) when logging is enabled", async () => {
     mockIsHarvesterLoggingEnabled.mockReturnValue(true);
     mockGetAuthorizationHeaderIfConfigured.mockResolvedValueOnce({});
@@ -530,10 +557,14 @@ describe("local-index APIs", () => {
 
     const count = await harvestLocalIndexFromDcatFileApi("no-data-dict.rdf");
 
-    expect(mockHarvestFromFilePath).toHaveBeenCalledWith("no-data-dict.rdf", {
-      mappingErrors: [],
-      shaclViolations: undefined,
-    });
+    expect(mockHarvestFromFilePath).toHaveBeenCalledWith(
+      "no-data-dict.rdf",
+      {
+        mappingErrors: [],
+        shaclViolations: undefined,
+      },
+      undefined
+    );
     expect(mockClearLocalDiscoveryDatasets).toHaveBeenCalled();
     expect(
       mockClearLocalDiscoveryDatasets.mock.invocationCallOrder[0]
@@ -542,6 +573,26 @@ describe("local-index APIs", () => {
     );
     expect(mockUpsertLocalDiscoveryDatasets).toHaveBeenCalledWith(harvested);
     expect(count).toBe(1);
+  });
+
+  test("harvestLocalIndexFromDcatFileApi passes explicit content type", async () => {
+    const harvested = [
+      { id: "d1", title: "Dataset 1", publishers: [], hdab: [], creators: [] },
+    ];
+    mockHarvestFromFilePath.mockResolvedValueOnce(harvested);
+
+    await harvestLocalIndexFromDcatFileApi("uploaded-catalogue", {
+      contentType: "text/turtle",
+    });
+
+    expect(mockHarvestFromFilePath).toHaveBeenCalledWith(
+      "uploaded-catalogue",
+      {
+        mappingErrors: [],
+        shaclViolations: undefined,
+      },
+      "text/turtle"
+    );
   });
 
   test("harvestLocalIndexFromDcatFileApi skips clearing the index in append mode", async () => {

@@ -21,6 +21,9 @@ function parseArgs(argv) {
     } else if (token === "--mode") {
       args.mode = argv[i + 1] || "";
       i += 1;
+    } else if (token === "--content-type" || token === "--type") {
+      args.contentType = argv[i + 1] || "";
+      i += 1;
     } else if (token === "--append") {
       args.mode = "append";
     } else if (token === "--help" || token === "-h") {
@@ -43,6 +46,7 @@ function printUsage() {
       "Options:",
       '  --mode <replace|append>   Import mode. Defaults to "replace", which clears the local index first.',
       "  --append                  Shortcut for --mode append.",
+      "  --content-type <mime>     Override RDF parser type, e.g. application/rdf+xml or text/turtle.",
       "",
       "Example:",
       "  npm run harvest:dcat -- \\",
@@ -61,6 +65,9 @@ async function main() {
   ).trim();
   const mode = String(
     args.mode || process.env.HARVEST_MODE || "replace"
+  ).trim();
+  const contentType = String(
+    args.contentType || process.env.HARVEST_CONTENT_TYPE || ""
   ).trim();
 
   if (args.help || (!args.url && !args.file)) {
@@ -84,6 +91,7 @@ async function main() {
       ...(args.file ? { sourcePath: args.file } : { sourceUrl: args.url }),
       secret,
       mode,
+      contentType,
     });
 
     console.log(

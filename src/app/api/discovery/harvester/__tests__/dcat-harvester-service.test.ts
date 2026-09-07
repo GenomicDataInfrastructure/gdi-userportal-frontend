@@ -459,6 +459,27 @@ describe("DcatHarvesterService", () => {
     expect(datasets[0]?.id).toBe("dataset-1");
   });
 
+  test("uses an uploaded content type when the filename has no RDF extension", async () => {
+    const service = new DcatHarvesterService();
+    const turtle = `
+      @prefix dcat: <http://www.w3.org/ns/dcat#> .
+      @prefix dct: <http://purl.org/dc/terms/> .
+
+      <https://example.org/datasets/turtle-upload>
+        a dcat:Dataset ;
+        dct:title "Turtle upload" ;
+        dct:description "Parsed from an uploaded MIME type" .
+    `;
+
+    const datasets = await service.parseDatasetsFromRdf(
+      turtle,
+      "uploaded-catalogue",
+      "text/turtle; charset=utf-8"
+    );
+
+    expect(datasets[0]?.id).toBe("https://example.org/datasets/turtle-upload");
+  });
+
   test("stores foaf:page documentation values as-is regardless of scheme", async () => {
     const service = new DcatHarvesterService();
     const rdf = `
@@ -1151,6 +1172,32 @@ describe("DcatHarvesterService", () => {
     );
   });
 
+  test("harvestFromUrl uses the response content type when the URL has no extension", async () => {
+    const fetcher =
+      jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
+    fetcher.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      statusText: "OK",
+      headers: new Headers({ "content-type": "text/turtle" }),
+      text: async () => `
+        @prefix dcat: <http://www.w3.org/ns/dcat#> .
+        @prefix dct: <http://purl.org/dc/terms/> .
+
+        <https://example.org/datasets/header-turtle>
+          a dcat:Dataset ;
+          dct:title "Header Turtle" ;
+          dct:description "Parsed from the response content type" .
+      `,
+    } as Response);
+
+    const service = new DcatHarvesterService(fetcher);
+
+    const datasets = await service.harvestFromUrl("https://example.org/api");
+
+    expect(datasets[0]?.id).toBe("https://example.org/datasets/header-turtle");
+  });
+
   test("harvestFromUrl adds the harvest TLS dispatcher", async () => {
     const fetcher =
       jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
@@ -1328,6 +1375,31 @@ describe("DcatHarvesterService", () => {
     expect(spy).toHaveBeenCalledWith(
       expect.any(String),
       resolve("catalogue.ttl"),
+      "text/turtle",
+      undefined
+    );
+  });
+
+  test("harvestFromFilePath accepts an explicit content type override", async () => {
+    const resolvedPath = resolve("catalogue.upload");
+    mockReadFile.mockResolvedValueOnce(
+      "@prefix dcat: <http://www.w3.org/ns/dcat#> ."
+    );
+
+    const service = new DcatHarvesterService();
+    const spy = jest
+      .spyOn(service, "parseDatasetsFromRdf")
+      .mockResolvedValueOnce([]);
+
+    await service.harvestFromFilePath(
+      "catalogue.upload",
+      undefined,
+      "text/turtle"
+    );
+
+    expect(spy).toHaveBeenCalledWith(
+      expect.any(String),
+      resolvedPath,
       "text/turtle",
       undefined
     );

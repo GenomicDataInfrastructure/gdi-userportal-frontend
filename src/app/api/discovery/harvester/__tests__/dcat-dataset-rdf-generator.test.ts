@@ -1181,6 +1181,7 @@ describe("DCAT dataset export generators", () => {
     const DCT_PUBLISHER = "http://purl.org/dc/terms/publisher";
     const CV_CONTACT_POINT = "http://data.europa.eu/m8g/contactPoint";
     const CV_CONTACT_PAGE = "http://data.europa.eu/m8g/contactPage";
+    const VCARD_HAS_URL = "http://www.w3.org/2006/vcard/ns#hasURL";
     const FOAF_DOCUMENT = "http://xmlns.com/foaf/0.1/Document";
     const RDF_TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
     const contactPages = ["https://metabolic.lu", "https://endoctrine.lu"];
@@ -1212,6 +1213,14 @@ describe("DCAT dataset export generators", () => {
         (quad) =>
           quad.subject.value === contactPointNode &&
           quad.predicate.value === CV_CONTACT_PAGE &&
+          contactPages.includes(quad.object.value)
+      )
+    ).toHaveLength(2);
+    expect(
+      quads.filter(
+        (quad) =>
+          quad.subject.value === contactPointNode &&
+          quad.predicate.value === VCARD_HAS_URL &&
           contactPages.includes(quad.object.value)
       )
     ).toHaveLength(2);

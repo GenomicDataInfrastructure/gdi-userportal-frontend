@@ -80,6 +80,7 @@ const addAgents = (
         }
         const contactPageNode = createNamedNode(contactPage);
         store.add(cpNode, ns.cv("contactPage"), contactPageNode);
+        store.add(cpNode, ns.vcard("hasURL"), contactPageNode);
         store.add(contactPageNode, ns.rdf("type"), ns.foaf("Document"));
       });
     });

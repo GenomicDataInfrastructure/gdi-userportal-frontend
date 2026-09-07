@@ -5,9 +5,19 @@
 import { jest } from "@jest/globals";
 
 const mockHarvestLocalIndexFromDcatUrlApi =
-  jest.fn<(url: string, options?: { mode?: string }) => Promise<number>>();
+  jest.fn<
+    (
+      url: string,
+      options?: { mode?: string; contentType?: string }
+    ) => Promise<number>
+  >();
 const mockHarvestLocalIndexFromDcatFileApi =
-  jest.fn<(path: string, options?: { mode?: string }) => Promise<number>>();
+  jest.fn<
+    (
+      path: string,
+      options?: { mode?: string; contentType?: string }
+    ) => Promise<number>
+  >();
 
 jest.mock("@/app/api/discovery/local-index", () => ({
   harvestLocalIndexFromDcatUrlApi: mockHarvestLocalIndexFromDcatUrlApi,
@@ -51,6 +61,41 @@ describe("POST /api/discovery/harvest", () => {
     const response = await POST(
       new Request("http://localhost/api/discovery/harvest", {
         method: "POST",
+        body: JSON.stringify({ url: "https://example.org/catalogue.rdf" }),
+      })
+    );
+
+    expect(response.status).toBe(401);
+    await expect(response.json()).resolves.toEqual({ error: "Unauthorized" });
+  });
+
+  test("returns 401 when the provided secret has a different length than the configured one", async () => {
+    process.env.HARVEST_INTERNAL_SECRET = "top-secret";
+
+    const response = await POST(
+      new Request("http://localhost/api/discovery/harvest", {
+        method: "POST",
+        headers: {
+          "x-harvest-secret": "a-much-longer-secret-value",
+        },
+        body: JSON.stringify({ url: "https://example.org/catalogue.rdf" }),
+      })
+    );
+
+    expect(response.status).toBe(401);
+    await expect(response.json()).resolves.toEqual({ error: "Unauthorized" });
+    expect(mockHarvestLocalIndexFromDcatUrlApi).not.toHaveBeenCalled();
+  });
+
+  test("returns 401 when the provided secret is the same length but does not match", async () => {
+    process.env.HARVEST_INTERNAL_SECRET = "top-secret";
+
+    const response = await POST(
+      new Request("http://localhost/api/discovery/harvest", {
+        method: "POST",
+        headers: {
+          "x-harvest-secret": "not-secret",
+        },
         body: JSON.stringify({ url: "https://example.org/catalogue.rdf" }),
       })
     );
@@ -166,6 +211,54 @@ describe("POST /api/discovery/harvest", () => {
     );
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual({ count: 12 });
+  });
+
+  test("passes an explicit content type for a file path", async () => {
+    process.env.HARVEST_INTERNAL_SECRET = "top-secret";
+    mockHarvestLocalIndexFromDcatFileApi.mockResolvedValueOnce(1);
+
+    const response = await POST(
+      new Request("http://localhost/api/discovery/harvest", {
+        method: "POST",
+        headers: {
+          "x-harvest-secret": "top-secret",
+        },
+        body: JSON.stringify({
+          path: "uploaded-catalogue",
+          contentType: "text/turtle",
+        }),
+      })
+    );
+
+    expect(mockHarvestLocalIndexFromDcatFileApi).toHaveBeenCalledWith(
+      "uploaded-catalogue",
+      { mode: "replace", contentType: "text/turtle" }
+    );
+    expect(response.status).toBe(200);
+  });
+
+  test("passes an explicit content type for a url", async () => {
+    process.env.HARVEST_INTERNAL_SECRET = "top-secret";
+    mockHarvestLocalIndexFromDcatUrlApi.mockResolvedValueOnce(1);
+
+    const response = await POST(
+      new Request("http://localhost/api/discovery/harvest", {
+        method: "POST",
+        headers: {
+          "x-harvest-secret": "top-secret",
+        },
+        body: JSON.stringify({
+          url: "https://example.org/api",
+          contentType: "text/turtle",
+        }),
+      })
+    );
+
+    expect(mockHarvestLocalIndexFromDcatUrlApi).toHaveBeenCalledWith(
+      "https://example.org/api",
+      { mode: "replace", contentType: "text/turtle" }
+    );
+    expect(response.status).toBe(200);
   });
 
   test("passes append mode to the harvester", async () => {

@@ -27,6 +27,9 @@ function parseArgs(argv) {
     } else if (token === "--mode") {
       args.mode = argv[i + 1] || "";
       i += 1;
+    } else if (token === "--content-type" || token === "--type") {
+      args.contentType = argv[i + 1] || "";
+      i += 1;
     } else if (token === "--append") {
       args.mode = "append";
     } else if (token === "--once") {
@@ -53,10 +56,12 @@ function printUsage() {
       "  HARVEST_INTERNAL_SECRET      Shared secret sent as x-harvest-secret",
       "  HARVEST_SCHEDULE             Cron expression for recurring runs",
       '  HARVEST_MODE                 Import mode: "replace" or "append" (default: replace)',
+      "  HARVEST_CONTENT_TYPE         RDF parser type override, e.g. application/rdf+xml or text/turtle",
       "",
       "Flags:",
       "  --once                Run a single harvest and exit",
       "  --append              Append harvested datasets without clearing the local index",
+      "  --content-type <mime> Override the RDF parser type",
     ].join("\n")
   );
 }
@@ -78,6 +83,9 @@ function resolveWorkerConfig(argv = process.argv.slice(2), env = process.env) {
   ).trim();
   const schedule = String(args.schedule || env.HARVEST_SCHEDULE || "").trim();
   const mode = String(args.mode || env.HARVEST_MODE || "replace").trim();
+  const contentType = String(
+    args.contentType || env.HARVEST_CONTENT_TYPE || ""
+  ).trim();
 
   if (!sourceUrl) {
     if (!sourcePath) {
@@ -117,6 +125,7 @@ function resolveWorkerConfig(argv = process.argv.slice(2), env = process.env) {
     secret,
     schedule,
     mode,
+    contentType,
   };
 }
 

@@ -104,6 +104,33 @@ describe("harvest-http", () => {
     );
   });
 
+  test("includes an explicit content type when provided", async () => {
+    const fetchImpl = jest.fn().mockResolvedValue({
+      ok: true,
+      text: jest.fn().mockResolvedValue(JSON.stringify({ count: 1 })),
+    });
+
+    await requestHarvest(
+      {
+        apiUrl: "http://localhost:3000/api/discovery/harvest",
+        sourcePath: "uploaded-catalogue",
+        secret: "secret",
+        contentType: "text/turtle",
+      },
+      { fetchImpl, timeoutMs: 10 }
+    );
+
+    expect(fetchImpl).toHaveBeenCalledWith(
+      "http://localhost:3000/api/discovery/harvest",
+      expect.objectContaining({
+        body: JSON.stringify({
+          path: "uploaded-catalogue",
+          contentType: "text/turtle",
+        }),
+      })
+    );
+  });
+
   test("reports fetch failures using the catalogue file when sourcePath is set", async () => {
     const fetchImpl = jest.fn().mockRejectedValue(new Error("connect failed"));
 

@@ -37,6 +37,28 @@ describe("harvest-worker", () => {
     expect(config.mode).toBe("append");
   });
 
+  test("resolveWorkerConfig supports explicit content type", () => {
+    const config = resolveWorkerConfig(
+      ["--once", "--content-type", "text/turtle"],
+      {
+        HARVEST_SOURCE_FILE: "uploaded-catalogue",
+        HARVEST_INTERNAL_SECRET: "top-secret",
+      }
+    );
+
+    expect(config.contentType).toBe("text/turtle");
+  });
+
+  test("resolveWorkerConfig reads content type from the environment", () => {
+    const config = resolveWorkerConfig(["--once"], {
+      HARVEST_SOURCE_FILE: "uploaded-catalogue",
+      HARVEST_INTERNAL_SECRET: "top-secret",
+      HARVEST_CONTENT_TYPE: "application/rdf+xml",
+    });
+
+    expect(config.contentType).toBe("application/rdf+xml");
+  });
+
   test("resolveWorkerConfig uses HARVEST_BASE_URL when provided", () => {
     const config = resolveWorkerConfig(["--once"], {
       HARVEST_SOURCE_FILE: "no-data-dict.rdf",

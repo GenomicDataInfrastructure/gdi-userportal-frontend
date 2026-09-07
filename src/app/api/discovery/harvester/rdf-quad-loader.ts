@@ -14,11 +14,48 @@ export const RDF_CONTENT_TYPES = {
 export type RdfContentType =
   (typeof RDF_CONTENT_TYPES)[keyof typeof RDF_CONTENT_TYPES];
 
-export const detectContentTypeFromUrl = (url: string): RdfContentType => {
-  const pathname = new URL(url).pathname;
-  if (pathname.endsWith(".ttl")) return RDF_CONTENT_TYPES.turtle;
+const getSourcePath = (source: string): string => {
+  try {
+    return new URL(source).pathname;
+  } catch {
+    return source.split(/[?#]/, 1)[0] ?? source;
+  }
+};
+
+export const detectRdfContentType = (
+  source?: string,
+  contentType?: string | null
+): RdfContentType => {
+  const normalizedContentType = contentType
+    ?.split(";", 1)[0]
+    ?.trim()
+    .toLowerCase();
+
+  if (
+    normalizedContentType === RDF_CONTENT_TYPES.turtle ||
+    normalizedContentType === "application/x-turtle"
+  ) {
+    return RDF_CONTENT_TYPES.turtle;
+  }
+
+  if (
+    normalizedContentType === RDF_CONTENT_TYPES.rdfxml ||
+    normalizedContentType === "application/xml" ||
+    normalizedContentType === "text/xml"
+  ) {
+    return RDF_CONTENT_TYPES.rdfxml;
+  }
+
+  const sourcePath = source ? getSourcePath(source).toLowerCase() : "";
+  if (/\.(ttl|turtle|n3)$/.test(sourcePath)) {
+    return RDF_CONTENT_TYPES.turtle;
+  }
+
   return RDF_CONTENT_TYPES.rdfxml;
 };
+
+export const detectContentTypeFromUrl = (url: string): RdfContentType =>
+  detectRdfContentType(url);
 
 export const parseRdfToQuads = async (
   rdfText: string,

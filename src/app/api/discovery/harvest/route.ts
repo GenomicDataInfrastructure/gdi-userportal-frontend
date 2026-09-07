@@ -2,49 +2,17 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { timingSafeEqual } from "node:crypto";
 import {
   harvestLocalIndexFromDcatFileApi,
   harvestLocalIndexFromDcatUrlApi,
 } from "@/app/api/discovery/local-index";
 import type { HarvestLocalIndexMode } from "@/app/api/discovery/local-index";
+import {
+  getProvidedSecret,
+  secretsMatch,
+} from "@/app/api/discovery/harvest/harvest-secret";
 
 const HARVEST_MODES = new Set<HarvestLocalIndexMode>(["replace", "append"]);
-
-const getProvidedSecret = (request: Request): string => {
-  const headerSecret = request.headers.get("x-harvest-secret")?.trim();
-  if (headerSecret) {
-    return headerSecret;
-  }
-
-  const authorization = request.headers.get("authorization")?.trim();
-  if (!authorization) {
-    return "";
-  }
-
-  const bearerPrefix = "Bearer ";
-  return authorization.startsWith(bearerPrefix)
-    ? authorization.slice(bearerPrefix.length).trim()
-    : "";
-};
-
-const secretsMatch = (
-  configuredSecret: string,
-  providedSecret: string
-): boolean => {
-  if (!configuredSecret || !providedSecret) {
-    return false;
-  }
-
-  const configuredBuffer = Buffer.from(configuredSecret);
-  const providedBuffer = Buffer.from(providedSecret);
-
-  if (configuredBuffer.length !== providedBuffer.length) {
-    return false;
-  }
-
-  return timingSafeEqual(configuredBuffer, providedBuffer);
-};
 
 export async function POST(request: Request) {
   const configuredSecret = process.env.HARVEST_INTERNAL_SECRET?.trim();
@@ -62,10 +30,12 @@ export async function POST(request: Request) {
       url?: string;
       path?: string;
       mode?: HarvestLocalIndexMode;
+      contentType?: string;
     };
     const url = body?.url?.trim();
     const path = body?.path?.trim();
     const mode = body?.mode ?? "replace";
+    const contentType = body?.contentType?.trim();
 
     if (!url && !path) {
       return Response.json(
@@ -82,8 +52,14 @@ export async function POST(request: Request) {
     }
 
     const count = path
-      ? await harvestLocalIndexFromDcatFileApi(path, { mode })
-      : await harvestLocalIndexFromDcatUrlApi(url as string, { mode });
+      ? await harvestLocalIndexFromDcatFileApi(path, {
+          mode,
+          ...(contentType ? { contentType } : {}),
+        })
+      : await harvestLocalIndexFromDcatUrlApi(url as string, {
+          mode,
+          ...(contentType ? { contentType } : {}),
+        });
     return Response.json({ count });
   } catch (error) {
     return Response.json(

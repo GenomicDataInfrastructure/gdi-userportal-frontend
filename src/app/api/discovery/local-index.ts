@@ -35,6 +35,7 @@ export type HarvestLocalIndexMode = "replace" | "append";
 
 export type HarvestLocalIndexOptions = {
   mode?: HarvestLocalIndexMode;
+  contentType?: string;
 };
 
 export const upsertLocalIndexDatasetsApi = async (
@@ -99,6 +100,7 @@ export const harvestLocalIndexFromDcatUrlApi = async (
       const datasets = await harvestDatasets(
         catalogueRdfUrl,
         authHeaders,
+        options.contentType,
         collectors
       );
 
@@ -124,6 +126,7 @@ export const harvestLocalIndexFromDcatFileApi = async (
     async (collectors) => {
       const datasets = await harvestFileDatasets(
         catalogueRdfFilePath,
+        options.contentType,
         collectors
       );
 
@@ -333,6 +336,7 @@ const getAuthHeaders = async (
 const harvestDatasets = async (
   catalogueRdfUrl: string,
   authHeaders: Record<string, string>,
+  contentType?: string,
   collectors?: HarvestCollectors
 ): Promise<LocalDiscoveryDataset[]> => {
   try {
@@ -340,6 +344,7 @@ const harvestDatasets = async (
       catalogueRdfUrl,
       {
         headers: authHeaders,
+        ...(contentType ? { contentType } : {}),
       },
       collectors
     );
@@ -353,12 +358,14 @@ const harvestDatasets = async (
 
 const harvestFileDatasets = async (
   catalogueRdfFilePath: string,
+  contentType?: string,
   collectors?: HarvestCollectors
 ): Promise<LocalDiscoveryDataset[]> => {
   try {
     return await dcatHarvesterService.harvestFromFilePath(
       catalogueRdfFilePath,
-      collectors
+      collectors,
+      contentType
     );
   } catch (error) {
     throw wrapError(

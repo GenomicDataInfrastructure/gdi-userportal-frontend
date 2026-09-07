@@ -61,7 +61,9 @@ const addAgents = (
       );
       store.add(node, ns.cv("contactPoint"), cpNode);
       store.add(cpNode, ns.rdf("type"), ns.cv("ContactPoint"));
-      store.add(cpNode, ns.rdf("type"), ns.vcard("Kind"));
+      if (isNonEmptyString(cp.email)) {
+        store.add(cpNode, ns.rdf("type"), ns.vcard("Kind"));
+      }
       if (isNonEmptyString(cp.name)) {
         store.add(cpNode, ns.vcard("fn"), createLiteral(cp.name));
       }
@@ -74,6 +76,14 @@ const addAgents = (
         );
         store.add(cpNode, ns.cv("email"), createLiteral(cp.email));
       }
+      cp.contactPages?.forEach((contactPage) => {
+        if (!isNonEmptyString(contactPage)) {
+          return;
+        }
+        const contactPageNode = createNamedNode(contactPage);
+        store.add(cpNode, ns.cv("contactPage"), contactPageNode);
+        store.add(contactPageNode, ns.rdf("type"), ns.foaf("Document"));
+      });
     });
   });
 };

@@ -81,6 +81,7 @@ const FOAF_NAME = "http://xmlns.com/foaf/0.1/name"; // NOSONAR
 const FOAF_MBOX = "http://xmlns.com/foaf/0.1/mbox"; // NOSONAR
 const CV_CONTACT_POINT = "http://data.europa.eu/m8g/contactPoint"; // NOSONAR
 const CV_EMAIL = "http://data.europa.eu/m8g/email"; // NOSONAR
+const CV_CONTACT_PAGE = "http://data.europa.eu/m8g/contactPage"; // NOSONAR
 const VCARD_FN = "http://www.w3.org/2006/vcard/ns#fn"; // NOSONAR
 const VCARD_HAS_EMAIL = "http://www.w3.org/2006/vcard/ns#hasEmail"; // NOSONAR
 const FOAF_HOMEPAGE = "http://xmlns.com/foaf/0.1/homepage"; // NOSONAR
@@ -598,7 +599,7 @@ const extractAgent = (
     }
   }
 
-  // cv:contactPoint → extract name and email
+  // cv:contactPoint → extract name, email, and contact pages
   const contactPointObjects = graph.getObjects(agentSubject, CV_CONTACT_POINT);
   const contactPoints =
     contactPointObjects.length > 0
@@ -613,12 +614,21 @@ const extractAgent = (
                 : rawHasEmail) ||
               graph.getLiteral(cp, CV_EMAIL) ||
               undefined;
+            const contactPages = [
+              ...new Set(
+                graph
+                  .getObjects(cp, CV_CONTACT_PAGE)
+                  .map((contactPage) => graph.getNamedNodeValue(contactPage))
+                  .filter(Boolean)
+              ),
+            ];
             return {
               ...(cpName && { name: cpName }),
               ...(cpEmail && { email: cpEmail }),
+              ...(contactPages.length && { contactPages }),
             };
           })
-          .filter((cp) => cp.name || cp.email)
+          .filter((cp) => cp.name || cp.email || cp.contactPages?.length)
       : undefined;
 
   return {

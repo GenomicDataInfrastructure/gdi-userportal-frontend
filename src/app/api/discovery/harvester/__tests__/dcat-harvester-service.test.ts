@@ -337,6 +337,50 @@ describe("DcatHarvesterService", () => {
     ]);
   });
 
+  test("retains all publisher contact pages", async () => {
+    const service = new DcatHarvesterService();
+    const contactPages = ["https://metabolic.lu", "https://endoctrine.lu"];
+    const rdf = `
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:dcat="http://www.w3.org/ns/dcat#"
+        xmlns:dct="http://purl.org/dc/terms/"
+        xmlns:foaf="http://xmlns.com/foaf/0.1/"
+        xmlns:cv="http://data.europa.eu/m8g/"
+      >
+        <dcat:Dataset rdf:about="https://example.org/datasets/1">
+          <dct:title>Dataset</dct:title>
+          <dct:publisher>
+            <foaf:Agent>
+              <foaf:name>Example Publisher</foaf:name>
+              <cv:contactPoint>
+                <cv:ContactPoint>
+                  <cv:contactPage>
+                    <foaf:Document rdf:about="${contactPages[0]}" />
+                  </cv:contactPage>
+                  <cv:contactPage>
+                    <foaf:Document rdf:about="${contactPages[1]}" />
+                  </cv:contactPage>
+                </cv:ContactPoint>
+              </cv:contactPoint>
+            </foaf:Agent>
+          </dct:publisher>
+        </dcat:Dataset>
+      </rdf:RDF>
+    `;
+
+    await expect(service.parseDatasetsFromRdf(rdf)).resolves.toMatchObject([
+      {
+        publishers: [
+          {
+            name: "Example Publisher",
+            contactPoints: [{ contactPages }],
+          },
+        ],
+      },
+    ]);
+  });
+
   test("parseDatasetsFromRdf throws on the first mapping error when no error collector is given", async () => {
     const service = new DcatHarvesterService();
     const mapDatasetSpy = jest

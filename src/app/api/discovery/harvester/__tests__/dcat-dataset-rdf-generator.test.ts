@@ -449,6 +449,7 @@ describe("DCAT dataset export generators", () => {
           columnNodes.includes(q.subject.value) &&
           q.predicate.value === CSVW_TITLES &&
           q.object.value === "Patient Id" &&
+          q.object.termType === "Literal" &&
           q.object.language === "en"
       )
     ).toBe(true);

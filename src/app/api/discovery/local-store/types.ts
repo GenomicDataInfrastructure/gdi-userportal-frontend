@@ -19,7 +19,11 @@ export interface LocalAgent {
   type?: { value: string; label: string };
   identifier?: string;
   actedOnBehalfOf?: LocalAgent[];
-  contactPoints?: Array<{ name?: string; email?: string }>;
+  contactPoints?: Array<{
+    name?: string;
+    email?: string;
+    contactPages?: string[];
+  }>;
 }
 
 export interface LocalDiscoveryDistribution {

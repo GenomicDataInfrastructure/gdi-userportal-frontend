@@ -1177,6 +1177,56 @@ describe("DCAT dataset export generators", () => {
     expect(cvEmailQuad!.object.value).toBe(contactEmail);
   });
 
+  test("emits all publisher contact pages under one cv:contactPoint", async () => {
+    const DCT_PUBLISHER = "http://purl.org/dc/terms/publisher";
+    const CV_CONTACT_POINT = "http://data.europa.eu/m8g/contactPoint";
+    const CV_CONTACT_PAGE = "http://data.europa.eu/m8g/contactPage";
+    const FOAF_DOCUMENT = "http://xmlns.com/foaf/0.1/Document";
+    const RDF_TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+    const contactPages = ["https://metabolic.lu", "https://endoctrine.lu"];
+    const dataset = buildLocalDiscoveryDataset({
+      id: "https://example.org/datasets/export-1",
+      publishers: [
+        {
+          name: "Example Publisher",
+          contactPoints: [{ contactPages }],
+        },
+      ],
+    });
+
+    const quads = await parseRdfXmlToQuads(
+      await serializeDatasetAsRdfXml(dataset)
+    );
+    const publisherNode = quads.find(
+      (quad) => quad.predicate.value === DCT_PUBLISHER
+    )?.object.value;
+    const contactPointNode = quads.find(
+      (quad) =>
+        quad.subject.value === publisherNode &&
+        quad.predicate.value === CV_CONTACT_POINT
+    )?.object.value;
+
+    expect(contactPointNode).toBeDefined();
+    expect(
+      quads.filter(
+        (quad) =>
+          quad.subject.value === contactPointNode &&
+          quad.predicate.value === CV_CONTACT_PAGE &&
+          contactPages.includes(quad.object.value)
+      )
+    ).toHaveLength(2);
+    contactPages.forEach((contactPage) => {
+      expect(
+        quads.some(
+          (quad) =>
+            quad.subject.value === contactPage &&
+            quad.predicate.value === RDF_TYPE &&
+            quad.object.value === FOAF_DOCUMENT
+        )
+      ).toBe(true);
+    });
+  });
+
   test("emits healthdcatap:hdab agent typed as foaf:Organization and publishers as foaf:Agent", async () => {
     const FOAF_NS = "http://xmlns.com/foaf/0.1/";
     const publisherUri = "https://example.org/publisher/1";

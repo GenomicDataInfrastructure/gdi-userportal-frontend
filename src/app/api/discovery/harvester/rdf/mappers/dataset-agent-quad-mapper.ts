@@ -74,6 +74,14 @@ const addAgents = (
         );
         store.add(cpNode, ns.cv("email"), createLiteral(cp.email));
       }
+      cp.contactPages?.forEach((contactPage) => {
+        if (!isNonEmptyString(contactPage)) {
+          return;
+        }
+        const contactPageNode = createNamedNode(contactPage);
+        store.add(cpNode, ns.cv("contactPage"), contactPageNode);
+        store.add(contactPageNode, ns.rdf("type"), ns.foaf("Document"));
+      });
     });
   });
 };

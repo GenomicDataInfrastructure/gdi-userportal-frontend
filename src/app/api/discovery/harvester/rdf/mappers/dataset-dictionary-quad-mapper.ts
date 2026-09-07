@@ -3,20 +3,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-  DATASET_EXPORT_PREFIXES,
   DatasetRdfContext,
   addLiteral,
-  createNamedNode,
+  createLanguageLiteral,
   createNestedNode,
-  isAbsoluteUri,
   isNonEmptyString,
   ns,
 } from "@/app/api/discovery/harvester/rdf/context";
 
-const toDictionaryDatatypeNode = (value: string) =>
-  createNamedNode(
-    isAbsoluteUri(value) ? value : `${DATASET_EXPORT_PREFIXES.xsd}${value}`
-  );
+const toDictionaryDatatypeLiteral = (value: string): string =>
+  value.split(/[/#]/).findLast(Boolean) || value;
 
 export const addDatasetDictionaryQuads = ({
   dataset,
@@ -27,13 +23,23 @@ export const addDatasetDictionaryQuads = ({
     return;
   }
 
-  const schemaNode = createNestedNode(
+  const tableGroupNode = createNestedNode(
     { dataset, store, datasetNode },
     "data-dictionary"
   );
-  store.add(datasetNode, ns.foaf("page"), schemaNode);
-  store.add(schemaNode, ns.rdf("type"), ns.foaf("Document"));
-  store.add(schemaNode, ns.rdf("type"), ns.csvw("TableSchema"));
+  const tableNode = createNestedNode(
+    { dataset, store, datasetNode },
+    "data-dictionary-table"
+  );
+  store.add(datasetNode, ns.health("hasVariables"), tableGroupNode);
+  store.add(tableGroupNode, ns.rdf("type"), ns.csvw("TableGroup"));
+  store.add(tableGroupNode, ns.csvw("table"), tableNode);
+  store.add(tableNode, ns.rdf("type"), ns.csvw("Table"));
+  store.add(
+    tableNode,
+    ns.dct("title"),
+    createLanguageLiteral("Data Dictionary Table", "en")
+  );
 
   dataset.dataDictionary.forEach((entry, index) => {
     if (
@@ -48,13 +54,14 @@ export const addDatasetDictionaryQuads = ({
       { dataset, store, datasetNode },
       `data-dictionary-column-${index + 1}`
     );
-    store.add(schemaNode, ns.csvw("column"), columnNode);
+    store.add(tableNode, ns.csvw("column"), columnNode);
     store.add(columnNode, ns.rdf("type"), ns.csvw("Column"));
     addLiteral(store, columnNode, ns.csvw("name"), entry.name);
-    store.add(
+    addLiteral(
+      store,
       columnNode,
       ns.csvw("datatype"),
-      toDictionaryDatatypeNode(entry.type)
+      toDictionaryDatatypeLiteral(entry.type)
     );
     addLiteral(store, columnNode, ns.dct("description"), entry.description);
   });

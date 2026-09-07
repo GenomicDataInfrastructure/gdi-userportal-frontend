@@ -129,9 +129,11 @@ export const canonicalDiscoveryRdf = `
           <dct:description xml:lang="eng">https://www.example.com/purpose/research</dct:description>
         </dpv:Purpose>
       </dpv:hasPurpose>
-      <foaf:page>
-        <foaf:Document rdf:nodeID="Nc7c963dbbd1a488fa763cf3e13cfaf21">
-          <rdf:type rdf:resource="http://www.w3.org/ns/csvw#TableSchema"/>
+      <healthdcatap:hasVariables>
+        <csvw:TableGroup rdf:nodeID="Nc7c963dbbd1a488fa763cf3e13cfaf21">
+          <csvw:table>
+            <csvw:Table rdf:nodeID="Ntable1">
+              <dct:title xml:lang="en">Data Dictionary Table</dct:title>
           <csvw:column>
             <csvw:Column rdf:nodeID="Ncfd77d58a1a54203a688390ef40d27d4">
               <csvw:name>Data_1</csvw:name>
@@ -156,8 +158,10 @@ export const canonicalDiscoveryRdf = `
               <rdfs:comment xml:lang="eng">[10=Low, 20=Medium, 30=High]</rdfs:comment>
             </csvw:Column>
           </csvw:column>
-        </foaf:Document>
-      </foaf:page>
+            </csvw:Table>
+          </csvw:table>
+        </csvw:TableGroup>
+      </healthdcatap:hasVariables>
       <dct:publisher>
         <foaf:Agent rdf:nodeID="Npublisher1">
           <foaf:name xml:lang="eng">org</foaf:name>

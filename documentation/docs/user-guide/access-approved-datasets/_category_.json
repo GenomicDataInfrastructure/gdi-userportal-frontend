@@ -1,0 +1,9 @@
+{
+  "label": "Access approved datasets",
+  "position": 7,
+  "link": {
+    "type": "generated-index",
+    "title": "Access approved datasets",
+    "description": "Check your approved dataset access and use datasets through the Secure Processing Environment."
+  }
+}

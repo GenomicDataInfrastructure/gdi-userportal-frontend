@@ -4,26 +4,24 @@
 
 import {
   DatasetRdfContext,
-  createBlankNode,
   createNamedNode,
+  createNestedNode,
   isAbsoluteUri,
   isNonEmptyString,
   ns,
 } from "@/app/api/discovery/harvester/rdf/context";
 
-export const addDatasetProvenanceActivityQuads = ({
-  dataset,
-  store,
-  datasetNode,
-}: DatasetRdfContext): void => {
+export const addDatasetProvenanceActivityQuads = (
+  context: DatasetRdfContext
+): void => {
+  const { dataset, store, datasetNode } = context;
   if (!dataset.wasGeneratedBy?.length) {
     return;
   }
 
-  dataset.wasGeneratedBy.forEach((activity) => {
-    // Use a blank node so rdflib renders it inline as
-    // <prov:Activity rdf:nodeID="..."> rather than a separate top-level block.
-    const activityNode = createBlankNode();
+  dataset.wasGeneratedBy.forEach((activity, index) => {
+    // Named resources preserve rdf:type when rdflib's RDF/XML is parsed again.
+    const activityNode = createNestedNode(context, `activity-${index + 1}`);
     store.add(datasetNode, ns.prov("wasGeneratedBy"), activityNode);
     store.add(activityNode, ns.rdf("type"), ns.prov("Activity"));
 

@@ -124,6 +124,7 @@ export const addConcept = (
   if (isAbsoluteUri(value)) {
     const concept = createNamedNode(value);
     store.add(subject, predicate, concept);
+    store.add(concept, ns.rdf("type"), ns.skos("Concept"));
     if (isNonEmptyString(label)) {
       store.add(concept, ns.skos("prefLabel"), createLiteral(label));
     }

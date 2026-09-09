@@ -20,6 +20,7 @@ import { parseRdfXmlToQuads } from "@/app/api/discovery/harvester/rdf-quad-loade
 import { serializeDatasetAsRdfXml } from "@/app/api/discovery/harvester/dcat-dataset-rdfxml-generator";
 import { serializeDatasetAsTurtle } from "@/app/api/discovery/harvester/dcat-dataset-turtle-generator";
 import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtures";
+import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 
 describe("DCAT dataset export generators", () => {
   const originalBaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -523,34 +524,60 @@ describe("DCAT dataset export generators", () => {
   });
 
   test("emits prov:wasGeneratedBy with prov:Activity and dct:type in RDF/XML", async () => {
-    const activityTypeUri =
-      "https://healthdata.eu/activity/ADMINISTRATIVE_PROCESSES";
-    const dataset = buildLocalDiscoveryDataset({
+    const activityTypes = [
+      "https://example.org/activity/collection",
+      "https://example.org/activity/analysis",
+    ];
+    const dataset: LocalDiscoveryDataset = {
       id: "https://example.org/datasets/export-1",
-      wasGeneratedBy: [{ activityType: activityTypeUri }],
-    });
+      title: "Activity export regression",
+      publishers: [],
+      hdab: [],
+      creators: [],
+      wasGeneratedBy: activityTypes.map((activityType) => ({ activityType })),
+    };
 
     const rdfXml = await serializeDatasetAsRdfXml(dataset);
-
-    // rdflib encodes rdf:type via the element name and dct:type as a child element.
-    // These XML string checks are the authoritative structural assertions.
-    expect(rdfXml).toContain("prov:wasGeneratedBy");
-    expect(rdfXml).toContain("prov:Activity");
-    expect(rdfXml).toContain(`<dct:type rdf:resource="${activityTypeUri}"/>`);
-
     const quads = await parseRdfXmlToQuads(rdfXml);
-
-    // prov:wasGeneratedBy must link to a blank node (inline activity)
-    const activityBlankNodeIds = quads
+    const activities = quads
       .filter(
         (q) =>
-          q.subject.value === "https://example.org/datasets/export-1" &&
-          q.predicate.value === "http://www.w3.org/ns/prov#wasGeneratedBy" &&
-          q.object.termType === "BlankNode"
+          q.subject.value === dataset.id &&
+          q.predicate.value === "http://www.w3.org/ns/prov#wasGeneratedBy"
       )
-      .map((q) => q.object.value);
+      .map((q) => q.object);
 
-    expect(activityBlankNodeIds).toHaveLength(1);
+    expect(activities).toHaveLength(2);
+    expect(activities.map((activity) => activity.value).sort()).toEqual([
+      `${dataset.id}#activity-1`,
+      `${dataset.id}#activity-2`,
+    ]);
+    for (const activity of activities) {
+      expect(activity.termType).toBe("NamedNode");
+      expect(
+        quads.some(
+          (q) =>
+            q.subject.equals(activity) &&
+            q.predicate.value === RDF_TYPE &&
+            q.object.termType === "NamedNode" &&
+            q.object.value === "http://www.w3.org/ns/prov#Activity"
+        )
+      ).toBe(true);
+      expect(
+        quads
+          .filter(
+            (q) =>
+              q.subject.equals(activity) &&
+              q.predicate.value === "http://purl.org/dc/terms/type"
+          )
+          .map((q) => q.object)
+      ).toMatchObject([
+        {
+          termType: "NamedNode",
+          value: activityTypes[activity.value.endsWith("#activity-1") ? 0 : 1],
+        },
+      ]);
+    }
   });
 
   test("omits prov:wasGeneratedBy when wasGeneratedBy is undefined", async () => {

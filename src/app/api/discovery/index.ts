@@ -89,8 +89,6 @@ export const searchGVariantsApi = async (
     );
   }
 
-  await assertBeaconAuthorization();
-
   const normalizedOptions: DiscoveryGVariantSearchQuery = {
     params: options.params ?? {},
   };

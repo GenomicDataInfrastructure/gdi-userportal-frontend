@@ -71,5 +71,8 @@ describe("Search GVariants", () => {
       alleleCountHemizygous: 0.0,
       alleleFrequency: 0.13095,
     });
+    const { assertBeaconAuthorization } =
+      await import("@/app/api/ga4gh/beacon-authorization.actions");
+    expect(assertBeaconAuthorization).not.toHaveBeenCalled();
   });
 });

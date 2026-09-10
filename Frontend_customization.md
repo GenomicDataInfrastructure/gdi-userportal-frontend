@@ -17,6 +17,7 @@ SPDX-License-Identifier: Apache-2.0
 | KEYCLOAK_CLIENT_ID              | Client ID for Keycloak authentication                    | Obtained from your Keycloak admin console                        |
 | KEYCLOAK_CLIENT_SECRET          | Client secret for Keycloak authentication                | Obtained from your Keycloak admin console. Keep this secret!     |
 | KEYCLOAK_ISSUER_URL             | URL of the Keycloak realm                                | Ensure this points to the correct realm                          |
+| TRUSTED_VISA_ISSUERS            | Comma-separated GA4GH Visa issuer URL allow-list         | Required for Visa authorization; unset or invalid rejects all    |
 | END_SESSION_URL                 | URL for ending the user's session                        | Used for logout functionality                                    |
 | REFRESH_TOKEN_URL               | URL for refreshing authentication tokens                 | Ensures long-lived sessions                                      |
 | CSP_HEADER                      | Content Security Policy header                           | Defines allowed sources for various resource types               |

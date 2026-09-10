@@ -31,6 +31,7 @@ const serverEnv = {
         SKIP_VISA_SIGNATURE_VERIFICATION: "true",
         KEYCLOAK_ISSUER_URL: `http://localhost:${mockApiPort}`,
         LS_AAI_USERINFO_URL: `http://localhost:${mockApiPort}/userinfo`,
+        TRUSTED_VISA_ISSUERS: `http://localhost:${mockApiPort}`,
       }
     : {}),
 };

@@ -6,6 +6,11 @@ import "server-only";
 import { jwtDecode } from "jwt-decode";
 import { decodeProtectedHeader, jwtVerify } from "jose";
 import { JwksResolver, resolveJwksForJku } from "./jwks";
+import {
+  getTrustedVisaIssuers,
+  isTrustedVisaIssuer,
+  normalizeVisaIssuer,
+} from "./trustedIssuers";
 
 export type Ga4ghVisaV1 = {
   type: string;
@@ -33,6 +38,10 @@ export type ControlledAccessGrant = {
 };
 
 const CONTROLLED_ACCESS_GRANTS = "ControlledAccessGrants";
+
+function auditString(value: unknown, fallback: string): string {
+  return typeof value === "string" && value !== "" ? value : fallback;
+}
 
 /**
  * Decodes the payload of a GA4GH Visa JWT without verifying the signature.
@@ -88,22 +97,22 @@ export function extractControlledAccessGrants(
  *
  * Logs every attempt and every failure to support audit requirements.
  *
- * @returns `true` when the signature is valid, `false` otherwise.
+ * @returns The signature-verified payload, or `null` when validation fails.
  */
 async function verifyVisaJwt(
   jwt: string,
   payload: Ga4ghVisaPayload,
   jwksResolver: JwksResolver
-): Promise<boolean> {
-  const { iss, sub } = payload;
+): Promise<Ga4ghVisaPayload | null> {
+  const { iss } = payload;
   const visaType = payload.ga4gh_visa_v1.type;
 
-  console.debug("[visa-validation] attempt", { iss, sub, visaType });
+  console.debug("[visa-validation] attempt", { iss, visaType });
 
   // In test environments this can be set to skip cryptographic verification.
   // Signature correctness is covered by dedicated unit tests.
   if (process.env.SKIP_VISA_SIGNATURE_VERIFICATION === "true") {
-    return true;
+    return payload;
   }
 
   // Extract the jku from the JWT's protected header.
@@ -114,11 +123,10 @@ async function verifyVisaJwt(
   } catch (error) {
     console.error("[visa-validation] FAILED: could not decode JWT header", {
       iss,
-      sub,
       visaType,
       error,
     });
-    return false;
+    return null;
   }
 
   if (!jku) {
@@ -126,37 +134,70 @@ async function verifyVisaJwt(
       "[visa-validation] FAILED: jku claim missing from JWT header",
       {
         iss,
-        sub,
         visaType,
       }
     );
-    return false;
+    return null;
+  }
+
+  let parsedJku: URL;
+  try {
+    parsedJku = new URL(jku);
+  } catch {
+    console.error("[visa-validation] FAILED: invalid jku URL", {
+      iss,
+      visaType,
+    });
+    return null;
+  }
+
+  if (parsedJku.username || parsedJku.password || parsedJku.hash) {
+    console.error("[visa-validation] FAILED: unsafe jku URL", {
+      iss,
+      visaType,
+    });
+    return null;
+  }
+
+  const normalizedIssuer = normalizeVisaIssuer(iss);
+  if (
+    normalizedIssuer === null ||
+    parsedJku.origin !== new URL(normalizedIssuer).origin
+  ) {
+    console.error(
+      "[visa-validation] FAILED: jku origin does not match issuer",
+      {
+        iss,
+        visaType,
+        jkuOrigin: parsedJku.origin,
+      }
+    );
+    return null;
   }
 
   const keyFetcher = await jwksResolver(jku).catch((err: unknown) => {
     console.error("[visa-validation] FAILED: could not resolve JWKS", {
       iss,
-      sub,
       visaType,
-      jku,
       error: err instanceof Error ? err.message : String(err),
     });
     return null;
   });
 
-  if (keyFetcher === null) return false;
+  if (keyFetcher === null) return null;
 
   try {
-    await jwtVerify(jwt, keyFetcher);
-    return true;
+    const { payload: verifiedPayload } = await jwtVerify(jwt, keyFetcher, {
+      issuer: iss,
+    });
+    return verifiedPayload as Ga4ghVisaPayload;
   } catch (err) {
     console.error("[visa-validation] FAILED: signature verification error", {
       iss,
-      sub,
       visaType,
       error: err instanceof Error ? err.message : String(err),
     });
-    return false;
+    return null;
   }
 }
 
@@ -166,8 +207,8 @@ type VerifiedVisa = {
 };
 
 /**
- * Validates the JWT signature of each visa against its issuer's public keys,
- * then returns the decoded and verified visa payloads.
+ * Accepts visas only from TRUSTED_VISA_ISSUERS, binds each JWT's `jku` to the
+ * issuer origin, validates its signature, then returns verified payloads.
  *
  * Visas from untrusted or unknown issuers are silently dropped after being
  * logged for audit. Signature failures are also logged and dropped.
@@ -176,7 +217,7 @@ type VerifiedVisa = {
  *   `ga4gh_passport_v1` claims.
  * @param jwksResolver - Injectable JWKS resolver (defaults to the production
  *   resolver backed by signature verification against the JWT's `jku`).
- * @returns Decoded, signature-verified visa payloads.
+ * @returns Decoded, allow-listed, signature-verified visa payloads.
  */
 export async function extractVerifiedVisas(
   visaJwts: string[],
@@ -192,50 +233,78 @@ export async function extractVerifiedVisas(
   // Drop expired visas before making any network calls for signature
   // verification.
   const nowSeconds = Math.floor(Date.now() / 1000);
-  const expiredByIssuer: Record<string, number> = {};
+  const expiredByIssuer = new Map<string, number>();
   const active = candidates.filter(({ payload }) => {
     const exp = payload.ga4gh_visa_v1.exp;
     if (exp !== undefined && exp < nowSeconds) {
-      const key = payload.iss;
-      expiredByIssuer[key] = (expiredByIssuer[key] ?? 0) + 1;
+      const key = auditString(payload.iss, "missing");
+      expiredByIssuer.set(key, (expiredByIssuer.get(key) ?? 0) + 1);
       return false;
     }
     return true;
   });
-  const totalExpired = Object.values(expiredByIssuer).reduce(
+  const totalExpired = [...expiredByIssuer.values()].reduce(
     (sum, n) => sum + n,
     0
   );
   if (totalExpired > 0) {
     console.warn("[visa-validation] SKIPPED expired visas", {
       count: totalExpired,
-      byIssuer: expiredByIssuer,
+      byIssuer: Object.fromEntries(expiredByIssuer),
+    });
+  }
+
+  const trustedIssuers = getTrustedVisaIssuers();
+  const rejectedForIssuer = new Map<string, number>();
+  const accepted = active.filter(({ payload }) => {
+    if (isTrustedVisaIssuer(payload.iss, trustedIssuers)) return true;
+
+    const issuer = auditString(payload.iss, "missing");
+    const visaType = auditString(payload.ga4gh_visa_v1.type, "missing");
+    const key = `${issuer}|${visaType}`;
+    rejectedForIssuer.set(key, (rejectedForIssuer.get(key) ?? 0) + 1);
+    return false;
+  });
+
+  const totalRejectedForIssuer = [...rejectedForIssuer.values()].reduce(
+    (sum, n) => sum + n,
+    0
+  );
+  if (totalRejectedForIssuer > 0) {
+    console.warn("[visa-validation] REJECTED visas (unaccepted issuer)", {
+      count: totalRejectedForIssuer,
+      byIssuerAndType: Object.fromEntries(rejectedForIssuer),
     });
   }
 
   const verified: VerifiedVisa[] = [];
-  const rejectedByIssuerAndType: Record<string, number> = {};
+  const rejectedByIssuerAndType = new Map<string, number>();
 
-  for (const { jwt, payload } of active) {
-    const valid = await verifyVisaJwt(jwt, payload, jwksResolver);
-    if (!valid) {
+  for (const { jwt, payload } of accepted) {
+    const verifiedPayload = await verifyVisaJwt(jwt, payload, jwksResolver);
+    if (verifiedPayload === null) {
       const aggregateKey = `${payload.iss}|${payload.ga4gh_visa_v1.type}`;
-      rejectedByIssuerAndType[aggregateKey] =
-        (rejectedByIssuerAndType[aggregateKey] ?? 0) + 1;
+      rejectedByIssuerAndType.set(
+        aggregateKey,
+        (rejectedByIssuerAndType.get(aggregateKey) ?? 0) + 1
+      );
       continue;
     }
 
-    verified.push({ jwt, payload });
+    verified.push({ jwt, payload: verifiedPayload });
   }
 
-  const totalRejected = Object.values(rejectedByIssuerAndType).reduce(
+  const totalRejected = [...rejectedByIssuerAndType.values()].reduce(
     (sum, n) => sum + n,
     0
   );
   if (totalRejected > 0) {
     console.warn(
       "[visa-validation] REJECTED visas (failed signature verification)",
-      { count: totalRejected, byIssuerAndType: rejectedByIssuerAndType }
+      {
+        count: totalRejected,
+        byIssuerAndType: Object.fromEntries(rejectedByIssuerAndType),
+      }
     );
   }
 
@@ -243,8 +312,8 @@ export async function extractVerifiedVisas(
 }
 
 /**
- * Validates the JWT signature of each visa against its issuer's public keys,
- * then extracts `ControlledAccessGrants` visas from the verified set.
+ * Accepts visas only from TRUSTED_VISA_ISSUERS, validates each JWT against
+ * issuer-bound public keys, then extracts `ControlledAccessGrants` visas.
  *
  * Visas from untrusted or unknown issuers are silently dropped after being
  * logged for audit. Signature failures are also logged and dropped.
@@ -253,7 +322,8 @@ export async function extractVerifiedVisas(
  * @param jwksResolver - Injectable JWKS resolver (defaults to the production
  *   resolver backed by signature verification against the JWT's `jku`).
  * @returns Structured `ControlledAccessGrant` objects for every
- *   `ControlledAccessGrants` visa whose signature was successfully verified.
+ *   `ControlledAccessGrants` visa from an allow-listed issuer whose signature
+ *   was successfully verified.
  */
 export async function extractVerifiedControlledAccessGrants(
   passportJwts: string[],

@@ -26,6 +26,11 @@ const mapAppFilterKeyToDds = (key: string): string =>
 
 const RANGE_DEFAULT_OPERATORS = ["=", ">", "<", ">=", "<="] as const;
 
+const normalizeFilterHelpText = (
+  helpText: string | DiscoveryFilter["helpText"] | undefined
+): DiscoveryFilter["helpText"] =>
+  typeof helpText === "string" ? { text: helpText } : helpText;
+
 export class DdsDiscoveryProvider implements DiscoveryProvider {
   readonly key = "dds";
 
@@ -88,6 +93,7 @@ export class DdsDiscoveryProvider implements DiscoveryProvider {
       facets: typedResponse.facets?.map((facet) => ({
         ...facet,
         key: mapDdsFilterKeyToApp(facet.key),
+        helpText: normalizeFilterHelpText(facet.helpText),
       })),
     };
   }

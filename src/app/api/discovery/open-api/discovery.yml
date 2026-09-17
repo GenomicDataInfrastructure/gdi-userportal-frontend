@@ -935,8 +935,6 @@ components:
           title: Text
         link:
           $ref: "#/components/schemas/HelpTextLink"
-      required:
-        - link
     HelpTextLink:
       type: object
       title: Help text link
@@ -1076,7 +1074,12 @@ components:
           type: string
           title: Label
         helpText:
-          $ref: "#/components/schemas/HelpText"
+          description: >-
+            Filter help text. DDS traditionally returns HelpText objects; some
+            catalogue mappings return the display text directly.
+          oneOf:
+            - $ref: "#/components/schemas/HelpText"
+            - type: string
         values:
           type: array
           items:

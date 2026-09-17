@@ -89,4 +89,49 @@ describe("Retrieving a specific dataset", () => {
       label: "TAR archive",
     });
   });
+
+  test("accepts every DDS distribution license representation", async () => {
+    mockDiscoveryAdapter.onGet("/api/v1/datasets/102").reply(200, {
+      id: "102",
+      title: "Dataset 102",
+      description: "This is dataset 102",
+      distributions: [
+        {
+          id: "distribution-value-label",
+          title: "Value label license",
+          description: "Distribution description",
+          license: { value: "CC-BY-4.0", label: "CC BY 4.0" },
+        },
+        {
+          id: "distribution-string",
+          title: "String license",
+          description: "Distribution description",
+          license: "CC-BY-4.0",
+        },
+        {
+          id: "distribution-array",
+          title: "Array license",
+          description: "Distribution description",
+          license: ["CC-BY-4.0", { value: "CC0-1.0", label: "CC0 1.0" }],
+        },
+        {
+          id: "distribution-null",
+          title: "Null license",
+          description: "Distribution description",
+          license: null,
+        },
+      ],
+    });
+
+    const response = await retrieveDatasetApi("102");
+
+    expect(
+      response.distributions?.map((distribution) => distribution.license)
+    ).toEqual([
+      { value: "CC-BY-4.0", label: "CC BY 4.0" },
+      "CC-BY-4.0",
+      ["CC-BY-4.0", { value: "CC0-1.0", label: "CC0 1.0" }],
+      null,
+    ]);
+  });
 });

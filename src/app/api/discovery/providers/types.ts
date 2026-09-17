@@ -47,6 +47,12 @@ export interface DiscoveryValueLabel {
   count?: number;
 }
 
+export type DiscoveryLicense =
+  | DiscoveryValueLabel
+  | string
+  | Array<DiscoveryValueLabel | string>
+  | null;
+
 export interface DiscoveryAgent {
   name: string;
   email?: string;
@@ -147,7 +153,7 @@ export interface DiscoveryRetrievedDistribution {
   downloadUrl?: string;
   format?: DiscoveryValueLabel;
   languages?: DiscoveryValueLabel[];
-  license?: DiscoveryValueLabel;
+  license?: DiscoveryLicense;
   conformsTo?: DiscoveryValueLabel[];
   mediaType?: DiscoveryValueLabel;
   modifiedAt?: string;

@@ -41,6 +41,20 @@ const DistributionAccordion = ({
     distribution.format?.value?.split("/").pop() ||
     notAvailableLabel;
 
+  const getLicenseLabel = (license: RetrievedDistribution["license"]) => {
+    const licenses = Array.isArray(license) ? license : [license];
+    const labels = licenses
+      .filter((item): item is NonNullable<typeof item> => item != null)
+      .map((item) =>
+        typeof item === "string"
+          ? item.split("/").pop() || item
+          : item.label || item.value?.split("/").pop() || item.value
+      )
+      .filter((item): item is string => Boolean(item));
+
+    return labels.length > 0 ? labels.join(", ") : notAvailableLabel;
+  };
+
   useEffect(() => {
     contentRefs.current = contentRefs.current.slice(0, distributions.length);
   }, [distributions]);
@@ -186,9 +200,7 @@ const DistributionAccordion = ({
                         {t("license")}:
                       </strong>
                       <span className="text-sm ml-2">
-                        {distribution.license?.label ||
-                          distribution.license?.value?.split("/").pop() ||
-                          notAvailableLabel}
+                        {getLicenseLabel(distribution.license)}
                       </span>
                       <Tooltip message={t("tooltips.distributionLicense")} />
                     </span>

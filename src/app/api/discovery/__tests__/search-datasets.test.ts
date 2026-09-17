@@ -127,6 +127,41 @@ describe("Searching datasets", () => {
     ]);
   });
 
+  test("accepts and normalizes string help text for every facet type", async () => {
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
+    const facets = [
+      { key: "access_rights", type: "DROPDOWN" },
+      { key: "theme", type: "DROPDOWN" },
+      { key: "tags", type: "FREE_TEXT" },
+      { key: "modified", type: "DATETIME" },
+      { key: "number_of_records", type: "NUMBER" },
+    ].map(({ key, type }) => ({
+      source: "ckan",
+      type,
+      key,
+      label: key,
+      helpText: `Help for ${key}`,
+    }));
+
+    mockDiscoveryAdapter.onPost("/api/v1/datasets/search").reply(200, {
+      count: 0,
+      results: [],
+      facets,
+    });
+
+    const response = await searchDatasetsApi({});
+
+    expect(response.facets).toEqual(
+      facets.map((facet) => ({
+        ...facet,
+        helpText: { text: facet.helpText },
+      }))
+    );
+  });
+
   test("does not call beacon authorization when includeBeacon is false", async () => {
     const { assertBeaconAuthorization } =
       await import("@/app/api/ga4gh/beacon-authorization.actions");

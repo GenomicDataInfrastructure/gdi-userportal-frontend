@@ -34,7 +34,10 @@ function FilterItem({ filter }: FilterItemProps) {
     correspondingActiveFilter?.values?.length ||
     (correspondingActiveFilter?.entries && 1) ||
     0;
-  const helpText = filter.helpText?.text;
+  const helpText =
+    typeof filter.helpText === "string"
+      ? filter.helpText
+      : filter.helpText?.text;
 
   const getFilterContent = (type: FilterType) => {
     switch (type) {

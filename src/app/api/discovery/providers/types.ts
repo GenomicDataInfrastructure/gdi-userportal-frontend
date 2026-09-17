@@ -209,6 +209,10 @@ export interface DiscoveryFilter {
   type: DiscoveryFilterType;
   key: string;
   label: string;
+  helpText?: {
+    text?: string;
+    link?: { label: string[]; value: string[] };
+  };
   values?: DiscoveryValueLabel[];
   range?: DiscoveryFilterRange;
   operators?: DiscoveryOperator[];

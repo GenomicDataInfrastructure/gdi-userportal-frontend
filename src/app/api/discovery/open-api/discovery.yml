@@ -771,7 +771,19 @@ components:
           items:
             $ref: "#/components/schemas/ValueLabel"
         license:
-          $ref: "#/components/schemas/ValueLabel"
+          description: >-
+            Licence metadata returned by DDS. Older catalogue mappings return a
+            ValueLabel, while newer mappings can return an SPDX/URI string or
+            a list of licence values.
+          nullable: true
+          oneOf:
+            - $ref: "#/components/schemas/ValueLabel"
+            - type: string
+            - type: array
+              items:
+                oneOf:
+                  - $ref: "#/components/schemas/ValueLabel"
+                  - type: string
         conformsTo:
           type: array
           items:

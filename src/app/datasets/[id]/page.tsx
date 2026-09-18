@@ -15,10 +15,7 @@ import DatasetMetadata from "./DatasetMetadata";
 import Tooltip from "./Tooltip";
 import { createDatasetSidebarItems } from "./sidebarItems";
 import { retrieveDatasetApi, searchDatasetsApi } from "../../api/discovery";
-import {
-  HelpText,
-  SearchedDataset,
-} from "../../api/discovery/open-api/schemas";
+import { SearchedDataset } from "../../api/discovery/open-api/schemas";
 import { extractHelpTextMap } from "@/utils/datasetHelpers";
 import { UrlParams, UrlSearchParams } from "@/app/params";
 
@@ -88,9 +85,7 @@ export default async function Page({
 
   const relationships = dataset.datasetRelationships || [];
   const dictionary = dataset.dataDictionary || [];
-  const helpText = extractHelpTextMap(
-    dataset.helpText as Record<string, HelpText> | undefined
-  );
+  const helpText = extractHelpTextMap(dataset.helpText);
   const sidebarTranslations = {
     requestDataAccess: t("requestDataAccess"),
     externalRequestUnavailable: t("externalRequestUnavailable"),

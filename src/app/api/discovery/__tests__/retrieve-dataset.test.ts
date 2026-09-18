@@ -26,6 +26,26 @@ describe("Retrieving a specific dataset", () => {
     expect(response.id).toEqual("99");
   });
 
+  test("accepts legacy string help text returned by the live discovery API", async () => {
+    mockDiscoveryAdapter.onGet("/api/v1/datasets/legacy-help-text").reply(200, {
+      id: "legacy-help-text",
+      title: "Dataset with legacy help text",
+      description: "This is dataset legacy-help-text",
+      helpText: {
+        title: "A descriptive title for the dataset.",
+      },
+    });
+
+    await expect(retrieveDatasetApi("legacy-help-text")).resolves.toMatchObject(
+      {
+        id: "legacy-help-text",
+        helpText: {
+          title: "A descriptive title for the dataset.",
+        },
+      }
+    );
+  });
+
   test("accepts null data service fields returned by discovery backend", async () => {
     mockDiscoveryAdapter.onGet("/api/v1/datasets/100").reply(200, {
       id: "100",

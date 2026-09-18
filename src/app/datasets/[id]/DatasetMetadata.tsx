@@ -42,7 +42,6 @@ import { useTranslations } from "next-intl";
 import {
   DatasetDictionaryEntry,
   DatasetRelationEntry,
-  HelpText,
   RetrievedDataset,
   SearchedDataset,
   ValueLabel,
@@ -112,9 +111,7 @@ const DatasetMetadata = ({
   seriesMembers?: SearchedDataset[];
 }) => {
   const t = useTranslations("datasets.detail");
-  const helpText = extractHelpTextMap(
-    dataset.helpText as Record<string, HelpText> | undefined
-  );
+  const helpText = extractHelpTextMap(dataset.helpText);
   const [userTimezone, setUserTimezone] = useState<string | null>(null);
   const notProvidedLabel = t("notProvided");
   const notAvailableLabel = t("notAvailable");

@@ -453,7 +453,12 @@ components:
           type: object
           title: Help text
           additionalProperties:
-            $ref: "#/components/schemas/HelpText"
+            description: >-
+              DDS currently returns legacy string values here. Newer DDS
+              versions return structured help-text objects.
+            oneOf:
+              - type: string
+              - $ref: "#/components/schemas/HelpText"
         version:
           type: string
           title: Version

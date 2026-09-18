@@ -12,14 +12,17 @@ import {
 const EXTERNALLY_GOVERNED_URI = "http://data.gdi.eu/core/p2/ExternallyGoverned";
 
 export function extractHelpTextMap(
-  helpText?: Record<string, HelpText>
+  helpText?: Record<string, string | HelpText>
 ): Record<string, string> | undefined {
   if (!helpText) return undefined;
 
-  return Object.fromEntries(
-    Object.entries(helpText)
-      .filter(([, value]) => Boolean(value?.text))
-      .map(([key, value]) => [key, value.text as string])
+  return Object.entries(helpText).reduce<Record<string, string>>(
+    (result, [key, value]) => {
+      const text = typeof value === "string" ? value : value.text;
+      if (text) result[key] = text;
+      return result;
+    },
+    {}
   );
 }
 

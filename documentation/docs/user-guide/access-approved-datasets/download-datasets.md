@@ -10,10 +10,10 @@ After your application is approved, you will receive an email with instructions 
 
 To access and work with your approved datasets:
 
-1. Check your approval email for instructions from the data provider. 
+1. Check your approval email for instructions from the data provider.
 
-2. Typically, you will receive a link to the Secure Processing Environment (SPE) where you can access the datasets. 
- 
+2. Typically, you will receive a link to the Secure Processing Environment (SPE) where you can access the datasets.
+
 3. Follow the instructions in the SPE to access and work with the approved datasets.
 
    :::info Stay compliant

@@ -34,8 +34,7 @@ For information about how the Portal uses your Passport and Visas, see: [Your pa
 4. Select a dataset to view its full metadata and details.
 
    :::tip What's next?
-   
-   - You will receive an email with instructions on how to [access your approved datasets](/download-datasets). 
+   - You will receive an email with instructions on how to [access your approved datasets](/download-datasets).
    - If you cannot view any entitlements, see: [Troubleshoot dataset access](/troubleshoot-dataset-access).
 
    :::

@@ -20,7 +20,7 @@ Learn more about [Genomic Data Infrastructure (GDI)](about-gdi.md) and its found
 
 2. **[Request access](/category/request-datasets/):** Found a dataset you want to use? Submit an application to access it. You may need to provide documentation or requirements for your request, and you can invite collaborators to assist you with your application.
 
-3. **Access approved datasets:** Once your request is approved, you will receive an email with a link to the Secure Processing Environment (SPE) where you can securely download and work with the datasets.
+3. **Access approved datasets:** Once your request is approved, you can [view your entitlements](/view-entitlements) to see the datasets you have access to through the Secure Processing Environment (SPE).
 
    :::info Stay compliant
 

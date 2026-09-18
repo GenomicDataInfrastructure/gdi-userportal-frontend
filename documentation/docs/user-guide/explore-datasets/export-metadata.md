@@ -1,7 +1,7 @@
 ---
 slug: /export-metadata
 sidebar_label: "Export metadata"
-sidebar_position: 5
+sidebar_position: 4
 ---
 
 # Export metadata

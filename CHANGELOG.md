@@ -12,6 +12,58 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.7.7] - 2026-07-06
+## [v1.7.17] - 2026-09-15
+
+### Added
+- feat: enhance RDF serialization with activity tracking and dataset provenance by @Haris Zenovic in 666fb448
+- feat: add content type handling for harvest requests and responses by @Haris Zenovic in c623030a
+
+
+### Changed
+- chore(deps): update oras-project/setup-oras digest to f629924 by @Renovate Bot in 598ab52e
+- chore(deps): update dependency eslint-config-next to v16.3.5 by @Renovate Bot in 84fe83f1
+- ART-29022 enabled configuration for trusted visa issuers and validation of visa against these issuers (#1191) by @aslam-mohammed-vp in 0aa20588
+- chore(deps): update react monorepo to v19.3.0 (#1185) by @LNDS-Sysadmins in b0dfc1fb
+- chore(deps): bump js-yaml (#1184) by @dependabot[bot] in d59a5f34
+- chore(deps): bump joi from 17.13.3 to 17.13.7 in /documentation (#1183) by @dependabot[bot] in ae2a4f5f
+- chore(deps): bump svgo from 3.3.4 to 3.3.5 in /documentation (#1182) by @dependabot[bot] in 2d19d486
+- chore(deps): bump js-yaml from 3.14.2 to 3.15.2 in /documentation (#1178) by @dependabot[bot] in f1545765
+- chore(deps): bump colord from 2.9.3 to 2.10.0 in /documentation (#1188) by @dependabot[bot] in f6547f54
+- chore(deps): bump undici (#1177) by @dependabot[bot] in 59fb0366
+- chore(deps): bump browserslist from 4.28.1 to 4.28.9 in /documentation (#1176) by @dependabot[bot] in b4a19ae5
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1789008058 (#1186) by @LNDS-Sysadmins in 73bc7092
+- chore(deps): update oras-project/setup-oras digest to ccb7116 by @Renovate Bot in abf0430e
+- chore(deps): update oras-project/setup-oras digest to 52b6f72 by @Renovate Bot in ab9e876b
+- chore(deps): bump postcss-selector-parser in /documentation (#1168) by @dependabot[bot] in 19dbb0db
+- chore(deps-dev): bump browserslist from 4.28.1 to 4.28.8 (#1169) by @dependabot[bot] in e992e932
+- chore(deps): bump fast-uri from 3.1.2 to 3.1.7 in /documentation (#1170) by @dependabot[bot] in c758a0f3
+- chore(deps): bump @xmldom/xmldom from 0.8.13 to 0.8.15 (#1172) by @dependabot[bot] in 9c96bc04
+- chore(deps-dev): bump fast-uri from 3.1.5 to 3.1.7 (#1171) by @dependabot[bot] in ebecefca
+- chore(deps-dev): bump @humanfs/node from 0.16.7 to 0.16.8 (#1173) by @dependabot[bot] in c7ad6de6
+- ART-20535 restrict Beacon queries on ResearcherStatus and T&C acceptance (#1166) by @aslam-mohammed-vp in 3937546f
+- chore(deps): update dependency @types/react-dom to v19.2.7 by @Renovate Bot in 2cf69e32
+- chore(deps): update actions/deploy-pages action to v5.0.1 by @Renovate Bot in 2bd4e5f3
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1788215677 (#1165) by @LNDS-Sysadmins in 5eb7fa71
+- chore: update changelog for v1.7.16 (#1162) by @github-actions[bot] in 8bfe1542
+- chore(deps): update dependency eslint-config-next to v16.3.4 by @Renovate Bot in 0e5bf362
+- chore(deps): update oras-project/setup-oras digest to 39b47eb by @Renovate Bot in a017126f
+- Docs/art 26736 allele freq enhancements (#1153) by @Rose Pasigna in e7a83833
+
+
+### Fixed
+- fix(deps): update dependency next to v16.3.5 by @Renovate Bot in 447ae2d2
+- fixed build failure due to sharp version 0.35.3 vulnerability (#1187) by @aslam-mohammed-vp in b130fea9
+- fix(discovery): harvest HealthDCAT-AP data dictionaries (#1175) by @Inderpal Singh in e3815b07
+- fix(deps): update opentelemetry-js monorepo (#1164) by @LNDS-Sysadmins in c11d28bd
+- ART-20535 message text fix (#1174) by @aslam-mohammed-vp in 3b5a0420
+- fix(deps): update dependency next to v16.3.4 by @Renovate Bot in 0b325c9b
+- fix(deps): update dependency @opentelemetry/auto-instrumentations-node to ^0.80.0 (#1163) by @LNDS-Sysadmins in e30906fe
+
+
+### Removed
+- ART-29019 login and other checks removed for allel freq search (#1181) by @aslam-mohammed-vp in 6a8f1848
+
+
 ## [v1.7.16] - 2026-08-28
 
 ### Added

@@ -1077,6 +1077,18 @@
     "en": "Add to basket",
     "fr": "Ajouter au panier"
   },
+  "basket.alreadyGrantedExcluded": {
+    "en": "Datasets you already have access to are excluded from this request.",
+    "fr": "Les jeux de données auxquels vous avez déjà accès sont exclus de cette demande."
+  },
+  "basket.requestFailed": {
+    "en": "Unable to create your application. Please check that you are signed in and try again.",
+    "fr": "Impossible de créer votre demande. Vérifiez que vous êtes connecté et réessayez."
+  },
+  "basket.accessGranted": {
+    "en": "Access granted",
+    "fr": "Accès accordé"
+  },
   "basket.removeFromBasket": {
     "en": "Remove from basket",
     "fr": "Retirer du panier"

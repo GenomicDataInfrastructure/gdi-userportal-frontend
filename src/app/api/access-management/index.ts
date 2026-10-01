@@ -18,12 +18,47 @@ import { retrieveEntitlements } from "@/app/api/ga4gh/entitlements";
 export const createApplicationApi = async (createApplicationCommand: {
   datasetIds: string[];
 }) => {
-  const headers = await createHeaders();
-  const { applicationId } = await accessManagementClient.create_application_v1(
-    createApplicationCommand,
-    { headers }
-  );
-  return applicationId;
+  try {
+    const headers = await createHeaders();
+    if (!headers.Authorization) {
+      return {
+        ok: false as const,
+        response: {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+          data: {
+            title: "Unauthorized",
+            detail: "Sign in before requesting dataset access.",
+            status: 401,
+          },
+        },
+      };
+    }
+    const { applicationId } =
+      await accessManagementClient.create_application_v1(
+        createApplicationCommand,
+        { headers }
+      );
+    return { ok: true as const, applicationId, response: null };
+  } catch (error) {
+    const status = isAxiosError(error) ? (error.response?.status ?? 500) : 500;
+    const data = isAxiosError(error) ? error.response?.data : undefined;
+    return {
+      ok: false as const,
+      response: {
+        status,
+        headers: { "Content-Type": "application/json" },
+        data: {
+          title: typeof data?.title === "string" ? data.title : "Error",
+          detail:
+            typeof data?.detail === "string"
+              ? data.detail
+              : "Failed to create application",
+          status,
+        },
+      },
+    };
+  }
 };
 
 export const listApplicationsApi = async () => {

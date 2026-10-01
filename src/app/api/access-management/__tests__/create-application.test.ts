@@ -21,6 +21,18 @@ describe("Creating an application", () => {
 
   beforeEach(() => {
     jest.resetAllMocks();
+    mockDiscoveryAdapter.resetHistory();
+  });
+
+  test("Rejects unauthenticated requests without calling access management", async () => {
+    mockedGetServerSession.mockResolvedValueOnce(null);
+    await expect(
+      createApplicationApi({ datasetIds: ["id1"] })
+    ).resolves.toMatchObject({
+      ok: false,
+      response: { status: 401, data: { status: 401 } },
+    });
+    expect(mockDiscoveryAdapter.history.post).toHaveLength(0);
   });
 
   test("Creates a new application for the authenticated user", async () => {
@@ -36,6 +48,46 @@ describe("Creating an application", () => {
     const response = await createApplicationApi({ datasetIds: ["id1", "id2"] });
 
     expect(response).toBeDefined();
-    expect(response).toEqual("543");
+    expect(response).toEqual({
+      ok: true,
+      applicationId: "543",
+      response: null,
+    });
+  });
+  test.each([401, 403, 500])(
+    "Returns structured backend errors (%s)",
+    async (status) => {
+      mockedGetServerSession.mockResolvedValueOnce({
+        access_token: encrypt("token"),
+      });
+      mockDiscoveryAdapter
+        .onPost("/api/v1/applications/create")
+        .reply(status, { title: "Request failed", detail: "Backend detail" });
+      await expect(
+        createApplicationApi({ datasetIds: ["id1"] })
+      ).resolves.toMatchObject({
+        ok: false,
+        response: {
+          status,
+          data: { title: "Request failed", detail: "Backend detail", status },
+        },
+      });
+    }
+  );
+
+  test("Returns a safe structured error for unexpected failures", async () => {
+    mockedGetServerSession.mockRejectedValueOnce(
+      new Error("Internal credentials")
+    );
+    await expect(
+      createApplicationApi({ datasetIds: ["id1"] })
+    ).resolves.toMatchObject({
+      ok: false,
+      response: {
+        status: 500,
+        data: { detail: "Failed to create application" },
+      },
+    });
+    expect(mockDiscoveryAdapter.history.post).toHaveLength(0);
   });
 });

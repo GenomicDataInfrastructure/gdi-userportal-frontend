@@ -13,11 +13,10 @@ import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
 import { faPaperPlane, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { signIn, useSession } from "next-auth/react";
 import DatasetList from "../datasets/DatasetList";
-import { AxiosError } from "axios";
 import { createApplicationApi } from "../api/access-management";
 import { useRouter } from "@/i18n/navigation";
 import { UrlSearchParams } from "@/app/params";
-import { use } from "react";
+import { use, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 type BasketPageProps = {
@@ -27,10 +26,20 @@ type BasketPageProps = {
 export default function Page({ searchParams }: BasketPageProps) {
   const t = useTranslations();
   const _searchParams = use(searchParams);
-  const { basket, isLoading, emptyBasket } = useDatasetBasket();
+  const { basket, isLoading, emptyBasket, hasDatasetAccess, isAccessLoading } =
+    useDatasetBasket();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submittingRef = useRef(false);
   const { setAlert } = useAlert();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
+
+  const requestableDatasets = basket.filter(
+    (dataset) => !!dataset.identifier && !hasDatasetAccess(dataset)
+  );
+  const hasGrantedDatasets = basket.some(hasDatasetAccess);
+  const loginToRequest = () =>
+    signIn("keycloak", { callbackUrl: window.location.href });
 
   let heading = t("basket.title");
   if (basket.length > 0) {
@@ -42,38 +51,58 @@ export default function Page({ searchParams }: BasketPageProps) {
   }
 
   const requestNow = async () => {
-    const identifiers = basket
+    if (status !== "authenticated") {
+      await loginToRequest();
+      return;
+    }
+    if (
+      isAccessLoading ||
+      submittingRef.current ||
+      requestableDatasets.length === 0
+    )
+      return;
+    submittingRef.current = true;
+    setIsSubmitting(true);
+    const identifiers = requestableDatasets
       .map((dataset) => dataset.identifier)
       .filter((identifier): identifier is string => identifier !== undefined);
 
     try {
-      const applicationId = await createApplicationApi({
+      const result = await createApplicationApi({
         datasetIds: identifiers,
       });
-      emptyBasket();
-      router.push(`/applications/${applicationId}`);
-    } catch (error) {
-      if (error instanceof AxiosError) {
+      if (!result.ok) {
+        if (result.response.status === 401) {
+          await loginToRequest();
+          return;
+        }
         setAlert({
           type: "error",
-          message:
-            error.response?.data?.title ||
-            `Failed to create application, status code: ${error.response?.status}`,
-          details: error.response?.data?.detail,
+          message: result.response.data.title || t("basket.requestFailed"),
+          details: result.response.data.detail,
         });
+        return;
       }
+      emptyBasket();
+      router.push(`/applications/${result.applicationId}`);
+    } catch {
+      setAlert({ type: "error", message: t("basket.requestFailed") });
+    } finally {
+      submittingRef.current = false;
+      setIsSubmitting(false);
     }
   };
 
   let actionBtn = null;
 
   if (basket.length > 0) {
-    if (!session) {
+    if (status !== "authenticated") {
       actionBtn = (
         <Button
           icon={faPaperPlane}
           text={t("basket.loginToRequest")}
-          onClick={() => signIn("keycloak")}
+          className="hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+          onClick={loginToRequest}
           type="primary"
         />
       );
@@ -83,7 +112,11 @@ export default function Page({ searchParams }: BasketPageProps) {
           icon={faPaperPlane}
           text={t("basket.requestNow")}
           type="primary"
+          className="hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
           onClick={requestNow}
+          disabled={
+            isAccessLoading || isSubmitting || requestableDatasets.length === 0
+          }
         />
       );
     }
@@ -104,6 +137,11 @@ export default function Page({ searchParams }: BasketPageProps) {
           )}
           {actionBtn}
         </div>
+        {status === "authenticated" &&
+          !isAccessLoading &&
+          hasGrantedDatasets && (
+            <p role="status">{t("basket.alreadyGrantedExcluded")}</p>
+          )}
         {basket.length > 0 ? (
           <DatasetList datasets={basket} />
         ) : (

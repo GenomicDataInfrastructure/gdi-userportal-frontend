@@ -9,17 +9,13 @@ import {
 } from "@/app/api/discovery/open-api/schemas";
 import { retrieveDatasetApi } from "@/app/api/discovery";
 import { useWindowSize } from "@/hooks";
-import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
+import AddToBasketButton from "@/components/AddToBasketButton";
 import { truncateDescription } from "@/utils/textProcessing";
 import {
   getFirstAccessUrl,
   getExternalDatasetInfo,
 } from "@/utils/datasetHelpers";
-import {
-  faMinusCircle,
-  faPlusCircle,
-  faArrowRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card, { CardItem } from "../../components/Card";
 import { useEffect, useState, useRef, useMemo } from "react";
@@ -39,15 +35,11 @@ function DatasetCard({
   displayBasketButton = true,
   sourceLabel: sourceLabelProp,
 }: Readonly<DatasetCardProps>) {
-  const t = useTranslations("basket");
   const tDetail = useTranslations("datasets.detail");
   const screenSize = useWindowSize();
   const truncatedDesc = dataset.description
     ? truncateDescription(dataset.description, screenSize)
     : null;
-
-  const { basket, addDatasetToBasket, removeDatasetFromBasket, isLoading } =
-    useDatasetBasket();
 
   const [conformsTo, setConformsTo] = useState<ValueLabel[] | undefined>(
     dataset.conformsTo
@@ -91,16 +83,7 @@ function DatasetCard({
     conformsTo?.length,
   ]);
 
-  const isInBasket = basket.some((ds) => ds.id === dataset.id);
   const externalAccessUrl = getFirstAccessUrl(distributions);
-
-  const toggleDatasetInBasket = (e: React.MouseEvent) => {
-    e.preventDefault();
-    (isInBasket ? removeDatasetFromBasket : addDatasetToBasket)(dataset);
-  };
-
-  const hasIdentifier = !!dataset.identifier;
-  const buttonDisabled = isLoading || !hasIdentifier;
 
   const buttonElement =
     !displayBasketButton || dataset.isSeries ? undefined : isExternal ? (
@@ -136,24 +119,7 @@ function DatasetCard({
         )}
       </div>
     ) : (
-      <button
-        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-          if (buttonDisabled) {
-            e.preventDefault();
-            e.stopPropagation();
-            return;
-          }
-          toggleDatasetInBasket(e);
-        }}
-        disabled={buttonDisabled}
-        className={`inline-flex min-h-10 w-full items-center justify-center text-xs sm:w-auto sm:text-base rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide cursor-pointer shrink-0 ${buttonDisabled ? "opacity-60 cursor-not-allowed" : ""} ${isInBasket ? "bg-warning text-black hover:bg-secondary hover:text-white" : "bg-primary text-white hover:bg-secondary"}`}
-      >
-        <FontAwesomeIcon
-          icon={isInBasket ? faMinusCircle : faPlusCircle}
-          className="mr-2"
-        />
-        <span>{isInBasket ? t("removeFromBasket") : t("addToBasket")}</span>
-      </button>
+      <AddToBasketButton dataset={dataset} />
     );
 
   const subTitles = useMemo(

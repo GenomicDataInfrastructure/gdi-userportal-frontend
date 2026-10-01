@@ -51,7 +51,10 @@ export default function Card({
   const t = useTranslations();
   const isExternal = isExternalProp ?? !!externalUrl;
   return (
-    <div className="flex flex-col w-full shadow-bb rounded-lg pl-4 pr-4.5 group relative">
+    <article
+      aria-label={title}
+      className="flex flex-col w-full shadow-bb rounded-lg pl-4 pr-4.5 group relative"
+    >
       <div className="flex flex-col lg:flex-row gap-x-2 gap-y-4">
         <div className="flex flex-col gap-y-2 shrink w-full">
           {subTitles.length > 0 && (
@@ -167,6 +170,6 @@ export default function Card({
           )}
         </div>
       )}
-    </div>
+    </article>
   );
 }

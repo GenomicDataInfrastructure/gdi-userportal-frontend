@@ -64,9 +64,9 @@ export default async function RootLayout({
         <ScrollToTop />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AlertProvider>
-            <DatasetBasketProvider>
-              <div className="grid h-screen w-full grid-rows-[auto_1fr_auto]">
-                <SessionProviderWrapper>
+            <SessionProviderWrapper>
+              <DatasetBasketProvider>
+                <div className="grid h-screen w-full grid-rows-[auto_1fr_auto]">
                   <NotificationsProvider>
                     <div>
                       <Header />
@@ -77,9 +77,9 @@ export default async function RootLayout({
                     <Navbar />
                     <Footer />
                   </NotificationsProvider>
-                </SessionProviderWrapper>
-              </div>
-            </DatasetBasketProvider>
+                </div>
+              </DatasetBasketProvider>
+            </SessionProviderWrapper>
           </AlertProvider>
         </NextIntlClientProvider>
       </body>

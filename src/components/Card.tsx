@@ -51,8 +51,8 @@ export default function Card({
   const t = useTranslations();
   const isExternal = isExternalProp ?? !!externalUrl;
   return (
-    <Link
-      href={url}
+    <article
+      aria-label={title}
       className="flex flex-col w-full shadow-bb rounded-lg pl-4 pr-4.5 group relative"
     >
       <div className="flex flex-col lg:flex-row gap-x-2 gap-y-4">
@@ -73,9 +73,12 @@ export default function Card({
           )}
 
           <div className="flex items-start justify-between gap-3">
-            <div className="font-bold text-[20px] group-hover:text-info group-hover:underline">
+            <Link
+              href={url}
+              className="font-bold text-[20px] hover:text-info hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary rounded-sm"
+            >
               {title}
-            </div>
+            </Link>
             {(entityLabel || sourceLabel) && (
               <div className="inline-flex flex-wrap gap-1.5 shrink-0">
                 {entityLabel && (
@@ -167,6 +170,6 @@ export default function Card({
           )}
         </div>
       )}
-    </Link>
+    </article>
   );
 }

@@ -60,12 +60,15 @@ test("Dataset list renders filters and results", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: /cancer cohort study/i })
   ).toBeVisible();
-  const seriesCard = page.getByRole("link", {
+  const seriesCard = page.getByRole("article", {
     name: /pan-cancer longitudinal series/i,
   });
   await expect(seriesCard).toBeVisible();
   await expect(
-    seriesCard.locator("span").getByText(/dataset series/i)
+    seriesCard.getByRole("link", { name: /pan-cancer longitudinal series/i })
+  ).toBeVisible();
+  await expect(
+    seriesCard.getByText("Dataset series", { exact: true })
   ).toBeVisible();
   await expect(page.getByText(/1 dataset series/i)).toBeVisible();
   await expect(page.getByText(/externally governed/i)).toBeVisible();

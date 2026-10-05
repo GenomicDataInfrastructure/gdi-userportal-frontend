@@ -12,7 +12,7 @@ import messages from "../../src/i18n/messages.json";
 
 export const test = base.extend<{ resetMock: void }>({
   resetMock: [
-    async ({ request }, use) => {
+    async ({ request }, runFixture) => {
       const origin = `http://localhost:${process.env.MOCK_API_PORT || 4010}`;
       expect(
         (
@@ -29,7 +29,7 @@ export const test = base.extend<{ resetMock: void }>({
         ).ok()
       ).toBeTruthy();
       try {
-        await use();
+        await runFixture();
       } finally {
         await request.post(`${origin}/_test/accessibility-release`);
       }

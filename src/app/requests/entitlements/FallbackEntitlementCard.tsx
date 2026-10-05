@@ -26,7 +26,7 @@ export default function FallbackEntitlementCard({
 
   return (
     <div className="w-full p-4">
-      <p className="mb-2 text-xs italic text-red-500">
+      <p className="mb-2 text-xs italic text-red-700">
         {t("datasetUnavailable")}
       </p>
       <div className="flex flex-col gap-2 text-sm text-gray-700">

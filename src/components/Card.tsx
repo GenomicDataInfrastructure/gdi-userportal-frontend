@@ -72,7 +72,7 @@ export default function Card({
             </div>
           )}
 
-          <div className="flex items-start justify-between gap-3">
+          <div className="flex flex-wrap items-start justify-between gap-3">
             <Link
               href={url}
               className="font-bold text-[20px] hover:text-info hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary rounded-sm"

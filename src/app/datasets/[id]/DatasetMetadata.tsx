@@ -79,7 +79,7 @@ const MetadataField = ({
 }) => (
   <div className="flex items-center gap-2 flex-wrap relative group">
     {icon && <FontAwesomeIcon icon={icon} className="text-primary text-xs" />}
-    <span className="font-medium shrink-0">{label}:</span>
+    <span className="font-medium shrink-0 max-w-full">{label}:</span>
     <span>{children}</span>
     {tooltip && <Tooltip message={tooltip} />}
   </div>
@@ -252,7 +252,9 @@ const DatasetMetadata = ({
               )}
             </MetadataField>
             <div className="flex items-center gap-2 flex-wrap relative group">
-              <span className="font-medium shrink-0">{t("uri")}:</span>
+              <span className="font-medium shrink-0 max-w-full">
+                {t("uri")}:
+              </span>
               {dataset.uri ? (
                 <a
                   href={dataset.uri}
@@ -275,7 +277,7 @@ const DatasetMetadata = ({
         <MetadataSection title={t("coverage")} icon={faGlobe}>
           <div className="flex flex-col gap-3 text-sm">
             <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">
+              <span className="font-medium shrink-0 max-w-full">
                 {t("spatialCoverage")}:
               </span>
               {dataset.spatialCoverage && dataset.spatialCoverage.length > 0 ? (
@@ -311,7 +313,7 @@ const DatasetMetadata = ({
         <MetadataSection title={t("legalAndCompliance")} icon={faGavel}>
           <div className="flex flex-col gap-3 text-sm">
             <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">
+              <span className="font-medium shrink-0 max-w-full">
                 {t("applicableLegislation")}:
               </span>
               {dataset.applicableLegislation &&
@@ -592,7 +594,7 @@ const DatasetMetadata = ({
                 key={index}
                 className="flex items-start gap-2 flex-wrap relative group"
               >
-                <span className="font-medium shrink-0 min-w-[140px]">
+                <span className="font-medium shrink-0 max-w-full min-w-[140px]">
                   {relationship.relation}:
                 </span>
                 <Link
@@ -655,7 +657,7 @@ const DatasetMetadata = ({
           <MetadataSection title={t("healthInformation")} icon={faHeartPulse}>
             <div className="flex flex-col gap-3 text-sm">
               <div className="flex flex-wrap gap-2 items-center relative group">
-                <span className="font-medium shrink-0">
+                <span className="font-medium shrink-0 max-w-full">
                   {t("healthThemes")}:
                 </span>
                 {dataset.healthTheme && dataset.healthTheme.length > 0 ? (
@@ -673,7 +675,7 @@ const DatasetMetadata = ({
                 />
               </div>
               <div className="flex flex-wrap gap-2 items-center relative group">
-                <span className="font-medium shrink-0">
+                <span className="font-medium shrink-0 max-w-full">
                   {t("healthCategories")}:
                 </span>
                 {dataset.healthCategory && dataset.healthCategory.length > 0 ? (
@@ -693,7 +695,7 @@ const DatasetMetadata = ({
               </div>
               {dataset.provenance && (
                 <div className="flex flex-wrap gap-2 items-center relative group">
-                  <span className="font-medium shrink-0">
+                  <span className="font-medium shrink-0 max-w-full">
                     {t("provenance")}:
                   </span>
                   <span>{dataset.provenance}</span>
@@ -707,7 +709,7 @@ const DatasetMetadata = ({
               {dataset.provenanceActivity &&
                 dataset.provenanceActivity.length > 0 && (
                   <div className="flex flex-wrap gap-2 items-center relative group">
-                    <span className="font-medium shrink-0">
+                    <span className="font-medium shrink-0 max-w-full">
                       {t("wasGeneratedBy")}:
                     </span>
                     <Chips
@@ -795,7 +797,7 @@ const DatasetMetadata = ({
       <MetadataSection title={t("coverage")} icon={faGlobe}>
         <div className="flex flex-col gap-3 text-sm">
           <div className="flex flex-wrap gap-2 items-center relative group">
-            <span className="font-medium shrink-0">
+            <span className="font-medium shrink-0 max-w-full">
               {t("spatialCoverage")}:
             </span>
             {dataset.spatialCoverage && dataset.spatialCoverage.length > 0 ? (
@@ -862,7 +864,9 @@ const DatasetMetadata = ({
         <MetadataSection title={t("legalAndCompliance")} icon={faGavel}>
           <div className="flex flex-col gap-3 text-sm">
             <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">{t("legalBasis")}:</span>
+              <span className="font-medium shrink-0 max-w-full">
+                {t("legalBasis")}:
+              </span>
               {dataset.legalBasis && dataset.legalBasis.length > 0 ? (
                 <Chips
                   chips={dataset.legalBasis.map((item) => item.label)}
@@ -876,7 +880,7 @@ const DatasetMetadata = ({
               />
             </div>
             <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">
+              <span className="font-medium shrink-0 max-w-full">
                 {t("applicableLegislation")}:
               </span>
               {dataset.applicableLegislation &&
@@ -901,7 +905,9 @@ const DatasetMetadata = ({
               />
             </div>
             <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">{t("purpose")}:</span>
+              <span className="font-medium shrink-0 max-w-full">
+                {t("purpose")}:
+              </span>
               {dataset.purpose && dataset.purpose.length > 0 ? (
                 <Chips
                   chips={dataset.purpose.map((item) => item.label)}
@@ -915,7 +921,7 @@ const DatasetMetadata = ({
               />
             </div>
             <div className="flex flex-wrap gap-2 items-center relative group">
-              <span className="font-medium shrink-0">
+              <span className="font-medium shrink-0 max-w-full">
                 {t("personalDataTypes")}:
               </span>
               {dataset.personalData && dataset.personalData.length > 0 ? (
@@ -953,7 +959,9 @@ const DatasetMetadata = ({
                 icon={faBuilding}
                 className="text-primary text-xs"
               />
-              <span className="font-medium shrink-0">{t("publishers")}:</span>
+              <span className="font-medium shrink-0 max-w-full">
+                {t("publishers")}:
+              </span>
               {dataset.publishers && dataset.publishers.length > 0 ? (
                 dataset.publishers.map((publisher, index) => (
                   <span key={publisher.name}>
@@ -979,7 +987,7 @@ const DatasetMetadata = ({
                 icon={faNoteSticky}
                 className="text-primary text-xs"
               />
-              <span className="font-medium shrink-0">
+              <span className="font-medium shrink-0 max-w-full">
                 {t("publisherNote")}:
               </span>
               <span>
@@ -995,7 +1003,7 @@ const DatasetMetadata = ({
             </div>
             <div className="flex items-center gap-2 flex-wrap relative group">
               <FontAwesomeIcon icon={faUser} className="text-primary text-xs" />
-              <span className="font-medium shrink-0">
+              <span className="font-medium shrink-0 max-w-full">
                 {t("publisherType")}:
               </span>
               {dataset.publisherType && dataset.publisherType.length > 0 ? (
@@ -1017,7 +1025,9 @@ const DatasetMetadata = ({
                 icon={faBuilding}
                 className="text-primary text-xs"
               />
-              <span className="font-medium shrink-0">{t("creators")}:</span>
+              <span className="font-medium shrink-0 max-w-full">
+                {t("creators")}:
+              </span>
               {dataset.creators && dataset.creators.length > 0 ? (
                 dataset.creators.map((agent, index) => (
                   <span key={index} className="flex items-center gap-1">
@@ -1074,7 +1084,7 @@ const DatasetMetadata = ({
                     icon={faBuilding}
                     className="text-primary text-xs"
                   />
-                  <span className="font-medium shrink-0">
+                  <span className="font-medium shrink-0 max-w-full">
                     {t("healthDataAccessBody")}:
                   </span>
                   {dataset.hdab && dataset.hdab.length > 0 ? (
@@ -1112,7 +1122,7 @@ const DatasetMetadata = ({
           <MetadataSection title={t("codingAndStandards")} icon={faCode}>
             <div className="flex flex-col gap-3 text-sm">
               <div className="flex flex-wrap gap-2 items-center relative group">
-                <span className="font-medium shrink-0">
+                <span className="font-medium shrink-0 max-w-full">
                   {t("codingSystems")}:
                 </span>
                 {dataset.codingSystem && dataset.codingSystem.length > 0 ? (
@@ -1130,7 +1140,9 @@ const DatasetMetadata = ({
                 />
               </div>
               <div className="flex flex-wrap gap-2 items-center relative group">
-                <span className="font-medium shrink-0">{t("codeValues")}:</span>
+                <span className="font-medium shrink-0 max-w-full">
+                  {t("codeValues")}:
+                </span>
                 {dataset.codeValues && dataset.codeValues.length > 0 ? (
                   <Chips
                     chips={dataset.codeValues.map((item) => item.label)}
@@ -1182,7 +1194,9 @@ const DatasetMetadata = ({
           <div className="flex flex-col gap-2 text-sm">
             {dataset.homepage && (
               <div className="flex items-center gap-2 flex-wrap relative group">
-                <span className="font-medium shrink-0">{t("homepage")}:</span>
+                <span className="font-medium shrink-0 max-w-full">
+                  {t("homepage")}:
+                </span>
                 <a
                   href={dataset.homepage}
                   target="_blank"
@@ -1198,7 +1212,7 @@ const DatasetMetadata = ({
             )}
             {dataset.documentation && dataset.documentation.length > 0 && (
               <div className="flex items-center gap-2 flex-wrap relative group">
-                <span className="font-medium shrink-0">
+                <span className="font-medium shrink-0 max-w-full">
                   {t("documentation")}:
                 </span>
                 {dataset.documentation.map((doc, index) => (
@@ -1221,7 +1235,7 @@ const DatasetMetadata = ({
             )}
             {dataset.isReferencedBy && dataset.isReferencedBy.length > 0 && (
               <div className="flex items-center gap-2 flex-wrap relative group">
-                <span className="font-medium shrink-0">
+                <span className="font-medium shrink-0 max-w-full">
                   {t("referencedBy")}:
                 </span>
                 {dataset.isReferencedBy.map((ref, index) => (
@@ -1258,7 +1272,9 @@ const DatasetMetadata = ({
               )}
             </MetadataField>
             <div className="flex items-start gap-2 flex-wrap relative group">
-              <span className="font-medium shrink-0">{t("versionNotes")}:</span>
+              <span className="font-medium shrink-0 max-w-full">
+                {t("versionNotes")}:
+              </span>
               {dataset.versionNotes ? (
                 <ul className="list-disc pl-4">
                   {dataset.versionNotes.split("\n").map((note) => (

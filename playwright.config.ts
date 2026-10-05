@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 const defaultMode = "mocked";
 const e2eMode = process.env.E2E_MODE ?? defaultMode;
 const isMocked = e2eMode === "mocked";
+const appPort = Number(process.env.E2E_APP_PORT || 3000);
 const mockApiPort = Number(process.env.MOCK_API_PORT || 4010);
 
 process.env.E2E_MODE = e2eMode;
@@ -23,6 +24,8 @@ if (isMocked) {
 const serverEnv = {
   ...process.env,
   MOCK_API_PORT: String(mockApiPort),
+  PORT: String(appPort),
+  E2E_DIST_DIR: ".next-e2e",
   // Explicitly override values that .env.local may set, to ensure mocked tests
   // always use the local mock infrastructure.
   ...(isMocked
@@ -32,6 +35,19 @@ const serverEnv = {
         KEYCLOAK_ISSUER_URL: `http://localhost:${mockApiPort}`,
         LS_AAI_USERINFO_URL: `http://localhost:${mockApiPort}/userinfo`,
         TRUSTED_VISA_ISSUERS: `http://localhost:${mockApiPort}`,
+        DISCOVERY_PROVIDER: "dds",
+        NOTIFICATION_PROVIDER: "noop",
+        NEXTAUTH_URL: `http://localhost:${appPort}`,
+        NEXT_PUBLIC_SHOW_SERVICES: "true",
+        NEXT_PUBLIC_FEATURE_CONTACT_US: "true",
+        NEXT_PUBLIC_FEATURE_APPLICATION_OPTIONS: "true",
+        NEXT_PUBLIC_SHOW_ALLELE_FREQUENCY: "true",
+        NEXT_PUBLIC_SHOW_BASKET_AND_LOGIN: "true",
+        NEXT_PUBLIC_ENABLE_MULTILINGUAL:
+          process.env.E2E_MULTILINGUAL || "false",
+        HARVEST_LOGGING_ENABLED: "true",
+        OPENSEARCH_URL: `http://localhost:${mockApiPort}`,
+        OPENSEARCH_HARVESTER_LOGS_INDEX: "harvester_logs",
       }
     : {}),
 };
@@ -50,7 +66,7 @@ const webServers = [
     : []),
   {
     command: "npm run dev",
-    url: "http://localhost:3000",
+    url: `http://localhost:${appPort}`,
     timeout: 120 * 1000,
     // In mocked mode, always start fresh so serverEnv overrides .env.local
     reuseExistingServer: !isMocked,
@@ -62,6 +78,8 @@ const webServers = [
  */
 export default defineConfig({
   testDir: "./tests",
+  // Accessibility has its own browser/locale matrix and isolated mock state.
+  testIgnore: "**/accessibility*.spec.ts",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -88,6 +106,6 @@ export default defineConfig({
 
   webServer: webServers,
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL: `http://localhost:${appPort}`,
   },
 });

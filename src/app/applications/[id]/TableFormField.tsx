@@ -31,6 +31,8 @@ function TableFormField({
 }: TableFormFieldProps) {
   const t = useTranslations("application.fields");
   const { updateInputFields } = useApplicationDetails();
+  const labelId = `form-${formId}-${field.id}-label`;
+  const errorId = `form-${formId}-${field.id}-error`;
   const [tableValues, setTableValues] = useState<FormFieldTableValue[][]>(
     field.tableValues || [[]]
   );
@@ -75,7 +77,7 @@ function TableFormField({
   return (
     <div className="flex flex-col py-2">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg sm:text-xl">
+        <h3 id={labelId} className="text-lg sm:text-xl">
           {title} {field.optional ? t("optional") : ""}
         </h3>
         <button
@@ -86,7 +88,7 @@ function TableFormField({
           {t("addRow")}
         </button>
       </div>
-      <table className="mt-4 border-collapse">
+      <table aria-labelledby={labelId} className="mt-4 border-collapse">
         <thead>
           <tr>
             {field.tableColumns!.map((column) => (
@@ -104,6 +106,9 @@ function TableFormField({
                 <td key={column.key} className="px-2 py-2">
                   <input
                     type="text"
+                    aria-label={`${column.label?.find((label) => label.language === "en")?.name || column.label?.[0]?.name} ${t("rowNumber", { number: rowIndex + 1 })}`}
+                    aria-invalid={!!validationWarning}
+                    aria-describedby={validationWarning ? errorId : undefined}
                     value={
                       row.find((item) => item.column === column.key)?.value ||
                       ""
@@ -122,6 +127,7 @@ function TableFormField({
               ))}
               <td>
                 <button
+                  aria-label={t("removeRow", { number: rowIndex + 1 })}
                   onClick={() => deleteRow(rowIndex)}
                   disabled={isDisabled}
                 >
@@ -140,7 +146,9 @@ function TableFormField({
         </tbody>
       </table>
       {validationWarning && (
-        <span className="text-red-600 mt-2">{validationWarning}</span>
+        <span id={errorId} className="text-red-600 mt-2">
+          {validationWarning}
+        </span>
       )}
     </div>
   );

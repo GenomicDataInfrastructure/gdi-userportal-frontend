@@ -195,6 +195,41 @@ If this is your first time running Playwright, install the browsers:
 
 `npx playwright install --with-deps`
 
+### Running accessibility tests
+
+Install Chromium once, then run the focused accessibility suite:
+
+```bash
+npx playwright install chromium
+npm run test:a11y
+```
+
+The command starts the application and local mock API automatically. It scans
+all 15 unique page routes (see [the coverage audit](documentation/accessibility-audit.md))
+in Chromium for automatically detectable WCAG A and AA violations. A
+locally signed test session covers authenticated states, so live discovery,
+identity, and access-management services are not required. Notifications use
+this portal's existing `noop` provider, covering the empty notifications page;
+notification delivery and the enabled notification bell require provider-specific
+coverage. The HTML report, including axe JSON results, is written to
+`playwright-report/`.
+
+The suite also scans the mobile home page and checks keyboard operation of the
+dataset-series accordion and account menu, including focus return on dismissal.
+
+If another local project uses port 3000, choose another application port:
+
+```bash
+E2E_APP_PORT=3100 npm run test:a11y
+```
+
+GitHub pull requests, pushes to `main`, and manual workflow runs execute the same
+suite and retain HTML reports, axe JSON attachments, and failure artifacts for seven
+days. The tests use a separate `.next-e2e` build directory. A route inventory check
+fails when a page is added without updating the accessibility coverage.
+Automated checks cover only part of WCAG. A passing result does not establish
+full WCAG compliance; manual keyboard, focus, and visual review remains necessary.
+
 ## Further help
 
 To get more help on Next JS, go check out the [Next JS API Reference](https://nextjs.org/docs/pages/api-reference) page.

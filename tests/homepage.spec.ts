@@ -52,7 +52,7 @@ test("Homepage renders correctly and loads dynamic content", async ({
   const aboutSection = aboutHeading.locator("..");
   await expect(
     aboutSection.getByRole("link", { name: /read more/i })
-  ).toHaveAttribute("href", "/about");
+  ).toHaveAttribute("href", "/en/about");
 
   // ValueList renders with "Themes"
   const themesTitle = page.locator("h3", { hasText: "Themes" });

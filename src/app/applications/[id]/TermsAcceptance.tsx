@@ -101,9 +101,9 @@ export default function TermsAcceptance() {
             )}
             <p>
               {license.acceptedByCurrentUser ? (
-                <span className="text-green-600">{t("accepted")}</span>
+                <span className="text-green-800">{t("accepted")}</span>
               ) : (
-                <span className="text-red-600">{t("notAccepted")}</span>
+                <span className="text-red-800">{t("notAccepted")}</span>
               )}
             </p>
           </div>

@@ -17,6 +17,7 @@ function LoadingContainer({
 }: Readonly<LoadingContainerProps>) {
   return (
     <div
+      role="status"
       className={`w-full ${className}`}
       style={{ height: "calc(100vh - 100px)" }}
     >

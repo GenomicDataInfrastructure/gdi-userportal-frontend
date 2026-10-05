@@ -49,7 +49,7 @@ function createDatasetSidebarItems(
     {
       format: "jsonld",
       label: "JSON-LD",
-      style: { backgroundColor: "var(--color-secondary)", color: "white" },
+      style: { backgroundColor: "var(--color-secondary)", color: "black" },
     },
   ];
 

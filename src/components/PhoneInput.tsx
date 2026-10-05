@@ -23,7 +23,6 @@ import {
 } from "./shadcn/command";
 import { Input } from "./shadcn/input";
 import { Popover, PopoverContent, PopoverTrigger } from "./shadcn/popover";
-import { ScrollArea } from "./shadcn/scroll-area";
 
 type PhoneInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -97,6 +96,7 @@ const CountrySelect = ({
       <PopoverTrigger asChild>
         <Button
           type="button"
+          aria-label={`${t("searchCountry")}: ${options.find((option) => option.value === value)?.label || ""}`}
           variant="outline"
           className={cn(
             "flex h-12 items-center gap-2 rounded-md border-2 px-4 transition-colors duration-200",
@@ -115,38 +115,36 @@ const CountrySelect = ({
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0">
         <Command>
-          <CommandList>
-            <ScrollArea className="h-72">
-              <CommandInput placeholder={t("searchCountry")} />
-              <CommandEmpty>{t("noCountryFound")}</CommandEmpty>
-              <CommandGroup>
-                {options
-                  .filter((x) => x.value)
-                  .map((option) => (
-                    <CommandItem
-                      className="gap-2 cursor-pointer"
-                      key={option.value}
-                      onSelect={() => handleSelect(option.value)}
-                    >
-                      <FlagComponent
-                        country={option.value}
-                        countryName={option.label}
-                      />
-                      <span className="flex-1 text-sm">{option.label}</span>
-                      <span className="text-foreground/50 text-sm">
-                        {`+${RPNInput.getCountryCallingCode(option.value)}`}
-                      </span>
-                      <FontAwesomeIcon
-                        icon={faCheck}
-                        className={cn(
-                          "ml-auto h-4 w-4",
-                          option.value === value ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                    </CommandItem>
-                  ))}
-              </CommandGroup>
-            </ScrollArea>
+          <CommandInput placeholder={t("searchCountry")} />
+          <CommandList className="max-h-72">
+            <CommandEmpty>{t("noCountryFound")}</CommandEmpty>
+            <CommandGroup>
+              {options
+                .filter((x) => x.value)
+                .map((option) => (
+                  <CommandItem
+                    className="gap-2 cursor-pointer aria-selected:text-black"
+                    key={option.value}
+                    onSelect={() => handleSelect(option.value)}
+                  >
+                    <FlagComponent
+                      country={option.value}
+                      countryName={option.label}
+                    />
+                    <span className="flex-1 text-sm">{option.label}</span>
+                    <span className="text-gray-700 text-sm">
+                      {`+${RPNInput.getCountryCallingCode(option.value)}`}
+                    </span>
+                    <FontAwesomeIcon
+                      icon={faCheck}
+                      className={cn(
+                        "ml-auto h-4 w-4",
+                        option.value === value ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                  </CommandItem>
+                ))}
+            </CommandGroup>
           </CommandList>
         </Command>
       </PopoverContent>

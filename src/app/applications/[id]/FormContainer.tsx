@@ -24,24 +24,26 @@ function FormContainer({
     form.externalTitle?.[0]?.name;
 
   return (
-    <ul className="space-y-4 border rounded-2xl p-5">
+    <section className="border rounded-2xl p-5">
       <h3 className="mb-4 text-2xl">{formTitle}</h3>
-      {form.fields!.map(
-        (field) =>
-          !!field?.visible && (
-            <li key={field.id}>
-              <FieldContainer
-                formId={form.id!}
-                field={field}
-                editable={editable}
-                validationWarning={validationWarnings?.find(
-                  (it) => it.fieldId === field.id
-                )}
-              />
-            </li>
-          )
-      )}
-    </ul>
+      <ul className="space-y-4">
+        {form.fields!.map(
+          (field) =>
+            !!field?.visible && (
+              <li key={field.id}>
+                <FieldContainer
+                  formId={form.id!}
+                  field={field}
+                  editable={editable}
+                  validationWarning={validationWarnings?.find(
+                    (it) => it.fieldId === field.id
+                  )}
+                />
+              </li>
+            )
+        )}
+      </ul>
+    </section>
   );
 }
 

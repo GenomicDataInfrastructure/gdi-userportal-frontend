@@ -10,6 +10,13 @@ import { createApiClient as createAccessManagementApiClient } from "@/app/api/ac
 
 export const discoveryAxiosInstance = axios.create();
 export const accessManagementAxiosInstance = axios.create();
+// Axios represents HTTP 204 as an empty string. Normalize the empty response
+// before the generated client validates endpoints whose response is void.
+accessManagementAxiosInstance.interceptors.response.use((response) => {
+  if (response.status === 204 && response.data === "")
+    response.data = undefined;
+  return response;
+});
 
 export const discoveryClient = createDiscoveryApiClient(
   serverConfig.discoveryUrl,

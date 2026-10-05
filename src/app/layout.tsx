@@ -66,7 +66,7 @@ export default async function RootLayout({
           <AlertProvider>
             <SessionProviderWrapper>
               <DatasetBasketProvider>
-                <div className="grid h-screen w-full grid-rows-[auto_1fr_auto]">
+                <div className="grid h-screen w-full grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr_auto]">
                   <NotificationsProvider>
                     <div>
                       <Header />

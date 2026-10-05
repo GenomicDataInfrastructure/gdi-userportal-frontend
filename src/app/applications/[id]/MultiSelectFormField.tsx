@@ -28,6 +28,8 @@ function MultiSelectFormField({
   validationWarning,
 }: MultiSelectFormFieldProps) {
   const { updateInputFields } = useApplicationDetails();
+  const labelId = `form-${formId}-${field.id}-label`;
+  const errorId = `form-${formId}-${field.id}-error`;
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
     field.value ? field.value.split(" ") : []
   );
@@ -53,13 +55,16 @@ function MultiSelectFormField({
 
   return (
     <div
+      role="group"
+      aria-labelledby={labelId}
+      aria-describedby={validationWarning ? errorId : undefined}
       className={`flex flex-col py-2 ${
         isDisabled ? "disabled:opacity-50 border-slate-200" : "bg-white"
       }`}
     >
       <div className="flex flex-col justify-between">
         <div>
-          <h3 className="text-lg sm:text-xl">
+          <h3 id={labelId} className="text-lg sm:text-xl">
             {title} {field.optional ? "(Optional)" : ""}
           </h3>
         </div>
@@ -73,8 +78,9 @@ function MultiSelectFormField({
             >
               <input
                 type="checkbox"
+                aria-invalid={!!validationWarning}
                 className="h-4 w-4 border rounded-md checked:accent-secondary flex-none cursor-pointer disabled:cursor-not-allowed"
-                id={option.key}
+                id={`form-${formId}-${field.id}-${option.key}`}
                 value={option.key}
                 checked={selectedOptions.includes(option.key)}
                 onChange={(e) =>
@@ -83,7 +89,7 @@ function MultiSelectFormField({
                 disabled={isDisabled}
               />
               <label
-                htmlFor={option.key}
+                htmlFor={`form-${formId}-${field.id}-${option.key}`}
                 className={`ml-2 text-md px-1 rounded-md ${
                   isDisabled
                     ? "opacity-50 cursor-not-allowed"
@@ -98,7 +104,9 @@ function MultiSelectFormField({
         </div>
       </div>
       {validationWarning && (
-        <span className="text-red-600 mt-2">{validationWarning}</span>
+        <span id={errorId} className="text-red-600 mt-2">
+          {validationWarning}
+        </span>
       )}
     </div>
   );

@@ -21,6 +21,7 @@ type FormFieldProps = {
   options?: { value: string; label: string }[];
   tooltip?: string;
   placeholder?: string;
+  error?: string;
 };
 
 const FormField: React.FC<FormFieldProps> = ({
@@ -32,6 +33,7 @@ const FormField: React.FC<FormFieldProps> = ({
   options,
   tooltip,
   placeholder,
+  error,
 }) => {
   return (
     <div className="col-span-1">
@@ -70,6 +72,8 @@ const FormField: React.FC<FormFieldProps> = ({
           <input
             id={fieldKey}
             type={type}
+            aria-invalid={!!error}
+            aria-describedby={error ? `${fieldKey}-error` : undefined}
             value={value}
             onChange={(e) => onChange(e.target.value)}
             className="border border-gray-300 p-2 rounded-sm w-full"
@@ -224,6 +228,7 @@ export default function GVariantsSearchBar({
         {canShowVariant && (
           <FormField
             fieldKey="variant"
+            error={errorMessage}
             label={t("variant")}
             type="text"
             value={searchFilterInput.variant}
@@ -279,7 +284,7 @@ export default function GVariantsSearchBar({
             onClick={search}
             text={t("search")}
             type="primary"
-            className="text-center"
+            className="text-center hover:text-black"
             props={
               isSearchDisabled ? { title: DISABLED_SEARCH_TOOLTIP } : undefined
             }
@@ -299,7 +304,13 @@ export default function GVariantsSearchBar({
       )}
 
       {errorMessage && (
-        <p className="text-red-500 text-md mt-2">{errorMessage}</p>
+        <p
+          id="variant-error"
+          role="alert"
+          className="text-red-700 text-md mt-2"
+        >
+          {errorMessage}
+        </p>
       )}
     </div>
   );

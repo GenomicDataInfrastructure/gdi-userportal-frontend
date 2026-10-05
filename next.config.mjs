@@ -7,6 +7,8 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig = {
   output: "standalone",
+  // Keep browser tests independent of an already running development server.
+  distDir: process.env.E2E_DIST_DIR || ".next",
   serverExternalPackages: [
     "@opentelemetry/auto-instrumentations-node",
     "@opentelemetry/sdk-node",

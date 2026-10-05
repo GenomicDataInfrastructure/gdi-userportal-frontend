@@ -75,6 +75,7 @@ function SearchBar({ size, searchParams }: Readonly<SearchBarProps>) {
         >
           <button
             type="submit"
+            aria-label={t("search.placeholder")}
             className="flex w-full cursor-pointer items-center rounded-r-lg bg-primary px-4 tracking-wide text-white transition-all duration-300 hover:bg-hover-color sm:w-auto"
           >
             <FontAwesomeIcon icon={faSearch} />

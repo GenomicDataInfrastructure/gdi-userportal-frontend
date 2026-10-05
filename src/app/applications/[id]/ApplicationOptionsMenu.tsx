@@ -37,14 +37,14 @@ const ApplicationOptionsMenu: React.FC<ApplicationOptionsMenuProps> = ({
   const t = useTranslations();
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <button
           type="button"
           disabled={disabled}
           aria-label={t("application.options.label")}
           className={cn(
-            "flex items-center justify-center rounded-md border-2 border-primary px-4 h-10 text-sm text-primary transition-colors duration-200 hover:bg-secondary hover:text-white hover:border-transparent",
+            "flex items-center justify-center rounded-md border-2 border-primary px-4 h-10 text-sm text-primary transition-colors duration-200 hover:bg-secondary hover:text-black hover:border-transparent",
             disabled && "opacity-60 cursor-not-allowed hover:bg-transparent"
           )}
         >

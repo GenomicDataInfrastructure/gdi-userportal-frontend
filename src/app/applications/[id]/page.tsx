@@ -146,7 +146,7 @@ export default function ApplicationDetailsPage({
                 />
               )}
             </div>
-            <div className="mt-4 flex items-center gap-x-3 sm:mt-0">
+            <div className="mt-4 flex flex-wrap items-center gap-3 sm:mt-0">
               {isDraft && (
                 <Button
                   type="warning"

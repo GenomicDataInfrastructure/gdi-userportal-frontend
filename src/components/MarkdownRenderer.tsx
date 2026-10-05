@@ -7,12 +7,15 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeRaw from "rehype-raw";
+import { useTranslations } from "next-intl";
 
 interface MarkdownRendererProps {
   content: string;
 }
 
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
+  const t = useTranslations("markdown");
+
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
@@ -52,8 +55,16 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
             {...props}
           />
         ),
+        // Wide tables scroll within a focusable region so the page reflows.
         table: ({ ...props }) => (
-          <table className="table-auto w-full mb-6 rounded-lg" {...props} />
+          <div
+            role="region"
+            aria-label={t("scrollableTable")}
+            tabIndex={0}
+            className="mb-6 overflow-x-auto"
+          >
+            <table className="table-auto w-full rounded-lg" {...props} />
+          </div>
         ),
         thead: ({ ...props }) => <thead className="" {...props} />,
         tbody: ({ ...props }) => <tbody {...props} />,

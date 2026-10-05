@@ -31,9 +31,13 @@ function Avatar({ user }: Readonly<AvatarProps>) {
   }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-disclaimer p-[10px] text-sm text-white shadow-xs transition-all duration-300 hover:bg-hover-color md:p-[12px] md:text-base lg:h-11 lg:w-11">
+        <button
+          type="button"
+          aria-label={user?.name || t("login")}
+          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-primary p-[10px] text-sm text-white shadow-xs transition-all duration-300 hover:bg-hover-color md:p-[12px] md:text-base lg:h-11 lg:w-11"
+        >
           {user?.image ? (
             <Image src={user.image} alt="avatar" className="rounded-full" />
           ) : (
@@ -41,7 +45,7 @@ function Avatar({ user }: Readonly<AvatarProps>) {
               {getInitials(user?.name)}
             </p>
           )}
-        </div>
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-white">
         <DropdownMenuGroup>

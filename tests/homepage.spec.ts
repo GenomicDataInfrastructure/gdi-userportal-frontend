@@ -50,9 +50,10 @@ test("Homepage renders correctly and loads dynamic content", async ({
   });
   await expect(aboutHeading).toBeVisible();
   const aboutSection = aboutHeading.locator("..");
+  // The locale prefix is only present when multilingual routing is enabled.
   await expect(
     aboutSection.getByRole("link", { name: /read more/i })
-  ).toHaveAttribute("href", "/en/about");
+  ).toHaveAttribute("href", /^(\/en)?\/about$/);
 
   // ValueList renders with "Themes"
   const themesTitle = page.locator("h3", { hasText: "Themes" });

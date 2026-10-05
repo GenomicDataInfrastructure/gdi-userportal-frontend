@@ -21,23 +21,29 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
       remarkPlugins={[remarkGfm]}
       rehypePlugins={[rehypeSlug, rehypeRaw]}
       components={{
-        h1: ({ ...props }) => (
+        h1: ({ children, ...props }) => (
           <h1
             className="text-left font-title text-2xl sm:text-3xl mb-6 decoration-primary"
             {...props}
-          />
+          >
+            {children}
+          </h1>
         ),
-        h2: ({ ...props }) => (
+        h2: ({ children, ...props }) => (
           <h2
             className="text-left font-title text-xl sm:text-2xl mb-4 mt-6"
             {...props}
-          />
+          >
+            {children}
+          </h2>
         ),
-        h3: ({ ...props }) => (
+        h3: ({ children, ...props }) => (
           <h3
             className="text-left font-title text-lg sm:text-xl mb-4 mt-4"
             {...props}
-          />
+          >
+            {children}
+          </h3>
         ),
         p: ({ ...props }) => <p className="mb-6 leading-relaxed" {...props} />,
         ul: ({ ...props }) => (
@@ -47,13 +53,15 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
           <ol className="list-inside list-decimal mb-6" {...props} />
         ),
         li: ({ ...props }) => <li className="mb-3" {...props} />,
-        a: ({ ...props }) => (
+        a: ({ children, ...props }) => (
           <a
             className="text-info hover:underline"
             target="_blank"
             rel="noopener noreferrer"
             {...props}
-          />
+          >
+            {children}
+          </a>
         ),
         // Wide tables scroll within a focusable region so the page reflows.
         table: ({ ...props }) => (

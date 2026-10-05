@@ -29,7 +29,6 @@ export default function FreeTextFilterContent({
 }: FreeTextFilterContentProps) {
   const t = useTranslations("datasets.filters");
   const { activeFilters, addActiveFilter } = useFilters();
-  const [openedDropdown, setOpenedDropdown] = useState<number | null>(null);
   const [items, setItems] = useState<FreeTextFormItem[]>([
     initialFreeTextFormItem,
   ]);
@@ -52,20 +51,10 @@ export default function FreeTextFilterContent({
     }
   }, [activeFilters, correspondingActiveFilter]);
 
-  const toggleDropdown = (index: number) => {
-    setOpenedDropdown(openedDropdown === index ? null : index);
-  };
-
-  const handleSelectOperator = (
-    event: React.MouseEvent<HTMLDivElement>,
-    index: number
-  ) => {
-    const operator = event.currentTarget.textContent as Operator;
-
+  const handleSelectOperator = (operator: Operator, index: number) => {
     setItems((items) =>
       items.map((item, i) => (i === index ? { ...item, operator } : item))
     );
-    setOpenedDropdown(null);
   };
 
   function handleAddNewFilter() {
@@ -117,7 +106,9 @@ export default function FreeTextFilterContent({
             className="flex flex-col gap-y-3"
           >
             <div className="flex gap-x-8 justify-between items-center w-full">
-              <label className="w-24">{t("valueLabel")}</label>
+              <label htmlFor={`${filter.key}-${index}-value`} className="w-24">
+                {t("valueLabel")}
+              </label>
               <input
                 id={`${filter.key}-${index}-value`}
                 name={`${filter.key}-${index}-value`}
@@ -136,41 +127,32 @@ export default function FreeTextFilterContent({
               />
             </div>
             <div className="flex items-center w-full gap-x-8 justify-between">
-              <label className="w-24">{t("operatorLabel")}</label>
-              <div className="relative w-full">
-                <div
-                  onClick={() => toggleDropdown(index)}
-                  onBlur={() => setOpenedDropdown(null)}
-                  tabIndex={0}
-                  className="flex items-center justify-between p-2 bg-white border rounded-md cursor-pointer"
-                >
-                  <span
-                    id={`${filter.key}-${index}-operator-display`}
-                    className={item.operator ? "" : "text-[#a0a0a0]"}
-                  >
-                    {item.operator || t("operatorPlaceholder")}
-                  </span>
-                </div>
-                {index === openedDropdown && (
-                  <div
-                    className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg"
-                    onMouseDown={(event) => event.preventDefault()}
-                  >
-                    {filter.operators &&
-                      filter.operators.map((operator) => (
-                        <div
-                          key={operator + index}
-                          className="p-2 hover:bg-warning cursor-pointer"
-                          onClick={(event) =>
-                            handleSelectOperator(event, index)
-                          }
-                        >
-                          {operator}
-                        </div>
-                      ))}
-                  </div>
-                )}
-              </div>
+              <label
+                htmlFor={`${filter.key}-${index}-operator`}
+                className="w-24"
+              >
+                {t("operatorLabel")}
+              </label>
+              <select
+                id={`${filter.key}-${index}-operator`}
+                name={`${filter.key}-${index}-operator`}
+                className={`p-2 bg-white border rounded-md cursor-pointer w-full ${
+                  item.operator ? "" : "text-gray-500"
+                }`}
+                value={item.operator ?? ""}
+                onChange={(event) =>
+                  handleSelectOperator(event.target.value as Operator, index)
+                }
+              >
+                <option value="" disabled>
+                  {t("operatorPlaceholder")}
+                </option>
+                {filter.operators?.map((operator) => (
+                  <option key={operator} value={operator}>
+                    {operator}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         ))}

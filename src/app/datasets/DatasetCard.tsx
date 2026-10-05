@@ -87,7 +87,7 @@ function DatasetCard({
 
   const buttonElement =
     !displayBasketButton || dataset.isSeries ? undefined : isExternal ? (
-      <div onClick={(e) => e.stopPropagation()}>
+      <div role="presentation" onClick={(e) => e.stopPropagation()}>
         {externalAccessUrl ? (
           <ExternalDatasetConfirmationDialog url={externalAccessUrl}>
             {({ onClick }) => (

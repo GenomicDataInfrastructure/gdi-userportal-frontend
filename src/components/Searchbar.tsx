@@ -62,6 +62,7 @@ function SearchBar({ size, searchParams }: Readonly<SearchBarProps>) {
     <form onSubmit={handleSubmit} className="w-full text-sm">
       <div className="relative">
         <input
+          aria-label={t("search.placeholder")}
           placeholder={t("search.placeholder")}
           className={`${sizeClass} w-full rounded-lg px-4 py-[9px] shadow-xl ease-in-out hover:shadow-2xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-focus-ring focus:outline-none transition-all duration-300`}
           value={query}

@@ -106,6 +106,42 @@ export const expectNoAccessibilityViolations = async (
     results.violations,
     JSON.stringify(violationSummary, null, 2)
   ).toHaveLength(0);
+
+  await expectFocusableElementsToBeNamed(page);
+};
+
+// axe checks names for buttons, links and form fields, but not for other
+// elements that are reachable with Tab, such as a div with tabindex="0". Every
+// element in the tab order must have an accessible name, whether it comes from
+// content, a label, aria-labelledby, aria-label or title. Uses the axe-core
+// instance that AxeBuilder injected, so names are computed as axe does.
+// Content hidden by an open dialog or menu (aria-hidden or inert) is skipped;
+// axe's aria-hidden-focus rule covers focusable elements inside it. Radix
+// focus guards are invisible sentinels that move focus back into a menu.
+const expectFocusableElementsToBeNamed = async (page: Page) => {
+  const unnamed = await page.evaluate(() => {
+    const { axe } = window as unknown as { axe: typeof import("axe-core") };
+    axe.setup(document);
+    try {
+      return Array.from(document.querySelectorAll<HTMLElement>("body *"))
+        .filter(
+          (element) =>
+            element.tabIndex >= 0 &&
+            !("radixFocusGuard" in element.dataset) &&
+            !element.closest('[aria-hidden="true"], [inert]') &&
+            axe.commons.dom.isFocusable(element) &&
+            !axe.commons.text.accessibleText(element).trim()
+        )
+        .map((element) => element.outerHTML.slice(0, 200));
+    } finally {
+      axe.teardown();
+    }
+  });
+
+  expect(
+    unnamed,
+    `Focusable elements without an accessible name:\n${unnamed.join("\n")}`
+  ).toHaveLength(0);
 };
 
 export const authenticate = async (page: Page) => {

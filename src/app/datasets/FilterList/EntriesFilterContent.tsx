@@ -91,8 +91,14 @@ export default function EntriesFilterContent({
               key={filter.source + filter.key + entry.key}
               className="flex gap-x-8 justify-between items-center w-full"
             >
-              <label className="w-56">{entry.label}</label>
+              <label
+                htmlFor={`${filter.source}-${filter.key}-${entry.key}`}
+                className="w-56"
+              >
+                {entry.label}
+              </label>
               <input
+                id={`${filter.source}-${filter.key}-${entry.key}`}
                 className="border rounded-md p-2 w-full"
                 placeholder={t("valuePlaceholder")}
                 value={entry.value}

@@ -77,6 +77,44 @@ for (const state of ["datasets-empty", "datasets-error"]) {
   });
 }
 
+test("dataset filters are labelled and keyboard operable", async ({
+  page,
+}, info) => {
+  await page.goto(`${prefix}/datasets?page=1`);
+  for (const name of [
+    "Organization",
+    "Keyword",
+    "Modified Date",
+    "Records Count",
+  ]) {
+    const toggle = page.getByRole("button", { name: new RegExp(`^${name}`) });
+    // A key press made before hydration is lost, so retry until it expands.
+    await expect(async () => {
+      await toggle.focus();
+      await page.keyboard.press("Enter");
+      await expect(toggle).toHaveAttribute("aria-expanded", "true", {
+        timeout: 1_000,
+      });
+    }).toPass();
+  }
+  await expect(
+    page.getByRole("textbox", { name: "Organization Name" })
+  ).toBeVisible();
+  await expect(page.getByLabel("Date", { exact: true })).toBeVisible();
+  await expect(page.getByRole("combobox", { name: "Operator" })).toHaveCount(3);
+  await scan(page, info);
+
+  const records = page.locator("form").filter({
+    has: page.getByRole("spinbutton", { name: "Number" }),
+  });
+  await records.getByRole("spinbutton", { name: "Number" }).fill("10");
+  await records.getByRole("combobox", { name: "Operator" }).selectOption(">");
+  await records.getByRole("button", { name: "Apply" }).press("Enter");
+  await expect(
+    page.getByRole("heading", { name: /active filters/i })
+  ).toBeVisible();
+});
+
 for (const route of ["themes", "publishers"])
   for (const state of ["values-empty", "values-error"]) {
     test(`${route} ${state}`, async ({ page }, info) => {

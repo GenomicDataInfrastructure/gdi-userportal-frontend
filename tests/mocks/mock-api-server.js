@@ -101,6 +101,8 @@ async function main() {
     empty: [],
   };
 
+  const handleFeatureData = require("./feature-data")({ sendJson });
+
   const server = http.createServer(async (req, res) => {
     setCorsHeaders(res);
 
@@ -118,6 +120,8 @@ async function main() {
     const { pathname } = requestUrl;
 
     if (pathname === "/health") return sendJson(res, 200, { status: "ok" });
+
+    if (await handleFeatureData(req, res, pathname)) return;
 
     // ── Test control ────────────────────────────────────────────────────────
     if (pathname === "/_test/set-scenario" && req.method === "POST") {

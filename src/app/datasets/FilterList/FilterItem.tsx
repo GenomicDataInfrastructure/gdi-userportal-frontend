@@ -67,10 +67,12 @@ function FilterItem({ filter }: FilterItemProps) {
                   <span className="relative inline-flex items-center gap-x-2 group">
                     <span className="text-base px-1.5">{filter.label}</span>
                     {helpText && (
+                      // Not focusable: it sits inside the disclosure button,
+                      // whose accessible name includes the help text.
                       <span
-                        tabIndex={0}
+                        role="img"
                         aria-label={helpText}
-                        className="relative group inline-flex items-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info"
+                        className="relative group inline-flex items-center"
                       >
                         <FontAwesomeIcon
                           icon={faInfoCircle}

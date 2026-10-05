@@ -6,6 +6,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import axe from "axe-core";
 import { act, Suspense } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { jest } from "@jest/globals";
@@ -98,6 +99,28 @@ describe("NotificationsPage", () => {
       await Promise.resolve();
     });
   };
+
+  test.each([
+    [
+      "populated",
+      { notifications: [notification("1"), notification("2", true)] },
+    ],
+    ["loading", { isLoading: true }],
+    ["error", { error: true }],
+    ["empty", {}],
+    ["pagination", { notifications: fullPage("accessible") }],
+  ])("%s state has accessible names and semantics", async (_name, state) => {
+    await render(state as Record<string, unknown>);
+    const result = await axe.run(container, {
+      runOnly: {
+        type: "tag",
+        values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"],
+      },
+      // jsdom has no layout or computed contrast; browser scans cover those.
+      rules: { "color-contrast": { enabled: false } },
+    });
+    expect(result.violations).toEqual([]);
+  });
 
   test("renders the base list from the provider", async () => {
     await render({ notifications: [notification("1"), notification("2")] });

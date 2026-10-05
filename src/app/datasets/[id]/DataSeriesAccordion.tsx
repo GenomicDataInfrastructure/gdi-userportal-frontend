@@ -61,13 +61,10 @@ export default function DataSeriesAccordion({
             className="w-full border-b border-primary/20 last:border-b-0"
             key={seriesItem.id}
           >
-            <button
-              type="button"
-              onClick={() => toggleItem(index)}
-              className={`flex w-full cursor-pointer items-center justify-between rounded-md px-2 py-3 text-left transition-colors ${
+            <div
+              className={`flex w-full items-center justify-between rounded-md px-2 py-3 text-left transition-colors ${
                 openIndex === index ? "bg-hover" : "hover:bg-hover"
               }`}
-              aria-expanded={openIndex === index}
             >
               <span className="flex items-center relative group">
                 <FontAwesomeIcon icon={faLayerGroup} className="text-primary" />
@@ -77,16 +74,14 @@ export default function DataSeriesAccordion({
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-info hover:text-hover-color hover:underline"
-                      onClick={(event) => event.stopPropagation()}
+                      className="inline-flex min-h-6 items-center text-info hover:text-hover-color hover:underline"
                     >
                       {seriesItem.title}
                     </a>
                   ) : (
                     <Link
                       href={href}
-                      className="text-info hover:text-hover-color hover:underline"
-                      onClick={(event) => event.stopPropagation()}
+                      className="inline-flex min-h-6 items-center text-info hover:text-hover-color hover:underline"
                     >
                       {seriesItem.title}
                     </Link>
@@ -94,11 +89,18 @@ export default function DataSeriesAccordion({
                 </span>
                 <Tooltip message={t("tooltips.openDatasetSeriesDetails")} />
               </span>
-              <FontAwesomeIcon
-                icon={openIndex === index ? faChevronUp : faChevronDown}
-                className="text-primary"
-              />
-            </button>
+              <button
+                type="button"
+                onClick={() => toggleItem(index)}
+                className="flex min-h-6 min-w-6 items-center justify-center rounded-md text-primary"
+                aria-expanded={openIndex === index}
+                aria-label={`${t("tooltips.openDatasetSeriesDetails")}: ${seriesItem.title}`}
+              >
+                <FontAwesomeIcon
+                  icon={openIndex === index ? faChevronUp : faChevronDown}
+                />
+              </button>
+            </div>
             <div
               ref={(el: HTMLDivElement | null) => {
                 contentRefs.current[index] = el;

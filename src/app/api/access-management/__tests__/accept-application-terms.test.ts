@@ -23,7 +23,7 @@ describe("Accepting the terms of an application", () => {
     jest.resetAllMocks();
   });
 
-  test("Accepts the terms of an application", async () => {
+  test.each([200, 204])("Accepts the terms with HTTP %i", async (status) => {
     const encryptedToken = encrypt("decryptedToken");
     mockedGetServerSession.mockResolvedValueOnce({
       access_token: encryptedToken,
@@ -31,7 +31,7 @@ describe("Accepting the terms of an application", () => {
 
     mockDiscoveryAdapter
       .onPost("/api/v1/applications/43/accept-terms")
-      .reply(200);
+      .reply(status, status === 204 ? "" : undefined);
 
     await acceptApplicationTermsApi(43, { acceptedLicenses: [21, 22] });
   });

@@ -6,3 +6,7 @@ documentation/build/
 .next/
 node_modules/
 coverage/
+
+.next-e2e/
+playwright-report/
+test-results/

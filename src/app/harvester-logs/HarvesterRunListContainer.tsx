@@ -4,6 +4,7 @@
 
 "use client";
 
+import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import Error from "@/app/error";
@@ -29,6 +30,7 @@ export default function HarvesterRunListContainer({
 }: Readonly<HarvesterRunListContainerProps>) {
   const t = useTranslations();
   const router = useRouter();
+  const selectedRunButton = useRef<HTMLButtonElement | null>(null);
   const { runs, runCount, isLoading, errorCode, selectRun } =
     useHarvesterLogs();
 
@@ -100,7 +102,10 @@ export default function HarvesterRunListContainer({
           <button
             key={run.runId}
             type="button"
-            onClick={() => selectRun(run.runId)}
+            onClick={(event) => {
+              selectedRunButton.current = event.currentTarget;
+              selectRun(run.runId);
+            }}
             className="w-full text-left border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
           >
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -112,7 +117,7 @@ export default function HarvesterRunListContainer({
                   {new Date(run.startedAt).toLocaleString()}
                 </p>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
                 <span className="text-sm text-green-700">
                   {t("harvesterLogs.fields.succeeded")}: {run.succeeded}
                 </span>
@@ -137,7 +142,9 @@ export default function HarvesterRunListContainer({
           currentPage={currentPage}
         />
       </div>
-      <HarvesterRunDetail />
+      <HarvesterRunDetail
+        restoreFocus={() => selectedRunButton.current?.focus()}
+      />
     </>
   );
 }

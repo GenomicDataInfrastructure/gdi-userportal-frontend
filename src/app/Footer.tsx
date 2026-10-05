@@ -43,7 +43,7 @@ function Footer() {
         <div className="container mx-auto flex flex-col gap-16 md:flex-row md:gap-24">
           {/* First column: About the project */}
           <div className="flex flex-col items-start gap-4 w-full md:w-3/5">
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               {contentConfig.websiteUrl ? (
                 <a
                   href={contentConfig.websiteUrl}

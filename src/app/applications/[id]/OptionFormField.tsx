@@ -33,6 +33,8 @@ function OptionFormField({
 }: OptionFormFieldProps) {
   const t = useTranslations("application.fields");
   const { updateInputFields } = useApplicationDetails();
+  const labelId = `form-${formId}-${field.id}-label`;
+  const errorId = `form-${formId}-${field.id}-error`;
   const [selectedOption, setSelectedOption] = useState(field.value || "");
 
   useEffect(() => {
@@ -54,16 +56,19 @@ function OptionFormField({
   return (
     <div className="flex flex-col py-2">
       <div className="flex flex-col justify-between">
-        <h3 className="text-lg sm:text-xl">
-          {title} {field.optional ? t("optional") : ""}
-        </h3>
         <div className="relative">
           <Listbox
             value={selectedOption}
             onChange={handleSelectChange}
             disabled={isDisabled}
           >
+            <Listbox.Label as="h3" id={labelId} className="text-lg sm:text-xl">
+              {title} {field.optional ? t("optional") : ""}
+            </Listbox.Label>
             <Listbox.Button
+              aria-labelledby={labelId}
+              aria-invalid={!!validationWarning}
+              aria-describedby={validationWarning ? errorId : undefined}
               className={`w-full mt-4 rounded-md border-2 px-4 py-[9px] text-md pr-10 text-left ${
                 isDisabled
                   ? "border-slate-200 cursor-not-allowed bg-slate-50 opacity-50"
@@ -85,7 +90,10 @@ function OptionFormField({
                 }`}
               />
             </Listbox.Button>
-            <Listbox.Options className="absolute mt-2 w-full rounded-md bg-white shadow-lg max-h-60 ring-1 ring-black ring-opacity-5">
+            <Listbox.Options
+              aria-labelledby={labelId}
+              className="absolute mt-2 w-full rounded-md bg-white shadow-lg max-h-60 ring-1 ring-black ring-opacity-5"
+            >
               {field.options!.length > 0 ? (
                 field.options!.map((option: FormFieldOption) => (
                   <Listbox.Option
@@ -124,7 +132,9 @@ function OptionFormField({
         </div>
       </div>
       {validationWarning && (
-        <span className="text-red-600 mt-2">{validationWarning}</span>
+        <span id={errorId} className="text-red-600 mt-2">
+          {validationWarning}
+        </span>
       )}
     </div>
   );

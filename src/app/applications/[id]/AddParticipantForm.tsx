@@ -88,12 +88,14 @@ const AddParticipantForm = ({
             onChange={(e) => setCurrentAddParticipantName(e.target.value)}
             type="text"
             placeholder={t("namePlaceholder")}
+            aria-label={t("namePlaceholder")}
           />
           <Input
             value={currentAddParticipantEmail}
             onChange={(e) => setCurrentAddParticipantEmail(e.target.value)}
             type="text"
             placeholder={t("emailPlaceholder")}
+            aria-label={t("emailPlaceholder")}
           />
           <div className="flex gap-2 self-end">
             {isAddParticipantFormShown && (

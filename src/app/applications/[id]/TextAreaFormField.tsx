@@ -24,6 +24,8 @@ function TextAreaFormField({
   validationWarning,
 }: TextAreaFormFieldProps) {
   const { updateInputFields } = useApplicationDetails();
+  const labelId = `form-${formId}-${field.id}-label`;
+  const errorId = `form-${formId}-${field.id}-error`;
   const [inputValue, setInputValue] = useState(field.value!);
 
   useEffect(() => {
@@ -46,11 +48,14 @@ function TextAreaFormField({
     <div className="flex flex-col py-2">
       <div className="flex flex-col justify-between">
         <div>
-          <h3 className="text-lg sm:text-xl">{`${title} ${
+          <h3 id={labelId} className="text-lg sm:text-xl">{`${title} ${
             field.optional ? "(Optional)" : ""
           }`}</h3>
         </div>
         <textarea
+          aria-labelledby={labelId}
+          aria-invalid={!!validationWarning}
+          aria-describedby={validationWarning ? errorId : undefined}
           placeholder={title}
           rows={5}
           value={inputValue}
@@ -64,7 +69,9 @@ function TextAreaFormField({
         />
       </div>
       {validationWarning && (
-        <span className="text-red-600 mt-2">{validationWarning}</span>
+        <span id={errorId} className="text-red-600 mt-2">
+          {validationWarning}
+        </span>
       )}
     </div>
   );

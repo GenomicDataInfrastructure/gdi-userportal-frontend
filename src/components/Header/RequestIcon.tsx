@@ -9,11 +9,13 @@ import React from "react";
 
 interface RequestIconProps {
   isActive: boolean;
+  label: string;
 }
 
-const RequestIcon: React.FC<RequestIconProps> = ({ isActive }) => (
+const RequestIcon: React.FC<RequestIconProps> = ({ isActive, label }) => (
   <Link
     href="/requests"
+    aria-label={label}
     className={`relative flex items-center text-info hover:text-secondary transition-opacity duration-300 ${
       isActive ? "text-primary" : ""
     }`}

@@ -4,7 +4,7 @@
 
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import AppButton from "@/components/Button";
 import { Button as DialogButton } from "@/components/shadcn/button";
 import { Input } from "@/components/shadcn/input";
@@ -50,6 +50,7 @@ function isValidEmailFormat(value: string): boolean {
 export default function ContactUsModal() {
   const t = useTranslations("contact");
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLElement | null>(null);
   const [topics, setTopics] = useState<TopicOption[]>([]);
   const [formState, setFormState] =
     useState<ContactFormState>(INITIAL_FORM_STATE);
@@ -220,12 +221,19 @@ export default function ContactUsModal() {
         className="self-start"
         onClick={(event) => {
           event.preventDefault();
+          triggerRef.current = event.currentTarget;
           setOpen(true);
         }}
       />
 
       <Dialog open={open} onOpenChange={closeDialog}>
-        <DialogContent className="sm:max-w-xl bg-white max-h-[90vh] overflow-y-auto">
+        <DialogContent
+          onCloseAutoFocus={(event) => {
+            event.preventDefault();
+            triggerRef.current?.focus();
+          }}
+          className="sm:max-w-xl bg-white max-h-[90vh] overflow-y-auto"
+        >
           <DialogHeader>
             <DialogTitle>{t("title")}</DialogTitle>
             <DialogDescription>{t("description")}</DialogDescription>

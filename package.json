@@ -25,7 +25,8 @@
     "type-check": "tsc --noEmit",
     "format": "prettier --check .",
     "format:fix": "prettier --write --list-different .",
-    "validate": "npm run lint && npm run test && npm run type-check && npm run format"
+    "validate": "npm run lint && npm run test && npm run type-check && npm run format",
+    "test:a11y": "E2E_MULTILINGUAL=true playwright test --config=playwright.accessibility.config.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
@@ -92,6 +93,7 @@
     "utils": "^0.2.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@eslint/compat": "^2.0.2",
     "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4.0.0",
@@ -100,6 +102,7 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@typescript-eslint/eslint-plugin": "^8.18.2",
+    "axe-core": "^4.13.0",
     "dotenv": "^17.1.0",
     "eslint": "^10.0.0",
     "eslint-config-next": "16.3.8",

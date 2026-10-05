@@ -8,6 +8,7 @@
 
 @theme {
   --color-primary: var(--color-primary);
+  --color-primary-foreground: #fff;
   --color-secondary: var(--color-secondary);
   --color-info: var(--color-info);
   --color-warning: var(--color-warning);

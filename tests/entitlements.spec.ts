@@ -64,9 +64,9 @@ async function setAuthCookie(page: Page) {
 }
 
 /**
- * Cookie with a valid JWT but NO access_token / id_token.
- * The session callback will throw → getToken returns null
- * → fetchGa4ghPassport returns { passportPresent: false }.
+ * Keep a valid session with an empty access token. Omitting the token fields
+ * makes the session callback throw and NextAuth discard the session before
+ * the entitlement page can render its passport-unavailable state.
  */
 async function setAuthCookieWithoutTokens(page: Page) {
   const secret = process.env.NEXTAUTH_SECRET || "your-secret";
@@ -75,6 +75,8 @@ async function setAuthCookieWithoutTokens(page: Page) {
       name: "Test User",
       email: "test@example.com",
       sub: "test-user",
+      access_token: "",
+      id_token: "fake-id-token",
       expires_at: Math.floor(Date.now() / 1000) + 3600,
     },
     secret,
@@ -187,7 +189,7 @@ test.describe("Entitlements page (GA4GH Passport flow)", () => {
   test("shows passport-unavailable banner when access token is missing", async ({
     page,
   }) => {
-    // Override the cookie — no access_token so getToken returns null
+    // Override the cookie with an authenticated session without a usable token.
     await page.context().clearCookies();
     await setAuthCookieWithoutTokens(page);
     await page.goto("/requests?tab=entitlements");

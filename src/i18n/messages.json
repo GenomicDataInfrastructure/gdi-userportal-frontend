@@ -1884,5 +1884,17 @@
   "harvesterLogs.warningType.distributionIssue": {
     "en": "Distribution issue",
     "fr": "Problème de distribution"
+  },
+  "application.fields.rowNumber": {
+    "en": "row {number}",
+    "fr": "ligne {number}"
+  },
+  "application.fields.removeRow": {
+    "en": "Remove row {number}",
+    "fr": "Supprimer la ligne {number}"
+  },
+  "markdown.scrollableTable": {
+    "en": "Scrollable table",
+    "fr": "Tableau défilant"
   }
 }

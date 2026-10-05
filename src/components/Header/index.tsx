@@ -58,7 +58,10 @@ function Header() {
     loginBtn = session ? (
       <>
         <NotificationBell />
-        <RequestIcon isActive={!!activeTab?.includes("requests")} />
+        <RequestIcon
+          isActive={!!activeTab?.includes("requests")}
+          label={t("nav.requests")}
+        />
         <Avatar user={session.user as User} />
       </>
     ) : (
@@ -164,6 +167,7 @@ function Header() {
               <>
                 <Link
                   href="/basket"
+                  aria-label={t("basket.title")}
                   className={`relative flex items-center text-info hover:text-secondary transition-opacity duration-300 p-2 ${
                     activeTab?.includes("basket") ? "text-primary" : ""
                   }`}

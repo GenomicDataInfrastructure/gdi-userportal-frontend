@@ -25,6 +25,8 @@ function PhoneFormField({
   validationWarning,
 }: PhoneFormFieldProps) {
   const { updateInputFields } = useApplicationDetails();
+  const labelId = `form-${formId}-${field.id}-label`;
+  const errorId = `form-${formId}-${field.id}-error`;
   const [inputValue, setInputValue] = useState(field.value!);
 
   useEffect(() => {
@@ -59,12 +61,15 @@ function PhoneFormField({
     <div className="flex flex-col py-2">
       <div className="flex flex-col">
         <div>
-          <h3 className="text-lg sm:text-xl">{`${title} ${
+          <h3 id={labelId} className="text-lg sm:text-xl">{`${title} ${
             field.optional ? "(Optional)" : ""
           }`}</h3>
         </div>
         <div className="mt-4 flex w-full">
           <PhoneInput
+            aria-labelledby={labelId}
+            aria-invalid={!!validationWarning}
+            aria-describedby={validationWarning ? errorId : undefined}
             value={inputValue}
             onChange={handlePhoneChange}
             onBlur={handlePhoneBlur}
@@ -74,7 +79,9 @@ function PhoneFormField({
         </div>
       </div>
       {validationWarning && (
-        <span className="text-red-600 mt-2">{validationWarning}</span>
+        <span id={errorId} className="text-red-600 mt-2">
+          {validationWarning}
+        </span>
       )}
     </div>
   );

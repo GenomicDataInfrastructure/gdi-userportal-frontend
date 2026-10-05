@@ -46,7 +46,11 @@ function groupErrorsByMessage(
   return Array.from(groups.values()).sort((a, b) => b.count - a.count);
 }
 
-export default function HarvesterRunDetail() {
+export default function HarvesterRunDetail({
+  restoreFocus,
+}: {
+  restoreFocus?: () => void;
+}) {
   const t = useTranslations();
   const { selectedRun, isLoadingSelectedRun, clearSelectedRun } =
     useHarvesterLogs();
@@ -64,7 +68,15 @@ export default function HarvesterRunDetail() {
         if (!open) clearSelectedRun();
       }}
     >
-      <DialogContent className="sm:max-w-3xl bg-white max-h-[85vh] overflow-y-auto">
+      <DialogContent
+        onCloseAutoFocus={(event) => {
+          if (restoreFocus) {
+            event.preventDefault();
+            restoreFocus();
+          }
+        }}
+        className="sm:max-w-3xl bg-white max-h-[85vh] overflow-y-auto"
+      >
         <DialogHeader>
           <DialogTitle>{t("harvesterLogs.detail.title")}</DialogTitle>
         </DialogHeader>
@@ -186,7 +198,7 @@ export default function HarvesterRunDetail() {
                           >
                             {dataset.datasetTitle ??
                               t("harvesterLogs.detail.untitledDataset")}
-                            <span className="text-xs text-gray-400 ml-2 break-all">
+                            <span className="text-xs text-gray-600 ml-2 break-all">
                               {dataset.subjectId}
                             </span>
                           </li>

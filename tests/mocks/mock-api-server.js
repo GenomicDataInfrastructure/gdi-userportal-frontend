@@ -101,6 +101,11 @@ async function main() {
     empty: [],
   };
 
+  const handleAccessibility = require("./accessibility-data")({
+    sendJson,
+    readBody,
+  });
+
   const server = http.createServer(async (req, res) => {
     setCorsHeaders(res);
 
@@ -118,6 +123,8 @@ async function main() {
     const { pathname } = requestUrl;
 
     if (pathname === "/health") return sendJson(res, 200, { status: "ok" });
+
+    if (await handleAccessibility(req, res, pathname)) return;
 
     // ── Test control ────────────────────────────────────────────────────────
     if (pathname === "/_test/set-scenario" && req.method === "POST") {
@@ -148,6 +155,79 @@ async function main() {
     // ── JWKS ────────────────────────────────────────────────────────────────
     if (pathname === "/jwks.json" && req.method === "GET") {
       return sendJson(res, 200, jwks);
+    }
+
+    // Server-rendered pages and server actions also need mock backend data.
+    if (pathname === "/api/v1/applications/88" && req.method === "GET") {
+      return sendJson(res, 200, {
+        id: 88,
+        externalId: "A11Y-88",
+        state: "application.state/draft",
+        applicant: {
+          name: "Accessibility Test User",
+          email: "accessibility@example.com",
+        },
+        members: [],
+        invitedMembers: [],
+        datasets: [],
+        licenses: [],
+        attachments: [],
+        events: [
+          {
+            eventType: "application.event/created",
+            eventTime: "2026-01-01T12:00:00Z",
+          },
+        ],
+        forms: [
+          {
+            id: 1,
+            externalTitle: [{ language: "en", name: "Research project" }],
+            fields: [
+              {
+                id: "purpose",
+                type: "text",
+                visible: true,
+                optional: false,
+                title: [{ language: "en", name: "Research purpose" }],
+                value: "Synthetic cohort research",
+              },
+            ],
+          },
+        ],
+      });
+    }
+    if (pathname === "/harvester_logs" && req.method === "PUT") {
+      return sendJson(res, 200, { acknowledged: true });
+    }
+    if (pathname === "/harvester_logs/_search" && req.method === "POST") {
+      return sendJson(res, 200, {
+        hits: {
+          total: { value: 1 },
+          hits: [
+            {
+              _id: "a11y-run",
+              _source: {
+                runId: "a11y-run",
+                startedAt: "2026-01-01T12:00:00Z",
+                finishedAt: "2026-01-01T12:01:00Z",
+                source: { url: "https://example.org/synthetic-catalogue" },
+                mode: "append",
+                status: "success",
+                succeeded: 1,
+                failed: 0,
+                errors: [],
+                warnings: [],
+                succeededDatasets: [],
+              },
+            },
+          ],
+        },
+      });
+    }
+
+    // The portal's access-management contract returns an array, unlike HDLU.
+    if (pathname === "/api/v1/applications" && req.method === "GET") {
+      return sendJson(res, 200, []);
     }
 
     // ── Discovery API ────────────────────────────────────────────────────────

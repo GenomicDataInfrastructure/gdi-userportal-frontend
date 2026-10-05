@@ -33,6 +33,8 @@ function GenericInputFormField({
 }: GenericInputFormFieldProps) {
   const t = useTranslations("application.fields");
   const { updateInputFields } = useApplicationDetails();
+  const labelId = `form-${formId}-${field.id}-label`;
+  const errorId = `form-${formId}-${field.id}-error`;
   const [inputValue, setInputValue] = useState(field.value!);
 
   useEffect(() => {
@@ -58,15 +60,18 @@ function GenericInputFormField({
     <div className="flex flex-col py-2">
       <div className="flex flex-col justify-between">
         <div>
-          <h3 className="text-lg sm:text-xl">{`${title} ${
+          <h3 id={labelId} className="text-lg sm:text-xl">{`${title} ${
             field.optional ? t("optional") : ""
           }`}</h3>
         </div>
         <div className="mt-4 flex items-center">
           {children}
           <Input
+            aria-labelledby={labelId}
+            aria-invalid={!!validationWarning}
+            aria-describedby={validationWarning ? errorId : undefined}
             type={type}
-            id={field.id!.toString()}
+            id={`form-${formId}-${field.id}`}
             name={field.id!.toString()}
             value={inputValue}
             onChange={handleInputChange}
@@ -81,7 +86,9 @@ function GenericInputFormField({
         </div>
       </div>
       {validationWarning && (
-        <span className="text-red-600 mt-2">{validationWarning}</span>
+        <span id={errorId} className="text-red-600 mt-2">
+          {validationWarning}
+        </span>
       )}
     </div>
   );

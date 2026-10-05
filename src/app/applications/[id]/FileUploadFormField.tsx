@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import { useRef } from "react";
 import { useApplicationDetails } from "@/providers/application/ApplicationProvider";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { useTranslations } from "next-intl";
@@ -26,9 +27,15 @@ function FileUploadFormField({
 }: FileUploadFormFieldProps) {
   const t = useTranslations("application.fields");
   const { application, isLoading, addAttachment } = useApplicationDetails();
+  const labelId = `form-${formId}-${field.id}-label`;
+  const errorId = `form-${formId}-${field.id}-error`;
+  const buttonId = `form-${formId}-${field.id}-upload`;
+
+  const fileInput = useRef<HTMLInputElement>(null);
 
   async function onFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files![0];
+    const file = e.target.files?.[0];
+    if (!file) return;
     const formData = new FormData();
     formData.set("file", file);
     await addAttachment(formId, field.id!, formData);
@@ -39,20 +46,28 @@ function FileUploadFormField({
     <div className="flex flex-col py-2">
       <div className="flex justify-between">
         <div>
-          <h3 className="text-lg sm:text-xl">{`${title} ${
+          <h3 id={labelId} className="text-lg sm:text-xl">{`${title} ${
             field.optional ? t("optional") : ""
           }`}</h3>
         </div>
         <>
           <input
             type="file"
+            ref={fileInput}
+            aria-labelledby={labelId}
+            aria-describedby={validationWarning ? errorId : undefined}
             id={`input-file-${field.id}`}
             disabled={isLoading || !editable}
             onChange={onFileUpload}
             className="hidden"
           />
-          <label
-            htmlFor={`input-file-${field.id}`}
+          <button
+            type="button"
+            aria-labelledby={`${buttonId} ${labelId}`}
+            aria-describedby={validationWarning ? errorId : undefined}
+            id={buttonId}
+            onClick={() => fileInput.current?.click()}
+            disabled={isLoading || !editable}
             className={`bg-info text-white rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide sm:w-auto ${
               isLoading || !editable
                 ? "cursor-not-allowed opacity-50"
@@ -61,7 +76,7 @@ function FileUploadFormField({
           >
             <FontAwesomeIcon icon={faPlusCircle} className="mr-2 text-sm" />
             <span className="text-sm">{t("uploadFile")}</span>
-          </label>
+          </button>
         </>
       </div>
 
@@ -85,7 +100,9 @@ function FileUploadFormField({
           })}
       </ul>
       {validationWarning && (
-        <span className="text-red-600 mt-1">{validationWarning}</span>
+        <span id={errorId} className="text-red-600 mt-1">
+          {validationWarning}
+        </span>
       )}
     </div>
   );

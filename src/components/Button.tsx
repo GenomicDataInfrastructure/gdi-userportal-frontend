@@ -39,11 +39,11 @@ const Button: React.FC<ButtonProps> = ({
     "rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide cursor-pointer";
 
   const classes = {
-    primary: "bg-primary text-white hover:bg-secondary",
+    primary: "bg-primary text-white hover:bg-secondary hover:text-black",
     secondary:
-      "bg-transparent text-primary border-2 border-primary hover:bg-secondary hover:text-white hover:border-transparent",
-    info: "bg-info text-white hover:bg-secondary",
-    warning: "bg-warning text-black hover:bg-secondary hover:text-white",
+      "bg-transparent text-primary border-2 border-primary hover:bg-secondary hover:text-black hover:border-transparent",
+    info: "bg-info text-white hover:bg-secondary hover:text-black",
+    warning: "bg-warning text-black hover:bg-secondary hover:text-black",
   };
 
   const disabledClasses = disabled

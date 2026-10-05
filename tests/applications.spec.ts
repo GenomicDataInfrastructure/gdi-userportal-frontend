@@ -39,9 +39,7 @@ test.describe("applications", () => {
     await page.reload();
 
     await expect(page.getByText(/^submitted$/i).first()).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: /^submit$/i })
-    ).toBeHidden();
+    await expect(page.getByRole("button", { name: /^submit$/i })).toBeHidden();
   });
 
   test("applicant sees an application approved by the external approval service", async ({
@@ -53,8 +51,6 @@ test.describe("applications", () => {
     await page.goto(`/applications/${applicationId}`);
 
     await expect(page.getByText(/^approved$/i).first()).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: /^submit$/i })
-    ).toBeHidden();
+    await expect(page.getByRole("button", { name: /^submit$/i })).toBeHidden();
   });
 });

@@ -29,6 +29,7 @@ function FileUploadFormField({
   const { application, isLoading, addAttachment } = useApplicationDetails();
   const labelId = `form-${formId}-${field.id}-label`;
   const errorId = `form-${formId}-${field.id}-error`;
+  const buttonId = `form-${formId}-${field.id}-upload`;
 
   const fileInput = useRef<HTMLInputElement>(null);
 
@@ -62,6 +63,9 @@ function FileUploadFormField({
           />
           <button
             type="button"
+            aria-labelledby={`${buttonId} ${labelId}`}
+            aria-describedby={validationWarning ? errorId : undefined}
+            id={buttonId}
             onClick={() => fileInput.current?.click()}
             disabled={isLoading || !editable}
             className={`bg-info text-white rounded-md px-4 py-2 font-bold transition-colors duration-200 tracking-wide sm:w-auto ${

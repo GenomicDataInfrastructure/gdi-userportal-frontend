@@ -64,7 +64,7 @@ function AddToBasketButton({
           </span>
         )}
       </span>
-      {!hasAccess && withoutAccessContent}
+      {withoutAccessContent}
       {!hasAccess && !withoutAccessContent && (
         <Button
           text={isInBasket ? t("removeFromBasket") : t("addToBasket")}

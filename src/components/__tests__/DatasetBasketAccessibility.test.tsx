@@ -83,3 +83,41 @@ it("separates navigation and actions and announces granted access as a status", 
     container.remove();
   }
 });
+
+it("keeps an external access action visible after access is granted", async () => {
+  const container = document.createElement("div");
+  document.body.appendChild(container);
+  const root = createRoot(container);
+  const dataset = {
+    id: "external-test",
+    identifier: "external-test",
+    title: "External test dataset",
+  } as SearchedDataset;
+  mockGranted = true;
+
+  try {
+    await act(async () =>
+      root.render(
+        createElement(AddToBasketButton, {
+          dataset,
+          withoutAccessContent: createElement(
+            "a",
+            { href: "https://example.test/access" },
+            "Open external portal"
+          ),
+        })
+      )
+    );
+
+    expect(container.querySelector('[role="status"]')?.textContent).toContain(
+      "accessGranted"
+    );
+    expect(container.querySelector("a")?.textContent).toBe(
+      "Open external portal"
+    );
+  } finally {
+    act(() => root.unmount());
+    container.remove();
+    mockGranted = false;
+  }
+});

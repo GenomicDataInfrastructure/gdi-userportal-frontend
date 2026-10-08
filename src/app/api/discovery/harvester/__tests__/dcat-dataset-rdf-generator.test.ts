@@ -32,8 +32,9 @@ describe("DCAT dataset export generators", () => {
   const CSVW_TABLE_PROPERTY = "http://www.w3.org/ns/csvw#table";
   const CSVW_COLUMN = "http://www.w3.org/ns/csvw#column";
   const CSVW_NAME = "http://www.w3.org/ns/csvw#name";
-  const CSVW_TITLES = "http://www.w3.org/ns/csvw#titles";
+  const CSVW_TITLE = "http://www.w3.org/ns/csvw#title";
   const CSVW_DATATYPE = "http://www.w3.org/ns/csvw#datatype";
+  const DCT_TITLE = "http://purl.org/dc/terms/title";
   const DCT_DESCRIPTION = "http://purl.org/dc/terms/description";
 
   beforeEach(() => {
@@ -415,6 +416,16 @@ describe("DCAT dataset export generators", () => {
       quads.some(
         (q) =>
           q.subject.value === tableGroupNodes[0] &&
+          q.predicate.value === DCT_TITLE &&
+          q.object.value === "Data Dictionary" &&
+          q.object.termType === "Literal" &&
+          q.object.language === "en"
+      )
+    ).toBe(true);
+    expect(
+      quads.some(
+        (q) =>
+          q.subject.value === tableGroupNodes[0] &&
           q.predicate.value === RDF_TYPE &&
           q.object.value === CSVW_TABLE_GROUP
       )
@@ -448,7 +459,7 @@ describe("DCAT dataset export generators", () => {
       quads.some(
         (q) =>
           columnNodes.includes(q.subject.value) &&
-          q.predicate.value === CSVW_TITLES &&
+          q.predicate.value === CSVW_TITLE &&
           q.object.value === "Patient Id" &&
           q.object.termType === "Literal" &&
           q.object.language === "en"
@@ -484,8 +495,9 @@ describe("DCAT dataset export generators", () => {
     expect(turtle).toContain("healthdcatap:hasVariables");
     expect(turtle).toContain("csvw:TableGroup");
     expect(turtle).toContain("csvw:Table");
+    expect(turtle).toContain('dct:title "Data Dictionary"@en');
     expect(turtle).toContain('csvw:name "patient_id"');
-    expect(turtle).toContain('csvw:titles "Patient Id"@en');
+    expect(turtle).toContain('csvw:title "Patient Id"@en');
     expect(turtle).toContain('csvw:datatype "string"');
 
     const graph = jsonLd["@graph"] as Array<Record<string, unknown>>;

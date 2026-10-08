@@ -40,6 +40,11 @@ export const addDatasetDictionaryQuads = ({
   );
   store.add(datasetNode, ns.health("hasVariables"), tableGroupNode);
   store.add(tableGroupNode, ns.rdf("type"), ns.csvw("TableGroup"));
+  store.add(
+    tableGroupNode,
+    ns.dct("title"),
+    createLanguageLiteral("Data Dictionary", "en")
+  );
   store.add(tableGroupNode, ns.csvw("table"), tableNode);
   store.add(tableNode, ns.rdf("type"), ns.csvw("Table"));
   store.add(
@@ -66,7 +71,7 @@ export const addDatasetDictionaryQuads = ({
     addLiteral(store, columnNode, ns.csvw("name"), entry.name);
     store.add(
       columnNode,
-      ns.csvw("titles"),
+      ns.csvw("title"),
       createLanguageLiteral(toDictionaryColumnTitle(entry.name), "en")
     );
     addLiteral(

@@ -163,7 +163,7 @@ export default function Card({
         </div>
       )}
       {(keywords.length > 0 || button) && (
-        <div className="mt-6 flex flex-col items-stretch gap-3 pr-2 sm:flex-row sm:items-start sm:justify-between">
+        <div className="mt-auto flex flex-col items-stretch gap-3 pr-2 pt-6 sm:flex-row sm:items-start sm:justify-between">
           {keywords.length > 0 && <Chips chips={keywords} />}
           {contentConfig.showBasketAndLogin && button && (
             <div className="w-full sm:ml-auto sm:w-auto">{button}</div>

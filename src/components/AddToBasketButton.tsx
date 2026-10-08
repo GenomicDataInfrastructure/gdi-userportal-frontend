@@ -19,12 +19,14 @@ type AddToBasketButtonProps = {
   dataset: SearchedDataset | null;
   disabled?: boolean;
   withoutAccessContent?: ReactNode;
+  layout?: "stacked" | "inline";
 };
 
 function AddToBasketButton({
   dataset,
   disabled: isDisabledProp = false,
   withoutAccessContent,
+  layout = "stacked",
 }: Readonly<AddToBasketButtonProps>) {
   const t = useTranslations("basket");
   const {
@@ -54,17 +56,27 @@ function AddToBasketButton({
   };
 
   return (
-    <div className="flex flex-col items-start gap-2">
+    <div
+      className={
+        layout === "inline"
+          ? "flex flex-wrap items-center justify-end gap-x-4 gap-y-2"
+          : "flex flex-col items-start gap-2"
+      }
+    >
+      {withoutAccessContent}
       <span role="status" aria-atomic="true">
         {hasAccess && (
-          <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
-            <FontAwesomeIcon icon={faCheckCircle} aria-hidden="true" />
+          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-700">
+            <FontAwesomeIcon
+              icon={faCheckCircle}
+              className="text-primary"
+              aria-hidden="true"
+            />
             <span>{t("accessGranted")}</span>
             <span className="sr-only">: {dataset?.title}</span>
           </span>
         )}
       </span>
-      {withoutAccessContent}
       {!hasAccess && !withoutAccessContent && (
         <Button
           text={isInBasket ? t("removeFromBasket") : t("addToBasket")}

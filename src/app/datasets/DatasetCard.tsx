@@ -123,6 +123,7 @@ function DatasetCard({
     !displayBasketButton || dataset.isSeries ? undefined : (
       <AddToBasketButton
         dataset={dataset}
+        layout="inline"
         withoutAccessContent={isExternal ? externalDatasetAction : undefined}
       />
     );

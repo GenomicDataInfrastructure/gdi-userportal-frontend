@@ -54,7 +54,7 @@ function AddToBasketButton({
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-start gap-2">
       <span role="status" aria-atomic="true">
         {hasAccess && (
           <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">

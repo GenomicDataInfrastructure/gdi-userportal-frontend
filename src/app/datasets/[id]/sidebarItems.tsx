@@ -56,26 +56,29 @@ function createDatasetSidebarItems(
   return [
     {
       label: t.requestDataAccess,
-      value: externalInfo.isExternal ? (
-        <div className="flex flex-col gap-2">
-          <p className="text-xs text-gray-600">
-            {t.externalRequestUnavailable}
-            {externalAccessUrl ? ` ${t.externalRequestPortal}` : ""}
-          </p>
-          {externalAccessUrl ? (
-            <ExternalDatasetLink url={externalAccessUrl} />
-          ) : (
-            <span className="text-xs px-3 py-2 font-semibold bg-gray-200 text-gray-600 rounded-md w-fit">
-              {t.noExternalLinkAvailable}
-            </span>
-          )}
-        </div>
-      ) : (
+      value: (
         <AddToBasketButton
           dataset={{
             ...dataset,
             distributionsCount: dataset.distributions?.length,
           }}
+          withoutAccessContent={
+            externalInfo.isExternal ? (
+              <div className="flex flex-col gap-2">
+                <p className="text-xs text-gray-600">
+                  {t.externalRequestUnavailable}
+                  {externalAccessUrl ? ` ${t.externalRequestPortal}` : ""}
+                </p>
+                {externalAccessUrl ? (
+                  <ExternalDatasetLink url={externalAccessUrl} />
+                ) : (
+                  <span className="text-xs px-3 py-2 font-semibold bg-gray-200 text-gray-600 rounded-md w-fit">
+                    {t.noExternalLinkAvailable}
+                  </span>
+                )}
+              </div>
+            ) : undefined
+          }
         />
       ),
       hideItem: !!dataset.isSeries,

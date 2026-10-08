@@ -85,41 +85,47 @@ function DatasetCard({
 
   const externalAccessUrl = getFirstAccessUrl(distributions);
 
+  const externalDatasetAction = (
+    <div role="presentation" onClick={(e) => e.stopPropagation()}>
+      {externalAccessUrl ? (
+        <ExternalDatasetConfirmationDialog url={externalAccessUrl}>
+          {({ onClick }) => (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onClick(e);
+              }}
+              className="text-xs sm:text-base text-primary hover:text-info underline hover:no-underline font-semibold transition-colors duration-200 cursor-pointer shrink-0 inline-flex items-center gap-1"
+            >
+              <span>{tDetail("accessExternalDataset")}</span>
+              <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+            </button>
+          )}
+        </ExternalDatasetConfirmationDialog>
+      ) : (
+        <button
+          disabled
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+          className="text-xs sm:text-base text-gray-400 cursor-not-allowed inline-flex items-center gap-1"
+        >
+          <span>{tDetail("externalLinkNotAvailable")}</span>
+          <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+        </button>
+      )}
+    </div>
+  );
+
   const buttonElement =
-    !displayBasketButton || dataset.isSeries ? undefined : isExternal ? (
-      <div role="presentation" onClick={(e) => e.stopPropagation()}>
-        {externalAccessUrl ? (
-          <ExternalDatasetConfirmationDialog url={externalAccessUrl}>
-            {({ onClick }) => (
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onClick(e);
-                }}
-                className="text-xs sm:text-base text-primary hover:text-info underline hover:no-underline font-semibold transition-colors duration-200 cursor-pointer shrink-0 inline-flex items-center gap-1"
-              >
-                <span>{tDetail("accessExternalDataset")}</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-              </button>
-            )}
-          </ExternalDatasetConfirmationDialog>
-        ) : (
-          <button
-            disabled
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            className="text-xs sm:text-base text-gray-400 cursor-not-allowed inline-flex items-center gap-1"
-          >
-            <span>{tDetail("externalLinkNotAvailable")}</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-          </button>
-        )}
-      </div>
-    ) : (
-      <AddToBasketButton dataset={dataset} />
+    !displayBasketButton || dataset.isSeries ? undefined : (
+      <AddToBasketButton
+        dataset={dataset}
+        layout="inline"
+        withoutAccessContent={isExternal ? externalDatasetAction : undefined}
+      />
     );
 
   const subTitles = useMemo(

@@ -293,7 +293,6 @@ components:
       required:
         - source
         - type
-        - label
     FilterType:
       type: string
       enum:
@@ -996,8 +995,15 @@ components:
         type:
           $ref: "#/components/schemas/ValueLabel"
         identifier:
-          type: string
           title: identifier
+          description: >-
+            Agent identifiers. DDS may return either the legacy scalar value or
+            an array when the source metadata contains multiple identifiers.
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
         actedOnBehalfOf:
           type: array
           description: Organization the agent acted on behalf of.

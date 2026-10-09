@@ -54,6 +54,36 @@ describe("Searching datasets", () => {
     expect(response.count).toEqual(1);
   });
 
+  test("accepts array-valued publisher identifiers returned by DDS", async () => {
+    const encryptedToken = encrypt("decryptedToken");
+    mockedGetServerSession.mockResolvedValueOnce({
+      access_token: encryptedToken,
+    });
+
+    mockDiscoveryAdapter.onPost("/api/v1/datasets/search").reply(200, {
+      count: 1,
+      results: [
+        {
+          id: "1",
+          title: "Dataset 1",
+          description: "Description of dataset 1",
+          publishers: [
+            {
+              name: "Publisher",
+              identifier: ["https://ror.org/012345678"],
+            },
+          ],
+        },
+      ],
+    });
+
+    const response = await searchDatasetsApi({});
+
+    expect(response.results?.[0].publishers?.[0].identifier).toEqual([
+      "https://ror.org/012345678",
+    ]);
+  });
+
   test("maps publisherName facets to publisher_name and uses default relevance sort", async () => {
     const encryptedToken = encrypt("decryptedToken");
     mockedGetServerSession.mockResolvedValueOnce({

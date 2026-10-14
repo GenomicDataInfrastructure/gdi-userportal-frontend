@@ -14,6 +14,34 @@ import { createHeaders } from "@/app/api/shared/headers";
 import { AxiosError, isAxiosError } from "axios";
 import { ZodError } from "zod";
 import { retrieveEntitlements } from "@/app/api/ga4gh/entitlements";
+import { checkBeaconAuthorization } from "@/app/api/ga4gh/beacon-authorization";
+
+const unauthorizedResponse = {
+  status: 401,
+  headers: { "Content-Type": "application/json" },
+  data: {
+    title: "Unauthorized",
+    detail: "Sign in before requesting dataset access.",
+    status: 401,
+  },
+} as const;
+
+const forbiddenApplicationResponse = {
+  status: 403,
+  headers: { "Content-Type": "application/json" },
+  data: {
+    title: "Application requirements not met",
+    detail:
+      "Active Researcher status and acceptance of the Terms & Conditions are required to apply for dataset access.",
+    status: 403,
+  },
+} as const;
+
+async function canApplyForDatasetAccess(): Promise<boolean> {
+  const { hasResearcherStatus, hasAcceptedTC } =
+    await checkBeaconAuthorization();
+  return hasResearcherStatus && hasAcceptedTC;
+}
 
 export const createApplicationApi = async (createApplicationCommand: {
   datasetIds: string[];
@@ -23,15 +51,13 @@ export const createApplicationApi = async (createApplicationCommand: {
     if (!headers.Authorization) {
       return {
         ok: false as const,
-        response: {
-          status: 401,
-          headers: { "Content-Type": "application/json" },
-          data: {
-            title: "Unauthorized",
-            detail: "Sign in before requesting dataset access.",
-            status: 401,
-          },
-        },
+        response: unauthorizedResponse,
+      };
+    }
+    if (!(await canApplyForDatasetAccess())) {
+      return {
+        ok: false as const,
+        response: forbiddenApplicationResponse,
       };
     }
     const { applicationId } =
@@ -128,6 +154,15 @@ export const saveFormsAndDuosApi = async (
 export const submitApplicationApi = async (applicationId: number) => {
   try {
     const headers = await createHeaders();
+    if (!headers.Authorization) {
+      return { ok: false as const, response: unauthorizedResponse };
+    }
+    if (!(await canApplyForDatasetAccess())) {
+      return {
+        ok: false as const,
+        response: forbiddenApplicationResponse,
+      };
+    }
     await accessManagementClient.submit_application_v1(undefined, {
       params: { id: applicationId },
       headers,

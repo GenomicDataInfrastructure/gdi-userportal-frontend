@@ -19,6 +19,7 @@ interface ButtonProps {
   disabled?: boolean;
   className?: string;
   props?: React.ComponentPropsWithoutRef<"a">;
+  buttonProps?: React.ComponentPropsWithoutRef<"button">;
   children?: React.ReactNode;
   flex?: boolean;
 }
@@ -32,6 +33,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled,
   className,
   props,
+  buttonProps,
   children,
   flex = false,
 }) => {
@@ -104,6 +106,7 @@ const Button: React.FC<ButtonProps> = ({
       )}
       onClick={handleClick}
       disabled={disabled}
+      {...buttonProps}
     >
       {content}
     </button>

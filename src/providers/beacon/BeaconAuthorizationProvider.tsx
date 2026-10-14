@@ -40,16 +40,18 @@ const BeaconAuthorizationContext = createContext<
 export function BeaconAuthorizationProvider({
   children,
   isAuthenticated,
+  enabled = contentConfig.beaconSearchEnabled,
 }: {
   children: ReactNode;
   isAuthenticated: boolean;
+  enabled?: boolean;
 }) {
   const [state, setState] = useState<BeaconAuthorizationState>({
     status: "loading",
   });
 
   useEffect(() => {
-    if (!contentConfig.beaconSearchEnabled) {
+    if (!enabled) {
       setState({ status: "unauthenticated" });
       return;
     }
@@ -89,7 +91,7 @@ export function BeaconAuthorizationProvider({
     return () => {
       cancelled = true;
     };
-  }, [isAuthenticated]);
+  }, [enabled, isAuthenticated]);
 
   return (
     <BeaconAuthorizationContext.Provider value={state}>

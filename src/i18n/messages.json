@@ -1086,23 +1086,23 @@
     "fr": "Impossible de créer votre demande. Vérifiez que vous êtes connecté et réessayez."
   },
   "basket.authorizationUnavailable": {
-    "en": "We could not verify your application eligibility. Please try again.",
-    "fr": "Nous n’avons pas pu vérifier votre admissibilité à la demande. Veuillez réessayer."
+    "en": "We could not verify your eligibility to request dataset access. Please try again.",
+    "fr": "Nous n’avons pas pu vérifier votre admissibilité à demander l’accès aux jeux de données. Veuillez réessayer."
   },
   "basket.applicationRequirementsMissing": {
-    "en": "Active Researcher status and acceptance of the Terms & Conditions are required to apply for dataset access.",
-    "fr": "Un statut de chercheur actif et l’acceptation des conditions générales sont requis pour demander l’accès aux jeux de données."
+    "en": "You must have Active Researcher status and accept the Terms & Conditions to request dataset access.",
+    "fr": "Vous devez avoir un statut de chercheur actif et accepter les conditions générales pour demander l’accès aux jeux de données."
   },
   "basket.applicationRequirementsTitle": {
     "en": "Application requirements not met",
     "fr": "Conditions de demande non remplies"
   },
   "basket.researcherRequired": {
-    "en": "Active Researcher status is required to apply for dataset access.",
-    "fr": "Un statut de chercheur actif est requis pour demander l’accès aux jeux de données."
+    "en": "You must have Active Researcher status to request dataset access.",
+    "fr": "Vous devez avoir un statut de chercheur actif pour demander l’accès aux jeux de données."
   },
   "basket.termsRequired": {
-    "en": "You must accept the Terms & Conditions to apply for dataset access.",
+    "en": "You must accept the Terms & Conditions to request dataset access.",
     "fr": "Vous devez accepter les conditions générales pour demander l’accès aux jeux de données."
   },
   "basket.accessGranted": {

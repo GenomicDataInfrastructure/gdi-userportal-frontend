@@ -242,6 +242,7 @@ test("application fields, option menu, validation and file picker are accessible
   page,
 }, info) => {
   await authenticate(page);
+  await visaScenario(page, "authorized");
   await scenario(page, "application-invalid");
   await page.goto(`${prefix}/applications/89`);
   const purpose = page.getByRole("textbox", {

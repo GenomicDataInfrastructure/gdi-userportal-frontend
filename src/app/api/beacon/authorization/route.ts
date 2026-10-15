@@ -8,7 +8,7 @@ import { BeaconAuthorizationStatus } from "@/app/api/ga4gh/beacon-authorization.
 
 export async function GET(): Promise<NextResponse<BeaconAuthorizationStatus>> {
   try {
-    const status = await checkBeaconAuthorization();
+    const status = await checkBeaconAuthorization({ refresh: true });
     if (!status.hasResearcherStatus || !status.hasAcceptedTC) {
       return NextResponse.json(status, { status: 403 });
     }

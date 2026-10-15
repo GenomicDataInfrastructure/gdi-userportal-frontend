@@ -38,8 +38,9 @@ const forbiddenApplicationResponse = {
 } as const;
 
 async function canApplyForDatasetAccess(): Promise<boolean> {
-  const { hasResearcherStatus, hasAcceptedTC } =
-    await checkBeaconAuthorization();
+  const { hasResearcherStatus, hasAcceptedTC } = await checkBeaconAuthorization(
+    { refresh: true }
+  );
   return hasResearcherStatus && hasAcceptedTC;
 }
 

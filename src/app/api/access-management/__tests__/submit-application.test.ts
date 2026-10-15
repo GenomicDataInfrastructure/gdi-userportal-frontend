@@ -46,6 +46,9 @@ describe("Submitting an application", () => {
 
     const result = await submitApplicationApi(44);
     expect(result).toEqual({ ok: true, response: null });
+    expect(mockedCheckBeaconAuthorization).toHaveBeenCalledWith({
+      refresh: true,
+    });
   });
 
   test.each([

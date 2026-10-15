@@ -1085,6 +1085,10 @@
     "en": "Unable to create your application. Please check that you are signed in and try again.",
     "fr": "Impossible de créer votre demande. Vérifiez que vous êtes connecté et réessayez."
   },
+  "basket.authorizationUnavailable": {
+    "en": "We could not verify your application eligibility. Please try again.",
+    "fr": "Nous n’avons pas pu vérifier votre admissibilité à la demande. Veuillez réessayer."
+  },
   "basket.applicationRequirementsMissing": {
     "en": "Active Researcher status and acceptance of the Terms & Conditions are required to apply for dataset access.",
     "fr": "Un statut de chercheur actif et l’acceptation des conditions générales sont requis pour demander l’accès aux jeux de données."

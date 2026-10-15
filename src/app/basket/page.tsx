@@ -65,6 +65,7 @@ function BasketPage({ searchParams }: BasketPageProps) {
   const authorization =
     authorizationState.status === "ready" ? authorizationState.auth : undefined;
   const canApply = isBeaconAuthorized(authorization);
+  const hasAuthorizationError = authorizationState.status === "error";
   let applicationWarning: string | undefined;
 
   if (
@@ -92,7 +93,7 @@ function BasketPage({ searchParams }: BasketPageProps) {
       await loginToRequest();
       return;
     }
-    if (!canApply) return;
+    if (!canApply || hasAuthorizationError) return;
     if (
       isAccessLoading ||
       submittingRef.current ||
@@ -154,6 +155,7 @@ function BasketPage({ searchParams }: BasketPageProps) {
           onClick={requestNow}
           disabled={
             !canApply ||
+            hasAuthorizationError ||
             isAccessLoading ||
             isSubmitting ||
             requestableDatasets.length === 0
@@ -196,7 +198,10 @@ function BasketPage({ searchParams }: BasketPageProps) {
               aria-hidden="true"
             />
             <div>
-              <h3 id={applicationWarningTitleId} className="mb-1 text-lg font-semibold">
+              <h3
+                id={applicationWarningTitleId}
+                className="mb-1 text-lg font-semibold"
+              >
                 {t("basket.applicationRequirementsTitle")}
               </h3>
               <p
@@ -206,6 +211,21 @@ function BasketPage({ searchParams }: BasketPageProps) {
                 {applicationWarning}
               </p>
             </div>
+          </div>
+        )}
+        {hasAuthorizationError && (
+          <div
+            className="mb-6 flex w-full items-start gap-3 rounded-lg border-l-4 border-l-warning bg-warning/10 p-4 text-left shadow-lg"
+            role="alert"
+          >
+            <FontAwesomeIcon
+              icon={faExclamationTriangle}
+              className="mt-0.5 h-5 w-5 shrink-0 text-warning"
+              aria-hidden="true"
+            />
+            <p className="text-sm leading-6 text-black md:text-base">
+              {t("basket.authorizationUnavailable")}
+            </p>
           </div>
         )}
         {status === "authenticated" &&

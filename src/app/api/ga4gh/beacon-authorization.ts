@@ -14,17 +14,10 @@ import {
 
 const CACHE_TTL_MS = 60_000;
 
-const hasLoggedMissingEnv: Record<string, boolean> = {};
 const visaCache = new Map<
   string,
   { visaJwts: string[]; verified: Ga4ghVisaPayload[]; at: number }
 >();
-
-function logMissingEnvOnce(name: string): void {
-  if (hasLoggedMissingEnv[name]) return;
-  hasLoggedMissingEnv[name] = true;
-  console.debug(`[beacon-authorization] ${name} is not configured`);
-}
 
 function hashToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
@@ -45,9 +38,6 @@ function pruneVisaCache(now: number): void {
  */
 export function __resetBeaconAuthorizationCache(): void {
   visaCache.clear();
-  for (const key of Object.keys(hasLoggedMissingEnv)) {
-    delete hasLoggedMissingEnv[key];
-  }
 }
 
 /**
@@ -60,31 +50,32 @@ export function __resetBeaconAuthorizationCache(): void {
 export function validateBeaconVisaStatuses(
   visas: Ga4ghVisaPayload[]
 ): BeaconAuthorizationStatus {
-  // TODO(ART-28730): re-enable value and expiry checks once
-  // RESEARCHER_STATUS_URI / LEGAL_DOC_URL are configured in the Keycloak
-  // visa issuer service and visa issue/exp dates are persistent.
-
-  if (!process.env.RESEARCHER_STATUS_URI) {
-    logMissingEnvOnce("RESEARCHER_STATUS_URI");
-  }
-  if (!process.env.LEGAL_DOC_URL) {
-    logMissingEnvOnce("LEGAL_DOC_URL");
-  }
+  const nowSeconds = Math.floor(Date.now() / 1000);
 
   const hasResearcherStatus = visas.some((visa) => {
     const v = visa.ga4gh_visa_v1;
-    return v.type === "ResearcherStatus" && v.by === "so";
+    return (
+      v.type === "ResearcherStatus" &&
+      v.by === "so" &&
+      v.exp !== undefined &&
+      v.exp >= nowSeconds
+    );
   });
 
   const hasAcceptedTC = visas.some((visa) => {
     const v = visa.ga4gh_visa_v1;
-    return v.type === "AcceptedTermsAndPolicies" && v.by === "self";
+    return (
+      v.type === "AcceptedTermsAndPolicies" &&
+      v.by === "self" &&
+      v.exp !== undefined &&
+      v.exp >= nowSeconds
+    );
   });
 
   return { hasResearcherStatus, hasAcceptedTC };
 }
 
-async function getVerifiedVisas(): Promise<{
+async function getVerifiedVisas(refresh = false): Promise<{
   visaJwts: string[];
   verified: Ga4ghVisaPayload[];
 }> {
@@ -93,7 +84,7 @@ async function getVerifiedVisas(): Promise<{
 
   pruneVisaCache(now);
 
-  if (token) {
+  if (token && !refresh) {
     const cached = visaCache.get(hashToken(token));
     if (cached && now - cached.at < CACHE_TTL_MS) {
       return { visaJwts: cached.visaJwts, verified: cached.verified };
@@ -126,8 +117,10 @@ async function getVerifiedVisas(): Promise<{
  *
  * @returns Authorization status flags.
  */
-export async function checkBeaconAuthorization(): Promise<BeaconAuthorizationStatus> {
-  const { verified } = await getVerifiedVisas();
+export async function checkBeaconAuthorization(options?: {
+  refresh?: boolean;
+}): Promise<BeaconAuthorizationStatus> {
+  const { verified } = await getVerifiedVisas(options?.refresh);
   return validateBeaconVisaStatuses(verified);
 }
 

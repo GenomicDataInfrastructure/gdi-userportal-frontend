@@ -24,25 +24,22 @@ jest.mock("@/i18n/navigation", () => ({
 jest.mock("@/providers/AlertProvider", () => ({
   useAlert: () => ({ setAlert: jest.fn() }),
 }));
-let mockAuthorization = {
+let mockAuthorization:
+  | { status: "loading" }
+  | { status: "unauthenticated" }
+  | { status: "error" }
+  | {
+      status: "ready";
+      auth: { hasResearcherStatus: boolean; hasAcceptedTC: boolean };
+    } = {
   status: "ready" as const,
   auth: { hasResearcherStatus: true, hasAcceptedTC: true },
 };
 jest.mock("@/providers/beacon/BeaconAuthorizationProvider", () => ({
+  ...jest.requireActual("@/providers/beacon/BeaconAuthorizationProvider"),
   BeaconAuthorizationProvider: ({ children }: { children: React.ReactNode }) =>
     children,
   useBeaconAuthorization: () => mockAuthorization,
-  isBeaconAuthorized: (auth?: {
-    hasResearcherStatus: boolean;
-    hasAcceptedTC: boolean;
-  }) => !!auth?.hasResearcherStatus && !!auth?.hasAcceptedTC,
-  getBeaconAuthReason: (auth?: {
-    hasResearcherStatus: boolean;
-    hasAcceptedTC: boolean;
-  }) => ({
-    hasResearcherStatus: !!auth?.hasResearcherStatus,
-    hasAcceptedTC: !!auth?.hasAcceptedTC,
-  }),
 }));
 let mockAccessLoading = false;
 const mockBasket = {
@@ -182,3 +179,33 @@ it.each([
     }
   }
 );
+
+it("shows an authorization error without reporting missing requirements", async () => {
+  (
+    globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
+  mockStatus = "authenticated";
+  mockAuthorization = { status: "error" };
+  const container = document.createElement("div");
+  const root = createRoot(container);
+
+  try {
+    await act(async () =>
+      root.render(createElement(Page, { searchParams: Promise.resolve({}) }))
+    );
+
+    expect(container.querySelector('[role="alert"]')?.textContent).toBe(
+      "basket.authorizationUnavailable"
+    );
+    expect(container.textContent).not.toContain(
+      "basket.applicationRequirementsMissing"
+    );
+  } finally {
+    act(() => root.unmount());
+    mockStatus = "unauthenticated";
+    mockAuthorization = {
+      status: "ready",
+      auth: { hasResearcherStatus: true, hasAcceptedTC: true },
+    };
+  }
+});

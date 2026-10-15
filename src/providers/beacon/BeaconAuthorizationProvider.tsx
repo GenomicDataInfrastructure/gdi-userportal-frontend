@@ -31,6 +31,7 @@ export function getBeaconAuthReason(auth?: BeaconAuthorizationStatus): {
 type BeaconAuthorizationState =
   | { status: "loading" }
   | { status: "unauthenticated" }
+  | { status: "error" }
   | { status: "ready"; auth: BeaconAuthorizationStatus };
 
 const BeaconAuthorizationContext = createContext<
@@ -62,34 +63,51 @@ export function BeaconAuthorizationProvider({
     }
 
     let cancelled = false;
+    let requestController: AbortController | undefined;
     setState({ status: "loading" });
 
-    fetch("/api/beacon/authorization", { credentials: "include" })
-      .then(async (response) => {
-        if (cancelled) return;
+    const loadAuthorization = () => {
+      requestController?.abort();
+      requestController = new AbortController();
+      setState({ status: "loading" });
 
-        if (!response.ok && response.status !== 403) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-
-        const auth = (await response.json()) as BeaconAuthorizationStatus;
-        setState({ status: "ready", auth });
+      fetch("/api/beacon/authorization", {
+        credentials: "include",
+        signal: requestController.signal,
       })
-      .catch((error) => {
-        console.error(
-          "[BeaconAuthorizationProvider] authorization check failed",
-          error
-        );
-        if (!cancelled) {
-          setState({
-            status: "ready",
-            auth: { hasResearcherStatus: false, hasAcceptedTC: false },
-          });
-        }
-      });
+        .then(async (response) => {
+          if (cancelled) return;
+
+          if (!response.ok && response.status !== 403) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+
+          const auth = (await response.json()) as BeaconAuthorizationStatus;
+          if (!cancelled) {
+            setState({ status: "ready", auth });
+          }
+        })
+        .catch((error) => {
+          if (error instanceof DOMException && error.name === "AbortError") {
+            return;
+          }
+          console.error(
+            "[BeaconAuthorizationProvider] authorization check failed",
+            error
+          );
+          if (!cancelled) {
+            setState({ status: "error" });
+          }
+        });
+    };
+
+    loadAuthorization();
+    window.addEventListener("focus", loadAuthorization);
 
     return () => {
       cancelled = true;
+      requestController?.abort();
+      window.removeEventListener("focus", loadAuthorization);
     };
   }, [enabled, isAuthenticated]);
 

@@ -65,6 +65,9 @@ describe("Creating an application", () => {
       applicationId: "543",
       response: null,
     });
+    expect(mockedCheckBeaconAuthorization).toHaveBeenCalledWith({
+      refresh: true,
+    });
   });
 
   test.each([

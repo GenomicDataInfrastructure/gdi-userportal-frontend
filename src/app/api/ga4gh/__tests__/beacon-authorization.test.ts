@@ -114,21 +114,19 @@ describe("validateBeaconVisaStatuses", () => {
     });
   });
 
-  // TODO(ART-28730): re-enable expiry check once visa exp dates are persistent.
-  test("does not check expiry while ART-28730 is pending", () => {
+  test("rejects an expired visa", () => {
     const expired = {
       ...researcherStatusVisa,
       ga4gh_visa_v1: { ...researcherStatusVisa.ga4gh_visa_v1, exp: 1 },
     };
     const result = validateBeaconVisaStatuses([expired, acceptedTermsVisa]);
     expect(result).toEqual({
-      hasResearcherStatus: true,
+      hasResearcherStatus: false,
       hasAcceptedTC: true,
     });
   });
 
-  // TODO(ART-28730): re-enable value check once RESEARCHER_STATUS_URI is configured.
-  test("does not check value URI while ART-28730 is pending", () => {
+  test("does not validate value URIs while URI validation is disabled", () => {
     const invalid = {
       ...researcherStatusVisa,
       ga4gh_visa_v1: {
@@ -148,8 +146,6 @@ describe("checkBeaconAuthorization", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     __resetBeaconAuthorizationCache();
-    delete process.env.RESEARCHER_STATUS_URI;
-    delete process.env.LEGAL_DOC_URL;
   });
 
   test("returns false for both when user is unauthenticated", async () => {
@@ -213,6 +209,31 @@ describe("checkBeaconAuthorization", () => {
     });
   });
 
+  test("refreshes visas when requested instead of reusing the token cache", async () => {
+    mockedGetToken.mockResolvedValue("access-token");
+    mockedFetchGa4ghVisas
+      .mockResolvedValueOnce({
+        visaJwts: [makeVisaJwt(researcherStatusVisa)],
+        passportPresent: true,
+      })
+      .mockResolvedValueOnce({
+        visaJwts: [makeVisaJwt(acceptedTermsVisa)],
+        passportPresent: true,
+      });
+    mockedExtractVerifiedVisas
+      .mockResolvedValueOnce([{ jwt: "jwt1", payload: researcherStatusVisa }])
+      .mockResolvedValueOnce([{ jwt: "jwt2", payload: acceptedTermsVisa }]);
+
+    await checkBeaconAuthorization();
+    const refreshed = await checkBeaconAuthorization({ refresh: true });
+
+    expect(refreshed).toEqual({
+      hasResearcherStatus: false,
+      hasAcceptedTC: true,
+    });
+    expect(mockedFetchGa4ghVisas).toHaveBeenCalledTimes(2);
+  });
+
   test("returns false when passport is absent", async () => {
     mockedGetToken.mockResolvedValueOnce("access-token");
     mockedFetchGa4ghVisas.mockResolvedValueOnce({
@@ -234,8 +255,6 @@ describe("assertBeaconAuthorization", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     __resetBeaconAuthorizationCache();
-    delete process.env.RESEARCHER_STATUS_URI;
-    delete process.env.LEGAL_DOC_URL;
   });
 
   test("does not throw when both visas are valid", async () => {

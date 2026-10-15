@@ -24,29 +24,39 @@ import {
 import { formatDateTime } from "@/utils/formatDate";
 import { getTranslation } from "@/utils/getTranslation";
 import {
+  faExclamationTriangle,
   faPaperPlane,
   faSpinner,
   faXmarkCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useId, useState } from "react";
+import { useSession } from "next-auth/react";
 import ApplicationOptionsMenu from "./ApplicationOptionsMenu";
 import FormContainer from "./FormContainer";
 import { createApplicationSidebarItems } from "./sidebarItems";
 import { UrlSearchParams } from "@/app/params";
+import {
+  BeaconAuthorizationProvider,
+  getBeaconAuthReason,
+  isBeaconAuthorized,
+  useBeaconAuthorization,
+} from "@/providers/beacon/BeaconAuthorizationProvider";
 
 type ApplicationDetailsPageProps = {
   searchParams: Promise<UrlSearchParams>;
 };
 
-export default function ApplicationDetailsPage({
-  searchParams,
-}: ApplicationDetailsPageProps) {
+function ApplicationDetailsPage({ searchParams }: ApplicationDetailsPageProps) {
   const t = useTranslations();
   const _searchParams = use(searchParams);
   const router = useRouter();
+  const { status } = useSession();
+  const authorizationState = useBeaconAuthorization();
   const [alert, setAlert] = useState<AlertState | null>(null);
+  const applicationWarningTitleId = useId();
+  const applicationWarningMessageId = useId();
   const onCloseAlert = () => {
     setAlert(null);
   };
@@ -108,6 +118,28 @@ export default function ApplicationDetailsPage({
   const lastEvent = events![0];
   const editable = isApplicationEditable(application);
   const isDraft = application.state === ApplicationState.DRAFT;
+  const authorization =
+    authorizationState.status === "ready" ? authorizationState.auth : undefined;
+  const canSubmit = isBeaconAuthorized(authorization);
+  const isAuthorizationLoading =
+    status === "loading" ||
+    (status === "authenticated" && authorizationState.status === "loading");
+  const hasAuthorizationError = authorizationState.status === "error";
+  let applicationEligibilityWarning: string | undefined;
+
+  if (editable && status === "authenticated" && authorization) {
+    const { hasResearcherStatus, hasAcceptedTC } =
+      getBeaconAuthReason(authorization);
+    if (!hasResearcherStatus && !hasAcceptedTC) {
+      applicationEligibilityWarning = t(
+        "basket.applicationRequirementsMissing"
+      );
+    } else if (!hasResearcherStatus) {
+      applicationEligibilityWarning = t("basket.researcherRequired");
+    } else if (!hasAcceptedTC) {
+      applicationEligibilityWarning = t("basket.termsRequired");
+    }
+  }
 
   const formWarnings: ValidationWarning[] = [];
   const applicationWarnings: ValidationWarning[] = [];
@@ -163,10 +195,20 @@ export default function ApplicationDetailsPage({
                   type="primary"
                   text={t("application.submit")}
                   icon={faPaperPlane}
-                  disabled={isLoading}
+                  disabled={
+                    isLoading ||
+                    isAuthorizationLoading ||
+                    !canSubmit ||
+                    hasAuthorizationError
+                  }
                   onClick={handleSubmission}
                   flex={true}
                   className="h-10 text-sm"
+                  buttonProps={
+                    applicationEligibilityWarning
+                      ? { "aria-describedby": applicationWarningMessageId }
+                      : undefined
+                  }
                 />
               )}
               {contentConfig.showApplicationOptions && (
@@ -190,6 +232,51 @@ export default function ApplicationDetailsPage({
           )}
 
           <div className="h-[2px] bg-secondary opacity-80"></div>
+
+          {applicationEligibilityWarning && (
+            <div
+              className="flex w-full items-start gap-3 rounded-lg border-l-4 border-l-warning bg-warning/10 p-4 text-left shadow-lg"
+              role="alert"
+              aria-labelledby={applicationWarningTitleId}
+              aria-describedby={applicationWarningMessageId}
+            >
+              <FontAwesomeIcon
+                icon={faExclamationTriangle}
+                className="mt-0.5 h-5 w-5 shrink-0 text-warning"
+                aria-hidden="true"
+              />
+              <div>
+                <h3
+                  id={applicationWarningTitleId}
+                  className="mb-1 text-lg font-semibold"
+                >
+                  {t("basket.applicationRequirementsTitle")}
+                </h3>
+                <p
+                  id={applicationWarningMessageId}
+                  className="text-sm leading-6 text-black md:text-base"
+                >
+                  {applicationEligibilityWarning}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {editable && status === "authenticated" && hasAuthorizationError && (
+            <div
+              className="flex w-full items-start gap-3 rounded-lg border-l-4 border-l-warning bg-warning/10 p-4 text-left shadow-lg"
+              role="alert"
+            >
+              <FontAwesomeIcon
+                icon={faExclamationTriangle}
+                className="mt-0.5 h-5 w-5 shrink-0 text-warning"
+                aria-hidden="true"
+              />
+              <p className="text-sm leading-6 text-black md:text-base">
+                {t("basket.authorizationUnavailable")}
+              </p>
+            </div>
+          )}
 
           <div className="lg:hidden w-full">
             <Sidebar items={createApplicationSidebarItems(application, t)} />
@@ -234,5 +321,18 @@ export default function ApplicationDetailsPage({
         </aside>
       </div>
     </PageContainer>
+  );
+}
+
+export default function Page(props: ApplicationDetailsPageProps) {
+  const { status } = useSession();
+
+  return (
+    <BeaconAuthorizationProvider
+      isAuthenticated={status === "authenticated"}
+      enabled
+    >
+      <ApplicationDetailsPage {...props} />
+    </BeaconAuthorizationProvider>
   );
 }

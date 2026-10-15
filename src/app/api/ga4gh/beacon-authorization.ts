@@ -57,8 +57,8 @@ export function validateBeaconVisaStatuses(
     return (
       v.type === "ResearcherStatus" &&
       v.by === "so" &&
-      v.exp !== undefined &&
-      v.exp >= nowSeconds
+      visa.exp !== undefined &&
+      visa.exp >= nowSeconds
     );
   });
 
@@ -67,8 +67,8 @@ export function validateBeaconVisaStatuses(
     return (
       v.type === "AcceptedTermsAndPolicies" &&
       v.by === "self" &&
-      v.exp !== undefined &&
-      v.exp >= nowSeconds
+      visa.exp !== undefined &&
+      visa.exp >= nowSeconds
     );
   });
 

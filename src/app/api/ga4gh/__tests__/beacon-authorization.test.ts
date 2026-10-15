@@ -117,11 +117,38 @@ describe("validateBeaconVisaStatuses", () => {
   test("rejects an expired visa", () => {
     const expired = {
       ...researcherStatusVisa,
-      ga4gh_visa_v1: { ...researcherStatusVisa.ga4gh_visa_v1, exp: 1 },
+      exp: 1,
     };
     const result = validateBeaconVisaStatuses([expired, acceptedTermsVisa]);
     expect(result).toEqual({
       hasResearcherStatus: false,
+      hasAcceptedTC: true,
+    });
+  });
+
+  test("accepts visas with a valid exp when ga4gh_visa_v1.exp is missing or expired", () => {
+    const visaWithNoInnerExpiry = {
+      ...researcherStatusVisa,
+      ga4gh_visa_v1: {
+        ...researcherStatusVisa.ga4gh_visa_v1,
+        exp: undefined,
+      },
+    };
+    const visaWithExpiredInnerExpiry = {
+      ...acceptedTermsVisa,
+      ga4gh_visa_v1: {
+        ...acceptedTermsVisa.ga4gh_visa_v1,
+        exp: 1,
+      },
+    };
+
+    expect(
+      validateBeaconVisaStatuses([
+        visaWithNoInnerExpiry,
+        visaWithExpiredInnerExpiry,
+      ])
+    ).toEqual({
+      hasResearcherStatus: true,
       hasAcceptedTC: true,
     });
   });

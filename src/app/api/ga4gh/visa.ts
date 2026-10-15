@@ -235,7 +235,7 @@ export async function extractVerifiedVisas(
   const nowSeconds = Math.floor(Date.now() / 1000);
   const expiredByIssuer = new Map<string, number>();
   const active = candidates.filter(({ payload }) => {
-    const exp = payload.ga4gh_visa_v1.exp;
+    const exp = payload.exp;
     if (exp !== undefined && exp < nowSeconds) {
       const key = auditString(payload.iss, "missing");
       expiredByIssuer.set(key, (expiredByIssuer.get(key) ?? 0) + 1);

@@ -16,6 +16,11 @@ test.describe("applications", () => {
   }) => {
     const applicationId = browserName === "firefox" ? 91 : 89;
     await authenticate(page);
+    const scenarioResponse = await page.request.post(
+      `${mockOrigin}/_test/set-scenario`,
+      { data: { scenario: "authorized" } }
+    );
+    expect(scenarioResponse.ok()).toBeTruthy();
     await page.goto(`/applications/${applicationId}`);
 
     await expect(

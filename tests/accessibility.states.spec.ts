@@ -176,7 +176,7 @@ for (const authenticated of [false, true]) {
     page,
   }, info) => {
     if (authenticated) await authenticate(page);
-    await visaScenario(page, "empty");
+    await visaScenario(page, authenticated ? "authorized" : "empty");
     await page.goto(`${prefix}/datasets/ds-001`);
     await page.getByRole("button", { name: /add to basket/i }).click();
     await page.goto(`${prefix}/basket`);
@@ -194,7 +194,7 @@ for (const authenticated of [false, true]) {
 
 test("basket request error is announced", async ({ page }, info) => {
   await authenticate(page);
-  await visaScenario(page, "empty");
+  await visaScenario(page, "authorized");
   await scenario(page, "basket-error");
   await page.goto(`${prefix}/datasets/ds-001`);
   await page.getByRole("button", { name: /add to basket/i }).click();

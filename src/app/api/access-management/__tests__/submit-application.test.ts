@@ -8,11 +8,19 @@ import { jest } from "@jest/globals";
 import { getServerSession } from "next-auth";
 import { encrypt } from "@/utils/encryption";
 import { submitApplicationApi } from "@/app/api/access-management";
+import { checkBeaconAuthorization } from "@/app/api/ga4gh/beacon-authorization";
 
 jest.mock("next-auth/next");
+jest.mock("@/app/api/ga4gh/beacon-authorization", () => ({
+  checkBeaconAuthorization: jest.fn(),
+}));
 const mockedGetServerSession = getServerSession as jest.MockedFunction<
   typeof getServerSession
 >;
+const mockedCheckBeaconAuthorization =
+  checkBeaconAuthorization as jest.MockedFunction<
+    typeof checkBeaconAuthorization
+  >;
 
 describe("Submitting an application", () => {
   const mockDiscoveryAdapter = new AxiosMockAdapter(
@@ -21,6 +29,11 @@ describe("Submitting an application", () => {
 
   beforeEach(() => {
     jest.resetAllMocks();
+    mockDiscoveryAdapter.resetHistory();
+    mockedCheckBeaconAuthorization.mockResolvedValue({
+      hasResearcherStatus: true,
+      hasAcceptedTC: true,
+    });
   });
 
   test("Successfully submits an application", async () => {
@@ -33,7 +46,39 @@ describe("Submitting an application", () => {
 
     const result = await submitApplicationApi(44);
     expect(result).toEqual({ ok: true, response: null });
+    expect(mockedCheckBeaconAuthorization).toHaveBeenCalledWith({
+      refresh: true,
+    });
   });
+
+  test.each([
+    [false, true],
+    [true, false],
+    [false, false],
+  ])(
+    "Rejects submission without both required Visas (Researcher: %s, T&C: %s)",
+    async (hasResearcherStatus, hasAcceptedTC) => {
+      mockedGetServerSession.mockResolvedValueOnce({
+        access_token: encrypt("token"),
+      });
+      mockedCheckBeaconAuthorization.mockResolvedValueOnce({
+        hasResearcherStatus,
+        hasAcceptedTC,
+      });
+
+      await expect(submitApplicationApi(44)).resolves.toMatchObject({
+        ok: false,
+        response: {
+          status: 403,
+          data: {
+            title: "Application requirements not met",
+            status: 403,
+          },
+        },
+      });
+      expect(mockDiscoveryAdapter.history.post).toHaveLength(0);
+    }
+  );
 
   test("Handles validation warnings from backend", async () => {
     const encryptedToken = encrypt("decryptedToken");

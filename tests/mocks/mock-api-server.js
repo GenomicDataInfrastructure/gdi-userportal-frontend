@@ -45,7 +45,12 @@ async function main() {
   const jwks = { keys: [publicKeyJwk] };
   const jkuUrl = `http://localhost:${port}/jwks.json`;
 
-  async function createVisaJwt({ datasetId, source, by }) {
+  async function createVisaJwt({
+    value,
+    source,
+    by,
+    type = "ControlledAccessGrants",
+  }) {
     const nowSeconds = Math.floor(Date.now() / 1000);
     const exp = nowSeconds + 365 * 24 * 60 * 60;
     return new SignJWT({
@@ -54,8 +59,8 @@ async function main() {
       iat: nowSeconds,
       exp,
       ga4gh_visa_v1: {
-        type: "ControlledAccessGrants",
-        value: datasetId,
+        type,
+        value,
         source,
         by,
         iat: nowSeconds,
@@ -74,28 +79,42 @@ async function main() {
   const visaScenarios = {
     default: [
       await createVisaJwt({
-        datasetId: "doi:10.1234/ds-001",
+        value: "doi:10.1234/ds-001",
         source: "ckan",
         by: "REMS",
       }),
     ],
     multiple: [
       await createVisaJwt({
-        datasetId: "doi:10.1234/ds-001",
+        value: "doi:10.1234/ds-001",
         source: "ckan",
         by: "REMS",
       }),
       await createVisaJwt({
-        datasetId: "doi:10.1234/ds-002",
+        value: "doi:10.1234/ds-002",
         source: "rems",
         by: "DAC",
       }),
     ],
     fallback: [
       await createVisaJwt({
-        datasetId: "unknown-dataset-id-999",
+        value: "unknown-dataset-id-999",
         source: "rems",
         by: "DAC",
+      }),
+    ],
+    authorized: [
+      await createVisaJwt({
+        type: "ResearcherStatus",
+        value: "https://doi.org/10.1038/s41431-018-0219-y",
+        source: "https://example.org/researcher-status",
+        by: "so",
+      }),
+      await createVisaJwt({
+        type: "AcceptedTermsAndPolicies",
+        value: "https://example.org/terms-and-conditions",
+        source: "https://example.org/terms-and-conditions",
+        by: "self",
       }),
     ],
     empty: [],

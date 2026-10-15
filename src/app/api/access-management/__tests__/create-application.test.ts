@@ -8,11 +8,19 @@ import { jest } from "@jest/globals";
 import { getServerSession } from "next-auth";
 import { encrypt } from "@/utils/encryption";
 import { createApplicationApi } from "@/app/api/access-management";
+import { checkBeaconAuthorization } from "@/app/api/ga4gh/beacon-authorization";
 
 jest.mock("next-auth/next");
+jest.mock("@/app/api/ga4gh/beacon-authorization", () => ({
+  checkBeaconAuthorization: jest.fn(),
+}));
 const mockedGetServerSession = getServerSession as jest.MockedFunction<
   typeof getServerSession
 >;
+const mockedCheckBeaconAuthorization =
+  checkBeaconAuthorization as jest.MockedFunction<
+    typeof checkBeaconAuthorization
+  >;
 
 describe("Creating an application", () => {
   const mockDiscoveryAdapter = new AxiosMockAdapter(
@@ -22,6 +30,10 @@ describe("Creating an application", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     mockDiscoveryAdapter.resetHistory();
+    mockedCheckBeaconAuthorization.mockResolvedValue({
+      hasResearcherStatus: true,
+      hasAcceptedTC: true,
+    });
   });
 
   test("Rejects unauthenticated requests without calling access management", async () => {
@@ -53,7 +65,41 @@ describe("Creating an application", () => {
       applicationId: "543",
       response: null,
     });
+    expect(mockedCheckBeaconAuthorization).toHaveBeenCalledWith({
+      refresh: true,
+    });
   });
+
+  test.each([
+    [false, true],
+    [true, false],
+    [false, false],
+  ])(
+    "Rejects requests without both required Visas (Researcher: %s, T&C: %s)",
+    async (hasResearcherStatus, hasAcceptedTC) => {
+      mockedGetServerSession.mockResolvedValueOnce({
+        access_token: encrypt("token"),
+      });
+      mockedCheckBeaconAuthorization.mockResolvedValueOnce({
+        hasResearcherStatus,
+        hasAcceptedTC,
+      });
+
+      await expect(
+        createApplicationApi({ datasetIds: ["id1"] })
+      ).resolves.toMatchObject({
+        ok: false,
+        response: {
+          status: 403,
+          data: {
+            title: "Application requirements not met",
+            status: 403,
+          },
+        },
+      });
+      expect(mockDiscoveryAdapter.history.post).toHaveLength(0);
+    }
+  );
   test.each([401, 403, 500])(
     "Returns structured backend errors (%s)",
     async (status) => {

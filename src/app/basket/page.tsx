@@ -10,20 +10,31 @@ import LoadingContainer from "@/components/LoadingContainer";
 import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
 import { useDatasetBasket } from "@/providers/DatasetBasketProvider";
-import { faPaperPlane, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faExclamationTriangle,
+  faPaperPlane,
+  faPlusCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signIn, useSession } from "next-auth/react";
 import DatasetList from "../datasets/DatasetList";
 import { createApplicationApi } from "../api/access-management";
 import { useRouter } from "@/i18n/navigation";
 import { UrlSearchParams } from "@/app/params";
-import { use, useRef, useState } from "react";
+import { use, useId, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
+import {
+  getBeaconAuthReason,
+  isBeaconAuthorized,
+  useBeaconAuthorization,
+  BeaconAuthorizationProvider,
+} from "@/providers/beacon/BeaconAuthorizationProvider";
 
 type BasketPageProps = {
   searchParams: Promise<UrlSearchParams>;
 };
 
-export default function Page({ searchParams }: BasketPageProps) {
+function BasketPage({ searchParams }: BasketPageProps) {
   const t = useTranslations();
   const _searchParams = use(searchParams);
   const { basket, isLoading, emptyBasket, hasDatasetAccess, isAccessLoading } =
@@ -32,7 +43,10 @@ export default function Page({ searchParams }: BasketPageProps) {
   const submittingRef = useRef(false);
   const { setAlert } = useAlert();
   const { status } = useSession();
+  const authorizationState = useBeaconAuthorization();
   const router = useRouter();
+  const applicationWarningTitleId = useId();
+  const applicationWarningMessageId = useId();
 
   const requestableDatasets = basket.filter(
     (dataset) => !!dataset.identifier && !hasDatasetAccess(dataset)
@@ -46,7 +60,31 @@ export default function Page({ searchParams }: BasketPageProps) {
     heading = t("basket.titleWithCount", { count: basket.length });
   }
 
-  if (isLoading || status === "loading") {
+  const isAuthorizationLoading =
+    status === "authenticated" && authorizationState.status === "loading";
+  const authorization =
+    authorizationState.status === "ready" ? authorizationState.auth : undefined;
+  const canApply = isBeaconAuthorized(authorization);
+  const hasAuthorizationError = authorizationState.status === "error";
+  let applicationWarning: string | undefined;
+
+  if (
+    status === "authenticated" &&
+    authorizationState.status === "ready" &&
+    !canApply
+  ) {
+    const { hasResearcherStatus, hasAcceptedTC } =
+      getBeaconAuthReason(authorization);
+    if (!hasResearcherStatus && !hasAcceptedTC) {
+      applicationWarning = t("basket.applicationRequirementsMissing");
+    } else if (!hasResearcherStatus) {
+      applicationWarning = t("basket.researcherRequired");
+    } else {
+      applicationWarning = t("basket.termsRequired");
+    }
+  }
+
+  if (isLoading || status === "loading" || isAuthorizationLoading) {
     return <LoadingContainer text={t("basket.loading")} />;
   }
 
@@ -55,6 +93,7 @@ export default function Page({ searchParams }: BasketPageProps) {
       await loginToRequest();
       return;
     }
+    if (!canApply || hasAuthorizationError) return;
     if (
       isAccessLoading ||
       submittingRef.current ||
@@ -115,7 +154,16 @@ export default function Page({ searchParams }: BasketPageProps) {
           className="hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
           onClick={requestNow}
           disabled={
-            isAccessLoading || isSubmitting || requestableDatasets.length === 0
+            !canApply ||
+            hasAuthorizationError ||
+            isAccessLoading ||
+            isSubmitting ||
+            requestableDatasets.length === 0
+          }
+          buttonProps={
+            applicationWarning
+              ? { "aria-describedby": applicationWarningMessageId }
+              : undefined
           }
         />
       );
@@ -137,6 +185,49 @@ export default function Page({ searchParams }: BasketPageProps) {
           )}
           {actionBtn}
         </div>
+        {applicationWarning && (
+          <div
+            className="mb-6 flex w-full items-start gap-3 rounded-lg border-l-4 border-l-warning bg-warning/10 p-4 text-left shadow-lg"
+            role="alert"
+            aria-labelledby={applicationWarningTitleId}
+            aria-describedby={applicationWarningMessageId}
+          >
+            <FontAwesomeIcon
+              icon={faExclamationTriangle}
+              className="mt-0.5 h-5 w-5 shrink-0 text-warning"
+              aria-hidden="true"
+            />
+            <div>
+              <h3
+                id={applicationWarningTitleId}
+                className="mb-1 text-lg font-semibold"
+              >
+                {t("basket.applicationRequirementsTitle")}
+              </h3>
+              <p
+                id={applicationWarningMessageId}
+                className="text-sm leading-6 text-black md:text-base"
+              >
+                {applicationWarning}
+              </p>
+            </div>
+          </div>
+        )}
+        {hasAuthorizationError && (
+          <div
+            className="mb-6 flex w-full items-start gap-3 rounded-lg border-l-4 border-l-warning bg-warning/10 p-4 text-left shadow-lg"
+            role="alert"
+          >
+            <FontAwesomeIcon
+              icon={faExclamationTriangle}
+              className="mt-0.5 h-5 w-5 shrink-0 text-warning"
+              aria-hidden="true"
+            />
+            <p className="text-sm leading-6 text-black md:text-base">
+              {t("basket.authorizationUnavailable")}
+            </p>
+          </div>
+        )}
         {status === "authenticated" &&
           !isAccessLoading &&
           hasGrantedDatasets && (
@@ -159,5 +250,18 @@ export default function Page({ searchParams }: BasketPageProps) {
         )}
       </ListContainer>
     </PageContainer>
+  );
+}
+
+export default function Page(props: BasketPageProps) {
+  const { status } = useSession();
+
+  return (
+    <BeaconAuthorizationProvider
+      isAuthenticated={status === "authenticated"}
+      enabled
+    >
+      <BasketPage {...props} />
+    </BeaconAuthorizationProvider>
   );
 }

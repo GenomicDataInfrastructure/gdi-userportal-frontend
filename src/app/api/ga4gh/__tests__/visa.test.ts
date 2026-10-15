@@ -734,10 +734,10 @@ describe("extractVerifiedControlledAccessGrants", () => {
   // Visa expiry filtering
   // ---------------------------------------------------------------------------
 
-  test("filters out a visa whose ga4gh_visa_v1.exp is in the past", async () => {
+  test("filters out a visa whose exp is in the past", async () => {
     const expiredPayload = {
       ...VISA_PAYLOAD,
-      ga4gh_visa_v1: { ...VISA_PAYLOAD.ga4gh_visa_v1, exp: 1 }, // epoch+1s
+      exp: 1, // epoch+1s
     };
     const jwt = await signVisaJwt(expiredPayload, privateKeyA);
     const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
@@ -757,15 +757,11 @@ describe("extractVerifiedControlledAccessGrants", () => {
 
   test("keeps a visa with no exp field (no expiry set)", async () => {
     const noExpPayload = {
-      ...VISA_PAYLOAD,
-      ga4gh_visa_v1: {
-        type: VISA_PAYLOAD.ga4gh_visa_v1.type,
-        value: VISA_PAYLOAD.ga4gh_visa_v1.value,
-        source: VISA_PAYLOAD.ga4gh_visa_v1.source,
-        by: VISA_PAYLOAD.ga4gh_visa_v1.by,
-        iat: VISA_PAYLOAD.ga4gh_visa_v1.iat,
-        // exp intentionally omitted
-      },
+      iss: VISA_PAYLOAD.iss,
+      sub: VISA_PAYLOAD.sub,
+      iat: VISA_PAYLOAD.iat,
+      ga4gh_visa_v1: VISA_PAYLOAD.ga4gh_visa_v1,
+      // visa exp intentionally omitted
     };
     const jwt = await signVisaJwt(noExpPayload, privateKeyA);
     const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
@@ -786,7 +782,7 @@ describe("extractVerifiedControlledAccessGrants", () => {
   test("does not verify expired visas (no JWKS call made)", async () => {
     const expiredPayload = {
       ...VISA_PAYLOAD,
-      ga4gh_visa_v1: { ...VISA_PAYLOAD.ga4gh_visa_v1, exp: 1 },
+      exp: 1,
     };
     const jwt = await signVisaJwt(expiredPayload, privateKeyA);
     const resolverSpy = jest.fn(resolverTrustingA);
@@ -801,10 +797,10 @@ describe("extractVerifiedControlledAccessGrants", () => {
   test("returns only non-expired visas from a mixed passport", async () => {
     const expiredPayload = {
       ...VISA_PAYLOAD,
+      exp: 1,
       ga4gh_visa_v1: {
         ...VISA_PAYLOAD.ga4gh_visa_v1,
         value: "GDID-EXPIRED",
-        exp: 1,
       },
     };
     const validJwt = await signVisaJwt(VISA_PAYLOAD, privateKeyA);
@@ -824,18 +820,18 @@ describe("extractVerifiedControlledAccessGrants", () => {
   test("aggregates repeated expired visas for the same issuer", async () => {
     const expiredPayloadA = {
       ...VISA_PAYLOAD,
+      exp: 1,
       ga4gh_visa_v1: {
         ...VISA_PAYLOAD.ga4gh_visa_v1,
         value: "GDID-EXPIRED-A",
-        exp: 1,
       },
     };
     const expiredPayloadB = {
       ...VISA_PAYLOAD,
+      exp: 1,
       ga4gh_visa_v1: {
         ...VISA_PAYLOAD.ga4gh_visa_v1,
         value: "GDID-EXPIRED-B",
-        exp: 1,
       },
     };
     const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
@@ -954,14 +950,14 @@ describe("extractVerifiedVisas", () => {
       iss: "https://issuer-a.example.org",
       sub: "user@lifescience-ri.eu",
       iat: 1785223779,
-      exp: 9999999999,
+      exp: 1,
       ga4gh_visa_v1: {
         type: "ResearcherStatus",
         value: "https://doi.org/10.1038/s41431-018-0219-y",
         source: "https://issuer-a.example.org",
         by: "so",
         iat: 1785223779,
-        exp: 1,
+        exp: 9999999999,
       },
     };
 

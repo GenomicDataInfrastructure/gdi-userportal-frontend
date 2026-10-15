@@ -1085,6 +1085,26 @@
     "en": "Unable to create your application. Please check that you are signed in and try again.",
     "fr": "Impossible de créer votre demande. Vérifiez que vous êtes connecté et réessayez."
   },
+  "basket.authorizationUnavailable": {
+    "en": "We could not verify your eligibility to request dataset access. Please try again.",
+    "fr": "Nous n’avons pas pu vérifier votre admissibilité à demander l’accès aux jeux de données. Veuillez réessayer."
+  },
+  "basket.applicationRequirementsMissing": {
+    "en": "You must have Active Researcher status and accept the Terms & Conditions to request dataset access.",
+    "fr": "Vous devez avoir un statut de chercheur actif et accepter les conditions générales pour demander l’accès aux jeux de données."
+  },
+  "basket.applicationRequirementsTitle": {
+    "en": "Application requirements not met",
+    "fr": "Conditions de demande non remplies"
+  },
+  "basket.researcherRequired": {
+    "en": "You must have Active Researcher status to request dataset access.",
+    "fr": "Vous devez avoir un statut de chercheur actif pour demander l’accès aux jeux de données."
+  },
+  "basket.termsRequired": {
+    "en": "You must accept the Terms & Conditions to request dataset access.",
+    "fr": "Vous devez accepter les conditions générales pour demander l’accès aux jeux de données."
+  },
   "basket.accessGranted": {
     "en": "Access granted",
     "fr": "Accès accordé"

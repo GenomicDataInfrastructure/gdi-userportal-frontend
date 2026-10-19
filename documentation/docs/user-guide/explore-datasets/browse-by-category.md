@@ -8,9 +8,9 @@ sidebar_position: 2
 
 Browse datasets by **Themes** and **Publishers** directly from the main menu. While these categories are available as filters in the search page, you can access their dedicated sections from the main navigation menu for quick browsing.
 
-        :::tip Sign in for better discovery
+        :::tip Log in for better discovery
 
-        [**Sign in**](/sign-in) to view comprehensive information. While you can use this tool without an account, signing in allows you to search and view more details, such as `record counts` and other metadata, to help you find what you need.
+        [**Log in**](/sign-in) to view comprehensive information. While you can use this tool without an account, logging in allows you to search and view more details, such as `record counts` and other metadata, to help you find what you need.
 
         :::
 

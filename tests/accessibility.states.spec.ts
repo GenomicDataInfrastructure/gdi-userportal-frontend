@@ -185,7 +185,7 @@ for (const authenticated of [false, true]) {
     ).toBeVisible();
     await expect(
       page.getByRole("button", {
-        name: authenticated ? /request now/i : /login to request/i,
+        name: authenticated ? /request now/i : /log in to request/i,
       })
     ).toBeEnabled();
     await scan(page, info);

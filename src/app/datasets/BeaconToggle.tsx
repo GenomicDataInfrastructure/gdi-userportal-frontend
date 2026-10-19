@@ -19,6 +19,8 @@ import contentConfig from "@/config/contentConfig";
 
 export default function BeaconToggle() {
   const t = useTranslations("datasets");
+  const contactEmail =
+    contentConfig.email || "gdi-coordination@elixir-europe.org";
   const { status: sessionStatus } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -104,7 +106,18 @@ export default function BeaconToggle() {
                   canEnableBeacon ? "text-gray-600" : "text-gray-800"
                 }`}
               >
-                {t(helperTextKey)}
+                <p>
+                  {t.rich(helperTextKey, {
+                    contact: (chunks) => (
+                      <a
+                        href={`mailto:${contactEmail}`}
+                        className="underline hover:no-underline"
+                      >
+                        {chunks}
+                      </a>
+                    ),
+                  })}
+                </p>
               </div>
             )}
           </div>

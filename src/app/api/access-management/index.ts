@@ -21,7 +21,7 @@ const unauthorizedResponse = {
   headers: { "Content-Type": "application/json" },
   data: {
     title: "Unauthorized",
-    detail: "Sign in before requesting dataset access.",
+    detail: "Log in before requesting dataset access.",
     status: 401,
   },
 } as const;

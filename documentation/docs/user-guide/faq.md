@@ -10,7 +10,7 @@ For additional questions or support, please contact our support team.
 
 ### Do I need an account to access GDI Portal?
 
-You do not need an account to access the GDI Portal and browse dataset information. However, you need to sign in to your account to request access to the dataset records. Signing in also enables additional features such as saving searches and receiving notifications.
+You do not need an account to access the GDI Portal and browse dataset information. However, you need to log in to your account to request access to the dataset records. Logging in also enables additional features such as saving searches and receiving notifications.
 
 ### I found a dataset I want to use. What do I do?
 
@@ -26,11 +26,11 @@ Yes, the GDI Portal enables cross-border access to genomic data across European 
 
 ### What is GA4GH Passport and Visa?
 
-GA4GH (Global Alliance for Genomics and Health) Passport and Visa is a standardized system for managing access to genomic datasets. Think of it like international travel documents: your **Passport** is your authenticated identity (provided when you sign in via LS-AAI), and **Visas** are digital certificates proving you have permission to access specific datasets. These visas are issued by data access committees and automatically recognized across the GDI network. Learn more: [Your passport and access](/your-passport-and-access)
+GA4GH (Global Alliance for Genomics and Health) Passport and Visa is a standardized system for managing access to genomic datasets. Think of it like international travel documents: your **Passport** is your authenticated identity (provided when you log in via LS-AAI), and **Visas** are digital certificates proving you have permission to access specific datasets. These visas are issued by data access committees and automatically recognized across the GDI network. Learn more: [Your passport and access](/your-passport-and-access)
 
 ### Why can't I see my entitlements?
 
-If you see a "GA4GH Passport unavailable" message or cannot view your entitlements, this usually means your sign-in session has expired or there's a temporary issue with the authentication service. Try signing out and signing in again to refresh your credentials. If you see "No access grants found," it means you don't have any active access grants—your applications may still be under review, your grants may have expired, or you haven't applied for any datasets yet.
+If you see a "GA4GH Passport unavailable" message or cannot view your entitlements, this usually means your login session has expired or there's a temporary issue with the authentication service. Try logging out and logging in again to refresh your credentials. If you see "No access grants found," it means you don't have any active access grants—your applications may still be under review, your grants may have expired, or you haven't applied for any datasets yet.
 
 ### How long do access grants last?
 

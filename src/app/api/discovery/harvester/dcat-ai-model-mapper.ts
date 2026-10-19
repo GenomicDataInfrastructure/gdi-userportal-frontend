@@ -30,14 +30,10 @@ import { normalizeDate } from "@/app/api/discovery/harvester/date-utils";
 // NOSONAR: This is an RDF vocabulary URI (identifier, not a network endpoint) and must use http as defined by its specification.
 const RDF_TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"; // NOSONAR
 
-
 export const AI_MODEL_RDF_TYPE_URI =
   "http://mindig_lu.gitlab.io/DCAT-AP-LU/vocab/cdsp/AIModel"; // NOSONAR
 
-export const isAiModelSubject = (
-  subject: RDF.Term,
-  graph: RdfGraph
-): boolean =>
+export const isAiModelSubject = (subject: RDF.Term, graph: RdfGraph): boolean =>
   graph
     .getObjects(subject, RDF_TYPE)
     .some((object) => object.value.trim() === AI_MODEL_RDF_TYPE_URI);
@@ -102,7 +98,8 @@ const extractVersionNotes = (
   subject: RDF.Term,
   graph: RdfGraph
 ): string | undefined => {
-  const values = graph.getObjectValues(subject, ADMS_VERSION_NOTES).filter(Boolean);
+  const values = graph
+    .getObjectValues(subject, ADMS_VERSION_NOTES)
+    .filter(Boolean);
   return values.length > 0 ? values.join("\n") : undefined;
 };
-

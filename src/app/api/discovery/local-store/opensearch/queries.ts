@@ -675,7 +675,8 @@ export const buildSearchBody = (
     options.facets,
     options.operator
   );
-  const crossFields = fieldSets.crossFieldSearchFields ?? crossFieldSearchFields;
+  const crossFields =
+    fieldSets.crossFieldSearchFields ?? crossFieldSearchFields;
   const keywordFields = fieldSets.keywordSearchFields ?? keywordSearchFields;
   const phrasePrefix = fieldSets.phrasePrefixFields ?? phrasePrefixFields;
 

@@ -27,9 +27,7 @@ describe("dcat-ai-model-mapper", () => {
 
     expect(aiModelSubjects).toHaveLength(2);
     expect(plainSubjects).toHaveLength(1);
-    expect(plainSubjects[0].value).toBe(
-      "https://example.org/datasets/plain-1"
-    );
+    expect(plainSubjects[0].value).toBe("https://example.org/datasets/plain-1");
   });
 
   it("maps all shared fields for a fully-populated AI Model record", async () => {
@@ -55,7 +53,8 @@ describe("dcat-ai-model-mapper", () => {
       versionNotes: "Retrained on expanded dataset",
       keywords: ["radiology", "classification"],
       accessRights: {
-        value: "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
+        value:
+          "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
         label: "Public",
       },
       documentation: ["https://example.org/docs/ai-models/1"],

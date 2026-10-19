@@ -85,7 +85,13 @@ describe("OpenSearchAiModelStore", () => {
     const store = createStore();
 
     await store.upsertAiModels([
-      { id: "ai-model-1", title: "Model", entityType: "AI_MODEL", publishers: [], creators: [] },
+      {
+        id: "ai-model-1",
+        title: "Model",
+        entityType: "AI_MODEL",
+        publishers: [],
+        creators: [],
+      },
     ]);
 
     expect(mockClient.post).toHaveBeenCalledWith(

@@ -10,7 +10,7 @@ View your approved applications through the **Entitlements** section of your das
 
 ## What are entitlements?
 
-An entitlement is the GDI Portal's record of your approved dataset access. The Portal creates it from verified access information in your GA4GH Passport when you sign in.
+An entitlement is the GDI Portal's record of your approved dataset access. The Portal creates it from verified access information in your GA4GH Passport when you log in.
 
 For information about how the Portal uses your Passport and Visas, see: [Your passport and access](/your-passport-and-access).
 

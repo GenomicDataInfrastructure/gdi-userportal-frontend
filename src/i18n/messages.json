@@ -122,7 +122,7 @@
     "fr": "Demandes"
   },
   "auth.login": {
-    "en": "Login",
+    "en": "Log in",
     "fr": "Connexion"
   },
   "auth.logout": {
@@ -302,20 +302,20 @@
     "fr": "Activez cette option pour filtrer par caractéristiques de données au niveau individuel et afficher le nombre d'enregistrements"
   },
   "datasets.beaconLoginRequired": {
-    "en": "Login is required to use individual-level data discovery.",
-    "fr": "La connexion est requise pour utiliser la découverte de données au niveau individuel."
+    "en": "Log in to search individual-level data.",
+    "fr": "Connectez-vous pour rechercher des données au niveau individuel."
   },
   "datasets.beaconResearcherRequired": {
-    "en": "Active Researcher status is required. Please complete your researcher registration.",
-    "fr": "Un statut de chercheur actif est requis. Veuillez finaliser votre inscription de chercheur."
+    "en": "You need Active Researcher status to search individual-level data. <contact>Contact us</contact> to complete your registration.",
+    "fr": "Vous devez avoir le statut de chercheur actif pour rechercher des données au niveau individuel. <contact>Contactez-nous</contact> pour finaliser votre inscription."
   },
   "datasets.beaconTermsRequired": {
-    "en": "You must accept the Terms & Conditions to use individual-level data discovery.",
-    "fr": "Vous devez accepter les conditions générales pour utiliser la découverte de données au niveau individuel."
+    "en": "Accept the Terms & Conditions to search individual-level data. Log out and back in to accept them.",
+    "fr": "Acceptez les conditions générales pour rechercher des données au niveau individuel. Déconnectez-vous, puis reconnectez-vous pour les accepter."
   },
   "datasets.beaconRequirementsMissing": {
-    "en": "Active Researcher status and acceptance of the Terms & Conditions are required.",
-    "fr": "Un statut de chercheur actif et l'acceptation des conditions générales sont requis."
+    "en": "You need Active Researcher status and must accept the Terms & Conditions to search individual-level data. <contact>Contact us</contact> to complete your registration.",
+    "fr": "Vous devez avoir le statut de chercheur actif et accepter les conditions générales pour rechercher des données au niveau individuel. <contact>Contactez-nous</contact> pour finaliser votre inscription."
   },
   "datasets.beaconErrorResearcher": {
     "en": "Individual-level data discovery has been disabled because your Researcher status is missing or expired.",
@@ -1054,7 +1054,7 @@
     "fr": "Chargement de votre panier..."
   },
   "basket.loginToRequest": {
-    "en": "Login to request",
+    "en": "Log in to request",
     "fr": "Se connecter pour faire une demande"
   },
   "basket.requestNow": {

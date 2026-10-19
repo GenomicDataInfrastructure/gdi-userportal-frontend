@@ -6,11 +6,11 @@ sidebar_position: 4
 
 # Your passport and access
 
-Learn why you sign in through LS-AAI and how the GDI Portal uses your GA4GH Passport to show your approved dataset access.
+Learn why you log in through LS-AAI and how the GDI Portal uses your GA4GH Passport to show your approved dataset access.
 
 ## How dataset access works
 
-The GDI Portal uses the **GA4GH Passport and Visa** system to securely manage access to genomic datasets. In order to use this passport system, you must sign in through **LS-AAI**.
+The GDI Portal uses the **GA4GH Passport and Visa** system to securely manage access to genomic datasets. In order to use this passport system, you must log in through **LS-AAI**.
 
 Think of your GA4GH credentials like international travel documents:
 
@@ -25,15 +25,15 @@ GA4GH, the Global Alliance for Genomics and Health, develops standards for respo
 
 :::
 
-## Sign in with LS-AAI
+## Log in with LS-AAI
 
-LS-AAI, the Login Service for Academic and Administrative Institutions, lets you sign in to the GDI Portal with an existing institutional account such as Google, LinkedIn, university, or other organisational accounts. This means you do not need to create a new account specifically for the GDI Portal.
+LS-AAI, the Login Service for Academic and Administrative Institutions, lets you log in to the GDI Portal with an existing institutional account such as Google, LinkedIn, university, or other organisational accounts. This means you do not need to create a new account specifically for the GDI Portal.
 
-You must sign in through LS-AAI to use the GA4GH Passport and Visa system for accessing datasets:
+You must log in through LS-AAI to use the GA4GH Passport and Visa system for accessing datasets:
 
-- When you sign in, LS-AAI retrieves your passport and visas, which determine what datasets you can access in the portal.
+- When you log in, LS-AAI retrieves your passport and visas, which determine what datasets you can access in the portal.
 - If LS-AAI cannot retrieve a Passport, the GDI Portal cannot retrieve your dataset access even if your application has been approved.
 
-[Sign in with LS-AAI](/sign-in).
+[Log in with LS-AAI](/sign-in).
 
 If you cannot view your approved access, see: [Troubleshoot dataset access](/troubleshoot-dataset-access).

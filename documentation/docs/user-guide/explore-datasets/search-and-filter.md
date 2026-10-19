@@ -16,9 +16,9 @@ In this guide
 
 <br/>
 
-:::tip Sign in for enhanced search
+:::tip Log in for enhanced search
 
-[**Sign in**](/sign-in) to get comprehensive search results. While you can search datasets without an account, signing in allows you to filter and view more details in the search results, such as `record counts` and other metadata.
+[**Log in**](/sign-in) to get comprehensive search results. While you can search datasets without an account, logging in allows you to filter and view more details in the search results, such as `record counts` and other metadata.
 
 :::
 
@@ -32,7 +32,7 @@ On the **Home** or **Datasets** page, enter any term or phrase to search across 
 
 ## Filter your results
 
-Use the filters on the left side of the search results page to narrow down your results. These filters are based on dataset metadata, and signing in gives you access to additional metadata-based filters. Common filters include: Access Rights, Data Types, Themes, Dataset series, and Publishers.
+Use the filters on the left side of the search results page to narrow down your results. These filters are based on dataset metadata, and logging in gives you access to additional metadata-based filters. Common filters include: Access Rights, Data Types, Themes, Dataset series, and Publishers.
 
 Here's an example of a search result for the word "cancer", with filters applied for Access Rights: `Public`.
 
@@ -57,14 +57,14 @@ By default, [standard searches](#standard-search) use catalog metadata only. Whe
 
 :::info Note
 
-- You must [sign in](/sign-in) to access individual-level data discovery.
+- You must [log in](/sign-in) to access individual-level data discovery.
 - Searches may be slower when individual-level data discovery is enabled, as the system queries actual data records across multiple sources.
 
 :::
 
 To search with individual-level data discovery:
 
-1. [Sign in](/sign-in) to your account
+1. [Log in](/sign-in) to your account
 2. Navigate to the **Datasets** page
 3. Locate the **Include Individual-level data discovery** toggle at the top of the search results
 4. Enable the toggle to activate patient-level data searching

@@ -16,9 +16,9 @@ Check the status of your [applications](/track-application). If your access has 
 
 ## Your GA4GH Passport is unavailable
 
-The GDI Portal could not retrieve your GA4GH Passport from LS-AAI. This can happen when your sign-in session has expired or the authentication service is temporarily unavailable.
+The GDI Portal could not retrieve your GA4GH Passport from LS-AAI. This can happen when your login session has expired or the authentication service is temporarily unavailable.
 
-Sign out, then [sign in through LS-AAI](/sign-in) again. Contact support if the issue persists.
+Log out, then [log in through LS-AAI](/sign-in) again. Contact support if the issue persists.
 
 ## Dataset details are unavailable
 

@@ -22,4 +22,4 @@ You need an active account with admin permissions to perform catalogue managemen
 
 2. Select **Log in** in the top-right corner of the page.
 
-3. Enter the credentials you used when registering with the LNDS Service Desk. If it's your first time signing in, you may need to verify your email address.
+3. Enter the credentials you used when registering with the LNDS Service Desk. If it's your first time logging in, you may need to verify your email address.

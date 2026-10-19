@@ -35,6 +35,10 @@
     "en": "Services",
     "fr": "Services"
   },
+  "nav.aiModels": {
+    "en": "AI Model",
+    "fr": "Modèle d'IA"
+  },
   "services.title": {
     "en": "GDI Service Catalogue",
     "fr": "Catalogue de services GDI"
@@ -217,6 +221,10 @@
     "en": "Search datasets",
     "fr": "Rechercher des jeux de données"
   },
+  "search.aiModelsPlaceholder": {
+    "en": "Search AI models",
+    "fr": "Rechercher des modèles d'IA"
+  },
   "recent.seeAll": {
     "en": "See all",
     "fr": "Voir tout"
@@ -268,6 +276,18 @@
   "datasets.noResults": {
     "en": "No datasets found matching your criteria. Try adjusting your search or filters.",
     "fr": "Aucun jeu de données ne correspond à vos critères. Essayez d'ajuster votre recherche ou vos filtres."
+  },
+  "aiModels.results": {
+    "en": "{count, plural, =0 {No AI models found} one {# AI model found} other {# AI models found}}",
+    "fr": "{count, plural, =0 {Aucun modèle d'IA trouvé} one {# modèle d'IA trouvé} other {# modèles d'IA trouvés}}"
+  },
+  "aiModels.noResults": {
+    "en": "No AI models found matching your criteria.",
+    "fr": "Aucun modèle d'IA ne correspond à vos critères."
+  },
+  "aiModels.contacts": {
+    "en": "Contacts",
+    "fr": "Contacts"
   },
   "datasets.catalogueFilters": {
     "en": "Catalogue Filters",

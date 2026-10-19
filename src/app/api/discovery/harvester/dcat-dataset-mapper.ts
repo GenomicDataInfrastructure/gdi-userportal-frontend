@@ -25,20 +25,20 @@ export const DCAT_CATALOG = "http://www.w3.org/ns/dcat#Catalog";
 
 // NOSONAR: These are RDF vocabulary URIs (identifiers, not network endpoints) and must use http as defined by their specifications.
 const DCAT_IN_CATALOG = "http://www.w3.org/ns/dcat#inCatalog"; // NOSONAR
-const DCT_IDENTIFIER = "http://purl.org/dc/terms/identifier"; // NOSONAR
-const DCT_TITLE = "http://purl.org/dc/terms/title"; // NOSONAR
-const DC_TITLE = "http://purl.org/dc/elements/1.1/title"; // NOSONAR
-const DCT_DESCRIPTION = "http://purl.org/dc/terms/description"; // NOSONAR
-const DC_DESCRIPTION = "http://purl.org/dc/elements/1.1/description"; // NOSONAR
+export const DCT_IDENTIFIER = "http://purl.org/dc/terms/identifier"; // NOSONAR
+export const DCT_TITLE = "http://purl.org/dc/terms/title"; // NOSONAR
+export const DC_TITLE = "http://purl.org/dc/elements/1.1/title"; // NOSONAR
+export const DCT_DESCRIPTION = "http://purl.org/dc/terms/description"; // NOSONAR
+export const DC_DESCRIPTION = "http://purl.org/dc/elements/1.1/description"; // NOSONAR
 const DCT_PROVENANCE = "http://purl.org/dc/terms/provenance"; // NOSONAR
 const DCT_LANGUAGE = "http://purl.org/dc/terms/language"; // NOSONAR
-const DCT_ISSUED = "http://purl.org/dc/terms/issued"; // NOSONAR
-const DCT_MODIFIED = "http://purl.org/dc/terms/modified"; // NOSONAR
-const DCAT_VERSION = "http://www.w3.org/ns/dcat#version"; // NOSONAR
-const DCAT_HAS_VERSION = "http://www.w3.org/ns/dcat#hasVersion"; // NOSONAR
-const ADMS_VERSION_NOTES = "http://www.w3.org/ns/adms#versionNotes"; // NOSONAR
+export const DCT_ISSUED = "http://purl.org/dc/terms/issued"; // NOSONAR
+export const DCT_MODIFIED = "http://purl.org/dc/terms/modified"; // NOSONAR
+export const DCAT_VERSION = "http://www.w3.org/ns/dcat#version"; // NOSONAR
+export const DCAT_HAS_VERSION = "http://www.w3.org/ns/dcat#hasVersion"; // NOSONAR
+export const ADMS_VERSION_NOTES = "http://www.w3.org/ns/adms#versionNotes"; // NOSONAR
 const DCT_SPATIAL = "http://purl.org/dc/terms/spatial"; // NOSONAR
-const SKOS_PREF_LABEL = "http://www.w3.org/2004/02/skos/core#prefLabel"; // NOSONAR
+export const SKOS_PREF_LABEL = "http://www.w3.org/2004/02/skos/core#prefLabel"; // NOSONAR
 const RDFS_LABEL = "http://www.w3.org/2000/01/rdf-schema#label"; // NOSONAR
 const HEALTHDCATAP_NUMBER_OF_RECORDS =
   "http://healthdataportal.eu/ns/health#numberOfRecords"; // NOSONAR
@@ -62,7 +62,7 @@ const DCAT_END_DATE = "http://www.w3.org/ns/dcat#endDate"; // NOSONAR
 const DCAT_TEMPORAL_RESOLUTION = "http://www.w3.org/ns/dcat#temporalResolution"; // NOSONAR
 const DCT_ACCRUAL_PERIODICITY = "http://purl.org/dc/terms/accrualPeriodicity"; // NOSONAR
 const DCAT_THEME = "http://www.w3.org/ns/dcat#theme"; // NOSONAR
-const DCAT_KEYWORD = "http://www.w3.org/ns/dcat#keyword"; // NOSONAR
+export const DCAT_KEYWORD = "http://www.w3.org/ns/dcat#keyword"; // NOSONAR
 const HEALTHDCATAP_HEALTH_THEME =
   "http://healthdataportal.eu/ns/health#healthTheme"; // NOSONAR
 const HEALTHDCATAP_HEALTH_CATEGORY =
@@ -75,8 +75,8 @@ const DPV_HAS_PURPOSE = "http://www.w3.org/ns/dpv#hasPurpose"; // NOSONAR
 const DPV_HAS_PERSONAL_DATA = "http://www.w3.org/ns/dpv#hasPersonalData"; // NOSONAR
 const DCATAP_APPLICABLE_LEGISLATION =
   "http://data.europa.eu/r5r/applicableLegislation"; // NOSONAR
-const DCT_PUBLISHER = "http://purl.org/dc/terms/publisher"; // NOSONAR
-const DCT_CREATOR = "http://purl.org/dc/terms/creator"; // NOSONAR
+export const DCT_PUBLISHER = "http://purl.org/dc/terms/publisher"; // NOSONAR
+export const DCT_CREATOR = "http://purl.org/dc/terms/creator"; // NOSONAR
 const FOAF_NAME = "http://xmlns.com/foaf/0.1/name"; // NOSONAR
 const FOAF_MBOX = "http://xmlns.com/foaf/0.1/mbox"; // NOSONAR
 const CV_CONTACT_POINT = "http://data.europa.eu/m8g/contactPoint"; // NOSONAR
@@ -226,7 +226,7 @@ export const mapDataset = (
   };
 };
 
-const resolveValueLabels = (
+export const resolveValueLabels = (
   objects: RDF.Term[],
   graph: RdfGraph
 ): Array<{ value: string; label: string }> => {
@@ -461,7 +461,7 @@ const extractFrequency = (
   return { value, label };
 };
 
-const extractAccessRights = (
+export const extractAccessRights = (
   datasetSubject: RDF.Term,
   graph: RdfGraph
 ): { value: string; label: string } | undefined => {
@@ -551,7 +551,7 @@ const extractPersonalData = (
   return result.length > 0 ? result : undefined;
 };
 
-const extractAgent = (
+export const extractAgent = (
   agentSubject: RDF.Term,
   graph: RdfGraph
 ): LocalAgent | undefined => {
@@ -643,7 +643,7 @@ const extractAgent = (
   };
 };
 
-const extractAgents = (
+export const extractAgents = (
   subject: RDF.Term,
   graph: RdfGraph,
   predicate: string
@@ -688,7 +688,7 @@ const extractIsReferencedBy = (
   return values.length > 0 ? values : undefined;
 };
 
-const extractDocumentation = (
+export const extractDocumentation = (
   datasetSubject: RDF.Term,
   graph: RdfGraph
 ): string[] | undefined => {

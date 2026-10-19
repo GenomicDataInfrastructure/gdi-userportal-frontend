@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import axios, { AxiosInstance } from "axios";
 import {
   LocalDiscoveryValueLabel,
   LocalDiscoveryDataset,
@@ -13,12 +12,9 @@ import {
 import {
   SearchBackendCountResponse,
   SearchBackendTermsAggregationResponse,
-  SearchBackendDocumentResponse,
   SearchBackendSearchResponse,
 } from "@/app/api/discovery/local-store/opensearch/types";
 import {
-  buildBulkUpsertBody,
-  buildClearBody,
   buildFilterValuesBody,
   buildSearchBody,
   createIndexMappings,
@@ -27,89 +23,26 @@ import {
   mapGetDocumentResponse,
   mapSearchResponse,
 } from "@/app/api/discovery/local-store/opensearch/mappers";
-import {
-  createOpenSearchClient,
-  formatSearchBackendError as formatOpenSearchError,
-  isIndexAlreadyExistsError,
-  isIndexCreateBlockedError,
-} from "@/app/api/discovery/local-store/opensearch/errors";
+import { formatSearchBackendError as formatOpenSearchError } from "@/app/api/discovery/local-store/opensearch/errors";
 import { getLocalFilterDefinition } from "@/app/api/discovery/local-store/filter-registry";
+import {
+  OpenSearchDocumentStore,
+  OpenSearchStoreParams,
+} from "@/app/api/discovery/local-store/opensearch/document-store";
 
 const formatSearchBackendError = (error: unknown): string =>
   formatOpenSearchError(error, "OpenSearch search request");
 
-export class OpenSearchDiscoveryStore implements LocalDiscoveryStore {
-  readonly key = "opensearch";
-
-  private readonly client: AxiosInstance;
-  private readonly indexName: string;
-  private initialized = false;
-
-  constructor(params: {
-    baseUrl: string;
-    indexName: string;
-    username?: string;
-    password?: string;
-    apiKey?: string;
-    insecureTls?: boolean;
-  }) {
-    this.client = createOpenSearchClient(params);
-    this.indexName = params.indexName;
-  }
-
-  async ensureInitialized(): Promise<void> {
-    if (this.initialized) return;
-
-    let initializationError: unknown;
-    try {
-      await this.client.put(`/${this.indexName}`, createIndexMappings());
-    } catch (error) {
-      initializationError = error;
-    }
-
-    if (!initializationError) {
-      this.initialized = true;
-      return;
-    }
-
-    if (
-      !isIndexAlreadyExistsError(initializationError) &&
-      !isIndexCreateBlockedError(initializationError)
-    ) {
-      throw initializationError;
-    }
-
-    try {
-      await this.client.put(
-        `/${this.indexName}/_mapping`,
-        createIndexMappings().mappings
-      );
-    } catch (mappingError) {
-      if (
-        isIndexCreateBlockedError(initializationError) &&
-        axios.isAxiosError(mappingError) &&
-        mappingError.response?.status === 404
-      ) {
-        throw initializationError;
-      }
-
-      console.warn(
-        `[OpenSearch] Could not update mapping for index "${this.indexName}" — ` +
-          `one or more field types may have changed. Delete and recreate the index to apply the new schema. ` +
-          `Error: ${formatSearchBackendError(mappingError)}`
-      );
-    }
-
-    this.initialized = true;
+export class OpenSearchDiscoveryStore
+  extends OpenSearchDocumentStore<LocalDiscoveryDataset>
+  implements LocalDiscoveryStore
+{
+  constructor(params: OpenSearchStoreParams) {
+    super(params, createIndexMappings);
   }
 
   async clearDatasets(): Promise<void> {
-    await this.ensureInitialized();
-
-    await this.client.post(
-      `/${this.indexName}/_delete_by_query`,
-      buildClearBody()
-    );
+    await this.clearDocuments();
   }
 
   async hasFilterValues(key: string): Promise<boolean> {
@@ -208,38 +141,10 @@ export class OpenSearchDiscoveryStore implements LocalDiscoveryStore {
   }
 
   async retrieveDataset(id: string): Promise<LocalDiscoveryDataset | null> {
-    await this.ensureInitialized();
-
-    try {
-      const response = await this.client.get<SearchBackendDocumentResponse>(
-        `/${this.indexName}/_doc/${encodeURIComponent(id)}`
-      );
-
-      return mapGetDocumentResponse(response.data);
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        return null;
-      }
-
-      throw error;
-    }
+    return this.retrieveDocument(id, mapGetDocumentResponse);
   }
 
   async upsertDatasets(datasets: LocalDiscoveryDataset[]): Promise<void> {
-    await this.ensureInitialized();
-    if (!datasets.length) return;
-    const body = buildBulkUpsertBody(this.indexName, datasets);
-
-    const response = await this.client.post<{ errors?: boolean }>(
-      "/_bulk",
-      body,
-      {
-        headers: { "Content-Type": "application/x-ndjson" },
-      }
-    );
-
-    if (response.data.errors) {
-      throw new Error("OpenSearch bulk upsert reported item-level errors");
-    }
+    await this.upsertDocuments(datasets);
   }
 }

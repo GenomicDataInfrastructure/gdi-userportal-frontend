@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-  LocalDiscoveryDataset,
   LocalDiscoverySearchFacet,
   LocalDiscoverySearchOptions,
 } from "@/app/api/discovery/local-store/types";
@@ -59,6 +58,35 @@ const phrasePrefixFields = [
   "provenance",
   "versionNotes",
 ];
+
+// AI Model's smaller field lists, only the fields shared with Dataset.
+const aiModelCrossFieldSearchFields = [
+  "title^3",
+  "description",
+  "versionNotes",
+  "keywords",
+  "hasVersions.label",
+  "accessRights.label",
+  "publishers.name",
+  "creators.name",
+  "contacts.name",
+];
+
+const aiModelKeywordSearchFields = ["id", "identifier", "version"];
+
+const aiModelPhrasePrefixFields = ["title^4", "description", "versionNotes"];
+
+export type SearchFieldSets = {
+  crossFieldSearchFields?: string[];
+  keywordSearchFields?: string[];
+  phrasePrefixFields?: string[];
+};
+
+export const aiModelSearchFieldSets: SearchFieldSets = {
+  crossFieldSearchFields: aiModelCrossFieldSearchFields,
+  keywordSearchFields: aiModelKeywordSearchFields,
+  phrasePrefixFields: aiModelPhrasePrefixFields,
+};
 
 type OpenSearchQueryClause = Record<string, unknown>;
 type OpenSearchSortClause = Record<string, unknown>;
@@ -579,7 +607,67 @@ export const createIndexMappings = () => ({
   },
 });
 
-export const buildSearchBody = (options: LocalDiscoverySearchOptions) => {
+export const createAiModelIndexMappings = () => ({
+  settings: {
+    analysis: {
+      tokenizer: {
+        word_boundary_tokenizer: {
+          type: "pattern",
+          pattern: "[^\\p{L}\\p{N}]+",
+        },
+      },
+      analyzer: {
+        word_boundary_analyzer: {
+          type: "custom",
+          tokenizer: "word_boundary_tokenizer",
+          filter: ["lowercase"],
+        },
+      },
+    },
+  },
+  mappings: {
+    properties: {
+      id: { type: "keyword" },
+      identifier: { type: "keyword" },
+      entityType: { type: "keyword" },
+      title: {
+        type: "text",
+        analyzer: "word_boundary_analyzer",
+        fields: { keyword: { type: "keyword" } },
+      },
+      description: { type: "text", analyzer: "word_boundary_analyzer" },
+      createdAt: { type: "date" },
+      modifiedAt: { type: "date" },
+      version: { type: "keyword" },
+      hasVersions: valueLabelMapping(),
+      versionNotes: { type: "text", analyzer: "word_boundary_analyzer" },
+      accessRights: valueLabelMapping(),
+      keywords: { type: "keyword" },
+      documentation: { type: "keyword" },
+      publishers: agentMapping(),
+      creators: agentMapping(),
+      contacts: {
+        type: "object",
+        properties: {
+          name: {
+            type: "text",
+            analyzer: "word_boundary_analyzer",
+            fields: { keyword: { type: "keyword" } },
+          },
+          email: { type: "keyword" },
+          uri: { type: "keyword" },
+          url: { type: "keyword" },
+          identifier: { type: "keyword" },
+        },
+      },
+    },
+  },
+});
+
+export const buildSearchBody = (
+  options: LocalDiscoverySearchOptions,
+  fieldSets: SearchFieldSets = {}
+) => {
   const from = options.start ?? 0;
   const size = options.rows ?? 20;
   const query = options.query?.trim();
@@ -587,6 +675,9 @@ export const buildSearchBody = (options: LocalDiscoverySearchOptions) => {
     options.facets,
     options.operator
   );
+  const crossFields = fieldSets.crossFieldSearchFields ?? crossFieldSearchFields;
+  const keywordFields = fieldSets.keywordSearchFields ?? keywordSearchFields;
+  const phrasePrefix = fieldSets.phrasePrefixFields ?? phrasePrefixFields;
 
   const queryClause = query
     ? {
@@ -597,7 +688,7 @@ export const buildSearchBody = (options: LocalDiscoverySearchOptions) => {
             {
               multi_match: {
                 query,
-                fields: crossFieldSearchFields,
+                fields: crossFields,
                 type: "cross_fields",
                 operator: "and",
               },
@@ -605,7 +696,7 @@ export const buildSearchBody = (options: LocalDiscoverySearchOptions) => {
             {
               multi_match: {
                 query,
-                fields: crossFieldSearchFields,
+                fields: crossFields,
                 fuzziness: "AUTO",
                 minimum_should_match: "100%",
               },
@@ -613,14 +704,14 @@ export const buildSearchBody = (options: LocalDiscoverySearchOptions) => {
             {
               multi_match: {
                 query,
-                fields: keywordSearchFields,
+                fields: keywordFields,
                 fuzziness: "AUTO",
               },
             },
             {
               multi_match: {
                 query,
-                fields: phrasePrefixFields,
+                fields: phrasePrefix,
                 type: "phrase_prefix",
               },
             },
@@ -668,9 +759,9 @@ export const buildFilterValuesBody = (field: string, size = 1000) => ({
   },
 });
 
-export const buildBulkUpsertBody = (
+export const buildBulkUpsertBody = <TDocument extends { id: string }>(
   indexName: string,
-  datasets: LocalDiscoveryDataset[]
+  datasets: TDocument[]
 ): string =>
   datasets
     .map(

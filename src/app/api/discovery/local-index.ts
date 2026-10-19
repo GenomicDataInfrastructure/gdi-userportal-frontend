@@ -12,10 +12,20 @@ import {
   clearLocalDiscoveryDatasets,
   upsertLocalDiscoveryDatasets,
 } from "@/app/api/discovery/local-store/factory";
-import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import {
+  clearLocalAiModels,
+  upsertLocalAiModels,
+} from "@/app/api/discovery/local-store/ai-model-factory";
+import {
+  LocalDiscoveryAiModel,
+  LocalDiscoveryDataset,
+} from "@/app/api/discovery/local-store/types";
+import {
+  AiModelMappingError,
   dcatHarvesterService,
+  DatasetMappingError,
   HarvestCollectors,
+  HarvestedCatalogue,
   MappingError,
 } from "@/app/api/discovery/harvester/dcat-harvester-service";
 import {
@@ -30,6 +40,7 @@ import {
   writeHarvesterRunLog,
 } from "@/app/api/discovery/local-store/harvester-logs/factory";
 import { HarvesterRunLog } from "@/app/api/discovery/local-store/harvester-logs/types";
+import contentConfig from "@/config/contentConfig";
 
 export type HarvestLocalIndexMode = "replace" | "append";
 
@@ -97,11 +108,20 @@ export const harvestLocalIndexFromDcatUrlApi = async (
     mode,
     async (collectors) => {
       const authHeaders = await getAuthHeaders(catalogueRdfUrl);
-      const datasets = await harvestDatasets(
-        catalogueRdfUrl,
-        authHeaders,
-        options.contentType,
-        collectors
+      const { datasets, aiModels } = await harvestCatalogue(
+        () =>
+          dcatHarvesterService.harvestFromUrl(
+            catalogueRdfUrl,
+            {
+              headers: authHeaders,
+              includeAiModels: contentConfig.enableAiModel,
+              ...(options.contentType
+                ? { contentType: options.contentType }
+                : {}),
+            },
+            collectors
+          ),
+        catalogueRdfUrl
       );
 
       if (mode === "replace") {
@@ -109,7 +129,8 @@ export const harvestLocalIndexFromDcatUrlApi = async (
       }
 
       await indexDatasets(catalogueRdfUrl, datasets);
-      return datasets;
+      await indexAiModels(catalogueRdfUrl, aiModels, mode);
+      return { datasets, aiModels };
     }
   );
 };
@@ -124,26 +145,66 @@ export const harvestLocalIndexFromDcatFileApi = async (
     { path: catalogueRdfFilePath },
     mode,
     async (collectors) => {
-      const datasets = await harvestFileDatasets(
-        catalogueRdfFilePath,
-        options.contentType,
-        collectors
+      const { datasets, aiModels } = await harvestCatalogue(
+        () =>
+          dcatHarvesterService.harvestFromFilePath(
+            catalogueRdfFilePath,
+            collectors,
+            options.contentType,
+            contentConfig.enableAiModel
+          ),
+        catalogueRdfFilePath
       );
 
       if (mode === "replace") {
-        await clearLocalDiscoveryDatasets();
+        await clearIndex(catalogueRdfFilePath);
       }
 
-      await upsertLocalDiscoveryDatasets(datasets);
-      return datasets;
+      await indexDatasets(catalogueRdfFilePath, datasets);
+      await indexAiModels(catalogueRdfFilePath, aiModels, mode);
+      return { datasets, aiModels };
     }
   );
+};
+
+const harvestCatalogue = async (
+  run: () => Promise<HarvestedCatalogue>,
+  source: string
+) => {
+  try {
+    return await run();
+  } catch (error) {
+    throw wrapError(
+      `Failed to harvest catalogue from ${source}: ${formatErrorDetails(error)}`,
+      error
+    );
+  }
+};
+
+const indexAiModels = async (
+  source: string,
+  aiModels: LocalDiscoveryAiModel[],
+  mode: HarvestLocalIndexMode
+): Promise<void> => {
+  if (!contentConfig.enableAiModel) return;
+
+  try {
+    if (mode === "replace") {
+      await clearLocalAiModels();
+    }
+    await upsertLocalAiModels(aiModels);
+  } catch (error) {
+    throw wrapError(
+      `Failed to index ${aiModels.length} harvested AI Models from ${source}: ${formatErrorDetails(error)}`,
+      error
+    );
+  }
 };
 
 const runHarvestWithLogging = async (
   source: { url?: string; path?: string },
   mode: HarvestLocalIndexMode,
-  run: (collectors: HarvestCollectors) => Promise<LocalDiscoveryDataset[]>
+  run: (collectors: HarvestCollectors) => Promise<HarvestedCatalogue>
 ): Promise<number> => {
   const loggingEnabled = isHarvesterLoggingEnabled();
   const startedAt = new Date().toISOString();
@@ -153,14 +214,15 @@ const runHarvestWithLogging = async (
   };
 
   try {
-    const datasets = await run(collectors);
+    const catalogue = await run(collectors);
+    const { datasets, aiModels } = catalogue;
 
     if (loggingEnabled) {
       await logHarvesterRun({
         startedAt,
         source,
         mode,
-        succeeded: datasets.length,
+        succeeded: datasets.length + aiModels.length,
         mappingErrors: collectors.mappingErrors,
         warnings: [
           ...collectDatasetFieldWarnings(datasets),
@@ -273,7 +335,10 @@ const logHarvesterRun = async (params: {
   } = params;
 
   const errors: HarvesterRunLog["errors"] = mappingErrors
-    .filter((issue) => issue.scope === "dataset")
+    .filter(
+      (issue): issue is DatasetMappingError | AiModelMappingError =>
+        issue.scope === "dataset" || issue.scope === "aiModel"
+    )
     .map((issue) => ({
       subjectId: issue.subjectId,
       message: issue.message,
@@ -313,9 +378,7 @@ const logHarvesterRun = async (params: {
     await writeHarvesterRunLog(log);
   } catch (error) {
     console.error(
-      `[HarvesterLogs] Failed to write run log: ${
-        error instanceof Error ? error.message : String(error)
-      }`
+      `[HarvesterLogs] Failed to write run log: ${formatErrorDetails(error)}`
     );
   }
 };
@@ -327,74 +390,32 @@ const getAuthHeaders = async (
     return await oidcAuthService.getAuthorizationHeaderIfConfigured();
   } catch (error) {
     throw wrapError(
-      `Failed to prepare authorization for harvesting ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`,
+      `Failed to prepare authorization for harvesting ${catalogueRdfUrl}: ${formatErrorDetails(error)}`,
       error
     );
   }
 };
 
-const harvestDatasets = async (
-  catalogueRdfUrl: string,
-  authHeaders: Record<string, string>,
-  contentType?: string,
-  collectors?: HarvestCollectors
-): Promise<LocalDiscoveryDataset[]> => {
-  try {
-    return await dcatHarvesterService.harvestFromUrl(
-      catalogueRdfUrl,
-      {
-        headers: authHeaders,
-        ...(contentType ? { contentType } : {}),
-      },
-      collectors
-    );
-  } catch (error) {
-    throw wrapError(
-      `Failed to harvest datasets from ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`,
-      error
-    );
-  }
-};
-
-const harvestFileDatasets = async (
-  catalogueRdfFilePath: string,
-  contentType?: string,
-  collectors?: HarvestCollectors
-): Promise<LocalDiscoveryDataset[]> => {
-  try {
-    return await dcatHarvesterService.harvestFromFilePath(
-      catalogueRdfFilePath,
-      collectors,
-      contentType
-    );
-  } catch (error) {
-    throw wrapError(
-      `Failed to harvest datasets from file ${catalogueRdfFilePath}: ${error instanceof Error ? error.message : String(error)}`,
-      error
-    );
-  }
-};
-
-const clearIndex = async (catalogueRdfUrl: string): Promise<void> => {
+const clearIndex = async (source: string): Promise<void> => {
   try {
     await clearLocalDiscoveryDatasets();
   } catch (error) {
     throw wrapError(
-      `Failed to clear the local discovery index before importing ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`,
+      `Failed to clear the local discovery index before importing ${source}: ${formatErrorDetails(error)}`,
       error
     );
   }
 };
 
 const indexDatasets = async (
-  catalogueRdfUrl: string,
+  source: string,
   datasets: LocalDiscoveryDataset[]
 ): Promise<void> => {
   try {
     await upsertLocalDiscoveryDatasets(datasets);
   } catch (error) {
     throw wrapError(
-      `Failed to index ${datasets.length} harvested datasets from ${catalogueRdfUrl}: ${error instanceof Error ? error.message : String(error)}`,
+      `Failed to index ${datasets.length} harvested datasets from ${source}: ${formatErrorDetails(error)}`,
       error
     );
   }

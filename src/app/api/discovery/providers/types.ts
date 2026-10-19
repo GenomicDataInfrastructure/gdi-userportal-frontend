@@ -265,6 +265,38 @@ export interface DiscoveryProviderCapabilities {
   supportsGVariants: boolean;
   supportsFilterEntries: boolean;
 }
+export interface DiscoverySearchedAiModel {
+  id: string;
+  identifier?: string;
+  title: string;
+  description?: string;
+  createdAt?: string;
+  modifiedAt?: string;
+  version?: string;
+  hasVersions?: DiscoveryValueLabel[];
+  versionNotes?: string;
+  accessRights?: DiscoveryValueLabel;
+  keywords?: string[];
+  documentation?: string[];
+  publishers: DiscoveryAgent[];
+  creators: DiscoveryAgent[];
+}
+
+export interface DiscoveryRetrievedAiModel extends DiscoverySearchedAiModel {
+  contacts?: DiscoveryContactPoint[];
+}
+
+export interface DiscoveryAiModelSearchQuery {
+  query?: string;
+  sort?: string;
+  rows?: number;
+  start?: number;
+}
+
+export interface DiscoveryAiModelsSearchResponse {
+  count?: number;
+  results?: DiscoverySearchedAiModel[];
+}
 
 export interface DiscoveryProvider {
   readonly key: string;
@@ -289,4 +321,8 @@ export interface DiscoveryProvider {
   searchGVariants: (
     options: DiscoveryGVariantSearchQuery
   ) => Promise<DiscoveryGVariantSearchResult[]>;
+  searchAiModels?: (
+    options: DiscoveryAiModelSearchQuery
+  ) => Promise<DiscoveryAiModelsSearchResponse>;
+  retrieveAiModel?: (id: string) => Promise<DiscoveryRetrievedAiModel>;
 }

@@ -205,3 +205,38 @@ export interface LocalDiscoveryStore {
   retrieveDataset: (id: string) => Promise<LocalDiscoveryDataset | null>;
   upsertDatasets: (datasets: LocalDiscoveryDataset[]) => Promise<void>;
 }
+
+export interface LocalDiscoveryAiModel {
+  id: string;
+  identifier?: string;
+  entityType: "AI_MODEL";
+  title: string;
+  description?: string;
+  createdAt?: string;
+  modifiedAt?: string;
+  version?: string;
+  hasVersions?: Array<{ value: string; label: string }>;
+  versionNotes?: string;
+  accessRights?: { value: string; label: string };
+  keywords?: string[];
+  documentation?: string[];
+  contacts?: LocalContactPoint[];
+  publishers: LocalAgent[];
+  creators: LocalAgent[];
+}
+
+export interface LocalDiscoveryAiModelSearchResult {
+  count: number;
+  results: LocalDiscoveryAiModel[];
+}
+
+export interface LocalDiscoveryAiModelStore {
+  readonly key: string;
+  ensureInitialized: () => Promise<void>;
+  clearAiModels: () => Promise<void>;
+  searchAiModels: (
+    options: LocalDiscoverySearchOptions
+  ) => Promise<LocalDiscoveryAiModelSearchResult>;
+  retrieveAiModel: (id: string) => Promise<LocalDiscoveryAiModel | null>;
+  upsertAiModels: (aiModels: LocalDiscoveryAiModel[]) => Promise<void>;
+}

@@ -56,6 +56,7 @@ If you choose the local index adapter with OpenSearch, set:
 DISCOVERY_PROVIDER=local-index
 OPENSEARCH_URL=https://localhost:9200
 OPENSEARCH_DISCOVERY_INDEX=discovery_datasets
+OPENSEARCH_AI_MODEL_INDEX=discovery_ai_models
 OPENSEARCH_USERNAME=admin
 OPENSEARCH_PASSWORD=<your-password>
 OPENSEARCH_TLS_INSECURE=true

@@ -66,3 +66,45 @@ export const isIndexCreateBlockedError = (error: unknown): boolean =>
   axios.isAxiosError(error) &&
   error.response?.status === 403 &&
   JSON.stringify(error.response.data).includes("create-index blocked");
+
+export const ensureIndexInitialized = async (
+  client: AxiosInstance,
+  indexName: string,
+  createMappings: () => { mappings: unknown }
+): Promise<void> => {
+  let initializationError: unknown;
+  try {
+    await client.put(`/${indexName}`, createMappings());
+  } catch (error) {
+    initializationError = error;
+  }
+
+  if (!initializationError) {
+    return;
+  }
+
+  if (
+    !isIndexAlreadyExistsError(initializationError) &&
+    !isIndexCreateBlockedError(initializationError)
+  ) {
+    throw initializationError;
+  }
+
+  try {
+    await client.put(`/${indexName}/_mapping`, createMappings().mappings);
+  } catch (mappingError) {
+    if (
+      isIndexCreateBlockedError(initializationError) &&
+      axios.isAxiosError(mappingError) &&
+      mappingError.response?.status === 404
+    ) {
+      throw initializationError;
+    }
+
+    console.warn(
+      `[OpenSearch] Could not update mapping for index "${indexName}" — ` +
+        `one or more field types may have changed. Delete and recreate the index to apply the new schema. ` +
+        `Error: ${formatSearchBackendError(mappingError)}`
+    );
+  }
+};

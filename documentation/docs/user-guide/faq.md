@@ -26,7 +26,7 @@ Yes, the GDI Portal enables cross-border access to genomic data across European 
 
 ### What is GA4GH Passport and Visa?
 
-GA4GH (Global Alliance for Genomics and Health) Passport and Visa is a standardized system for managing access to genomic datasets. Think of it like international travel documents: your **Passport** is your authenticated identity (provided when you log in via LS-AAI), and **Visas** are digital certificates proving you have permission to access specific datasets. These visas are issued by data access committees and automatically recognized across the GDI network. Learn more: [Your passport and access](/your-passport-and-access)
+GA4GH (Global Alliance for Genomics and Health) Passport and Visa is a standardized system for managing access to genomic datasets. Think of it like international travel documents: your **Passport** is your authenticated identity (provided when you log in via LS-AAI), and **Visas** are digital certificates proving you have permission to access specific datasets. These visas are issued by data access committees and automatically recognized across the GDI network. Learn more: [Your passport and access](/understand-your-access-rights)
 
 ### Why can't I see my entitlements?
 

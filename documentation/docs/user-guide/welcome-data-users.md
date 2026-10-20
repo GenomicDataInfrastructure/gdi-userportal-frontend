@@ -1,6 +1,6 @@
 ---
 slug: /welcome-data-users
-sidebar_label: "Welcome"
+sidebar_label: "Welcome to the GDI Data Portal"
 sidebar_position: 1
 ---
 
@@ -14,16 +14,55 @@ This guide is for **data users**—healthcare researchers, policy-makers, and pr
 
 Learn more about [Genomic Data Infrastructure (GDI)](about-gdi.md) and its founding initiatives.
 
-## Access genomic datasets in three steps
+## What would you like to do?
 
-1. **[Explore datasets](/category/explore-datasets/):** Browse and search through detailed dataset information—search by any criteria such as keywords, research topics, disease areas, or allele frequency.
+If you're new to GDI User Portal, start with learning the **key concepts** or **get started** with your account. 
 
-2. **[Request access](/category/request-datasets/):** Found a dataset you want to use? Submit an application to access it. You may need to provide documentation or requirements for your request, and you can invite collaborators to assist you with your application.
+import Link from '@docusaurus/Link';
+import styles from '@site/src/pages/index.module.css';
 
-3. **Access approved datasets:** Once your request is approved, you can [view your entitlements](/view-entitlements) to see the datasets you have access to through the Secure Processing Environment (SPE).
+<div className={styles.grid}>
 
-   :::info Stay compliant
+  <div className={styles.card}>
+    <Link to="/how-it-works">
+      <h3>💡 How it works</h3>
+    </Link>
+    <p>Learn how the Data Portal works and your journey to accessing genomic datasets.</p>
+  </div>
 
-   All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to **use data responsibly** and according to the terms and agreements you signed during the application process.
+  <div className={styles.card}>
+    <Link to="/understand-your-access-rights">
+      <h3>🚀 Understand your access rights</h3>
+    </Link>
+    <p>Understand your requirements for requesting access to genomic datasets.</p>
+  </div>
 
-   :::
+  <div className={styles.card}>
+    <Link to="/category/explore-datasets">
+      <h3>📑 Explore datasets</h3>
+    </Link>
+    <p>Explore available datasets and their metadata for your research needs.</p>
+  </div>
+
+  <div className={styles.card}>
+    <Link to="/category/request-datasets">
+      <h3>🔖 Request datasets</h3>
+    </Link>
+    <p>Request access to datasets and submit your applications for approval.</p>
+  </div>
+
+  <div className={styles.card}>
+    <Link to="/category/access-approved-datasets">
+      <h3>📂 Access approved datasets</h3>
+    </Link>
+    <p>View and access datasets for which you have been granted approval.</p>
+  </div>
+
+  <div className={styles.card}>
+    <Link to="/faq">
+      <h3>❓ FAQ</h3>
+    </Link>
+    <p>Find answers to common questions about using the GDI Data Portal.</p>
+  </div>
+
+</div>

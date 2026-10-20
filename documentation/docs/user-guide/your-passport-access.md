@@ -1,12 +1,12 @@
 ---
-slug: /your-passport-and-access
-sidebar_label: "Your passport and access"
-sidebar_position: 4
+slug: /understand-your-access-rights
+sidebar_label: "Understand your access rights"
+sidebar_position: 3
 ---
 
-# Your passport and access
+# Understand your access rights
 
-Learn why you log in through LS-AAI and how the GDI Portal uses your GA4GH Passport to show your approved dataset access.
+Before you log in, make sure the data access committee has approved your request for the dataset. When you log in through LS-AAI, the GDI Portal retrieves your GA4GH Passport and Visas to show your approved dataset access.
 
 ## How dataset access works
 

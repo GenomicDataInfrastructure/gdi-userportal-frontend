@@ -5,7 +5,7 @@ sidebar_position: 2
 ---
 # How the Data Portal works
 
-The GDI Data Portal is your gateway to discovering and accessing genomic datasets for research. This page explains the process from finding a dataset to getting access, so you know what to expect at each stage.
+This page explains the process of finding genomic datasets and getting access to them.
 
 ## Your journey to accessing datasets
 

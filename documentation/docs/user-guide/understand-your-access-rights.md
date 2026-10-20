@@ -6,7 +6,7 @@ sidebar_position: 3
 
 # Understand your access rights
 
-Before you log in, make sure the data access committee has approved your request for the dataset. When you log in through LS-AAI, the GDI Portal retrieves your GA4GH Passport and Visas to show your approved dataset access.
+Before you log in to the Data Portal, understand your access rights and the requirements for accessing genomic datasets.
 
 ## How dataset access works
 
@@ -25,15 +25,13 @@ GA4GH, the Global Alliance for Genomics and Health, develops standards for respo
 
 :::
 
-## Log in with LS-AAI
+## Why log in with LS-AAI?
+
+You must log in through LS-AAI so that the GDI Portal can retrieve your GA4GH Passport and associated visas, which are necessary for accessing datasets. 
 
 LS-AAI, the Login Service for Academic and Administrative Institutions, lets you log in to the GDI Portal with an existing institutional account such as Google, LinkedIn, university, or other organisational accounts. This means you do not need to create a new account specifically for the GDI Portal.
 
-You must log in through LS-AAI to use the GA4GH Passport and Visa system for accessing datasets:
+When you log in with LS-AAI:
 
-- When you log in, LS-AAI retrieves your passport and visas, which determine what datasets you can access in the portal.
-- If LS-AAI cannot retrieve a Passport, the GDI Portal cannot retrieve your dataset access even if your application has been approved.
-
-[Log in with LS-AAI](/sign-in).
-
-If you cannot view your approved access, see: [Troubleshoot dataset access](/troubleshoot-dataset-access).
+- **LS-AAI retrieves your passport and visas**, which determine what datasets you can access in the portal.
+- **If LS-AAI cannot retrieve a Passport**, you will not be able to retrieve your approved datasets (entitlements) even if your application has been approved.

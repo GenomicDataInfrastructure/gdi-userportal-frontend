@@ -10,7 +10,7 @@ Welcome to the GDI Data Portal user guide!
 
 The **GDI Data Portal** gives you access to Europe's largest network of genomic datasets for your research and analysis needs. As part of the 1+ Million Genomes Initiative, this portal enables federated and secure cross-border access to high-quality genomic data and related phenotypic information across European countries.
 
-This guide is for **data users**—healthcare researchers, policy-makers, and professionals—who want to discover and request access to genomic datasets for research and clinical purposes.
+This guide is for **data users**—such as healthcare researchers, policy-makers, and any entity or individual—who want to discover and request access to genomic datasets for research and clinical purposes.
 
 Learn more about [Genomic Data Infrastructure (GDI)](about-gdi.md) and its founding initiatives.
 
@@ -34,12 +34,12 @@ import styles from '@site/src/pages/index.module.css';
     <Link to="/understand-your-access-rights">
       <h3>🚀 Understand your access rights</h3>
     </Link>
-    <p>Understand your requirements for requesting access to genomic datasets.</p>
+    <p>Understand your requirements and permissions to request access to genomic datasets.</p>
   </div>
 
   <div className={styles.card}>
     <Link to="/category/explore-datasets">
-      <h3>📑 Explore datasets</h3>
+      <h3>🔎 Explore datasets</h3>
     </Link>
     <p>Explore available datasets and their metadata for your research needs.</p>
   </div>
@@ -53,14 +53,14 @@ import styles from '@site/src/pages/index.module.css';
 
   <div className={styles.card}>
     <Link to="/category/access-approved-datasets">
-      <h3>📂 Access approved datasets</h3>
+      <h3>📂 View approved datasets</h3>
     </Link>
     <p>View and access datasets for which you have been granted approval.</p>
   </div>
 
   <div className={styles.card}>
     <Link to="/faq">
-      <h3>❓ FAQ</h3>
+      <h3>❓ Frequently asked questions</h3>
     </Link>
     <p>Find answers to common questions about using the GDI Data Portal.</p>
   </div>

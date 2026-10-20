@@ -252,67 +252,6 @@ export const canonicalDiscoveryRdf = `
   </rdf:RDF>
 `;
 
-export const canonicalAiModelDiscoveryRdf = `
-  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-           xmlns:dcat="http://www.w3.org/ns/dcat#"
-           xmlns:dct="http://purl.org/dc/terms/"
-           xmlns:adms="http://www.w3.org/ns/adms#"
-           xmlns:skos="http://www.w3.org/2004/02/skos/core#"
-           xmlns:foaf="http://xmlns.com/foaf/0.1/"
-           xmlns:vcard="http://www.w3.org/2006/vcard/ns#"
-           xmlns:cdsp="http://mindig_lu.gitlab.io/DCAT-AP-LU/vocab/cdsp/">
-    <dcat:Dataset rdf:about="https://example.org/ai-models/1">
-      <rdf:type rdf:resource="http://mindig_lu.gitlab.io/DCAT-AP-LU/vocab/cdsp/AIModel"/>
-      <dct:identifier>ai-model-1</dct:identifier>
-      <dct:title xml:lang="en">Chest X-Ray Classifier</dct:title>
-      <dct:description xml:lang="en">Deep learning model for detecting pneumonia from chest X-rays</dct:description>
-      <dct:issued>2025-03-01</dct:issued>
-      <dct:modified>2026-01-10T09:00:00Z</dct:modified>
-      <dcat:version>2.1.0</dcat:version>
-      <dcat:hasVersion rdf:resource="https://example.org/ai-models/1/v1"/>
-      <adms:versionNotes>Retrained on expanded dataset</adms:versionNotes>
-      <dcat:keyword>radiology</dcat:keyword>
-      <dcat:keyword>classification</dcat:keyword>
-      <dct:accessRights>
-        <skos:Concept rdf:about="http://publications.europa.eu/resource/authority/access-right/PUBLIC">
-          <skos:prefLabel xml:lang="eng">Public</skos:prefLabel>
-        </skos:Concept>
-      </dct:accessRights>
-      <foaf:page rdf:resource="https://example.org/docs/ai-models/1"/>
-      <dct:publisher>
-        <foaf:Agent>
-          <foaf:name>LNDS AI Lab</foaf:name>
-          <foaf:mbox rdf:resource="mailto:ai-lab@lnds.lu"/>
-        </foaf:Agent>
-      </dct:publisher>
-      <dct:creator>
-        <foaf:Agent>
-          <foaf:name>Dr. Jane Doe</foaf:name>
-        </foaf:Agent>
-      </dct:creator>
-      <dcat:contactPoint>
-        <vcard:Individual>
-          <vcard:fn>Support Team</vcard:fn>
-          <vcard:hasEmail rdf:resource="mailto:support@lnds.lu"/>
-        </vcard:Individual>
-      </dcat:contactPoint>
-    </dcat:Dataset>
-
-    <dcat:Dataset rdf:about="https://example.org/ai-models/2">
-      <rdf:type rdf:resource="http://mindig_lu.gitlab.io/DCAT-AP-LU/vocab/cdsp/AIModel"/>
-      <dct:identifier>ai-model-2</dct:identifier>
-      <dct:title xml:lang="en">Minimal Model</dct:title>
-      <dct:description xml:lang="en">A model record with only the required fields</dct:description>
-    </dcat:Dataset>
-
-    <dcat:Dataset rdf:about="https://example.org/datasets/plain-1">
-      <dct:identifier>plain-dataset-1</dct:identifier>
-      <dct:title xml:lang="en">Plain Dataset</dct:title>
-      <dct:description xml:lang="en">A regular dataset record, not an AI Model</dct:description>
-    </dcat:Dataset>
-  </rdf:RDF>
-`;
-
 export const canonicalLocalDiscoveryDatasetExportRdf = `<?xml version="1.0" encoding="UTF-8"?>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:dcat="http://www.w3.org/ns/dcat#"

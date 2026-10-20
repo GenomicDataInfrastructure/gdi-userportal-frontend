@@ -4,20 +4,12 @@
 
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import type * as RDF from "@rdfjs/types";
-import {
-  LocalDiscoveryAiModel,
-  LocalDiscoveryDataset,
-} from "@/app/api/discovery/local-store/types";
+import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import {
   DCAT_DATASET,
   getFallbackCatalogue,
   mapDataset,
 } from "@/app/api/discovery/harvester/dcat-dataset-mapper";
-import {
-  isAiModelSubject,
-  mapAiModel,
-} from "@/app/api/discovery/harvester/dcat-ai-model-mapper";
 import {
   formatErrorDetails,
   wrapError,
@@ -42,18 +34,10 @@ type FetchLike = (input: string | URL, init?: RequestInit) => Promise<Response>;
 type HarvestOptions = {
   headers?: Record<string, string>;
   contentType?: string;
-  includeAiModels?: boolean;
 };
 
 export type DatasetMappingError = {
   scope: "dataset";
-  subjectId: string;
-  message: string;
-  stack?: string;
-};
-
-export type AiModelMappingError = {
-  scope: "aiModel";
   subjectId: string;
   message: string;
   stack?: string;
@@ -67,10 +51,7 @@ export type DistributionMappingError = {
   stack?: string;
 };
 
-export type MappingError =
-  | DatasetMappingError
-  | AiModelMappingError
-  | DistributionMappingError;
+export type MappingError = DatasetMappingError | DistributionMappingError;
 
 export type HarvestCollectors = {
   mappingErrors: MappingError[];
@@ -79,7 +60,6 @@ export type HarvestCollectors = {
 
 export type HarvestedCatalogue = {
   datasets: LocalDiscoveryDataset[];
-  aiModels: LocalDiscoveryAiModel[];
 };
 
 export class DcatHarvesterService {
@@ -89,12 +69,12 @@ export class DcatHarvesterService {
     this.fetcher = fetcher;
   }
 
+  /** Maps every RDF record as a Dataset until RDF provides a model discriminator. */
   async parseCatalogueFromRdf(
     rdfText: string,
     sourceRef?: string,
     contentType?: string,
-    collectors?: HarvestCollectors,
-    includeAiModels = true
+    collectors?: HarvestCollectors
   ): Promise<HarvestedCatalogue> {
     const resolvedContentType = detectRdfContentType(sourceRef, contentType);
     const quads = await parseRdfToQuads(
@@ -123,19 +103,7 @@ export class DcatHarvesterService {
           })
       : undefined;
 
-    const { datasetSubjects, aiModelSubjects } = graph
-      .getSubjectsOfType(DCAT_DATASET)
-      .reduce(
-        (partition, subject) => {
-          if (isAiModelSubject(subject, graph)) {
-            if (includeAiModels) partition.aiModelSubjects.push(subject);
-          } else {
-            partition.datasetSubjects.push(subject);
-          }
-          return partition;
-        },
-        { datasetSubjects: [] as RDF.Term[], aiModelSubjects: [] as RDF.Term[] }
-      );
+    const datasetSubjects = graph.getSubjectsOfType(DCAT_DATASET);
 
     const datasets = datasetSubjects
       .flatMap((datasetSubject, index) => {
@@ -165,27 +133,7 @@ export class DcatHarvesterService {
       })
       .filter((dataset) => Boolean(dataset.title || dataset.description));
 
-    const aiModels = aiModelSubjects
-      .flatMap((subject, index) => {
-        try {
-          return [mapAiModel(subject, graph, index)];
-        } catch (error) {
-          if (!collectors) {
-            throw error;
-          }
-
-          collectors.mappingErrors.push({
-            scope: "aiModel",
-            subjectId: subject.value,
-            message: formatErrorDetails(error),
-            stack: error instanceof Error ? error.stack : undefined,
-          });
-          return [];
-        }
-      })
-      .filter((aiModel) => Boolean(aiModel.title || aiModel.description));
-
-    return { datasets, aiModels };
+    return { datasets };
   }
 
   async harvestFromUrl(
@@ -200,8 +148,7 @@ export class DcatHarvesterService {
         text,
         url,
         detectRdfContentType(url, contentType),
-        collectors,
-        options.includeAiModels
+        collectors
       );
     } catch (error) {
       throw wrapError(
@@ -214,8 +161,7 @@ export class DcatHarvesterService {
   async harvestFromFilePath(
     filePath: string,
     collectors?: HarvestCollectors,
-    contentType?: string,
-    includeAiModels = true
+    contentType?: string
   ): Promise<HarvestedCatalogue> {
     const { text, resolvedPath } = await this.readRdfFile(
       filePath,
@@ -227,8 +173,7 @@ export class DcatHarvesterService {
         text,
         resolvedPath,
         detectRdfContentType(resolvedPath, contentType),
-        collectors,
-        includeAiModels
+        collectors
       );
     } catch (error) {
       throw wrapError(

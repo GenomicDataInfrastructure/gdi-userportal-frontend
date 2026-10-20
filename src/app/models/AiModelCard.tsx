@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Link } from "@/i18n/navigation";
-import { formatDate } from "@/utils/formatDate";
+import AiModelDate from "./AiModelDate";
 import { faCalendarAlt, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
@@ -28,13 +28,13 @@ export default function AiModelCard({ aiModel }: Readonly<AiModelCardProps>) {
         {aiModel.createdAt && (
           <span className="flex items-center gap-1">
             <FontAwesomeIcon icon={faCalendarAlt} />
-            {t("createdOn")} {formatDate(aiModel.createdAt)}
+            {t("createdOn")} <AiModelDate value={aiModel.createdAt} />
           </span>
         )}
         {aiModel.modifiedAt && (
           <span className="flex items-center gap-1">
             <FontAwesomeIcon icon={faSyncAlt} />
-            {t("modifiedOn")} {formatDate(aiModel.modifiedAt)}
+            {t("modifiedOn")} <AiModelDate value={aiModel.modifiedAt} />
           </span>
         )}
       </div>

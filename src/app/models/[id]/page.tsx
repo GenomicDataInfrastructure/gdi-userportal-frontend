@@ -11,7 +11,9 @@ import { getTranslations } from "next-intl/server";
 import { retrieveAiModelApi } from "@/app/api/discovery";
 import { UrlParams, UrlSearchParams } from "@/app/params";
 import contentConfig from "@/config/contentConfig";
-import { formatDate } from "@/utils/formatDate";
+import type { ReactNode } from "react";
+import AiModelDate from "@/app/models/AiModelDate";
+import { getDiscoveryProvider } from "@/app/api/discovery/providers/factory";
 
 type AiModelDetailsPageProps = {
   params: Promise<UrlParams>;
@@ -22,7 +24,7 @@ export default async function Page({
   params,
   searchParams,
 }: AiModelDetailsPageProps) {
-  if (!contentConfig.enableAiModel) {
+  if (!contentConfig.enableAiModel || !getDiscoveryProvider().retrieveAiModel) {
     notFound();
   }
 
@@ -39,7 +41,7 @@ export default async function Page({
   let aiModel: Awaited<ReturnType<typeof retrieveAiModelApi>>;
 
   try {
-    aiModel = await retrieveAiModelApi(_params.id);
+    aiModel = await retrieveAiModelApi(decodeURIComponent(_params.id));
   } catch (error) {
     console.error(error);
     if (axios.isAxiosError(error)) {
@@ -71,11 +73,15 @@ export default async function Page({
           />
           <MetadataItem
             label={t("createdOn")}
-            value={aiModel.createdAt && formatDate(aiModel.createdAt)}
+            value={
+              aiModel.createdAt && <AiModelDate value={aiModel.createdAt} />
+            }
           />
           <MetadataItem
             label={t("modifiedOn")}
-            value={aiModel.modifiedAt && formatDate(aiModel.modifiedAt)}
+            value={
+              aiModel.modifiedAt && <AiModelDate value={aiModel.modifiedAt} />
+            }
           />
           <MetadataItem
             label={t("publishers")}
@@ -111,7 +117,7 @@ export default async function Page({
 function MetadataItem({
   label,
   value,
-}: Readonly<{ label: string; value?: string }>) {
+}: Readonly<{ label: string; value?: ReactNode }>) {
   if (!value) return null;
 
   return (

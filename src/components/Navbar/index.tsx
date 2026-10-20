@@ -9,6 +9,7 @@ import { getNavItems } from "@/utils/getNavItems";
 import { useTranslations } from "next-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
+import { useAiModelSupport } from "@/providers/AiModelSupportProvider";
 
 function Navbar() {
   const t = useTranslations();
@@ -18,7 +19,8 @@ function Navbar() {
     typeof window !== "undefined" ? window.scrollY : 0
   );
 
-  const navItems = getNavItems(t);
+  const supportsAiModels = useAiModelSupport();
+  const navItems = getNavItems(t, { supportsAiModels });
 
   useEffect(() => {
     const handleScroll = debounce(() => {

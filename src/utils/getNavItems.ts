@@ -16,6 +16,7 @@ import { NavItem } from "@/types/navigation";
 
 interface GetNavItemsOptions {
   includeAbout?: boolean;
+  supportsAiModels?: boolean;
 }
 
 export function getNavItems(
@@ -58,7 +59,7 @@ export function getNavItems(
     },
   ];
 
-  if (contentConfig.enableAiModel) {
+  if (contentConfig.enableAiModel && options.supportsAiModels) {
     const datasetsIndex = navItems.findIndex(
       (item) => item.href === "/datasets"
     );

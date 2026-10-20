@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-"use server";
+import "server-only";
 
 import { randomUUID } from "node:crypto";
 import { createHeaders } from "@/app/api/shared/headers";
@@ -12,16 +12,8 @@ import {
   clearLocalDiscoveryDatasets,
   upsertLocalDiscoveryDatasets,
 } from "@/app/api/discovery/local-store/factory";
+import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
 import {
-  clearLocalAiModels,
-  upsertLocalAiModels,
-} from "@/app/api/discovery/local-store/ai-model-factory";
-import {
-  LocalDiscoveryAiModel,
-  LocalDiscoveryDataset,
-} from "@/app/api/discovery/local-store/types";
-import {
-  AiModelMappingError,
   dcatHarvesterService,
   DatasetMappingError,
   HarvestCollectors,
@@ -40,7 +32,6 @@ import {
   writeHarvesterRunLog,
 } from "@/app/api/discovery/local-store/harvester-logs/factory";
 import { HarvesterRunLog } from "@/app/api/discovery/local-store/harvester-logs/types";
-import contentConfig from "@/config/contentConfig";
 
 export type HarvestLocalIndexMode = "replace" | "append";
 
@@ -108,13 +99,12 @@ export const harvestLocalIndexFromDcatUrlApi = async (
     mode,
     async (collectors) => {
       const authHeaders = await getAuthHeaders(catalogueRdfUrl);
-      const { datasets, aiModels } = await harvestCatalogue(
+      const { datasets } = await harvestCatalogue(
         () =>
           dcatHarvesterService.harvestFromUrl(
             catalogueRdfUrl,
             {
               headers: authHeaders,
-              includeAiModels: contentConfig.enableAiModel,
               ...(options.contentType
                 ? { contentType: options.contentType }
                 : {}),
@@ -129,8 +119,7 @@ export const harvestLocalIndexFromDcatUrlApi = async (
       }
 
       await indexDatasets(catalogueRdfUrl, datasets);
-      await indexAiModels(catalogueRdfUrl, aiModels, mode);
-      return { datasets, aiModels };
+      return { datasets };
     }
   );
 };
@@ -145,13 +134,12 @@ export const harvestLocalIndexFromDcatFileApi = async (
     { path: catalogueRdfFilePath },
     mode,
     async (collectors) => {
-      const { datasets, aiModels } = await harvestCatalogue(
+      const { datasets } = await harvestCatalogue(
         () =>
           dcatHarvesterService.harvestFromFilePath(
             catalogueRdfFilePath,
             collectors,
-            options.contentType,
-            contentConfig.enableAiModel
+            options.contentType
           ),
         catalogueRdfFilePath
       );
@@ -161,8 +149,7 @@ export const harvestLocalIndexFromDcatFileApi = async (
       }
 
       await indexDatasets(catalogueRdfFilePath, datasets);
-      await indexAiModels(catalogueRdfFilePath, aiModels, mode);
-      return { datasets, aiModels };
+      return { datasets };
     }
   );
 };
@@ -176,26 +163,6 @@ const harvestCatalogue = async (
   } catch (error) {
     throw wrapError(
       `Failed to harvest catalogue from ${source}: ${formatErrorDetails(error)}`,
-      error
-    );
-  }
-};
-
-const indexAiModels = async (
-  source: string,
-  aiModels: LocalDiscoveryAiModel[],
-  mode: HarvestLocalIndexMode
-): Promise<void> => {
-  if (!contentConfig.enableAiModel) return;
-
-  try {
-    if (mode === "replace") {
-      await clearLocalAiModels();
-    }
-    await upsertLocalAiModels(aiModels);
-  } catch (error) {
-    throw wrapError(
-      `Failed to index ${aiModels.length} harvested AI Models from ${source}: ${formatErrorDetails(error)}`,
       error
     );
   }
@@ -215,14 +182,14 @@ const runHarvestWithLogging = async (
 
   try {
     const catalogue = await run(collectors);
-    const { datasets, aiModels } = catalogue;
+    const { datasets } = catalogue;
 
     if (loggingEnabled) {
       await logHarvesterRun({
         startedAt,
         source,
         mode,
-        succeeded: datasets.length + aiModels.length,
+        succeeded: datasets.length,
         mappingErrors: collectors.mappingErrors,
         warnings: [
           ...collectDatasetFieldWarnings(datasets),
@@ -335,10 +302,7 @@ const logHarvesterRun = async (params: {
   } = params;
 
   const errors: HarvesterRunLog["errors"] = mappingErrors
-    .filter(
-      (issue): issue is DatasetMappingError | AiModelMappingError =>
-        issue.scope === "dataset" || issue.scope === "aiModel"
-    )
+    .filter((issue): issue is DatasetMappingError => issue.scope === "dataset")
     .map((issue) => ({
       subjectId: issue.subjectId,
       message: issue.message,

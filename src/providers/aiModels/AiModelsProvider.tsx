@@ -26,13 +26,14 @@ const AiModelsContext = createContext<AiModelsState | undefined>(undefined);
 function reducer(state: AiModelsState, action: AiModelsAction): AiModelsState {
   switch (action.type) {
     case AiModelsActionType.LOADING:
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: true, errorCode: undefined };
     case AiModelsActionType.AI_MODELS_LOADED:
       return {
         ...state,
         isLoading: false,
         aiModels: action.payload?.aiModels,
         aiModelCount: action.payload?.aiModelCount,
+        errorCode: undefined,
       };
     case AiModelsActionType.REJECTED:
       return {

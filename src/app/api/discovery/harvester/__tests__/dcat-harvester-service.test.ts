@@ -1413,7 +1413,7 @@ describe("DcatHarvesterService", () => {
 
     await expect(
       service.harvestFromFilePath("no-data-dict.rdf")
-    ).resolves.toEqual({ datasets: [], aiModels: [] });
+    ).resolves.toEqual({ datasets: [] });
 
     expect(mockReadFile).toHaveBeenCalledWith(resolvedPath, "utf8");
   });
@@ -1426,7 +1426,7 @@ describe("DcatHarvesterService", () => {
     const service = new DcatHarvesterService();
 
     await expect(service.harvestFromFilePath("catalogue.ttl")).resolves.toEqual(
-      { datasets: [], aiModels: [] }
+      { datasets: [] }
     );
   });
 
@@ -1439,7 +1439,7 @@ describe("DcatHarvesterService", () => {
 
     await expect(
       service.harvestFromFilePath("catalogue.upload", undefined, "text/turtle")
-    ).resolves.toEqual({ datasets: [], aiModels: [] });
+    ).resolves.toEqual({ datasets: [] });
   });
 
   test("harvestFromFilePath wraps file read failures", async () => {

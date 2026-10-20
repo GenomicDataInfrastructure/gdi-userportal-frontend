@@ -17,6 +17,7 @@ import AiModelsProvider, {
 import { UrlSearchParams } from "@/app/params";
 import { useLocale } from "next-intl";
 import contentConfig from "@/config/contentConfig";
+import { useAiModelSupport } from "@/providers/AiModelSupportProvider";
 
 type AiModelsPageProps = {
   searchParams: Promise<UrlSearchParams>;
@@ -42,7 +43,8 @@ function AiModelsSummary() {
 }
 
 export default function AiModelsPage({ searchParams }: AiModelsPageProps) {
-  if (!contentConfig.enableAiModel) {
+  const supportsAiModels = useAiModelSupport();
+  if (!contentConfig.enableAiModel || !supportsAiModels) {
     notFound();
   }
 

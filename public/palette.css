@@ -19,7 +19,7 @@ SPDX-License-Identifier: Apache-2.0
   --color-footer: #dae7ed;
   --color-heading-secondary: #6c757d;
   --color-card-shadow: rgba(0, 0, 0, 0.15);
-  --color-focus-ring: rgba(55, 122, 128, 0.25);
+  --color-focus-ring: #2d696f;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -38,6 +38,6 @@ SPDX-License-Identifier: Apache-2.0
     --color-footer: #dae7ed;
     --color-heading-secondary: #6c757d;
     --color-card-shadow: rgba(0, 0, 0, 0.15);
-    --color-focus-ring: rgba(55, 122, 128, 0.25);
+    --color-focus-ring: #2d696f;
   }
 }

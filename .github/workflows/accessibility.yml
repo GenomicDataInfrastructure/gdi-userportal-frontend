@@ -27,13 +27,8 @@ jobs:
             browser: firefox
           - project: mobile
             browser: chromium
-          - project: french
-            browser: chromium
-          - project: french-mobile
-            browser: chromium
     env:
       E2E_MODE: mocked
-      E2E_MULTILINGUAL: true
       MOCK_API_PORT: 4010
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

@@ -15,7 +15,8 @@ SPDX-License-Identifier: CC-BY-4.0
 
 A successful automated scan is necessary but does not establish WCAG conformance.
 Complete this protocol against the deployed release candidate with production-like
-data. Test English and French, anonymous and authenticated journeys. Record the
+data. Test every enabled locale (currently English), anonymous and authenticated
+journeys. Record the
 date, tester, build, browser, operating system, assistive technology, result,
 evidence, and defect reference for every test.
 
@@ -29,7 +30,7 @@ npm run test:a11y
 
 The suite must report no failures. It scans every application route with axe's
 WCAG 2.0, 2.1 and 2.2 A/AA tags, checks focusable names, keyboard interactions,
-validation and dynamic states, English and French pages, and 320 CSS pixel reflow.
+validation and dynamic states, English pages, and 320 CSS pixel reflow.
 CI retains the HTML report, axe JSON, traces and screenshots. Also scan the real
 identity-provider pages and notification-provider UI, which mocked tests do not
 exercise.
@@ -119,7 +120,7 @@ be reviewed, corrected, confirmed or reversed as applicable.
 
 ### Language, consistency and realistic content (3.1.1, 3.1.2, 3.2.3, 3.2.4, 3.2.6)
 
-1. Read English and French pages and foreign-language passages with a screen reader.
+1. Read every enabled locale and foreign-language passages with a screen reader.
 2. Compare navigation, help, contact mechanisms and repeated icons across routes.
 3. Repeat key workflows with long values, missing optional content, large result
    sets, special-character filenames, backend errors and an expired session.

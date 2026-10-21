@@ -16,12 +16,16 @@ const expectVisibleFocusIndicator = async (element: Locator) => {
   expect(
     await element.evaluate((node) => {
       const style = getComputedStyle(node);
-      return Math.max(
-        Number.parseFloat(style.outlineWidth),
-        Number.parseFloat(style.boxShadow === "none" ? "0" : "1")
+      const outlineAlpha = style.outlineColor.match(
+        /rgba?\([^)]*?(?:,|\s\/\s)([\d.]+)\)$/
+      )?.[1];
+      return (
+        style.outlineStyle !== "none" &&
+        Number.parseFloat(style.outlineWidth) >= 2 &&
+        (outlineAlpha === undefined || Number.parseFloat(outlineAlpha) > 0)
       );
     })
-  ).toBeGreaterThan(0);
+  ).toBe(true);
 };
 // A selection made before hydration is reset, so retry until the field renders.
 const selectGenome = async (page: Page) => {
@@ -53,9 +57,10 @@ test("tablet navigation toggle exposes its name, state and visible focus", async
 }, info) => {
   await page.setViewportSize({ width: 800, height: 900 });
   await page.goto(prefix);
-  const toggle = page.locator('button[aria-controls="tablet-navigation-menu"]');
+  const toggle = page.locator(".menu-container > button");
 
   await expect(toggle).toHaveAccessibleName("Open navigation menu");
+  await expect(toggle).not.toHaveAttribute("aria-controls");
   await toggle.focus();
   await expectVisibleFocusIndicator(toggle);
   await toggle.press("Enter");
@@ -375,7 +380,9 @@ test("application attachment removal is named, keyboard reachable and large enou
   const removeFile = page.getByRole("button", {
     name: /remove file.*synthetic-protocol\.pdf/i,
   });
-  await removeFile.focus();
+  const uploadFile = page.getByRole("button", { name: /upload file/i });
+  await uploadFile.focus();
+  await page.keyboard.press("Tab");
   await expectVisibleFocusIndicator(removeFile);
   expect(
     await removeFile.evaluate((element) => {
@@ -383,6 +390,8 @@ test("application attachment removal is named, keyboard reachable and large enou
       return Math.min(width, height);
     })
   ).toBeGreaterThanOrEqual(24);
+  await page.keyboard.press("Enter");
+  await expect(removeFile).toBeHidden();
   await scan(page, info);
 });
 

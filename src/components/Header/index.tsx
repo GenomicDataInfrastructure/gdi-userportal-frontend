@@ -88,7 +88,9 @@ function Header() {
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 aria-label={t(isMenuOpen ? "nav.closeMenu" : "nav.openMenu")}
                 aria-expanded={isMenuOpen}
-                aria-controls="tablet-navigation-menu"
+                aria-controls={
+                  isMenuOpen ? "tablet-navigation-menu" : undefined
+                }
                 className="rounded-md p-2 text-primary hover:text-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
               >
                 <FontAwesomeIcon

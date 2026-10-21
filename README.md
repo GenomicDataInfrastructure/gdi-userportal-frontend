@@ -198,17 +198,16 @@ If this is your first time running Playwright, install the browsers:
 
 ### Running accessibility tests
 
-Install Chromium once, then run the focused accessibility suite:
+Install Chromium and Firefox once, then run the focused accessibility suite:
 
 ```bash
-npx playwright install chromium
+npx playwright install chromium firefox
 npm run test:a11y
 ```
 
 The command starts the application and local mock API automatically. It scans
-all 15 unique page routes in Chromium and Firefox, at desktop and 320px mobile
-viewports, and in English and French for automatically detectable WCAG A and AA
-violations. A
+all executable page routes in Chromium and Firefox, at desktop and 320px mobile
+viewports, in English for automatically detectable WCAG A and AA violations. A
 locally signed test session covers authenticated states, so live discovery,
 identity, and access-management services are not required. Notifications use
 this portal's existing `noop` provider, covering the empty notifications page;
@@ -227,7 +226,7 @@ E2E_APP_PORT=3100 npm run test:a11y
 ```
 
 GitHub pull requests, pushes to `main`, and manual workflow runs execute the full
-matrix as five parallel jobs and retain a separate HTML report, axe JSON
+matrix as three parallel jobs and retain a separate HTML report, axe JSON
 attachments, and failure artifacts for each profile for seven days. The tests use
 a separate `.next-e2e` build directory. A route inventory check fails when a page
 is added without updating the accessibility coverage.

@@ -7,13 +7,11 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  IconDefinition,
   faSyncAlt,
   faBuilding,
   faTag,
   faFile,
   faCalendarAlt,
-  faKey,
   faLanguage,
   faIdBadge,
   faDatabase,
@@ -36,7 +34,11 @@ import { formatDate } from "@/utils/formatDate";
 import DistributionAccordion from "./DistributionAccordion";
 import DataSeriesAccordion from "./DataSeriesAccordion";
 import { Link } from "@/i18n/navigation";
-import Tooltip from "./Tooltip";
+import Tooltip from "@/components/Tooltip";
+import MetadataSection from "@/components/metadata/MetadataSection";
+import MetadataField from "@/components/metadata/MetadataField";
+import MetadataKeywords from "@/components/metadata/MetadataKeywords";
+import NotProvided from "@/components/metadata/NotProvided";
 import Chips from "@/components/Chips";
 import { useTranslations } from "next-intl";
 import {
@@ -47,47 +49,6 @@ import {
   ValueLabel,
 } from "@/app/api/discovery/open-api/schemas";
 import { extractHelpTextMap } from "@/utils/datasetHelpers";
-
-const MetadataSection = ({
-  title,
-  icon,
-  children,
-}: {
-  title: string;
-  icon: IconDefinition;
-  children: React.ReactNode;
-}) => (
-  <div className="mt-4 p-4 bg-surface rounded-lg">
-    <h2 className="text-[18px] font-semibold pb-2.5 flex items-center gap-2">
-      <FontAwesomeIcon icon={icon} className="text-primary" />
-      {title}
-    </h2>
-    {children}
-  </div>
-);
-
-const MetadataField = ({
-  label,
-  children,
-  icon,
-  tooltip,
-}: {
-  label: string;
-  children: React.ReactNode;
-  icon?: IconDefinition;
-  tooltip?: string;
-}) => (
-  <div className="flex items-center gap-2 flex-wrap relative group">
-    {icon && <FontAwesomeIcon icon={icon} className="text-primary text-xs" />}
-    <span className="font-medium shrink-0 max-w-full">{label}:</span>
-    <span>{children}</span>
-    {tooltip && <Tooltip message={tooltip} />}
-  </div>
-);
-
-const NotProvided = ({ label }: { label: string }) => (
-  <span className="text-primary">{label}</span>
-);
 
 type ExtendedRetrievedDataset = RetrievedDataset & {
   publisherType?: ValueLabel[];
@@ -562,30 +523,11 @@ const DatasetMetadata = ({
           )
         );
       })()}
-      {dataset.keywords && dataset.keywords.length > 0 && (
-        <div className="mt-4">
-          <span className="flex gap-2 items-center relative group">
-            <FontAwesomeIcon
-              icon={faKey}
-              className="align-middle text-primary"
-            />
-            <span className="align-middle">{t("keywords")}:</span>
-            <div className="flex flex-wrap gap-1">
-              {dataset.keywords.map((keyword) => (
-                <span
-                  className="bg-warning bg-opacity-50 px-4 py-1 rounded-full text-gray font-medium text-[14px] inline-block"
-                  key={keyword}
-                >
-                  {keyword}
-                </span>
-              ))}
-            </div>
-            <Tooltip
-              message={helpText?.["keywords"] ?? t("tooltips.datasetKeywords")}
-            />
-          </span>
-        </div>
-      )}
+      <MetadataKeywords
+        keywords={dataset.keywords ?? []}
+        label={t("keywords")}
+        tooltip={helpText?.["keywords"] ?? t("tooltips.datasetKeywords")}
+      />
       {relationships && relationships.length > 0 && (
         <MetadataSection title={t("datasetRelations")} icon={faLink}>
           <div className="flex flex-col gap-3 text-sm">

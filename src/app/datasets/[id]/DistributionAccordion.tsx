@@ -19,7 +19,7 @@ import {
   faCircleInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
-import Tooltip from "./Tooltip";
+import Tooltip from "@/components/Tooltip";
 import { RetrievedDistribution } from "@/app/api/discovery/open-api/schemas";
 import { useTranslations } from "next-intl";
 

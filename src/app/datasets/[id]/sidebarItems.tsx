@@ -4,9 +4,10 @@
 
 import AddToBasketButton from "@/components/AddToBasketButton";
 import { SidebarItem } from "@/components/Sidebar";
-import contentConfig from "@/config/contentConfig";
-import { faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  ContactPointsSidebarTranslations,
+  createContactPointsSidebarItem,
+} from "@/components/ContactPointsSidebarItem";
 import ExportDatasetButton from "@/app/datasets/[id]/ExportDatasetButton";
 import { RetrievedDataset } from "@/app/api/discovery/open-api/schemas";
 import {
@@ -15,15 +16,12 @@ import {
 } from "@/utils/datasetHelpers";
 import ExternalDatasetLink from "./ExternalDatasetLink";
 
-type DatasetSidebarTranslations = {
+type DatasetSidebarTranslations = ContactPointsSidebarTranslations & {
   requestDataAccess: string;
   externalRequestUnavailable: string;
   externalRequestPortal: string;
   noExternalLinkAvailable: string;
   exportMetadataIn: string;
-  contactPoints: string;
-  noContactProvided: string;
-  noEmailProvided: string;
 };
 
 function createDatasetSidebarItems(
@@ -97,46 +95,7 @@ function createDatasetSidebarItems(
         </div>
       ),
     },
-    {
-      label: t.contactPoints,
-      value: (
-        <div className="flex items-center text-[14px]">
-          <div className="flex flex-col gap-1">
-            {dataset.contacts?.length === 0 ? (
-              <>
-                <div className="flex gap-8 items-center">
-                  <FontAwesomeIcon icon={faUser} className="text-primary" />
-                  <p>{t.noContactProvided}</p>
-                </div>
-                <div className="flex gap-8 items-center">
-                  <FontAwesomeIcon icon={faEnvelope} className="text-primary" />
-                  <p>{t.noEmailProvided}</p>
-                </div>
-              </>
-            ) : (
-              dataset.contacts?.map((contact, index) => (
-                <div key={index}>
-                  <div className="flex gap-8 items-center">
-                    <FontAwesomeIcon icon={faUser} className="text-primary" />
-                    <p>{contact.name || t.noContactProvided}</p>
-                  </div>
-                  <div
-                    key={`${index}-email`}
-                    className="flex gap-8 items-center"
-                  >
-                    <FontAwesomeIcon
-                      icon={faEnvelope}
-                      className="text-primary"
-                    />
-                    <p>{contact.email || t.noEmailProvided}</p>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      ),
-    },
+    createContactPointsSidebarItem(dataset.contacts, t),
   ];
 }
 

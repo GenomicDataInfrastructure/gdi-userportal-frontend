@@ -11,7 +11,7 @@ import { useTranslations } from "next-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Disclosure } from "@headlessui/react";
 import { default as DropdownFilterContent } from "./DropdownFilterContent";
-import Tooltip from "@/app/datasets/[id]/Tooltip";
+import Tooltip from "@/components/Tooltip";
 import EntriesFilterContent from "./EntriesFilterContent";
 import FreeTextFilterContent from "./FreeTextFilterContent";
 import DateTimeFilterContent from "./DateTimeFilterContent";

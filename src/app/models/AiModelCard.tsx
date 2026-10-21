@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { Link } from "@/i18n/navigation";
-import AiModelDate from "./AiModelDate";
-import { faCalendarAlt, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useTranslations } from "next-intl";
+import Card from "@/components/Card";
+import { createAiModelCardItems } from "./aiModelCardItems";
 import { DiscoverySearchedAiModel } from "@/app/api/discovery/providers/types";
+import { useTranslations } from "next-intl";
+import { useWindowSize } from "@/hooks";
+import { truncateDescription } from "@/utils/textProcessing";
 
 type AiModelCardProps = {
   aiModel: DiscoverySearchedAiModel;
@@ -15,29 +15,18 @@ type AiModelCardProps = {
 
 export default function AiModelCard({ aiModel }: Readonly<AiModelCardProps>) {
   const t = useTranslations("datasets.detail");
+  const screenSize = useWindowSize();
+  const description = aiModel.description
+    ? truncateDescription(aiModel.description, screenSize)
+    : t("noDescriptionAvailable");
+
   return (
-    <Link
-      href={`/models/${encodeURIComponent(aiModel.id)}`}
-      className="block w-full p-4"
-    >
-      <h3 className="font-semibold text-lg">{aiModel.title}</h3>
-      {aiModel.description && (
-        <p className="text-sm text-gray-600 mt-1">{aiModel.description}</p>
-      )}
-      <div className="flex gap-4 mt-2 text-xs text-gray-500">
-        {aiModel.createdAt && (
-          <span className="flex items-center gap-1">
-            <FontAwesomeIcon icon={faCalendarAlt} />
-            {t("createdOn")} <AiModelDate value={aiModel.createdAt} />
-          </span>
-        )}
-        {aiModel.modifiedAt && (
-          <span className="flex items-center gap-1">
-            <FontAwesomeIcon icon={faSyncAlt} />
-            {t("modifiedOn")} <AiModelDate value={aiModel.modifiedAt} />
-          </span>
-        )}
-      </div>
-    </Link>
+    <Card
+      url={`/models/${encodeURIComponent(aiModel.id)}`}
+      title={aiModel.title}
+      description={description}
+      cardItems={createAiModelCardItems(aiModel)}
+      keywords={aiModel.keywords}
+    />
   );
 }

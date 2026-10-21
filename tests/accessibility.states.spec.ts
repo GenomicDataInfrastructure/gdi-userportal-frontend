@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2026 PNED G.I.E.
 // SPDX-License-Identifier: Apache-2.0
-import type { Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 import {
   test,
   expect,
@@ -11,6 +11,18 @@ import {
 } from "./fixtures/accessibility";
 
 const prefix = "/en";
+const expectVisibleFocusIndicator = async (element: Locator) => {
+  await expect(element).toBeFocused();
+  expect(
+    await element.evaluate((node) => {
+      const style = getComputedStyle(node);
+      return Math.max(
+        Number.parseFloat(style.outlineWidth),
+        Number.parseFloat(style.boxShadow === "none" ? "0" : "1")
+      );
+    })
+  ).toBeGreaterThan(0);
+};
 // A selection made before hydration is reset, so retry until the field renders.
 const selectGenome = async (page: Page) => {
   await expect(async () => {
@@ -34,6 +46,58 @@ test("services expand and collapse with the keyboard", async ({
   await scan(page, info);
   await page.keyboard.press("Space");
   await expect(card).toHaveAttribute("aria-expanded", "false");
+});
+
+test("tablet navigation toggle exposes its name, state and visible focus", async ({
+  page,
+}, info) => {
+  await page.setViewportSize({ width: 800, height: 900 });
+  await page.goto(prefix);
+  const toggle = page.locator('button[aria-controls="tablet-navigation-menu"]');
+
+  await expect(toggle).toHaveAccessibleName("Open navigation menu");
+  await toggle.focus();
+  await expectVisibleFocusIndicator(toggle);
+  await toggle.press("Enter");
+
+  await expect(toggle).toHaveAccessibleName("Close navigation menu");
+  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  await expect(toggle).toHaveAttribute(
+    "aria-controls",
+    "tablet-navigation-menu"
+  );
+  await expect(
+    page.getByRole("navigation", { name: "Main navigation" })
+  ).toBeVisible();
+  await scan(page, info);
+});
+
+test("request tabs expose relationships and support arrow keys", async ({
+  page,
+}, info) => {
+  await authenticate(page);
+  await page.goto(`${prefix}/requests?tab=applications`);
+
+  const applications = page.getByRole("tab", { name: "Applications" });
+  const entitlements = page.getByRole("tab", { name: "Entitlements" });
+  const panel = page.getByRole("tabpanel");
+  await expect(applications).toHaveAttribute("aria-selected", "true");
+  await expect(applications).toHaveAttribute(
+    "aria-controls",
+    "requests-tabpanel"
+  );
+  await expect(panel).toHaveAttribute(
+    "aria-labelledby",
+    "requests-applications-tab"
+  );
+
+  await applications.focus();
+  await applications.press("ArrowRight");
+  await expect(page).toHaveURL(/tab=entitlements/);
+  await expect(entitlements).toHaveAttribute("aria-selected", "true");
+  await expect(entitlements).toBeFocused();
+  await expectVisibleFocusIndicator(entitlements);
+  await scan(page, info);
 });
 
 test("dataset accordion supports keyboard navigation and expanded scanning", async ({
@@ -113,6 +177,17 @@ test("dataset filters are labelled and keyboard operable", async ({
   await expect(
     page.getByRole("heading", { name: /active filters/i })
   ).toBeVisible();
+  const removeFilter = page.getByRole("button", {
+    name: /remove filter.*records count/i,
+  });
+  await expect(removeFilter).toHaveAccessibleName(/records count/i);
+  expect(
+    await removeFilter.evaluate((element) => {
+      const { width, height } = element.getBoundingClientRect();
+      return Math.min(width, height);
+    })
+  ).toBeGreaterThanOrEqual(24);
+  await scan(page, info);
 });
 
 for (const route of ["themes", "publishers"])
@@ -277,13 +352,37 @@ test("application participant form and terms are accessible", async ({
   await authenticate(page);
   await page.goto(`${prefix}/applications/89`);
   await page.getByRole("button", { name: /add participant/i }).click();
-  await expect(page.getByRole("textbox", { name: /^name$/i })).toBeVisible();
+  const participantName = page.getByRole("textbox", { name: /^name$/i });
+  const participantEmail = page.getByRole("textbox", { name: /^email$/i });
+  await expect(participantName).toHaveAttribute("autocomplete", "name");
+  await expect(participantEmail).toHaveAttribute("type", "email");
+  await expect(participantEmail).toHaveAttribute("autocomplete", "email");
   await scan(page, info);
   await page.getByRole("button", { name: /^cancel$/i }).click();
   await page.getByRole("button", { name: /accept all/i }).click();
   await expect(
     page.getByText(/^accepted$/i).filter({ visible: true })
   ).toBeVisible();
+  await scan(page, info);
+});
+
+test("application attachment removal is named, keyboard reachable and large enough", async ({
+  page,
+}, info) => {
+  await authenticate(page);
+  await scenario(page, "application-attachment");
+  await page.goto(`${prefix}/applications/89`);
+  const removeFile = page.getByRole("button", {
+    name: /remove file.*synthetic-protocol\.pdf/i,
+  });
+  await removeFile.focus();
+  await expectVisibleFocusIndicator(removeFile);
+  expect(
+    await removeFile.evaluate((element) => {
+      const { width, height } = element.getBoundingClientRect();
+      return Math.min(width, height);
+    })
+  ).toBeGreaterThanOrEqual(24);
   await scan(page, info);
 });
 
@@ -443,6 +542,18 @@ for (const succeeds of [true, false]) {
     await page.keyboard.press("Enter");
     const dialog = page.getByRole("dialog");
     await expect(dialog.getByLabel(/first name/i)).toBeFocused();
+    await expect(dialog.getByLabel(/first name/i)).toHaveAttribute(
+      "autocomplete",
+      "given-name"
+    );
+    await expect(dialog.getByLabel(/last name/i)).toHaveAttribute(
+      "autocomplete",
+      "family-name"
+    );
+    await expect(dialog.getByLabel(/^email/i)).toHaveAttribute(
+      "autocomplete",
+      "email"
+    );
     await expect(dialog.getByRole("combobox")).toBeEnabled();
     await scan(page, info);
     await dialog.getByLabel(/first name/i).fill("Test");

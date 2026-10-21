@@ -7,9 +7,25 @@
     "en": "Genomic Data Infrastructure User Portal",
     "fr": "Portail utilisateur de l'infrastructure de données génomiques"
   },
+  "accessibility.skipToMainContent": {
+    "en": "Skip to main content",
+    "fr": "Aller au contenu principal"
+  },
   "nav.home": {
     "en": "Home",
     "fr": "Accueil"
+  },
+  "nav.main": {
+    "en": "Main navigation",
+    "fr": "Navigation principale"
+  },
+  "nav.openMenu": {
+    "en": "Open navigation menu",
+    "fr": "Ouvrir le menu de navigation"
+  },
+  "nav.closeMenu": {
+    "en": "Close navigation menu",
+    "fr": "Fermer le menu de navigation"
   },
   "nav.datasets": {
     "en": "Datasets",
@@ -1960,6 +1976,10 @@
   "application.fields.removeRow": {
     "en": "Remove row {number}",
     "fr": "Supprimer la ligne {number}"
+  },
+  "application.fields.removeFile": {
+    "en": "Remove file",
+    "fr": "Supprimer le fichier"
   },
   "markdown.scrollableTable": {
     "en": "Scrollable table",

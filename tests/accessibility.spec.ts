@@ -146,6 +146,21 @@ test("every executable route has an accessibility scan", () => {
       .sort()
   ).toEqual(executablePages.map(({ route }) => route).sort());
 });
+test("skip link bypasses repeated content", async ({ page }, info) => {
+  await page.goto(url("/", info));
+
+  await page.keyboard.press("Tab");
+  const skipLink = page.getByRole("link", {
+    name: message("accessibility.skipToMainContent", info),
+    exact: true,
+  });
+  await expect(skipLink).toBeVisible();
+  await expect(skipLink).toBeFocused();
+
+  await skipLink.press("Enter");
+  await expect(page).toHaveURL(/#main-content$/);
+  await expect(page.locator("main#main-content")).toBeFocused();
+});
 for (const entry of pages.filter(({ scan }) => scan !== false)) {
   test(`${entry.route} page`, async ({ page }, info) => {
     if (entry.auth) await authenticate(page);

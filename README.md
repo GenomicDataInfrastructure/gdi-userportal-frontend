@@ -206,8 +206,9 @@ npm run test:a11y
 ```
 
 The command starts the application and local mock API automatically. It scans
-all 15 unique page routes (see [the coverage audit](documentation/accessibility-audit.md))
-in Chromium for automatically detectable WCAG A and AA violations. A
+all 15 unique page routes in Chromium and Firefox, at desktop and 320px mobile
+viewports, and in English and French for automatically detectable WCAG A and AA
+violations. A
 locally signed test session covers authenticated states, so live discovery,
 identity, and access-management services are not required. Notifications use
 this portal's existing `noop` provider, covering the empty notifications page;
@@ -215,8 +216,9 @@ notification delivery and the enabled notification bell require provider-specifi
 coverage. The HTML report, including axe JSON results, is written to
 `playwright-report/`.
 
-The suite also scans the mobile home page and checks keyboard operation of the
-dataset-series accordion and account menu, including focus return on dismissal.
+Interactive-state tests cover keyboard operation, validation, error and loading
+states, dialogs, menus, accordions, and focus restoration in Chromium, Firefox,
+and at the mobile viewport.
 
 If another local project uses port 3000, choose another application port:
 
@@ -224,12 +226,15 @@ If another local project uses port 3000, choose another application port:
 E2E_APP_PORT=3100 npm run test:a11y
 ```
 
-GitHub pull requests, pushes to `main`, and manual workflow runs execute the same
-suite and retain HTML reports, axe JSON attachments, and failure artifacts for seven
-days. The tests use a separate `.next-e2e` build directory. A route inventory check
-fails when a page is added without updating the accessibility coverage.
+GitHub pull requests, pushes to `main`, and manual workflow runs execute the full
+matrix as five parallel jobs and retain a separate HTML report, axe JSON
+attachments, and failure artifacts for each profile for seven days. The tests use
+a separate `.next-e2e` build directory. A route inventory check fails when a page
+is added without updating the accessibility coverage.
 Automated checks cover only part of WCAG. A passing result does not establish
 full WCAG compliance; manual keyboard, focus, and visual review remains necessary.
+Follow the [WCAG 2.2 AA manual accessibility test protocol](documentation/docs/developer-guide/5-test-your-changes/5-accessibility-compliance.md)
+for release evidence and sign-off.
 
 ## Further help
 

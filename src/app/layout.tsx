@@ -20,7 +20,7 @@ import "./globals.css";
 config.autoAddCss = false;
 import contentConfig from "@/config/contentConfig";
 import { FilterProvider } from "@/providers/filters/FilterProvider";
-import { getMessages } from "@/i18n/messages";
+import { getFlatMessages, getMessages } from "@/i18n/messages";
 import { getDiscoveryProvider } from "@/app/api/discovery/providers/factory";
 import { AiModelSupportProvider } from "@/providers/AiModelSupportProvider";
 
@@ -40,6 +40,7 @@ export default async function RootLayout({
       ? headerLocale
       : routing.defaultLocale;
   const messages = getMessages(locale);
+  const flatMessages = getFlatMessages(locale);
   const provider = getDiscoveryProvider();
   const supportsAiModels = Boolean(
     provider.searchAiModels && provider.retrieveAiModel
@@ -70,6 +71,12 @@ export default async function RootLayout({
         <ScrollToTop />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AiModelSupportProvider value={supportsAiModels}>
+            <a
+              href="#main-content"
+              className="sr-only z-50 rounded-md bg-white px-4 py-3 text-primary shadow-lg focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:outline-2 focus:outline-offset-2 focus:outline-primary"
+            >
+              {String(flatMessages["accessibility.skipToMainContent"])}
+            </a>
             <AlertProvider>
               <SessionProviderWrapper>
                 <DatasetBasketProvider>
@@ -79,7 +86,9 @@ export default async function RootLayout({
                         <Header />
                       </div>
                       <FilterProvider>
-                        <div>{children}</div>
+                        <main id="main-content" tabIndex={-1}>
+                          {children}
+                        </main>
                       </FilterProvider>
                       <Navbar />
                       <Footer />

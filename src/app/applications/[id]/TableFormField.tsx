@@ -120,7 +120,7 @@ function TableFormField({
                     className={`w-full p-2 border-2 rounded-md ${
                       isDisabled
                         ? "border-slate-200 cursor-not-allowed bg-slate-50 opacity-50"
-                        : "border-primary focus:outline-hidden focus:ring-primary"
+                        : "border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
                     }`}
                   />
                 </td>

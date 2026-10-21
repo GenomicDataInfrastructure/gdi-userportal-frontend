@@ -7,10 +7,10 @@ sidebar_position: 4
 # Log in with LS-AAI
 
 While you can browse datasets without logging in, you need to log in to access enhanced features and request access to datasets. By logging in, you can:
-   - **Submit applications** to request access to datasets.
-   - **Enhance your search** with additional filters and more comprehensive search results.
-   - **See more dataset information** including `record counts` and other metadata to help assess if datasets meet your research needs.
 
+- **Submit applications** to request access to datasets.
+- **Enhance your search** with additional filters and more comprehensive search results.
+- **See more dataset information** including `record counts` and other metadata to help assess if datasets meet your research needs.
 
 **To log in to the GDI Portal:**
 

@@ -16,7 +16,7 @@ Learn more about [Genomic Data Infrastructure (GDI)](about-gdi.md) and its found
 
 ## What would you like to do?
 
-If you're new to GDI User Portal, start with learning the **key concepts** or **get started** with your account. 
+If you're new to GDI User Portal, start with learning the **key concepts** or **get started** with your account.
 
 import Link from '@docusaurus/Link';
 import styles from '@site/src/pages/index.module.css';

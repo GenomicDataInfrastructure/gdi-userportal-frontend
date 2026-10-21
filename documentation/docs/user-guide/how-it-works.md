@@ -3,6 +3,7 @@ slug: /how-it-works
 sidebar_label: "How it works"
 sidebar_position: 2
 ---
+
 # How the Data Portal works
 
 This page explains the process of finding genomic datasets and getting access to them.
@@ -31,11 +32,10 @@ flowchart LR
 
 :::note External datasets
 
-This process does not apply to datasets labelled as `External datasets`. 
+This process does not apply to datasets labelled as `External datasets`.
 Some datasets in the portal are maintained by organisations outside of GDI and are labelled as `External datasets`. To access them, follow the links to their external websites.
 
 :::
-
 
 ## Access genomic datasets in three steps
 
@@ -52,5 +52,3 @@ Follow these steps to discover, request, and access genomic datasets.
    All data are protected by governance frameworks and data access policies to ensure ethical and legal use. Remember to **use data responsibly** and according to the terms and agreements you signed during the application process.
 
    :::
-
-

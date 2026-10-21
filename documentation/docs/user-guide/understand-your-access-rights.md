@@ -27,7 +27,7 @@ GA4GH, the Global Alliance for Genomics and Health, develops standards for respo
 
 ## Why log in with LS-AAI?
 
-You must log in through LS-AAI so that the GDI Portal can retrieve your GA4GH Passport and associated visas, which are necessary for accessing datasets. 
+You must log in through LS-AAI so that the GDI Portal can retrieve your GA4GH Passport and associated visas, which are necessary for accessing datasets.
 
 LS-AAI, the Login Service for Academic and Administrative Institutions, lets you log in to the GDI Portal with an existing institutional account such as Google, LinkedIn, university, or other organisational accounts. This means you do not need to create a new account specifically for the GDI Portal.
 

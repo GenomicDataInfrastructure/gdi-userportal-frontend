@@ -21,6 +21,8 @@ config.autoAddCss = false;
 import contentConfig from "@/config/contentConfig";
 import { FilterProvider } from "@/providers/filters/FilterProvider";
 import { getMessages } from "@/i18n/messages";
+import { getDiscoveryProvider } from "@/app/api/discovery/providers/factory";
+import { AiModelSupportProvider } from "@/providers/AiModelSupportProvider";
 
 function isValidLocale(locale: string): locale is AppLocale {
   return (routing.locales as readonly string[]).includes(locale);
@@ -38,6 +40,10 @@ export default async function RootLayout({
       ? headerLocale
       : routing.defaultLocale;
   const messages = getMessages(locale);
+  const provider = getDiscoveryProvider();
+  const supportsAiModels = Boolean(
+    provider.searchAiModels && provider.retrieveAiModel
+  );
 
   return (
     <html lang={locale}>
@@ -63,24 +69,26 @@ export default async function RootLayout({
       <body>
         <ScrollToTop />
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <AlertProvider>
-            <SessionProviderWrapper>
-              <DatasetBasketProvider>
-                <div className="grid h-screen w-full grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr_auto]">
-                  <NotificationsProvider>
-                    <div>
-                      <Header />
-                    </div>
-                    <FilterProvider>
-                      <div>{children}</div>
-                    </FilterProvider>
-                    <Navbar />
-                    <Footer />
-                  </NotificationsProvider>
-                </div>
-              </DatasetBasketProvider>
-            </SessionProviderWrapper>
-          </AlertProvider>
+          <AiModelSupportProvider value={supportsAiModels}>
+            <AlertProvider>
+              <SessionProviderWrapper>
+                <DatasetBasketProvider>
+                  <div className="grid h-screen w-full grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr_auto]">
+                    <NotificationsProvider>
+                      <div>
+                        <Header />
+                      </div>
+                      <FilterProvider>
+                        <div>{children}</div>
+                      </FilterProvider>
+                      <Navbar />
+                      <Footer />
+                    </NotificationsProvider>
+                  </div>
+                </DatasetBasketProvider>
+              </SessionProviderWrapper>
+            </AlertProvider>
+          </AiModelSupportProvider>
         </NextIntlClientProvider>
       </body>
     </html>

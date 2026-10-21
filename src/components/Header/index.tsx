@@ -22,6 +22,7 @@ import Avatar from "./Avatar";
 import NotificationBell from "./Notifications/NotificationBell";
 import RequestIcon from "./RequestIcon";
 import { getNavItems } from "@/utils/getNavItems";
+import { useAiModelSupport } from "@/providers/AiModelSupportProvider";
 
 function Header() {
   const t = useTranslations();
@@ -31,7 +32,8 @@ function Header() {
   const { basket, isLoading } = useDatasetBasket();
   const isExternalHeaderLogo = contentConfig.headerLogoUrl.startsWith("http");
 
-  const navItems = getNavItems(t, { includeAbout: true });
+  const supportsAiModels = useAiModelSupport();
+  const navItems = getNavItems(t, { includeAbout: true, supportsAiModels });
 
   const closeMenu = () => {
     setIsMenuOpen(false);

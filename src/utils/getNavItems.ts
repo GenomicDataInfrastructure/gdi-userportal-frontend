@@ -7,6 +7,7 @@ import {
   faHome,
   faInfoCircle,
   faLineChart,
+  faRobot,
   faServer,
   faWandSparkles,
 } from "@fortawesome/free-solid-svg-icons";
@@ -15,6 +16,7 @@ import { NavItem } from "@/types/navigation";
 
 interface GetNavItemsOptions {
   includeAbout?: boolean;
+  supportsAiModels?: boolean;
 }
 
 export function getNavItems(
@@ -56,6 +58,18 @@ export function getNavItems(
       isActive: (activePath: string) => activePath === "/publishers",
     },
   ];
+
+  if (contentConfig.enableAiModel && options.supportsAiModels) {
+    const datasetsIndex = navItems.findIndex(
+      (item) => item.href === "/datasets"
+    );
+    navItems.splice(datasetsIndex + 1, 0, {
+      icon: faRobot,
+      label: t("nav.aiModels"),
+      href: "/models",
+      isActive: (activePath: string) => activePath.includes("/models"),
+    });
+  }
 
   if (includeAbout) {
     navItems.push({

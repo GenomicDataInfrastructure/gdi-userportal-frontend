@@ -33,21 +33,23 @@ const AiModelMetadata = ({
 }) => {
   const t = useTranslations("datasets.detail");
   const notProvidedLabel = t("notProvided");
-  // formatDate() resolves the viewer's timezone, which only exists
-  // client-side — wait for mount before calling it, same guard
-  // DatasetMetadata uses.
+  // formatDate() depends on the viewer's timezone, so only dates wait for
+  // mount; the rest of the metadata remains server-rendered.
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  if (!isMounted) return null;
+  const hasDates =
+    isMounted && Boolean(aiModel.createdAt || aiModel.modifiedAt);
+  const hasPublishers = aiModel.publishers.length > 0;
+  const hasAccessRights = Boolean(aiModel.accessRights);
 
   return (
     <>
       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 font-normal text-gray">
-        {aiModel.createdAt && (
+        {isMounted && aiModel.createdAt && (
           <span className="flex gap-2 items-center relative group">
             <FontAwesomeIcon
               icon={faCalendarAlt}
@@ -59,10 +61,10 @@ const AiModelMetadata = ({
             <Tooltip message={t("tooltips.datasetCreated")} />
           </span>
         )}
-        {aiModel.createdAt && aiModel.modifiedAt && (
+        {isMounted && aiModel.createdAt && aiModel.modifiedAt && (
           <div className="text-lightaccent hidden sm:inline-block">|</div>
         )}
-        {aiModel.modifiedAt && (
+        {isMounted && aiModel.modifiedAt && (
           <span className="flex gap-2 items-center relative group">
             <FontAwesomeIcon
               icon={faSyncAlt}
@@ -74,9 +76,11 @@ const AiModelMetadata = ({
             <Tooltip message={t("tooltips.datasetUpdated")} />
           </span>
         )}
-        {aiModel.publishers && aiModel.publishers.length > 0 && (
+        {hasPublishers && (
           <>
-            <div className="text-lightaccent hidden sm:inline-block">|</div>
+            {hasDates && (
+              <div className="text-lightaccent hidden sm:inline-block">|</div>
+            )}
             <span className="flex gap-2 items-center relative group">
               <FontAwesomeIcon
                 icon={faBuilding}
@@ -101,7 +105,9 @@ const AiModelMetadata = ({
         )}
         {aiModel.accessRights && (
           <>
-            <div className="text-lightaccent hidden sm:inline-block">|</div>
+            {hasDates || hasPublishers ? (
+              <div className="text-lightaccent hidden sm:inline-block">|</div>
+            ) : null}
             <span className="flex gap-2 items-center relative group">
               <FontAwesomeIcon
                 icon={faTag}
@@ -117,7 +123,9 @@ const AiModelMetadata = ({
         )}
         {aiModel.identifier && (
           <>
-            <div className="text-lightaccent hidden sm:inline-block">|</div>
+            {hasDates || hasPublishers || hasAccessRights ? (
+              <div className="text-lightaccent hidden sm:inline-block">|</div>
+            ) : null}
             <span className="flex gap-2 items-center relative group">
               <FontAwesomeIcon
                 icon={faIdBadge}

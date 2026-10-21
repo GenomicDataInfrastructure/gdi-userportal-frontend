@@ -55,6 +55,13 @@ export default async function Page({
       );
     }
 
+    if (
+      error instanceof Error &&
+      error.message.startsWith("AI Model not found in local index:")
+    ) {
+      return <ErrorComponent statusCode={404} />;
+    }
+
     return <ErrorComponent statusCode={500} />;
   }
 

@@ -25,7 +25,10 @@ export default function AiModelCard({ aiModel }: Readonly<AiModelCardProps>) {
       url={`/models/${encodeURIComponent(aiModel.id)}`}
       title={aiModel.title}
       description={description}
-      cardItems={createAiModelCardItems(aiModel)}
+      cardItems={createAiModelCardItems(aiModel, {
+        createdOn: t("createdOn"),
+        modifiedOn: t("modifiedOn"),
+      })}
       keywords={aiModel.keywords}
     />
   );

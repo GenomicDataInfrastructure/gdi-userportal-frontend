@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { CardItem } from "@/components/Card";
-import { formatDate } from "@/utils/formatDate";
+import { formatDateUtc } from "@/utils/formatDate";
 import {
   faCalendarAlt,
   faSyncAlt,
@@ -16,17 +16,28 @@ type CardItemMetadata = {
   publishers?: { name?: string }[];
 };
 
-export function createDateCardItems({
-  createdAt,
-  modifiedAt,
-}: CardItemMetadata): CardItem[] {
+export type DateCardItemLabels = {
+  createdOn: string;
+  modifiedOn: string;
+};
+
+export function createDateCardItems(
+  { createdAt, modifiedAt }: CardItemMetadata,
+  labels: DateCardItemLabels = {
+    createdOn: "Created on",
+    modifiedOn: "Modified on",
+  }
+): CardItem[] {
   return [
     {
-      text: (createdAt && `Created on ${formatDate(createdAt)}`) || "",
+      text:
+        (createdAt && `${labels.createdOn} ${formatDateUtc(createdAt)}`) || "",
       icon: faCalendarAlt,
     },
     {
-      text: (modifiedAt && `Modified on ${formatDate(modifiedAt)}`) || "",
+      text:
+        (modifiedAt && `${labels.modifiedOn} ${formatDateUtc(modifiedAt)}`) ||
+        "",
       icon: faSyncAlt,
     },
   ];

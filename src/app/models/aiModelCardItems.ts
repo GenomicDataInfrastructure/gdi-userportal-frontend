@@ -6,11 +6,16 @@ import { CardItem } from "@/components/Card";
 import {
   createDateCardItems,
   createPublisherCardItem,
+  DateCardItemLabels,
 } from "@/components/cardItems";
 import { DiscoverySearchedAiModel } from "@/app/api/discovery/providers/types";
 
 export function createAiModelCardItems(
-  aiModel: DiscoverySearchedAiModel
+  aiModel: DiscoverySearchedAiModel,
+  dateLabels: DateCardItemLabels
 ): CardItem[] {
-  return [...createDateCardItems(aiModel), createPublisherCardItem(aiModel)];
+  return [
+    ...createDateCardItems(aiModel, dateLabels),
+    createPublisherCardItem(aiModel),
+  ];
 }

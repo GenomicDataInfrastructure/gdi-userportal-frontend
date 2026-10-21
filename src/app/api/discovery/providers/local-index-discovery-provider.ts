@@ -4,7 +4,6 @@
 
 import { getLocalDiscoveryStore } from "@/app/api/discovery/local-store/factory";
 import { getLocalAiModelStore } from "@/app/api/discovery/local-store/ai-model-factory";
-import { DiscoveryNotFoundError } from "@/app/api/discovery/errors";
 import {
   LocalDiscoveryAiModel,
   LocalDiscoveryDataset,
@@ -289,7 +288,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
   async retrieveAiModel(id: string): Promise<DiscoveryRetrievedAiModel> {
     const aiModel = await this.aiModelStore.retrieveAiModel(id);
     if (!aiModel) {
-      throw new DiscoveryNotFoundError("AI Model", id);
+      throw new Error(`AI Model not found in local index: ${id}`);
     }
 
     return {

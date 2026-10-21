@@ -32,8 +32,7 @@ flowchart LR
 
 :::note External datasets
 
-This process does not apply to datasets labelled as `External datasets`.
-Some datasets in the portal are maintained by organisations outside of GDI and are labelled as `External datasets`. To access them, follow the links to their external websites.
+This process does not apply to datasets labelled as `Externally Governed`. These datasets are maintained by organisations outside of GDI. To access them, follow the links to their external websites. 
 
 :::
 

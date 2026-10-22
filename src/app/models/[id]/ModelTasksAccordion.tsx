@@ -68,9 +68,6 @@ export default function ModelTasksAccordion({
   modelTasks,
 }: Readonly<ModelTasksAccordionProps>) {
   const t = useTranslations("aiModels");
-  // Each modality expands/collapses independently — unlike the single-open
-  // Distribution/DataSeries accordions, several modalities can stay open
-  // at once here.
   const [openValues, setOpenValues] = useState<Set<string>>(new Set());
   const [fullyOpenValues, setFullyOpenValues] = useState<Set<string>>(
     new Set()

@@ -287,14 +287,11 @@ export interface DiscoverySearchedAiModel {
   documentation?: string[];
   publishers: DiscoveryAgent[];
   creators: DiscoveryAgent[];
-  // AI-Model-only field confirmed against MDC's form. It is REST-only in MDC
-  // today, so it is populated by the local seed script until RDF carries it.
   libraries?: string[];
 }
 
 export interface DiscoveryRetrievedAiModel extends DiscoverySearchedAiModel {
   contacts?: DiscoveryContactPoint[];
-  // The taxonomy is only needed on the detail page, not in search results.
   modelTasks?: DiscoveryModelTask[];
 }
 

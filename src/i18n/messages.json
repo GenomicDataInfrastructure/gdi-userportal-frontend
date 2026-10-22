@@ -306,8 +306,8 @@
     "fr": "Modalités, tâches et sous-tâches que ce modèle d'IA exécute."
   },
   "aiModels.tasks": {
-    "en": "Tasks",
-    "fr": "Tâches"
+    "en": "Task",
+    "fr": "Tâche"
   },
   "aiModels.subtasks": {
     "en": "Subtasks",

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { DiscoverySearchedAiModel } from "@/app/api/discovery/providers/types";
+import { faBook } from "@fortawesome/free-solid-svg-icons";
 import { createAiModelCardItems } from "../aiModelCardItems";
 
 describe("createAiModelCardItems", () => {
@@ -63,12 +64,12 @@ describe("createAiModelCardItems", () => {
       creators: [],
     } as DiscoverySearchedAiModel;
 
-    expect(
-      createAiModelCardItems(
-        aiModel,
-        { createdOn: "Created on", modifiedOn: "Modified on" },
-        "Libraries"
-      )
-    ).toEqual(expect.arrayContaining([expect.objectContaining({ text: "" })]));
+    const cardItems = createAiModelCardItems(
+      aiModel,
+      { createdOn: "Created on", modifiedOn: "Modified on" },
+      "Libraries"
+    );
+
+    expect(cardItems.find((item) => item.icon === faBook)?.text).toBe("");
   });
 });

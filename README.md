@@ -192,6 +192,11 @@ Playwright E2E tests support two modes:
 - Real backend mode (release pipeline): uses `.env.e2e.test` and hits DEV services.
   - `E2E_MODE=real npx playwright test`
 
+Mock visa scenarios are isolated by each test session's access token. Use
+`setVisaScenario(page, scenario)` from `tests/fixtures/visaScenario.ts` with the
+shared authentication helpers; the mock broker preserves that token through the
+userinfo request so concurrent workers cannot overwrite another session's visas.
+
 If this is your first time running Playwright, install the browsers:
 
 `npx playwright install --with-deps`

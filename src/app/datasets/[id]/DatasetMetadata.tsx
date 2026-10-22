@@ -57,6 +57,7 @@ type ExtendedRetrievedDataset = RetrievedDataset & {
     | RetrievedDataset["temporalCoverage"]
     | { start?: string; end?: string };
   analytics?: RetrievedDataset["analytics"] | string[];
+  custodians?: RetrievedDataset["hdab"];
   dcatTypes?: ValueLabel[];
 };
 
@@ -888,6 +889,7 @@ const DatasetMetadata = ({
         (dataset.publishers && dataset.publishers.length > 0) ||
         (dataset.publisherType && dataset.publisherType.length > 0) ||
         (dataset.creators && dataset.creators.length > 0) ||
+        (dataset.custodians && dataset.custodians.length > 0) ||
         (hasHealthTheme &&
           ((dataset.hdab && dataset.hdab.length > 0) ||
             dataset.trustedDataHolder !== undefined))) && (
@@ -987,6 +989,33 @@ const DatasetMetadata = ({
               )}
               <Tooltip
                 message={helpText?.["creators"] ?? t("tooltips.creators")}
+              />
+            </div>
+            <div className="flex items-center gap-2 flex-wrap relative group">
+              <FontAwesomeIcon
+                icon={faBuilding}
+                className="text-primary text-xs"
+              />
+              <span className="font-medium shrink-0 max-w-full">
+                {t("custodian")}:
+              </span>
+              {dataset.custodians && dataset.custodians.length > 0 ? (
+                dataset.custodians.map((agent, index) => (
+                  <span key={index} className="flex items-center gap-1">
+                    <span>
+                      {agent.name}
+                      {agent.email && (
+                        <span className="ml-1 text-info">({agent.email})</span>
+                      )}
+                    </span>
+                    {index < dataset.custodians!.length - 1 && ","}
+                  </span>
+                ))
+              ) : (
+                <NotProvided label={notProvidedLabel} />
+              )}
+              <Tooltip
+                message={helpText?.["custodian"] ?? t("tooltips.custodian")}
               />
             </div>
             {hasHealthTheme && (

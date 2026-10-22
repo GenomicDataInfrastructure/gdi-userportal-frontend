@@ -26,15 +26,19 @@ export interface LocalAgent {
   }>;
 }
 
+export type LocalDistributionRole = "distribution" | "analytics";
+
 export interface LocalDiscoveryDistribution {
   id: string;
   title: string;
   description?: string;
+  roles?: LocalDistributionRole[];
   format?: { value: string; label: string };
   mediaType?: { value: string; label: string };
   license?: { value: string; label: string };
   rights?: string;
   status?: { value: string; label: string };
+  availability?: { value: string; label: string };
   conformsTo?: Array<{ value: string; label: string }>;
   applicableLegislation?: Array<{ value: string; label: string }>;
   byteSize?: number;
@@ -104,6 +108,7 @@ export interface LocalDiscoveryDataset {
   publishers: LocalAgent[];
   hdab: LocalAgent[];
   creators: LocalAgent[];
+  custodians?: LocalAgent[];
   publisherType?: Array<{ value: string; label: string }>;
   personalData?: Array<{ value: string; label: string }>;
   purpose?: Array<{ value: string; label: string }>;

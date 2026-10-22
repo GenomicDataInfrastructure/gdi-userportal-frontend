@@ -7,6 +7,7 @@ import { getLocalAiModelStore } from "@/app/api/discovery/local-store/ai-model-f
 import {
   LocalDiscoveryAiModel,
   LocalDiscoveryDataset,
+  LocalDistributionRole,
 } from "@/app/api/discovery/local-store/types";
 import {
   getLocalDiscoveryDatasetExportMimeType,
@@ -111,8 +112,14 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     };
   }
 
-  private mapDistributions(dataset: LocalDiscoveryDataset) {
-    return dataset.distributions?.map((distribution) => ({
+  private mapDistributions(
+    dataset: LocalDiscoveryDataset,
+    role: LocalDistributionRole
+  ) {
+    const distributions = dataset.distributions?.filter((distribution) =>
+      (distribution.roles ?? ["distribution"]).includes(role)
+    );
+    return distributions?.map((distribution) => ({
       id: distribution.id,
       title: distribution.title,
       description: distribution.description ?? "",
@@ -121,6 +128,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       license: distribution.license,
       rights: distribution.rights,
       status: distribution.status,
+      availability: distribution.availability?.label,
       conformsTo: distribution.conformsTo,
       applicableLegislation: distribution.applicableLegislation,
       byteSize: distribution.byteSize,
@@ -201,6 +209,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       throw new Error(`Dataset not found in local index: ${id}`);
     }
     const dcatType = dataset.dcatType?.[0];
+    const analytics = this.mapDistributions(dataset, "analytics");
 
     return {
       ...this.mapLocalDataset(dataset),
@@ -211,7 +220,9 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       healthCategory: dataset.healthCategory ?? [],
       dcatType,
       dcatTypes: dataset.dcatType ?? [],
-      distributions: this.mapDistributions(dataset),
+      distributions: this.mapDistributions(dataset, "distribution"),
+      analytics: analytics?.length ? analytics : undefined,
+      custodians: dataset.custodians?.map((a) => this.mapAgent(a)),
       numberOfRecords: dataset.numberOfRecords,
       provenance: dataset.provenance,
       legalBasis: dataset.legalBasis,

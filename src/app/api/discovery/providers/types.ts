@@ -180,6 +180,8 @@ export interface DiscoveryRetrievedDataset extends DiscoveryDatasetBase {
   provenance?: string;
   spatial?: DiscoveryValueLabel;
   distributions?: DiscoveryRetrievedDistribution[];
+  analytics?: DiscoveryRetrievedDistribution[];
+  custodians?: DiscoveryAgent[];
   dcatType?: DiscoveryValueLabel;
   dcatTypes?: DiscoveryValueLabel[];
   healthTheme?: DiscoveryValueLabel[];

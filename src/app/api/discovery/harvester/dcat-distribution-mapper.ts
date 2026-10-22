@@ -3,7 +3,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type * as RDF from "@rdfjs/types";
-import { LocalDiscoveryDistribution } from "@/app/api/discovery/local-store/types";
+import {
+  LocalDiscoveryDistribution,
+  LocalDistributionRole,
+} from "@/app/api/discovery/local-store/types";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 import { normalizeDate } from "@/app/api/discovery/harvester/date-utils";
 import { formatErrorDetails } from "@/app/api/discovery/harvester/error-utils";
@@ -35,6 +38,7 @@ const DCT_RIGHTS = "http://purl.org/dc/terms/rights"; // NOSONAR
 const DCT_CONFORMS_TO = "http://purl.org/dc/terms/conformsTo"; // NOSONAR
 const DCATAP_APPLICABLE_LEGISLATION =
   "http://data.europa.eu/r5r/applicableLegislation"; // NOSONAR
+const DCATAP_AVAILABILITY = "http://data.europa.eu/r5r/availability"; // NOSONAR
 const DCAT_BYTE_SIZE = "http://www.w3.org/ns/dcat#byteSize"; // NOSONAR
 const SKOS_PREF_LABEL = "http://www.w3.org/2004/02/skos/core#prefLabel"; // NOSONAR
 const RDFS_LABEL = "http://www.w3.org/2000/01/rdf-schema#label"; // NOSONAR
@@ -50,19 +54,30 @@ export const extractDistributions = (
   if (!distributionSubjects.length) return undefined;
 
   const distributions = distributionSubjects
-    .map((distributionSubject, index) => {
-      try {
-        return mapDistribution(distributionSubject, graph, datasetId, index);
-      } catch (error) {
-        onDistributionError?.({
-          datasetId,
-          distributionId: graph.getNamedNodeValue(distributionSubject),
-          message: formatErrorDetails(error),
-          stack: error instanceof Error ? error.stack : undefined,
-        });
-        return undefined;
+    .map(
+      (
+        { subject: distributionSubject, roles },
+        index
+      ): LocalDiscoveryDistribution | undefined => {
+        try {
+          const distribution = mapDistribution(
+            distributionSubject,
+            graph,
+            datasetId,
+            index
+          );
+          return distribution && { ...distribution, roles };
+        } catch (error) {
+          onDistributionError?.({
+            datasetId,
+            distributionId: graph.getNamedNodeValue(distributionSubject),
+            message: formatErrorDetails(error),
+            stack: error instanceof Error ? error.stack : undefined,
+          });
+          return undefined;
+        }
       }
-    })
+    )
     .filter(
       (distribution): distribution is LocalDiscoveryDistribution =>
         distribution !== undefined
@@ -72,18 +87,29 @@ export const extractDistributions = (
 };
 
 const getDistributionSubjects = (datasetSubject: RDF.Term, graph: RdfGraph) => {
-  const subjects = [
-    ...graph.getObjects(datasetSubject, DCAT_DISTRIBUTION),
-    ...graph.getObjects(datasetSubject, HEALTHDCATAP_ANALYTICS),
+  const linked: Array<{ subject: RDF.Term; role: LocalDistributionRole }> = [
+    ...graph
+      .getObjects(datasetSubject, DCAT_DISTRIBUTION)
+      .map((subject) => ({ subject, role: "distribution" as const })),
+    ...graph
+      .getObjects(datasetSubject, HEALTHDCATAP_ANALYTICS)
+      .map((subject) => ({ subject, role: "analytics" as const })),
   ];
 
-  const seen = new Set<string>();
-  return subjects.filter((subject) => {
+  const byKey = new Map<
+    string,
+    { subject: RDF.Term; roles: LocalDistributionRole[] }
+  >();
+  for (const { subject, role } of linked) {
     const key = `${subject.termType}:${subject.value}`;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+    const entry = byKey.get(key);
+    if (entry) {
+      entry.roles.push(role);
+    } else {
+      byKey.set(key, { subject, roles: [role] });
+    }
+  }
+  return [...byKey.values()];
 };
 
 const mapDistribution = (
@@ -114,6 +140,11 @@ const mapDistribution = (
     license: getDistributionLicense(distributionSubject, graph),
     rights: getDistributionRights(distributionSubject, graph),
     status: getDistributionStatus(distributionSubject, graph),
+    availability: resolveDistributionConcept(
+      distributionSubject,
+      graph,
+      DCATAP_AVAILABILITY
+    ),
     conformsTo: getDistributionConformsTo(distributionSubject, graph),
     applicableLegislation: getDistributionApplicableLegislation(
       distributionSubject,

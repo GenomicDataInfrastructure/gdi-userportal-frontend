@@ -87,13 +87,15 @@ const AddParticipantForm = ({
             value={currentAddParticipantName}
             onChange={(e) => setCurrentAddParticipantName(e.target.value)}
             type="text"
+            autoComplete="name"
             placeholder={t("namePlaceholder")}
             aria-label={t("namePlaceholder")}
           />
           <Input
             value={currentAddParticipantEmail}
             onChange={(e) => setCurrentAddParticipantEmail(e.target.value)}
-            type="text"
+            type="email"
+            autoComplete="email"
             placeholder={t("emailPlaceholder")}
             aria-label={t("emailPlaceholder")}
           />

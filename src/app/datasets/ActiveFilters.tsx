@@ -59,6 +59,7 @@ export default function ActiveFilters() {
               <ActiveFilterPill
                 key={`${f.source}-${f.key}`}
                 onRemove={() => removeActiveFilter(f.key, f.source)}
+                removeLabel={t("filters.removeFilter")}
               >
                 {`${f.label}: ${formatEntries(f.entries!)}`}
               </ActiveFilterPill>
@@ -68,6 +69,7 @@ export default function ActiveFilters() {
               <ActiveFilterPill
                 key={`${f.source}-${f.key}-${v.value}-${v.operator}`}
                 onRemove={() => removeActiveValue(f, v.value, v.operator)}
+                removeLabel={t("filters.removeFilter")}
               >
                 {`${f.label} ${v.operator || ":"} ${v.label}`}
               </ActiveFilterPill>

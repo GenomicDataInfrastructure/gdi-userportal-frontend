@@ -6,9 +6,9 @@ import { test, expect } from "./fixtures/mockApi";
 import { encode } from "next-auth/jwt";
 import Cryptr from "cryptr";
 import type { Page } from "@playwright/test";
+import { mockAccessToken, setVisaScenario } from "./fixtures/visaScenario";
 
 const isMocked = process.env.E2E_MODE === "mocked";
-const mockApiPort = Number(process.env.MOCK_API_PORT || 4010);
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -29,7 +29,7 @@ async function setAuthCookie(page: Page) {
   const nextAuthUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
   const cryptr = new Cryptr(nextAuthUrl);
 
-  const fakeKeycloakToken = "fake-keycloak-access-token";
+  const fakeKeycloakToken = mockAccessToken(page);
   const fakeIdToken = "fake-id-token";
 
   const token = await encode({
@@ -94,25 +94,13 @@ async function setAuthCookieWithoutTokens(page: Page) {
   ]);
 }
 
-/** Tells the mock server which visa scenario to return from the userinfo endpoint. */
-async function setScenario(page: Page, scenario: string) {
-  await page.request.post(
-    `http://localhost:${mockApiPort}/_test/set-scenario`,
-    {
-      data: JSON.stringify({ scenario }),
-      headers: { "Content-Type": "application/json" },
-    }
-  );
-}
+const setScenario = setVisaScenario;
 
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
 
 test.describe("Entitlements page (GA4GH Passport flow)", () => {
-  // Must run serially — tests share mock server scenario state via
-  // POST /_test/set-scenario, so parallel execution causes race conditions.
-  test.describe.configure({ mode: "serial" });
   test.beforeEach(async ({ page }) => {
     test.skip(!isMocked, "Mocked-only tests");
     await setAuthCookie(page);
@@ -125,6 +113,46 @@ test.describe("Entitlements page (GA4GH Passport flow)", () => {
     await expect(page.getByText(/cancer cohort study/i)).toBeVisible({
       timeout: 15000,
     });
+  });
+
+  test("keeps concurrent passport scenarios isolated between sessions", async ({
+    browser,
+    baseURL,
+  }) => {
+    const contexts = await Promise.all(
+      ["fallback", "multiple", "authorized"].map(() =>
+        browser.newContext({ baseURL })
+      )
+    );
+    try {
+      const pages = await Promise.all(
+        contexts.map((context) => context.newPage())
+      );
+      await Promise.all(pages.map((page) => setAuthCookie(page)));
+      // Set every scenario before navigating: a global scenario would make all
+      // three sessions receive whichever value was written last.
+      await Promise.all(
+        pages.map((page, index) =>
+          setScenario(page, ["fallback", "multiple", "authorized"][index])
+        )
+      );
+      await Promise.all(
+        pages.map((page) => page.goto("/requests?tab=entitlements"))
+      );
+      await Promise.all([
+        expect(pages[0].getByText(/unknown-dataset-id-999/i)).toBeVisible({
+          timeout: 15000,
+        }),
+        expect(pages[1].getByText(/rare disease genomes/i)).toBeVisible({
+          timeout: 15000,
+        }),
+        expect(
+          pages[2].getByText(/do not have any active entitlements/i)
+        ).toBeVisible({ timeout: 15000 }),
+      ]);
+    } finally {
+      await Promise.all(contexts.map((context) => context.close()));
+    }
   });
 
   test("shows source and granted-by label on entitlement card", async ({

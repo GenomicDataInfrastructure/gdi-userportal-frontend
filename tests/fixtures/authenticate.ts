@@ -3,6 +3,7 @@
 
 import type { Page } from "@playwright/test";
 import { encode } from "next-auth/jwt";
+import { mockAccessToken } from "./visaScenario";
 
 export const authenticate = async (page: Page) => {
   const token = await encode({
@@ -10,7 +11,7 @@ export const authenticate = async (page: Page) => {
       sub: "e2e-test-user",
       name: "E2E Test User",
       email: "e2e@example.com",
-      access_token: "e2e-test-access-token",
+      access_token: mockAccessToken(page),
       id_token: "e2e-test-id-token",
       expires_at: Math.floor(Date.now() / 1000) + 3600,
     },

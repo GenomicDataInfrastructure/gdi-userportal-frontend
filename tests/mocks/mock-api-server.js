@@ -72,9 +72,9 @@ async function main() {
   }
 
   // ---------------------------------------------------------------------------
-  // Scenario state — controlled via POST /_test/set-scenario
+  // Scenarios belong to an access token, never to the shared server.
   // ---------------------------------------------------------------------------
-  let currentScenario = "default";
+  const sessionScenarios = new Map();
 
   const visaScenarios = {
     default: [
@@ -151,12 +151,18 @@ async function main() {
     if (pathname === "/_test/set-scenario" && req.method === "POST") {
       try {
         const body = await readBody(req);
-        const { scenario } = JSON.parse(body);
-        if (scenario in visaScenarios) {
-          currentScenario = scenario;
+        const { scenario, accessToken } = JSON.parse(body);
+        if (
+          Object.hasOwn(visaScenarios, scenario) &&
+          typeof accessToken === "string" &&
+          accessToken.length > 0
+        ) {
+          sessionScenarios.set(accessToken, scenario);
           return sendJson(res, 200, { ok: true, scenario });
         }
-        return sendJson(res, 400, { error: `Unknown scenario: ${scenario}` });
+        return sendJson(res, 400, {
+          error: "A valid scenario and non-empty accessToken are required",
+        });
       } catch {
         return sendJson(res, 400, { error: "Invalid JSON body" });
       }
@@ -164,12 +170,17 @@ async function main() {
 
     // ── GA4GH Passport: Keycloak LS-AAI token exchange ──────────────────────
     if (pathname === "/broker/LSAAI/token" && req.method === "GET") {
-      return sendJson(res, 200, { access_token: "fake-lsaai-token" });
+      const accessToken = req.headers.authorization?.replace(/^Bearer /, "");
+      if (!accessToken)
+        return sendJson(res, 401, { error: "Missing access token" });
+      return sendJson(res, 200, { access_token: accessToken });
     }
 
     // ── GA4GH Passport: LS-AAI userinfo ────────────────────────────────────
     if (pathname === "/userinfo" && req.method === "POST") {
-      const visas = visaScenarios[currentScenario] ?? visaScenarios.default;
+      const accessToken = req.headers.authorization?.replace(/^Bearer /, "");
+      const scenario = sessionScenarios.get(accessToken) ?? "default";
+      const visas = visaScenarios[scenario];
       return sendJson(res, 200, { ga4gh_passport_v1: visas });
     }
 

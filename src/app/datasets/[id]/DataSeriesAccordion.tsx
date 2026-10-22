@@ -17,7 +17,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
 import { DatasetSeries } from "@/app/api/discovery/open-api/schemas";
-import Tooltip from "./Tooltip";
+import Tooltip from "@/components/Tooltip";
 import { useTranslations } from "next-intl";
 
 type DataSeriesAccordionProps = {

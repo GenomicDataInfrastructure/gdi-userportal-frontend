@@ -29,9 +29,9 @@ function Sidebar({ items }: Readonly<SidebarProps>) {
               key={item.label}
             >
               <h3 className="sm:text-md lg:text-lg font-bold">{item.label}</h3>
-              <span className="text-sm sm:text-base lg:text-lg">
+              <div className="text-sm sm:text-base lg:text-lg">
                 {item.value}
-              </span>
+              </div>
             </div>
           )
       )}

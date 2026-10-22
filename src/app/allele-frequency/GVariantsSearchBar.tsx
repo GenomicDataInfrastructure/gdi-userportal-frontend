@@ -9,7 +9,7 @@ import contentConfig from "@/config/contentConfig";
 import { faInfoCircle, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
-import Tooltip from "../datasets/[id]/Tooltip";
+import Tooltip from "@/components/Tooltip";
 import { useTranslations } from "next-intl";
 
 type FormFieldProps = {

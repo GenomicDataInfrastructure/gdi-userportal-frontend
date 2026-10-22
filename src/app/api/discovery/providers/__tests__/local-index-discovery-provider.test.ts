@@ -722,7 +722,12 @@ describe("LocalIndexDiscoveryProvider", () => {
     mockStore.retrieveDataset.mockResolvedValueOnce(
       buildLocalDiscoveryDataset({
         id: "health",
-        custodians: [{ name: "Custodian Organisation" }],
+        custodians: [
+          {
+            name: "Custodian Organisation",
+            contactPoints: [{ email: "custodian@example.org" }],
+          },
+        ],
         distributions: [
           {
             id: "data",
@@ -735,6 +740,7 @@ describe("LocalIndexDiscoveryProvider", () => {
             },
           },
           { id: "legacy", title: "Stored before roles" },
+          { id: "empty", title: "Empty roles", roles: [] },
           { id: "stats", title: "Analytics", roles: ["analytics"] },
           {
             id: "both",
@@ -750,12 +756,16 @@ describe("LocalIndexDiscoveryProvider", () => {
     expect(dataset.distributions?.map((d) => d.id)).toEqual([
       "data",
       "legacy",
+      "empty",
       "both",
     ]);
     expect(dataset.analytics?.map((d) => d.id)).toEqual(["stats", "both"]);
     expect(dataset.distributions?.[0].availability).toBe("Available");
     expect(dataset.custodians).toEqual([
-      expect.objectContaining({ name: "Custodian Organisation" }),
+      expect.objectContaining({
+        name: "Custodian Organisation",
+        contactPoints: [{ email: "custodian@example.org" }],
+      }),
     ]);
   });
 

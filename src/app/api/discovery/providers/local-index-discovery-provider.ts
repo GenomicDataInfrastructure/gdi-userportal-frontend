@@ -8,6 +8,7 @@ import {
   LocalDiscoveryAiModel,
   LocalDiscoveryDataset,
   LocalDistributionRole,
+  getDistributionRoles,
 } from "@/app/api/discovery/local-store/types";
 import {
   getLocalDiscoveryDatasetExportMimeType,
@@ -58,6 +59,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       homepage: agent.homepage,
       type: agent.type,
       identifier: agent.identifier,
+      contactPoints: agent.contactPoints,
     };
   }
 
@@ -117,7 +119,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     role: LocalDistributionRole
   ) {
     const distributions = dataset.distributions?.filter((distribution) =>
-      (distribution.roles ?? ["distribution"]).includes(role)
+      getDistributionRoles(distribution).includes(role)
     );
     return distributions?.map((distribution) => ({
       id: distribution.id,

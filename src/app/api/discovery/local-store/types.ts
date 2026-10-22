@@ -28,6 +28,11 @@ export interface LocalAgent {
 
 export type LocalDistributionRole = "distribution" | "analytics";
 
+export const getDistributionRoles = (distribution: {
+  roles?: LocalDistributionRole[];
+}): LocalDistributionRole[] =>
+  distribution.roles?.length ? distribution.roles : ["distribution"];
+
 export interface LocalDiscoveryDistribution {
   id: string;
   title: string;

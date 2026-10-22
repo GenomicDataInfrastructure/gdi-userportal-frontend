@@ -57,7 +57,6 @@ type ExtendedRetrievedDataset = RetrievedDataset & {
     | RetrievedDataset["temporalCoverage"]
     | { start?: string; end?: string };
   analytics?: RetrievedDataset["analytics"] | string[];
-  custodians?: RetrievedDataset["hdab"];
   dcatTypes?: ValueLabel[];
 };
 
@@ -1000,17 +999,22 @@ const DatasetMetadata = ({
                 {t("custodian")}:
               </span>
               {dataset.custodians && dataset.custodians.length > 0 ? (
-                dataset.custodians.map((agent, index) => (
-                  <span key={index} className="flex items-center gap-1">
-                    <span>
-                      {agent.name}
-                      {agent.email && (
-                        <span className="ml-1 text-info">({agent.email})</span>
-                      )}
+                dataset.custodians.map((agent, index) => {
+                  const email =
+                    agent.email ??
+                    agent.contactPoints?.find((cp) => cp.email)?.email;
+                  return (
+                    <span key={index} className="flex items-center gap-1">
+                      <span>
+                        {agent.name}
+                        {email && (
+                          <span className="ml-1 text-info">({email})</span>
+                        )}
+                      </span>
+                      {index < dataset.custodians!.length - 1 && ","}
                     </span>
-                    {index < dataset.custodians!.length - 1 && ","}
-                  </span>
-                ))
+                  );
+                })
               ) : (
                 <NotProvided label={notProvidedLabel} />
               )}
@@ -1265,7 +1269,7 @@ const DatasetMetadata = ({
         </MetadataSection>
       )}
 
-      {hasHealthTheme && analytics.length > 0 && (
+      {analytics.length > 0 && (
         <MetadataSection title={t("analytics")} icon={faChartBar}>
           <div className="relative group">
             {analytics.length > 0 ? (

@@ -62,6 +62,11 @@ export interface DiscoveryAgent {
   type?: DiscoveryValueLabel;
   identifier?: string;
   actedOnBehalfOf?: DiscoveryAgent[];
+  contactPoints?: Array<{
+    name?: string;
+    email?: string;
+    contactPages?: string[];
+  }>;
 }
 
 export interface DiscoveryTimeWindow {

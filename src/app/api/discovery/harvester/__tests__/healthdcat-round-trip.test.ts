@@ -203,6 +203,13 @@ describe("HealthDCAT-AP round trip from MDC RDF to dispatcher payload", () => {
     expect(literalOf(quads, custodian.value, `${FOAF}name`)).toBe(
       "Custodian Organisation"
     );
+    expect(
+      objectsOf(
+        quads,
+        custodian.value,
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+      ).map((o) => o.value)
+    ).toContain(`${FOAF}Organization`);
   });
 
   test("keeps distribution description, licence and availability", async () => {

@@ -15,6 +15,7 @@ import {
   ns,
 } from "@/app/api/discovery/harvester/rdf/context";
 import { DATASET_EXPORT_PREFIXES } from "@/app/api/discovery/harvester/dcat-dataset-rdf-shared";
+import { getDistributionRoles } from "@/app/api/discovery/local-store/types";
 
 export const addDatasetDistributionQuads = ({
   dataset,
@@ -29,7 +30,7 @@ export const addDatasetDistributionQuads = ({
           `distribution-${index + 1}`
         );
 
-    const roles = distribution.roles ?? ["distribution"];
+    const roles = getDistributionRoles(distribution);
     if (roles.includes("distribution")) {
       store.add(datasetNode, ns.dcat("distribution"), distributionNode);
     }

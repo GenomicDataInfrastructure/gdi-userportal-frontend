@@ -107,6 +107,7 @@ export const addDatasetAgentQuads = (context: DatasetRdfContext): void => {
     context,
     ns.geodcatap("custodian"),
     "custodian",
-    context.dataset.custodians ?? []
+    context.dataset.custodians ?? [],
+    ns.foaf("Organization")
   );
 };

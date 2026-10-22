@@ -15,6 +15,7 @@ import {
   ns,
 } from "@/app/api/discovery/harvester/rdf/context";
 import { DATASET_EXPORT_PREFIXES } from "@/app/api/discovery/harvester/dcat-dataset-rdf-shared";
+import { getDistributionRoles } from "@/app/api/discovery/local-store/types";
 
 export const addDatasetDistributionQuads = ({
   dataset,
@@ -29,10 +30,22 @@ export const addDatasetDistributionQuads = ({
           `distribution-${index + 1}`
         );
 
-    store.add(datasetNode, ns.dcat("distribution"), distributionNode);
+    const roles = getDistributionRoles(distribution);
+    if (roles.includes("distribution")) {
+      store.add(datasetNode, ns.dcat("distribution"), distributionNode);
+    }
+    if (roles.includes("analytics")) {
+      store.add(datasetNode, ns.health("analytics"), distributionNode);
+    }
     store.add(distributionNode, ns.rdf("type"), ns.dcat("Distribution"));
     addLiteral(store, distributionNode, ns.dct("identifier"), distribution.id);
     addLiteral(store, distributionNode, ns.dct("title"), distribution.title);
+    addLiteral(
+      store,
+      distributionNode,
+      ns.dct("description"),
+      distribution.description
+    );
 
     if (distribution.format) {
       const { value, label } = distribution.format;
@@ -91,6 +104,26 @@ export const addDatasetDistributionQuads = ({
         if (isNonEmptyString(label)) {
           store.add(
             statusNode,
+            ns.skos("prefLabel"),
+            createLanguageLiteral(label, "eng")
+          );
+        }
+      }
+    }
+
+    if (distribution.availability) {
+      const { value, label } = distribution.availability;
+      if (isNonEmptyString(value) && isAbsoluteUri(value)) {
+        const availabilityNode = createNamedNode(value);
+        store.add(
+          distributionNode,
+          ns.dcatap("availability"),
+          availabilityNode
+        );
+        store.add(availabilityNode, ns.rdf("type"), ns.skos("Concept"));
+        if (isNonEmptyString(label)) {
+          store.add(
+            availabilityNode,
             ns.skos("prefLabel"),
             createLanguageLiteral(label, "eng")
           );

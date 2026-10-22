@@ -87,6 +87,7 @@ const VCARD_HAS_EMAIL = "http://www.w3.org/2006/vcard/ns#hasEmail"; // NOSONAR
 const FOAF_HOMEPAGE = "http://xmlns.com/foaf/0.1/homepage"; // NOSONAR
 const FOAF_URL = "http://xmlns.com/foaf/0.1/workInfoHomepage"; // NOSONAR
 const HEALTHDCATAP_HDAB = "http://healthdataportal.eu/ns/health#hdab"; // NOSONAR
+const GEODCATAP_CUSTODIAN = "http://data.europa.eu/930/custodian"; // NOSONAR
 const HEALTHDCATAP_HAS_CODE_VALUES =
   "http://healthdataportal.eu/ns/health#hasCodeValues"; // NOSONAR
 const HEALTHDCATAP_HAS_CODING_SYSTEM =
@@ -208,6 +209,11 @@ export const mapDataset = (
     publisherType: publisherTypes.length > 0 ? publisherTypes : undefined,
     hdab: extractAgents(datasetSubject, graph, HEALTHDCATAP_HDAB),
     creators: extractAgents(datasetSubject, graph, DCT_CREATOR),
+    custodians: extractOptionalAgents(
+      datasetSubject,
+      graph,
+      GEODCATAP_CUSTODIAN
+    ),
     personalData: extractPersonalData(datasetSubject, graph),
     purpose: extractPurpose(datasetSubject, graph),
     codeValues: extractLiteralValueLabels(
@@ -652,6 +658,15 @@ export const extractAgents = (
   return objects
     .map((obj) => extractAgent(obj, graph))
     .filter((a): a is LocalAgent => a !== undefined);
+};
+
+const extractOptionalAgents = (
+  subject: RDF.Term,
+  graph: RdfGraph,
+  predicate: string
+): LocalAgent[] | undefined => {
+  const agents = extractAgents(subject, graph, predicate);
+  return agents.length > 0 ? agents : undefined;
 };
 
 const extractLiteralValueLabels = (

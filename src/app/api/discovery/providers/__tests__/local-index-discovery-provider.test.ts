@@ -722,6 +722,57 @@ describe("LocalIndexDiscoveryProvider", () => {
     });
   });
 
+  test("retrieveDataset separates analytics distributions and exposes availability and custodians", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce(
+      buildLocalDiscoveryDataset({
+        id: "health",
+        custodians: [
+          {
+            name: "Custodian Organisation",
+            contactPoints: [{ email: "custodian@example.org" }],
+          },
+        ],
+        distributions: [
+          {
+            id: "data",
+            title: "Data distribution",
+            roles: ["distribution"],
+            availability: {
+              value:
+                "http://publications.europa.eu/resource/authority/planned-availability/AVAILABLE",
+              label: "Available",
+            },
+          },
+          { id: "legacy", title: "Stored before roles" },
+          { id: "empty", title: "Empty roles", roles: [] },
+          { id: "stats", title: "Analytics", roles: ["analytics"] },
+          {
+            id: "both",
+            title: "Both roles",
+            roles: ["distribution", "analytics"],
+          },
+        ],
+      })
+    );
+
+    const dataset = await provider.retrieveDataset("health");
+
+    expect(dataset.distributions?.map((d) => d.id)).toEqual([
+      "data",
+      "legacy",
+      "empty",
+      "both",
+    ]);
+    expect(dataset.analytics?.map((d) => d.id)).toEqual(["stats", "both"]);
+    expect(dataset.distributions?.[0].availability).toBe("Available");
+    expect(dataset.custodians).toEqual([
+      expect.objectContaining({
+        name: "Custodian Organisation",
+        contactPoints: [{ email: "custodian@example.org" }],
+      }),
+    ]);
+  });
+
   test("retrieveDataset preserves unknown languages and text-only spatial coverage", async () => {
     mockStore.retrieveDataset.mockResolvedValueOnce(
       buildLocalDiscoveryDataset({

@@ -888,6 +888,7 @@ const DatasetMetadata = ({
         (dataset.publishers && dataset.publishers.length > 0) ||
         (dataset.publisherType && dataset.publisherType.length > 0) ||
         (dataset.creators && dataset.creators.length > 0) ||
+        (dataset.custodians && dataset.custodians.length > 0) ||
         (hasHealthTheme &&
           ((dataset.hdab && dataset.hdab.length > 0) ||
             dataset.trustedDataHolder !== undefined))) && (
@@ -987,6 +988,38 @@ const DatasetMetadata = ({
               )}
               <Tooltip
                 message={helpText?.["creators"] ?? t("tooltips.creators")}
+              />
+            </div>
+            <div className="flex items-center gap-2 flex-wrap relative group">
+              <FontAwesomeIcon
+                icon={faBuilding}
+                className="text-primary text-xs"
+              />
+              <span className="font-medium shrink-0 max-w-full">
+                {t("custodian")}:
+              </span>
+              {dataset.custodians && dataset.custodians.length > 0 ? (
+                dataset.custodians.map((agent, index) => {
+                  const email =
+                    agent.email ??
+                    agent.contactPoints?.find((cp) => cp.email)?.email;
+                  return (
+                    <span key={index} className="flex items-center gap-1">
+                      <span>
+                        {agent.name}
+                        {email && (
+                          <span className="ml-1 text-info">({email})</span>
+                        )}
+                      </span>
+                      {index < dataset.custodians!.length - 1 && ","}
+                    </span>
+                  );
+                })
+              ) : (
+                <NotProvided label={notProvidedLabel} />
+              )}
+              <Tooltip
+                message={helpText?.["custodian"] ?? t("tooltips.custodian")}
               />
             </div>
             {hasHealthTheme && (
@@ -1236,7 +1269,7 @@ const DatasetMetadata = ({
         </MetadataSection>
       )}
 
-      {hasHealthTheme && analytics.length > 0 && (
+      {analytics.length > 0 && (
         <MetadataSection title={t("analytics")} icon={faChartBar}>
           <div className="relative group">
             {analytics.length > 0 ? (

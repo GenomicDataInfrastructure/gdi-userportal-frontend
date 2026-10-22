@@ -182,9 +182,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
             : null;
         }
 
-        const values = await this.aiModelStore.retrieveFilterValues(
-          filter.key
-        );
+        const values = await this.aiModelStore.retrieveFilterValues(filter.key);
         if (!values.length) {
           return null;
         }

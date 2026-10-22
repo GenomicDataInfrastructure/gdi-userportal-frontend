@@ -76,7 +76,10 @@ export class OpenSearchAiModelStore
   async retrieveFilterValues(key: string): Promise<LocalDiscoveryValueLabel[]> {
     await this.ensureInitialized();
     const filterDefinition = getLocalAiModelFilterDefinition(key);
-    if (filterDefinition?.type !== "DROPDOWN" || !filterDefinition.aggregation) {
+    if (
+      filterDefinition?.type !== "DROPDOWN" ||
+      !filterDefinition.aggregation
+    ) {
       return [];
     }
 

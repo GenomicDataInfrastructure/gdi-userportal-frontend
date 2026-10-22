@@ -62,6 +62,11 @@ export interface DiscoveryAgent {
   type?: DiscoveryValueLabel;
   identifier?: string;
   actedOnBehalfOf?: DiscoveryAgent[];
+  contactPoints?: Array<{
+    name?: string;
+    email?: string;
+    contactPages?: string[];
+  }>;
 }
 
 export interface DiscoveryTimeWindow {
@@ -180,6 +185,8 @@ export interface DiscoveryRetrievedDataset extends DiscoveryDatasetBase {
   provenance?: string;
   spatial?: DiscoveryValueLabel;
   distributions?: DiscoveryRetrievedDistribution[];
+  analytics?: DiscoveryRetrievedDistribution[];
+  custodians?: DiscoveryAgent[];
   dcatType?: DiscoveryValueLabel;
   dcatTypes?: DiscoveryValueLabel[];
   healthTheme?: DiscoveryValueLabel[];

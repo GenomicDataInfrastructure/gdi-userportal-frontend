@@ -264,6 +264,7 @@ describe("DcatHarvesterService", () => {
             id: "distribution-1",
             title: "Population Registry CSV",
             description: "Distribution-level CSV extract for registry data",
+            roles: ["distribution"],
             format: {
               value:
                 "http://publications.europa.eu/resource/authority/file-type/CSV",
@@ -680,6 +681,7 @@ describe("DcatHarvesterService", () => {
       {
         id: "dist-1",
         title: "dist-1",
+        roles: ["distribution"],
         format: undefined,
         accessUrl: "https://example.org/access/1",
         downloadUrl: undefined,

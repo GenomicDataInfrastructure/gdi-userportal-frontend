@@ -661,6 +661,14 @@
     "en": "Health Data Access Body (HDAB)",
     "fr": "Organisme d'accès aux données de santé (HDAB)"
   },
+  "datasets.detail.custodian": {
+    "en": "Custodian",
+    "fr": "Dépositaire"
+  },
+  "datasets.detail.availability": {
+    "en": "Availability",
+    "fr": "Disponibilité"
+  },
   "datasets.detail.codingAndStandards": {
     "en": "Coding & Standards",
     "fr": "Codification et standards"
@@ -857,6 +865,10 @@
     "en": "Maturity status of the distribution.",
     "fr": "Statut de maturité de la distribution."
   },
+  "datasets.detail.tooltips.distributionAvailability": {
+    "en": "How long the distribution is planned to remain available.",
+    "fr": "Durée pendant laquelle la distribution est prévue de rester disponible."
+  },
   "datasets.detail.tooltips.distributionApplicableLegislation": {
     "en": "Legislation applicable to this distribution.",
     "fr": "Législation applicable à cette distribution."
@@ -1040,6 +1052,10 @@
   "datasets.detail.tooltips.healthDataAccessBody": {
     "en": "Health Data Access Body responsible for granting access to this dataset.",
     "fr": "Organisme d'accès aux données de santé chargé d'accorder l'accès à ce jeu de données."
+  },
+  "datasets.detail.tooltips.custodian": {
+    "en": "Organisation responsible for keeping and maintaining the dataset.",
+    "fr": "Organisation chargée de conserver et de maintenir le jeu de données."
   },
   "datasets.detail.tooltips.codingSystems": {
     "en": "Coding systems or standards used in this dataset (e.g., ICD-10, SNOMED CT).",

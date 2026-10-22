@@ -21,7 +21,7 @@ import { useLocale } from "next-intl";
 import contentConfig from "@/config/contentConfig";
 import { useAiModelSupport } from "@/providers/AiModelSupportProvider";
 import { BeaconAuthorizationProvider } from "@/providers/beacon/BeaconAuthorizationProvider";
-import { useFilters } from "@/providers/filters/FilterProvider";
+import { FilterProvider, useFilters } from "@/providers/filters/FilterProvider";
 
 type AiModelsPageProps = {
   searchParams: Promise<UrlSearchParams>;
@@ -75,23 +75,25 @@ export default function AiModelsPage({ searchParams }: AiModelsPageProps) {
             />
           </div>
 
-          <AiModelsProvider searchParams={_searchParams}>
-            <AiModelsSummary hasQuery={Boolean(_searchParams.q)} />
-            <div className="col-start-0 col-span-12 flex flex-col gap-4 sm:block xl:hidden">
-              <div className="my-4 h-fit">
-                <FilterList />
+          <FilterProvider>
+            <AiModelsProvider searchParams={_searchParams}>
+              <AiModelsSummary hasQuery={Boolean(_searchParams.q)} />
+              <div className="col-start-0 col-span-12 flex flex-col gap-4 sm:block xl:hidden">
+                <div className="my-4 h-fit">
+                  <FilterList />
+                </div>
               </div>
-            </div>
-            <div className="col-start-0 col-span-4 flex flex-col gap-y-6">
-              <div className="col-start-0 col-span-4 mr-6 hidden h-fit xl:block px-6">
-                <FilterList />
+              <div className="col-start-0 col-span-4 flex flex-col gap-y-6">
+                <div className="col-start-0 col-span-4 mr-6 hidden h-fit xl:block px-6">
+                  <FilterList />
+                </div>
               </div>
-            </div>
-            <div className="col-span-12 xl:col-span-8">
-              <ActiveFilters />
-              <AiModelListContainer currentPage={currentPage} />
-            </div>
-          </AiModelsProvider>
+              <div className="col-span-12 xl:col-span-8">
+                <ActiveFilters />
+                <AiModelListContainer currentPage={currentPage} />
+              </div>
+            </AiModelsProvider>
+          </FilterProvider>
         </div>
       </PageContainer>
     </BeaconAuthorizationProvider>

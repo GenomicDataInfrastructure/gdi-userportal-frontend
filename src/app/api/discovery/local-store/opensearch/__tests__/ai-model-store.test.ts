@@ -123,13 +123,13 @@ describe("OpenSearchAiModelStore", () => {
       data: { count: 2 },
     });
 
-    await expect(store.hasFilterValues("libraries")).resolves.toBe(true);
+    await expect(store.hasFilterValues("modified")).resolves.toBe(true);
     expect(mockClient.post).toHaveBeenCalledWith(
       "/discovery_ai_models/_count",
       {
         query: {
           exists: {
-            field: "libraries",
+            field: "modifiedAt",
           },
         },
       }

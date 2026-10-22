@@ -66,19 +66,21 @@ const createOperatorFilter = ({
   type,
   key,
   label,
+  field,
   operators,
 }: {
   group: string;
   type: "NUMBER" | "DATETIME";
   key: string;
   label: string;
+  field?: string;
   operators: LocalDiscoveryOperator[];
 }): LocalFilterDefinition => ({
   group,
   type,
   key,
   label,
-  field: key,
+  field: field ?? key,
   operators,
 });
 
@@ -110,6 +112,7 @@ const modifiedFilter = createOperatorFilter({
   type: "DATETIME",
   key: "modified",
   label: "Modified date",
+  field: "modifiedAt",
   operators: [...comparisonOperators, "!"],
 });
 

@@ -82,6 +82,37 @@ const createOperatorFilter = ({
   operators,
 });
 
+const publisherNameFilter = createDropdownFilter({
+  group: "Catalogue",
+  key: "publisherName",
+  label: "Publisher",
+  field: "publishers.name.keyword",
+});
+
+const keywordsFilter = createDropdownFilter({
+  group: "Catalogue",
+  key: "keywords",
+  label: "Keywords",
+  field: "keywords",
+  mapBucket: mapBucketToValueLabel,
+});
+
+const accessRightsFilter = createDropdownFilter({
+  group: "Access",
+  key: "accessRights",
+  label: "Access rights",
+  field: "accessRights.label.keyword",
+  mapBucket: mapBucketToValueLabel,
+});
+
+const modifiedFilter = createOperatorFilter({
+  group: "Dates",
+  type: "DATETIME",
+  key: "modified",
+  label: "Modified date",
+  operators: [...comparisonOperators, "!"],
+});
+
 const localFilterDefinitions: LocalFilterDefinition[] = [
   createDropdownFilter({
     group: "Catalogue",
@@ -90,12 +121,7 @@ const localFilterDefinitions: LocalFilterDefinition[] = [
     field: "themes.label.keyword",
     mapBucket: mapBucketToValueLabel,
   }),
-  createDropdownFilter({
-    group: "Catalogue",
-    key: "publisherName",
-    label: "Publisher",
-    field: "publishers.name.keyword",
-  }),
+  publisherNameFilter,
   createDropdownFilter({
     group: "Catalogue",
     key: "languages",
@@ -115,20 +141,8 @@ const localFilterDefinitions: LocalFilterDefinition[] = [
     label: "Catalogue",
     field: "catalogue.keyword",
   }),
-  createDropdownFilter({
-    group: "Catalogue",
-    key: "keywords",
-    label: "Keywords",
-    field: "keywords",
-    mapBucket: mapBucketToValueLabel,
-  }),
-  createDropdownFilter({
-    group: "Access",
-    key: "accessRights",
-    label: "Access rights",
-    field: "accessRights.label.keyword",
-    mapBucket: mapBucketToValueLabel,
-  }),
+  keywordsFilter,
+  accessRightsFilter,
   createDropdownFilter({
     group: "Standards",
     key: "conformsTo",
@@ -157,13 +171,7 @@ const localFilterDefinitions: LocalFilterDefinition[] = [
     label: "Unique individuals",
     operators: comparisonOperators,
   }),
-  createOperatorFilter({
-    group: "Dates",
-    type: "DATETIME",
-    key: "modified",
-    label: "Modified date",
-    operators: [...comparisonOperators, "!"],
-  }),
+  modifiedFilter,
 ];
 
 const stripAggregation = ({
@@ -178,3 +186,25 @@ export const getLocalFilterDefinition = (
   key: string
 ): LocalFilterDefinition | undefined =>
   localFilterDefinitions.find((definition) => definition.key === key);
+
+const localAiModelFilterDefinitions: LocalFilterDefinition[] = [
+  keywordsFilter,
+  accessRightsFilter,
+  publisherNameFilter,
+  createDropdownFilter({
+    group: "Catalogue",
+    key: "libraries",
+    label: "Libraries",
+    field: "libraries",
+    mapBucket: mapBucketToValueLabel,
+  }),
+  modifiedFilter,
+];
+
+export const listLocalAiModelFilters = (): LocalDiscoveryFilter[] =>
+  localAiModelFilterDefinitions.map(stripAggregation);
+
+export const getLocalAiModelFilterDefinition = (
+  key: string
+): LocalFilterDefinition | undefined =>
+  localAiModelFilterDefinitions.find((definition) => definition.key === key);

@@ -13,7 +13,10 @@ import {
   serializeLocalDiscoveryDataset,
 } from "@/app/api/discovery/harvester/dcat-dataset-rdf-generator";
 import { BasePlaceholderDiscoveryProvider } from "@/app/api/discovery/providers/base-placeholder-provider";
-import { listLocalFilters } from "@/app/api/discovery/local-store/filter-registry";
+import {
+  listLocalFilters,
+  listLocalAiModelFilters,
+} from "@/app/api/discovery/local-store/filter-registry";
 import {
   DiscoveryAgent,
   DiscoveryAiModelSearchQuery,
@@ -167,6 +170,38 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     return this.store.retrieveFilterValues(key);
   }
 
+  async retrieveAiModelFilters(
+    _headers: Record<string, string>
+  ): Promise<DiscoveryFilter[]> {
+    const localFilters = listLocalAiModelFilters();
+    const resolvedFilters = await Promise.all(
+      localFilters.map(async (filter) => {
+        if (filter.type !== "DROPDOWN") {
+          return (await this.aiModelStore.hasFilterValues(filter.key))
+            ? { ...filter, source: this.key }
+            : null;
+        }
+
+        const values = await this.aiModelStore.retrieveFilterValues(
+          filter.key
+        );
+        if (!values.length) {
+          return null;
+        }
+
+        return {
+          ...filter,
+          source: this.key,
+          values,
+        };
+      })
+    );
+
+    return resolvedFilters.filter(
+      (filter): filter is DiscoveryFilter => filter !== null
+    );
+  }
+
   async searchDatasets(
     options: DiscoveryDatasetSearchQuery,
     headers: Record<string, string>
@@ -271,18 +306,25 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
   }
 
   async searchAiModels(
-    options: DiscoveryAiModelSearchQuery
+    options: DiscoveryAiModelSearchQuery,
+    headers: Record<string, string>
   ): Promise<DiscoveryAiModelsSearchResponse> {
-    const response = await this.aiModelStore.searchAiModels({
-      query: options.query,
-      sort: options.sort,
-      start: options.start,
-      rows: options.rows,
-    });
+    await this.aiModelStore.ensureInitialized();
+    const [response, facets] = await Promise.all([
+      this.aiModelStore.searchAiModels({
+        query: options.query,
+        facets: options.facets?.map(({ source: _source, ...facet }) => facet),
+        sort: options.sort,
+        start: options.start,
+        rows: options.rows,
+      }),
+      this.retrieveAiModelFilters(headers),
+    ]);
 
     return {
       count: response.count,
       results: response.results.map((aiModel) => this.mapLocalAiModel(aiModel)),
+      facets,
     };
   }
 

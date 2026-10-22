@@ -29,6 +29,8 @@ const mockAiModelStore = {
   key: "opensearch",
   ensureInitialized: jest.fn<() => Promise<void>>(),
   clearAiModels: jest.fn<() => Promise<void>>(),
+  hasFilterValues: jest.fn<(_key: string) => Promise<boolean>>(),
+  retrieveFilterValues: jest.fn<(_key: string) => Promise<unknown[]>>(),
   searchAiModels:
     jest.fn<
       (_options: unknown) => Promise<LocalDiscoveryAiModelSearchResult>
@@ -89,6 +91,8 @@ describe("LocalIndexDiscoveryProvider", () => {
     provider = new LocalIndexDiscoveryProvider();
     mockStore.hasFilterValues.mockResolvedValue(true);
     mockStore.retrieveFilterValues.mockResolvedValue([]);
+    mockAiModelStore.hasFilterValues.mockResolvedValue(false);
+    mockAiModelStore.retrieveFilterValues.mockResolvedValue([]);
   });
 
   test("exposes expected key, capabilities, and local filters", async () => {
@@ -1467,6 +1471,34 @@ describe("LocalIndexDiscoveryProvider", () => {
     );
   });
 
+  test("retrieveAiModelFilters resolves values from the AI Model registry", async () => {
+    mockAiModelStore.retrieveFilterValues.mockImplementation(async (key) => {
+      if (key === "libraries") {
+        return [{ value: "transformers", label: "transformers", count: 1 }];
+      }
+      return [];
+    });
+    mockAiModelStore.hasFilterValues.mockImplementation(
+      async (key) => key === "modified"
+    );
+
+    await expect(provider.retrieveAiModelFilters({})).resolves.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          source: "local-index",
+          key: "libraries",
+          type: "DROPDOWN",
+          values: [{ value: "transformers", label: "transformers", count: 1 }],
+        }),
+        expect.objectContaining({
+          source: "local-index",
+          key: "modified",
+          type: "DATETIME",
+        }),
+      ])
+    );
+  });
+
   test("searchAiModels maps results from the dedicated AI Model index", async () => {
     mockAiModelStore.searchAiModels.mockResolvedValueOnce({
       count: 1,
@@ -1490,7 +1522,7 @@ describe("LocalIndexDiscoveryProvider", () => {
     });
 
     await expect(
-      provider.searchAiModels({ query: "classifier" })
+      provider.searchAiModels({ query: "classifier" }, {})
     ).resolves.toEqual({
       count: 1,
       results: [
@@ -1521,9 +1553,11 @@ describe("LocalIndexDiscoveryProvider", () => {
           creators: [],
         },
       ],
+      facets: [],
     });
     expect(mockAiModelStore.searchAiModels).toHaveBeenCalledWith({
       query: "classifier",
+      facets: undefined,
       sort: undefined,
       start: undefined,
       rows: undefined,

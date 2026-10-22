@@ -266,6 +266,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       documentation: aiModel.documentation,
       publishers: aiModel.publishers.map((a) => this.mapAgent(a)),
       creators: aiModel.creators.map((a) => this.mapAgent(a)),
+      libraries: aiModel.libraries,
     };
   }
 
@@ -294,6 +295,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     return {
       ...this.mapLocalAiModel(aiModel),
       contacts: aiModel.contacts,
+      modelTasks: aiModel.modelTasks,
     };
   }
 }

@@ -15,6 +15,7 @@ type AiModelCardProps = {
 
 export default function AiModelCard({ aiModel }: Readonly<AiModelCardProps>) {
   const t = useTranslations("datasets.detail");
+  const tAiModels = useTranslations("aiModels");
   const screenSize = useWindowSize();
   const description = aiModel.description
     ? truncateDescription(aiModel.description, screenSize)
@@ -25,10 +26,14 @@ export default function AiModelCard({ aiModel }: Readonly<AiModelCardProps>) {
       url={`/models/${encodeURIComponent(aiModel.id)}`}
       title={aiModel.title}
       description={description}
-      cardItems={createAiModelCardItems(aiModel, {
-        createdOn: t("createdOn"),
-        modifiedOn: t("modifiedOn"),
-      })}
+      cardItems={createAiModelCardItems(
+        aiModel,
+        {
+          createdOn: t("createdOn"),
+          modifiedOn: t("modifiedOn"),
+        },
+        tAiModels("libraries")
+      )}
       keywords={aiModel.keywords}
     />
   );

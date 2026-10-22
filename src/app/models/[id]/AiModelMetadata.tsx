@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import {
   faBuilding,
   faCalendarAlt,
+  faCogs,
   faIdBadge,
   faInfoCircle,
   faLink,
@@ -25,6 +26,7 @@ import Tooltip from "@/components/Tooltip";
 import { Link } from "@/i18n/navigation";
 import { formatDate } from "@/utils/formatDate";
 import { DiscoveryRetrievedAiModel } from "@/app/api/discovery/providers/types";
+import ModelTasksAccordion from "./ModelTasksAccordion";
 
 const AiModelMetadata = ({
   aiModel,
@@ -32,6 +34,7 @@ const AiModelMetadata = ({
   aiModel: DiscoveryRetrievedAiModel;
 }) => {
   const t = useTranslations("datasets.detail");
+  const tAiModels = useTranslations("aiModels");
   const notProvidedLabel = t("notProvided");
   // formatDate() depends on the viewer's timezone, so only dates wait for
   // mount; the rest of the metadata remains server-rendered.
@@ -145,6 +148,18 @@ const AiModelMetadata = ({
         label={t("keywords")}
         tooltip={t("tooltips.datasetKeywords")}
       />
+
+      <MetadataKeywords
+        keywords={aiModel.libraries ?? []}
+        label={tAiModels("libraries")}
+        tooltip={tAiModels("tooltips.libraries")}
+      />
+
+      {aiModel.modelTasks && aiModel.modelTasks.length > 0 && (
+        <MetadataSection title={tAiModels("modalities")} icon={faCogs}>
+          <ModelTasksAccordion modelTasks={aiModel.modelTasks} />
+        </MetadataSection>
+      )}
 
       {aiModel.documentation && aiModel.documentation.length > 0 && (
         <MetadataSection title={t("linksAndReferences")} icon={faLink}>

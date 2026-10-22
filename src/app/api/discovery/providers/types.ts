@@ -265,6 +265,13 @@ export interface DiscoveryProviderCapabilities {
   supportsGVariants: boolean;
   supportsFilterEntries: boolean;
 }
+
+export interface DiscoveryModelTask {
+  modality: DiscoveryValueLabel;
+  task: DiscoveryValueLabel;
+  subtask?: DiscoveryValueLabel;
+}
+
 export interface DiscoverySearchedAiModel {
   id: string;
   identifier?: string;
@@ -280,10 +287,12 @@ export interface DiscoverySearchedAiModel {
   documentation?: string[];
   publishers: DiscoveryAgent[];
   creators: DiscoveryAgent[];
+  libraries?: string[];
 }
 
 export interface DiscoveryRetrievedAiModel extends DiscoverySearchedAiModel {
   contacts?: DiscoveryContactPoint[];
+  modelTasks?: DiscoveryModelTask[];
 }
 
 export interface DiscoveryAiModelSearchQuery {

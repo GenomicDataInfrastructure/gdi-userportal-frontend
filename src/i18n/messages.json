@@ -289,6 +289,34 @@
     "en": "Contacts",
     "fr": "Contacts"
   },
+  "aiModels.libraries": {
+    "en": "Libraries",
+    "fr": "Bibliothèques"
+  },
+  "aiModels.tooltips.libraries": {
+    "en": "Software libraries used to build or run this AI model.",
+    "fr": "Bibliothèques logicielles utilisées pour construire ou exécuter ce modèle d'IA."
+  },
+  "aiModels.modalities": {
+    "en": "Modalities",
+    "fr": "Modalités"
+  },
+  "aiModels.tooltips.modalities": {
+    "en": "Modalities, tasks, and subtasks this AI model performs.",
+    "fr": "Modalités, tâches et sous-tâches que ce modèle d'IA exécute."
+  },
+  "aiModels.tasks": {
+    "en": "Tasks",
+    "fr": "Tâches"
+  },
+  "aiModels.subtasks": {
+    "en": "Subtasks",
+    "fr": "Sous-tâches"
+  },
+  "aiModels.noSubtasks": {
+    "en": "No subtasks specified",
+    "fr": "Aucune sous-tâche spécifiée"
+  },
   "datasets.catalogueFilters": {
     "en": "Catalogue Filters",
     "fr": "Filtres du catalogue"

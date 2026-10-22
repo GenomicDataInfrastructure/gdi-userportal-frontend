@@ -660,6 +660,15 @@ export const createAiModelIndexMappings = () => ({
           identifier: { type: "keyword" },
         },
       },
+      libraries: { type: "keyword" },
+      modelTasks: {
+        type: "object",
+        properties: {
+          modality: valueLabelMapping(),
+          task: valueLabelMapping(),
+          subtask: valueLabelMapping(),
+        },
+      },
     },
   },
 });

@@ -1479,6 +1479,12 @@ describe("LocalIndexDiscoveryProvider", () => {
           description: "Detects pneumonia",
           publishers: [{ name: "LNDS AI Lab" }],
           creators: [],
+          modelTasks: [
+            {
+              modality: { value: "modality:image", label: "Image" },
+              task: { value: "classification", label: "Classification" },
+            },
+          ],
         },
       ],
     });
@@ -1533,6 +1539,12 @@ describe("LocalIndexDiscoveryProvider", () => {
       publishers: [],
       creators: [],
       contacts: [{ name: "Support", email: "support@lnds.lu" }],
+      modelTasks: [
+        {
+          modality: { value: "modality:image", label: "Image" },
+          task: { value: "classification", label: "Classification" },
+        },
+      ],
     });
 
     await expect(provider.retrieveAiModel("ai-model-1")).resolves.toEqual({
@@ -1551,6 +1563,12 @@ describe("LocalIndexDiscoveryProvider", () => {
       publishers: [],
       creators: [],
       contacts: [{ name: "Support", email: "support@lnds.lu" }],
+      modelTasks: [
+        {
+          modality: { value: "modality:image", label: "Image" },
+          task: { value: "classification", label: "Classification" },
+        },
+      ],
     });
   });
 

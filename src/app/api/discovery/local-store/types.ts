@@ -206,6 +206,12 @@ export interface LocalDiscoveryStore {
   upsertDatasets: (datasets: LocalDiscoveryDataset[]) => Promise<void>;
 }
 
+export interface LocalModelTask {
+  modality: { value: string; label: string };
+  task: { value: string; label: string };
+  subtask?: { value: string; label: string };
+}
+
 export interface LocalDiscoveryAiModel {
   id: string;
   identifier?: string;
@@ -223,6 +229,12 @@ export interface LocalDiscoveryAiModel {
   contacts?: LocalContactPoint[];
   publishers: LocalAgent[];
   creators: LocalAgent[];
+  // AI-Model-only fields confirmed against MDC's form (libraries, model_tasks).
+  // Both are REST-API-only in MDC today — never emitted to RDF — so they
+  // can't be harvested yet; populated only via the local seed script until
+  // MDC's RDF export gains a signal for them. See dcat-harvester-service.ts.
+  libraries?: string[];
+  modelTasks?: LocalModelTask[];
 }
 
 export interface LocalDiscoveryAiModelSearchResult {

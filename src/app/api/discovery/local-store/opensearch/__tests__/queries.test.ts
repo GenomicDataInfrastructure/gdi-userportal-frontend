@@ -406,6 +406,38 @@ describe("opensearch/queries", () => {
     ]);
   });
 
+  test("buildSearchBody applies AI Model task facet", () => {
+    const body = buildSearchBody(
+      {
+        facets: [
+          {
+            type: "DROPDOWN",
+            key: "task",
+            value: "Classification",
+          },
+        ],
+      },
+      aiModelSearchFieldSets
+    );
+
+    expect((body.query as any).bool.filter).toEqual([
+      {
+        bool: {
+          should: [
+            { term: { "modelTasks.task.value": "Classification" } },
+            { term: { "modelTasks.task.label.keyword": "Classification" } },
+            {
+              match_phrase: {
+                "modelTasks.task.label": "Classification",
+              },
+            },
+          ],
+          minimum_should_match: 1,
+        },
+      },
+    ]);
+  });
+
   test("buildSearchBody adds OR facet filters", () => {
     const body = buildSearchBody({
       facets: [

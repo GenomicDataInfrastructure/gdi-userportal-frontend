@@ -81,6 +81,61 @@ describe("OpenSearchAiModelStore", () => {
     await expect(store.retrieveAiModel("missing")).resolves.toBeNull();
   });
 
+  test("retrieveFilterValues returns aggregated library values", async () => {
+    const store = createStore();
+    mockClient.post.mockResolvedValueOnce({
+      data: {
+        aggregations: {
+          values: {
+            buckets: [{ key: "transformers", doc_count: 2 }],
+          },
+        },
+      },
+    });
+
+    await expect(store.retrieveFilterValues("libraries")).resolves.toEqual([
+      { value: "transformers", label: "transformers", count: 2 },
+    ]);
+    expect(mockClient.post).toHaveBeenCalledWith(
+      "/discovery_ai_models/_search",
+      expect.objectContaining({
+        aggs: {
+          values: {
+            terms: expect.objectContaining({
+              field: "libraries",
+            }),
+          },
+        },
+      })
+    );
+  });
+
+  test("retrieveFilterValues returns an empty array for non-dropdown filters", async () => {
+    const store = createStore();
+
+    await expect(store.retrieveFilterValues("modified")).resolves.toEqual([]);
+    expect(mockClient.post).not.toHaveBeenCalled();
+  });
+
+  test("hasFilterValues returns true when the field exists in indexed documents", async () => {
+    const store = createStore();
+    mockClient.post.mockResolvedValueOnce({
+      data: { count: 2 },
+    });
+
+    await expect(store.hasFilterValues("modified")).resolves.toBe(true);
+    expect(mockClient.post).toHaveBeenCalledWith(
+      "/discovery_ai_models/_count",
+      {
+        query: {
+          exists: {
+            field: "modifiedAt",
+          },
+        },
+      }
+    );
+  });
+
   test("upsertAiModels sends a bulk request", async () => {
     const store = createStore();
 

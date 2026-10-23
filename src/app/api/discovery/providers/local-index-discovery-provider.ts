@@ -7,6 +7,8 @@ import { getLocalAiModelStore } from "@/app/api/discovery/local-store/ai-model-f
 import {
   LocalDiscoveryAiModel,
   LocalDiscoveryDataset,
+  LocalDiscoveryFilter,
+  LocalDiscoveryValueLabel,
   LocalDistributionRole,
   getDistributionRoles,
 } from "@/app/api/discovery/local-store/types";
@@ -15,7 +17,10 @@ import {
   serializeLocalDiscoveryDataset,
 } from "@/app/api/discovery/harvester/dcat-dataset-rdf-generator";
 import { BasePlaceholderDiscoveryProvider } from "@/app/api/discovery/providers/base-placeholder-provider";
-import { listLocalFilters } from "@/app/api/discovery/local-store/filter-registry";
+import {
+  listLocalFilters,
+  listLocalAiModelFilters,
+} from "@/app/api/discovery/local-store/filter-registry";
 import {
   DiscoveryAgent,
   DiscoveryAiModelSearchQuery,
@@ -140,19 +145,24 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     }));
   }
 
-  async retrieveFilters(
-    _headers: Record<string, string>
+  private async resolveLocalFilters(
+    localFilters: LocalDiscoveryFilter[],
+    filterStore: {
+      hasFilterValues: (key: string) => Promise<boolean>;
+      retrieveFilterValues: (
+        key: string
+      ) => Promise<LocalDiscoveryValueLabel[]>;
+    }
   ): Promise<DiscoveryFilter[]> {
-    const localFilters = listLocalFilters();
     const resolvedFilters = await Promise.all(
       localFilters.map(async (filter) => {
         if (filter.type !== "DROPDOWN") {
-          return (await this.store.hasFilterValues(filter.key))
+          return (await filterStore.hasFilterValues(filter.key))
             ? { ...filter, source: this.key }
             : null;
         }
 
-        const values = await this.store.retrieveFilterValues(filter.key);
+        const values = await filterStore.retrieveFilterValues(filter.key);
         if (!values.length) {
           return null;
         }
@@ -170,11 +180,26 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     );
   }
 
+  async retrieveFilters(
+    _headers: Record<string, string>
+  ): Promise<DiscoveryFilter[]> {
+    return this.resolveLocalFilters(listLocalFilters(), this.store);
+  }
+
   async retrieveFilterValues(
     key: string,
     _headers: Record<string, string>
   ): Promise<DiscoveryValueLabel[]> {
     return this.store.retrieveFilterValues(key);
+  }
+
+  async retrieveAiModelFilters(
+    _headers: Record<string, string>
+  ): Promise<DiscoveryFilter[]> {
+    return this.resolveLocalFilters(
+      listLocalAiModelFilters(),
+      this.aiModelStore
+    );
   }
 
   async searchDatasets(
@@ -284,18 +309,25 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
   }
 
   async searchAiModels(
-    options: DiscoveryAiModelSearchQuery
+    options: DiscoveryAiModelSearchQuery,
+    headers: Record<string, string>
   ): Promise<DiscoveryAiModelsSearchResponse> {
-    const response = await this.aiModelStore.searchAiModels({
-      query: options.query,
-      sort: options.sort,
-      start: options.start,
-      rows: options.rows,
-    });
+    await this.aiModelStore.ensureInitialized();
+    const [response, facets] = await Promise.all([
+      this.aiModelStore.searchAiModels({
+        query: options.query,
+        facets: options.facets?.map(({ source: _source, ...facet }) => facet),
+        sort: options.sort,
+        start: options.start,
+        rows: options.rows,
+      }),
+      this.retrieveAiModelFilters(headers),
+    ]);
 
     return {
       count: response.count,
       results: response.results.map((aiModel) => this.mapLocalAiModel(aiModel)),
+      facets,
     };
   }
 

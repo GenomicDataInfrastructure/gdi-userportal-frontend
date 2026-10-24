@@ -35,11 +35,12 @@ FROM base AS runner
 USER 0
 WORKDIR /app
 
-# The runtime only needs node: drop the base image's bundled npm/npx
-# (and the undici copy inside npm that Trivy flags, CVE-2026-109869).
+# The runtime only needs node: drop the base image's bundled npm/npx and
+# corepack (and the undici copy inside npm that Trivy flags, CVE-2026-109869).
 RUN NODE_PREFIX="$(dirname "$(dirname "$(readlink -f "$(command -v node)")")")" \
- && rm -rf "${NODE_PREFIX}/lib/node_modules/npm" "${NODE_PREFIX}/bin/npm" "${NODE_PREFIX}/bin/npx" \
- && ! command -v npm && ! command -v npx
+ && rm -rf "${NODE_PREFIX}/lib/node_modules/npm" "${NODE_PREFIX}/lib/node_modules/corepack" \
+      "${NODE_PREFIX}/bin/npm" "${NODE_PREFIX}/bin/npx" "${NODE_PREFIX}/bin/corepack" \
+ && ! command -v npm && ! command -v npx && ! command -v corepack
 
 ENV NODE_ENV="production"
 # Optional: Disable telemetry at runtime

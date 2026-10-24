@@ -12,6 +12,7 @@ const mockClient = {
     (_url: string, _body?: unknown, _config?: unknown) => Promise<{ data: any }>
   >(),
   get: jest.fn<(_url: string) => Promise<{ data: any }>>(),
+  interceptors: { request: { use: jest.fn() } },
 };
 
 jest.mock("axios", () => ({
@@ -404,10 +405,7 @@ describe("OpenSearchDiscoveryStore", () => {
 
     expect((axios as any).create).toHaveBeenCalledWith(
       expect.objectContaining({
-        headers: {
-          "Accept-Encoding": "gzip, deflate",
-          Authorization: "ApiKey abc123",
-        },
+        headers: { Authorization: "ApiKey abc123" },
         auth: undefined,
       })
     );

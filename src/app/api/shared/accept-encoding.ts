@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import type { AxiosInstance } from "axios";
+
 // Server-side requests never ask for Brotli responses (CVE-2026-111497).
 export const ACCEPT_ENCODING = "gzip, deflate";
 
@@ -27,4 +29,18 @@ export const withAcceptEncoding = (
     )
   );
   return { ...merged, "accept-encoding": ACCEPT_ENCODING };
+};
+
+/**
+ * Sets `Accept-Encoding: gzip, deflate` on every request of an axios instance,
+ * replacing instance defaults and per-request values.
+ */
+export const enforceAcceptEncoding = <T extends AxiosInstance>(
+  instance: T
+): T => {
+  instance.interceptors.request.use((config) => {
+    config.headers.set("Accept-Encoding", ACCEPT_ENCODING);
+    return config;
+  });
+  return instance;
 };

@@ -4,6 +4,8 @@
 
 services:
   frontend:
+    # The base image is linux/amd64 only; ARM hosts build it under emulation.
+    platform: linux/amd64
     ports:
       - 3000:3000
     build:

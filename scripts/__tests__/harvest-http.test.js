@@ -73,6 +73,7 @@ describe("harvest-http", () => {
         headers: {
           "Content-Type": "application/json",
           "x-harvest-secret": "secret",
+          "accept-encoding": "gzip, deflate",
         },
         body: JSON.stringify({ url: "https://catalogue.example/dcat" }),
       })
@@ -164,7 +165,7 @@ describe("harvest-http", () => {
     ).resolves.toBe(0);
   });
 
-  test("adds an undici dispatcher for HTTPS harvest API URLs", async () => {
+  test("keeps TLS verification for HTTPS harvest API URLs", async () => {
     const fetchImpl = jest.fn().mockResolvedValue({
       ok: true,
       text: jest.fn().mockResolvedValue("{}"),
@@ -179,9 +180,7 @@ describe("harvest-http", () => {
       { fetchImpl, timeoutMs: 10 }
     );
 
-    expect(fetchImpl.mock.calls[0][1]).toEqual(
-      expect.objectContaining({ dispatcher: expect.any(Object) })
-    );
+    expect(fetchImpl.mock.calls[0][1].dispatcher).toBeUndefined();
   });
 
   test("wraps fetch failures with request context", async () => {

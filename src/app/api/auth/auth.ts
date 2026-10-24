@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import { withAcceptEncoding } from "@/app/api/shared/accept-encoding";
 import { decrypt } from "@/utils/encryption";
 import { jwtDecode } from "jwt-decode";
 import { Account, getServerSession } from "next-auth";
@@ -34,7 +35,9 @@ export function completeTokenWithAccountInfo(
 
 export async function refreshAccessToken(token: JWT) {
   const response = await fetch(`${process.env.REFRESH_TOKEN_URL}`, {
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    headers: withAcceptEncoding({
+      "Content-Type": "application/x-www-form-urlencoded",
+    }),
     body: new URLSearchParams({
       client_id: `${process.env.KEYCLOAK_CLIENT_ID}`,
       client_secret: `${process.env.KEYCLOAK_CLIENT_SECRET}`,

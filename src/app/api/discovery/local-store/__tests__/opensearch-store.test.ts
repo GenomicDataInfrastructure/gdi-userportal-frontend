@@ -12,6 +12,7 @@ const mockClient = {
     (_url: string, _body?: unknown, _config?: unknown) => Promise<{ data: any }>
   >(),
   get: jest.fn<(_url: string) => Promise<{ data: any }>>(),
+  interceptors: { request: { use: jest.fn() } },
 };
 
 jest.mock("axios", () => ({

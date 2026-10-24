@@ -79,15 +79,17 @@ describe("OidcAuthService", () => {
       "https://id.example/token",
       expect.objectContaining({
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "accept-encoding": "gzip, deflate",
+        },
         body: "grant_type=client_credentials&client_id=client-id&client_secret=client-secret",
-        dispatcher: expect.anything(),
       })
     );
     expect(headers).toEqual({ Authorization: "Bearer token-123" });
   });
 
-  test("adds the harvest TLS dispatcher", async () => {
+  test("keeps TLS verification for the token request", async () => {
     process.env.HARVEST_OIDC_TOKEN_URL = "https://id.example/token";
     process.env.HARVEST_OIDC_CLIENT_ID = "client-id";
     process.env.HARVEST_OIDC_CLIENT_SECRET = "client-secret";
@@ -102,11 +104,9 @@ describe("OidcAuthService", () => {
 
     expect(fetchMock).toHaveBeenCalledWith(
       "https://id.example/token",
-      expect.objectContaining({
-        method: "POST",
-        dispatcher: expect.anything(),
-      })
+      expect.objectContaining({ method: "POST" })
     );
+    expect(fetchMock.mock.calls[0][1]).not.toHaveProperty("dispatcher");
   });
 
   test("reuses cached token while it is still valid", async () => {

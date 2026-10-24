@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { getZammadConfig } from "@/app/api/helpdesk/config";
+import { withAcceptEncoding } from "@/app/api/shared/accept-encoding";
 
 type CreateZammadTicketInput = {
   title: string;
@@ -125,10 +126,10 @@ async function postZammadTicket(
     response = await withOptionalInsecureTls(baseUrl, tlsInsecure, () =>
       fetch(`${baseUrl}/api/v1/tickets`, {
         method: "POST",
-        headers: {
+        headers: withAcceptEncoding({
           Authorization: `Token token=${apiToken}`,
           "Content-Type": "application/json",
-        },
+        }),
         body: JSON.stringify(payload),
       })
     );
@@ -162,10 +163,10 @@ async function updateZammadCustomerProfile(
     await withOptionalInsecureTls(baseUrl, tlsInsecure, () =>
       fetch(`${baseUrl}/api/v1/users/${customerId}`, {
         method: "PUT",
-        headers: {
+        headers: withAcceptEncoding({
           Authorization: `Token token=${apiToken}`,
           "Content-Type": "application/json",
-        },
+        }),
         body: JSON.stringify({
           firstname: firstName,
           lastname: lastName,

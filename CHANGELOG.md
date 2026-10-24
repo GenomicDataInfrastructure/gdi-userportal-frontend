@@ -17,6 +17,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - ci: ignore npm's bundled undici CVE-2026-109869 for 30 days by @Bruno Pacheco in 2d631fe5
 - revert: keep npm, npx and corepack in the runner image by @Bruno Pacheco in 980517f2
+## [v1.7.21] - 2026-10-24
+
+### Added
+- feat: preserve custodian, analytics and distribution availability in HealthDCAT-AP export and dataset page by @Emiliana in 6f70dd16
+-  feat: index modalities and tasks and add retrieval flow by @Rania Hamdani in 9ff5de78
+- feat: add AI model details page and enhance code by @Rania Hamdani in cea0d9d7
+- fix: gate AI Model UI on provider support, not just the feature flag by @Rania Hamdani in dbe12792
+- feat: add an AI model provider and extend opensearch to store AI models by @Rania Hamdani in 8e63abc8
+- feat: restricted functionality to apply for datasets for users without Researcher Status and T&C visas (#1247) by @aslam-mohammed-vp in 6cf2f80e
+- feat: enhance accessibility by adding labels to form elements and improving focusable element checks by @Haris Zenovic in cc30eef6
+- feat: add button for file upload with accessibility attributes by @Haris Zenovic in 52978a71
+- feat: enhance accessibility features and tests by @Haris Zenovic in f7f8cd39
+
+
+### Changed
+- chore(deps): update oras-project/setup-oras digest to 1c05fec by @Renovate Bot in cb124ac7
+- chore: updated dataset search page messages (#1248) by @aslam-mohammed-vp in c6d86a7d
+- chore(deps): update oras-project/setup-oras digest to 9a53c63 by @Renovate Bot in b160d97d
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1791925304 (#1246) by @LNDS-Sysadmins in e5b06317
+- Added acceptance test suite in documentation (#1244) by @aslam-mohammed-vp in f3b7d230
+- chore(deps): bump shell-quote from 1.10.0 to 1.12.0 in /documentation (#1233) by @dependabot[bot] in aa136dc4
+- chore(deps): bump dompurify from 3.4.13 to 3.4.16 in /documentation (#1225) by @dependabot[bot] in 35c3adf0
+- chore(deps): bump brace-expansion from 5.0.6 to 5.0.12 in /documentation (#1213) by @dependabot[bot] in 502d2c8c
+- chore(deps): bump axios from 1.18.0 to 1.20.0 (#1216) by @dependabot[bot] in a32c8868
+- chore(deps): update actions/upload-artifact action to v7.0.2 by @Renovate Bot in 639ec8b0
+- chore(deps): update oras-project/setup-oras digest to 9bf3b00 by @Renovate Bot in 6070f9b6
+- ART-30074 added acceptance test coverage (#1222) by @aslam-mohammed-vp in 6beb951d
+- chore(deps): update oras-project/setup-oras digest to 35de7d5 by @Renovate Bot in 3c33c430
+- test: update about section link assertion for multilingual routing by @Haris Zenovic in 12922694
+- chore(deps): bump @grpc/grpc-js from 1.14.4 to 1.14.5 (#1217) by @dependabot[bot] in 2065de1c
+- chore(deps): bump nanoid from 3.3.16 to 3.3.19 (#1203) by @dependabot[bot] in c281ba24
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1790838229 (#1218) by @LNDS-Sysadmins in baf27afd
+- ART-30039 prevented duplicate application for datasets user already have access (#1219) by @aslam-mohammed-vp in e7749d23
+- chore(deps): update dependency eslint-config-next to v16.3.8 by @Renovate Bot in 7f033836
+- chore(deps): update oras-project/setup-oras digest to 005458a by @Renovate Bot in 637e5f1f
+- chore(deps): update dependency eslint-config-next to v16.3.7 by @Renovate Bot in a4433f9e
+- chore(deps): update oras-project/setup-oras digest to 9f241ed by @Renovate Bot in d3c15364
+- chore(deps): update registry.access.redhat.com/ubi9/nodejs-24-minimal docker tag to v1790168883 (#1208) by @LNDS-Sysadmins in c0a24a4c
+- chore(deps): update docker/build-push-action action to v7.4.0 (#1194) by @LNDS-Sysadmins in 5ffebadf
+- chore(deps): update astral-sh/setup-uv action to v10.2.0 (#1192) by @LNDS-Sysadmins in 24f85786
+- chore(deps): bump postcss from 8.5.6 to 8.5.28 in /documentation (#1190) by @dependabot[bot] in 9cc8ca9e
+- chore(deps): update dependency eslint-config-next to v16.3.6 by @Renovate Bot in c40e7b84
+- chore(deps): update oras-project/setup-oras digest to 931fc54 by @Renovate Bot in a7a6b410
+- doc: update CHANGELOG.md for v1.7.17 by @LNDS-Sysadmins in 0b89f6f2
+
+
+### Fixed
+- fix: also drop corepack from the runner image by @Bruno Pacheco in 943357ca
+- fix: drop bundled npm from runner image; static if for zizmor by @Bruno Pacheco in 4b42969f
+- fix(deps): next 16.4.3, undici 8.12.2; disable release e2e by @Bruno Pacheco in 99d55303
+- fix: enforce accept-encoding per axios request; amd64 platform in compose by @Bruno Pacheco in 56666fc2
+- fix: Node 24.22.1 base image, no Brotli and verified TLS (CVE-2026-111497) by @Bruno Pacheco in 30b4e45d
+- fix: accessibility improvements, tests and automated test run optimizations (#1254) by @aslam-mohammed-vp in 459917fe
+- fix: sourcery by @Emiliana in 5c17e015
+- fix: test issue by @Rania Hamdani in e584f07a
+- fix: task not tasks by @Rania Hamdani in d0f12f96
+- fix: add local index by @Rania Hamdani in 58c9f376
+- fix: sonar issues by @Rania Hamdani in dd6c55b2
+- fix: accessibity tests by @Rania Hamdani in d80eb0b5
+- fix: format by @Rania Hamdani in 6d0d7c03
+- fix(deps): update react monorepo to v19.3.1 by @Renovate Bot in 3a653072
+- fix: updated sharp to fix high severity issue (#1242) by @aslam-mohammed-vp in 71f43b06
+- ART-30167 fix:DDS API contract change for Agent, DatasetSearchQueryFacet (#1239) by @aslam-mohammed-vp in 22f4b51c
+- fix: comply with HealthDCAT-AP v8 CSVW rules (#1238) by @Habib-Ahmad in 88777920
+- ART-30039 fixed access granted status for dataset cards (#1237) by @aslam-mohammed-vp in 755b8d1c
+- fix: rename parameter in resetMock function for clarity by @Haris Zenovic in d318e348
+- fix(deps): update dependency next to v16.3.8 by @Renovate Bot in 30aabf27
+- fix(deps): update dependency next to v16.3.7 by @Renovate Bot in 93d39868
+- ART-29822 fixed Add To Basket Button alignment and size for desktop and mobile (#1209) by @aslam-mohammed-vp in 67a5f598
+- fix(deps): update dependency next to v16.3.6 by @Renovate Bot in 4a35a51b
 
 
 ## [v1.7.17] - 2026-09-15

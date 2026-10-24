@@ -12,6 +12,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.7.7] - 2026-07-06
+## [v1.7.18] - 2026-09-17
+
+### Fixed
+- ART-29402 fixed yml (#1197) by @aslam-mohammed-vp in e9955ff5
+
+
 ## [v1.7.16] - 2026-08-28
 
 ### Added

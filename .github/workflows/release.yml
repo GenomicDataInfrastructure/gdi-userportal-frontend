@@ -44,7 +44,7 @@ jobs:
   # Re-enable (remove the if, and add e2e-tests back to versioning.needs)
   # once the environments are back.
   e2e-tests:
-    if: ${{ false }}
+    if: false
     runs-on: ubuntu-latest
     needs: ort
     permissions:

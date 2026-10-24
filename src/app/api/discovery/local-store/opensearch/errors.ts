@@ -5,6 +5,8 @@
 import axios, { AxiosInstance } from "axios";
 import https from "node:https";
 
+import { enforceAcceptEncoding } from "@/app/api/shared/accept-encoding";
+
 export const createOpenSearchClient = (params: {
   baseUrl: string;
   username?: string;
@@ -17,17 +19,19 @@ export const createOpenSearchClient = (params: {
     headers.Authorization = `ApiKey ${params.apiKey}`;
   }
 
-  return axios.create({
-    baseURL: params.baseUrl,
-    headers,
-    httpsAgent: params.insecureTls
-      ? new https.Agent({ rejectUnauthorized: false })
-      : undefined,
-    auth:
-      params.username && params.password
-        ? { username: params.username, password: params.password }
+  return enforceAcceptEncoding(
+    axios.create({
+      baseURL: params.baseUrl,
+      headers,
+      httpsAgent: params.insecureTls
+        ? new https.Agent({ rejectUnauthorized: false })
         : undefined,
-  });
+      auth:
+        params.username && params.password
+          ? { username: params.username, password: params.password }
+          : undefined,
+    })
+  );
 };
 
 export const formatSearchBackendError = (

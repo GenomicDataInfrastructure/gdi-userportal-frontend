@@ -5,6 +5,7 @@
 "use server";
 
 import { getToken } from "@/app/api/auth/auth";
+import { withAcceptEncoding } from "@/app/api/shared/accept-encoding";
 import { jwtDecode } from "jwt-decode";
 
 /** Maximum time to wait for any single fetch in the passport pipeline. */
@@ -23,6 +24,7 @@ async function fetchWithTimeout(
   try {
     return await fetch(url, {
       ...options,
+      headers: withAcceptEncoding(options.headers),
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
   } catch (err) {

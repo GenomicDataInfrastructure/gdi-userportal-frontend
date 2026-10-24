@@ -6,6 +6,7 @@ import { jest } from "@jest/globals";
 import { OpenSearchAiModelStore } from "@/app/api/discovery/local-store/opensearch/ai-model-store";
 
 const mockClient = {
+  interceptors: { request: { use: jest.fn() } },
   put: jest.fn<(_url: string, _body: unknown) => Promise<unknown>>(),
   post: jest.fn<
     (_url: string, _body?: unknown, _config?: unknown) => Promise<{ data: any }>

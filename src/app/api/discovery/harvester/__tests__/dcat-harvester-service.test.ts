@@ -1234,8 +1234,7 @@ describe("DcatHarvesterService", () => {
     expect(fetcher).toHaveBeenCalledWith(
       "https://example.org/catalogue.rdf",
       expect.objectContaining({
-        headers: undefined,
-        dispatcher: expect.anything(),
+        headers: { "accept-encoding": "gzip, deflate" },
       })
     );
   });
@@ -1268,7 +1267,7 @@ describe("DcatHarvesterService", () => {
     expect(datasets[0]?.id).toBe("https://example.org/datasets/header-turtle");
   });
 
-  test("harvestFromUrl adds the harvest TLS dispatcher", async () => {
+  test("harvestFromUrl keeps caller headers and TLS verification", async () => {
     const fetcher =
       jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
     fetcher.mockResolvedValueOnce({
@@ -1287,10 +1286,13 @@ describe("DcatHarvesterService", () => {
     expect(fetcher).toHaveBeenCalledWith(
       "https://example.org/catalogue.rdf",
       expect.objectContaining({
-        headers: { Authorization: "Bearer token" },
-        dispatcher: expect.anything(),
+        headers: {
+          Authorization: "Bearer token",
+          "accept-encoding": "gzip, deflate",
+        },
       })
     );
+    expect(fetcher.mock.calls[0][1]).not.toHaveProperty("dispatcher");
   });
 
   test("harvestFromUrl throws on non-ok response", async () => {

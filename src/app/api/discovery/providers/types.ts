@@ -304,6 +304,7 @@ export interface DiscoveryRetrievedAiModel extends DiscoverySearchedAiModel {
 
 export interface DiscoveryAiModelSearchQuery {
   query?: string;
+  facets?: DiscoverySearchFacet[];
   sort?: string;
   rows?: number;
   start?: number;
@@ -312,6 +313,7 @@ export interface DiscoveryAiModelSearchQuery {
 export interface DiscoveryAiModelsSearchResponse {
   count?: number;
   results?: DiscoverySearchedAiModel[];
+  facets?: DiscoveryFilter[];
 }
 
 export interface DiscoveryProvider {
@@ -338,7 +340,8 @@ export interface DiscoveryProvider {
     options: DiscoveryGVariantSearchQuery
   ) => Promise<DiscoveryGVariantSearchResult[]>;
   searchAiModels?: (
-    options: DiscoveryAiModelSearchQuery
+    options: DiscoveryAiModelSearchQuery,
+    headers: Record<string, string>
   ) => Promise<DiscoveryAiModelsSearchResponse>;
   retrieveAiModel?: (id: string) => Promise<DiscoveryRetrievedAiModel>;
 }

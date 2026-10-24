@@ -11,6 +11,8 @@ import AiModelListContainer from "./AiModelListContainer";
 import { use } from "react";
 import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
+import FilterList from "@/app/datasets/FilterList";
+import ActiveFilters from "@/app/datasets/ActiveFilters";
 import AiModelsProvider, {
   useAiModels,
 } from "@/providers/aiModels/AiModelsProvider";
@@ -18,13 +20,16 @@ import { UrlSearchParams } from "@/app/params";
 import { useLocale } from "next-intl";
 import contentConfig from "@/config/contentConfig";
 import { useAiModelSupport } from "@/providers/AiModelSupportProvider";
+import { BeaconAuthorizationProvider } from "@/providers/beacon/BeaconAuthorizationProvider";
+import { FilterProvider, useFilters } from "@/providers/filters/FilterProvider";
 
 type AiModelsPageProps = {
   searchParams: Promise<UrlSearchParams>;
 };
 
-function AiModelsSummary() {
+function AiModelsSummary({ hasQuery }: { hasQuery: boolean }) {
   const { aiModelCount, isLoading, errorCode } = useAiModels();
+  const { activeFilters } = useFilters();
   return (
     <>
       <ResultCount
@@ -37,6 +42,7 @@ function AiModelsSummary() {
         namespace="aiModels"
         count={aiModelCount}
         isLoading={isLoading}
+        hasAppliedFilters={hasQuery || activeFilters.length > 0}
       />
     </>
   );
@@ -58,23 +64,38 @@ export default function AiModelsPage({ searchParams }: AiModelsPageProps) {
   const currentPage = Number(_searchParams.page);
 
   return (
-    <PageContainer searchParams={_searchParams}>
-      <div className="grid grid-cols-12">
-        <div className="col-start-0 col-span-12 flex items-center justify-between xl:col-span-10 xl:col-start-2">
-          <SearchBar
-            searchParams={_searchParams}
-            basePath="/models"
-            placeholderKey="search.aiModelsPlaceholder"
-          />
-        </div>
-
-        <AiModelsProvider searchParams={_searchParams}>
-          <AiModelsSummary />
-          <div className="col-span-12 xl:col-span-8 xl:col-start-5">
-            <AiModelListContainer currentPage={currentPage} />
+    <BeaconAuthorizationProvider isAuthenticated={false} enabled={false}>
+      <PageContainer searchParams={_searchParams}>
+        <div className="grid grid-cols-12">
+          <div className="col-start-0 col-span-12 flex items-center justify-between xl:col-span-10 xl:col-start-2">
+            <SearchBar
+              searchParams={_searchParams}
+              basePath="/models"
+              placeholderKey="search.aiModelsPlaceholder"
+            />
           </div>
-        </AiModelsProvider>
-      </div>
-    </PageContainer>
+
+          <FilterProvider>
+            <AiModelsProvider searchParams={_searchParams}>
+              <AiModelsSummary hasQuery={Boolean(_searchParams.q)} />
+              <div className="col-start-0 col-span-12 flex flex-col gap-4 sm:block xl:hidden">
+                <div className="my-4 h-fit">
+                  <FilterList />
+                </div>
+              </div>
+              <div className="col-start-0 col-span-4 flex flex-col gap-y-6">
+                <div className="col-start-0 col-span-4 mr-6 hidden h-fit xl:block px-6">
+                  <FilterList />
+                </div>
+              </div>
+              <div className="col-span-12 xl:col-span-8">
+                <ActiveFilters />
+                <AiModelListContainer currentPage={currentPage} />
+              </div>
+            </AiModelsProvider>
+          </FilterProvider>
+        </div>
+      </PageContainer>
+    </BeaconAuthorizationProvider>
   );
 }

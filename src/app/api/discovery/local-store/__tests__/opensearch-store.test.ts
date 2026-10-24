@@ -404,7 +404,10 @@ describe("OpenSearchDiscoveryStore", () => {
 
     expect((axios as any).create).toHaveBeenCalledWith(
       expect.objectContaining({
-        headers: { Authorization: "ApiKey abc123" },
+        headers: {
+          "Accept-Encoding": "gzip, deflate",
+          Authorization: "ApiKey abc123",
+        },
         auth: undefined,
       })
     );

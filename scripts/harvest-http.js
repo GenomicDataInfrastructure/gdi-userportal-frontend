@@ -2,16 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-const { Agent, fetch: undiciFetch } = require("undici");
+const { fetch: undiciFetch } = require("undici");
 
 const HARVEST_REQUEST_TIMEOUT_MS = 600000;
-const harvestDispatcher = new Agent({
-  connect: { rejectUnauthorized: false },
-});
-
-function usesHttps(url) {
-  return String(url).trim().toLowerCase().startsWith("https://");
-}
+// Never ask for Brotli responses (CVE-2026-111497).
+const ACCEPT_ENCODING = "gzip, deflate";
 
 function buildHarvestApiUrl(baseUrl) {
   return `${String(baseUrl).replace(/\/+$/, "")}/api/discovery/harvest`;
@@ -87,6 +82,7 @@ async function requestHarvest(
       headers: {
         "Content-Type": "application/json",
         "x-harvest-secret": secret,
+        "accept-encoding": ACCEPT_ENCODING,
       },
       body: JSON.stringify({
         ...(sourceUrl ? { url: sourceUrl } : {}),
@@ -95,7 +91,6 @@ async function requestHarvest(
         ...(contentType ? { contentType } : {}),
       }),
       signal: timeoutController.signal,
-      ...(usesHttps(apiUrl) ? { dispatcher: harvestDispatcher } : {}),
     });
   } catch (error) {
     throw new Error(

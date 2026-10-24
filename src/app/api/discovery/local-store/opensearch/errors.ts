@@ -5,6 +5,8 @@
 import axios, { AxiosInstance } from "axios";
 import https from "node:https";
 
+import { ACCEPT_ENCODING } from "@/app/api/shared/accept-encoding";
+
 export const createOpenSearchClient = (params: {
   baseUrl: string;
   username?: string;
@@ -12,7 +14,9 @@ export const createOpenSearchClient = (params: {
   apiKey?: string;
   insecureTls?: boolean;
 }): AxiosInstance => {
-  const headers: Record<string, string> = {};
+  const headers: Record<string, string> = {
+    "Accept-Encoding": ACCEPT_ENCODING,
+  };
   if (params.apiKey) {
     headers.Authorization = `ApiKey ${params.apiKey}`;
   }

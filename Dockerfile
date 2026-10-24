@@ -1,7 +1,12 @@
 # SPDX-FileCopyrightText: 2024 PNED G.I.E.
 #
 # SPDX-License-Identifier: Apache-2.0
-FROM registry.access.redhat.com/ubi9/nodejs-24-minimal:1791925304 AS base
+# LNDS rhel-nodejs (ubi9-minimal + Node.js 24.22.1, CVE-2026-111497), as in #1259, pinned by digest.
+# linux/amd64 only. Bump the digest when the :24 tag is rebuilt.
+FROM registry.lnds.lu/library/rhel-nodejs:24@sha256:e40eae54cda0f074ef85c340729d7306b90a32ffd478dfa53601d81a5114e87f AS base
+USER 0
+RUN microdnf update -y && microdnf clean all
+USER 1001
 
 # Install dependencies only when needed
 FROM base AS deps

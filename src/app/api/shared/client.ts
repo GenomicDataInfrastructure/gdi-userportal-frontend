@@ -5,11 +5,16 @@
 import axios from "axios";
 
 import serverConfig from "@/config/serverConfig";
+import { ACCEPT_ENCODING } from "@/app/api/shared/accept-encoding";
 import { createApiClient as createDiscoveryApiClient } from "@/app/api/discovery/open-api/schemas";
 import { createApiClient as createAccessManagementApiClient } from "@/app/api/access-management/open-api/schemas";
 
-export const discoveryAxiosInstance = axios.create();
-export const accessManagementAxiosInstance = axios.create();
+export const discoveryAxiosInstance = axios.create({
+  headers: { "Accept-Encoding": ACCEPT_ENCODING },
+});
+export const accessManagementAxiosInstance = axios.create({
+  headers: { "Accept-Encoding": ACCEPT_ENCODING },
+});
 // Axios represents HTTP 204 as an empty string. Normalize the empty response
 // before the generated client validates endpoints whose response is void.
 accessManagementAxiosInstance.interceptors.response.use((response) => {

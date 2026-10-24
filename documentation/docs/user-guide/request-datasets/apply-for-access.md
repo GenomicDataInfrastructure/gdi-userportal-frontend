@@ -29,7 +29,7 @@ To apply for access to datasets:
 
    :::info External datasets
 
-   Some datasets may be managed by an external organisation. These datasets have an `Externally governed` label and cannot be added to the basket. To request access, select **Access External Dataset** and follow the link to the external source.
+   Some datasets may be managed by an external organisation. These datasets have an `Externally Governed` label and cannot be added to the basket. To request access, select **Access External Dataset** and follow the link to the external source.
 
    <figure>
    <img src="img/request-access/access-external-datasets.png" alt="Screenshot showing external dataset with Externally governed label" width="900" />

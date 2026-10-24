@@ -12,6 +12,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.7.7] - 2026-07-06
+## [v1.7.22] - 2026-10-24
+
+### Changed
+- ci: ignore npm's bundled undici CVE-2026-109869 for 30 days by @Bruno Pacheco in 2d631fe5
+- revert: keep npm, npx and corepack in the runner image by @Bruno Pacheco in 980517f2
+
+
 ## [v1.7.17] - 2026-09-15
 
 ### Added

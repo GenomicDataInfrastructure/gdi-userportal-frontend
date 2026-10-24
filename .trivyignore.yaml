@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: 2026 PNED G.I.E.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+vulnerabilities:
+  - id: CVE-2026-109869
+    paths:
+      - "usr/local/nvm/versions/node/*/lib/node_modules/npm/node_modules/undici/package.json"
+    expired_at: 2026-11-23
+    statement: >-
+      undici 6.29.0 bundled in the base image's npm (rhel-nodejs:24). No npm
+      release fixes it yet (npm 12.2.1 is the latest). npm stays in the image
+      because other images build on it. The app's own undici copies are fixed.
+      Remove this entry once npm ships undici >= 6.29.1 and the base digest
+      is bumped.

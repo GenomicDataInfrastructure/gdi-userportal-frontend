@@ -20,7 +20,7 @@ The GDI User Portal Front-end is a crucial component of the Genomic Data Infrast
 The GDI User Portal Front-end serves as the user-friendly interface for this initiative, utilizing [Angular CLI](https://github.com/angular/angular-cli) version 16.2.3. This frontend application plays a crucial role in enhancing user experience and ensuring efficient interaction with the genomic data infrastructure.
 
 - **Status**: 1.0.0
-- **Demo Link**: [Demo Website](https://catalogue-test.azurewebsites.net/)
+- **Demo Link**: [Demo Website](https://portal.staging.gdi.lu)
 - **Related Project**: [1+ Million Genomes Project](https://gdi.onemilliongenomes.eu/)
 
 ## Installation

@@ -122,6 +122,8 @@ const pages: {
   // Keep these feature-gated routes in the inventory without scanning a 404.
   { route: "/models", scan: false, ready: async () => {} },
   { route: "/models/[id]", scan: false, ready: async () => {} },
+  // Immediately redirects to Keycloak via next-auth signIn(); nothing to scan.
+  { route: "/login", scan: false, ready: async () => {} },
 ];
 const discoverPages = (directory: string, route = ""): string[] =>
   readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {

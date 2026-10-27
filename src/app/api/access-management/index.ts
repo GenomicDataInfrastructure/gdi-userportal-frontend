@@ -89,14 +89,14 @@ export const createApplicationApi = async (createApplicationCommand: {
 };
 
 export const listApplicationsApi = async () => {
-  const headers = await createHeaders();
+  const headers = await requireAuthenticatedHeaders();
   return await accessManagementClient.list_applications_v1({
     headers,
   });
 };
 
 export const retrieveApplicationApi = async (applicationId: number) => {
-  const headers = await createHeaders();
+  const headers = await requireAuthenticatedHeaders();
   return await accessManagementClient.retrieve_application_v1({
     params: { id: applicationId },
     headers,
@@ -210,8 +210,17 @@ export const submitApplicationApi = async (applicationId: number) => {
 };
 
 export const retrieveEntitlementsApi = async () => {
+  await requireAuthenticatedHeaders();
   return retrieveEntitlements();
 };
+
+async function requireAuthenticatedHeaders(): Promise<Record<string, string>> {
+  const headers = await createHeaders();
+  if (!headers.Authorization) {
+    throw new Error("Log in to view your applications and entitlements.");
+  }
+  return headers;
+}
 
 export const inviteMemberApi = async (
   applicationId: number,

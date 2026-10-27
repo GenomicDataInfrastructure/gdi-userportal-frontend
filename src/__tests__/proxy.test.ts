@@ -1,0 +1,71 @@
+// SPDX-FileCopyrightText: 2026 PNED G.I.E.
+// SPDX-License-Identifier: Apache-2.0
+
+import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
+import { proxy } from "../proxy";
+
+jest.mock("@/i18n/routing", () => ({ routing: { locales: ["en", "fr"] } }));
+jest.mock("next-auth/jwt", () => ({ getToken: jest.fn() }));
+jest.mock("next-intl/middleware", () => ({
+  __esModule: true,
+  default: () => () => mockLocaleResponse,
+}));
+
+let mockLocaleResponse: NextResponse;
+const mockGetToken = jest.mocked(getToken);
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  mockLocaleResponse = NextResponse.next();
+  mockGetToken.mockResolvedValue(null);
+});
+
+test.each([
+  "/requests?tab=applications",
+  "/requests?tab=entitlements",
+  "/requests/",
+  "/applications/123",
+  "/en/requests?tab=applications",
+  "/en/requests?tab=entitlements",
+  "/fr/requests?tab=entitlements",
+  "/fr/applications/123",
+])("requires sign-in for logged-out navigation to %s", async (path) => {
+  const request = new NextRequest(`http://localhost:3000${path}`);
+  const response = await proxy(request);
+  const location = new URL(response.headers.get("location")!);
+  expect(location.pathname).toBe("/login");
+  expect(location.searchParams.get("callbackUrl")).toBe(request.url);
+  expect(mockGetToken).toHaveBeenCalledWith({ req: request });
+});
+
+test("locale redirects cannot bypass authentication", async () => {
+  mockLocaleResponse = NextResponse.redirect(
+    "http://localhost:3000/en/requests"
+  );
+  const response = await proxy(
+    new NextRequest("http://localhost:3000/requests")
+  );
+  expect(new URL(response.headers.get("location")!).pathname).toBe("/login");
+});
+
+test("authenticated navigation preserves locale routing", async () => {
+  mockGetToken.mockResolvedValue({ sub: "user-1" });
+  mockLocaleResponse = NextResponse.redirect(
+    "http://localhost:3000/en/requests"
+  );
+  const response = await proxy(
+    new NextRequest("http://localhost:3000/requests")
+  );
+  expect(response).toBe(mockLocaleResponse);
+});
+
+test.each(["/", "/datasets", "/en/datasets", "/requests-other"])(
+  "public route %s remains accessible",
+  async (path) => {
+    expect(await proxy(new NextRequest(`http://localhost:3000${path}`))).toBe(
+      mockLocaleResponse
+    );
+    expect(mockGetToken).not.toHaveBeenCalled();
+  }
+);

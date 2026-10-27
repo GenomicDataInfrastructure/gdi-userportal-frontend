@@ -33,7 +33,8 @@ export const retrieveEntitlements = async (
   let visaJwts: string[];
   let passportPresent: boolean;
   try {
-    ({ visaJwts, passportPresent } = await fetchGa4ghVisas(keycloakAccessToken));
+    ({ visaJwts, passportPresent } =
+      await fetchGa4ghVisas(keycloakAccessToken));
   } catch (err) {
     console.error(
       "[entitlements] Visa fetch failed; returning empty entitlements",

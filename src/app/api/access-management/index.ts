@@ -11,13 +11,15 @@ import {
 } from "@/app/api/access-management/open-api/schemas";
 import { accessManagementClient } from "@/app/api/shared/client";
 import { createHeaders } from "@/app/api/shared/headers";
-import { AxiosError, isAxiosError } from "axios";
+import { AxiosError, AxiosHeaders, isAxiosError } from "axios";
 import { ZodError } from "zod";
 import { retrieveEntitlements } from "@/app/api/ga4gh/entitlements";
 import { checkBeaconAuthorization } from "@/app/api/ga4gh/beacon-authorization";
 
 const unauthorizedResponse = {
   status: 401,
+  statusText: "Unauthorized",
+  config: { headers: new AxiosHeaders() },
   headers: { "Content-Type": "application/json" },
   data: {
     title: "Unauthorized",
@@ -25,6 +27,27 @@ const unauthorizedResponse = {
     status: 401,
   },
 } as const;
+
+function createUnauthorizedError() {
+  return new AxiosError(
+    unauthorizedResponse.data.detail,
+    "ERR_UNAUTHORIZED",
+    undefined,
+    undefined,
+    unauthorizedResponse
+  );
+}
+
+function getBearerToken(authorizationHeader: string | undefined) {
+  if (!authorizationHeader) {
+    return null;
+  }
+  const [scheme, token] = authorizationHeader.split(" ");
+  if (scheme?.toLowerCase() !== "bearer" || !token) {
+    return null;
+  }
+  return token;
+}
 
 const forbiddenApplicationResponse = {
   status: 403,
@@ -210,14 +233,14 @@ export const submitApplicationApi = async (applicationId: number) => {
 };
 
 export const retrieveEntitlementsApi = async () => {
-  await requireAuthenticatedHeaders();
-  return retrieveEntitlements();
+  const headers = await requireAuthenticatedHeaders();
+  return retrieveEntitlements(getBearerToken(headers.Authorization));
 };
 
 async function requireAuthenticatedHeaders(): Promise<Record<string, string>> {
   const headers = await createHeaders();
   if (!headers.Authorization) {
-    throw new Error("Log in to view your applications and entitlements.");
+    throw createUnauthorizedError();
   }
   return headers;
 }

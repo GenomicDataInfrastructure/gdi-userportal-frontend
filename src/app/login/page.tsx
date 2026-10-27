@@ -19,7 +19,10 @@ export default function LoginPage() {
   const started = useRef(false);
 
   useEffect(() => {
-    if (!started.current) {
+    const hasAuthenticationError = !!new URL(window.location.href).searchParams
+      .get("error")
+      ?.trim();
+    if (!started.current && !hasAuthenticationError) {
       started.current = true;
       void startLogin();
     }

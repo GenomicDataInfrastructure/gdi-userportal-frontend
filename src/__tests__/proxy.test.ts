@@ -15,6 +15,11 @@ jest.mock("next-intl/middleware", () => ({
 let mockLocaleResponse: NextResponse;
 const mockGetToken = jest.mocked(getToken);
 
+function expectRedirectResponse(response: NextResponse) {
+  expect(response.status).toBeGreaterThanOrEqual(300);
+  expect(response.status).toBeLessThan(400);
+}
+
 beforeEach(() => {
   jest.clearAllMocks();
   mockLocaleResponse = NextResponse.next();
@@ -33,6 +38,7 @@ test.each([
 ])("requires sign-in for logged-out navigation to %s", async (path) => {
   const request = new NextRequest(`http://localhost:3000${path}`);
   const response = await proxy(request);
+  expectRedirectResponse(response);
   const location = new URL(response.headers.get("location")!);
   expect(location.pathname).toBe("/login");
   expect(location.searchParams.get("callbackUrl")).toBe(request.url);
@@ -46,6 +52,7 @@ test("locale redirects cannot bypass authentication", async () => {
   const response = await proxy(
     new NextRequest("http://localhost:3000/requests")
   );
+  expectRedirectResponse(response);
   expect(new URL(response.headers.get("location")!).pathname).toBe("/login");
 });
 

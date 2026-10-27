@@ -36,7 +36,9 @@ test.each([
     jest
       .mocked(createHeaders)
       .mockResolvedValue({ "Content-Type": "application/json" });
-    await expect(read()).rejects.toThrow("Log in");
+    await expect(read()).rejects.toMatchObject({
+      response: { status: 401 },
+    });
     expect(accessManagementClient.list_applications_v1).not.toHaveBeenCalled();
     expect(
       accessManagementClient.retrieve_application_v1
@@ -46,7 +48,8 @@ test.each([
 );
 
 test("authenticated users can read applications and entitlements", async () => {
-  const headers = { Authorization: "Bearer test-token" };
+  const accessToken = "******";
+  const headers = { Authorization: `Bearer ${accessToken}` };
   jest.mocked(createHeaders).mockResolvedValue(headers);
   jest.mocked(retrieveEntitlements).mockResolvedValue({
     entitlements: [],
@@ -65,4 +68,5 @@ test("authenticated users can read applications and entitlements", async () => {
     params: { id: 123 },
     headers,
   });
+  expect(retrieveEntitlements).toHaveBeenCalledWith(accessToken);
 });

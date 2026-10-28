@@ -159,6 +159,7 @@ table th {
 .search-result-item {
   display: block;
   padding: 0.75rem 1rem;
+  background-color: #fafafa;
   text-decoration: none;
   color: inherit;
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
@@ -225,6 +226,10 @@ table th {
 [data-theme="dark"] .search-result-item:hover,
 [data-theme="dark"] .search-result-item-active {
   background-color: var(--ifm-color-emphasis-200);
+}
+
+[data-theme="dark"] .search-result-item {
+  background-color: var(--ifm-background-color);
 }
 
 /* Responsive adjustments */

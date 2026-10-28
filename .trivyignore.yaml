@@ -13,3 +13,21 @@ vulnerabilities:
       because other images build on it. The app's own undici copies are fixed.
       Remove this entry once npm ships undici >= 6.29.1 and the base digest
       is bumped.
+  - id: CVE-2026-109383
+    paths:
+      - "usr/local/nvm/versions/node/*/lib/node_modules/npm/node_modules/undici/package.json"
+    expired_at: 2026-11-11
+    statement: >-
+      TLS certificate validation bypass in undici affects npm's bundled copy
+      in the base image. This ignore is scoped to npm's internal path only and
+      expires automatically. Remove this entry once the base image ships npm
+      with undici >= 6.29.1.
+  - id: CVE-2026-87018
+    paths:
+      - "usr/local/nvm/versions/node/*/lib/node_modules/npm/node_modules/undici/package.json"
+    expired_at: 2026-11-11
+    statement: >-
+      TLS renegotiation DoS in undici affects npm's bundled copy in the base
+      image. This ignore is scoped to npm's internal path only and expires
+      automatically. Remove this entry once the base image ships npm with
+      undici >= 6.29.1.

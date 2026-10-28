@@ -6,6 +6,7 @@ export default function SearchBar() {
   const [currentScope, setCurrentScope] = useState("all");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
+  const [activeResultIndex, setActiveResultIndex] = useState(-1);
   const [isOpen, setIsOpen] = useState(false);
   const [searchIndexes, setSearchIndexes] = useState(null);
   const searchRef = useRef(null);
@@ -106,6 +107,7 @@ export default function SearchBar() {
   const handleSearch = (e) => {
     const value = e.target.value;
     setQuery(value);
+    setActiveResultIndex(-1);
 
     if (value.trim().length >= 2) {
       const searchResults = performSearch(value, currentScope);
@@ -131,11 +133,53 @@ export default function SearchBar() {
 
   // Handle keyboard navigation
   const handleKeyDown = (e) => {
+    if (e.nativeEvent.isComposing) {
+      return;
+    }
+
+    if (e.key === "ArrowDown" && results.length > 0) {
+      e.preventDefault();
+      setIsOpen(true);
+      setActiveResultIndex((index) =>
+        index < 0 || index === results.length - 1 ? 0 : index + 1
+      );
+      return;
+    }
+
+    if (e.key === "ArrowUp" && results.length > 0) {
+      e.preventDefault();
+      setIsOpen(true);
+      setActiveResultIndex((index) =>
+        index < 0
+          ? results.length - 1
+          : (index - 1 + results.length) % results.length
+      );
+      return;
+    }
+
+    if (e.key === "Enter" && isOpen && results.length > 0) {
+      e.preventDefault();
+      const selectedResult =
+        results[activeResultIndex >= 0 ? activeResultIndex : 0];
+      window.location.assign(selectedResult.url);
+      return;
+    }
+
     if (e.key === "Escape") {
       setIsOpen(false);
       setQuery("");
+      setResults([]);
+      setActiveResultIndex(-1);
     }
   };
+
+  useEffect(() => {
+    if (activeResultIndex >= 0) {
+      resultsRef.current?.children[activeResultIndex]?.scrollIntoView({
+        block: "nearest",
+      });
+    }
+  }, [activeResultIndex]);
 
   const handleResultClick = () => {
     setIsOpen(false);
@@ -168,6 +212,17 @@ export default function SearchBar() {
       <div className="search-input-wrapper">
         <input
           type="search"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={isOpen && results.length > 0}
+          aria-controls="documentation-search-results"
+          aria-activedescendant={
+            isOpen &&
+            activeResultIndex >= 0 &&
+            activeResultIndex < results.length
+              ? `documentation-search-result-${activeResultIndex}`
+              : undefined
+          }
           placeholder={getPlaceholderText()}
           value={query}
           onChange={handleSearch}
@@ -177,12 +232,25 @@ export default function SearchBar() {
         />
 
         {isOpen && results.length > 0 && (
-          <div className="search-results-dropdown" ref={resultsRef}>
+          <div
+            className="search-results-dropdown"
+            id="documentation-search-results"
+            role="listbox"
+            ref={resultsRef}
+          >
             {results.map((result, index) => (
               <a
                 key={result.id}
                 href={result.url}
-                className="search-result-item"
+                id={`documentation-search-result-${index}`}
+                role="option"
+                aria-selected={activeResultIndex === index}
+                className={`search-result-item${
+                  activeResultIndex === index
+                    ? " search-result-item-active"
+                    : ""
+                }`}
+                onMouseMove={() => setActiveResultIndex(index)}
                 onClick={handleResultClick}
               >
                 <div className="search-result-title">{result.title}</div>

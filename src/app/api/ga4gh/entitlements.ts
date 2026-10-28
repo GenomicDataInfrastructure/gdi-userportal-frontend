@@ -18,7 +18,9 @@ import { fetchGa4ghVisas } from "./passport";
  * ControlledAccessGrants visas from trusted issuers.
  * Expired visas are filtered out before signature verification.
  */
-export const retrieveEntitlements = async (): Promise<{
+export const retrieveEntitlements = async (
+  keycloakAccessToken?: string | null
+): Promise<{
   entitlements: {
     datasetId: string;
     start?: string;
@@ -31,7 +33,8 @@ export const retrieveEntitlements = async (): Promise<{
   let visaJwts: string[];
   let passportPresent: boolean;
   try {
-    ({ visaJwts, passportPresent } = await fetchGa4ghVisas());
+    ({ visaJwts, passportPresent } =
+      await fetchGa4ghVisas(keycloakAccessToken));
   } catch (err) {
     console.error(
       "[entitlements] Visa fetch failed; returning empty entitlements",

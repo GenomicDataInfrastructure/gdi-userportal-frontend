@@ -34,6 +34,7 @@ function extractRoles(decodedToken: DecodedTokenRoles): string[] {
 }
 
 export const authOptions: NextAuthOptions = {
+  pages: { signIn: "/login" },
   providers: [
     Keycloack({
       clientId: `${process.env.KEYCLOAK_CLIENT_ID}`,

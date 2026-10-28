@@ -217,7 +217,7 @@ export default function SearchBar() {
           aria-expanded={isOpen && results.length > 0}
           aria-controls="documentation-search-results"
           aria-activedescendant={
-            activeResultIndex >= 0
+            isOpen && activeResultIndex >= 0 && activeResultIndex < results.length
               ? `documentation-search-result-${activeResultIndex}`
               : undefined
           }

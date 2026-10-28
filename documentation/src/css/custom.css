@@ -165,7 +165,8 @@ table th {
   transition: background-color 0.2s ease;
 }
 
-.search-result-item:hover {
+.search-result-item:hover,
+.search-result-item-active {
   background-color: var(--ifm-color-emphasis-100);
   text-decoration: none;
   color: inherit;
@@ -221,7 +222,8 @@ table th {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-[data-theme="dark"] .search-result-item:hover {
+[data-theme="dark"] .search-result-item:hover,
+[data-theme="dark"] .search-result-item-active {
   background-color: var(--ifm-color-emphasis-200);
 }
 

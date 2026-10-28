@@ -153,7 +153,7 @@ export default function SearchBar() {
       return;
     }
 
-    if (e.key === "Enter" && results.length > 0) {
+    if (e.key === "Enter" && isOpen && results.length > 0) {
       e.preventDefault();
       const selectedResult =
         results[activeResultIndex >= 0 ? activeResultIndex : 0];

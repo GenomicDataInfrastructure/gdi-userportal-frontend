@@ -32,7 +32,7 @@ flowchart LR
 
 :::note External datasets
 
-This process does not apply to datasets labelled as `Externally Governed`. These datasets are maintained by organisations outside of GDI. To access them, follow the links to their external websites. 
+This process does not apply to datasets labelled as `Externally Governed`. These datasets are maintained by organisations outside of GDI. To access them, follow the links to their external websites.
 
 :::
 

@@ -224,7 +224,7 @@ table th {
 }
 
 [data-theme="dark"] .search-result-item:hover,
-[data-theme="dark"] .search-result-item-active {
+[data-theme="dark"] .search-result-item.search-result-item-active {
   background-color: var(--ifm-color-emphasis-200);
 }
 

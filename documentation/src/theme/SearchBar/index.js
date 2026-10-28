@@ -133,6 +133,10 @@ export default function SearchBar() {
 
   // Handle keyboard navigation
   const handleKeyDown = (e) => {
+    if (e.nativeEvent.isComposing) {
+      return;
+    }
+
     if (e.key === "ArrowDown" && results.length > 0) {
       e.preventDefault();
       setIsOpen(true);
@@ -213,7 +217,7 @@ export default function SearchBar() {
           aria-expanded={isOpen && results.length > 0}
           aria-controls="documentation-search-results"
           aria-activedescendant={
-            activeResultIndex >= 0
+            isOpen && activeResultIndex >= 0 && activeResultIndex < results.length
               ? `documentation-search-result-${activeResultIndex}`
               : undefined
           }

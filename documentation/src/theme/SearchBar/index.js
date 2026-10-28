@@ -133,6 +133,10 @@ export default function SearchBar() {
 
   // Handle keyboard navigation
   const handleKeyDown = (e) => {
+    if (e.nativeEvent.isComposing) {
+      return;
+    }
+
     if (e.key === "ArrowDown" && results.length > 0) {
       e.preventDefault();
       setIsOpen(true);

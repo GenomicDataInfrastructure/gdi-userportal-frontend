@@ -4,7 +4,6 @@
 
 import { test, expect } from "./fixtures/mockApi";
 import { encode } from "next-auth/jwt";
-import Cryptr from "cryptr";
 import type { Page } from "@playwright/test";
 import { mockAccessToken, setVisaScenario } from "./fixtures/visaScenario";
 
@@ -17,17 +16,11 @@ const isMocked = process.env.E2E_MODE === "mocked";
 /**
  * Creates a NextAuth JWT cookie that passes both:
  *  - The middleware `getToken` check (requires a valid signed JWT)
- *  - The session callback (requires `access_token` and `id_token` so Cryptr
- *    does not throw, enabling `getToken("access_token")` to return a value
- *    that the GA4GH Passport flow can use)
+ *  - The session callback (requires `access_token` and `id_token` so the
+ *    server-side token flow can use the Keycloak credentials)
  */
 async function setAuthCookie(page: Page) {
   const secret = process.env.NEXTAUTH_SECRET || "your-secret";
-  // The session callback calls encrypt(token.access_token) using NEXTAUTH_URL
-  // as the Cryptr secret.  Pre-encrypt here so the raw token stored in the
-  // NextAuth JWT matches what the session callback would produce.
-  const nextAuthUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-  const cryptr = new Cryptr(nextAuthUrl);
 
   const fakeKeycloakToken = mockAccessToken(page);
   const fakeIdToken = "fake-id-token";
@@ -58,15 +51,11 @@ async function setAuthCookie(page: Page) {
       sameSite: "Lax",
     },
   ]);
-
-  // Suppress unused variable warning — cryptr is imported for type purposes
-  void cryptr;
 }
 
 /**
- * Keep a valid session with an empty access token. Omitting the token fields
- * makes the session callback throw and NextAuth discard the session before
- * the entitlement page can render its passport-unavailable state.
+ * Keep a valid session with an empty access token to exercise the
+ * passport-unavailable state without requiring a real Keycloak credential.
  */
 async function setAuthCookieWithoutTokens(page: Page) {
   const secret = process.env.NEXTAUTH_SECRET || "your-secret";

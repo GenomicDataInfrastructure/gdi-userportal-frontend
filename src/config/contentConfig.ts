@@ -30,9 +30,30 @@ interface ContentConfig {
   showApplicationOptions: boolean;
   showServices: boolean;
   enableAiModel: boolean;
+  crmEmbedEnabled: boolean;
+  crmEmbedTestPortalId: string;
   footerLogos?: Array<{ src: string; alt: string; url?: string }>;
   favicon: string;
   headerLogoUrl: string;
+}
+
+const crmEmbedEnabled =
+  env("NEXT_PUBLIC_CRM_EMBED_ENABLED")?.toLowerCase() === "true";
+const crmEmbedEnvironment =
+  env("NEXT_PUBLIC_CRM_EMBED_ENVIRONMENT")?.trim().toLowerCase() || "";
+const crmEmbedTestPortalId =
+  env("NEXT_PUBLIC_CRM_EMBED_TEST_PORTAL_ID")?.trim() || "";
+
+if (
+  crmEmbedEnabled &&
+  (crmEmbedEnvironment !== "test" ||
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+      crmEmbedTestPortalId
+    ))
+) {
+  throw new Error(
+    "CRM embed requires NEXT_PUBLIC_CRM_EMBED_ENVIRONMENT=test and a valid NEXT_PUBLIC_CRM_EMBED_TEST_PORTAL_ID when NEXT_PUBLIC_CRM_EMBED_ENABLED is true"
+  );
 }
 
 const contentConfig: ContentConfig = {
@@ -78,6 +99,8 @@ const contentConfig: ContentConfig = {
     env("NEXT_PUBLIC_FEATURE_APPLICATION_OPTIONS")?.toLowerCase() === "true",
   showServices: env("NEXT_PUBLIC_SHOW_SERVICES")?.toLowerCase() === "true",
   enableAiModel: env("NEXT_PUBLIC_ENABLE_AI_MODEL")?.toLowerCase() === "true",
+  crmEmbedEnabled,
+  crmEmbedTestPortalId,
   footerLogos: env("NEXT_PUBLIC_FOOTER_LOGOS")
     ? JSON.parse(env("NEXT_PUBLIC_FOOTER_LOGOS") || "[]")
     : undefined,

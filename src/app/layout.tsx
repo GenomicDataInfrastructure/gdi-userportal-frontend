@@ -9,6 +9,7 @@ import { routing, type AppLocale } from "@/i18n/routing";
 import { DatasetBasketProvider } from "@/providers/DatasetBasketProvider";
 import { AlertProvider } from "@/providers/AlertProvider";
 import { NotificationsProvider } from "@/providers/notifications/NotificationsProvider";
+import CrmEmbedScript from "@/components/CrmEmbedScript";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { NextIntlClientProvider } from "next-intl";
@@ -79,6 +80,11 @@ export default async function RootLayout({
             </a>
             <AlertProvider>
               <SessionProviderWrapper>
+                {contentConfig.crmEmbedEnabled && (
+                  <CrmEmbedScript
+                    portalId={contentConfig.crmEmbedTestPortalId}
+                  />
+                )}
                 <DatasetBasketProvider>
                   <div className="grid h-screen w-full grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr_auto]">
                     <NotificationsProvider>

@@ -30,9 +30,26 @@ interface ContentConfig {
   showApplicationOptions: boolean;
   showServices: boolean;
   enableAiModel: boolean;
+  crmEmbedEnabled: boolean;
+  crmEmbedPortalId: string;
   footerLogos?: Array<{ src: string; alt: string; url?: string }>;
   favicon: string;
   headerLogoUrl: string;
+}
+
+const crmEmbedPortalId = env("NEXT_PUBLIC_CRM_EMBED_PORTAL_ID")?.trim() || "";
+const crmEmbedEnabled =
+  env("NEXT_PUBLIC_CRM_EMBED_ENABLED")?.toLowerCase() === "true";
+
+if (
+  crmEmbedEnabled &&
+  !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+    crmEmbedPortalId
+  )
+) {
+  throw new Error(
+    "NEXT_PUBLIC_CRM_EMBED_PORTAL_ID must be a valid UUID when NEXT_PUBLIC_CRM_EMBED_ENABLED is true"
+  );
 }
 
 const contentConfig: ContentConfig = {
@@ -78,6 +95,8 @@ const contentConfig: ContentConfig = {
     env("NEXT_PUBLIC_FEATURE_APPLICATION_OPTIONS")?.toLowerCase() === "true",
   showServices: env("NEXT_PUBLIC_SHOW_SERVICES")?.toLowerCase() === "true",
   enableAiModel: env("NEXT_PUBLIC_ENABLE_AI_MODEL")?.toLowerCase() === "true",
+  crmEmbedEnabled,
+  crmEmbedPortalId,
   footerLogos: env("NEXT_PUBLIC_FOOTER_LOGOS")
     ? JSON.parse(env("NEXT_PUBLIC_FOOTER_LOGOS") || "[]")
     : undefined,

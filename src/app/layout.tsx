@@ -14,6 +14,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { NextIntlClientProvider } from "next-intl";
 import { headers } from "next/headers";
 import { PublicEnvScript } from "next-runtime-env";
+import Script from "next/script";
 import Footer from "./Footer";
 import SessionProviderWrapper from "./SessionProviderWrapper";
 import "./globals.css";
@@ -68,6 +69,13 @@ export default async function RootLayout({
         <link rel="stylesheet" href={"/fonts.css"} />
       </head>
       <body>
+        {contentConfig.crmEmbedEnabled && (
+          <Script
+            src="https://gdi-crm.dyn.cloud.e-infra.cz/embed.js"
+            data-portal={contentConfig.crmEmbedPortalId}
+            strategy="afterInteractive"
+          />
+        )}
         <ScrollToTop />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AiModelSupportProvider value={supportsAiModels}>

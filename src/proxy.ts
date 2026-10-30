@@ -15,6 +15,17 @@ function isProtectedPathname(pathname: string) {
   ).test(pathname);
 }
 
+// next-auth's getToken() only infers the secure (`__Secure-`-prefixed) cookie
+// name from NEXTAUTH_URL/VERCEL, not from the request, so behind a TLS
+// terminating reverse proxy it can look for the wrong cookie unless told
+// explicitly that the original request was HTTPS.
+function isSecureRequest(req: NextRequest) {
+  return (
+    req.headers.get("x-forwarded-proto") === "https" ||
+    req.nextUrl.protocol === "https:"
+  );
+}
+
 export async function proxy(req: NextRequest) {
   const response = handleI18nRouting(req);
 
@@ -22,7 +33,7 @@ export async function proxy(req: NextRequest) {
     return response;
   }
 
-  const token = await getToken({ req });
+  const token = await getToken({ req, secureCookie: isSecureRequest(req) });
 
   if (!token) {
     const signInUrl = new URL("/login", req.url);

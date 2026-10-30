@@ -42,7 +42,30 @@ test.each([
   const location = new URL(response.headers.get("location")!);
   expect(location.pathname).toBe("/login");
   expect(location.searchParams.get("callbackUrl")).toBe(request.url);
-  expect(mockGetToken).toHaveBeenCalledWith({ req: request });
+  expect(mockGetToken).toHaveBeenCalledWith({
+    req: request,
+    secureCookie: false,
+  });
+});
+
+test("passes secureCookie: true when the request arrives over HTTPS", async () => {
+  const request = new NextRequest("https://portal.example.org/requests");
+  await proxy(request);
+  expect(mockGetToken).toHaveBeenCalledWith({
+    req: request,
+    secureCookie: true,
+  });
+});
+
+test("passes secureCookie: true when forwarded by a TLS-terminating proxy", async () => {
+  const request = new NextRequest("http://localhost:3000/requests", {
+    headers: { "x-forwarded-proto": "https" },
+  });
+  await proxy(request);
+  expect(mockGetToken).toHaveBeenCalledWith({
+    req: request,
+    secureCookie: true,
+  });
 });
 
 test("locale redirects cannot bypass authentication", async () => {

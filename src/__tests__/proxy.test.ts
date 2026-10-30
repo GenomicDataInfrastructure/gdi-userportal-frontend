@@ -68,6 +68,32 @@ test("passes secureCookie: true when forwarded by a TLS-terminating proxy", asyn
   });
 });
 
+test("passes secureCookie: true for the client-facing protocol in a forwarded-proto chain", async () => {
+  const request = new NextRequest("http://localhost:3000/requests", {
+    headers: { "x-forwarded-proto": "https, http" },
+  });
+  await proxy(request);
+  expect(mockGetToken).toHaveBeenCalledWith({
+    req: request,
+    secureCookie: true,
+  });
+});
+
+test("passes secureCookie: true when NEXTAUTH_URL is https, even without a forwarded header", async () => {
+  const originalNextAuthUrl = process.env.NEXTAUTH_URL;
+  process.env.NEXTAUTH_URL = "https://portal.example.org";
+  try {
+    const request = new NextRequest("http://localhost:3000/requests");
+    await proxy(request);
+    expect(mockGetToken).toHaveBeenCalledWith({
+      req: request,
+      secureCookie: true,
+    });
+  } finally {
+    process.env.NEXTAUTH_URL = originalNextAuthUrl;
+  }
+});
+
 test("locale redirects cannot bypass authentication", async () => {
   mockLocaleResponse = NextResponse.redirect(
     "http://localhost:3000/en/requests"

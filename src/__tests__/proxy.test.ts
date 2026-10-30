@@ -42,7 +42,56 @@ test.each([
   const location = new URL(response.headers.get("location")!);
   expect(location.pathname).toBe("/login");
   expect(location.searchParams.get("callbackUrl")).toBe(request.url);
-  expect(mockGetToken).toHaveBeenCalledWith({ req: request });
+  expect(mockGetToken).toHaveBeenCalledWith({
+    req: request,
+    secureCookie: false,
+  });
+});
+
+test("passes secureCookie: true when the request arrives over HTTPS", async () => {
+  const request = new NextRequest("https://portal.example.org/requests");
+  await proxy(request);
+  expect(mockGetToken).toHaveBeenCalledWith({
+    req: request,
+    secureCookie: true,
+  });
+});
+
+test("passes secureCookie: true when forwarded by a TLS-terminating proxy", async () => {
+  const request = new NextRequest("http://localhost:3000/requests", {
+    headers: { "x-forwarded-proto": "https" },
+  });
+  await proxy(request);
+  expect(mockGetToken).toHaveBeenCalledWith({
+    req: request,
+    secureCookie: true,
+  });
+});
+
+test("passes secureCookie: true for the client-facing protocol in a forwarded-proto chain", async () => {
+  const request = new NextRequest("http://localhost:3000/requests", {
+    headers: { "x-forwarded-proto": "https, http" },
+  });
+  await proxy(request);
+  expect(mockGetToken).toHaveBeenCalledWith({
+    req: request,
+    secureCookie: true,
+  });
+});
+
+test("passes secureCookie: true when NEXTAUTH_URL is https, even without a forwarded header", async () => {
+  const originalNextAuthUrl = process.env.NEXTAUTH_URL;
+  process.env.NEXTAUTH_URL = "https://portal.example.org";
+  try {
+    const request = new NextRequest("http://localhost:3000/requests");
+    await proxy(request);
+    expect(mockGetToken).toHaveBeenCalledWith({
+      req: request,
+      secureCookie: true,
+    });
+  } finally {
+    process.env.NEXTAUTH_URL = originalNextAuthUrl;
+  }
 });
 
 test("locale redirects cannot bypass authentication", async () => {

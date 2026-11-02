@@ -81,4 +81,3 @@ test("recovers from a failed sign-in attempt instead of spinning forever", async
 
   expect(container.textContent).not.toBe("");
 });
-

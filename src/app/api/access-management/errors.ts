@@ -9,9 +9,7 @@
 export const ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE =
   "ACCESS_MANAGEMENT_UNAUTHORIZED";
 
-export function isAccessManagementUnauthorizedError(
-  error: unknown
-): boolean {
+export function isAccessManagementUnauthorizedError(error: unknown): boolean {
   return (
     error instanceof Error &&
     error.message === ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE

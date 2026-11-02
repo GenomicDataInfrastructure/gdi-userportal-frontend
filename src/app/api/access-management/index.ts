@@ -14,7 +14,7 @@ import { createHeaders } from "@/app/api/shared/headers";
 import { AxiosError, AxiosHeaders, isAxiosError } from "axios";
 import { ZodError } from "zod";
 import { retrieveEntitlements } from "@/app/api/ga4gh/entitlements";
-import { LsAaiUnauthorizedError } from "@/app/api/ga4gh/passport";
+import { LsAaiUnauthorizedError } from "@/app/api/ga4gh/errors";
 import { checkBeaconAuthorization } from "@/app/api/ga4gh/beacon-authorization";
 import { ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE } from "./errors";
 

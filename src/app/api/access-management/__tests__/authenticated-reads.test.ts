@@ -9,7 +9,7 @@ import {
 import { createHeaders } from "@/app/api/shared/headers";
 import { accessManagementClient } from "@/app/api/shared/client";
 import { retrieveEntitlements } from "@/app/api/ga4gh/entitlements";
-import { LsAaiUnauthorizedError } from "@/app/api/ga4gh/passport";
+import { LsAaiUnauthorizedError } from "@/app/api/ga4gh/errors";
 import { ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE } from "../errors";
 
 jest.mock("@/app/api/shared/headers", () => ({ createHeaders: jest.fn() }));
@@ -35,9 +35,7 @@ test("rejects unauthenticated application detail reads before accessing data", a
   await expect(retrieveApplicationApi(123)).rejects.toMatchObject({
     response: { status: 401 },
   });
-  expect(
-    accessManagementClient.retrieve_application_v1
-  ).not.toHaveBeenCalled();
+  expect(accessManagementClient.retrieve_application_v1).not.toHaveBeenCalled();
 });
 
 test.each([

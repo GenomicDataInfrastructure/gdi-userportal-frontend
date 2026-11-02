@@ -8,7 +8,8 @@ import {
   ControlledAccessGrant,
   extractVerifiedControlledAccessGrants,
 } from "./visa";
-import { fetchGa4ghVisas, LsAaiUnauthorizedError } from "./passport";
+import { fetchGa4ghVisas } from "./passport";
+import { LsAaiUnauthorizedError } from "./errors";
 
 /**
  * GA4GH Passport/Visa-based entitlement retrieval.
@@ -47,7 +48,6 @@ export const retrieveEntitlements = async (
     );
     return { entitlements: [], passportPresent: false };
   }
-
 
   let grants: ControlledAccessGrant[];
   try {

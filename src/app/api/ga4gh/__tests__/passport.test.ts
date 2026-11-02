@@ -4,7 +4,8 @@
 
 import { jest } from "@jest/globals";
 import { getToken } from "@/app/api/auth/auth";
-import { fetchGa4ghPassport, fetchGa4ghVisas, LsAaiUnauthorizedError } from "../passport";
+import { fetchGa4ghPassport, fetchGa4ghVisas } from "../passport";
+import { LsAaiUnauthorizedError } from "../errors";
 
 jest.mock("@/app/api/auth/auth");
 const mockedGetToken = getToken as jest.MockedFunction<typeof getToken>;

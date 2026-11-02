@@ -7,6 +7,7 @@
 import { getToken } from "@/app/api/auth/auth";
 import { withAcceptEncoding } from "@/app/api/shared/accept-encoding";
 import { jwtDecode } from "jwt-decode";
+import { LsAaiUnauthorizedError } from "./errors";
 
 /** Maximum time to wait for any single fetch in the passport pipeline. */
 const FETCH_TIMEOUT_MS = 10_000;
@@ -53,17 +54,6 @@ type DecodedAccessToken = {
 };
 
 const MAX_VISA_JWTS = 100;
-
-/**
- * Thrown when LS-AAI rejects the Keycloak access token itself (HTTP 401),
- * as opposed to LS-AAI being unreachable or returning no passport claim.
- */
-export class LsAaiUnauthorizedError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "LsAaiUnauthorizedError";
-  }
-}
 
 /**
  * The result of fetching a GA4GH Passport.

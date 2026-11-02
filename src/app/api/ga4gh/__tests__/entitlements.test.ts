@@ -5,7 +5,8 @@
 import { jest } from "@jest/globals";
 import { extractVerifiedControlledAccessGrants } from "../visa";
 import { retrieveEntitlements } from "../entitlements";
-import { fetchGa4ghVisas, LsAaiUnauthorizedError } from "../passport";
+import { fetchGa4ghVisas } from "../passport";
+import { LsAaiUnauthorizedError } from "../errors";
 
 jest.mock("../passport");
 jest.mock("../visa");

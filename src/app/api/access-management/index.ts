@@ -13,22 +13,21 @@ import { accessManagementClient } from "@/app/api/shared/client";
 import { createHeaders } from "@/app/api/shared/headers";
 import { AxiosError, AxiosHeaders, isAxiosError } from "axios";
 import { ZodError } from "zod";
-import { retrieveEntitlements } from "@/app/api/ga4gh/entitlements";
 import { LsAaiUnauthorizedError } from "@/app/api/ga4gh/errors";
+import { retrieveEntitlements } from "@/app/api/ga4gh/entitlements";
 import { checkBeaconAuthorization } from "@/app/api/ga4gh/beacon-authorization";
-import { ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE } from "./errors";
 
-// Server Actions only forward `Error.message` to the client, stripping
-// AxiosError/LsAaiUnauthorizedError-ness, so unauthorized failures must be
-// normalized to a stable message before crossing that boundary.
-function toAccessManagementError(error: unknown): Error {
-  const isUnauthorized =
+// Return expected failures as plain data: production sanitizes thrown errors.
+function toAccessManagementFailure(error: unknown) {
+  const unauthorized =
     (isAxiosError(error) && error.response?.status === 401) ||
     error instanceof LsAaiUnauthorizedError;
-  if (isUnauthorized) {
-    return new Error(ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE);
+  if (unauthorized) {
+    return { ok: false as const, status: 401 as const };
   }
-  return error instanceof Error ? error : new Error("Unknown error");
+  // Unexpected failures must remain visible in server logs. Next.js hides
+  // their details from production clients, which show the generic error UI.
+  throw error;
 }
 
 const unauthorizedResponse = {
@@ -129,11 +128,10 @@ export const createApplicationApi = async (createApplicationCommand: {
 export const listApplicationsApi = async () => {
   try {
     const headers = await requireAuthenticatedHeaders();
-    return await accessManagementClient.list_applications_v1({
-      headers,
-    });
+    const data = await accessManagementClient.list_applications_v1({ headers });
+    return { ok: true as const, data };
   } catch (error) {
-    throw toAccessManagementError(error);
+    return toAccessManagementFailure(error);
   }
 };
 
@@ -254,9 +252,12 @@ export const submitApplicationApi = async (applicationId: number) => {
 export const retrieveEntitlementsApi = async () => {
   try {
     const headers = await requireAuthenticatedHeaders();
-    return await retrieveEntitlements(getBearerToken(headers.Authorization));
+    const data = await retrieveEntitlements(
+      getBearerToken(headers.Authorization)
+    );
+    return { ok: true as const, data };
   } catch (error) {
-    throw toAccessManagementError(error);
+    return toAccessManagementFailure(error);
   }
 };
 

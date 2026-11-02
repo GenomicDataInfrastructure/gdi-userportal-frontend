@@ -92,8 +92,8 @@ describe("fetchGa4ghPassport", () => {
       mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
       mockFetch([{ ok: false, status: 401, body: {} }]);
 
-      await expect(fetchGa4ghPassport()).rejects.toThrow(
-        "LS-AAI token exchange failed: 401"
+      await expect(fetchGa4ghPassport()).rejects.toBeInstanceOf(
+        LsAaiUnauthorizedError
       );
     });
 
@@ -203,8 +203,8 @@ describe("fetchGa4ghPassport", () => {
         { ok: false, status: 401, body: { error: "invalid_token" } },
       ]);
 
-      await expect(fetchGa4ghPassport()).rejects.toThrow(
-        "LS-AAI userinfo request failed: 401 invalid_token"
+      await expect(fetchGa4ghPassport()).rejects.toBeInstanceOf(
+        LsAaiUnauthorizedError
       );
     });
   });

@@ -17,7 +17,6 @@ import { useTranslations } from "next-intl";
 import { EmptyEntitlements } from "./EmptyEntitlements";
 import PassportUnavailableBanner from "./PassportUnavailableBanner";
 import { retrieveEntitlementsApi } from "../../api/access-management";
-import { isAccessManagementUnauthorizedError } from "@/app/api/access-management/errors";
 import { ErrorResponse } from "@/app/api/access-management/open-api/schemas";
 import { DatasetEntitlement } from "@/app/api/access-management/additional-types";
 
@@ -37,17 +36,31 @@ function EntitlementsPage() {
   const [response, setResponse] = useState<EntitlementsResponse>({
     status: "loading",
   });
+
   const isRedirectingToLogin = useRef(false);
 
   useEffect(() => {
     async function fetchData() {
       try {
         const result = await retrieveEntitlementsApi();
-        const { entitlements } = result;
+        if (!result.ok) {
+          if (isRedirectingToLogin.current) return;
+          isRedirectingToLogin.current = true;
+          try {
+            await signIn("keycloak", { callbackUrl: window.location.href });
+          } catch (signInError) {
+            console.error(signInError);
+            isRedirectingToLogin.current = false;
+            setResponse({ status: "error" });
+          }
+          return;
+        }
+
+        const { entitlements } = result.data;
         const passportPresent =
-          "passportPresent" in result &&
-          typeof result.passportPresent === "boolean"
-            ? result.passportPresent
+          "passportPresent" in result.data &&
+          typeof result.data.passportPresent === "boolean"
+            ? result.data.passportPresent
             : undefined;
 
         const datasetEntitlements =
@@ -60,21 +73,6 @@ function EntitlementsPage() {
         });
       } catch (error) {
         console.error(error);
-
-        // A stale/invalid access token is rejected at the gateway, so
-        // re-authenticate instead of showing a generic error.
-        if (isAccessManagementUnauthorizedError(error)) {
-          if (isRedirectingToLogin.current) return;
-          isRedirectingToLogin.current = true;
-          try {
-            await signIn("keycloak", { callbackUrl: window.location.href });
-          } catch (signInError) {
-            console.error(signInError);
-            isRedirectingToLogin.current = false;
-            setResponse({ status: "error" });
-          }
-          return;
-        }
 
         let errorResponse;
         if (axios.isAxiosError(error)) {

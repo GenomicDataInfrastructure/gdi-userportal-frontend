@@ -19,7 +19,6 @@ import axios from "axios";
 import { signIn } from "next-auth/react";
 import ApplicationCard from "./ApplicationCard";
 import { listApplicationsApi } from "../../api/access-management";
-import { isAccessManagementUnauthorizedError } from "@/app/api/access-management/errors";
 import {
   ErrorResponse,
   ListedApplication,
@@ -36,29 +35,28 @@ const ApplicationsPage: React.FC = () => {
   const [response, setResponse] = useState<ApplicationResponse>({
     status: "loading",
   });
+
   const isRedirectingToLogin = useRef(false);
 
   const fetchApplications = async () => {
     setResponse({ status: "loading" });
     try {
-      const applications = await listApplicationsApi();
-      setResponse({ applications, status: "success" });
-    } catch (error) {
-      console.error(error);
-      // A stale/invalid access token is rejected at the gateway, so
-      // re-authenticate instead of showing a generic error.
-      if (isAccessManagementUnauthorizedError(error)) {
+      const result = await listApplicationsApi();
+      if (!result.ok) {
         if (isRedirectingToLogin.current) return;
         isRedirectingToLogin.current = true;
         try {
           await signIn("keycloak", { callbackUrl: window.location.href });
-        } catch (signInError) {
-          console.error(signInError);
+        } catch (error) {
+          console.error(error);
           isRedirectingToLogin.current = false;
           setResponse({ status: "error" });
         }
         return;
       }
+      setResponse({ applications: result.data, status: "success" });
+    } catch (error) {
+      console.error(error);
       setResponse({
         status: "error",
         error: axios.isAxiosError(error) ? error.response?.data : undefined,

@@ -14,7 +14,22 @@ import { createHeaders } from "@/app/api/shared/headers";
 import { AxiosError, AxiosHeaders, isAxiosError } from "axios";
 import { ZodError } from "zod";
 import { retrieveEntitlements } from "@/app/api/ga4gh/entitlements";
+import { LsAaiUnauthorizedError } from "@/app/api/ga4gh/errors";
 import { checkBeaconAuthorization } from "@/app/api/ga4gh/beacon-authorization";
+import { ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE } from "./errors";
+
+// Server Actions only forward `Error.message` to the client, stripping
+// AxiosError/LsAaiUnauthorizedError-ness, so unauthorized failures must be
+// normalized to a stable message before crossing that boundary.
+function toAccessManagementError(error: unknown): Error {
+  const isUnauthorized =
+    (isAxiosError(error) && error.response?.status === 401) ||
+    error instanceof LsAaiUnauthorizedError;
+  if (isUnauthorized) {
+    return new Error(ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE);
+  }
+  return error instanceof Error ? error : new Error("Unknown error");
+}
 
 const unauthorizedResponse = {
   status: 401,
@@ -112,10 +127,14 @@ export const createApplicationApi = async (createApplicationCommand: {
 };
 
 export const listApplicationsApi = async () => {
-  const headers = await requireAuthenticatedHeaders();
-  return await accessManagementClient.list_applications_v1({
-    headers,
-  });
+  try {
+    const headers = await requireAuthenticatedHeaders();
+    return await accessManagementClient.list_applications_v1({
+      headers,
+    });
+  } catch (error) {
+    throw toAccessManagementError(error);
+  }
 };
 
 export const retrieveApplicationApi = async (applicationId: number) => {
@@ -233,8 +252,12 @@ export const submitApplicationApi = async (applicationId: number) => {
 };
 
 export const retrieveEntitlementsApi = async () => {
-  const headers = await requireAuthenticatedHeaders();
-  return retrieveEntitlements(getBearerToken(headers.Authorization));
+  try {
+    const headers = await requireAuthenticatedHeaders();
+    return await retrieveEntitlements(getBearerToken(headers.Authorization));
+  } catch (error) {
+    throw toAccessManagementError(error);
+  }
 };
 
 async function requireAuthenticatedHeaders(): Promise<Record<string, string>> {

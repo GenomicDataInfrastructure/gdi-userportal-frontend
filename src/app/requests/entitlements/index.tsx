@@ -12,6 +12,7 @@ import EntitlementsList from "./EntitlementsList";
 import LoadingContainer from "@/components/LoadingContainer";
 import Error from "@/app/error";
 import axios from "axios";
+import { signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { EmptyEntitlements } from "./EmptyEntitlements";
 import PassportUnavailableBanner from "./PassportUnavailableBanner";
@@ -58,9 +59,16 @@ function EntitlementsPage() {
       } catch (error) {
         console.error(error);
 
+        // A stale/invalid access token is rejected at the gateway (no JSON
+        // body), so re-authenticate instead of showing a generic error.
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          await signIn("keycloak", { callbackUrl: window.location.href });
+          return;
+        }
+
         let errorResponse;
         if (axios.isAxiosError(error)) {
-          errorResponse = error.response!.data;
+          errorResponse = error.response?.data;
         }
 
         setResponse({

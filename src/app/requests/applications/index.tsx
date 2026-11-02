@@ -16,6 +16,7 @@ import React, { useEffect, useState } from "react";
 import { Status } from "@/utils/pageStatus.types";
 import LoadingContainer from "@/components/LoadingContainer";
 import axios from "axios";
+import { signIn } from "next-auth/react";
 import ApplicationCard from "./ApplicationCard";
 import { listApplicationsApi } from "../../api/access-management";
 import {
@@ -42,9 +43,15 @@ const ApplicationsPage: React.FC = () => {
       setResponse({ applications, status: "success" });
     } catch (error) {
       console.error(error);
+      // A stale/invalid access token is rejected at the gateway (no JSON
+      // body), so re-authenticate instead of showing a generic error.
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        await signIn("keycloak", { callbackUrl: window.location.href });
+        return;
+      }
       setResponse({
         status: "error",
-        error: axios.isAxiosError(error) ? error.response!.data : undefined,
+        error: axios.isAxiosError(error) ? error.response?.data : undefined,
       });
     }
   };

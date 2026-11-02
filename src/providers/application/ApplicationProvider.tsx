@@ -20,6 +20,7 @@ import {
 import debounce from "@/utils/debounce";
 import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
+import { signIn } from "next-auth/react";
 import {
   Dispatch,
   createContext,
@@ -27,6 +28,7 @@ import {
   useContext,
   useEffect,
   useReducer,
+  useRef,
 } from "react";
 import {
   acceptApplicationTermsApi,
@@ -168,7 +170,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
   const params = useParams<{ id: string }>();
   const id = params?.id;
 
-  function handleErrorResponseAfterAction(error: Error) {
+  const handleErrorResponseAfterAction = useCallback((error: Error) => {
     if (error instanceof AxiosError) {
       dispatch({
         type: ApplicationActionType.REJECTED,
@@ -184,25 +186,39 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
         },
       });
     }
-  }
+  }, []);
+
+  const isRedirectingToLogin = useRef(false);
+  const reauthenticate = useCallback(async () => {
+    if (isRedirectingToLogin.current) return;
+    isRedirectingToLogin.current = true;
+    try {
+      await signIn("keycloak", { callbackUrl: window.location.href });
+    } catch (error) {
+      isRedirectingToLogin.current = false;
+      handleErrorResponseAfterAction(error as Error);
+    }
+  }, [handleErrorResponseAfterAction]);
 
   const fetchApplication = useCallback(async () => {
     if (!id) return;
     dispatch({ type: ApplicationActionType.LOADING });
 
     try {
-      const retrievedApplication = (await retrieveApplicationApi(
-        +id
-      )) as RetrievedApplication;
+      const result = await retrieveApplicationApi(+id);
+      if (!result.ok) {
+        await reauthenticate();
+        return;
+      }
 
       dispatch({
         type: ApplicationActionType.APPLICATION_LOADED,
-        payload: retrievedApplication,
+        payload: result.data,
       });
     } catch (error) {
       handleErrorResponseAfterAction(error as Error);
     }
-  }, [id]);
+  }, [id, reauthenticate, handleErrorResponseAfterAction]);
 
   useEffect(() => {
     fetchApplication().catch((error) => console.log(error));
@@ -216,10 +232,18 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
     dispatch({ type: ApplicationActionType.LOADING });
 
     try {
-      const attachmentId = (await addAttachmentToApplicationApi(
+      const result = await addAttachmentToApplicationApi(
         application!.id!,
         attachment
-      )) as number;
+      );
+      if (!result.ok) {
+        await reauthenticate();
+        return;
+      }
+      const attachmentId = result.data;
+      if (attachmentId === undefined) {
+        throw new Error("Attachment response is missing an ID");
+      }
 
       const action = {
         type: ApplicationActionType.ATTACHMENT_ATTACHED,
@@ -320,7 +344,13 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
     dispatch({ type: ApplicationActionType.LOADING });
 
     try {
-      await acceptApplicationTermsApi(application!.id!, { acceptedLicenses });
+      const result = await acceptApplicationTermsApi(application!.id!, {
+        acceptedLicenses,
+      });
+      if (!result.ok) {
+        await reauthenticate();
+        return;
+      }
       dispatch({ type: ApplicationActionType.ACCEPT_TERMS });
       await fetchApplication();
     } catch (error) {
@@ -336,7 +366,11 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
     dispatch({ type: ApplicationActionType.LOADING });
 
     try {
-      await deleteApplicationApi(application!.id!);
+      const result = await deleteApplicationApi(application!.id!);
+      if (!result.ok) {
+        await reauthenticate();
+        return;
+      }
       dispatch({ type: ApplicationActionType.APPLICATION_DELETED });
     } catch (error) {
       handleErrorResponseAfterAction(error as Error);
@@ -352,6 +386,11 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       if (result.ok) {
         dispatch({ type: ApplicationActionType.CLEAR_ERROR });
         await fetchApplication();
+        return;
+      }
+
+      if (result.response?.status === 401) {
+        await reauthenticate();
         return;
       }
 
@@ -377,7 +416,7 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
       dispatch({ type: ApplicationActionType.LOADING });
 
       try {
-        await saveFormsAndDuosApi(
+        const result = await saveFormsAndDuosApi(
           applicationId,
           forms.map((form: RetrievedApplicationForm) => ({
             formId: form.id,
@@ -394,6 +433,10 @@ function ApplicationProvider({ children }: ApplicationProviderProps) {
           []
         );
 
+        if (!result.ok) {
+          await reauthenticate();
+          return;
+        }
         dispatch({ type: ApplicationActionType.FORM_SAVED });
       } catch (error) {
         handleErrorResponseAfterAction(error as Error);

@@ -136,48 +136,71 @@ export const listApplicationsApi = async () => {
 };
 
 export const retrieveApplicationApi = async (applicationId: number) => {
-  const headers = await requireAuthenticatedHeaders();
-  return await accessManagementClient.retrieve_application_v1({
-    params: { id: applicationId },
-    headers,
-  });
+  try {
+    const headers = await requireAuthenticatedHeaders();
+    const data = await accessManagementClient.retrieve_application_v1({
+      params: { id: applicationId },
+      headers,
+    });
+    return { ok: true as const, data };
+  } catch (error) {
+    return toAccessManagementFailure(error);
+  }
 };
 
 export const deleteApplicationApi = async (applicationId: number) => {
-  const headers = await createHeaders();
-  await accessManagementClient.delete_application_v1(undefined, {
-    params: { id: applicationId },
-    headers,
-  });
+  try {
+    const headers = await requireAuthenticatedHeaders();
+    await accessManagementClient.delete_application_v1(undefined, {
+      params: { id: applicationId },
+      headers,
+    });
+    return { ok: true as const };
+  } catch (error) {
+    return toAccessManagementFailure(error);
+  }
 };
 
 export const addAttachmentToApplicationApi = async (
   applicationId: number,
   attachment: FormData
 ) => {
-  const headers = await createHeaders();
-  delete headers["Content-Type"];
+  try {
+    const headers = await requireAuthenticatedHeaders();
+    delete headers["Content-Type"];
 
-  const { id } = await accessManagementClient.add_attachment_to_application_v1(
-    { file: attachment.get("file") as File },
-    {
-      params: { id: applicationId },
-      headers,
-    }
-  );
+    const { id } =
+      await accessManagementClient.add_attachment_to_application_v1(
+        { file: attachment.get("file") as File },
+        {
+          params: { id: applicationId },
+          headers,
+        }
+      );
 
-  return id;
+    return { ok: true as const, data: id };
+  } catch (error) {
+    return toAccessManagementFailure(error);
+  }
 };
 
 export const acceptApplicationTermsApi = async (
   applicationId: number,
   acceptTermsCommand: { acceptedLicenses: number[] }
 ) => {
-  const headers = await createHeaders();
-  await accessManagementClient.accept_application_terms_v1(acceptTermsCommand, {
-    params: { id: applicationId },
-    headers,
-  });
+  try {
+    const headers = await requireAuthenticatedHeaders();
+    await accessManagementClient.accept_application_terms_v1(
+      acceptTermsCommand,
+      {
+        params: { id: applicationId },
+        headers,
+      }
+    );
+    return { ok: true as const };
+  } catch (error) {
+    return toAccessManagementFailure(error);
+  }
 };
 
 export const saveFormsAndDuosApi = async (
@@ -185,11 +208,16 @@ export const saveFormsAndDuosApi = async (
   forms: SaveForm[],
   duoCodes: SaveDUOCode[]
 ) => {
-  const headers = await createHeaders();
-  await accessManagementClient.save_application_forms_and_duos_v1(
-    { forms, duoCodes },
-    { params: { id: applicationId }, headers }
-  );
+  try {
+    const headers = await requireAuthenticatedHeaders();
+    await accessManagementClient.save_application_forms_and_duos_v1(
+      { forms, duoCodes },
+      { params: { id: applicationId }, headers }
+    );
+    return { ok: true as const };
+  } catch (error) {
+    return toAccessManagementFailure(error);
+  }
 };
 
 export const submitApplicationApi = async (applicationId: number) => {

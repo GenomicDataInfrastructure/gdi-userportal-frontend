@@ -3,6 +3,10 @@
 
 import {
   listApplicationsApi,
+  deleteApplicationApi,
+  addAttachmentToApplicationApi,
+  acceptApplicationTermsApi,
+  saveFormsAndDuosApi,
   retrieveApplicationApi,
   retrieveEntitlementsApi,
 } from "../index";
@@ -16,6 +20,10 @@ jest.mock("@/app/api/shared/client", () => ({
   accessManagementClient: {
     list_applications_v1: jest.fn(),
     retrieve_application_v1: jest.fn(),
+    delete_application_v1: jest.fn(),
+    add_attachment_to_application_v1: jest.fn(),
+    accept_application_terms_v1: jest.fn(),
+    save_application_forms_and_duos_v1: jest.fn(),
   },
 }));
 jest.mock("@/app/api/ga4gh/entitlements", () => ({
@@ -113,8 +121,72 @@ test("preserves unexpected failures for server-side error reporting", async () =
 
 test("blocks unauthenticated application details before calling the backend", async () => {
   jest.mocked(createHeaders).mockResolvedValue({});
-  await expect(retrieveApplicationApi(123)).rejects.toMatchObject({
-    response: { status: 401 },
+  await expect(retrieveApplicationApi(123)).resolves.toEqual({
+    ok: false,
+    status: 401,
   });
   expect(accessManagementClient.retrieve_application_v1).not.toHaveBeenCalled();
 });
+
+const applicationActions = [
+  [
+    "details",
+    () => retrieveApplicationApi(123),
+    accessManagementClient.retrieve_application_v1,
+  ],
+  [
+    "delete",
+    () => deleteApplicationApi(123),
+    accessManagementClient.delete_application_v1,
+  ],
+  [
+    "attachment",
+    () => addAttachmentToApplicationApi(123, new FormData()),
+    accessManagementClient.add_attachment_to_application_v1,
+  ],
+  [
+    "terms",
+    () => acceptApplicationTermsApi(123, { acceptedLicenses: [] }),
+    accessManagementClient.accept_application_terms_v1,
+  ],
+  [
+    "forms",
+    () => saveFormsAndDuosApi(123, [], []),
+    accessManagementClient.save_application_forms_and_duos_v1,
+  ],
+] as const;
+
+test.each(applicationActions)(
+  "blocks unauthenticated %s actions before backend access",
+  async (_, action, backend) => {
+    jest.mocked(createHeaders).mockResolvedValue({});
+    await expect(action()).resolves.toEqual({ ok: false, status: 401 });
+    expect(backend).not.toHaveBeenCalled();
+  }
+);
+
+test.each(applicationActions)(
+  "serializes expired-session failures from %s actions",
+  async (_, action, backend) => {
+    jest
+      .mocked(createHeaders)
+      .mockResolvedValue({ Authorization: "Bearer stale-token" });
+    jest
+      .mocked(backend)
+      .mockRejectedValue({ isAxiosError: true, response: { status: 401 } });
+    const result = JSON.parse(JSON.stringify(await action()));
+    expect(result).toEqual({ ok: false, status: 401 });
+  }
+);
+
+test.each(applicationActions)(
+  "preserves unexpected %s failures for server reporting",
+  async (_, action, backend) => {
+    jest
+      .mocked(createHeaders)
+      .mockResolvedValue({ Authorization: "Bearer token" });
+    const failure = new Error("private upstream details");
+    jest.mocked(backend).mockRejectedValue(failure);
+    await expect(action()).rejects.toBe(failure);
+  }
+);

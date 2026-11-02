@@ -36,6 +36,6 @@ describe("Retrieving a specific application", () => {
     const response = await retrieveApplicationApi(88);
 
     expect(response).toBeDefined();
-    expect(response.id).toEqual("88");
+    expect(response).toEqual({ ok: true, data: { id: "88" } });
   });
 });

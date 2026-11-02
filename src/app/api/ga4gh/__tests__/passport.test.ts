@@ -203,8 +203,10 @@ describe("fetchGa4ghPassport", () => {
         { ok: false, status: 401, body: { error: "invalid_token" } },
       ]);
 
-      await expect(fetchGa4ghPassport()).rejects.toBeInstanceOf(
-        LsAaiUnauthorizedError
+      const passport = fetchGa4ghPassport();
+      await expect(passport).rejects.toBeInstanceOf(LsAaiUnauthorizedError);
+      await expect(passport).rejects.toThrow(
+        "LS-AAI userinfo request failed: 401 invalid_token"
       );
     });
   });

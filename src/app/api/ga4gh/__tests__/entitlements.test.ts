@@ -5,7 +5,7 @@
 import { jest } from "@jest/globals";
 import { extractVerifiedControlledAccessGrants } from "../visa";
 import { retrieveEntitlements } from "../entitlements";
-import { fetchGa4ghVisas } from "../passport";
+import { fetchGa4ghVisas, LsAaiUnauthorizedError } from "../passport";
 
 jest.mock("../passport");
 jest.mock("../visa");
@@ -242,6 +242,16 @@ describe("retrieveEntitlements", () => {
       expect.objectContaining({ error: "LS-AAI token exchange failed: 401" })
     );
     consoleSpy.mockRestore();
+  });
+
+  it("propagates an LsAaiUnauthorizedError instead of returning empty entitlements", async () => {
+    mockedFetchGa4ghVisas.mockRejectedValueOnce(
+      new LsAaiUnauthorizedError("LS-AAI userinfo request failed: 401")
+    );
+
+    await expect(retrieveEntitlements()).rejects.toBeInstanceOf(
+      LsAaiUnauthorizedError
+    );
   });
 
   it("returns empty entitlements when passport fetch times out", async () => {

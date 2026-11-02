@@ -55,6 +55,17 @@ type DecodedAccessToken = {
 const MAX_VISA_JWTS = 100;
 
 /**
+ * Thrown when LS-AAI rejects the Keycloak access token itself (HTTP 401),
+ * as opposed to LS-AAI being unreachable or returning no passport claim.
+ */
+export class LsAaiUnauthorizedError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "LsAaiUnauthorizedError";
+  }
+}
+
+/**
  * The result of fetching a GA4GH Passport.
  *
  * `passportPresent` is `true` when the LS-AAI userinfo response contained the
@@ -106,9 +117,10 @@ async function exchangeKeycloakTokenForLsAai(
     } catch {
       // non-JSON body — keep statusText
     }
-    throw new Error(
-      `LS-AAI token exchange failed: ${response.status} ${detail}`
-    );
+    const message = `LS-AAI token exchange failed: ${response.status} ${detail}`;
+    throw response.status === 401
+      ? new LsAaiUnauthorizedError(message)
+      : new Error(message);
   }
 
   const data: LsAaiTokenResponse = await response.json();
@@ -160,9 +172,10 @@ async function fetchPassportFromLsAai(
     } catch {
       // non-JSON body — keep statusText
     }
-    throw new Error(
-      `LS-AAI userinfo request failed: ${response.status} ${detail}`
-    );
+    const message = `LS-AAI userinfo request failed: ${response.status} ${detail}`;
+    throw response.status === 401
+      ? new LsAaiUnauthorizedError(message)
+      : new Error(message);
   }
 
   const data: UserinfoResponse = await response.json();

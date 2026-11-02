@@ -4,7 +4,7 @@
 
 import { jest } from "@jest/globals";
 import { getToken } from "@/app/api/auth/auth";
-import { fetchGa4ghPassport, fetchGa4ghVisas } from "../passport";
+import { fetchGa4ghPassport, fetchGa4ghVisas, LsAaiUnauthorizedError } from "../passport";
 
 jest.mock("@/app/api/auth/auth");
 const mockedGetToken = getToken as jest.MockedFunction<typeof getToken>;
@@ -96,6 +96,15 @@ describe("fetchGa4ghPassport", () => {
       );
     });
 
+    it("throws an LsAaiUnauthorizedError when the broker rejects with 401", async () => {
+      mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
+      mockFetch([{ ok: false, status: 401, body: {} }]);
+
+      await expect(fetchGa4ghPassport()).rejects.toBeInstanceOf(
+        LsAaiUnauthorizedError
+      );
+    });
+
     it("throws when the broker response contains no access_token", async () => {
       mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
       mockFetch([{ ok: true, body: {} }]);
@@ -171,6 +180,18 @@ describe("fetchGa4ghPassport", () => {
 
       await expect(fetchGa4ghPassport()).rejects.toThrow(
         "LS-AAI userinfo request failed: 403"
+      );
+    });
+
+    it("throws an LsAaiUnauthorizedError when the userinfo endpoint rejects with 401", async () => {
+      mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
+      mockFetch([
+        { ok: true, body: { access_token: LS_AAI_TOKEN } },
+        { ok: false, status: 401, body: {} },
+      ]);
+
+      await expect(fetchGa4ghPassport()).rejects.toBeInstanceOf(
+        LsAaiUnauthorizedError
       );
     });
 

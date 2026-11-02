@@ -9,6 +9,8 @@ import {
 import { createHeaders } from "@/app/api/shared/headers";
 import { accessManagementClient } from "@/app/api/shared/client";
 import { retrieveEntitlements } from "@/app/api/ga4gh/entitlements";
+import { LsAaiUnauthorizedError } from "@/app/api/ga4gh/passport";
+import { ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE } from "../errors";
 
 jest.mock("@/app/api/shared/headers", () => ({ createHeaders: jest.fn() }));
 jest.mock("@/app/api/shared/client", () => ({
@@ -26,23 +28,31 @@ jest.mock("@/app/api/ga4gh/beacon-authorization", () => ({
 
 beforeEach(() => jest.resetAllMocks());
 
+test("rejects unauthenticated application detail reads before accessing data", async () => {
+  jest
+    .mocked(createHeaders)
+    .mockResolvedValue({ "Content-Type": "application/json" });
+  await expect(retrieveApplicationApi(123)).rejects.toMatchObject({
+    response: { status: 401 },
+  });
+  expect(
+    accessManagementClient.retrieve_application_v1
+  ).not.toHaveBeenCalled();
+});
+
 test.each([
   ["application list", () => listApplicationsApi()],
-  ["application detail", () => retrieveApplicationApi(123)],
   ["entitlements", () => retrieveEntitlementsApi()],
 ] as const)(
-  "rejects unauthenticated %s reads before accessing data",
+  "rejects unauthenticated %s reads with the stable unauthorized message",
   async (_, read) => {
     jest
       .mocked(createHeaders)
       .mockResolvedValue({ "Content-Type": "application/json" });
-    await expect(read()).rejects.toMatchObject({
-      response: { status: 401 },
-    });
+    await expect(read()).rejects.toThrow(
+      ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE
+    );
     expect(accessManagementClient.list_applications_v1).not.toHaveBeenCalled();
-    expect(
-      accessManagementClient.retrieve_application_v1
-    ).not.toHaveBeenCalled();
     expect(retrieveEntitlements).not.toHaveBeenCalled();
   }
 );
@@ -69,4 +79,33 @@ test("authenticated users can read applications and entitlements", async () => {
     headers,
   });
   expect(retrieveEntitlements).toHaveBeenCalledWith(accessToken);
+});
+
+test("normalizes a 401 from the gateway itself to the stable unauthorized message", async () => {
+  jest
+    .mocked(createHeaders)
+    .mockResolvedValue({ Authorization: "Bearer stale-token" });
+  jest.mocked(accessManagementClient.list_applications_v1).mockRejectedValue({
+    isAxiosError: true,
+    response: { status: 401 },
+  });
+
+  await expect(listApplicationsApi()).rejects.toThrow(
+    ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE
+  );
+});
+
+test("normalizes an LS-AAI unauthorized rejection to the stable unauthorized message", async () => {
+  jest
+    .mocked(createHeaders)
+    .mockResolvedValue({ Authorization: "Bearer stale-token" });
+  jest
+    .mocked(retrieveEntitlements)
+    .mockRejectedValue(
+      new LsAaiUnauthorizedError("LS-AAI userinfo request failed: 401")
+    );
+
+  await expect(retrieveEntitlementsApi()).rejects.toThrow(
+    ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE
+  );
 });

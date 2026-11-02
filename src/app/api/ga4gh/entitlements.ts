@@ -8,7 +8,7 @@ import {
   ControlledAccessGrant,
   extractVerifiedControlledAccessGrants,
 } from "./visa";
-import { fetchGa4ghVisas } from "./passport";
+import { fetchGa4ghVisas, LsAaiUnauthorizedError } from "./passport";
 
 /**
  * GA4GH Passport/Visa-based entitlement retrieval.
@@ -36,12 +36,18 @@ export const retrieveEntitlements = async (
     ({ visaJwts, passportPresent } =
       await fetchGa4ghVisas(keycloakAccessToken));
   } catch (err) {
+    // LS-AAI explicitly rejected the Keycloak access token — the user's
+    // session is invalid, not merely "no passport"; let the caller react.
+    if (err instanceof LsAaiUnauthorizedError) {
+      throw err;
+    }
     console.error(
       "[entitlements] Visa fetch failed; returning empty entitlements",
       { error: err instanceof Error ? err.message : String(err) }
     );
     return { entitlements: [], passportPresent: false };
   }
+
 
   let grants: ControlledAccessGrant[];
   try {

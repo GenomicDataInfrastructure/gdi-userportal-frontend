@@ -7,6 +7,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { createElement } from "react";
 import ApplicationsPage from "../index";
+import { ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE } from "@/app/api/access-management/errors";
 
 const mockSignIn = jest.fn();
 jest.mock("next-auth/react", () => ({
@@ -46,11 +47,10 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-test("redirects to Keycloak login when the API rejects with a 401", async () => {
-  mockListApplicationsApi.mockRejectedValue({
-    isAxiosError: true,
-    response: { status: 401, data: "" },
-  });
+test("redirects to Keycloak login when the API rejects with the unauthorized marker", async () => {
+  mockListApplicationsApi.mockRejectedValue(
+    new Error(ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE)
+  );
 
   await renderApplicationsPage();
 
@@ -70,3 +70,15 @@ test("shows a generic error for non-401 failures without redirecting to login", 
   expect(mockSignIn).not.toHaveBeenCalled();
   expect(container.textContent).toContain("Oops");
 });
+
+test("recovers from a failed sign-in attempt instead of spinning forever", async () => {
+  mockListApplicationsApi.mockRejectedValue(
+    new Error(ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE)
+  );
+  mockSignIn.mockRejectedValue(new Error("network error"));
+
+  const container = await renderApplicationsPage();
+
+  expect(container.textContent).not.toBe("");
+});
+

@@ -12,13 +12,14 @@ import ListContainer from "@/components/ListContainer";
 import PageHeading from "@/components/PageHeading";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { useTranslations } from "next-intl";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Status } from "@/utils/pageStatus.types";
 import LoadingContainer from "@/components/LoadingContainer";
 import axios from "axios";
 import { signIn } from "next-auth/react";
 import ApplicationCard from "./ApplicationCard";
 import { listApplicationsApi } from "../../api/access-management";
+import { isAccessManagementUnauthorizedError } from "@/app/api/access-management/errors";
 import {
   ErrorResponse,
   ListedApplication,
@@ -35,6 +36,7 @@ const ApplicationsPage: React.FC = () => {
   const [response, setResponse] = useState<ApplicationResponse>({
     status: "loading",
   });
+  const isRedirectingToLogin = useRef(false);
 
   const fetchApplications = async () => {
     setResponse({ status: "loading" });
@@ -43,10 +45,18 @@ const ApplicationsPage: React.FC = () => {
       setResponse({ applications, status: "success" });
     } catch (error) {
       console.error(error);
-      // A stale/invalid access token is rejected at the gateway (no JSON
-      // body), so re-authenticate instead of showing a generic error.
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        await signIn("keycloak", { callbackUrl: window.location.href });
+      // A stale/invalid access token is rejected at the gateway, so
+      // re-authenticate instead of showing a generic error.
+      if (isAccessManagementUnauthorizedError(error)) {
+        if (isRedirectingToLogin.current) return;
+        isRedirectingToLogin.current = true;
+        try {
+          await signIn("keycloak", { callbackUrl: window.location.href });
+        } catch (signInError) {
+          console.error(signInError);
+          isRedirectingToLogin.current = false;
+          setResponse({ status: "error" });
+        }
         return;
       }
       setResponse({

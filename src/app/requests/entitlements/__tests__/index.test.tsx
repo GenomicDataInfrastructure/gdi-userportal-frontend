@@ -3,11 +3,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { act } from "react";
-import { createRoot } from "react-dom/client";
+import { act, StrictMode } from "react";
+import { createRoot, type Root } from "react-dom/client";
 import { createElement } from "react";
 import EntitlementsPage from "../index";
-import { ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE } from "@/app/api/access-management/errors";
 
 const mockSignIn = jest.fn();
 jest.mock("next-auth/react", () => ({
@@ -38,27 +37,41 @@ jest.mock("../PassportUnavailableBanner", () => ({
   default: () => null,
 }));
 
+const roots: Root[] = [];
+
+afterEach(() => {
+  act(() => roots.splice(0).forEach((root) => root.unmount()));
+  document.body.replaceChildren();
+});
+
 async function renderEntitlementsPage() {
   const container = document.createElement("div");
   document.body.appendChild(container);
   const root = createRoot(container);
+  roots.push(root);
   await act(async () => {
-    root.render(createElement(EntitlementsPage));
+    root.render(
+      createElement(StrictMode, null, createElement(EntitlementsPage))
+    );
   });
   return container;
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  jest.resetAllMocks();
+  (
+    globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
 });
 
-test("redirects to Keycloak login when the API rejects with the unauthorized marker", async () => {
-  mockRetrieveEntitlementsApi.mockRejectedValue(
-    new Error(ACCESS_MANAGEMENT_UNAUTHORIZED_MESSAGE)
+test("redirects to Keycloak login when the API returns a serialized unauthorized result", async () => {
+  mockRetrieveEntitlementsApi.mockResolvedValue(
+    JSON.parse(JSON.stringify({ ok: false, status: 401 }))
   );
 
   await renderEntitlementsPage();
 
+  expect(mockSignIn).toHaveBeenCalledTimes(1);
   expect(mockSignIn).toHaveBeenCalledWith("keycloak", {
     callbackUrl: window.location.href,
   });
@@ -74,4 +87,21 @@ test("shows a generic error for non-401 failures without redirecting to login", 
 
   expect(mockSignIn).not.toHaveBeenCalled();
   expect(container.textContent).toContain("Oops");
+});
+
+test("shows an error when starting login fails", async () => {
+  mockRetrieveEntitlementsApi.mockResolvedValue({ ok: false, status: 401 });
+  mockSignIn.mockRejectedValue(new Error("network error"));
+  const container = await renderEntitlementsPage();
+  expect(container.textContent).toBe("error");
+});
+test("renders a successful response without starting login", async () => {
+  mockRetrieveEntitlementsApi.mockResolvedValue({
+    ok: true,
+    data: { entitlements: [], passportPresent: true },
+  });
+  const container = await renderEntitlementsPage();
+  expect(mockSignIn).not.toHaveBeenCalled();
+  expect(container.textContent).not.toContain("error");
+  expect(container.textContent).toContain("requests.entitlements.title");
 });

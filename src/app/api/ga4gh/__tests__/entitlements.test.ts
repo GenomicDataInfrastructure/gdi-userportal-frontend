@@ -293,3 +293,11 @@ describe("retrieveEntitlements", () => {
     consoleSpy.mockRestore();
   });
 });
+
+test("propagates rejected sessions instead of treating them as a missing passport", async () => {
+  const failure = new LsAaiUnauthorizedError(
+    "LS-AAI userinfo request failed: 401"
+  );
+  mockedFetchGa4ghVisas.mockRejectedValueOnce(failure);
+  await expect(retrieveEntitlements("stale-token")).rejects.toBe(failure);
+});

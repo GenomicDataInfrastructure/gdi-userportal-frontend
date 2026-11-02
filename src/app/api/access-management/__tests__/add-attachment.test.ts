@@ -45,6 +45,6 @@ describe("Adding an attachment to an application", () => {
     const response = await addAttachmentToApplicationApi(67, formData);
 
     expect(response).toBeDefined();
-    expect(response).toEqual("122");
+    expect(response).toEqual({ ok: true, data: "122" });
   });
 });

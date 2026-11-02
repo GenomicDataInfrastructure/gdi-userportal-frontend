@@ -40,6 +40,7 @@ describe("Listing applications", () => {
     const response = await listApplicationsApi();
 
     expect(response).toBeDefined();
-    expect(response.length).toEqual(1);
+    expect(response.ok).toBe(true);
+    if (response.ok) expect(response.data).toHaveLength(1);
   });
 });

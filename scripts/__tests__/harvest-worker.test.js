@@ -135,7 +135,7 @@ describe("harvest-worker", () => {
     expect(fetchImpl.mock.calls[0][1].dispatcher).toBeUndefined();
   });
 
-  test("triggerHarvest adds the harvest TLS dispatcher", async () => {
+  test("triggerHarvest keeps TLS verification for HTTPS URLs", async () => {
     const fetchImpl = jest.fn().mockResolvedValue({
       ok: true,
       status: 200,
@@ -155,9 +155,12 @@ describe("harvest-worker", () => {
     expect(fetchImpl).toHaveBeenCalledWith(
       "https://frontend.example/api/discovery/harvest",
       expect.objectContaining({
-        dispatcher: expect.anything(),
+        headers: expect.objectContaining({
+          "accept-encoding": "gzip, deflate",
+        }),
       })
     );
+    expect(fetchImpl.mock.calls[0][1].dispatcher).toBeUndefined();
   });
 
   test("triggerHarvest surfaces API response failures", async () => {

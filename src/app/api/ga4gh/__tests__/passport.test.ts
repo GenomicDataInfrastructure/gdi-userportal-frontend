@@ -5,6 +5,7 @@
 import { jest } from "@jest/globals";
 import { getToken } from "@/app/api/auth/auth";
 import { fetchGa4ghPassport, fetchGa4ghVisas } from "../passport";
+import { LsAaiUnauthorizedError } from "../errors";
 
 jest.mock("@/app/api/auth/auth");
 const mockedGetToken = getToken as jest.MockedFunction<typeof getToken>;
@@ -91,8 +92,17 @@ describe("fetchGa4ghPassport", () => {
       mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
       mockFetch([{ ok: false, status: 401, body: {} }]);
 
-      await expect(fetchGa4ghPassport()).rejects.toThrow(
-        "LS-AAI token exchange failed: 401"
+      await expect(fetchGa4ghPassport()).rejects.toBeInstanceOf(
+        LsAaiUnauthorizedError
+      );
+    });
+
+    it("throws an LsAaiUnauthorizedError when the broker rejects with 401", async () => {
+      mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
+      mockFetch([{ ok: false, status: 401, body: {} }]);
+
+      await expect(fetchGa4ghPassport()).rejects.toBeInstanceOf(
+        LsAaiUnauthorizedError
       );
     });
 
@@ -174,6 +184,18 @@ describe("fetchGa4ghPassport", () => {
       );
     });
 
+    it("throws an LsAaiUnauthorizedError when the userinfo endpoint rejects with 401", async () => {
+      mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
+      mockFetch([
+        { ok: true, body: { access_token: LS_AAI_TOKEN } },
+        { ok: false, status: 401, body: {} },
+      ]);
+
+      await expect(fetchGa4ghPassport()).rejects.toBeInstanceOf(
+        LsAaiUnauthorizedError
+      );
+    });
+
     it("includes error field from userinfo JSON body in thrown message", async () => {
       mockedGetToken.mockResolvedValueOnce(KEYCLOAK_TOKEN);
       mockFetch([
@@ -181,7 +203,9 @@ describe("fetchGa4ghPassport", () => {
         { ok: false, status: 401, body: { error: "invalid_token" } },
       ]);
 
-      await expect(fetchGa4ghPassport()).rejects.toThrow(
+      const passport = fetchGa4ghPassport();
+      await expect(passport).rejects.toBeInstanceOf(LsAaiUnauthorizedError);
+      await expect(passport).rejects.toThrow(
         "LS-AAI userinfo request failed: 401 invalid_token"
       );
     });

@@ -7,6 +7,7 @@ import { isApplicationEditable } from "@/utils/application";
 import { faClose, faFileCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { RetrievedApplicationAttachment } from "@/app/api/access-management/open-api/schemas";
+import { useTranslations } from "next-intl";
 
 type FileUploadedProps = {
   attachment: RetrievedApplicationAttachment;
@@ -16,6 +17,7 @@ type FileUploadedProps = {
 
 function FileUploaded({ attachment, formId, fieldId }: FileUploadedProps) {
   const { application, isLoading, deleteAttachment } = useApplicationDetails();
+  const t = useTranslations("application.fields");
   return (
     <div className="relative mt-5 flex items-center justify-between gap-x-1 break-all rounded-sm border-2 bg-surface px-3 py-1.5 sm:gap-x-3">
       <div className="flex items-center gap-x-2 sm:gap-x-4">
@@ -26,13 +28,17 @@ function FileUploaded({ attachment, formId, fieldId }: FileUploadedProps) {
         <h3 className="text-md text-info">{attachment.filename}</h3>
       </div>
       {isApplicationEditable(application!) && (
-        <FontAwesomeIcon
-          icon={faClose}
-          className={`border-1 cursor-pointer rounded-full p-1.5 text-md text-info transition-colors duration-200 hover:text-primary ${
+        <button
+          type="button"
+          aria-label={`${t("removeFile")}: ${attachment.filename}`}
+          className={`flex min-h-6 min-w-6 items-center justify-center rounded-full border text-info transition-colors duration-200 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring ${
             isLoading ? "pointer-events-none opacity-10" : ""
           }`}
           onClick={() => deleteAttachment(formId, fieldId, attachment.id!)}
-        />
+          disabled={isLoading}
+        >
+          <FontAwesomeIcon icon={faClose} aria-hidden="true" />
+        </button>
       )}
     </div>
   );

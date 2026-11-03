@@ -5,7 +5,9 @@
 "use server";
 
 import { getToken } from "@/app/api/auth/auth";
+import { withAcceptEncoding } from "@/app/api/shared/accept-encoding";
 import { jwtDecode } from "jwt-decode";
+import { LsAaiUnauthorizedError } from "./errors";
 
 /** Maximum time to wait for any single fetch in the passport pipeline. */
 const FETCH_TIMEOUT_MS = 10_000;
@@ -23,6 +25,7 @@ async function fetchWithTimeout(
   try {
     return await fetch(url, {
       ...options,
+      headers: withAcceptEncoding(options.headers),
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
   } catch (err) {
@@ -104,9 +107,10 @@ async function exchangeKeycloakTokenForLsAai(
     } catch {
       // non-JSON body — keep statusText
     }
-    throw new Error(
-      `LS-AAI token exchange failed: ${response.status} ${detail}`
-    );
+    const message = `LS-AAI token exchange failed: ${response.status} ${detail}`;
+    throw response.status === 401
+      ? new LsAaiUnauthorizedError(message)
+      : new Error(message);
   }
 
   const data: LsAaiTokenResponse = await response.json();
@@ -158,9 +162,10 @@ async function fetchPassportFromLsAai(
     } catch {
       // non-JSON body — keep statusText
     }
-    throw new Error(
-      `LS-AAI userinfo request failed: ${response.status} ${detail}`
-    );
+    const message = `LS-AAI userinfo request failed: ${response.status} ${detail}`;
+    throw response.status === 401
+      ? new LsAaiUnauthorizedError(message)
+      : new Error(message);
   }
 
   const data: UserinfoResponse = await response.json();

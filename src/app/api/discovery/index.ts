@@ -13,7 +13,12 @@ import {
   RetrievedDataset,
   ValueLabel,
 } from "@/app/api/discovery/open-api/schemas";
-import { DiscoveryGVariantSearchQuery } from "@/app/api/discovery/providers/types";
+import {
+  DiscoveryAiModelSearchQuery,
+  DiscoveryAiModelsSearchResponse,
+  DiscoveryGVariantSearchQuery,
+  DiscoveryRetrievedAiModel,
+} from "@/app/api/discovery/providers/types";
 import { getDiscoveryProvider } from "@/app/api/discovery/providers/factory";
 import { createHeaders } from "@/app/api/shared/headers";
 import { assertBeaconAuthorization } from "@/app/api/ga4gh/beacon-authorization.actions";
@@ -96,4 +101,34 @@ export const searchGVariantsApi = async (
   return (await discoveryProvider.searchGVariants(
     normalizedOptions
   )) as GVariantsSearchResponse[];
+};
+
+const assertAiModelSupport = () => {
+  if (!discoveryProvider.searchAiModels || !discoveryProvider.retrieveAiModel) {
+    throw new Error(
+      `The configured discovery provider "${discoveryProvider.key}" does not support AI Models`
+    );
+  }
+};
+
+export const searchAiModelsApi = async (
+  options: DiscoveryAiModelSearchQuery
+): Promise<DiscoveryAiModelsSearchResponse> => {
+  if (!contentConfig.enableAiModel) {
+    throw new Error("The AI Model feature is disabled");
+  }
+  assertAiModelSupport();
+
+  return discoveryProvider.searchAiModels!(options);
+};
+
+export const retrieveAiModelApi = async (
+  id: string
+): Promise<DiscoveryRetrievedAiModel> => {
+  if (!contentConfig.enableAiModel) {
+    throw new Error("The AI Model feature is disabled");
+  }
+  assertAiModelSupport();
+
+  return discoveryProvider.retrieveAiModel!(id);
 };

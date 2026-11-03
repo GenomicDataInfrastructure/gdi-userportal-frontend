@@ -69,10 +69,10 @@ function OptionFormField({
               aria-labelledby={labelId}
               aria-invalid={!!validationWarning}
               aria-describedby={validationWarning ? errorId : undefined}
-              className={`w-full mt-4 rounded-md border-2 px-4 py-[9px] text-md pr-10 text-left ${
+              className={`relative w-full mt-4 rounded-md border-2 px-4 py-[9px] text-md pr-10 text-left ${
                 isDisabled
                   ? "border-slate-200 cursor-not-allowed bg-slate-50 opacity-50"
-                  : "border-primary focus:outline-hidden focus:ring-primary cursor-pointer"
+                  : "border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring cursor-pointer"
               }`}
             >
               {selectedOption
@@ -85,7 +85,7 @@ function OptionFormField({
                 : t("selectAnOption")}
               <FontAwesomeIcon
                 icon={faChevronDown}
-                className={`absolute right-3 top-1/2 transform -translate-y-1/5 ${
+                className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${
                   isDisabled ? "text-slate-200" : "text-black"
                 }`}
               />

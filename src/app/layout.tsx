@@ -9,6 +9,7 @@ import { routing, type AppLocale } from "@/i18n/routing";
 import { DatasetBasketProvider } from "@/providers/DatasetBasketProvider";
 import { AlertProvider } from "@/providers/AlertProvider";
 import { NotificationsProvider } from "@/providers/notifications/NotificationsProvider";
+import CrmEmbedScript from "@/components/CrmEmbedScript";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { NextIntlClientProvider } from "next-intl";
@@ -20,7 +21,9 @@ import "./globals.css";
 config.autoAddCss = false;
 import contentConfig from "@/config/contentConfig";
 import { FilterProvider } from "@/providers/filters/FilterProvider";
-import { getMessages } from "@/i18n/messages";
+import { getFlatMessages, getMessages } from "@/i18n/messages";
+import { getDiscoveryProvider } from "@/app/api/discovery/providers/factory";
+import { AiModelSupportProvider } from "@/providers/AiModelSupportProvider";
 
 function isValidLocale(locale: string): locale is AppLocale {
   return (routing.locales as readonly string[]).includes(locale);
@@ -38,6 +41,11 @@ export default async function RootLayout({
       ? headerLocale
       : routing.defaultLocale;
   const messages = getMessages(locale);
+  const flatMessages = getFlatMessages(locale);
+  const provider = getDiscoveryProvider();
+  const supportsAiModels = Boolean(
+    provider.searchAiModels && provider.retrieveAiModel
+  );
 
   return (
     <html lang={locale}>
@@ -63,24 +71,39 @@ export default async function RootLayout({
       <body>
         <ScrollToTop />
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <AlertProvider>
-            <SessionProviderWrapper>
-              <DatasetBasketProvider>
-                <div className="grid h-screen w-full grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr_auto]">
-                  <NotificationsProvider>
-                    <div>
-                      <Header />
-                    </div>
-                    <FilterProvider>
-                      <div>{children}</div>
-                    </FilterProvider>
-                    <Navbar />
-                    <Footer />
-                  </NotificationsProvider>
-                </div>
-              </DatasetBasketProvider>
-            </SessionProviderWrapper>
-          </AlertProvider>
+          <AiModelSupportProvider value={supportsAiModels}>
+            <a
+              href="#main-content"
+              className="sr-only z-50 rounded-md bg-white px-4 py-3 text-primary shadow-lg focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:outline-2 focus:outline-offset-2 focus:outline-primary"
+            >
+              {String(flatMessages["accessibility.skipToMainContent"])}
+            </a>
+            <AlertProvider>
+              <SessionProviderWrapper>
+                {contentConfig.crmEmbedEnabled && (
+                  <CrmEmbedScript
+                    portalId={contentConfig.crmEmbedTestPortalId}
+                  />
+                )}
+                <DatasetBasketProvider>
+                  <div className="grid h-screen w-full grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr_auto]">
+                    <NotificationsProvider>
+                      <div>
+                        <Header />
+                      </div>
+                      <FilterProvider>
+                        <main id="main-content" tabIndex={-1}>
+                          {children}
+                        </main>
+                      </FilterProvider>
+                      <Navbar />
+                      <Footer />
+                    </NotificationsProvider>
+                  </div>
+                </DatasetBasketProvider>
+              </SessionProviderWrapper>
+            </AlertProvider>
+          </AiModelSupportProvider>
         </NextIntlClientProvider>
       </body>
     </html>

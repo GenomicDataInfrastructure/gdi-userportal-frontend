@@ -9,6 +9,7 @@ import {
 } from "@playwright/test";
 import { encode } from "next-auth/jwt";
 import messages from "../../src/i18n/messages.json";
+import { mockAccessToken, setVisaScenario } from "./visaScenario";
 
 export const test = base.extend<{ resetMock: void }>({
   resetMock: [
@@ -18,13 +19,6 @@ export const test = base.extend<{ resetMock: void }>({
         (
           await request.post(`${origin}/_test/accessibility`, {
             data: { scenario: "baseline" },
-          })
-        ).ok()
-      ).toBeTruthy();
-      expect(
-        (
-          await request.post(`${origin}/_test/set-scenario`, {
-            data: { scenario: "default" },
           })
         ).ok()
       ).toBeTruthy();
@@ -54,16 +48,7 @@ export const scenario = async (page: Page, value: string) => {
     ).ok()
   ).toBeTruthy();
 };
-export const visaScenario = async (page: Page, value: string) => {
-  expect(
-    (
-      await page.request.post(
-        `http://localhost:${process.env.MOCK_API_PORT || 4010}/_test/set-scenario`,
-        { data: { scenario: value } }
-      )
-    ).ok()
-  ).toBeTruthy();
-};
+export const visaScenario = setVisaScenario;
 const wcagTags = [
   "wcag2a",
   "wcag2aa",
@@ -150,7 +135,7 @@ export const authenticate = async (page: Page) => {
       sub: "accessibility-test-user",
       name: "Accessibility Test User",
       email: "accessibility@example.com",
-      access_token: "accessibility-test-access-token",
+      access_token: mockAccessToken(page),
       id_token: "accessibility-test-id-token",
       expires_at: Math.floor(Date.now() / 1000) + 3600,
     },

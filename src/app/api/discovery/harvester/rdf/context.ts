@@ -29,6 +29,7 @@ export const ns = {
   adms: rdf.Namespace(DATASET_EXPORT_PREFIXES.adms),
   health: rdf.Namespace(DATASET_EXPORT_PREFIXES.healthdcatap),
   dcatap: rdf.Namespace(DATASET_EXPORT_PREFIXES.dcatap),
+  geodcatap: rdf.Namespace(DATASET_EXPORT_PREFIXES.geodcatap),
   rdfs: rdf.Namespace(DATASET_EXPORT_PREFIXES.rdfs),
   skos: rdf.Namespace(DATASET_EXPORT_PREFIXES.skos),
   dpv: rdf.Namespace(DATASET_EXPORT_PREFIXES.dpv),

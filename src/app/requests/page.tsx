@@ -65,12 +65,19 @@ function RequestPage({ searchParams }: RequestPageProps) {
         tabItems={tabItems}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        panelId="requests-tabpanel"
       />
-      {activeTab === "applications" ? (
-        <ApplicationsPage />
-      ) : (
-        <EntitlementsPage />
-      )}
+      <div
+        id="requests-tabpanel"
+        role="tabpanel"
+        aria-labelledby={`requests-${activeTab}-tab`}
+      >
+        {activeTab === "applications" ? (
+          <ApplicationsPage />
+        ) : (
+          <EntitlementsPage />
+        )}
+      </div>
     </PageContainer>
   );
 }

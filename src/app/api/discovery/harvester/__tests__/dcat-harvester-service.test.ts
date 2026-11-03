@@ -7,9 +7,26 @@ import { resolve } from "node:path";
 import { canonicalDiscoveryRdf } from "@/app/api/discovery/test-utils/fixtures";
 import {
   DcatHarvesterService,
+  HarvestCollectors,
   MappingError,
 } from "@/app/api/discovery/harvester/dcat-harvester-service";
 import * as datasetMapper from "@/app/api/discovery/harvester/dcat-dataset-mapper";
+
+const parseDatasetsFromRdf = async (
+  service: DcatHarvesterService,
+  rdfText: string,
+  sourceRef?: string,
+  contentType?: string,
+  collectors?: HarvestCollectors
+) => {
+  const { datasets } = await service.parseCatalogueFromRdf(
+    rdfText,
+    sourceRef,
+    contentType,
+    collectors
+  );
+  return datasets;
+};
 
 const mockReadFile =
   jest.fn<(path: string, encoding: string) => Promise<string>>();
@@ -28,7 +45,7 @@ describe("DcatHarvesterService", () => {
   test("parses a canonical RDF fixture with discovery metadata", async () => {
     const service = new DcatHarvesterService();
     await expect(
-      service.parseDatasetsFromRdf(canonicalDiscoveryRdf)
+      parseDatasetsFromRdf(service, canonicalDiscoveryRdf)
     ).resolves.toEqual([
       {
         id: "dataset-1",
@@ -247,6 +264,7 @@ describe("DcatHarvesterService", () => {
             id: "distribution-1",
             title: "Population Registry CSV",
             description: "Distribution-level CSV extract for registry data",
+            roles: ["distribution"],
             format: {
               value:
                 "http://publications.europa.eu/resource/authority/file-type/CSV",
@@ -369,7 +387,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    await expect(service.parseDatasetsFromRdf(rdf)).resolves.toMatchObject([
+    await expect(parseDatasetsFromRdf(service, rdf)).resolves.toMatchObject([
       {
         publishers: [
           {
@@ -390,7 +408,7 @@ describe("DcatHarvesterService", () => {
       });
 
     await expect(
-      service.parseDatasetsFromRdf(canonicalDiscoveryRdf)
+      parseDatasetsFromRdf(service, canonicalDiscoveryRdf)
     ).rejects.toThrow("malformed dataset");
 
     mapDatasetSpy.mockRestore();
@@ -406,7 +424,8 @@ describe("DcatHarvesterService", () => {
 
     const collectors = { mappingErrors: [] as MappingError[] };
 
-    const datasets = await service.parseDatasetsFromRdf(
+    const datasets = await parseDatasetsFromRdf(
+      service,
       canonicalDiscoveryRdf,
       undefined,
       undefined,
@@ -471,7 +490,8 @@ describe("DcatHarvesterService", () => {
     const service = new DcatHarvesterService();
     const collectors = { mappingErrors: [] as MappingError[] };
 
-    const datasets = await service.parseDatasetsFromRdf(
+    const datasets = await parseDatasetsFromRdf(
+      service,
       rdfWithTwoDistributions,
       undefined,
       undefined,
@@ -495,7 +515,8 @@ describe("DcatHarvesterService", () => {
   test("infers the content type from sourceRef when contentType is not provided", async () => {
     const service = new DcatHarvesterService();
 
-    const datasets = await service.parseDatasetsFromRdf(
+    const datasets = await parseDatasetsFromRdf(
+      service,
       canonicalDiscoveryRdf,
       "https://example.org/catalogue.rdf"
     );
@@ -515,7 +536,8 @@ describe("DcatHarvesterService", () => {
         dct:description "Parsed from an uploaded MIME type" .
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(
+    const datasets = await parseDatasetsFromRdf(
+      service,
       turtle,
       "uploaded-catalogue",
       "text/turtle; charset=utf-8"
@@ -540,7 +562,7 @@ describe("DcatHarvesterService", () => {
         </dcat:Dataset>
       </rdf:RDF>
     `;
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].documentation).toEqual(["ftp://example.org/not-http"]);
   });
 
@@ -563,7 +585,7 @@ describe("DcatHarvesterService", () => {
         </dcat:Dataset>
       </rdf:RDF>
     `;
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].documentation).toEqual([
       "https://example.org/docs/guide",
       "https://example.org/docs/reference",
@@ -588,7 +610,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(
       datasets.map(({ title, description }) => ({ title, description }))
     ).toEqual([
@@ -627,7 +649,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
 
     expect(datasets[0].distributions).toHaveLength(1);
     expect(datasets[0].distributions?.[0]?.id).toBe("25");
@@ -653,12 +675,13 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
 
     expect(datasets[0].distributions).toEqual([
       {
         id: "dist-1",
         title: "dist-1",
+        roles: ["distribution"],
         format: undefined,
         accessUrl: "https://example.org/access/1",
         downloadUrl: undefined,
@@ -686,7 +709,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].distributions?.[0].rights).toBeUndefined();
   });
 
@@ -711,7 +734,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].distributions?.[0].rights).toEqual("PUBLIC");
   });
 
@@ -737,7 +760,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
 
     expect(datasets[0].distributions).toHaveLength(1);
     expect(datasets[0].distributions?.[0]?.id).toBe("dist-1");
@@ -758,7 +781,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].languages).toEqual([
       {
         value: "http://publications.europa.eu/resource/authority/language/ENG",
@@ -816,7 +839,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets.map((dataset) => dataset.catalogue)).toEqual([
       "https://example.org/catalogues/about-only",
       "Inline Catalogue",
@@ -841,7 +864,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].catalogue).toBe("Main Catalogue");
   });
 
@@ -862,7 +885,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].id).toBe("dataset-1");
     expect(datasets[1]).toMatchObject({
       id: "https://example.org/datasets/2",
@@ -921,7 +944,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0]).toMatchObject({
       createdAt: undefined,
       modifiedAt: undefined,
@@ -943,7 +966,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0]).toMatchObject({
       createdAt: "2020-01-02T03:04:05.000Z",
       modifiedAt: "2021-02-03T04:05:06.000Z",
@@ -965,7 +988,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].populationCoverage).toBe("Population cov");
   });
 
@@ -985,7 +1008,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].spatialResolutionInMeters).toEqual([100, 200]);
   });
 
@@ -1005,7 +1028,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].versionNotes).toEqual([
       "Version Notes 1",
       "Version Notes 2",
@@ -1031,7 +1054,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].provenance).toBe("Collected from national registries");
   });
 
@@ -1049,7 +1072,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].provenance).toBe("Imported from a national registry");
   });
 
@@ -1071,7 +1094,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].provenance).toBe(
       "Derived from an audited clinical system"
     );
@@ -1096,7 +1119,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].wasGeneratedBy).toEqual([
       {
         activityType: "https://healthdata.eu/activity/ADMINISTRATIVE_PROCESSES",
@@ -1117,7 +1140,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].wasGeneratedBy).toBeUndefined();
   });
 
@@ -1137,7 +1160,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].spatialCoverage).toEqual([
       {
         uri: "http://publications.europa.eu/resource/authority/country/LUX",
@@ -1161,10 +1184,11 @@ describe("DcatHarvesterService", () => {
     } as Response);
 
     const service = new DcatHarvesterService(fetcher);
+    const { datasets } = await service.harvestFromUrl(
+      "https://example.org/catalogue.rdf"
+    );
 
-    await expect(
-      service.harvestFromUrl("https://example.org/catalogue.rdf")
-    ).resolves.toEqual([
+    expect(datasets).toEqual([
       {
         id: "https://example.org/datasets/x",
         identifier: "",
@@ -1210,8 +1234,7 @@ describe("DcatHarvesterService", () => {
     expect(fetcher).toHaveBeenCalledWith(
       "https://example.org/catalogue.rdf",
       expect.objectContaining({
-        headers: undefined,
-        dispatcher: expect.anything(),
+        headers: { "accept-encoding": "gzip, deflate" },
       })
     );
   });
@@ -1237,12 +1260,14 @@ describe("DcatHarvesterService", () => {
 
     const service = new DcatHarvesterService(fetcher);
 
-    const datasets = await service.harvestFromUrl("https://example.org/api");
+    const { datasets } = await service.harvestFromUrl(
+      "https://example.org/api"
+    );
 
     expect(datasets[0]?.id).toBe("https://example.org/datasets/header-turtle");
   });
 
-  test("harvestFromUrl adds the harvest TLS dispatcher", async () => {
+  test("harvestFromUrl keeps caller headers and TLS verification", async () => {
     const fetcher =
       jest.fn<(input: string | URL, init?: RequestInit) => Promise<Response>>();
     fetcher.mockResolvedValueOnce({
@@ -1261,10 +1286,13 @@ describe("DcatHarvesterService", () => {
     expect(fetcher).toHaveBeenCalledWith(
       "https://example.org/catalogue.rdf",
       expect.objectContaining({
-        headers: { Authorization: "Bearer token" },
-        dispatcher: expect.anything(),
+        headers: {
+          Authorization: "Bearer token",
+          "accept-encoding": "gzip, deflate",
+        },
       })
     );
+    expect(fetcher.mock.calls[0][1]).not.toHaveProperty("dispatcher");
   });
 
   test("harvestFromUrl throws on non-ok response", async () => {
@@ -1365,18 +1393,17 @@ describe("DcatHarvesterService", () => {
       ok: true,
       status: 200,
       statusText: "OK",
-      text: async () => "<rdf />",
+      text: async () => "not valid rdf at all {{{",
     } as Response);
 
     const service = new DcatHarvesterService(fetcher);
-    jest
-      .spyOn(service, "parseDatasetsFromRdf")
-      .mockRejectedValueOnce(new Error("invalid RDF payload"));
 
     await expect(
-      service.harvestFromUrl("https://example.org/catalogue.rdf")
+      service.harvestFromUrl("https://example.org/catalogue.rdf", {
+        contentType: "application/rdf+xml",
+      })
     ).rejects.toThrow(
-      "Failed to parse RDF from https://example.org/catalogue.rdf: invalid RDF payload"
+      "Failed to parse RDF from https://example.org/catalogue.rdf"
     );
   });
 
@@ -1387,21 +1414,12 @@ describe("DcatHarvesterService", () => {
     );
 
     const service = new DcatHarvesterService();
-    const spy = jest
-      .spyOn(service, "parseDatasetsFromRdf")
-      .mockResolvedValueOnce([]);
 
     await expect(
       service.harvestFromFilePath("no-data-dict.rdf")
-    ).resolves.toEqual([]);
+    ).resolves.toEqual({ datasets: [] });
 
     expect(mockReadFile).toHaveBeenCalledWith(resolvedPath, "utf8");
-    expect(spy).toHaveBeenCalledWith(
-      '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" />',
-      resolvedPath,
-      "application/rdf+xml",
-      undefined
-    );
   });
 
   test("harvestFromFilePath detects text/turtle for .ttl files", async () => {
@@ -1410,43 +1428,22 @@ describe("DcatHarvesterService", () => {
     );
 
     const service = new DcatHarvesterService();
-    const spy = jest
-      .spyOn(service, "parseDatasetsFromRdf")
-      .mockResolvedValueOnce([]);
 
-    await service.harvestFromFilePath("catalogue.ttl");
-
-    expect(spy).toHaveBeenCalledWith(
-      expect.any(String),
-      resolve("catalogue.ttl"),
-      "text/turtle",
-      undefined
+    await expect(service.harvestFromFilePath("catalogue.ttl")).resolves.toEqual(
+      { datasets: [] }
     );
   });
 
   test("harvestFromFilePath accepts an explicit content type override", async () => {
-    const resolvedPath = resolve("catalogue.upload");
     mockReadFile.mockResolvedValueOnce(
       "@prefix dcat: <http://www.w3.org/ns/dcat#> ."
     );
 
     const service = new DcatHarvesterService();
-    const spy = jest
-      .spyOn(service, "parseDatasetsFromRdf")
-      .mockResolvedValueOnce([]);
 
-    await service.harvestFromFilePath(
-      "catalogue.upload",
-      undefined,
-      "text/turtle"
-    );
-
-    expect(spy).toHaveBeenCalledWith(
-      expect.any(String),
-      resolvedPath,
-      "text/turtle",
-      undefined
-    );
+    await expect(
+      service.harvestFromFilePath("catalogue.upload", undefined, "text/turtle")
+    ).resolves.toEqual({ datasets: [] });
   });
 
   test("harvestFromFilePath wraps file read failures", async () => {
@@ -1460,17 +1457,18 @@ describe("DcatHarvesterService", () => {
   });
 
   test("harvestFromFilePath wraps RDF parse failures", async () => {
-    mockReadFile.mockResolvedValueOnce("<rdf />");
+    mockReadFile.mockResolvedValueOnce("not valid rdf at all {{{");
 
     const service = new DcatHarvesterService();
-    jest
-      .spyOn(service, "parseDatasetsFromRdf")
-      .mockRejectedValueOnce(new Error("invalid RDF payload"));
 
     await expect(
-      service.harvestFromFilePath("no-data-dict.rdf")
+      service.harvestFromFilePath(
+        "no-data-dict.rdf",
+        undefined,
+        "application/rdf+xml"
+      )
     ).rejects.toThrow(
-      `Failed to parse RDF from ${resolve("no-data-dict.rdf")}: invalid RDF payload`
+      `Failed to parse RDF from ${resolve("no-data-dict.rdf")}`
     );
   });
 
@@ -1493,7 +1491,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].frequency).toEqual({
       value:
         "http://publications.europa.eu/resource/authority/frequency/ANNUAL",
@@ -1515,7 +1513,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].frequency).toEqual({
       value:
         "http://publications.europa.eu/resource/authority/frequency/MONTHLY",
@@ -1542,7 +1540,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].temporalCoverage).toEqual({
       start: "2020-01-01T00:00:00.000Z",
       end: "2023-12-31T00:00:00.000Z",
@@ -1574,7 +1572,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].retentionPeriod).toEqual([
       { start: "2020-01-01T00:00:00.000Z", end: "2022-12-31T00:00:00.000Z" },
       { start: "2023-01-01T00:00:00.000Z", end: undefined },
@@ -1600,7 +1598,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].temporalCoverage).toBeUndefined();
   });
 
@@ -1624,7 +1622,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].retentionPeriod).toBeUndefined();
   });
 
@@ -1649,7 +1647,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].personalData).toEqual([
       { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
       {
@@ -1672,7 +1670,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].personalData).toBeUndefined();
   });
 
@@ -1696,7 +1694,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].personalData).toEqual([
       { value: "https://w3id.org/dpv/dpv-pd#Location", label: "Location Data" },
     ]);
@@ -1718,7 +1716,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].personalData).toEqual([
       { value: "https://w3id.org/dpv/dpv-pd#Financial", label: "Financial" },
       {
@@ -1747,7 +1745,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].personalData).toEqual([
       { value: "https://w3id.org/dpv/dpv-pd#Age", label: "Age" },
     ]);
@@ -1778,7 +1776,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].purpose).toEqual([
       {
         value: "https://www.example.com/purpose/research",
@@ -1801,7 +1799,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].purpose).toBeUndefined();
   });
 
@@ -1827,7 +1825,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].purpose).toEqual([
       { value: "Valid purpose", label: "Valid purpose" },
     ]);
@@ -1856,7 +1854,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].purpose).toEqual([
       { value: "Research", label: "Research" },
     ]);
@@ -1877,7 +1875,7 @@ describe("DcatHarvesterService", () => {
       </rdf:RDF>
     `;
 
-    const datasets = await service.parseDatasetsFromRdf(rdf);
+    const datasets = await parseDatasetsFromRdf(service, rdf);
     expect(datasets[0].temporalResolution).toBe("P1M");
   });
 
@@ -1902,7 +1900,7 @@ describe("DcatHarvesterService", () => {
     `;
 
     try {
-      const datasets = await service.parseDatasetsFromRdf(rdf);
+      const datasets = await parseDatasetsFromRdf(service, rdf);
       expect(datasets[0]).toMatchObject({ createdAt: undefined });
     } finally {
       getTimeSpy.mockRestore();

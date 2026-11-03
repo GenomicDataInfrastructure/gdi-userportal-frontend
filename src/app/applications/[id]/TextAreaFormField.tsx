@@ -62,7 +62,7 @@ function TextAreaFormField({
           className={`mt-4 w-full rounded-md border-2 border-primary px-4 py-[9px] text-md ${
             isDisabled
               ? "border-slate-200 cursor-not-allowed opacity-50 bg-slate-50"
-              : "border-primary focus:outline-hidden focus:ring-primary"
+              : "border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
           }`}
           onChange={handleInputChange}
           disabled={isDisabled}

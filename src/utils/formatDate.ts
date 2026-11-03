@@ -13,6 +13,10 @@ export function formatDate(inputDate?: string): string {
   return _formatDate("d MMMM yyyy", inputDate);
 }
 
+export function formatDateUtc(inputDate?: string): string {
+  return formatDateInTimeZone("d MMMM yyyy", inputDate, "UTC");
+}
+
 export function formatDateTime(inputDate: string) {
   return _formatDate("d MMMM yyyy, HH.mm (zzz)", inputDate);
 }
@@ -26,15 +30,22 @@ function getUserTimezone() {
 }
 
 function _formatDate(targetFormat: string, inputDate?: string) {
+  return formatDateInTimeZone(targetFormat, inputDate, getUserTimezone());
+}
+
+function formatDateInTimeZone(
+  targetFormat: string,
+  inputDate: string | undefined,
+  timeZone: string
+) {
   if (!inputDate) {
     return "N/A";
   }
 
   const date = new Date(inputDate);
-  const userTimeZone = getUserTimezone();
 
   try {
-    return formatInTimeZone(date, userTimeZone, targetFormat, { locale: enGB });
+    return formatInTimeZone(date, timeZone, targetFormat, { locale: enGB });
   } catch (error) {
     if (process.env.NODE_ENV !== "test") {
       console.error(error);

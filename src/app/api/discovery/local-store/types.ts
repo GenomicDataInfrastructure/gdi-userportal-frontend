@@ -26,15 +26,24 @@ export interface LocalAgent {
   }>;
 }
 
+export type LocalDistributionRole = "distribution" | "analytics";
+
+export const getDistributionRoles = (distribution: {
+  roles?: LocalDistributionRole[];
+}): LocalDistributionRole[] =>
+  distribution.roles?.length ? distribution.roles : ["distribution"];
+
 export interface LocalDiscoveryDistribution {
   id: string;
   title: string;
   description?: string;
+  roles?: LocalDistributionRole[];
   format?: { value: string; label: string };
   mediaType?: { value: string; label: string };
   license?: { value: string; label: string };
   rights?: string;
   status?: { value: string; label: string };
+  availability?: { value: string; label: string };
   conformsTo?: Array<{ value: string; label: string }>;
   applicableLegislation?: Array<{ value: string; label: string }>;
   byteSize?: number;
@@ -104,6 +113,7 @@ export interface LocalDiscoveryDataset {
   publishers: LocalAgent[];
   hdab: LocalAgent[];
   creators: LocalAgent[];
+  custodians?: LocalAgent[];
   publisherType?: Array<{ value: string; label: string }>;
   personalData?: Array<{ value: string; label: string }>;
   purpose?: Array<{ value: string; label: string }>;
@@ -204,4 +214,47 @@ export interface LocalDiscoveryStore {
   ) => Promise<LocalDiscoverySearchResult>;
   retrieveDataset: (id: string) => Promise<LocalDiscoveryDataset | null>;
   upsertDatasets: (datasets: LocalDiscoveryDataset[]) => Promise<void>;
+}
+
+export interface LocalModelTask {
+  modality: { value: string; label: string };
+  task: { value: string; label: string };
+  subtask?: { value: string; label: string };
+}
+
+export interface LocalDiscoveryAiModel {
+  id: string;
+  identifier?: string;
+  entityType: "AI_MODEL";
+  title: string;
+  description?: string;
+  createdAt?: string;
+  modifiedAt?: string;
+  version?: string;
+  hasVersions?: Array<{ value: string; label: string }>;
+  versionNotes?: string;
+  accessRights?: { value: string; label: string };
+  keywords?: string[];
+  documentation?: string[];
+  contacts?: LocalContactPoint[];
+  publishers: LocalAgent[];
+  creators: LocalAgent[];
+  libraries?: string[];
+  modelTasks?: LocalModelTask[];
+}
+
+export interface LocalDiscoveryAiModelSearchResult {
+  count: number;
+  results: LocalDiscoveryAiModel[];
+}
+
+export interface LocalDiscoveryAiModelStore {
+  readonly key: string;
+  ensureInitialized: () => Promise<void>;
+  clearAiModels: () => Promise<void>;
+  searchAiModels: (
+    options: LocalDiscoverySearchOptions
+  ) => Promise<LocalDiscoveryAiModelSearchResult>;
+  retrieveAiModel: (id: string) => Promise<LocalDiscoveryAiModel | null>;
+  upsertAiModels: (aiModels: LocalDiscoveryAiModel[]) => Promise<void>;
 }

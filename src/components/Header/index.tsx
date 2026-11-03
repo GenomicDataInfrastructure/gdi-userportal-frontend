@@ -22,6 +22,7 @@ import Avatar from "./Avatar";
 import NotificationBell from "./Notifications/NotificationBell";
 import RequestIcon from "./RequestIcon";
 import { getNavItems } from "@/utils/getNavItems";
+import { useAiModelSupport } from "@/providers/AiModelSupportProvider";
 
 function Header() {
   const t = useTranslations();
@@ -31,7 +32,8 @@ function Header() {
   const { basket, isLoading } = useDatasetBasket();
   const isExternalHeaderLogo = contentConfig.headerLogoUrl.startsWith("http");
 
-  const navItems = getNavItems(t, { includeAbout: true });
+  const supportsAiModels = useAiModelSupport();
+  const navItems = getNavItems(t, { includeAbout: true, supportsAiModels });
 
   const closeMenu = () => {
     setIsMenuOpen(false);
@@ -82,8 +84,14 @@ function Header() {
           <div className="flex items-center gap-x-4 md:gap-x-6">
             <div className="menu-container hidden md:block lg:hidden">
               <button
+                type="button"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-primary hover:text-secondary focus:outline-hidden p-2"
+                aria-label={t(isMenuOpen ? "nav.closeMenu" : "nav.openMenu")}
+                aria-expanded={isMenuOpen}
+                aria-controls={
+                  isMenuOpen ? "tablet-navigation-menu" : undefined
+                }
+                className="rounded-md p-2 text-primary hover:text-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
               >
                 <FontAwesomeIcon
                   icon={faBars}
@@ -91,7 +99,11 @@ function Header() {
                 />
               </button>
               {isMenuOpen && (
-                <div className="absolute left-0 right-0 top-[100%] z-10 rounded-md bg-white shadow-lg">
+                <nav
+                  id="tablet-navigation-menu"
+                  aria-label={t("nav.main")}
+                  className="absolute left-0 right-0 top-[100%] z-10 rounded-md bg-white shadow-lg"
+                >
                   <ul>
                     {navItems.map((item) => {
                       return (
@@ -111,7 +123,7 @@ function Header() {
                       );
                     })}
                   </ul>
-                </div>
+                </nav>
               )}
             </div>
 
@@ -142,7 +154,10 @@ function Header() {
               </Link>
             )}
 
-            <div className="hidden items-center gap-x-2 text-base font-body lg:flex lg:text-lg xl:gap-x-4">
+            <nav
+              aria-label={t("nav.main")}
+              className="hidden items-center gap-x-2 text-base font-body lg:flex lg:text-lg xl:gap-x-4"
+            >
               {navItems.map((item) => {
                 const isActive = item.isActive(activeTab);
                 return (
@@ -159,7 +174,7 @@ function Header() {
                   </Link>
                 );
               })}
-            </div>
+            </nav>
           </div>
 
           <div className="font-body flex items-center gap-x-6 md:gap-x-8">

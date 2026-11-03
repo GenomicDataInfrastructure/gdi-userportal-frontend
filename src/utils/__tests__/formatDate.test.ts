@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2025 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-import { formatDate, formatDateTime } from "./../formatDate";
+import { formatDate, formatDateTime, formatDateUtc } from "./../formatDate";
 import { jest } from "@jest/globals";
 
 describe("formatDate and formatDateTime", () => {
@@ -51,6 +51,12 @@ describe("formatDate and formatDateTime", () => {
   });
 
   describe("Server-side behavior", () => {
+    it("formats dates in UTC", () => {
+      expect(formatDateUtc("2024-02-09T10:27:47.585Z")).toEqual(
+        "9 February 2024"
+      );
+    });
+
     it("throws an error if formatDate is called server-side", () => {
       const input = "2024-02-09T10:27:47.585Z";
       expect(() => formatDate(input)).toThrow(

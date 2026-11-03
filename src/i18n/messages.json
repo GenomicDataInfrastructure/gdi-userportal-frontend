@@ -7,9 +7,25 @@
     "en": "Genomic Data Infrastructure User Portal",
     "fr": "Portail utilisateur de l'infrastructure de données génomiques"
   },
+  "accessibility.skipToMainContent": {
+    "en": "Skip to main content",
+    "fr": "Aller au contenu principal"
+  },
   "nav.home": {
     "en": "Home",
     "fr": "Accueil"
+  },
+  "nav.main": {
+    "en": "Main navigation",
+    "fr": "Navigation principale"
+  },
+  "nav.openMenu": {
+    "en": "Open navigation menu",
+    "fr": "Ouvrir le menu de navigation"
+  },
+  "nav.closeMenu": {
+    "en": "Close navigation menu",
+    "fr": "Fermer le menu de navigation"
   },
   "nav.datasets": {
     "en": "Datasets",
@@ -34,6 +50,10 @@
   "nav.services": {
     "en": "Services",
     "fr": "Services"
+  },
+  "nav.aiModels": {
+    "en": "AI Models",
+    "fr": "Modèles d'IA"
   },
   "services.title": {
     "en": "GDI Service Catalogue",
@@ -217,6 +237,10 @@
     "en": "Search datasets",
     "fr": "Rechercher des jeux de données"
   },
+  "search.aiModelsPlaceholder": {
+    "en": "Search AI models",
+    "fr": "Rechercher des modèles d'IA"
+  },
   "recent.seeAll": {
     "en": "See all",
     "fr": "Voir tout"
@@ -268,6 +292,46 @@
   "datasets.noResults": {
     "en": "No datasets found matching your criteria. Try adjusting your search or filters.",
     "fr": "Aucun jeu de données ne correspond à vos critères. Essayez d'ajuster votre recherche ou vos filtres."
+  },
+  "aiModels.results": {
+    "en": "{count, plural, =0 {No AI models found} one {# AI model found} other {# AI models found}}",
+    "fr": "{count, plural, =0 {Aucun modèle d'IA trouvé} one {# modèle d'IA trouvé} other {# modèles d'IA trouvés}}"
+  },
+  "aiModels.noResults": {
+    "en": "No AI models found matching your criteria.",
+    "fr": "Aucun modèle d'IA ne correspond à vos critères."
+  },
+  "aiModels.contacts": {
+    "en": "Contacts",
+    "fr": "Contacts"
+  },
+  "aiModels.libraries": {
+    "en": "Libraries",
+    "fr": "Bibliothèques"
+  },
+  "aiModels.tooltips.libraries": {
+    "en": "Software libraries used to build or run this AI model.",
+    "fr": "Bibliothèques logicielles utilisées pour construire ou exécuter ce modèle d'IA."
+  },
+  "aiModels.modalities": {
+    "en": "Modalities",
+    "fr": "Modalités"
+  },
+  "aiModels.tooltips.modalities": {
+    "en": "Modalities, tasks, and subtasks this AI model performs.",
+    "fr": "Modalités, tâches et sous-tâches que ce modèle d'IA exécute."
+  },
+  "aiModels.tasks": {
+    "en": "Task",
+    "fr": "Tâche"
+  },
+  "aiModels.subtasks": {
+    "en": "Subtasks",
+    "fr": "Sous-tâches"
+  },
+  "aiModels.noSubtasks": {
+    "en": "No subtasks specified",
+    "fr": "Aucune sous-tâche spécifiée"
   },
   "datasets.catalogueFilters": {
     "en": "Catalogue Filters",
@@ -597,6 +661,14 @@
     "en": "Health Data Access Body (HDAB)",
     "fr": "Organisme d'accès aux données de santé (HDAB)"
   },
+  "datasets.detail.custodian": {
+    "en": "Custodian",
+    "fr": "Dépositaire"
+  },
+  "datasets.detail.availability": {
+    "en": "Availability",
+    "fr": "Disponibilité"
+  },
   "datasets.detail.codingAndStandards": {
     "en": "Coding & Standards",
     "fr": "Codification et standards"
@@ -793,6 +865,10 @@
     "en": "Maturity status of the distribution.",
     "fr": "Statut de maturité de la distribution."
   },
+  "datasets.detail.tooltips.distributionAvailability": {
+    "en": "How long the distribution is planned to remain available.",
+    "fr": "Durée pendant laquelle la distribution est prévue de rester disponible."
+  },
   "datasets.detail.tooltips.distributionApplicableLegislation": {
     "en": "Legislation applicable to this distribution.",
     "fr": "Législation applicable à cette distribution."
@@ -976,6 +1052,10 @@
   "datasets.detail.tooltips.healthDataAccessBody": {
     "en": "Health Data Access Body responsible for granting access to this dataset.",
     "fr": "Organisme d'accès aux données de santé chargé d'accorder l'accès à ce jeu de données."
+  },
+  "datasets.detail.tooltips.custodian": {
+    "en": "Organisation responsible for keeping and maintaining the dataset.",
+    "fr": "Organisation chargée de conserver et de maintenir le jeu de données."
   },
   "datasets.detail.tooltips.codingSystems": {
     "en": "Coding systems or standards used in this dataset (e.g., ICD-10, SNOMED CT).",
@@ -1912,6 +1992,10 @@
   "application.fields.removeRow": {
     "en": "Remove row {number}",
     "fr": "Supprimer la ligne {number}"
+  },
+  "application.fields.removeFile": {
+    "en": "Remove file",
+    "fr": "Supprimer le fichier"
   },
   "markdown.scrollableTable": {
     "en": "Scrollable table",

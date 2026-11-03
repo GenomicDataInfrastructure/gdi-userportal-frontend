@@ -11,13 +11,29 @@ import {
 } from "@/app/api/access-management/open-api/schemas";
 import { accessManagementClient } from "@/app/api/shared/client";
 import { createHeaders } from "@/app/api/shared/headers";
-import { AxiosError, isAxiosError } from "axios";
+import { AxiosError, AxiosHeaders, isAxiosError } from "axios";
 import { ZodError } from "zod";
+import { LsAaiUnauthorizedError } from "@/app/api/ga4gh/errors";
 import { retrieveEntitlements } from "@/app/api/ga4gh/entitlements";
 import { checkBeaconAuthorization } from "@/app/api/ga4gh/beacon-authorization";
 
+// Return expected failures as plain data: production sanitizes thrown errors.
+function toAccessManagementFailure(error: unknown) {
+  const unauthorized =
+    (isAxiosError(error) && error.response?.status === 401) ||
+    error instanceof LsAaiUnauthorizedError;
+  if (unauthorized) {
+    return { ok: false as const, status: 401 as const };
+  }
+  // Unexpected failures must remain visible in server logs. Next.js hides
+  // their details from production clients, which show the generic error UI.
+  throw error;
+}
+
 const unauthorizedResponse = {
   status: 401,
+  statusText: "Unauthorized",
+  config: { headers: new AxiosHeaders() },
   headers: { "Content-Type": "application/json" },
   data: {
     title: "Unauthorized",
@@ -25,6 +41,27 @@ const unauthorizedResponse = {
     status: 401,
   },
 } as const;
+
+function createUnauthorizedError() {
+  return new AxiosError(
+    unauthorizedResponse.data.detail,
+    "ERR_UNAUTHORIZED",
+    undefined,
+    undefined,
+    unauthorizedResponse
+  );
+}
+
+function getBearerToken(authorizationHeader: string | undefined) {
+  if (!authorizationHeader) {
+    return null;
+  }
+  const [scheme, token] = authorizationHeader.split(" ");
+  if (scheme?.toLowerCase() !== "bearer" || !token) {
+    return null;
+  }
+  return token;
+}
 
 const forbiddenApplicationResponse = {
   status: 403,
@@ -89,55 +126,81 @@ export const createApplicationApi = async (createApplicationCommand: {
 };
 
 export const listApplicationsApi = async () => {
-  const headers = await createHeaders();
-  return await accessManagementClient.list_applications_v1({
-    headers,
-  });
+  try {
+    const headers = await requireAuthenticatedHeaders();
+    const data = await accessManagementClient.list_applications_v1({ headers });
+    return { ok: true as const, data };
+  } catch (error) {
+    return toAccessManagementFailure(error);
+  }
 };
 
 export const retrieveApplicationApi = async (applicationId: number) => {
-  const headers = await createHeaders();
-  return await accessManagementClient.retrieve_application_v1({
-    params: { id: applicationId },
-    headers,
-  });
+  try {
+    const headers = await requireAuthenticatedHeaders();
+    const data = await accessManagementClient.retrieve_application_v1({
+      params: { id: applicationId },
+      headers,
+    });
+    return { ok: true as const, data };
+  } catch (error) {
+    return toAccessManagementFailure(error);
+  }
 };
 
 export const deleteApplicationApi = async (applicationId: number) => {
-  const headers = await createHeaders();
-  await accessManagementClient.delete_application_v1(undefined, {
-    params: { id: applicationId },
-    headers,
-  });
+  try {
+    const headers = await requireAuthenticatedHeaders();
+    await accessManagementClient.delete_application_v1(undefined, {
+      params: { id: applicationId },
+      headers,
+    });
+    return { ok: true as const };
+  } catch (error) {
+    return toAccessManagementFailure(error);
+  }
 };
 
 export const addAttachmentToApplicationApi = async (
   applicationId: number,
   attachment: FormData
 ) => {
-  const headers = await createHeaders();
-  delete headers["Content-Type"];
+  try {
+    const headers = await requireAuthenticatedHeaders();
+    delete headers["Content-Type"];
 
-  const { id } = await accessManagementClient.add_attachment_to_application_v1(
-    { file: attachment.get("file") as File },
-    {
-      params: { id: applicationId },
-      headers,
-    }
-  );
+    const { id } =
+      await accessManagementClient.add_attachment_to_application_v1(
+        { file: attachment.get("file") as File },
+        {
+          params: { id: applicationId },
+          headers,
+        }
+      );
 
-  return id;
+    return { ok: true as const, data: id };
+  } catch (error) {
+    return toAccessManagementFailure(error);
+  }
 };
 
 export const acceptApplicationTermsApi = async (
   applicationId: number,
   acceptTermsCommand: { acceptedLicenses: number[] }
 ) => {
-  const headers = await createHeaders();
-  await accessManagementClient.accept_application_terms_v1(acceptTermsCommand, {
-    params: { id: applicationId },
-    headers,
-  });
+  try {
+    const headers = await requireAuthenticatedHeaders();
+    await accessManagementClient.accept_application_terms_v1(
+      acceptTermsCommand,
+      {
+        params: { id: applicationId },
+        headers,
+      }
+    );
+    return { ok: true as const };
+  } catch (error) {
+    return toAccessManagementFailure(error);
+  }
 };
 
 export const saveFormsAndDuosApi = async (
@@ -145,11 +208,16 @@ export const saveFormsAndDuosApi = async (
   forms: SaveForm[],
   duoCodes: SaveDUOCode[]
 ) => {
-  const headers = await createHeaders();
-  await accessManagementClient.save_application_forms_and_duos_v1(
-    { forms, duoCodes },
-    { params: { id: applicationId }, headers }
-  );
+  try {
+    const headers = await requireAuthenticatedHeaders();
+    await accessManagementClient.save_application_forms_and_duos_v1(
+      { forms, duoCodes },
+      { params: { id: applicationId }, headers }
+    );
+    return { ok: true as const };
+  } catch (error) {
+    return toAccessManagementFailure(error);
+  }
 };
 
 export const submitApplicationApi = async (applicationId: number) => {
@@ -210,8 +278,24 @@ export const submitApplicationApi = async (applicationId: number) => {
 };
 
 export const retrieveEntitlementsApi = async () => {
-  return retrieveEntitlements();
+  try {
+    const headers = await requireAuthenticatedHeaders();
+    const data = await retrieveEntitlements(
+      getBearerToken(headers.Authorization)
+    );
+    return { ok: true as const, data };
+  } catch (error) {
+    return toAccessManagementFailure(error);
+  }
 };
+
+async function requireAuthenticatedHeaders(): Promise<Record<string, string>> {
+  const headers = await createHeaders();
+  if (!headers.Authorization) {
+    throw createUnauthorizedError();
+  }
+  return headers;
+}
 
 export const inviteMemberApi = async (
   applicationId: number,

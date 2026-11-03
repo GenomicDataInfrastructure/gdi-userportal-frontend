@@ -6,6 +6,7 @@ import { jest } from "@jest/globals";
 import { extractVerifiedControlledAccessGrants } from "../visa";
 import { retrieveEntitlements } from "../entitlements";
 import { fetchGa4ghVisas } from "../passport";
+import { LsAaiUnauthorizedError } from "../errors";
 
 jest.mock("../passport");
 jest.mock("../visa");
@@ -244,6 +245,16 @@ describe("retrieveEntitlements", () => {
     consoleSpy.mockRestore();
   });
 
+  it("propagates an LsAaiUnauthorizedError instead of returning empty entitlements", async () => {
+    mockedFetchGa4ghVisas.mockRejectedValueOnce(
+      new LsAaiUnauthorizedError("LS-AAI userinfo request failed: 401")
+    );
+
+    await expect(retrieveEntitlements()).rejects.toBeInstanceOf(
+      LsAaiUnauthorizedError
+    );
+  });
+
   it("returns empty entitlements when passport fetch times out", async () => {
     mockedFetchGa4ghVisas.mockRejectedValueOnce(
       new Error("LS-AAI broker endpoint timed out")
@@ -281,4 +292,12 @@ describe("retrieveEntitlements", () => {
     );
     consoleSpy.mockRestore();
   });
+});
+
+test("propagates rejected sessions instead of treating them as a missing passport", async () => {
+  const failure = new LsAaiUnauthorizedError(
+    "LS-AAI userinfo request failed: 401"
+  );
+  mockedFetchGa4ghVisas.mockRejectedValueOnce(failure);
+  await expect(retrieveEntitlements("stale-token")).rejects.toBe(failure);
 });

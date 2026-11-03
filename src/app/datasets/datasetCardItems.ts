@@ -3,40 +3,26 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { CardItem } from "@/components/Card";
+import {
+  createDateCardItems,
+  createPublisherCardItem,
+} from "@/components/cardItems";
 import { formatDate } from "@/utils/formatDate";
 import {
   faBookBookmark,
-  faCalendarAlt,
   faClock,
   faFile,
   faLayerGroup,
-  faSyncAlt,
-  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { SearchedDataset } from "@/app/api/discovery/open-api/schemas";
 
 export function createDatasetCardItems(dataset: SearchedDataset): CardItem[] {
-  const publisherNames = dataset.publishers
-    ?.map((publisher) => publisher.name)
-    .filter((name): name is string => Boolean(name));
   const hasTemporalCoverageSummary = Boolean(
     dataset.temporalCoverageStart || dataset.temporalCoverageEnd
   );
 
   return [
-    {
-      text:
-        (dataset.createdAt && `Created on ${formatDate(dataset.createdAt)}`) ||
-        "",
-      icon: faCalendarAlt,
-    },
-    {
-      text:
-        (dataset.modifiedAt &&
-          `Modified on ${formatDate(dataset.modifiedAt)}`) ||
-        "",
-      icon: faSyncAlt,
-    },
+    ...createDateCardItems(dataset),
     {
       text:
         (hasTemporalCoverageSummary &&
@@ -44,13 +30,7 @@ export function createDatasetCardItems(dataset: SearchedDataset): CardItem[] {
         "",
       icon: faClock,
     },
-    {
-      text:
-        ((publisherNames?.length ?? 0) > 0 &&
-          `Published by ${(publisherNames ?? []).join(", ")}`) ||
-        "",
-      icon: faUser,
-    },
+    createPublisherCardItem(dataset),
     {
       text:
         (dataset.distributionsCount &&

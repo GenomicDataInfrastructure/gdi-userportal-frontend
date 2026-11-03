@@ -5,13 +5,14 @@
 
 import ListContainer from "@/components/ListContainer";
 import PageHeading from "@/components/PageHeading";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Status } from "@/utils/pageStatus.types";
 import { createDatasetEntitlements } from "@/utils/datasetEntitlements";
 import EntitlementsList from "./EntitlementsList";
 import LoadingContainer from "@/components/LoadingContainer";
 import Error from "@/app/error";
 import axios from "axios";
+import { signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { EmptyEntitlements } from "./EmptyEntitlements";
 import PassportUnavailableBanner from "./PassportUnavailableBanner";
@@ -36,15 +37,30 @@ function EntitlementsPage() {
     status: "loading",
   });
 
+  const isRedirectingToLogin = useRef(false);
+
   useEffect(() => {
     async function fetchData() {
       try {
         const result = await retrieveEntitlementsApi();
-        const { entitlements } = result;
+        if (!result.ok) {
+          if (isRedirectingToLogin.current) return;
+          isRedirectingToLogin.current = true;
+          try {
+            await signIn("keycloak", { callbackUrl: window.location.href });
+          } catch (signInError) {
+            console.error(signInError);
+            isRedirectingToLogin.current = false;
+            setResponse({ status: "error" });
+          }
+          return;
+        }
+
+        const { entitlements } = result.data;
         const passportPresent =
-          "passportPresent" in result &&
-          typeof result.passportPresent === "boolean"
-            ? result.passportPresent
+          "passportPresent" in result.data &&
+          typeof result.data.passportPresent === "boolean"
+            ? result.data.passportPresent
             : undefined;
 
         const datasetEntitlements =
@@ -60,7 +76,7 @@ function EntitlementsPage() {
 
         let errorResponse;
         if (axios.isAxiosError(error)) {
-          errorResponse = error.response!.data;
+          errorResponse = error.response?.data;
         }
 
         setResponse({

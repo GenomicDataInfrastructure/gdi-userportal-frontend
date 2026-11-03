@@ -10,6 +10,7 @@ const e2eMode = process.env.E2E_MODE ?? defaultMode;
 const isMocked = e2eMode === "mocked";
 const appPort = Number(process.env.E2E_APP_PORT || 3000);
 const mockApiPort = Number(process.env.MOCK_API_PORT || 4010);
+const ciWorkers = Number(process.env.PLAYWRIGHT_CI_WORKERS || 2);
 
 process.env.E2E_MODE = e2eMode;
 
@@ -86,8 +87,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  /* Keep local auto worker count; use bounded parallelism on CI. */
+  workers: process.env.CI ? ciWorkers : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: "html",
 

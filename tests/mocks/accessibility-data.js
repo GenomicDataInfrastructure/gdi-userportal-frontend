@@ -124,6 +124,17 @@ module.exports = ({ sendJson, readBody }) => {
       release?.();
       scenario = JSON.parse(await readBody(req)).scenario;
       draft = application();
+      if (scenario === "application-attachment") {
+        draft.attachments = [
+          {
+            id: 7,
+            filename: "synthetic-protocol.pdf",
+            type: "application/pdf",
+          },
+        ];
+        draft.forms[0].fields.find((item) => item.id === "protocol").value =
+          "7";
+      }
       return reply(200, { ok: true });
     }
     if (!scenario) return false;

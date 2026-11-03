@@ -4,11 +4,10 @@
 
 import { test, expect } from "./fixtures/mockApi";
 import { encode } from "next-auth/jwt";
-import Cryptr from "cryptr";
 import type { Page } from "@playwright/test";
+import { mockAccessToken, setVisaScenario } from "./fixtures/visaScenario";
 
 const isMocked = process.env.E2E_MODE === "mocked";
-const mockApiPort = Number(process.env.MOCK_API_PORT || 4010);
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -17,19 +16,13 @@ const mockApiPort = Number(process.env.MOCK_API_PORT || 4010);
 /**
  * Creates a NextAuth JWT cookie that passes both:
  *  - The middleware `getToken` check (requires a valid signed JWT)
- *  - The session callback (requires `access_token` and `id_token` so Cryptr
- *    does not throw, enabling `getToken("access_token")` to return a value
- *    that the GA4GH Passport flow can use)
+ *  - The session callback (requires `access_token` and `id_token` so the
+ *    server-side token flow can use the Keycloak credentials)
  */
 async function setAuthCookie(page: Page) {
   const secret = process.env.NEXTAUTH_SECRET || "your-secret";
-  // The session callback calls encrypt(token.access_token) using NEXTAUTH_URL
-  // as the Cryptr secret.  Pre-encrypt here so the raw token stored in the
-  // NextAuth JWT matches what the session callback would produce.
-  const nextAuthUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-  const cryptr = new Cryptr(nextAuthUrl);
 
-  const fakeKeycloakToken = "fake-keycloak-access-token";
+  const fakeKeycloakToken = mockAccessToken(page);
   const fakeIdToken = "fake-id-token";
 
   const token = await encode({
@@ -58,15 +51,11 @@ async function setAuthCookie(page: Page) {
       sameSite: "Lax",
     },
   ]);
-
-  // Suppress unused variable warning — cryptr is imported for type purposes
-  void cryptr;
 }
 
 /**
- * Keep a valid session with an empty access token. Omitting the token fields
- * makes the session callback throw and NextAuth discard the session before
- * the entitlement page can render its passport-unavailable state.
+ * Keep a valid session with an empty access token to exercise the
+ * passport-unavailable state without requiring a real Keycloak credential.
  */
 async function setAuthCookieWithoutTokens(page: Page) {
   const secret = process.env.NEXTAUTH_SECRET || "your-secret";
@@ -94,25 +83,13 @@ async function setAuthCookieWithoutTokens(page: Page) {
   ]);
 }
 
-/** Tells the mock server which visa scenario to return from the userinfo endpoint. */
-async function setScenario(page: Page, scenario: string) {
-  await page.request.post(
-    `http://localhost:${mockApiPort}/_test/set-scenario`,
-    {
-      data: JSON.stringify({ scenario }),
-      headers: { "Content-Type": "application/json" },
-    }
-  );
-}
+const setScenario = setVisaScenario;
 
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
 
 test.describe("Entitlements page (GA4GH Passport flow)", () => {
-  // Must run serially — tests share mock server scenario state via
-  // POST /_test/set-scenario, so parallel execution causes race conditions.
-  test.describe.configure({ mode: "serial" });
   test.beforeEach(async ({ page }) => {
     test.skip(!isMocked, "Mocked-only tests");
     await setAuthCookie(page);
@@ -125,6 +102,46 @@ test.describe("Entitlements page (GA4GH Passport flow)", () => {
     await expect(page.getByText(/cancer cohort study/i)).toBeVisible({
       timeout: 15000,
     });
+  });
+
+  test("keeps concurrent passport scenarios isolated between sessions", async ({
+    browser,
+    baseURL,
+  }) => {
+    const contexts = await Promise.all(
+      ["fallback", "multiple", "authorized"].map(() =>
+        browser.newContext({ baseURL })
+      )
+    );
+    try {
+      const pages = await Promise.all(
+        contexts.map((context) => context.newPage())
+      );
+      await Promise.all(pages.map((page) => setAuthCookie(page)));
+      // Set every scenario before navigating: a global scenario would make all
+      // three sessions receive whichever value was written last.
+      await Promise.all(
+        pages.map((page, index) =>
+          setScenario(page, ["fallback", "multiple", "authorized"][index])
+        )
+      );
+      await Promise.all(
+        pages.map((page) => page.goto("/requests?tab=entitlements"))
+      );
+      await Promise.all([
+        expect(pages[0].getByText(/unknown-dataset-id-999/i)).toBeVisible({
+          timeout: 15000,
+        }),
+        expect(pages[1].getByText(/rare disease genomes/i)).toBeVisible({
+          timeout: 15000,
+        }),
+        expect(
+          pages[2].getByText(/do not have any active entitlements/i)
+        ).toBeVisible({ timeout: 15000 }),
+      ]);
+    } finally {
+      await Promise.all(contexts.map((context) => context.close()));
+    }
   });
 
   test("shows source and granted-by label on entitlement card", async ({

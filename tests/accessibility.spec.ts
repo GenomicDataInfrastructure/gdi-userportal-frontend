@@ -18,6 +18,7 @@ const pages: {
   route: string;
   path?: string;
   auth?: boolean;
+  scan?: boolean;
   ready: (page: Page, info: TestInfo) => Promise<void>;
 }[] = [
   {
@@ -118,6 +119,11 @@ const pages: {
       ).toBeVisible();
     },
   },
+  // Keep these feature-gated routes in the inventory without scanning a 404.
+  { route: "/models", scan: false, ready: async () => {} },
+  { route: "/models/[id]", scan: false, ready: async () => {} },
+  // Immediately redirects to Keycloak via next-auth signIn(); nothing to scan.
+  { route: "/login", scan: false, ready: async () => {} },
 ];
 const discoverPages = (directory: string, route = ""): string[] =>
   readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -130,12 +136,34 @@ const discoverPages = (directory: string, route = ""): string[] =>
     }
     return /^page\.[jt]sx?$/.test(entry.name) ? [route || "/"] : [];
   });
-test("every route has an executable accessibility scan", () => {
+test("every executable route has an accessibility scan", () => {
+  const nonExecutableRoutes = new Set(
+    pages.filter(({ scan }) => scan === false).map(({ route }) => route)
+  );
+  const executablePages = pages.filter(({ scan }) => scan !== false);
+
   expect(
-    [...new Set(discoverPages(join(process.cwd(), "src/app")))].sort()
-  ).toEqual(pages.map(({ route }) => route).sort());
+    [...new Set(discoverPages(join(process.cwd(), "src/app")))]
+      .filter((route) => !nonExecutableRoutes.has(route))
+      .sort()
+  ).toEqual(executablePages.map(({ route }) => route).sort());
 });
-for (const entry of pages) {
+test("skip link bypasses repeated content", async ({ page }, info) => {
+  await page.goto(url("/", info));
+
+  await page.keyboard.press("Tab");
+  const skipLink = page.getByRole("link", {
+    name: message("accessibility.skipToMainContent", info),
+    exact: true,
+  });
+  await expect(skipLink).toBeVisible();
+  await expect(skipLink).toBeFocused();
+
+  await skipLink.press("Enter");
+  await expect(page).toHaveURL(/#main-content$/);
+  await expect(page.locator("main#main-content")).toBeFocused();
+});
+for (const entry of pages.filter(({ scan }) => scan !== false)) {
   test(`${entry.route} page`, async ({ page }, info) => {
     if (entry.auth) await authenticate(page);
     const response = await page.goto(url(entry.path || entry.route, info));

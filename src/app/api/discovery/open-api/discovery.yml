@@ -547,6 +547,11 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Agent"
+        custodians:
+          type: array
+          description: Organisations responsible for keeping the dataset (geodcatap:custodian).
+          items:
+            $ref: "#/components/schemas/Agent"
         spatialCoverage:
           type: array
           description: A geographic region that is covered by the dataset.
@@ -1014,8 +1019,25 @@ components:
           description: Publisher spatial coverage.
           items:
             $ref: "#/components/schemas/ValueLabel"
+        contactPoints:
+          type: array
+          description: Contact points of the agent (cv:contactPoint).
+          items:
+            $ref: "#/components/schemas/AgentContactPoint"
       required:
         - name
+    AgentContactPoint:
+      properties:
+        name:
+          type: string
+          title: name
+        email:
+          type: string
+          title: email
+        contactPages:
+          type: array
+          items:
+            type: string
     DatasetRelationEntry:
       properties:
         relation:

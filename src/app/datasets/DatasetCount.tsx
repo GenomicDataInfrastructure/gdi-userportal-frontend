@@ -4,23 +4,17 @@
 
 "use client";
 
+import ResultCount from "@/components/ResultCount";
 import { useDatasets } from "@/providers/datasets/DatasetsProvider";
-import { useTranslations } from "next-intl";
 
 export default function DatasetCount() {
-  const t = useTranslations("datasets");
   const { datasetCount, isLoading, errorCode } = useDatasets();
-  let text;
-  if (isLoading || datasetCount === undefined) {
-    text = "";
-  } else if (errorCode) {
-    text = t("results", { count: 0 });
-  } else {
-    text = t("results", { count: datasetCount });
-  }
   return (
-    <p className="col-start-0 col-span-12 mt-5 xl:mb-12 mb-4 text-center text-sm text-info h-9">
-      {text}
-    </p>
+    <ResultCount
+      namespace="datasets"
+      count={datasetCount}
+      isLoading={isLoading}
+      errorCode={errorCode}
+    />
   );
 }

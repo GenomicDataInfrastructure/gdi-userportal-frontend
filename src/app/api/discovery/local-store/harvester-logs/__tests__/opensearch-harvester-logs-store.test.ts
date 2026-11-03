@@ -7,6 +7,7 @@ import { OpenSearchHarvesterLogsStore } from "@/app/api/discovery/local-store/ha
 import { HarvesterRunLog } from "@/app/api/discovery/local-store/harvester-logs/types";
 
 const mockClient = {
+  interceptors: { request: { use: jest.fn() } },
   put: jest.fn<(_url: string, _body: unknown) => Promise<unknown>>(),
   post: jest.fn<
     (_url: string, _body?: unknown, _config?: unknown) => Promise<{ data: any }>

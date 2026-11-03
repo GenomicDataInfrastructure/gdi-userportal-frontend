@@ -3,6 +3,7 @@
 
 import { test, expect } from "./fixtures/mockApi";
 import { authenticate } from "./fixtures/authenticate";
+import { setVisaScenario } from "./fixtures/visaScenario";
 
 const isMocked = process.env.E2E_MODE === "mocked";
 const mockOrigin = `http://localhost:${process.env.MOCK_API_PORT || 4010}`;
@@ -16,11 +17,7 @@ test.describe("applications", () => {
   }) => {
     const applicationId = browserName === "firefox" ? 91 : 89;
     await authenticate(page);
-    const scenarioResponse = await page.request.post(
-      `${mockOrigin}/_test/set-scenario`,
-      { data: { scenario: "authorized" } }
-    );
-    expect(scenarioResponse.ok()).toBeTruthy();
+    await setVisaScenario(page, "authorized");
     await page.goto(`/applications/${applicationId}`);
 
     await expect(

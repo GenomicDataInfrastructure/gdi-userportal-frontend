@@ -2,15 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { Agent, Dispatcher, fetch as undiciFetch } from "undici";
-
-const harvestDispatcher = new Agent({
-  connect: { rejectUnauthorized: false },
-});
-
-type HarvestRequestInit = RequestInit & {
-  dispatcher?: Dispatcher;
-};
+import { fetch as undiciFetch } from "undici";
+import { withAcceptEncoding } from "@/app/api/shared/accept-encoding";
 
 export type HarvestFetchLike = (
   input: string | URL,
@@ -19,16 +12,11 @@ export type HarvestFetchLike = (
 
 export const harvestFetch = undiciFetch as unknown as HarvestFetchLike;
 
-const usesHttps = (input: string | URL): boolean =>
-  String(input).trim().toLowerCase().startsWith("https://");
-
+// TLS is always verified. Add private CAs of harvested sources through
+// NODE_EXTRA_CA_CERTS in the deployment, not here.
 export const buildHarvestRequestInit = (
-  input: string | URL,
   init: RequestInit = {}
-): HarvestRequestInit =>
-  usesHttps(input)
-    ? {
-        ...init,
-        dispatcher: harvestDispatcher,
-      }
-    : { ...init };
+): RequestInit => ({
+  ...init,
+  headers: withAcceptEncoding(init.headers),
+});

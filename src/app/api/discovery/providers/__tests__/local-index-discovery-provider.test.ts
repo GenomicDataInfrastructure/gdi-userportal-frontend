@@ -4,6 +4,8 @@
 
 import { jest } from "@jest/globals";
 import {
+  LocalDiscoveryAiModel,
+  LocalDiscoveryAiModelSearchResult,
   LocalDiscoveryDataset,
   LocalDiscoverySearchResult,
 } from "@/app/api/discovery/local-store/types";
@@ -23,8 +25,26 @@ const mockStore = {
     jest.fn<(_datasets: LocalDiscoveryDataset[]) => Promise<void>>(),
 };
 
+const mockAiModelStore = {
+  key: "opensearch",
+  ensureInitialized: jest.fn<() => Promise<void>>(),
+  clearAiModels: jest.fn<() => Promise<void>>(),
+  searchAiModels:
+    jest.fn<
+      (_options: unknown) => Promise<LocalDiscoveryAiModelSearchResult>
+    >(),
+  retrieveAiModel:
+    jest.fn<(_id: string) => Promise<LocalDiscoveryAiModel | null>>(),
+  upsertAiModels:
+    jest.fn<(_aiModels: LocalDiscoveryAiModel[]) => Promise<void>>(),
+};
+
 jest.mock("@/app/api/discovery/local-store/factory", () => ({
   getLocalDiscoveryStore: () => mockStore,
+}));
+
+jest.mock("@/app/api/discovery/local-store/ai-model-factory", () => ({
+  getLocalAiModelStore: () => mockAiModelStore,
 }));
 
 jest.mock("@/utils/formatDatasetLanguage", () => ({
@@ -696,6 +716,57 @@ describe("LocalIndexDiscoveryProvider", () => {
         },
       ],
     });
+  });
+
+  test("retrieveDataset separates analytics distributions and exposes availability and custodians", async () => {
+    mockStore.retrieveDataset.mockResolvedValueOnce(
+      buildLocalDiscoveryDataset({
+        id: "health",
+        custodians: [
+          {
+            name: "Custodian Organisation",
+            contactPoints: [{ email: "custodian@example.org" }],
+          },
+        ],
+        distributions: [
+          {
+            id: "data",
+            title: "Data distribution",
+            roles: ["distribution"],
+            availability: {
+              value:
+                "http://publications.europa.eu/resource/authority/planned-availability/AVAILABLE",
+              label: "Available",
+            },
+          },
+          { id: "legacy", title: "Stored before roles" },
+          { id: "empty", title: "Empty roles", roles: [] },
+          { id: "stats", title: "Analytics", roles: ["analytics"] },
+          {
+            id: "both",
+            title: "Both roles",
+            roles: ["distribution", "analytics"],
+          },
+        ],
+      })
+    );
+
+    const dataset = await provider.retrieveDataset("health");
+
+    expect(dataset.distributions?.map((d) => d.id)).toEqual([
+      "data",
+      "legacy",
+      "empty",
+      "both",
+    ]);
+    expect(dataset.analytics?.map((d) => d.id)).toEqual(["stats", "both"]);
+    expect(dataset.distributions?.[0].availability).toBe("Available");
+    expect(dataset.custodians).toEqual([
+      expect.objectContaining({
+        name: "Custodian Organisation",
+        contactPoints: [{ email: "custodian@example.org" }],
+      }),
+    ]);
   });
 
   test("retrieveDataset preserves unknown languages and text-only spatial coverage", async () => {
@@ -1444,6 +1515,119 @@ describe("LocalIndexDiscoveryProvider", () => {
 
     await expect(provider.retrieveDataset("missing")).rejects.toThrow(
       "Dataset not found in local index: missing"
+    );
+  });
+
+  test("searchAiModels maps results from the dedicated AI Model index", async () => {
+    mockAiModelStore.searchAiModels.mockResolvedValueOnce({
+      count: 1,
+      results: [
+        {
+          id: "ai-model-1",
+          identifier: "ai-model-1",
+          entityType: "AI_MODEL",
+          title: "Chest X-Ray Classifier",
+          description: "Detects pneumonia",
+          publishers: [{ name: "LNDS AI Lab" }],
+          creators: [],
+          modelTasks: [
+            {
+              modality: { value: "modality:image", label: "Image" },
+              task: { value: "classification", label: "Classification" },
+            },
+          ],
+        },
+      ],
+    });
+
+    await expect(
+      provider.searchAiModels({ query: "classifier" })
+    ).resolves.toEqual({
+      count: 1,
+      results: [
+        {
+          id: "ai-model-1",
+          identifier: "ai-model-1",
+          title: "Chest X-Ray Classifier",
+          description: "Detects pneumonia",
+          createdAt: undefined,
+          modifiedAt: undefined,
+          version: undefined,
+          hasVersions: undefined,
+          versionNotes: undefined,
+          accessRights: undefined,
+          keywords: [],
+          documentation: undefined,
+          publishers: [
+            {
+              name: "LNDS AI Lab",
+              email: undefined,
+              url: undefined,
+              uri: undefined,
+              homepage: undefined,
+              type: undefined,
+              identifier: undefined,
+            },
+          ],
+          creators: [],
+        },
+      ],
+    });
+    expect(mockAiModelStore.searchAiModels).toHaveBeenCalledWith({
+      query: "classifier",
+      sort: undefined,
+      start: undefined,
+      rows: undefined,
+    });
+  });
+
+  test("retrieveAiModel maps the fixture, including contacts, from the dedicated index", async () => {
+    mockAiModelStore.retrieveAiModel.mockResolvedValueOnce({
+      id: "ai-model-1",
+      entityType: "AI_MODEL",
+      title: "Chest X-Ray Classifier",
+      description: "Detects pneumonia",
+      publishers: [],
+      creators: [],
+      contacts: [{ name: "Support", email: "support@lnds.lu" }],
+      modelTasks: [
+        {
+          modality: { value: "modality:image", label: "Image" },
+          task: { value: "classification", label: "Classification" },
+        },
+      ],
+    });
+
+    await expect(provider.retrieveAiModel("ai-model-1")).resolves.toEqual({
+      id: "ai-model-1",
+      identifier: undefined,
+      title: "Chest X-Ray Classifier",
+      description: "Detects pneumonia",
+      createdAt: undefined,
+      modifiedAt: undefined,
+      version: undefined,
+      hasVersions: undefined,
+      versionNotes: undefined,
+      accessRights: undefined,
+      keywords: [],
+      documentation: undefined,
+      publishers: [],
+      creators: [],
+      contacts: [{ name: "Support", email: "support@lnds.lu" }],
+      modelTasks: [
+        {
+          modality: { value: "modality:image", label: "Image" },
+          task: { value: "classification", label: "Classification" },
+        },
+      ],
+    });
+  });
+
+  test("retrieveAiModel throws when the AI Model is missing", async () => {
+    mockAiModelStore.retrieveAiModel.mockResolvedValueOnce(null);
+
+    await expect(provider.retrieveAiModel("missing")).rejects.toThrow(
+      "AI Model not found in local index: missing"
     );
   });
 });

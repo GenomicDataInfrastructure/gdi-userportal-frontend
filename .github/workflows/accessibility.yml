@@ -14,8 +14,19 @@ permissions:
 
 jobs:
   accessibility:
+    name: Accessibility (${{ matrix.project }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: chromium
+            browser: chromium
+          - project: firefox
+            browser: firefox
+          - project: mobile
+            browser: chromium
     env:
       E2E_MODE: mocked
       MOCK_API_PORT: 4010
@@ -29,19 +40,20 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Install browsers
-        run: npx playwright install --with-deps chromium firefox
+      - name: Install browser
+        run: npx playwright install --with-deps ${{ matrix.browser }}
       - name: Generate API types
         run: npm run generate:openapi
       - name: Check notification component accessibility
+        if: matrix.project == 'chromium'
         run: npx jest src/app/notifications/__tests__/page.test.tsx --runInBand
       - name: Run accessibility tests
-        run: npm run test:a11y
+        run: npx playwright test --config=playwright.accessibility.config.ts --project=${{ matrix.project }}
       - name: Upload accessibility report
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: accessibility-report
+          name: accessibility-report-${{ matrix.project }}
           path: |
             playwright-report/
             test-results/

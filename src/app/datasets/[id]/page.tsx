@@ -12,7 +12,7 @@ import axios from "axios";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DatasetMetadata from "./DatasetMetadata";
-import Tooltip from "./Tooltip";
+import Tooltip from "@/components/Tooltip";
 import { createDatasetSidebarItems } from "./sidebarItems";
 import { retrieveDatasetApi, searchDatasetsApi } from "../../api/discovery";
 import { SearchedDataset } from "../../api/discovery/open-api/schemas";

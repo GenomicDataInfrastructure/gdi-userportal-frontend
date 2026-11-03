@@ -246,6 +246,7 @@ export default function ContactUsModal() {
               </label>
               <Input
                 id="firstName"
+                autoComplete="given-name"
                 value={formState.firstName}
                 onChange={updateField("firstName")}
                 placeholder={t("firstNamePlaceholder")}
@@ -259,6 +260,7 @@ export default function ContactUsModal() {
               </label>
               <Input
                 id="lastName"
+                autoComplete="family-name"
                 value={formState.lastName}
                 onChange={updateField("lastName")}
                 placeholder={t("lastNamePlaceholder")}
@@ -273,6 +275,7 @@ export default function ContactUsModal() {
               <Input
                 id="email"
                 type="email"
+                autoComplete="email"
                 value={formState.email}
                 onChange={updateField("email")}
                 placeholder={t("emailPlaceholder")}
@@ -288,7 +291,7 @@ export default function ContactUsModal() {
                 id="topic"
                 value={formState.topic}
                 onChange={updateTopic}
-                className="border-input bg-background ring-offset-background placeholder:text-muted-foreground flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50"
+                className="border-input bg-background ring-offset-background placeholder:text-muted-foreground flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={isLoadingTopics || !isTopicAvailable}
                 required
               >
@@ -328,7 +331,7 @@ export default function ContactUsModal() {
                 value={formState.message}
                 onChange={updateField("message")}
                 placeholder={t("messagePlaceholder")}
-                className="border-input bg-background ring-offset-background placeholder:text-muted-foreground min-h-[140px] w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50"
+                className="border-input bg-background ring-offset-background placeholder:text-muted-foreground min-h-[140px] w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring disabled:cursor-not-allowed disabled:opacity-50"
                 maxLength={4000}
                 required
               />

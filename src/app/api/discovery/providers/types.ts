@@ -62,6 +62,11 @@ export interface DiscoveryAgent {
   type?: DiscoveryValueLabel;
   identifier?: string;
   actedOnBehalfOf?: DiscoveryAgent[];
+  contactPoints?: Array<{
+    name?: string;
+    email?: string;
+    contactPages?: string[];
+  }>;
 }
 
 export interface DiscoveryTimeWindow {
@@ -180,6 +185,8 @@ export interface DiscoveryRetrievedDataset extends DiscoveryDatasetBase {
   provenance?: string;
   spatial?: DiscoveryValueLabel;
   distributions?: DiscoveryRetrievedDistribution[];
+  analytics?: DiscoveryRetrievedDistribution[];
+  custodians?: DiscoveryAgent[];
   dcatType?: DiscoveryValueLabel;
   dcatTypes?: DiscoveryValueLabel[];
   healthTheme?: DiscoveryValueLabel[];
@@ -266,6 +273,47 @@ export interface DiscoveryProviderCapabilities {
   supportsFilterEntries: boolean;
 }
 
+export interface DiscoveryModelTask {
+  modality: DiscoveryValueLabel;
+  task: DiscoveryValueLabel;
+  subtask?: DiscoveryValueLabel;
+}
+
+export interface DiscoverySearchedAiModel {
+  id: string;
+  identifier?: string;
+  title: string;
+  description?: string;
+  createdAt?: string;
+  modifiedAt?: string;
+  version?: string;
+  hasVersions?: DiscoveryValueLabel[];
+  versionNotes?: string;
+  accessRights?: DiscoveryValueLabel;
+  keywords?: string[];
+  documentation?: string[];
+  publishers: DiscoveryAgent[];
+  creators: DiscoveryAgent[];
+  libraries?: string[];
+}
+
+export interface DiscoveryRetrievedAiModel extends DiscoverySearchedAiModel {
+  contacts?: DiscoveryContactPoint[];
+  modelTasks?: DiscoveryModelTask[];
+}
+
+export interface DiscoveryAiModelSearchQuery {
+  query?: string;
+  sort?: string;
+  rows?: number;
+  start?: number;
+}
+
+export interface DiscoveryAiModelsSearchResponse {
+  count?: number;
+  results?: DiscoverySearchedAiModel[];
+}
+
 export interface DiscoveryProvider {
   readonly key: string;
   readonly capabilities: DiscoveryProviderCapabilities;
@@ -289,4 +337,8 @@ export interface DiscoveryProvider {
   searchGVariants: (
     options: DiscoveryGVariantSearchQuery
   ) => Promise<DiscoveryGVariantSearchResult[]>;
+  searchAiModels?: (
+    options: DiscoveryAiModelSearchQuery
+  ) => Promise<DiscoveryAiModelsSearchResponse>;
+  retrieveAiModel?: (id: string) => Promise<DiscoveryRetrievedAiModel>;
 }

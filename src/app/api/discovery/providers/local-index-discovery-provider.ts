@@ -3,7 +3,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { getLocalDiscoveryStore } from "@/app/api/discovery/local-store/factory";
-import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
+import { getLocalAiModelStore } from "@/app/api/discovery/local-store/ai-model-factory";
+import {
+  LocalDiscoveryAiModel,
+  LocalDiscoveryDataset,
+  LocalDistributionRole,
+  getDistributionRoles,
+} from "@/app/api/discovery/local-store/types";
 import {
   getLocalDiscoveryDatasetExportMimeType,
   serializeLocalDiscoveryDataset,
@@ -12,11 +18,15 @@ import { BasePlaceholderDiscoveryProvider } from "@/app/api/discovery/providers/
 import { listLocalFilters } from "@/app/api/discovery/local-store/filter-registry";
 import {
   DiscoveryAgent,
+  DiscoveryAiModelSearchQuery,
+  DiscoveryAiModelsSearchResponse,
   DiscoveryDatasetBase,
   DiscoveryFilter,
   DiscoveryDatasetSearchQuery,
   DiscoveryDatasetsSearchResponse,
+  DiscoveryRetrievedAiModel,
   DiscoveryRetrievedDataset,
+  DiscoverySearchedAiModel,
   DiscoveryValueLabel,
 } from "@/app/api/discovery/providers/types";
 
@@ -30,6 +40,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
   } as const;
 
   private readonly store = getLocalDiscoveryStore();
+  private readonly aiModelStore = getLocalAiModelStore();
 
   private mapDatasetLanguages(
     languages?: Array<{ value: string; label: string }>
@@ -48,6 +59,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       homepage: agent.homepage,
       type: agent.type,
       identifier: agent.identifier,
+      contactPoints: agent.contactPoints,
     };
   }
 
@@ -102,8 +114,14 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     };
   }
 
-  private mapDistributions(dataset: LocalDiscoveryDataset) {
-    return dataset.distributions?.map((distribution) => ({
+  private mapDistributions(
+    dataset: LocalDiscoveryDataset,
+    role: LocalDistributionRole
+  ) {
+    const distributions = dataset.distributions?.filter((distribution) =>
+      getDistributionRoles(distribution).includes(role)
+    );
+    return distributions?.map((distribution) => ({
       id: distribution.id,
       title: distribution.title,
       description: distribution.description ?? "",
@@ -112,6 +130,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       license: distribution.license,
       rights: distribution.rights,
       status: distribution.status,
+      availability: distribution.availability?.label,
       conformsTo: distribution.conformsTo,
       applicableLegislation: distribution.applicableLegislation,
       byteSize: distribution.byteSize,
@@ -192,6 +211,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       throw new Error(`Dataset not found in local index: ${id}`);
     }
     const dcatType = dataset.dcatType?.[0];
+    const analytics = this.mapDistributions(dataset, "analytics");
 
     return {
       ...this.mapLocalDataset(dataset),
@@ -202,7 +222,9 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       healthCategory: dataset.healthCategory ?? [],
       dcatType,
       dcatTypes: dataset.dcatType ?? [],
-      distributions: this.mapDistributions(dataset),
+      distributions: this.mapDistributions(dataset, "distribution"),
+      analytics: analytics?.length ? analytics : undefined,
+      custodians: dataset.custodians?.map((a) => this.mapAgent(a)),
       numberOfRecords: dataset.numberOfRecords,
       provenance: dataset.provenance,
       legalBasis: dataset.legalBasis,
@@ -237,5 +259,56 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
     return new Blob([await serializeLocalDiscoveryDataset(dataset, format)], {
       type: getLocalDiscoveryDatasetExportMimeType(format),
     });
+  }
+
+  private mapLocalAiModel(
+    aiModel: LocalDiscoveryAiModel
+  ): DiscoverySearchedAiModel {
+    return {
+      id: aiModel.id,
+      identifier: aiModel.identifier,
+      title: aiModel.title,
+      description: aiModel.description,
+      createdAt: aiModel.createdAt,
+      modifiedAt: aiModel.modifiedAt,
+      version: aiModel.version,
+      hasVersions: aiModel.hasVersions,
+      versionNotes: aiModel.versionNotes,
+      accessRights: aiModel.accessRights,
+      keywords: aiModel.keywords ?? [],
+      documentation: aiModel.documentation,
+      publishers: aiModel.publishers.map((a) => this.mapAgent(a)),
+      creators: aiModel.creators.map((a) => this.mapAgent(a)),
+      libraries: aiModel.libraries,
+    };
+  }
+
+  async searchAiModels(
+    options: DiscoveryAiModelSearchQuery
+  ): Promise<DiscoveryAiModelsSearchResponse> {
+    const response = await this.aiModelStore.searchAiModels({
+      query: options.query,
+      sort: options.sort,
+      start: options.start,
+      rows: options.rows,
+    });
+
+    return {
+      count: response.count,
+      results: response.results.map((aiModel) => this.mapLocalAiModel(aiModel)),
+    };
+  }
+
+  async retrieveAiModel(id: string): Promise<DiscoveryRetrievedAiModel> {
+    const aiModel = await this.aiModelStore.retrieveAiModel(id);
+    if (!aiModel) {
+      throw new Error(`AI Model not found in local index: ${id}`);
+    }
+
+    return {
+      ...this.mapLocalAiModel(aiModel),
+      contacts: aiModel.contacts,
+      modelTasks: aiModel.modelTasks,
+    };
   }
 }

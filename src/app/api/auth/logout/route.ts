@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { getServerSession } from "next-auth";
+import { withAcceptEncoding } from "@/app/api/shared/accept-encoding";
 import { getToken } from "../auth";
 import { authOptions } from "../config";
 
@@ -18,7 +19,7 @@ export async function GET() {
     )}`;
 
     try {
-      await fetch(url);
+      await fetch(url, { headers: withAcceptEncoding() });
     } catch (err) {
       console.error(`Could not log out from Keycloak`, err);
       return new Response(null, { status: 500 });

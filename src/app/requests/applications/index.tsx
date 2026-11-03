@@ -12,10 +12,11 @@ import ListContainer from "@/components/ListContainer";
 import PageHeading from "@/components/PageHeading";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { useTranslations } from "next-intl";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Status } from "@/utils/pageStatus.types";
 import LoadingContainer from "@/components/LoadingContainer";
 import axios from "axios";
+import { signIn } from "next-auth/react";
 import ApplicationCard from "./ApplicationCard";
 import { listApplicationsApi } from "../../api/access-management";
 import {
@@ -35,16 +36,30 @@ const ApplicationsPage: React.FC = () => {
     status: "loading",
   });
 
+  const isRedirectingToLogin = useRef(false);
+
   const fetchApplications = async () => {
     setResponse({ status: "loading" });
     try {
-      const applications = await listApplicationsApi();
-      setResponse({ applications, status: "success" });
+      const result = await listApplicationsApi();
+      if (!result.ok) {
+        if (isRedirectingToLogin.current) return;
+        isRedirectingToLogin.current = true;
+        try {
+          await signIn("keycloak", { callbackUrl: window.location.href });
+        } catch (error) {
+          console.error(error);
+          isRedirectingToLogin.current = false;
+          setResponse({ status: "error" });
+        }
+        return;
+      }
+      setResponse({ applications: result.data, status: "success" });
     } catch (error) {
       console.error(error);
       setResponse({
         status: "error",
-        error: axios.isAxiosError(error) ? error.response!.data : undefined,
+        error: axios.isAxiosError(error) ? error.response?.data : undefined,
       });
     }
   };

@@ -19,7 +19,7 @@ import {
   faCircleInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "@/utils/formatDate";
-import Tooltip from "./Tooltip";
+import Tooltip from "@/components/Tooltip";
 import { RetrievedDistribution } from "@/app/api/discovery/open-api/schemas";
 import { useTranslations } from "next-intl";
 
@@ -237,6 +237,25 @@ const DistributionAccordion = ({
                             distribution.status.value?.split("/").pop()}
                         </span>
                         <Tooltip message={t("tooltips.distributionStatus")} />
+                      </span>
+                    </div>
+                  )}
+                  {distribution.availability && (
+                    <div className="flex items-center relative">
+                      <span className="group flex items-center">
+                        <FontAwesomeIcon
+                          icon={faCircleInfo}
+                          className="text-primary align-middle mr-2"
+                        />
+                        <strong className="text-sm font-semibold">
+                          {t("availability")}:
+                        </strong>
+                        <span className="text-sm ml-2">
+                          {distribution.availability}
+                        </span>
+                        <Tooltip
+                          message={t("tooltips.distributionAvailability")}
+                        />
                       </span>
                     </div>
                   )}

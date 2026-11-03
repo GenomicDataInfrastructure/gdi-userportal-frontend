@@ -90,7 +90,10 @@ describe("refreshAccessToken", () => {
 
     const result = await refreshAccessToken(mockToken);
     expect(fetch).toHaveBeenCalledWith(`${process.env.REFRESH_TOKEN_URL}`, {
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "accept-encoding": "gzip, deflate",
+      },
       body: new URLSearchParams({
         client_id: `${process.env.KEYCLOAK_CLIENT_ID}`,
         client_secret: `${process.env.KEYCLOAK_CLIENT_SECRET}`,

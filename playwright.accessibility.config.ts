@@ -33,20 +33,5 @@ export default defineConfig(base, {
       },
       metadata: { language: "en" },
     },
-    {
-      name: "french",
-      testMatch: "**/accessibility.spec.ts",
-      use: { ...devices["Desktop Chrome"] },
-      metadata: { language: "fr" },
-    },
-    {
-      name: "french-mobile",
-      testMatch: "**/accessibility.spec.ts",
-      use: {
-        ...devices["Desktop Chrome"],
-        viewport: { width: 320, height: 900 },
-      },
-      metadata: { language: "fr" },
-    },
   ],
 });

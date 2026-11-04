@@ -8,6 +8,7 @@ import PageContainer from "@/components/PageContainer";
 import SearchBar from "@/components/Searchbar";
 import { use, useEffect, useState } from "react";
 import RecentDatasets from "@/components/RecentDatasets";
+import RecentAiModels from "@/components/RecentAiModels";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { useAlert } from "@/providers/AlertProvider";
@@ -17,14 +18,17 @@ import { useTranslations } from "next-intl";
 import {
   retrieveFilterValuesApi,
   searchDatasetsApi,
+  searchAiModelsApi,
 } from "@/app/api/discovery";
 import {
   SearchedDataset,
   ValueLabel,
 } from "@/app/api/discovery/open-api/schemas";
+import { DiscoverySearchedAiModel } from "@/app/api/discovery/providers/types";
 import { FilterValueType } from "@/app/api/discovery/additional-types";
 import { UrlSearchParams } from "@/app/params";
 import contentConfig from "@/config/contentConfig";
+import { useAiModelSupport } from "@/providers/AiModelSupportProvider";
 
 type HomePageProps = {
   searchParams: Promise<UrlSearchParams>;
@@ -33,9 +37,11 @@ type HomePageProps = {
 const HomePage = ({ searchParams }: HomePageProps) => {
   const t = useTranslations();
   const [datasets, setDatasets] = useState<SearchedDataset[]>([]);
+  const [aiModels, setAiModels] = useState<DiscoverySearchedAiModel[]>([]);
   const [themes, setThemes] = useState<ValueLabel[]>([]);
   const { setAlert } = useAlert();
   const _searchParams = use(searchParams);
+  const supportsAiModels = useAiModelSupport();
 
   useEffect(() => {
     async function fetchThemes() {
@@ -81,6 +87,34 @@ const HomePage = ({ searchParams }: HomePageProps) => {
 
     fetchData();
   }, [setAlert]);
+
+  useEffect(() => {
+    if (!contentConfig.enableAiModel || !supportsAiModels) {
+      return;
+    }
+
+    async function fetchAiModels() {
+      try {
+        const data = await searchAiModelsApi({
+          rows: 4,
+          sort: "newest",
+        });
+        setAiModels(data.results!);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          setAlert({
+            type: "error",
+            message:
+              error.response?.data?.title ||
+              `Failed to fetch AI models, status code: ${error.response?.status}`,
+            details: error.response?.data?.detail,
+          });
+        }
+      }
+    }
+
+    fetchAiModels();
+  }, [setAlert, supportsAiModels]);
 
   return (
     <PageContainer
@@ -166,6 +200,14 @@ const HomePage = ({ searchParams }: HomePageProps) => {
           <RecentDatasets datasets={datasets} />
         </div>
       </div>
+      {contentConfig.enableAiModel && supportsAiModels && (
+        <div className="text-left flex items-center">
+          <div className="relative z-10 w-full my-8">
+            <h3 className="mb-4 text-2xl">{t("home.recentAiModels")}</h3>
+            <RecentAiModels aiModels={aiModels} />
+          </div>
+        </div>
+      )}
     </PageContainer>
   );
 };

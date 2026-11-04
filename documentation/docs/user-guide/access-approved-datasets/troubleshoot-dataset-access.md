@@ -24,4 +24,4 @@ Log out, then [log in through LS-AAI](/sign-in) again. Contact support if the is
 
 The GDI Portal can display your entitlements but may not be able to retrieve the dataset details. This can happen when the source systems are temporarily unavailable or there is a technical issue. Try again later, or contact support if the issue persists.
 
-For information about how the portal uses your Passport and Visas, see: [Your passport and access](/your-passport-and-access).
+For information about how the portal uses your Passport and Visas, see: [Your passport and access](/understand-your-access-rights).

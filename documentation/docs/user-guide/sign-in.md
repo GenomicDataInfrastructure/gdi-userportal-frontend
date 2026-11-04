@@ -1,30 +1,28 @@
 ---
 slug: /sign-in
-sidebar_label: "Log in"
-sidebar_position: 3
+sidebar_label: "Log in with LS-AAI"
+sidebar_position: 4
 ---
 
-# Log in
+# Log in with LS-AAI
 
-**Logging in** allows you to access enhanced features and request access to datasets. While you can browse datasets without an account, logging in allows you to:
+While you can browse datasets without logging in, you need to log in to access enhanced features and request access to datasets. By logging in, you can:
 
 - **Submit applications** to request access to datasets.
 - **Enhance your search** with additional filters and more comprehensive search results.
 - **See more dataset information** including `record counts` and other metadata to help assess if datasets meet your research needs.
 
-The GDI Portal uses your **existing accounts** with other platforms like **Google, LinkedIn, and organisations** like universities or research institutions, so you don't need to create a separate account.
-
-To log in to the GDI Portal:
+**To log in to the GDI Portal:**
 
 1. Open the GDI Portal in your browser: https://portal.dev.gdi.lu/.
 
-2. Select **Log in** at the top right corner of the page. The login page opens.
+2. Select **Log in** at the top right corner of the page.
 
 3. Select **LSAAI** as your login method.
 
    :::info Why LSAAI?
    - Logging in through LSAAI allows you to use your **existing accounts** with other platforms like Google, LinkedIn, and relevant organisations so you don't need to create a new account.
-   - LSAAI retrieves your **GA4GH Passport and Visas**, which determine your access permissions to datasets. Learn more about [your passports and access](/your-passport-and-access).
+   - LSAAI retrieves your **GA4GH Passport and Visas**, which determine your access permissions to datasets. [Understand your access rights](/understand-your-access-rights).
 
    :::
 
@@ -39,7 +37,7 @@ To log in to the GDI Portal:
     :::tip Login tips
 
          - You may need to verify your email address when logging in for the first time.
-         - When logging in through LSAAI, you will need to grant consent for the GDI Portal to **GA4GH Passport and Visa** details, which determines your access to datasets within the portal. Learn more about [your dataset access](/your-passport-and-access).
+         - When logging in through LSAAI, you will need to grant consent for the GDI Portal to **GA4GH Passport and Visa** details, which determines your access to datasets within the portal. Learn more about [your dataset access](/understand-your-access-rights).
 
          :::
 

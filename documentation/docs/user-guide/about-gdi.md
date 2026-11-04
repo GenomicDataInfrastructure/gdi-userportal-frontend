@@ -1,7 +1,7 @@
 ---
 slug: /user-guide/about-gdi
 sidebar_label: "About GDI"
-sidebar_position: 2
+sidebar_position: 10
 title: "About GDI"
 ---
 

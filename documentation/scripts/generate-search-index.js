@@ -46,6 +46,10 @@ function getAllMarkdownFiles(dir) {
   const items = fs.readdirSync(dir);
 
   for (const item of items) {
+    if (item.startsWith("_")) {
+      continue;
+    }
+
     const fullPath = path.join(dir, item);
     const stat = fs.statSync(fullPath);
 
@@ -94,25 +98,17 @@ function extractTextContent(content) {
 }
 
 // Function to generate URL from file path
-function generateUrl(filePath) {
-  const relativePath = path
-    .relative("docs", filePath)
-    .replace(/\\/g, "/")
-    .replace(/\.md$/, "")
-    .replace(/\/index$/, "");
-
-  // Ensure the URL starts with /gdi-userportal-frontend/ for GitHub Pages
+function generateUrl(filePath, frontmatter = {}) {
   const baseUrl = "/gdi-userportal-frontend/";
-  let url = "/" + relativePath;
+  const relativePath = frontmatter.slug
+    ? frontmatter.slug.replace(/^\/+|\/+$/g, "")
+    : path
+        .relative("docs", filePath)
+        .replace(/\\/g, "/")
+        .replace(/\.md$/, "")
+        .replace(/\/index$/, "");
 
-  // If it's the main intro file, make it the root
-  if (url === "/intro") {
-    url = baseUrl + "intro";
-  } else {
-    url = baseUrl + relativePath;
-  }
-
-  return url;
+  return baseUrl + relativePath;
 }
 
 // Generate search indexes
@@ -133,7 +129,7 @@ function generateSearchIndexes() {
           const { data: frontmatter, content: markdownContent } =
             matter(content);
 
-          const url = generateUrl(file);
+          const url = generateUrl(file, frontmatter);
           const title =
             frontmatter.title || path.basename(file, ".md").replace(/-/g, " ");
           const textContent = extractTextContent(markdownContent);

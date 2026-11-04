@@ -39,9 +39,14 @@ test.each([
   const request = new NextRequest(`http://localhost:3000${path}`);
   const response = await proxy(request);
   expectRedirectResponse(response);
-  const location = new URL(response.headers.get("location")!);
+  const location = new URL(
+    response.headers.get("location")!,
+    "https://portal.example.org"
+  );
   expect(location.pathname).toBe("/login");
-  expect(location.searchParams.get("callbackUrl")).toBe(request.url);
+  expect(location.searchParams.get("callbackUrl")).toBe(
+    `${request.nextUrl.pathname}${request.nextUrl.search}`
+  );
   expect(mockGetToken).toHaveBeenCalledWith({
     req: request,
     secureCookie: false,
@@ -102,7 +107,10 @@ test("locale redirects cannot bypass authentication", async () => {
     new NextRequest("http://localhost:3000/requests")
   );
   expectRedirectResponse(response);
-  expect(new URL(response.headers.get("location")!).pathname).toBe("/login");
+  expect(
+    new URL(response.headers.get("location")!, "https://portal.example.org")
+      .pathname
+  ).toBe("/login");
 });
 
 test("authenticated navigation preserves locale routing", async () => {
@@ -125,3 +133,24 @@ test.each(["/", "/datasets", "/en/datasets", "/requests-other"])(
     expect(mockGetToken).not.toHaveBeenCalled();
   }
 );
+
+test("keeps the login redirect and callback relative behind a reverse proxy", async () => {
+  const request = new NextRequest(
+    "http://internal:3000/requests?tab=applications",
+    { headers: { "x-forwarded-proto": "https" } }
+  );
+  const response = await proxy(request);
+  expectRedirectResponse(response);
+  expect(response.headers.get("location")).toBe(
+    "/login?callbackUrl=%2Frequests%3Ftab%3Dapplications"
+  );
+  const location = new URL(
+    response.headers.get("location")!,
+    "https://portal.example.org"
+  );
+  expect(location.origin).toBe("https://portal.example.org");
+  expect(location.pathname).toBe("/login");
+  expect(location.searchParams.get("callbackUrl")).toBe(
+    "/requests?tab=applications"
+  );
+});

@@ -47,9 +47,14 @@ export async function proxy(req: NextRequest) {
   const token = await getToken({ req, secureCookie: isSecureRequest(req) });
 
   if (!token) {
-    const signInUrl = new URL("/login", req.url);
-    signInUrl.searchParams.set("callbackUrl", req.nextUrl.href);
-    return NextResponse.redirect(signInUrl);
+    const searchParams = new URLSearchParams({
+      callbackUrl: `${req.nextUrl.pathname}${req.nextUrl.search}`,
+    });
+    // Resolve against the browser's public origin, even if req.url is internal.
+    return new NextResponse(null, {
+      status: 307,
+      headers: { Location: `/login?${searchParams}` },
+    });
   }
 
   return response;

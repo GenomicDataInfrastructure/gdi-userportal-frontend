@@ -41,7 +41,9 @@ test.each([
   expectRedirectResponse(response);
   const location = new URL(response.headers.get("location")!);
   expect(location.pathname).toBe("/login");
-  expect(location.searchParams.get("callbackUrl")).toBe(request.url);
+  expect(location.searchParams.get("callbackUrl")).toBe(
+    `${request.nextUrl.pathname}${request.nextUrl.search}`
+  );
   expect(mockGetToken).toHaveBeenCalledWith({
     req: request,
     secureCookie: false,
@@ -125,3 +127,15 @@ test.each(["/", "/datasets", "/en/datasets", "/requests-other"])(
     expect(mockGetToken).not.toHaveBeenCalled();
   }
 );
+
+test("keeps the callback relative behind a reverse proxy", async () => {
+  const request = new NextRequest(
+    "http://internal:3000/requests?tab=applications",
+    { headers: { "x-forwarded-proto": "https" } }
+  );
+  const response = await proxy(request);
+  const location = new URL(response.headers.get("location")!);
+  expect(location.searchParams.get("callbackUrl")).toBe(
+    "/requests?tab=applications"
+  );
+});

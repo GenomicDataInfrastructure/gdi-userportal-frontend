@@ -48,7 +48,10 @@ export async function proxy(req: NextRequest) {
 
   if (!token) {
     const signInUrl = new URL("/login", req.url);
-    signInUrl.searchParams.set("callbackUrl", req.nextUrl.href);
+    signInUrl.searchParams.set(
+      "callbackUrl",
+      `${req.nextUrl.pathname}${req.nextUrl.search}`
+    );
     return NextResponse.redirect(signInUrl);
   }
 

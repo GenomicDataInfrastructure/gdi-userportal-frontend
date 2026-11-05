@@ -412,7 +412,7 @@ describe("opensearch/queries", () => {
         facets: [
           {
             type: "DROPDOWN",
-            key: "task",
+            key: "tasks",
             value: "Classification",
           },
         ],
@@ -421,20 +421,7 @@ describe("opensearch/queries", () => {
     );
 
     expect((body.query as any).bool.filter).toEqual([
-      {
-        bool: {
-          should: [
-            { term: { "modelTasks.task.value": "Classification" } },
-            { term: { "modelTasks.task.label.keyword": "Classification" } },
-            {
-              match_phrase: {
-                "modelTasks.task.label": "Classification",
-              },
-            },
-          ],
-          minimum_should_match: 1,
-        },
-      },
+      { term: { tasks: "Classification" } },
     ]);
   });
 

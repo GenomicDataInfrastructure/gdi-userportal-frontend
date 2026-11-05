@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import {
   faBuilding,
   faCalendarAlt,
-  faCogs,
   faIdBadge,
   faInfoCircle,
   faLink,
@@ -26,7 +25,6 @@ import Tooltip from "@/components/Tooltip";
 import { Link } from "@/i18n/navigation";
 import { formatDate } from "@/utils/formatDate";
 import { DiscoveryRetrievedAiModel } from "@/app/api/discovery/providers/types";
-import ModelTasksAccordion from "./ModelTasksAccordion";
 
 const AiModelMetadata = ({
   aiModel,
@@ -155,11 +153,11 @@ const AiModelMetadata = ({
         tooltip={tAiModels("tooltips.libraries")}
       />
 
-      {aiModel.modelTasks && aiModel.modelTasks.length > 0 && (
-        <MetadataSection title={tAiModels("modalities")} icon={faCogs}>
-          <ModelTasksAccordion modelTasks={aiModel.modelTasks} />
-        </MetadataSection>
-      )}
+      <MetadataKeywords
+        keywords={aiModel.tasks ?? []}
+        label={tAiModels("tasks")}
+        tooltip={tAiModels("tooltips.tasks")}
+      />
 
       {aiModel.documentation && aiModel.documentation.length > 0 && (
         <MetadataSection title={t("linksAndReferences")} icon={faLink}>

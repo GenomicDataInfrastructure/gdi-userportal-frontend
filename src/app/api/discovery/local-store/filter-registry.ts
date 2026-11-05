@@ -203,9 +203,9 @@ const localAiModelFilterDefinitions: LocalFilterDefinition[] = [
   }),
   createDropdownFilter({
     group: "Catalogue",
-    key: "task",
+    key: "tasks",
     label: "Task",
-    field: "modelTasks.task.label.keyword",
+    field: "tasks",
     mapBucket: mapBucketToValueLabel,
   }),
   modifiedFilter,

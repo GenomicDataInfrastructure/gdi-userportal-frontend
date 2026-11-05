@@ -7,6 +7,7 @@ import {
   LocalDiscoveryAiModelSearchResult,
   LocalDiscoveryAiModelStore,
   LocalDiscoverySearchOptions,
+  LocalDiscoveryValueLabel,
   StoredDocumentSearchResponse,
 } from "@/app/api/discovery/local-store/types";
 import {
@@ -23,6 +24,7 @@ import {
   OpenSearchDocumentStore,
   OpenSearchStoreParams,
 } from "@/app/api/discovery/local-store/opensearch/document-store";
+import { getLocalAiModelFilterDefinition } from "@/app/api/discovery/local-store/filter-registry";
 
 type SearchBackendAiModelSearchResponse = StoredDocumentSearchResponse<
   Partial<LocalDiscoveryAiModel>
@@ -45,6 +47,14 @@ export class OpenSearchAiModelStore
 
   async clearAiModels(): Promise<void> {
     await this.clearDocuments();
+  }
+
+  async hasFilterValues(key: string): Promise<boolean> {
+    return super.hasFilterValues(key, getLocalAiModelFilterDefinition);
+  }
+
+  async retrieveFilterValues(key: string): Promise<LocalDiscoveryValueLabel[]> {
+    return super.retrieveFilterValues(key, getLocalAiModelFilterDefinition);
   }
 
   async searchAiModels(

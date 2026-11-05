@@ -252,6 +252,8 @@ export interface LocalDiscoveryAiModelStore {
   readonly key: string;
   ensureInitialized: () => Promise<void>;
   clearAiModels: () => Promise<void>;
+  hasFilterValues: (key: string) => Promise<boolean>;
+  retrieveFilterValues: (key: string) => Promise<LocalDiscoveryValueLabel[]>;
   searchAiModels: (
     options: LocalDiscoverySearchOptions
   ) => Promise<LocalDiscoveryAiModelSearchResult>;

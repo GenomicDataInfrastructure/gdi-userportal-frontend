@@ -119,7 +119,8 @@ export const searchAiModelsApi = async (
   }
   assertAiModelSupport();
 
-  return discoveryProvider.searchAiModels!(options);
+  const headers = await createHeaders();
+  return discoveryProvider.searchAiModels!(options, headers);
 };
 
 export const retrieveAiModelApi = async (

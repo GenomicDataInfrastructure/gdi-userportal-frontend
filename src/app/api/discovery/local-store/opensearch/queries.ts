@@ -207,6 +207,10 @@ const fieldConfigs: Record<string, FieldConfig> = {
     rangeField: "spatialResolutionInMeters",
     sortField: "spatialResolutionInMeters",
   },
+  task: {
+    exactFields: ["modelTasks.task.value", "modelTasks.task.label.keyword"],
+    textFields: ["modelTasks.task.label"],
+  },
 };
 
 const resolveFieldConfig = (key?: string): FieldConfig | null => {

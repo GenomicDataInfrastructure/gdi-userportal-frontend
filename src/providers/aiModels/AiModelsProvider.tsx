@@ -18,8 +18,41 @@ import {
   AiModelsState,
 } from "./AiModelProvider.types";
 import { searchAiModelsApi } from "@/app/api/discovery";
-import { DiscoveryAiModelSearchQuery } from "@/app/api/discovery/providers/types";
+import {
+  DiscoveryAiModelSearchQuery,
+  DiscoverySearchFacet,
+} from "@/app/api/discovery/providers/types";
+import { useFilters } from "@/providers/filters/FilterProvider";
+import { ActiveFilter } from "@/providers/filters/FilterProvider.types";
+import { FilterType } from "@/app/api/discovery/additional-types";
 import { UrlSearchParams } from "@/app/params";
+
+function convertActiveFiltersToFacets(
+  activeFilters: ActiveFilter[]
+): DiscoverySearchFacet[] {
+  return activeFilters
+    .map((filter) => {
+      const baseFacet = {
+        source: filter.source,
+        type: filter.type,
+        key: filter.key,
+      };
+
+      if (filter.type === FilterType.ENTRIES) {
+        return {
+          ...baseFacet,
+          entries: filter.entries,
+        };
+      }
+
+      return filter.values!.map((value) => ({
+        ...baseFacet,
+        value: value.value,
+        operator: value.operator,
+      }));
+    })
+    .flat();
+}
 
 const AiModelsContext = createContext<AiModelsState | undefined>(undefined);
 
@@ -64,6 +97,7 @@ export default function AiModelsProvider({
   children,
   searchParams,
 }: AiModelsProviderProps) {
+  const { activeFilters, setFilters } = useFilters();
   const [{ aiModels, aiModelCount, isLoading, errorCode }, dispatch] =
     useReducer(reducer, initialState);
   const { page, q, sort } = searchParams;
@@ -73,6 +107,7 @@ export default function AiModelsProvider({
 
     const options: DiscoveryAiModelSearchQuery = {
       query: q,
+      facets: convertActiveFiltersToFacets(activeFilters),
       sort: sort || "relevance",
       start: page ? (Number(page) - 1) * AI_MODEL_PER_PAGE : 0,
       rows: AI_MODEL_PER_PAGE,
@@ -80,6 +115,7 @@ export default function AiModelsProvider({
 
     try {
       const data = await searchAiModelsApi(options);
+      setFilters(data.facets ?? []);
       dispatch({
         type: AiModelsActionType.AI_MODELS_LOADED,
         payload: {
@@ -96,7 +132,7 @@ export default function AiModelsProvider({
       });
       console.error(error);
     }
-  }, [page, q, sort]);
+  }, [activeFilters, page, q, sort, setFilters]);
 
   useEffect(() => {
     fetchAiModels();

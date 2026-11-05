@@ -6,11 +6,19 @@ import axios, { AxiosInstance } from "axios";
 import {
   createOpenSearchClient,
   ensureIndexInitialized,
+  formatSearchBackendError as formatOpenSearchError,
 } from "@/app/api/discovery/local-store/opensearch/errors";
 import {
   buildBulkUpsertBody,
   buildClearBody,
+  buildFilterValuesBody,
 } from "@/app/api/discovery/local-store/opensearch/queries";
+import {
+  SearchBackendCountResponse,
+  SearchBackendTermsAggregationResponse,
+} from "@/app/api/discovery/local-store/opensearch/types";
+import { LocalFilterDefinition } from "@/app/api/discovery/local-store/filter-registry";
+import { LocalDiscoveryValueLabel } from "@/app/api/discovery/local-store/types";
 
 export type OpenSearchStoreParams = {
   baseUrl: string;
@@ -20,6 +28,9 @@ export type OpenSearchStoreParams = {
   apiKey?: string;
   insecureTls?: boolean;
 };
+
+const formatSearchBackendError = (error: unknown): string =>
+  formatOpenSearchError(error, "OpenSearch search request");
 
 /** Common lifecycle for a typed OpenSearch document index. */
 export abstract class OpenSearchDocumentStore<
@@ -37,6 +48,78 @@ export abstract class OpenSearchDocumentStore<
   ) {
     this.client = createOpenSearchClient(params);
     this.indexName = params.indexName;
+  }
+
+  protected async hasFilterValues(
+    key: string,
+    getFilterDefinition: (key: string) => LocalFilterDefinition | undefined
+  ): Promise<boolean> {
+    await this.ensureInitialized();
+
+    const field = getFilterDefinition(key)?.field;
+    if (!field) {
+      return false;
+    }
+
+    let response;
+    try {
+      response = await this.client.post<SearchBackendCountResponse>(
+        `/${this.indexName}/_count`,
+        { query: { exists: { field } } }
+      );
+    } catch (error) {
+      throw new Error(formatSearchBackendError(error));
+    }
+
+    return Boolean(response.data.count);
+  }
+
+  protected async retrieveFilterValues(
+    key: string,
+    getFilterDefinition: (key: string) => LocalFilterDefinition | undefined
+  ): Promise<LocalDiscoveryValueLabel[]> {
+    await this.ensureInitialized();
+
+    const filterDefinition = getFilterDefinition(key);
+    if (
+      filterDefinition?.type !== "DROPDOWN" ||
+      !filterDefinition.aggregation
+    ) {
+      return [];
+    }
+
+    const requestBody = buildFilterValuesBody(
+      filterDefinition.aggregation.field,
+      filterDefinition.aggregation.size
+    );
+
+    let response;
+    try {
+      response = await this.client.post<SearchBackendTermsAggregationResponse>(
+        `/${this.indexName}/_search`,
+        requestBody
+      );
+    } catch (error) {
+      throw new Error(formatSearchBackendError(error));
+    }
+
+    const aggregatedValues =
+      response.data.aggregations?.values?.buckets?.map((bucket) => {
+        const mappedValue = filterDefinition.aggregation?.mapBucket
+          ? filterDefinition.aggregation.mapBucket(bucket.key)
+          : { value: bucket.key, label: bucket.key };
+
+        if (!mappedValue.value || !mappedValue.label) {
+          return null;
+        }
+
+        return { ...mappedValue, count: bucket.doc_count };
+      }) ?? [];
+
+    return aggregatedValues.filter(
+      (value): value is NonNullable<(typeof aggregatedValues)[number]> =>
+        value !== null
+    );
   }
 
   async ensureInitialized(): Promise<void> {

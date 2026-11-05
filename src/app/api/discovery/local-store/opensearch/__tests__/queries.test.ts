@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
+  aiModelSearchFieldSets,
   buildBulkUpsertBody,
   buildClearBody,
   buildFilterValuesBody,
@@ -374,6 +375,64 @@ describe("opensearch/queries", () => {
       {
         bool: {
           must_not: [{ term: { modifiedAt: "2024-01-01T00:00:00.000Z" } }],
+        },
+      },
+    ]);
+  });
+
+  test("buildSearchBody applies AI Model library and modified date facets", () => {
+    const body = buildSearchBody(
+      {
+        facets: [
+          {
+            type: "DROPDOWN",
+            key: "libraries",
+            value: "transformers",
+          },
+          {
+            type: "DATETIME",
+            key: "modified",
+            operator: ">=",
+            value: "2024-01-01T00:00:00.000Z",
+          },
+        ],
+      },
+      aiModelSearchFieldSets
+    );
+
+    expect((body.query as any).bool.filter).toEqual([
+      { term: { libraries: "transformers" } },
+      { range: { modifiedAt: { gte: "2024-01-01T00:00:00.000Z" } } },
+    ]);
+  });
+
+  test("buildSearchBody applies AI Model task facet", () => {
+    const body = buildSearchBody(
+      {
+        facets: [
+          {
+            type: "DROPDOWN",
+            key: "task",
+            value: "Classification",
+          },
+        ],
+      },
+      aiModelSearchFieldSets
+    );
+
+    expect((body.query as any).bool.filter).toEqual([
+      {
+        bool: {
+          should: [
+            { term: { "modelTasks.task.value": "Classification" } },
+            { term: { "modelTasks.task.label.keyword": "Classification" } },
+            {
+              match_phrase: {
+                "modelTasks.task.label": "Classification",
+              },
+            },
+          ],
+          minimum_should_match: 1,
         },
       },
     ]);

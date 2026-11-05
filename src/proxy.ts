@@ -47,14 +47,33 @@ export async function proxy(req: NextRequest) {
   const token = await getToken({ req, secureCookie: isSecureRequest(req) });
 
   if (!token) {
-    const searchParams = new URLSearchParams({
-      callbackUrl: `${req.nextUrl.pathname}${req.nextUrl.search}`,
-    });
-    // Resolve against the browser's public origin, even if req.url is internal.
-    return new NextResponse(null, {
-      status: 307,
-      headers: { Location: `/login?${searchParams}` },
-    });
+    // Next.js requires an absolute Location. Use the configured public URL
+    // rather than an internal upstream host or untrusted forwarded headers.
+    let signInUrl: URL;
+    try {
+      const publicUrl = new URL(process.env.NEXTAUTH_URL ?? "");
+      if (
+        !["http:", "https:"].includes(publicUrl.protocol) ||
+        publicUrl.username ||
+        publicUrl.password
+      ) {
+        throw new Error("Invalid public authentication URL");
+      }
+      signInUrl = new URL("/login", publicUrl.origin);
+    } catch {
+      console.error(
+        "NEXTAUTH_URL must be an absolute HTTP(S) public portal URL"
+      );
+      return new NextResponse("Sign-in is temporarily unavailable.", {
+        status: 503,
+        headers: { "Cache-Control": "no-store" },
+      });
+    }
+    signInUrl.searchParams.set(
+      "callbackUrl",
+      `${req.nextUrl.pathname}${req.nextUrl.search}`
+    );
+    return NextResponse.redirect(signInUrl);
   }
 
   return response;

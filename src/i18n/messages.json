@@ -193,6 +193,10 @@
     "en": "Most Recent Datasets",
     "fr": "Jeux de données les plus récents"
   },
+  "home.recentAiModels": {
+    "en": "Most Recent AI Models",
+    "fr": "Modèles d'IA les plus récents"
+  },
   "home.themesSectionTitle": {
     "en": "Themes",
     "fr": "Thèmes"

@@ -4,6 +4,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { proxy } from "../proxy";
+import { adapter } from "next/dist/server/web/adapter";
+
+// Next.js installs this Node runtime global before loading the proxy.
+jest.mock("next/server", () => {
+  Object.assign(globalThis, {
+    AsyncLocalStorage: jest.requireActual("node:async_hooks").AsyncLocalStorage,
+  });
+  return jest.requireActual("next/server");
+});
 
 jest.mock("@/i18n/routing", () => ({ routing: { locales: ["en", "fr"] } }));
 jest.mock("next-auth/jwt", () => ({ getToken: jest.fn() }));
@@ -11,6 +20,13 @@ jest.mock("next-intl/middleware", () => ({
   __esModule: true,
   default: () => () => mockLocaleResponse,
 }));
+
+const originalNextAuthUrl = process.env.NEXTAUTH_URL;
+
+afterEach(() => {
+  if (originalNextAuthUrl === undefined) delete process.env.NEXTAUTH_URL;
+  else process.env.NEXTAUTH_URL = originalNextAuthUrl;
+});
 
 let mockLocaleResponse: NextResponse;
 const mockGetToken = jest.mocked(getToken);
@@ -21,6 +37,7 @@ function expectRedirectResponse(response: NextResponse) {
 }
 
 beforeEach(() => {
+  delete process.env.NEXTAUTH_URL;
   jest.clearAllMocks();
   mockLocaleResponse = NextResponse.next();
   mockGetToken.mockResolvedValue(null);
@@ -39,10 +56,7 @@ test.each([
   const request = new NextRequest(`http://localhost:3000${path}`);
   const response = await proxy(request);
   expectRedirectResponse(response);
-  const location = new URL(
-    response.headers.get("location")!,
-    "https://portal.example.org"
-  );
+  const location = new URL(response.headers.get("location")!);
   expect(location.pathname).toBe("/login");
   expect(location.searchParams.get("callbackUrl")).toBe(
     `${request.nextUrl.pathname}${request.nextUrl.search}`
@@ -107,10 +121,7 @@ test("locale redirects cannot bypass authentication", async () => {
     new NextRequest("http://localhost:3000/requests")
   );
   expectRedirectResponse(response);
-  expect(
-    new URL(response.headers.get("location")!, "https://portal.example.org")
-      .pathname
-  ).toBe("/login");
+  expect(new URL(response.headers.get("location")!).pathname).toBe("/login");
 });
 
 test("authenticated navigation preserves locale routing", async () => {
@@ -134,23 +145,43 @@ test.each(["/", "/datasets", "/en/datasets", "/requests-other"])(
   }
 );
 
-test("keeps the login redirect and callback relative behind a reverse proxy", async () => {
-  const request = new NextRequest(
-    "http://internal:3000/requests?tab=applications",
-    { headers: { "x-forwarded-proto": "https" } }
+test.each(["applications", "entitlements"])(
+  "redirects %s through the Next.js adapter using the configured public origin",
+  async (tab) => {
+    process.env.NEXTAUTH_URL = "https://portal.dev.gdi.lu";
+    const { response, waitUntil } = await adapter({
+      handler: proxy,
+      page: "/proxy",
+      request: {
+        url: `http://internal:3000/requests?tab=${tab}`,
+        method: "GET",
+        headers: {
+          host: "internal:3000",
+          "x-forwarded-host": "untrusted.example",
+          "x-forwarded-proto": "https",
+        },
+        signal: new AbortController().signal,
+      },
+    });
+    await waitUntil;
+    expect(response.status).toBe(307);
+    const location = new URL(response.headers.get("location")!);
+    expect(location.origin).toBe("https://portal.dev.gdi.lu");
+    expect(location.pathname).toBe("/login");
+    expect(location.searchParams.get("callbackUrl")).toBe(
+      `/requests?tab=${tab}`
+    );
+  }
+);
+
+test("uses the request origin for local development without NEXTAUTH_URL", async () => {
+  const response = await proxy(
+    new NextRequest("http://localhost:3000/requests?tab=entitlements")
   );
-  const response = await proxy(request);
-  expectRedirectResponse(response);
-  expect(response.headers.get("location")).toBe(
-    "/login?callbackUrl=%2Frequests%3Ftab%3Dapplications"
-  );
-  const location = new URL(
-    response.headers.get("location")!,
-    "https://portal.example.org"
-  );
-  expect(location.origin).toBe("https://portal.example.org");
+  const location = new URL(response.headers.get("location")!);
+  expect(location.origin).toBe("http://localhost:3000");
   expect(location.pathname).toBe("/login");
   expect(location.searchParams.get("callbackUrl")).toBe(
-    "/requests?tab=applications"
+    "/requests?tab=entitlements"
   );
 });

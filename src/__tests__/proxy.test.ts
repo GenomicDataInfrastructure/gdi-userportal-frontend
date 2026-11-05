@@ -37,7 +37,7 @@ function expectRedirectResponse(response: NextResponse) {
 }
 
 beforeEach(() => {
-  delete process.env.NEXTAUTH_URL;
+  process.env.NEXTAUTH_URL = "http://localhost:3000";
   jest.clearAllMocks();
   mockLocaleResponse = NextResponse.next();
   mockGetToken.mockResolvedValue(null);
@@ -174,7 +174,7 @@ test.each(["applications", "entitlements"])(
   }
 );
 
-test("uses the request origin for local development without NEXTAUTH_URL", async () => {
+test("uses the configured local origin for local development", async () => {
   const response = await proxy(
     new NextRequest("http://localhost:3000/requests?tab=entitlements")
   );
@@ -185,3 +185,43 @@ test("uses the request origin for local development without NEXTAUTH_URL", async
     "/requests?tab=entitlements"
   );
 });
+
+test.each([
+  undefined,
+  "",
+  "/relative",
+  "not-a-url",
+  "https://",
+  "javascript:alert(1)",
+  "ftp://portal.example.org",
+  "https://user:password@portal.example.org",
+])(
+  "handles invalid NEXTAUTH_URL %s without redirecting or throwing",
+  async (value) => {
+    if (value === undefined) delete process.env.NEXTAUTH_URL;
+    else process.env.NEXTAUTH_URL = value;
+    const error = jest.spyOn(console, "error").mockImplementation(() => {});
+    try {
+      const { response, waitUntil } = await adapter({
+        handler: proxy,
+        page: "/proxy",
+        request: {
+          url: "http://attacker.example/requests?tab=entitlements",
+          method: "GET",
+          headers: { host: "attacker.example" },
+          signal: new AbortController().signal,
+        },
+      });
+      await waitUntil;
+      expect(response.status).toBe(503);
+      expect(response.headers.get("location")).toBeNull();
+      expect(response.headers.get("cache-control")).toBe("no-store");
+      expect(await response.text()).toBe("Sign-in is temporarily unavailable.");
+      expect(error).toHaveBeenCalledWith(
+        "NEXTAUTH_URL must be an absolute HTTP(S) public portal URL"
+      );
+    } finally {
+      error.mockRestore();
+    }
+  }
+);

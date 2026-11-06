@@ -233,6 +233,26 @@
     "en": "Contact Us",
     "fr": "Nous contacter"
   },
+  "footer.linkedIn": {
+    "en": "LinkedIn",
+    "fr": "LinkedIn"
+  },
+  "footer.twitter": {
+    "en": "X (Twitter)",
+    "fr": "X (Twitter)"
+  },
+  "footer.github": {
+    "en": "GitHub",
+    "fr": "GitHub"
+  },
+  "footer.gitlab": {
+    "en": "GitLab",
+    "fr": "GitLab"
+  },
+  "footer.website": {
+    "en": "Project website",
+    "fr": "Site web du projet"
+  },
   "footer.getInTouch": {
     "en": "Get in touch",
     "fr": "Nous contacter"

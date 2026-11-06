@@ -216,12 +216,6 @@ export interface LocalDiscoveryStore {
   upsertDatasets: (datasets: LocalDiscoveryDataset[]) => Promise<void>;
 }
 
-export interface LocalModelTask {
-  modality: { value: string; label: string };
-  task: { value: string; label: string };
-  subtask?: { value: string; label: string };
-}
-
 export interface LocalDiscoveryAiModel {
   id: string;
   identifier?: string;
@@ -240,7 +234,7 @@ export interface LocalDiscoveryAiModel {
   publishers: LocalAgent[];
   creators: LocalAgent[];
   libraries?: string[];
-  modelTasks?: LocalModelTask[];
+  tasks?: string[];
 }
 
 export interface LocalDiscoveryAiModelSearchResult {

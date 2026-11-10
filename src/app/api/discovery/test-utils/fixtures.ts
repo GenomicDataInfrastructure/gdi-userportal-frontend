@@ -270,8 +270,8 @@ export const canonicalAiModelRdf = `<?xml version="1.0" encoding="utf-8"?>
         <skos:prefLabel xml:lang="eng">Public</skos:prefLabel>
       </dct:RightsStatement>
     </dct:accessRights>
-    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2022-01-01T00:00:00</dct:modified>
-    <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2022-01-01T00:00:00</dct:issued>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2022-01-01T00:00:00Z</dct:modified>
+    <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2022-01-01T00:00:00Z</dct:issued>
     <dcat:version>0.0.1</dcat:version>
     <dct:creator>
       <foaf:Agent rdf:nodeID="creator-1">

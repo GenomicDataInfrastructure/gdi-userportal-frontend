@@ -160,7 +160,10 @@ async function requestHarvest(
     );
   }
 
-  return Number(payload?.count ?? 0);
+  return {
+    datasetsCount: Number(payload?.datasetsCount ?? 0),
+    aiModelsCount: Number(payload?.aiModelsCount ?? 0),
+  };
 }
 
 module.exports = {

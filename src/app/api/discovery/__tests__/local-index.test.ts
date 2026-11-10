@@ -4,17 +4,24 @@
 
 import { jest } from "@jest/globals";
 import { buildDdsSearchedDataset } from "@/app/api/discovery/test-utils/fixtures";
-import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
+import {
+  LocalDiscoveryAiModel,
+  LocalDiscoveryDataset,
+} from "@/app/api/discovery/local-store/types";
 import { HarvestCollectors } from "@/app/api/discovery/harvester/dcat-harvester-service";
 
 type CatalogueHarvestResult = {
   datasets: LocalDiscoveryDataset[];
+  aiModels: LocalDiscoveryAiModel[];
 };
 
 const mockCreateHeaders = jest.fn<() => Promise<Record<string, string>>>();
 const mockUpsertLocalDiscoveryDatasets =
   jest.fn<(datasets: LocalDiscoveryDataset[]) => Promise<void>>();
 const mockClearLocalDiscoveryDatasets = jest.fn<() => Promise<void>>();
+const mockUpsertLocalAiModels =
+  jest.fn<(aiModels: LocalDiscoveryAiModel[]) => Promise<void>>();
+const mockClearLocalAiModels = jest.fn<() => Promise<void>>();
 const mockSearchDatasets =
   jest.fn<
     (
@@ -57,6 +64,11 @@ jest.mock("@/app/api/discovery/local-store/factory", () => ({
   upsertLocalDiscoveryDatasets: mockUpsertLocalDiscoveryDatasets,
 }));
 
+jest.mock("@/app/api/discovery/local-store/ai-model-factory", () => ({
+  clearLocalAiModels: mockClearLocalAiModels,
+  upsertLocalAiModels: mockUpsertLocalAiModels,
+}));
+
 jest.mock("@/app/api/discovery/providers/dds-discovery-provider", () => ({
   DdsDiscoveryProvider: jest.fn().mockImplementation(() => ({
     searchDatasets: mockSearchDatasets,
@@ -85,7 +97,7 @@ import {
 
 const resultWithDatasets = (
   datasets: LocalDiscoveryDataset[]
-): CatalogueHarvestResult => ({ datasets });
+): CatalogueHarvestResult => ({ datasets, aiModels: [] });
 
 describe("local-index APIs", () => {
   beforeEach(() => {
@@ -232,7 +244,7 @@ describe("local-index APIs", () => {
     ];
     mockHarvestFromUrl.mockResolvedValueOnce(resultWithDatasets(harvested));
 
-    const count = await harvestLocalIndexFromDcatUrlApi(
+    const result = await harvestLocalIndexFromDcatUrlApi(
       "https://example.org/catalogue.rdf"
     );
 
@@ -251,7 +263,46 @@ describe("local-index APIs", () => {
       mockUpsertLocalDiscoveryDatasets.mock.invocationCallOrder[0]
     );
     expect(mockUpsertLocalDiscoveryDatasets).toHaveBeenCalledWith(harvested);
-    expect(count).toBe(2);
+    expect(result).toEqual({ datasetsCount: 2, aiModelsCount: 0 });
+  });
+
+  test("harvestLocalIndexFromDcatUrlApi harvests and upserts AI Models alongside datasets", async () => {
+    const harvestedDatasets = [
+      {
+        id: "d1",
+        title: "Dataset 1",
+        publishers: [],
+        hdab: [],
+        creators: [],
+      },
+    ];
+    const harvestedAiModels = [
+      {
+        id: "ai-1",
+        entityType: "AI_MODEL" as const,
+        title: "AI Model 1",
+        publishers: [],
+        creators: [],
+      },
+    ];
+    mockHarvestFromUrl.mockResolvedValueOnce({
+      datasets: harvestedDatasets,
+      aiModels: harvestedAiModels,
+    });
+
+    const result = await harvestLocalIndexFromDcatUrlApi(
+      "https://example.org/catalogue.rdf"
+    );
+
+    expect(mockClearLocalAiModels).toHaveBeenCalled();
+    expect(mockClearLocalAiModels.mock.invocationCallOrder[0]).toBeLessThan(
+      mockUpsertLocalAiModels.mock.invocationCallOrder[0]
+    );
+    expect(mockUpsertLocalAiModels).toHaveBeenCalledWith(harvestedAiModels);
+    expect(mockUpsertLocalDiscoveryDatasets).toHaveBeenCalledWith(
+      harvestedDatasets
+    );
+    expect(result).toEqual({ datasetsCount: 1, aiModelsCount: 1 });
   });
 
   test("harvestLocalIndexFromDcatUrlApi fetches and parses the RDF source only once", async () => {
@@ -325,6 +376,7 @@ describe("local-index APIs", () => {
     });
 
     expect(mockClearLocalDiscoveryDatasets).not.toHaveBeenCalled();
+    expect(mockClearLocalAiModels).not.toHaveBeenCalled();
     expect(mockUpsertLocalDiscoveryDatasets).toHaveBeenCalled();
   });
 
@@ -354,7 +406,7 @@ describe("local-index APIs", () => {
     await expect(
       harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf")
     ).rejects.toThrow(
-      "Failed to index 2 harvested datasets from https://example.org/catalogue.rdf: bulk failed"
+      "Failed to index 2 harvested datasets and 0 harvested AI Models from https://example.org/catalogue.rdf: bulk failed"
     );
   });
 
@@ -635,7 +687,7 @@ describe("local-index APIs", () => {
 
     await expect(
       harvestLocalIndexFromDcatUrlApi("https://example.org/catalogue.rdf")
-    ).resolves.toBe(1);
+    ).resolves.toEqual({ datasetsCount: 1, aiModelsCount: 0 });
   });
 
   test("harvestLocalIndexFromDcatFileApi harvests and upserts datasets, clearing first in replace mode", async () => {
@@ -646,7 +698,7 @@ describe("local-index APIs", () => {
       resultWithDatasets(harvested)
     );
 
-    const count = await harvestLocalIndexFromDcatFileApi("no-data-dict.rdf");
+    const result = await harvestLocalIndexFromDcatFileApi("no-data-dict.rdf");
 
     expect(mockHarvestFromFilePath).toHaveBeenCalledWith(
       "no-data-dict.rdf",
@@ -663,7 +715,7 @@ describe("local-index APIs", () => {
       mockUpsertLocalDiscoveryDatasets.mock.invocationCallOrder[0]
     );
     expect(mockUpsertLocalDiscoveryDatasets).toHaveBeenCalledWith(harvested);
-    expect(count).toBe(1);
+    expect(result).toEqual({ datasetsCount: 1, aiModelsCount: 0 });
   });
 
   test("harvestLocalIndexFromDcatFileApi fetches and parses the file only once", async () => {
@@ -714,6 +766,7 @@ describe("local-index APIs", () => {
     });
 
     expect(mockClearLocalDiscoveryDatasets).not.toHaveBeenCalled();
+    expect(mockClearLocalAiModels).not.toHaveBeenCalled();
     expect(mockUpsertLocalDiscoveryDatasets).toHaveBeenCalled();
   });
 

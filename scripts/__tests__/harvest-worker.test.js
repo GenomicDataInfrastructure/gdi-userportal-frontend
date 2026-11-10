@@ -101,12 +101,14 @@ describe("harvest-worker", () => {
     ).toThrow("Invalid harvest cron expression: not-a-cron");
   });
 
-  test("triggerHarvest posts the expected payload and returns the count", async () => {
+  test("triggerHarvest posts the expected payload and returns the counts", async () => {
     const fetchImpl = jest.fn().mockResolvedValue({
       ok: true,
       status: 200,
       statusText: "OK",
-      text: jest.fn().mockResolvedValue('{"count":12}'),
+      text: jest
+        .fn()
+        .mockResolvedValue('{"datasetsCount":12,"aiModelsCount":5}'),
     });
 
     await expect(
@@ -119,7 +121,7 @@ describe("harvest-worker", () => {
         },
         { fetchImpl }
       )
-    ).resolves.toBe(12);
+    ).resolves.toEqual({ datasetsCount: 12, aiModelsCount: 5 });
 
     expect(fetchImpl).toHaveBeenCalledWith(
       HARVEST_ENDPOINT,
@@ -188,7 +190,9 @@ describe("harvest-worker", () => {
       ok: true,
       status: 200,
       statusText: "OK",
-      text: jest.fn().mockResolvedValue('{"count":3}'),
+      text: jest
+        .fn()
+        .mockResolvedValue('{"datasetsCount":3,"aiModelsCount":0}'),
     });
     const schedule = jest.fn().mockReturnValue({ stop: jest.fn() });
     const cronModule = { schedule };

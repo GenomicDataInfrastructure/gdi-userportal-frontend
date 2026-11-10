@@ -49,10 +49,14 @@ describe("harvest-http", () => {
     expect(truncateText("abcdef", 3)).toBe("abc...");
   });
 
-  test("posts a harvest request and returns the harvested count", async () => {
+  test("posts a harvest request and returns the harvested counts", async () => {
     const fetchImpl = jest.fn().mockResolvedValue({
       ok: true,
-      text: jest.fn().mockResolvedValue(JSON.stringify({ count: 3 })),
+      text: jest
+        .fn()
+        .mockResolvedValue(
+          JSON.stringify({ datasetsCount: 3, aiModelsCount: 2 })
+        ),
     });
 
     await expect(
@@ -64,7 +68,7 @@ describe("harvest-http", () => {
         },
         { fetchImpl, timeoutMs: 10 }
       )
-    ).resolves.toBe(3);
+    ).resolves.toEqual({ datasetsCount: 3, aiModelsCount: 2 });
 
     expect(fetchImpl).toHaveBeenCalledWith(
       "http://localhost:3000/api/discovery/harvest",
@@ -83,7 +87,11 @@ describe("harvest-http", () => {
   test("posts a harvest file path when provided", async () => {
     const fetchImpl = jest.fn().mockResolvedValue({
       ok: true,
-      text: jest.fn().mockResolvedValue(JSON.stringify({ count: 1 })),
+      text: jest
+        .fn()
+        .mockResolvedValue(
+          JSON.stringify({ datasetsCount: 1, aiModelsCount: 0 })
+        ),
     });
 
     await expect(
@@ -95,7 +103,7 @@ describe("harvest-http", () => {
         },
         { fetchImpl, timeoutMs: 10 }
       )
-    ).resolves.toBe(1);
+    ).resolves.toEqual({ datasetsCount: 1, aiModelsCount: 0 });
 
     expect(fetchImpl).toHaveBeenCalledWith(
       "http://localhost:3000/api/discovery/harvest",
@@ -108,7 +116,11 @@ describe("harvest-http", () => {
   test("includes an explicit content type when provided", async () => {
     const fetchImpl = jest.fn().mockResolvedValue({
       ok: true,
-      text: jest.fn().mockResolvedValue(JSON.stringify({ count: 1 })),
+      text: jest
+        .fn()
+        .mockResolvedValue(
+          JSON.stringify({ datasetsCount: 1, aiModelsCount: 0 })
+        ),
     });
 
     await requestHarvest(
@@ -147,7 +159,7 @@ describe("harvest-http", () => {
     ).rejects.toThrow("requested catalogue file: no-data-dict.rdf");
   });
 
-  test("returns zero when the harvest response has no JSON body", async () => {
+  test("returns zero counts when the harvest response has no JSON body", async () => {
     const fetchImpl = jest.fn().mockResolvedValue({
       ok: true,
       text: jest.fn().mockResolvedValue(""),
@@ -162,7 +174,7 @@ describe("harvest-http", () => {
         },
         { fetchImpl, timeoutMs: 10 }
       )
-    ).resolves.toBe(0);
+    ).resolves.toEqual({ datasetsCount: 0, aiModelsCount: 0 });
   });
 
   test("keeps TLS verification for HTTPS harvest API URLs", async () => {

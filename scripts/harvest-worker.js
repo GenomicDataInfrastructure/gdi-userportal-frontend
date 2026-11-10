@@ -153,12 +153,14 @@ function createHarvestWorker(config, dependencies = {}) {
     logger.log(`Starting harvest for ${sourceLabel}`);
 
     try {
-      const count = await triggerHarvest(config, { fetchImpl });
+      const { datasetsCount, aiModelsCount } = await triggerHarvest(config, {
+        fetchImpl,
+      });
       const durationMs = Date.now() - startedAt;
       logger.log(
-        `Harvest completed for ${sourceLabel}: ${count} datasets indexed in ${durationMs}ms`
+        `Harvest completed for ${sourceLabel}: ${datasetsCount} datasets, ${aiModelsCount} AI Models indexed in ${durationMs}ms`
       );
-      return count;
+      return { datasetsCount, aiModelsCount };
     } finally {
       runInProgress = false;
     }

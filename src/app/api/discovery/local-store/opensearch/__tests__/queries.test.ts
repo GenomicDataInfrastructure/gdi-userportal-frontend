@@ -425,6 +425,18 @@ describe("opensearch/queries", () => {
     ]);
   });
 
+  test("buildSearchBody includes AI Model libraries and tasks in the cross-field search", () => {
+    const body = buildSearchBody(
+      { query: "transformers" },
+      aiModelSearchFieldSets
+    );
+    const shouldClauses = (body.query as any).bool.must[0].bool.should;
+    const [crossFields] = shouldClauses;
+
+    expect(crossFields.multi_match.fields).toContain("libraries");
+    expect(crossFields.multi_match.fields).toContain("tasks");
+  });
+
   test("buildSearchBody adds OR facet filters", () => {
     const body = buildSearchBody({
       facets: [

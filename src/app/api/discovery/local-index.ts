@@ -378,7 +378,8 @@ const getAuthHeaders = async (
 
 const clearIndex = async (source: string): Promise<void> => {
   try {
-    await Promise.all([clearLocalDiscoveryDatasets(), clearLocalAiModels()]);
+    await clearLocalDiscoveryDatasets();
+    await clearLocalAiModels();
   } catch (error) {
     throw wrapError(
       `Failed to clear the local discovery index before importing ${source}: ${formatErrorDetails(error)}`,
@@ -393,10 +394,9 @@ const indexCatalogue = async (
   aiModels: LocalDiscoveryAiModel[]
 ): Promise<void> => {
   try {
-    await Promise.all([
-      upsertLocalDiscoveryDatasets(datasets),
-      upsertLocalAiModels(aiModels),
-    ]);
+    // Sequential for the same reason as clearIndex above.
+    await upsertLocalDiscoveryDatasets(datasets);
+    await upsertLocalAiModels(aiModels);
   } catch (error) {
     throw wrapError(
       `Failed to index ${datasets.length} harvested datasets and ${aiModels.length} harvested AI Models from ${source}: ${formatErrorDetails(error)}`,

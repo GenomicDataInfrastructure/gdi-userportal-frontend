@@ -12,10 +12,18 @@ import {
   clearLocalDiscoveryDatasets,
   upsertLocalDiscoveryDatasets,
 } from "@/app/api/discovery/local-store/factory";
-import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
+import {
+  clearLocalAiModels,
+  upsertLocalAiModels,
+} from "@/app/api/discovery/local-store/ai-model-factory";
+import {
+  LocalDiscoveryAiModel,
+  LocalDiscoveryDataset,
+} from "@/app/api/discovery/local-store/types";
 import {
   dcatHarvesterService,
   DatasetMappingError,
+  AiModelMappingError,
   HarvestCollectors,
   HarvestedCatalogue,
   MappingError,
@@ -38,6 +46,11 @@ export type HarvestLocalIndexMode = "replace" | "append";
 export type HarvestLocalIndexOptions = {
   mode?: HarvestLocalIndexMode;
   contentType?: string;
+};
+
+export type HarvestLocalIndexResult = {
+  datasetsCount: number;
+  aiModelsCount: number;
 };
 
 export const upsertLocalIndexDatasetsApi = async (
@@ -91,7 +104,7 @@ export const seedLocalIndexFromDdsApi = async (
 export const harvestLocalIndexFromDcatUrlApi = async (
   catalogueRdfUrl: string,
   options: HarvestLocalIndexOptions = {}
-): Promise<number> => {
+): Promise<HarvestLocalIndexResult> => {
   const mode = options.mode ?? "replace";
 
   return runHarvestWithLogging(
@@ -99,7 +112,7 @@ export const harvestLocalIndexFromDcatUrlApi = async (
     mode,
     async (collectors) => {
       const authHeaders = await getAuthHeaders(catalogueRdfUrl);
-      const { datasets } = await harvestCatalogue(
+      const { datasets, aiModels } = await harvestCatalogue(
         () =>
           dcatHarvesterService.harvestFromUrl(
             catalogueRdfUrl,
@@ -118,8 +131,8 @@ export const harvestLocalIndexFromDcatUrlApi = async (
         await clearIndex(catalogueRdfUrl);
       }
 
-      await indexDatasets(catalogueRdfUrl, datasets);
-      return { datasets };
+      await indexCatalogue(catalogueRdfUrl, datasets, aiModels);
+      return { datasets, aiModels };
     }
   );
 };
@@ -127,14 +140,14 @@ export const harvestLocalIndexFromDcatUrlApi = async (
 export const harvestLocalIndexFromDcatFileApi = async (
   catalogueRdfFilePath: string,
   options: HarvestLocalIndexOptions = {}
-): Promise<number> => {
+): Promise<HarvestLocalIndexResult> => {
   const mode = options.mode ?? "replace";
 
   return runHarvestWithLogging(
     { path: catalogueRdfFilePath },
     mode,
     async (collectors) => {
-      const { datasets } = await harvestCatalogue(
+      const { datasets, aiModels } = await harvestCatalogue(
         () =>
           dcatHarvesterService.harvestFromFilePath(
             catalogueRdfFilePath,
@@ -148,8 +161,8 @@ export const harvestLocalIndexFromDcatFileApi = async (
         await clearIndex(catalogueRdfFilePath);
       }
 
-      await indexDatasets(catalogueRdfFilePath, datasets);
-      return { datasets };
+      await indexCatalogue(catalogueRdfFilePath, datasets, aiModels);
+      return { datasets, aiModels };
     }
   );
 };
@@ -172,7 +185,7 @@ const runHarvestWithLogging = async (
   source: { url?: string; path?: string },
   mode: HarvestLocalIndexMode,
   run: (collectors: HarvestCollectors) => Promise<HarvestedCatalogue>
-): Promise<number> => {
+): Promise<HarvestLocalIndexResult> => {
   const loggingEnabled = isHarvesterLoggingEnabled();
   const startedAt = new Date().toISOString();
   const collectors: HarvestCollectors = {
@@ -181,28 +194,28 @@ const runHarvestWithLogging = async (
   };
 
   try {
-    const catalogue = await run(collectors);
-    const { datasets } = catalogue;
+    const { datasets, aiModels } = await run(collectors);
+    const succeededEntities = [...datasets, ...aiModels];
 
     if (loggingEnabled) {
       await logHarvesterRun({
         startedAt,
         source,
         mode,
-        succeeded: datasets.length,
+        succeeded: succeededEntities.length,
         mappingErrors: collectors.mappingErrors,
         warnings: [
           ...collectDatasetFieldWarnings(datasets),
           ...mapShaclViolationsToWarnings(collectors.shaclViolations ?? []),
         ],
-        succeededDatasets: datasets.map((dataset) => ({
-          subjectId: dataset.id,
-          datasetTitle: dataset.title || undefined,
+        succeededDatasets: succeededEntities.map((entity) => ({
+          subjectId: entity.id,
+          datasetTitle: entity.title || undefined,
         })),
       });
     }
 
-    return datasets.length;
+    return { datasetsCount: datasets.length, aiModelsCount: aiModels.length };
   } catch (error) {
     if (loggingEnabled) {
       await logHarvesterRun({
@@ -302,7 +315,10 @@ const logHarvesterRun = async (params: {
   } = params;
 
   const errors: HarvesterRunLog["errors"] = mappingErrors
-    .filter((issue): issue is DatasetMappingError => issue.scope === "dataset")
+    .filter(
+      (issue): issue is DatasetMappingError | AiModelMappingError =>
+        issue.scope === "dataset" || issue.scope === "aiModel"
+    )
     .map((issue) => ({
       subjectId: issue.subjectId,
       message: issue.message,
@@ -362,7 +378,7 @@ const getAuthHeaders = async (
 
 const clearIndex = async (source: string): Promise<void> => {
   try {
-    await clearLocalDiscoveryDatasets();
+    await Promise.all([clearLocalDiscoveryDatasets(), clearLocalAiModels()]);
   } catch (error) {
     throw wrapError(
       `Failed to clear the local discovery index before importing ${source}: ${formatErrorDetails(error)}`,
@@ -371,15 +387,19 @@ const clearIndex = async (source: string): Promise<void> => {
   }
 };
 
-const indexDatasets = async (
+const indexCatalogue = async (
   source: string,
-  datasets: LocalDiscoveryDataset[]
+  datasets: LocalDiscoveryDataset[],
+  aiModels: LocalDiscoveryAiModel[]
 ): Promise<void> => {
   try {
-    await upsertLocalDiscoveryDatasets(datasets);
+    await Promise.all([
+      upsertLocalDiscoveryDatasets(datasets),
+      upsertLocalAiModels(aiModels),
+    ]);
   } catch (error) {
     throw wrapError(
-      `Failed to index ${datasets.length} harvested datasets from ${source}: ${formatErrorDetails(error)}`,
+      `Failed to index ${datasets.length} harvested datasets and ${aiModels.length} harvested AI Models from ${source}: ${formatErrorDetails(error)}`,
       error
     );
   }

@@ -4,13 +4,17 @@
 
 import { jest } from "@jest/globals";
 import { resolve } from "node:path";
-import { canonicalDiscoveryRdf } from "@/app/api/discovery/test-utils/fixtures";
+import {
+  canonicalAiModelRdf,
+  canonicalDiscoveryRdf,
+} from "@/app/api/discovery/test-utils/fixtures";
 import {
   DcatHarvesterService,
   HarvestCollectors,
   MappingError,
 } from "@/app/api/discovery/harvester/dcat-harvester-service";
 import * as datasetMapper from "@/app/api/discovery/harvester/dcat-dataset-mapper";
+import * as aiModelMapper from "@/app/api/discovery/harvester/dcat-ai-model-mapper";
 
 const parseDatasetsFromRdf = async (
   service: DcatHarvesterService,
@@ -26,6 +30,22 @@ const parseDatasetsFromRdf = async (
     collectors
   );
   return datasets;
+};
+
+const parseAiModelsFromRdf = async (
+  service: DcatHarvesterService,
+  rdfText: string,
+  sourceRef?: string,
+  contentType?: string,
+  collectors?: HarvestCollectors
+) => {
+  const { aiModels } = await service.parseCatalogueFromRdf(
+    rdfText,
+    sourceRef,
+    contentType,
+    collectors
+  );
+  return aiModels;
 };
 
 const mockReadFile =
@@ -353,6 +373,116 @@ describe("DcatHarvesterService", () => {
         distributions: undefined,
       },
     ]);
+  });
+
+  test("maps an AI Model RDF record (rdf:type dcat:Resource) with its flat libraries and tasks", async () => {
+    const service = new DcatHarvesterService();
+
+    await expect(
+      parseAiModelsFromRdf(service, canonicalAiModelRdf)
+    ).resolves.toEqual([
+      {
+        id: "ai-model-1",
+        identifier: "ai-model-1",
+        entityType: "AI_MODEL",
+        title: "Sentiment Analysis Model",
+        description: "Classifies text sentiment.",
+        createdAt: "2021-12-31T23:00:00.000Z",
+        modifiedAt: "2021-12-31T23:00:00.000Z",
+        version: "0.0.1",
+        hasVersions: [],
+        versionNotes: undefined,
+        accessRights: {
+          value:
+            "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
+          label: "Public",
+        },
+        keywords: [],
+        documentation: undefined,
+        contacts: [
+          {
+            name: "LIST",
+            email: "rania.hamdani@lnds.lu",
+            uri: undefined,
+            url: undefined,
+            identifier: undefined,
+          },
+        ],
+        publishers: [{ name: "LIST", email: "rania.hamdani@lnds.lu" }],
+        creators: [{ name: "LIST" }],
+        libraries: ["Adapters"],
+        tasks: ["Text Classification", "Table Question Answering"],
+      },
+    ]);
+  });
+
+  test("does not mix AI Model (dcat:Resource) records into the Dataset list, and vice versa", async () => {
+    const service = new DcatHarvesterService();
+    const mixedRdf = `
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+               xmlns:dcat="http://www.w3.org/ns/dcat#"
+               xmlns:dct="http://purl.org/dc/terms/">
+        <dcat:Dataset rdf:about="https://example.org/datasets/plain-1">
+          <dct:identifier>dataset-plain-1</dct:identifier>
+          <dct:title xml:lang="en">A Plain Dataset</dct:title>
+        </dcat:Dataset>
+        <dcat:Resource rdf:about="https://example.org/ai-models/mixed-1">
+          <dct:identifier>ai-model-mixed-1</dct:identifier>
+          <dct:title xml:lang="en">A Mixed AI Model</dct:title>
+        </dcat:Resource>
+      </rdf:RDF>
+    `;
+
+    const { datasets, aiModels } =
+      await service.parseCatalogueFromRdf(mixedRdf);
+
+    expect(datasets).toHaveLength(1);
+    expect(datasets[0].id).toBe("dataset-plain-1");
+    expect(aiModels).toHaveLength(1);
+    expect(aiModels[0].id).toBe("ai-model-mixed-1");
+  });
+
+  test("parseAiModelsFromRdf throws on the first mapping error when no error collector is given", async () => {
+    const service = new DcatHarvesterService();
+    const mapAiModelSpy = jest
+      .spyOn(aiModelMapper, "mapAiModel")
+      .mockImplementationOnce(() => {
+        throw new Error("malformed AI Model");
+      });
+
+    await expect(
+      parseAiModelsFromRdf(service, canonicalAiModelRdf)
+    ).rejects.toThrow("malformed AI Model");
+
+    mapAiModelSpy.mockRestore();
+  });
+
+  test("parseAiModelsFromRdf collects a mapping error instead of throwing when a collector is given", async () => {
+    const service = new DcatHarvesterService();
+    const mapAiModelSpy = jest
+      .spyOn(aiModelMapper, "mapAiModel")
+      .mockImplementationOnce(() => {
+        throw new Error("boom");
+      });
+    const collectors: HarvestCollectors = { mappingErrors: [] };
+
+    const { aiModels } = await service.parseCatalogueFromRdf(
+      canonicalAiModelRdf,
+      undefined,
+      undefined,
+      collectors
+    );
+
+    expect(aiModels).toEqual([]);
+    expect(collectors.mappingErrors).toEqual([
+      expect.objectContaining({
+        scope: "aiModel",
+        subjectId: "https://example.org/ai-models/1",
+        message: "boom",
+      }),
+    ]);
+
+    mapAiModelSpy.mockRestore();
   });
 
   test("retains all publisher contact pages", async () => {
@@ -1417,7 +1547,7 @@ describe("DcatHarvesterService", () => {
 
     await expect(
       service.harvestFromFilePath("no-data-dict.rdf")
-    ).resolves.toEqual({ datasets: [] });
+    ).resolves.toEqual({ datasets: [], aiModels: [] });
 
     expect(mockReadFile).toHaveBeenCalledWith(resolvedPath, "utf8");
   });
@@ -1430,7 +1560,7 @@ describe("DcatHarvesterService", () => {
     const service = new DcatHarvesterService();
 
     await expect(service.harvestFromFilePath("catalogue.ttl")).resolves.toEqual(
-      { datasets: [] }
+      { datasets: [], aiModels: [] }
     );
   });
 
@@ -1443,7 +1573,7 @@ describe("DcatHarvesterService", () => {
 
     await expect(
       service.harvestFromFilePath("catalogue.upload", undefined, "text/turtle")
-    ).resolves.toEqual({ datasets: [] });
+    ).resolves.toEqual({ datasets: [], aiModels: [] });
   });
 
   test("harvestFromFilePath wraps file read failures", async () => {

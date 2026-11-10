@@ -4,12 +4,20 @@
 
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
+import type * as RDF from "@rdfjs/types";
+import {
+  LocalDiscoveryAiModel,
+  LocalDiscoveryDataset,
+} from "@/app/api/discovery/local-store/types";
 import {
   DCAT_DATASET,
   getFallbackCatalogue,
   mapDataset,
 } from "@/app/api/discovery/harvester/dcat-dataset-mapper";
+import {
+  DCAT_RESOURCE,
+  mapAiModel,
+} from "@/app/api/discovery/harvester/dcat-ai-model-mapper";
 import {
   formatErrorDetails,
   wrapError,
@@ -43,6 +51,13 @@ export type DatasetMappingError = {
   stack?: string;
 };
 
+export type AiModelMappingError = {
+  scope: "aiModel";
+  subjectId: string;
+  message: string;
+  stack?: string;
+};
+
 export type DistributionMappingError = {
   scope: "distribution";
   datasetId: string;
@@ -51,7 +66,10 @@ export type DistributionMappingError = {
   stack?: string;
 };
 
-export type MappingError = DatasetMappingError | DistributionMappingError;
+export type MappingError =
+  | DatasetMappingError
+  | AiModelMappingError
+  | DistributionMappingError;
 
 export type HarvestCollectors = {
   mappingErrors: MappingError[];
@@ -60,6 +78,7 @@ export type HarvestCollectors = {
 
 export type HarvestedCatalogue = {
   datasets: LocalDiscoveryDataset[];
+  aiModels: LocalDiscoveryAiModel[];
 };
 
 export class DcatHarvesterService {
@@ -69,7 +88,6 @@ export class DcatHarvesterService {
     this.fetcher = fetcher;
   }
 
-  /** Maps every RDF record as a Dataset until RDF provides a model discriminator. */
   async parseCatalogueFromRdf(
     rdfText: string,
     sourceRef?: string,
@@ -103,37 +121,54 @@ export class DcatHarvesterService {
           })
       : undefined;
 
-    const datasetSubjects = graph.getSubjectsOfType(DCAT_DATASET);
+    const datasets = this.mapSubjects(
+      graph.getSubjectsOfType(DCAT_DATASET),
+      "dataset",
+      collectors,
+      (datasetSubject, index) =>
+        mapDataset(
+          datasetSubject,
+          graph,
+          fallbackCatalogue,
+          index,
+          onDistributionError
+        )
+    );
 
-    const datasets = datasetSubjects
-      .flatMap((datasetSubject, index) => {
+    const aiModels = this.mapSubjects(
+      graph.getSubjectsOfType(DCAT_RESOURCE),
+      "aiModel",
+      collectors,
+      (aiModelSubject, index) => mapAiModel(aiModelSubject, graph, index)
+    );
+
+    return { datasets, aiModels };
+  }
+  private mapSubjects<T extends { title?: string; description?: string }>(
+    subjects: RDF.Term[],
+    scope: "dataset" | "aiModel",
+    collectors: HarvestCollectors | undefined,
+    mapEntity: (subject: RDF.Term, index: number) => T
+  ): T[] {
+    return subjects
+      .flatMap((subject, index) => {
         try {
-          return [
-            mapDataset(
-              datasetSubject,
-              graph,
-              fallbackCatalogue,
-              index,
-              onDistributionError
-            ),
-          ];
+          return [mapEntity(subject, index)];
         } catch (error) {
           if (!collectors) {
             throw error;
           }
 
           collectors.mappingErrors.push({
-            scope: "dataset",
-            subjectId: datasetSubject.value,
+            scope,
+            subjectId: subject.value,
             message: formatErrorDetails(error),
             stack: error instanceof Error ? error.stack : undefined,
-          });
+          } as DatasetMappingError | AiModelMappingError);
           return [];
         }
       })
-      .filter((dataset) => Boolean(dataset.title || dataset.description));
-
-    return { datasets };
+      .filter((entity) => Boolean(entity.title || entity.description));
   }
 
   async harvestFromUrl(

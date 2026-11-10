@@ -67,9 +67,9 @@ const HEALTHDCATAP_HEALTH_THEME =
   "http://healthdataportal.eu/ns/health#healthTheme"; // NOSONAR
 const HEALTHDCATAP_HEALTH_CATEGORY =
   "http://healthdataportal.eu/ns/health#healthCategory"; // NOSONAR
-const DCT_TYPE = "http://purl.org/dc/terms/type"; // NOSONAR
+export const DCT_TYPE = "http://purl.org/dc/terms/type"; // NOSONAR
 const DCT_ACCESS_RIGHTS = "http://purl.org/dc/terms/accessRights"; // NOSONAR
-const DCT_CONFORMS_TO = "http://purl.org/dc/terms/conformsTo"; // NOSONAR
+export const DCT_CONFORMS_TO = "http://purl.org/dc/terms/conformsTo"; // NOSONAR
 const DPV_HAS_LEGAL_BASIS = "http://www.w3.org/ns/dpv#hasLegalBasis"; // NOSONAR
 const DPV_HAS_PURPOSE = "http://www.w3.org/ns/dpv#hasPurpose"; // NOSONAR
 const DPV_HAS_PERSONAL_DATA = "http://www.w3.org/ns/dpv#hasPersonalData"; // NOSONAR
@@ -121,7 +121,13 @@ export const mapDataset = (
   const publisherTypes = publishers
     .map((p) => p.type)
     .filter((t): t is { value: string; label: string } => t !== undefined);
-  const datasetId = getDatasetId(datasetSubject, identifier, graph, index);
+  const datasetId = getEntityId(
+    datasetSubject,
+    identifier,
+    graph,
+    index,
+    "dataset"
+  );
 
   return {
     id: datasetId,
@@ -261,15 +267,17 @@ const extractHealthCategories = (
     label: formatHealthCategoryLabel(label) ?? label,
   }));
 
-const getDatasetIdentifier = (
+export const getDatasetIdentifier = (
   datasetSubject: RDF.Term,
   graph: RdfGraph
 ): string => graph.getLiteral(datasetSubject, DCT_IDENTIFIER);
 
-const getDatasetTitle = (datasetSubject: RDF.Term, graph: RdfGraph): string =>
-  graph.getFirstLiteral(datasetSubject, [DCT_TITLE, DC_TITLE]);
+export const getDatasetTitle = (
+  datasetSubject: RDF.Term,
+  graph: RdfGraph
+): string => graph.getFirstLiteral(datasetSubject, [DCT_TITLE, DC_TITLE]);
 
-const getDatasetDescription = (
+export const getDatasetDescription = (
   datasetSubject: RDF.Term,
   graph: RdfGraph
 ): string =>
@@ -306,22 +314,23 @@ const getCatalogueLabel = (catalogSubject: RDF.Term, graph: RdfGraph): string =>
   graph.getFirstLiteral(catalogSubject, [DCT_TITLE, DC_TITLE]) ||
   graph.getNamedNodeValue(catalogSubject);
 
-const getDatasetId = (
-  datasetSubject: RDF.Term,
+export const getEntityId = (
+  subject: RDF.Term,
   identifier: string,
   graph: RdfGraph,
-  index: number
+  index: number,
+  fallbackPrefix: string
 ): string => {
   if (identifier) {
     return identifier;
   }
 
-  const subjectValue = graph.getNamedNodeValue(datasetSubject);
+  const subjectValue = graph.getNamedNodeValue(subject);
   if (subjectValue) {
     return subjectValue;
   }
 
-  return `dataset-${index + 1}`;
+  return `${fallbackPrefix}-${index + 1}`;
 };
 
 const extractNumericLiteral = (
@@ -351,7 +360,7 @@ const extractPopulationCoverage = (
   graph: RdfGraph
 ): string => graph.getLiteral(datasetSubject, HEALTHDCATAP_POPULATION_COVERAGE);
 
-const extractVersionNotes = (
+export const extractVersionNotes = (
   datasetSubject: RDF.Term,
   graph: RdfGraph
 ): string[] | undefined => {

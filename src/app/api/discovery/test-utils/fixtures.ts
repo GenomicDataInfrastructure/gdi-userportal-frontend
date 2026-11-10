@@ -252,6 +252,66 @@ export const canonicalDiscoveryRdf = `
   </rdf:RDF>
 `;
 
+export const canonicalAiModelRdf = `<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  xmlns:dcat="http://www.w3.org/ns/dcat#"
+  xmlns:dct="http://purl.org/dc/terms/"
+  xmlns:vcard="http://www.w3.org/2006/vcard/ns#"
+  xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+  <dcat:Resource rdf:about="https://example.org/ai-models/1">
+    <dct:title xml:lang="eng">Sentiment Analysis Model</dct:title>
+    <dct:description xml:lang="eng">Classifies text sentiment.</dct:description>
+    <dct:identifier>ai-model-1</dct:identifier>
+    <dct:accessRights>
+      <dct:RightsStatement rdf:about="http://publications.europa.eu/resource/authority/access-right/PUBLIC">
+        <skos:prefLabel xml:lang="eng">Public</skos:prefLabel>
+      </dct:RightsStatement>
+    </dct:accessRights>
+    <dct:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2022-01-01T00:00:00</dct:modified>
+    <dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2022-01-01T00:00:00</dct:issued>
+    <dcat:version>0.0.1</dcat:version>
+    <dct:creator>
+      <foaf:Agent rdf:nodeID="creator-1">
+        <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Organization"/>
+        <foaf:name xml:lang="eng">LIST</foaf:name>
+      </foaf:Agent>
+    </dct:creator>
+    <dct:conformsTo>
+      <dct:Standard rdf:about="https://github.com/Adapter-Hub/adapter-transformers">
+        <skos:prefLabel xml:lang="eng">Adapters</skos:prefLabel>
+      </dct:Standard>
+    </dct:conformsTo>
+    <dct:type>
+      <skos:Concept rdf:about="https://huggingface.co/tasks/text-classification">
+        <skos:prefLabel xml:lang="eng">Text Classification</skos:prefLabel>
+      </skos:Concept>
+    </dct:type>
+    <dct:type>
+      <skos:Concept rdf:about="https://huggingface.co/tasks/table-question-answering">
+        <skos:prefLabel xml:lang="eng">Table Question Answering</skos:prefLabel>
+      </skos:Concept>
+    </dct:type>
+    <dct:publisher>
+      <foaf:Agent rdf:nodeID="publisher-1">
+        <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Organization"/>
+        <foaf:name xml:lang="eng">LIST</foaf:name>
+        <foaf:mbox rdf:resource="mailto:rania.hamdani@lnds.lu"/>
+      </foaf:Agent>
+    </dct:publisher>
+    <dcat:contactPoint>
+      <vcard:Organization rdf:nodeID="contact-1">
+        <rdf:type rdf:resource="http://www.w3.org/2006/vcard/ns#Kind"/>
+        <vcard:fn xml:lang="eng">LIST</vcard:fn>
+        <vcard:hasEmail rdf:resource="mailto:rania.hamdani@lnds.lu"/>
+      </vcard:Organization>
+    </dcat:contactPoint>
+  </dcat:Resource>
+</rdf:RDF>
+`;
+
 export const canonicalLocalDiscoveryDatasetExportRdf = `<?xml version="1.0" encoding="UTF-8"?>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:dcat="http://www.w3.org/ns/dcat#"

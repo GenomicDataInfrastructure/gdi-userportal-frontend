@@ -59,7 +59,8 @@ const phrasePrefixFields = [
   "versionNotes",
 ];
 
-// AI Model's smaller field lists, only the fields shared with Dataset.
+// AI Model's smaller field lists: the fields shared with Dataset, plus
+// Libraries and Tasks, which are AI-Model-only.
 const aiModelCrossFieldSearchFields = [
   "title^3",
   "description",
@@ -70,6 +71,8 @@ const aiModelCrossFieldSearchFields = [
   "publishers.name",
   "creators.name",
   "contacts.name",
+  "libraries",
+  "tasks",
 ];
 
 const aiModelKeywordSearchFields = ["id", "identifier", "version"];

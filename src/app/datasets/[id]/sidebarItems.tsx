@@ -9,6 +9,7 @@ import {
   createContactPointsSidebarItem,
 } from "@/components/ContactPointsSidebarItem";
 import ExportDatasetButton from "@/app/datasets/[id]/ExportDatasetButton";
+import { exportMetadataFormats } from "@/components/ExportMetadataFormats";
 import { RetrievedDataset } from "@/app/api/discovery/open-api/schemas";
 import {
   getFirstAccessUrl,
@@ -30,26 +31,6 @@ function createDatasetSidebarItems(
 ): SidebarItem[] {
   const externalInfo = getExternalDatasetInfo(dataset);
   const externalAccessUrl = getFirstAccessUrl(dataset.distributions);
-  const metaFormats = [
-    {
-      format: "rdf",
-      label: "RDF",
-      style: {
-        backgroundColor: "var(--color-warning)",
-        ":hover": { backgroundColor: "var(--color-hover)" },
-      },
-    },
-    {
-      format: "ttl",
-      label: "TTL",
-      style: { backgroundColor: "var(--color-info)", color: "white" },
-    },
-    {
-      format: "jsonld",
-      label: "JSON-LD",
-      style: { backgroundColor: "var(--color-secondary)", color: "black" },
-    },
-  ];
 
   return [
     {
@@ -85,7 +66,7 @@ function createDatasetSidebarItems(
       label: t.exportMetadataIn,
       value: (
         <div className="flex gap-2 transition py-2 sm:py-0">
-          {metaFormats.map((item) => (
+          {exportMetadataFormats.map((item) => (
             <ExportDatasetButton
               key={item.format}
               datasetId={dataset.id}

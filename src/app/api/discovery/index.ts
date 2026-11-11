@@ -133,3 +133,20 @@ export const retrieveAiModelApi = async (
 
   return discoveryProvider.retrieveAiModel!(id);
 };
+
+export const retrieveAiModelInSpecifiedFormat = async (
+  id: string,
+  format: "rdf" | "ttl" | "jsonld"
+): Promise<Blob> => {
+  if (!contentConfig.enableAiModel) {
+    throw new Error("The AI Model feature is disabled");
+  }
+  if (!discoveryProvider.retrieveAiModelInFormat) {
+    throw new Error(
+      `The configured discovery provider "${discoveryProvider.key}" does not support AI Models`
+    );
+  }
+
+  const headers = await createHeaders();
+  return discoveryProvider.retrieveAiModelInFormat(id, format, headers);
+};

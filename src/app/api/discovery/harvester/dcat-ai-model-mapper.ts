@@ -7,6 +7,7 @@ import { LocalDiscoveryAiModel } from "@/app/api/discovery/local-store/types";
 import { extractContactPoints } from "@/app/api/discovery/harvester/dcat-contact-point-mapper";
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 import { normalizeDate } from "@/app/api/discovery/harvester/date-utils";
+import { isAbsoluteUri } from "@/app/api/discovery/harvester/dcat-dataset-rdf-shared";
 import {
   DCAT_HAS_VERSION,
   DCAT_KEYWORD,
@@ -67,7 +68,25 @@ export const mapAiModel = (
     creators: extractAgents(aiModelSubject, graph, DCT_CREATOR),
     libraries: extractLabels(aiModelSubject, graph, DCT_CONFORMS_TO),
     tasks: extractLabels(aiModelSubject, graph, DCT_TYPE),
+    libraryResources: extractResourceLabels(
+      aiModelSubject,
+      graph,
+      DCT_CONFORMS_TO
+    ),
+    taskResources: extractResourceLabels(aiModelSubject, graph, DCT_TYPE),
   };
+};
+
+const extractResourceLabels = (
+  subject: RDF.Term,
+  graph: RdfGraph,
+  predicate: string
+): Array<{ value: string; label: string }> | undefined => {
+  const values = resolveValueLabels(
+    graph.getObjects(subject, predicate),
+    graph
+  ).filter(({ value }) => isAbsoluteUri(value));
+  return values.length ? values : undefined;
 };
 
 const extractLabels = (

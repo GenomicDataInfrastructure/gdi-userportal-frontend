@@ -9,7 +9,10 @@ import {
   LocalDiscoveryDataset,
   LocalDiscoverySearchResult,
 } from "@/app/api/discovery/local-store/types";
-import { buildLocalDiscoveryDataset } from "@/app/api/discovery/test-utils/fixtures";
+import {
+  buildLocalDiscoveryAiModel,
+  buildLocalDiscoveryDataset,
+} from "@/app/api/discovery/test-utils/fixtures";
 import { parseRdfXmlToQuads } from "@/app/api/discovery/harvester/rdf-quad-loader";
 
 const mockStore = {
@@ -1651,5 +1654,66 @@ describe("LocalIndexDiscoveryProvider", () => {
     await expect(provider.retrieveAiModel("missing")).rejects.toThrow(
       "AI Model not found in local index: missing"
     );
+  });
+
+  test("retrieveAiModelInFormat serializes full local-store AI Models to RDF", async () => {
+    mockAiModelStore.retrieveAiModel.mockResolvedValueOnce(
+      buildLocalDiscoveryAiModel({
+        id: "https://example.org/models/export-1",
+        title: "Sentiment Analyzer & Co",
+        description: "Classifies <text> sentiment",
+      })
+    );
+
+    const blob = await provider.retrieveAiModelInFormat("export-1", "rdf", {});
+
+    expect(mockAiModelStore.ensureInitialized).toHaveBeenCalled();
+    expect(mockAiModelStore.retrieveAiModel).toHaveBeenCalledWith("export-1");
+    expect(blob.type).toBe("application/rdf+xml");
+    const text = await blob.text();
+    expect(text).toContain("<rdf:RDF");
+    const quads = await parseRdfXmlToQuads(text);
+    const aiModelSubject = "https://example.org/models/export-1";
+
+    expect(
+      hasQuad(quads, {
+        subject: aiModelSubject,
+        predicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        object: "http://www.w3.org/ns/dcat#Resource",
+        objectTermType: "NamedNode",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: aiModelSubject,
+        predicate: "http://purl.org/dc/terms/title",
+        object: "Sentiment Analyzer & Co",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: aiModelSubject,
+        predicate: "http://purl.org/dc/terms/conformsTo",
+        object: "transformers",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+    expect(
+      hasQuad(quads, {
+        subject: aiModelSubject,
+        predicate: "http://purl.org/dc/terms/type",
+        object: "Text Classification",
+        objectTermType: "Literal",
+      })
+    ).toBe(true);
+  });
+
+  test("retrieveAiModelInFormat throws when the AI Model is missing", async () => {
+    mockAiModelStore.retrieveAiModel.mockResolvedValueOnce(null);
+
+    await expect(
+      provider.retrieveAiModelInFormat("missing-export", "rdf", {})
+    ).rejects.toThrow("AI Model not found in local index: missing-export");
   });
 });

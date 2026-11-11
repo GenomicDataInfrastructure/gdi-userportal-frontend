@@ -74,18 +74,22 @@ export const getLocalDiscoveryExportBaseUrl = (): string =>
     process.env.NEXT_PUBLIC_BASE_URL ?? DEFAULT_EXPORT_BASE_URL
   );
 
-const getDatasetExportKey = (dataset: LocalDiscoveryDataset): string =>
-  dataset.identifier || dataset.id || "unknown-dataset";
-
-export const getDatasetExportUri = (dataset: LocalDiscoveryDataset): string => {
-  if (dataset.id && isAbsoluteUri(dataset.id)) {
-    return dataset.id;
+export const buildExportUri = (
+  basePath: string,
+  entity: { id?: string; identifier?: string },
+  fallbackKey: string
+): string => {
+  if (entity.id && isAbsoluteUri(entity.id)) {
+    return entity.id;
   }
 
-  return `${getLocalDiscoveryExportBaseUrl()}/datasets/${encodeURIComponent(
-    getDatasetExportKey(dataset)
+  return `${getLocalDiscoveryExportBaseUrl()}/${basePath}/${encodeURIComponent(
+    entity.identifier || entity.id || fallbackKey
   )}`;
 };
+
+export const getDatasetExportUri = (dataset: LocalDiscoveryDataset): string =>
+  buildExportUri("datasets", dataset, "unknown-dataset");
 
 export const getDatasetRdfAboutAttribute = (
   dataset: LocalDiscoveryDataset

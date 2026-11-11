@@ -2,7 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
+import {
+  LocalDiscoveryAiModel,
+  LocalDiscoveryDataset,
+} from "@/app/api/discovery/local-store/types";
 
 export const canonicalDiscoveryRdf = `
   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -298,14 +301,14 @@ export const canonicalAiModelRdf = `<?xml version="1.0" encoding="utf-8"?>
       <foaf:Agent rdf:nodeID="publisher-1">
         <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Organization"/>
         <foaf:name xml:lang="eng">LIST</foaf:name>
-        <foaf:mbox rdf:resource="mailto:rania.hamdani@lnds.lu"/>
+        <foaf:mbox rdf:resource="mailto:ai-model@example.org"/>
       </foaf:Agent>
     </dct:publisher>
     <dcat:contactPoint>
       <vcard:Organization rdf:nodeID="contact-1">
         <rdf:type rdf:resource="http://www.w3.org/2006/vcard/ns#Kind"/>
         <vcard:fn xml:lang="eng">LIST</vcard:fn>
-        <vcard:hasEmail rdf:resource="mailto:rania.hamdani@lnds.lu"/>
+        <vcard:hasEmail rdf:resource="mailto:ai-model@example.org"/>
       </vcard:Organization>
     </dcat:contactPoint>
   </dcat:Resource>
@@ -520,6 +523,48 @@ export const buildLocalDiscoveryDataset = (
       label: "Company",
     },
   ],
+  ...overrides,
+});
+
+export const buildLocalDiscoveryAiModel = (
+  overrides: Partial<LocalDiscoveryAiModel> = {}
+): LocalDiscoveryAiModel => ({
+  id: "ai-model-a",
+  identifier: "ai-model-a",
+  entityType: "AI_MODEL",
+  title: "AI Model A & Co",
+  description: "A sample AI Model description",
+  createdAt: "2024-01-01T00:00:00.000Z",
+  modifiedAt: "2024-03-10T00:00:00.000Z",
+  version: "1.0.0",
+  hasVersions: [{ value: "v1", label: "Version 1" }],
+  versionNotes: "Initial release",
+  accessRights: {
+    value:
+      "http://publications.europa.eu/resource/authority/access-right/PUBLIC", // NOSONAR
+    label: "Public",
+  },
+  keywords: ["nlp", "classification"],
+  documentation: ["https://example.org/docs/ai-model-a"], // NOSONAR
+  contacts: [
+    {
+      name: "AI Model Support",
+      email: "support@example.org",
+    },
+  ],
+  publishers: [
+    {
+      name: "LIST",
+      email: "publisher@example.org",
+    },
+  ],
+  creators: [
+    {
+      name: "LIST",
+    },
+  ],
+  libraries: ["transformers"],
+  tasks: ["Text Classification"],
   ...overrides,
 });
 

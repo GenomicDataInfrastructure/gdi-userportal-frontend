@@ -5,9 +5,9 @@
 import {
   DatasetRdfContext,
   addConcept,
+  addEnglishLiteral,
   addLiteral,
   addNamedNode,
-  createLanguageLiteral,
   createLiteral,
   createNamedNode,
   createNestedNode,
@@ -33,13 +33,7 @@ const addAgents = (
 
     store.add(datasetNode, predicate, node);
     store.add(node, ns.rdf("type"), typeNode);
-    if (isNonEmptyString(agent.name)) {
-      store.add(
-        node,
-        ns.foaf("name"),
-        createLanguageLiteral(agent.name, "eng")
-      );
-    }
+    addEnglishLiteral(store, node, ns.foaf("name"), agent.name);
     addNamedNode(store, node, ns.foaf("workInfoHomepage"), agent.url);
     addNamedNode(store, node, ns.foaf("homepage"), agent.homepage);
     addNamedNode(store, node, ns.foaf("mbox"), toMailtoUri(agent.email));

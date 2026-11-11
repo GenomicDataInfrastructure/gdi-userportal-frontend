@@ -4,10 +4,10 @@
 
 import {
   DatasetRdfContext,
+  addEnglishLiteral,
   addLiteral,
   addNamedNode,
   createDateTimeLiteral,
-  createLanguageLiteral,
   createLiteral,
   createNamedNode,
   createNestedNode,
@@ -36,13 +36,7 @@ export const addDatasetCoreQuads = ({
       const langNode = createNamedNode(value);
       store.add(datasetNode, ns.dct("language"), langNode);
       store.add(langNode, ns.rdf("type"), ns.dct("LinguisticSystem"));
-      if (isNonEmptyString(label)) {
-        store.add(
-          langNode,
-          ns.skos("prefLabel"),
-          createLanguageLiteral(label, "eng")
-        );
-      }
+      addEnglishLiteral(store, langNode, ns.skos("prefLabel"), label);
       return;
     }
 

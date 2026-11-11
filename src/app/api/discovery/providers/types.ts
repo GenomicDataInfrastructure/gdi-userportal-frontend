@@ -338,4 +338,9 @@ export interface DiscoveryProvider {
     headers: Record<string, string>
   ) => Promise<DiscoveryAiModelsSearchResponse>;
   retrieveAiModel?: (id: string) => Promise<DiscoveryRetrievedAiModel>;
+  retrieveAiModelInFormat?: (
+    id: string,
+    format: "rdf" | "ttl" | "jsonld",
+    headers: Record<string, string>
+  ) => Promise<Blob>;
 }

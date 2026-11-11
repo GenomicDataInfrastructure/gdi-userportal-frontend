@@ -402,16 +402,41 @@ describe("DcatHarvesterService", () => {
         contacts: [
           {
             name: "LIST",
-            email: "rania.hamdani@lnds.lu",
+            email: "ai-model@example.org",
             uri: undefined,
             url: undefined,
             identifier: undefined,
           },
         ],
-        publishers: [{ name: "LIST", email: "rania.hamdani@lnds.lu" }],
-        creators: [{ name: "LIST" }],
+        publishers: [
+          {
+            name: "LIST",
+            email: "ai-model@example.org",
+          },
+        ],
+        creators: [
+          {
+            name: "LIST",
+          },
+        ],
         libraries: ["Adapters"],
+        libraryResources: [
+          {
+            value: "https://github.com/Adapter-Hub/adapter-transformers",
+            label: "Adapters",
+          },
+        ],
         tasks: ["Text Classification", "Table Question Answering"],
+        taskResources: [
+          {
+            value: "https://huggingface.co/tasks/text-classification",
+            label: "Text Classification",
+          },
+          {
+            value: "https://huggingface.co/tasks/table-question-answering",
+            label: "Table Question Answering",
+          },
+        ],
       },
     ]);
   });

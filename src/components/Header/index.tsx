@@ -139,7 +139,7 @@ function Header() {
                   alt={"Logo"}
                   width="100"
                   height="37"
-                  className={"mb-2 mt-2 w-[70px] md:w-[100px]"}
+                  className={"mb-2 mt-2 h-auto w-[70px] md:w-[100px]"}
                 />
               </a>
             ) : (
@@ -149,7 +149,7 @@ function Header() {
                   alt={"Logo"}
                   width="100"
                   height="37"
-                  className={"mb-2 mt-2 w-[70px] md:w-[100px]"}
+                  className={"mb-2 mt-2 h-auto w-[70px] md:w-[100px]"}
                 />
               </Link>
             )}

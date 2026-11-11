@@ -235,6 +235,8 @@ export interface LocalDiscoveryAiModel {
   creators: LocalAgent[];
   libraries?: string[];
   tasks?: string[];
+  libraryResources?: Array<{ value: string; label: string }>;
+  taskResources?: Array<{ value: string; label: string }>;
 }
 
 export interface LocalDiscoveryAiModelSearchResult {

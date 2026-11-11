@@ -89,7 +89,7 @@ describe("Retrieving a specific dataset", () => {
 
   test.each(["dataset", "distribution", "service"])(
     "still rejects a missing required %s title",
-    async (level) => {
+    (level) => {
       const dataset = {
         id: "required-fields",
         description: "Dataset description",
@@ -109,12 +109,19 @@ describe("Retrieving a specific dataset", () => {
           },
         ],
       };
-      mockDiscoveryAdapter
-        .onGet("/api/v1/datasets/required-fields")
-        .reply(200, dataset);
-
-      const response = await retrieveDatasetApi("required-fields");
-      expect(datasetSchema.safeParse(response).success).toBe(false);
+      const result = datasetSchema.safeParse(dataset);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const path =
+          level === "dataset"
+            ? ["title"]
+            : level === "distribution"
+              ? ["distributions", 0, "title"]
+              : ["distributions", 0, "accessService", 0, "title"];
+        expect(result.error.issues).toEqual(
+          expect.arrayContaining([expect.objectContaining({ path })])
+        );
+      }
     }
   );
 

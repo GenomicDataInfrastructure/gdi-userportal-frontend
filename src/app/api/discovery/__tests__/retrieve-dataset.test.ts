@@ -3,8 +3,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { retrieveDatasetApi } from "@/app/api/discovery";
+import { api } from "@/app/api/discovery/open-api/schemas";
 import AxiosMockAdapter from "axios-mock-adapter";
 import { discoveryAxiosInstance } from "@/app/api/shared/client";
+
+const datasetSchema = api.api.find(
+  (endpoint) => endpoint.alias === "retrieve_dataset"
+)!.response;
 
 describe("Retrieving a specific dataset", () => {
   const mockDiscoveryAdapter = new AxiosMockAdapter(discoveryAxiosInstance);
@@ -45,6 +50,73 @@ describe("Retrieving a specific dataset", () => {
       }
     );
   });
+
+  test.each([
+    {},
+    { id: "service-1" },
+    { description: "Beacon service description" },
+    { id: "service-1", description: "Beacon service description" },
+  ])(
+    "preserves access service metadata with optional fields %j",
+    async (fields) => {
+      const service = {
+        title: "GoE BG Beacon",
+        endpoint_url: ["https://beacon-af-staging.mmcbg.org/api/info"],
+        ...fields,
+      };
+      mockDiscoveryAdapter
+        .onGet("/api/v1/datasets/optional-service-fields")
+        .reply(200, {
+          id: "optional-service-fields",
+          title: "Dataset with optional service fields",
+          description: "Dataset description",
+          distributions: [
+            {
+              id: "distribution-1",
+              title: "Distribution title",
+              description: "Distribution description",
+              accessService: [service],
+            },
+          ],
+        });
+
+      const response = await retrieveDatasetApi("optional-service-fields");
+
+      expect(datasetSchema.safeParse(response).success).toBe(true);
+      expect(response.distributions?.[0]?.accessService?.[0]).toEqual(service);
+    }
+  );
+
+  test.each(["dataset", "distribution", "service"])(
+    "still rejects a missing required %s title",
+    async (level) => {
+      const dataset = {
+        id: "required-fields",
+        description: "Dataset description",
+        ...(level !== "dataset" && { title: "Dataset title" }),
+        distributions: [
+          {
+            id: "distribution-1",
+            description: "Distribution description",
+            ...(level !== "distribution" && { title: "Distribution title" }),
+            accessService: [
+              {
+                id: "service-1",
+                description: "Service description",
+                ...(level !== "service" && { title: "Service title" }),
+              },
+            ],
+          },
+        ],
+      };
+      mockDiscoveryAdapter
+        .onGet("/api/v1/datasets/required-fields")
+        .reply(200, dataset);
+
+      const response = await retrieveDatasetApi("required-fields");
+      expect(datasetSchema.safeParse(response).success).toBe(false);
+    }
+  );
 
   test("accepts null data service fields returned by discovery backend", async () => {
     mockDiscoveryAdapter.onGet("/api/v1/datasets/100").reply(200, {

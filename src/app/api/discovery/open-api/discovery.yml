@@ -912,9 +912,7 @@ components:
                 items:
                   $ref: "#/components/schemas/ValueLabel"
             required:
-              - id
               - title
-              - description
 
       required:
         - id

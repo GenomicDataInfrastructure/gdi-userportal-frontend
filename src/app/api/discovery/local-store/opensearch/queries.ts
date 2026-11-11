@@ -59,7 +59,8 @@ const phrasePrefixFields = [
   "versionNotes",
 ];
 
-// AI Model's smaller field lists, only the fields shared with Dataset.
+// AI Model's smaller field lists: the fields shared with Dataset, plus
+// Libraries and Tasks, which are AI-Model-only.
 const aiModelCrossFieldSearchFields = [
   "title^3",
   "description",
@@ -70,6 +71,8 @@ const aiModelCrossFieldSearchFields = [
   "publishers.name",
   "creators.name",
   "contacts.name",
+  "libraries",
+  "tasks",
 ];
 
 const aiModelKeywordSearchFields = ["id", "identifier", "version"];
@@ -207,10 +210,8 @@ const fieldConfigs: Record<string, FieldConfig> = {
     rangeField: "spatialResolutionInMeters",
     sortField: "spatialResolutionInMeters",
   },
-  task: {
-    exactFields: ["modelTasks.task.value", "modelTasks.task.label.keyword"],
-    textFields: ["modelTasks.task.label"],
-  },
+  tasks: { exactFields: ["tasks"], textFields: ["tasks"] },
+  libraries: { exactFields: ["libraries"], textFields: ["libraries"] },
 };
 
 const resolveFieldConfig = (key?: string): FieldConfig | null => {
@@ -668,14 +669,7 @@ export const createAiModelIndexMappings = () => ({
         },
       },
       libraries: { type: "keyword" },
-      modelTasks: {
-        type: "object",
-        properties: {
-          modality: valueLabelMapping(),
-          task: valueLabelMapping(),
-          subtask: valueLabelMapping(),
-        },
-      },
+      tasks: { type: "keyword" },
     },
   },
 });

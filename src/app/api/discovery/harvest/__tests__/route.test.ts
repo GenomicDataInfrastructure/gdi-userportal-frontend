@@ -4,19 +4,21 @@
 
 import { jest } from "@jest/globals";
 
+type HarvestResult = { datasetsCount: number; aiModelsCount: number };
+
 const mockHarvestLocalIndexFromDcatUrlApi =
   jest.fn<
     (
       url: string,
       options?: { mode?: string; contentType?: string }
-    ) => Promise<number>
+    ) => Promise<HarvestResult>
   >();
 const mockHarvestLocalIndexFromDcatFileApi =
   jest.fn<
     (
       path: string,
       options?: { mode?: string; contentType?: string }
-    ) => Promise<number>
+    ) => Promise<HarvestResult>
   >();
 
 jest.mock("@/app/api/discovery/local-index", () => ({
@@ -144,7 +146,10 @@ describe("POST /api/discovery/harvest", () => {
 
   test("returns 200 with count when harvesting from a file path", async () => {
     process.env.HARVEST_INTERNAL_SECRET = "top-secret";
-    mockHarvestLocalIndexFromDcatFileApi.mockResolvedValueOnce(7);
+    mockHarvestLocalIndexFromDcatFileApi.mockResolvedValueOnce({
+      datasetsCount: 7,
+      aiModelsCount: 0,
+    });
 
     const response = await POST(
       new Request("http://localhost/api/discovery/harvest", {
@@ -162,12 +167,18 @@ describe("POST /api/discovery/harvest", () => {
     );
     expect(mockHarvestLocalIndexFromDcatUrlApi).not.toHaveBeenCalled();
     expect(response.status).toBe(200);
-    await expect(response.json()).resolves.toEqual({ count: 7 });
+    await expect(response.json()).resolves.toEqual({
+      datasetsCount: 7,
+      aiModelsCount: 0,
+    });
   });
 
   test("prefers the file path over the url when both are provided", async () => {
     process.env.HARVEST_INTERNAL_SECRET = "top-secret";
-    mockHarvestLocalIndexFromDcatFileApi.mockResolvedValueOnce(2);
+    mockHarvestLocalIndexFromDcatFileApi.mockResolvedValueOnce({
+      datasetsCount: 2,
+      aiModelsCount: 0,
+    });
 
     const response = await POST(
       new Request("http://localhost/api/discovery/harvest", {
@@ -188,12 +199,18 @@ describe("POST /api/discovery/harvest", () => {
     );
     expect(mockHarvestLocalIndexFromDcatUrlApi).not.toHaveBeenCalled();
     expect(response.status).toBe(200);
-    await expect(response.json()).resolves.toEqual({ count: 2 });
+    await expect(response.json()).resolves.toEqual({
+      datasetsCount: 2,
+      aiModelsCount: 0,
+    });
   });
 
   test("returns 200 with count when harvest succeeds", async () => {
     process.env.HARVEST_INTERNAL_SECRET = "top-secret";
-    mockHarvestLocalIndexFromDcatUrlApi.mockResolvedValueOnce(12);
+    mockHarvestLocalIndexFromDcatUrlApi.mockResolvedValueOnce({
+      datasetsCount: 12,
+      aiModelsCount: 3,
+    });
 
     const response = await POST(
       new Request("http://localhost/api/discovery/harvest", {
@@ -210,12 +227,18 @@ describe("POST /api/discovery/harvest", () => {
       { mode: "replace" }
     );
     expect(response.status).toBe(200);
-    await expect(response.json()).resolves.toEqual({ count: 12 });
+    await expect(response.json()).resolves.toEqual({
+      datasetsCount: 12,
+      aiModelsCount: 3,
+    });
   });
 
   test("passes an explicit content type for a file path", async () => {
     process.env.HARVEST_INTERNAL_SECRET = "top-secret";
-    mockHarvestLocalIndexFromDcatFileApi.mockResolvedValueOnce(1);
+    mockHarvestLocalIndexFromDcatFileApi.mockResolvedValueOnce({
+      datasetsCount: 1,
+      aiModelsCount: 0,
+    });
 
     const response = await POST(
       new Request("http://localhost/api/discovery/harvest", {
@@ -239,7 +262,10 @@ describe("POST /api/discovery/harvest", () => {
 
   test("passes an explicit content type for a url", async () => {
     process.env.HARVEST_INTERNAL_SECRET = "top-secret";
-    mockHarvestLocalIndexFromDcatUrlApi.mockResolvedValueOnce(1);
+    mockHarvestLocalIndexFromDcatUrlApi.mockResolvedValueOnce({
+      datasetsCount: 1,
+      aiModelsCount: 0,
+    });
 
     const response = await POST(
       new Request("http://localhost/api/discovery/harvest", {
@@ -263,7 +289,10 @@ describe("POST /api/discovery/harvest", () => {
 
   test("passes append mode to the harvester", async () => {
     process.env.HARVEST_INTERNAL_SECRET = "top-secret";
-    mockHarvestLocalIndexFromDcatUrlApi.mockResolvedValueOnce(4);
+    mockHarvestLocalIndexFromDcatUrlApi.mockResolvedValueOnce({
+      datasetsCount: 4,
+      aiModelsCount: 1,
+    });
 
     const response = await POST(
       new Request("http://localhost/api/discovery/harvest", {
@@ -283,7 +312,10 @@ describe("POST /api/discovery/harvest", () => {
       { mode: "append" }
     );
     expect(response.status).toBe(200);
-    await expect(response.json()).resolves.toEqual({ count: 4 });
+    await expect(response.json()).resolves.toEqual({
+      datasetsCount: 4,
+      aiModelsCount: 1,
+    });
   });
 
   test("returns 400 when mode is invalid", async () => {

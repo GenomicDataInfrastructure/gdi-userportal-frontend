@@ -148,6 +148,28 @@ test("every executable route has an accessibility scan", () => {
       .sort()
   ).toEqual(executablePages.map(({ route }) => route).sort());
 });
+test("configured footer links are present and accessible", async ({
+  page,
+}, info) => {
+  await page.goto(url("/", info));
+  const footer = page.getByRole("contentinfo");
+  for (const [href, key] of [
+    ["https://www.linkedin.com/company/gdi-euproject/", "footer.linkedIn"],
+    ["https://twitter.com/GDI_EUproject", "footer.twitter"],
+    ["https://github.com/GenomicDataInfrastructure", "footer.github"],
+    ["https://gitlab.com/gdi-accessibility-test", "footer.gitlab"],
+    ["https://gdi.onemilliongenomes.eu/", "footer.website"],
+  ] as const) {
+    const links = footer.locator(`a[href="${href}"]`);
+    await expect(links).toHaveCount(key === "footer.website" ? 2 : 1);
+    for (const link of await links.all()) {
+      await expect(link).toBeVisible();
+      await expect(link).toHaveAccessibleName(message(key, info));
+    }
+  }
+  await expectNoAccessibilityViolations(page, info);
+});
+
 test("skip link bypasses repeated content", async ({ page }, info) => {
   await page.goto(url("/", info));
 

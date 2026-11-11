@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const count = path
+    const result = path
       ? await harvestLocalIndexFromDcatFileApi(path, {
           mode,
           ...(contentType ? { contentType } : {}),
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
           mode,
           ...(contentType ? { contentType } : {}),
         });
-    return Response.json({ count });
+    return Response.json(result);
   } catch (error) {
     return Response.json(
       { error: error instanceof Error ? error.message : String(error) },

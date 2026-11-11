@@ -47,6 +47,7 @@ function Footer() {
               {contentConfig.websiteUrl ? (
                 <a
                   href={contentConfig.websiteUrl}
+                  aria-label={t("footer.website")}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -164,6 +165,7 @@ function Footer() {
               {contentConfig.linkedInUrl && (
                 <a
                   href={contentConfig.linkedInUrl}
+                  aria-label={t("footer.linkedIn")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-info"
@@ -178,6 +180,7 @@ function Footer() {
                 <a
                   color="primary"
                   href={contentConfig.twitterUrl}
+                  aria-label={t("footer.twitter")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-info"
@@ -192,6 +195,7 @@ function Footer() {
                 <a
                   color="primary"
                   href={contentConfig.githubUrl}
+                  aria-label={t("footer.github")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-info"
@@ -206,6 +210,7 @@ function Footer() {
                 <a
                   color="primary"
                   href={contentConfig.gitlabUrl}
+                  aria-label={t("footer.gitlab")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-info"
@@ -220,6 +225,7 @@ function Footer() {
                 <a
                   color="primary"
                   href={contentConfig.websiteUrl}
+                  aria-label={t("footer.website")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-info"

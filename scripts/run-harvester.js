@@ -86,7 +86,7 @@ async function main() {
   }
 
   try {
-    const count = await requestHarvest({
+    const { datasetsCount, aiModelsCount } = await requestHarvest({
       apiUrl: endpoint,
       ...(args.file ? { sourcePath: args.file } : { sourceUrl: args.url }),
       secret,
@@ -95,7 +95,7 @@ async function main() {
     });
 
     console.log(
-      `Harvest completed: ${count} datasets indexed from ${args.file || args.url}`
+      `Harvest completed: ${datasetsCount} datasets, ${aiModelsCount} AI Models indexed from ${args.file || args.url}`
     );
   } catch (error) {
     throw new Error(

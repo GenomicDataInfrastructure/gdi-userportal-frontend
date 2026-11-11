@@ -412,7 +412,7 @@ describe("opensearch/queries", () => {
         facets: [
           {
             type: "DROPDOWN",
-            key: "task",
+            key: "tasks",
             value: "Classification",
           },
         ],
@@ -421,21 +421,20 @@ describe("opensearch/queries", () => {
     );
 
     expect((body.query as any).bool.filter).toEqual([
-      {
-        bool: {
-          should: [
-            { term: { "modelTasks.task.value": "Classification" } },
-            { term: { "modelTasks.task.label.keyword": "Classification" } },
-            {
-              match_phrase: {
-                "modelTasks.task.label": "Classification",
-              },
-            },
-          ],
-          minimum_should_match: 1,
-        },
-      },
+      { term: { tasks: "Classification" } },
     ]);
+  });
+
+  test("buildSearchBody includes AI Model libraries and tasks in the cross-field search", () => {
+    const body = buildSearchBody(
+      { query: "transformers" },
+      aiModelSearchFieldSets
+    );
+    const shouldClauses = (body.query as any).bool.must[0].bool.should;
+    const [crossFields] = shouldClauses;
+
+    expect(crossFields.multi_match.fields).toContain("libraries");
+    expect(crossFields.multi_match.fields).toContain("tasks");
   });
 
   test("buildSearchBody adds OR facet filters", () => {

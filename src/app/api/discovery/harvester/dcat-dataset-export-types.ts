@@ -2,4 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-export type LocalDiscoveryDatasetExportFormat = "rdf" | "ttl" | "jsonld";
+import { RdfExportFormat } from "@/app/api/discovery/harvester/rdf/rdf-serializer";
+
+export type LocalDiscoveryDatasetExportFormat = RdfExportFormat;

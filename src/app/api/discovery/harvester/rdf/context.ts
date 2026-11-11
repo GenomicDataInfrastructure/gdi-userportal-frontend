@@ -111,6 +111,17 @@ export const addNamedNode = (
   }
 };
 
+export const addEnglishLiteral = (
+  store: RdfStore,
+  subject: RdfNamedNode,
+  predicate: RdfNamedNode,
+  value?: string
+) => {
+  if (isNonEmptyString(value)) {
+    store.add(subject, predicate, createLanguageLiteral(value, "eng"));
+  }
+};
+
 export const addConcept = (
   store: RdfStore,
   subject: RdfNamedNode,

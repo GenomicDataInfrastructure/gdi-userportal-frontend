@@ -7,6 +7,8 @@ import PageContainer from "@/components/PageContainer";
 import PageHeading from "@/components/PageHeading";
 import Sidebar from "@/components/Sidebar";
 import { createContactPointsSidebarItem } from "@/components/ContactPointsSidebarItem";
+import ExportAiModelButton from "./ExportAiModelButton";
+import { exportMetadataFormats } from "@/components/ExportMetadataFormats";
 import axios from "axios";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -25,7 +27,8 @@ export default async function Page({
   params,
   searchParams,
 }: AiModelDetailsPageProps) {
-  if (!contentConfig.enableAiModel || !getDiscoveryProvider().retrieveAiModel) {
+  const discoveryProvider = getDiscoveryProvider();
+  if (!contentConfig.enableAiModel || !discoveryProvider.retrieveAiModel) {
     notFound();
   }
 
@@ -71,6 +74,24 @@ export default async function Page({
     noEmailProvided: t("noEmailProvided"),
   };
   const sidebarItems = [
+    ...(discoveryProvider.retrieveAiModelInFormat
+      ? [
+          {
+            label: t("exportMetadataIn"),
+            value: (
+              <div className="flex gap-2 transition py-2 sm:py-0">
+                {exportMetadataFormats.map((item) => (
+                  <ExportAiModelButton
+                    key={item.format}
+                    aiModelId={aiModel.id}
+                    item={item}
+                  />
+                ))}
+              </div>
+            ),
+          },
+        ]
+      : []),
     createContactPointsSidebarItem(aiModel.contacts, sidebarTranslations),
   ];
 

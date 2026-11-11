@@ -16,6 +16,10 @@ import {
   getLocalDiscoveryDatasetExportMimeType,
   serializeLocalDiscoveryDataset,
 } from "@/app/api/discovery/harvester/dcat-dataset-rdf-generator";
+import {
+  getLocalDiscoveryAiModelExportMimeType,
+  serializeLocalDiscoveryAiModel,
+} from "@/app/api/discovery/harvester/dcat-ai-model-rdf-generator";
 import { BasePlaceholderDiscoveryProvider } from "@/app/api/discovery/providers/base-placeholder-provider";
 import {
   listLocalFilters,
@@ -342,5 +346,21 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       ...this.mapLocalAiModel(aiModel),
       contacts: aiModel.contacts,
     };
+  }
+
+  async retrieveAiModelInFormat(
+    id: string,
+    format: "rdf" | "ttl" | "jsonld",
+    _headers: Record<string, string>
+  ): Promise<Blob> {
+    await this.aiModelStore.ensureInitialized();
+    const aiModel = await this.aiModelStore.retrieveAiModel(id);
+    if (!aiModel) {
+      throw new Error(`AI Model not found in local index: ${id}`);
+    }
+
+    return new Blob([await serializeLocalDiscoveryAiModel(aiModel, format)], {
+      type: getLocalDiscoveryAiModelExportMimeType(format),
+    });
   }
 }

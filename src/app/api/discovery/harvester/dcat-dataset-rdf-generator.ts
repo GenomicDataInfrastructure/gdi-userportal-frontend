@@ -7,6 +7,7 @@ import { LocalDiscoveryDatasetExportFormat } from "@/app/api/discovery/harvester
 import { serializeDatasetAsRdfXml } from "@/app/api/discovery/harvester/dcat-dataset-rdfxml-generator";
 import { serializeDatasetAsTurtle } from "@/app/api/discovery/harvester/dcat-dataset-turtle-generator";
 import { LocalDiscoveryDataset } from "@/app/api/discovery/local-store/types";
+import { getRdfExportMimeType } from "@/app/api/discovery/harvester/rdf/rdf-serializer";
 
 export const serializeLocalDiscoveryDataset = (
   dataset: LocalDiscoveryDataset,
@@ -24,13 +25,4 @@ export const serializeLocalDiscoveryDataset = (
 
 export const getLocalDiscoveryDatasetExportMimeType = (
   format: LocalDiscoveryDatasetExportFormat
-): string => {
-  switch (format) {
-    case "rdf":
-      return "application/rdf+xml";
-    case "ttl":
-      return "text/turtle";
-    case "jsonld":
-      return "application/ld+json";
-  }
-};
+): string => getRdfExportMimeType(format);

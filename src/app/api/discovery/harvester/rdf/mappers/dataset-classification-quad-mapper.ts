@@ -5,7 +5,7 @@
 import {
   DatasetRdfContext,
   addConcept,
-  createLanguageLiteral,
+  addEnglishLiteral,
   createLiteral,
   createNamedNode,
   isAbsoluteUri,
@@ -57,13 +57,7 @@ export const addDatasetClassificationQuads = ({
       const rightsNode = createNamedNode(value);
       store.add(datasetNode, ns.dct("accessRights"), rightsNode);
       store.add(rightsNode, ns.rdf("type"), ns.dct("RightsStatement"));
-      if (label) {
-        store.add(
-          rightsNode,
-          ns.skos("prefLabel"),
-          createLanguageLiteral(label, "eng")
-        );
-      }
+      addEnglishLiteral(store, rightsNode, ns.skos("prefLabel"), label);
     }
   }
   dataset.conformsTo?.forEach((entry) => {

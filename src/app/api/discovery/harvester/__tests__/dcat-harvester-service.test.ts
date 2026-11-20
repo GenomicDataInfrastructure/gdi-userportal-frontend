@@ -437,6 +437,12 @@ describe("DcatHarvesterService", () => {
             label: "Table Question Answering",
           },
         ],
+        licences: [
+          {
+            value: "https://www.apache.org/licenses/LICENSE-2.0",
+            label: "Apache License 2.0",
+          },
+        ],
       },
     ]);
   });

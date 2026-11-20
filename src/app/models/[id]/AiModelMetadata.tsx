@@ -159,6 +159,12 @@ const AiModelMetadata = ({
         tooltip={tAiModels("tooltips.tasks")}
       />
 
+      <MetadataKeywords
+        keywords={aiModel.licences ?? []}
+        label={tAiModels("licences")}
+        tooltip={tAiModels("tooltips.licences")}
+      />
+
       {aiModel.documentation && aiModel.documentation.length > 0 && (
         <MetadataSection title={t("linksAndReferences")} icon={faLink}>
           <div className="flex flex-col gap-2 text-sm">

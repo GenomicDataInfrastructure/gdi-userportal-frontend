@@ -237,6 +237,7 @@ export interface LocalDiscoveryAiModel {
   tasks?: string[];
   libraryResources?: Array<{ value: string; label: string }>;
   taskResources?: Array<{ value: string; label: string }>;
+  licences?: Array<{ value: string; label: string }>;
 }
 
 export interface LocalDiscoveryAiModelSearchResult {

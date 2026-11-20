@@ -310,6 +310,7 @@ export class LocalIndexDiscoveryProvider extends BasePlaceholderDiscoveryProvide
       creators: aiModel.creators.map((a) => this.mapAgent(a)),
       libraries: aiModel.libraries,
       tasks: aiModel.tasks,
+      licences: aiModel.licences?.map(({ label }) => label),
     };
   }
 

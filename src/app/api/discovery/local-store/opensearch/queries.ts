@@ -73,6 +73,7 @@ const aiModelCrossFieldSearchFields = [
   "contacts.name",
   "libraries",
   "tasks",
+  "licences.label",
 ];
 
 const aiModelKeywordSearchFields = ["id", "identifier", "version"];
@@ -212,6 +213,10 @@ const fieldConfigs: Record<string, FieldConfig> = {
   },
   tasks: { exactFields: ["tasks"], textFields: ["tasks"] },
   libraries: { exactFields: ["libraries"], textFields: ["libraries"] },
+  licences: {
+    exactFields: ["licences.value", "licences.label.keyword"],
+    textFields: ["licences.label"],
+  },
 };
 
 const resolveFieldConfig = (key?: string): FieldConfig | null => {
@@ -670,6 +675,7 @@ export const createAiModelIndexMappings = () => ({
       },
       libraries: { type: "keyword" },
       tasks: { type: "keyword" },
+      licences: valueLabelMapping(),
     },
   },
 });

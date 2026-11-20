@@ -290,6 +290,7 @@ export interface DiscoverySearchedAiModel {
   creators: DiscoveryAgent[];
   libraries?: string[];
   tasks?: string[];
+  licences?: string[];
 }
 
 export interface DiscoveryRetrievedAiModel extends DiscoverySearchedAiModel {

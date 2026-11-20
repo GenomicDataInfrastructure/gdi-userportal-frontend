@@ -142,6 +142,14 @@ const addClassification = (
     model.taskResources,
     model.tasks
   );
+  addResources(
+    store,
+    subject,
+    ns.dct("license"),
+    ns.dct("LicenseDocument"),
+    model.licences,
+    []
+  );
 };
 
 const addResources = (

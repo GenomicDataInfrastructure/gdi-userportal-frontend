@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { faBook } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faCertificate } from "@fortawesome/free-solid-svg-icons";
 import { CardItem } from "@/components/Card";
 import {
   createDateCardItems,
@@ -14,24 +14,24 @@ import { DiscoverySearchedAiModel } from "@/app/api/discovery/providers/types";
 export function createAiModelCardItems(
   aiModel: DiscoverySearchedAiModel,
   dateLabels: DateCardItemLabels,
-  librariesLabel: string
+  librariesLabel: string,
+  licencesLabel: string
 ): CardItem[] {
   return [
     ...createDateCardItems(aiModel, dateLabels),
     createPublisherCardItem(aiModel),
-    createLibrariesCardItem(aiModel, librariesLabel),
+    createValueListCardItem(aiModel.libraries, librariesLabel, faBook),
+    createValueListCardItem(aiModel.licences, licencesLabel, faCertificate),
   ];
 }
 
-function createLibrariesCardItem(
-  aiModel: DiscoverySearchedAiModel,
-  label: string
+function createValueListCardItem(
+  values: string[] | undefined,
+  label: string,
+  icon: CardItem["icon"]
 ): CardItem {
   return {
-    text:
-      ((aiModel.libraries?.length ?? 0) > 0 &&
-        `${label}: ${(aiModel.libraries ?? []).join(", ")}`) ||
-      "",
-    icon: faBook,
+    text: (values?.length ?? 0) > 0 ? `${label}: ${values!.join(", ")}` : "",
+    icon,
   };
 }

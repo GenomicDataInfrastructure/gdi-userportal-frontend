@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { DiscoverySearchedAiModel } from "@/app/api/discovery/providers/types";
-import { faBook, faCertificate } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faKey } from "@fortawesome/free-solid-svg-icons";
 import { createAiModelCardItems } from "../aiModelCardItems";
 
 describe("createAiModelCardItems", () => {
@@ -116,8 +116,6 @@ describe("createAiModelCardItems", () => {
       "Licences"
     );
 
-    expect(cardItems.find((item) => item.icon === faCertificate)?.text).toBe(
-      ""
-    );
+    expect(cardItems.find((item) => item.icon === faKey)?.text).toBe("");
   });
 });

@@ -4,10 +4,15 @@
 
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
+import contentConfig from "@/config/contentConfig";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
-  const publicPaths = ["/", "/datasets", "/themes", "/publishers", "/about"];
+  const publicPaths = ["/", "/datasets", "/publishers", "/about"];
+
+  if (contentConfig.showThemes) {
+    publicPaths.splice(2, 0, "/themes");
+  }
 
   if (routing.locales.length === 1) {
     return publicPaths.map((path) => ({

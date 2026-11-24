@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import { faBook, faCertificate } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faKey } from "@fortawesome/free-solid-svg-icons";
 import { CardItem } from "@/components/Card";
 import {
   createDateCardItems,
@@ -21,7 +21,7 @@ export function createAiModelCardItems(
     ...createDateCardItems(aiModel, dateLabels),
     createPublisherCardItem(aiModel),
     createValueListCardItem(aiModel.libraries, librariesLabel, faBook),
-    createValueListCardItem(aiModel.licences, licencesLabel, faCertificate),
+    createValueListCardItem(aiModel.licences, licencesLabel, faKey),
   ];
 }
 

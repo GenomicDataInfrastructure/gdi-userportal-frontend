@@ -6,17 +6,22 @@
 
 import { useEffect, useState } from "react";
 import {
+  faBook,
   faBuilding,
   faCalendarAlt,
+  faDatabase,
   faIdBadge,
   faInfoCircle,
+  faKey,
   faLink,
   faSyncAlt,
   faTag,
   faUserShield,
+  IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
+import Chips from "@/components/Chips";
 import MetadataField from "@/components/metadata/MetadataField";
 import MetadataKeywords from "@/components/metadata/MetadataKeywords";
 import MetadataSection from "@/components/metadata/MetadataSection";
@@ -141,28 +146,37 @@ const AiModelMetadata = ({
         )}
       </div>
 
-      <MetadataKeywords
-        keywords={aiModel.keywords ?? []}
-        label={t("keywords")}
-        tooltip={t("tooltips.datasetKeywords")}
-      />
+      {aiModel.tasks && aiModel.tasks.length > 0 && (
+        <div className="mt-4">
+          <span className="flex flex-wrap gap-2 items-center relative group">
+            <FontAwesomeIcon
+              icon={faDatabase}
+              className="align-middle text-primary"
+            />
+            <span className="align-middle shrink-0">
+              {tAiModels("tasks")}:
+            </span>
+            <Chips
+              chips={aiModel.tasks}
+              className="bg-primary/10 text-primary rounded-full py-1"
+            />
+            <Tooltip message={tAiModels("tooltips.tasks")} />
+          </span>
+        </div>
+      )}
 
-      <MetadataKeywords
-        keywords={aiModel.libraries ?? []}
+      <ValueListField
+        values={aiModel.libraries}
         label={tAiModels("libraries")}
         tooltip={tAiModels("tooltips.libraries")}
+        icon={faBook}
       />
 
-      <MetadataKeywords
-        keywords={aiModel.tasks ?? []}
-        label={tAiModels("tasks")}
-        tooltip={tAiModels("tooltips.tasks")}
-      />
-
-      <MetadataKeywords
-        keywords={aiModel.licences ?? []}
+      <ValueListField
+        values={aiModel.licences}
         label={tAiModels("licences")}
         tooltip={tAiModels("tooltips.licences")}
+        icon={faKey}
       />
 
       {aiModel.documentation && aiModel.documentation.length > 0 && (
@@ -188,6 +202,12 @@ const AiModelMetadata = ({
           </div>
         </MetadataSection>
       )}
+
+      <MetadataKeywords
+        keywords={aiModel.keywords ?? []}
+        label={t("keywords")}
+        tooltip={t("tooltips.datasetKeywords")}
+      />
 
       {(aiModel.publishers.length > 0 || aiModel.creators.length > 0) && (
         <MetadataSection
@@ -273,6 +293,32 @@ const AiModelMetadata = ({
         </MetadataSection>
       )}
     </>
+  );
+};
+
+const ValueListField = ({
+  values,
+  label,
+  tooltip,
+  icon,
+}: {
+  values: string[] | undefined;
+  label: string;
+  tooltip: string;
+  icon: IconDefinition;
+}) => {
+  if (!values || values.length === 0) return null;
+
+  return (
+    <div className="mt-4">
+      <span className="flex gap-2 items-center relative group">
+        <FontAwesomeIcon icon={icon} className="align-middle text-primary" />
+        <span className="align-middle">
+          {label}: {values.join(", ")}
+        </span>
+        <Tooltip message={tooltip} />
+      </span>
+    </div>
   );
 };
 

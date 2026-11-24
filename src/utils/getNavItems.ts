@@ -46,12 +46,6 @@ export function getNavItems(
         activePath.includes("/allele-frequency"),
     },
     {
-      icon: faWandSparkles,
-      label: t("nav.themes"),
-      href: "/themes",
-      isActive: (activePath: string) => activePath === "/themes",
-    },
-    {
       icon: faBook,
       label: t("nav.publishers"),
       href: "/publishers",
@@ -91,6 +85,18 @@ export function getNavItems(
 
   if (!contentConfig.showAlleleFrequency) {
     navItems = navItems.filter((item) => item.href !== "/allele-frequency");
+  }
+
+  if (contentConfig.showThemes) {
+    const publishersIndex = navItems.findIndex(
+      (item) => item.href === "/publishers"
+    );
+    navItems.splice(publishersIndex, 0, {
+      icon: faWandSparkles,
+      label: t("nav.themes"),
+      href: "/themes",
+      isActive: (activePath: string) => activePath === "/themes",
+    });
   }
 
   return navItems;

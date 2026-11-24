@@ -21,9 +21,9 @@ export default function MetadataKeywords({
 
   return (
     <div className="mt-4">
-      <div className="flex gap-2 items-center relative group">
+      <div className="flex flex-wrap gap-2 items-center relative group">
         <FontAwesomeIcon icon={faKey} className="align-middle text-primary" />
-        <span className="align-middle">{label}:</span>
+        <span className="align-middle shrink-0">{label}:</span>
         <div className="flex flex-wrap gap-1">
           {keywords.map((keyword) => (
             <span

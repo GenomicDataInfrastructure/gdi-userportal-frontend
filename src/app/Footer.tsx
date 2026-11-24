@@ -143,9 +143,16 @@ function Footer() {
             <Link className="hover:text-info" href="/datasets">
               {t("nav.datasets")}
             </Link>
-            <Link className="hover:text-info" href="/themes">
-              {t("nav.themes")}
-            </Link>
+            {contentConfig.showThemes && (
+              <Link className="hover:text-info" href="/themes">
+                {t("nav.themes")}
+              </Link>
+            )}
+            {contentConfig.enableAiModel && (
+              <Link className="hover:text-info" href="/models">
+                {t("nav.aiModels")}
+              </Link>
+            )}
             <Link className="hover:text-info" href="/publishers">
               {t("nav.publishers")}
             </Link>

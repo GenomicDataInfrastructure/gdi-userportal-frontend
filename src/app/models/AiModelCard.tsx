@@ -35,6 +35,8 @@ export default function AiModelCard({ aiModel }: Readonly<AiModelCardProps>) {
         tAiModels("libraries"),
         tAiModels("licences")
       )}
+      tags={aiModel.tasks ?? []}
+      tagLabel={tAiModels("tasks")}
       keywords={aiModel.keywords}
     />
   );

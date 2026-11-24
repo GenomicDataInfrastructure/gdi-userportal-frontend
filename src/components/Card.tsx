@@ -127,7 +127,7 @@ export default function Card({
 
           {tags.length > 0 && (
             <div className="mt-3">
-              <span className="flex flex-wrap gap-2 items-center">
+              <div className="flex flex-wrap gap-2 items-center">
                 {tagLabel && (
                   <span className="align-middle shrink-0">{tagLabel}:</span>
                 )}
@@ -135,7 +135,7 @@ export default function Card({
                   chips={tags}
                   className="bg-primary/10 text-primary rounded-full py-1"
                 />
-              </span>
+              </div>
             </div>
           )}
 

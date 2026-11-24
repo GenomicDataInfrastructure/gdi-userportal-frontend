@@ -148,7 +148,7 @@ const AiModelMetadata = ({
 
       {aiModel.tasks && aiModel.tasks.length > 0 && (
         <div className="mt-4">
-          <span className="flex flex-wrap gap-2 items-center relative group">
+          <div className="flex flex-wrap gap-2 items-center relative group">
             <FontAwesomeIcon
               icon={faDatabase}
               className="align-middle text-primary"
@@ -159,7 +159,7 @@ const AiModelMetadata = ({
               className="bg-primary/10 text-primary rounded-full py-1"
             />
             <Tooltip message={tAiModels("tooltips.tasks")} />
-          </span>
+          </div>
         </div>
       )}
 

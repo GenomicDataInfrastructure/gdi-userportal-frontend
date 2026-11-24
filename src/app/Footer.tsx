@@ -22,9 +22,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import contentConfig from "@/config/contentConfig";
+import { useAiModelSupport } from "@/providers/AiModelSupportProvider";
 
 function Footer() {
   const t = useTranslations();
+  const supportsAiModels = useAiModelSupport();
 
   return (
     <>
@@ -148,7 +150,7 @@ function Footer() {
                 {t("nav.themes")}
               </Link>
             )}
-            {contentConfig.enableAiModel && (
+            {contentConfig.enableAiModel && supportsAiModels && (
               <Link className="hover:text-info" href="/models">
                 {t("nav.aiModels")}
               </Link>

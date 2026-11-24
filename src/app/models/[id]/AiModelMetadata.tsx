@@ -153,9 +153,7 @@ const AiModelMetadata = ({
               icon={faDatabase}
               className="align-middle text-primary"
             />
-            <span className="align-middle shrink-0">
-              {tAiModels("tasks")}:
-            </span>
+            <span className="align-middle shrink-0">{tAiModels("tasks")}:</span>
             <Chips
               chips={aiModel.tasks}
               className="bg-primary/10 text-primary rounded-full py-1"

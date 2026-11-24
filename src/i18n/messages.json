@@ -345,6 +345,14 @@
     "en": "Tasks this AI model performs.",
     "fr": "Tâches que ce modèle d'IA exécute."
   },
+  "aiModels.licences": {
+    "en": "Licences",
+    "fr": "Licences"
+  },
+  "aiModels.tooltips.licences": {
+    "en": "Licences under which this AI model is made available.",
+    "fr": "Licences sous lesquelles ce modèle d'IA est mis à disposition."
+  },
   "datasets.catalogueFilters": {
     "en": "Catalogue Filters",
     "fr": "Filtres du catalogue"

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { DiscoverySearchedAiModel } from "@/app/api/discovery/providers/types";
-import { faBook } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faCertificate } from "@fortawesome/free-solid-svg-icons";
 import { createAiModelCardItems } from "../aiModelCardItems";
 
 describe("createAiModelCardItems", () => {
@@ -24,7 +24,8 @@ describe("createAiModelCardItems", () => {
           createdOn: "Créé le",
           modifiedOn: "Modifié le",
         },
-        "Bibliothèques"
+        "Bibliothèques",
+        "Licences"
       )
     ).toEqual(
       expect.arrayContaining([
@@ -47,7 +48,8 @@ describe("createAiModelCardItems", () => {
       createAiModelCardItems(
         aiModel,
         { createdOn: "Created on", modifiedOn: "Modified on" },
-        "Libraries"
+        "Libraries",
+        "Licences"
       )
     ).toEqual(
       expect.arrayContaining([
@@ -67,9 +69,55 @@ describe("createAiModelCardItems", () => {
     const cardItems = createAiModelCardItems(
       aiModel,
       { createdOn: "Created on", modifiedOn: "Modified on" },
-      "Libraries"
+      "Libraries",
+      "Licences"
     );
 
     expect(cardItems.find((item) => item.icon === faBook)?.text).toBe("");
+  });
+
+  it("includes licences when present", () => {
+    const aiModel = {
+      id: "ai-model-1",
+      title: "Model",
+      publishers: [],
+      creators: [],
+      licences: ["Apache License 2.0", "MIT License"],
+    } as DiscoverySearchedAiModel;
+
+    expect(
+      createAiModelCardItems(
+        aiModel,
+        { createdOn: "Created on", modifiedOn: "Modified on" },
+        "Libraries",
+        "Licences"
+      )
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          text: "Licences: Apache License 2.0, MIT License",
+        }),
+      ])
+    );
+  });
+
+  it("omits the licences item when there are none", () => {
+    const aiModel = {
+      id: "ai-model-1",
+      title: "Model",
+      publishers: [],
+      creators: [],
+    } as DiscoverySearchedAiModel;
+
+    const cardItems = createAiModelCardItems(
+      aiModel,
+      { createdOn: "Created on", modifiedOn: "Modified on" },
+      "Libraries",
+      "Licences"
+    );
+
+    expect(cardItems.find((item) => item.icon === faCertificate)?.text).toBe(
+      ""
+    );
   });
 });

@@ -297,6 +297,11 @@ export const canonicalAiModelRdf = `<?xml version="1.0" encoding="utf-8"?>
         <skos:prefLabel xml:lang="eng">Table Question Answering</skos:prefLabel>
       </skos:Concept>
     </dct:type>
+    <dct:license>
+      <dct:LicenseDocument rdf:about="https://www.apache.org/licenses/LICENSE-2.0">
+        <skos:prefLabel xml:lang="eng">Apache-2.0</skos:prefLabel>
+      </dct:LicenseDocument>
+    </dct:license>
     <dct:publisher>
       <foaf:Agent rdf:nodeID="publisher-1">
         <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Organization"/>

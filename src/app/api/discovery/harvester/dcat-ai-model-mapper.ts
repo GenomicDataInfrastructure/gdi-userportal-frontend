@@ -8,6 +8,7 @@ import { extractContactPoints } from "@/app/api/discovery/harvester/dcat-contact
 import { RdfGraph } from "@/app/api/discovery/harvester/rdf-graph";
 import { normalizeDate } from "@/app/api/discovery/harvester/date-utils";
 import { isAbsoluteUri } from "@/app/api/discovery/harvester/dcat-dataset-rdf-shared";
+import formatLicenseLabel from "@/utils/licenseLabels";
 import {
   DCAT_HAS_VERSION,
   DCAT_KEYWORD,
@@ -31,6 +32,7 @@ import {
 
 // AI Models are harvested as a distinct RDF type (dcat:Resource)
 export const DCAT_RESOURCE = "http://www.w3.org/ns/dcat#Resource";
+const DCT_LICENSE = "http://purl.org/dc/terms/license"; // NOSONAR
 
 /**
  * Maps an AI Model RDF record using only the fields it shares with Dataset,
@@ -74,6 +76,7 @@ export const mapAiModel = (
       DCT_CONFORMS_TO
     ),
     taskResources: extractResourceLabels(aiModelSubject, graph, DCT_TYPE),
+    licences: extractLicences(aiModelSubject, graph),
   };
 };
 
@@ -87,6 +90,22 @@ const extractResourceLabels = (
     graph
   ).filter(({ value }) => isAbsoluteUri(value));
   return values.length ? values : undefined;
+};
+
+const extractLicences = (
+  subject: RDF.Term,
+  graph: RdfGraph
+): Array<{ value: string; label: string }> | undefined => {
+  const licences = resolveValueLabels(
+    graph.getObjects(subject, DCT_LICENSE),
+    graph
+  )
+    .filter(({ value }) => isAbsoluteUri(value))
+    .map(({ value, label }) => ({
+      value,
+      label: formatLicenseLabel(value) ?? label,
+    }));
+  return licences.length ? licences : undefined;
 };
 
 const extractLabels = (

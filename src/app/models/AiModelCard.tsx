@@ -32,7 +32,8 @@ export default function AiModelCard({ aiModel }: Readonly<AiModelCardProps>) {
           createdOn: t("createdOn"),
           modifiedOn: t("modifiedOn"),
         },
-        tAiModels("libraries")
+        tAiModels("libraries"),
+        tAiModels("licences")
       )}
       keywords={aiModel.keywords}
     />

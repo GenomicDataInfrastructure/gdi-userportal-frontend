@@ -65,7 +65,7 @@ describe("BasePlaceholderDiscoveryProvider", () => {
   });
 
   test("throws for searchGVariants", async () => {
-    await expect(provider.searchGVariants({ params: {} })).rejects.toThrow(
+    await expect(provider.searchGVariants({ params: {} }, {})).rejects.toThrow(
       'Discovery provider "test-provider" does not implement "searchGVariants" yet'
     );
   });

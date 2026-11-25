@@ -1509,6 +1509,18 @@
     "en": "Searching and preparing results...",
     "fr": "Recherche et préparation des résultats..."
   },
+  "alleleFrequency.searchFailed": {
+    "en": "The allele frequency search could not be completed. Please try again later.",
+    "fr": "La recherche de fréquence allélique n'a pas pu aboutir. Veuillez réessayer plus tard."
+  },
+  "alleleFrequency.loginRequired": {
+    "en": "Please log in to search allele frequencies.",
+    "fr": "Veuillez vous connecter pour rechercher des fréquences alléliques."
+  },
+  "alleleFrequency.logIn": {
+    "en": "Log in",
+    "fr": "Se connecter"
+  },
   "alleleFrequency.noResults": {
     "en": "No results found",
     "fr": "Aucun résultat trouvé"

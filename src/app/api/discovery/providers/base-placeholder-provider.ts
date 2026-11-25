@@ -56,7 +56,8 @@ export abstract class BasePlaceholderDiscoveryProvider implements DiscoveryProvi
   }
 
   async searchGVariants(
-    _options: DiscoveryGVariantSearchQuery
+    _options: DiscoveryGVariantSearchQuery,
+    _headers: Record<string, string>
   ): Promise<DiscoveryGVariantSearchResult[]> {
     throw this.createNotImplementedError("searchGVariants");
   }

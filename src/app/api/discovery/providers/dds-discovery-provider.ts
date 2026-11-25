@@ -124,10 +124,12 @@ export class DdsDiscoveryProvider implements DiscoveryProvider {
   }
 
   async searchGVariants(
-    options: DiscoveryGVariantSearchQuery
+    options: DiscoveryGVariantSearchQuery,
+    headers: Record<string, string>
   ): Promise<DiscoveryGVariantSearchResult[]> {
     const response = await discoveryClient.searchGenomicVariants(
-      options as GVariantSearchQuery
+      options as GVariantSearchQuery,
+      { headers }
     );
     return response as DiscoveryGVariantSearchResult[];
   }

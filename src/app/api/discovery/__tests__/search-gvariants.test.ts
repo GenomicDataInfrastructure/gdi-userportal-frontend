@@ -62,6 +62,9 @@ describe("Search GVariants", () => {
 
     expect(response).toBeDefined();
     expect(response.length).toEqual(1);
+    expect(mockDiscoveryAdapter.history.post[0].headers?.Authorization).toBe(
+      "Bearer decryptedToken"
+    );
     expect(response[0]).toMatchObject({
       beacon: "org.nbis.ga4gh-approval-beacon-test",
       datasetId: "EGAD50000000276",

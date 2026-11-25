@@ -332,7 +332,8 @@ export interface DiscoveryProvider {
     headers: Record<string, string>
   ) => Promise<Blob>;
   searchGVariants: (
-    options: DiscoveryGVariantSearchQuery
+    options: DiscoveryGVariantSearchQuery,
+    headers: Record<string, string>
   ) => Promise<DiscoveryGVariantSearchResult[]>;
   searchAiModels?: (
     options: DiscoveryAiModelSearchQuery,

@@ -17,17 +17,17 @@ import {
   GVariantsSearchResponse,
   SearchedDataset,
 } from "@/app/api/discovery/open-api/schemas";
-import ErrorComponent from "@/app/error";
 import { UrlSearchParams } from "@/app/params";
+import Button from "@/components/Button";
 import PageContainer from "@/components/PageContainer";
 import contentConfig from "@/config/contentConfig";
 import {
   getExternalDatasetInfo,
   getFirstAccessUrl,
 } from "@/utils/datasetHelpers";
-import { isAxiosError } from "axios";
 import { use, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
+import { signIn, useSession } from "next-auth/react";
 
 type AlleleFrequencyPageProps = {
   searchParams: Promise<UrlSearchParams>;
@@ -54,11 +54,9 @@ export default function AlleleFrequencyPage({
   const [triedSearching, setTriedSearching] = useState(false);
   const [datasetTypeOptions, setDatasetTypeOptions] = useState<string[]>([]);
   const _searchParams = use(searchParams);
-  const [error, setError] = useState<{
-    statusCode: number;
-    title?: string;
-    detail?: string;
-  } | null>(null);
+  const [searchFailed, setSearchFailed] = useState(false);
+  const [loginRequired, setLoginRequired] = useState(false);
+  const { status: sessionStatus } = useSession();
   const datasetActionCacheRef = useRef<Record<string, DatasetActionInfo>>({});
 
   const buildDatasetActions = async (
@@ -203,11 +201,22 @@ export default function AlleleFrequencyPage({
   }, []);
 
   const handleSearch = async (props: SearchInputData) => {
+    // The genomic variant endpoint rejects anonymous requests, so ask the
+    // user to log in instead of sending a request that is bound to fail.
+    if (sessionStatus === "unauthenticated") {
+      setResults([]);
+      setSearchFailed(false);
+      setTriedSearching(false);
+      setLoginRequired(true);
+      return;
+    }
+    setLoginRequired(false);
     setLoading(true);
     setResults([]);
     setShowSummary(false);
     setDatasetActions({});
-    setError(null);
+    setSearchFailed(false);
+    setTriedSearching(false);
 
     try {
       const hasSpecificFilterSelected =
@@ -291,36 +300,14 @@ export default function AlleleFrequencyPage({
       setDatasetActions(actions);
       setTriedSearching(true);
     } catch (error) {
-      if (isAxiosError(error)) {
-        console.error(
-          `Allele-frequency search failed with status ${error.response?.status ?? "unknown"}`
-        );
-      } else {
-        console.error("Allele-frequency search failed");
-      }
-      if (isAxiosError(error) && error.response) {
-        setError({
-          statusCode: error.response.status,
-          title: error.response.data.title,
-          detail: error.response.data.detail,
-        });
-      } else {
-        setError({ statusCode: 500 });
-      }
+      // Server actions strip error details, so we can only report a generic
+      // failure here. Keep the search bar visible so the user can retry.
+      console.error("Allele-frequency search failed", error);
+      setSearchFailed(true);
     } finally {
       setLoading(false);
     }
   };
-  if (error) {
-    return (
-      <ErrorComponent
-        statusCode={error.statusCode}
-        errorTitle={error.title}
-        errorDetail={error.detail}
-      />
-    );
-  }
-
   return (
     <PageContainer
       searchParams={_searchParams}
@@ -334,7 +321,26 @@ export default function AlleleFrequencyPage({
 
       {loading && <p className="text-center text-gray-500">{t("searching")}</p>}
 
-      {!loading && triedSearching && results.length == 0 && (
+      {!loading && loginRequired && (
+        <div role="alert" className="flex flex-col items-center gap-3">
+          <p className="text-center text-gray-700">{t("loginRequired")}</p>
+          <Button
+            text={t("logIn")}
+            type="primary"
+            onClick={() =>
+              void signIn("keycloak", { callbackUrl: window.location.href })
+            }
+          />
+        </div>
+      )}
+
+      {!loading && searchFailed && (
+        <p role="alert" className="text-center text-red-600">
+          {t("searchFailed")}
+        </p>
+      )}
+
+      {!loading && !searchFailed && triedSearching && results.length == 0 && (
         <p className="text-center text-gray-500">{t("noResults")}</p>
       )}
 

@@ -23,6 +23,7 @@ import { getDiscoveryProvider } from "@/app/api/discovery/providers/factory";
 import { createHeaders } from "@/app/api/shared/headers";
 import { assertBeaconAuthorization } from "@/app/api/ga4gh/beacon-authorization.actions";
 import contentConfig from "@/config/contentConfig";
+import { isAxiosError } from "axios";
 
 const discoveryProvider = getDiscoveryProvider();
 
@@ -97,10 +98,20 @@ export const searchGVariantsApi = async (
   const normalizedOptions: DiscoveryGVariantSearchQuery = {
     params: options.params ?? {},
   };
+  const headers = await createHeaders();
 
-  return (await discoveryProvider.searchGVariants(
-    normalizedOptions
-  )) as GVariantsSearchResponse[];
+  try {
+    return (await discoveryProvider.searchGVariants(
+      normalizedOptions,
+      headers
+    )) as GVariantsSearchResponse[];
+  } catch (error) {
+    const status = isAxiosError(error) ? error.response?.status : undefined;
+    console.error(
+      `Genomic variant search failed with status ${status ?? "unknown"} (authenticated: ${"Authorization" in headers})`
+    );
+    throw error;
+  }
 };
 
 const assertAiModelSupport = () => {

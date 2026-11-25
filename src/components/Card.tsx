@@ -26,6 +26,8 @@ type CardProps = {
   description?: string;
   cardItems: CardItem[];
   keywords?: string[];
+  tags?: string[];
+  tagLabel?: string;
   button?: React.ReactNode;
   externalUrl?: string;
   isExternal?: boolean;
@@ -41,6 +43,8 @@ export default function Card({
   description = "No description available",
   cardItems,
   keywords = [],
+  tags = [],
+  tagLabel,
   button,
   externalUrl,
   isExternal: isExternalProp,
@@ -119,6 +123,20 @@ export default function Card({
             <p className="mt-3 line-clamp-2 font-normal text-base">
               {description}
             </p>
+          )}
+
+          {tags.length > 0 && (
+            <div className="mt-3">
+              <div className="flex flex-wrap gap-2 items-center">
+                {tagLabel && (
+                  <span className="align-middle shrink-0">{tagLabel}:</span>
+                )}
+                <Chips
+                  chips={tags}
+                  className="bg-primary/10 text-primary rounded-full py-1"
+                />
+              </div>
+            </div>
           )}
 
           <div className="mt-3 flex flex-col sm:flex-row sm:flex-wrap text-xs sm:text-[15px] gap-x-6 gap-y-3">

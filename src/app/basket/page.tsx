@@ -37,8 +37,7 @@ type BasketPageProps = {
 function BasketPage({ searchParams }: BasketPageProps) {
   const t = useTranslations();
   const _searchParams = use(searchParams);
-  const { basket, isLoading, emptyBasket, hasDatasetAccess, isAccessLoading } =
-    useDatasetBasket();
+  const { basket, isLoading, emptyBasket } = useDatasetBasket();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submittingRef = useRef(false);
   const { setAlert } = useAlert();
@@ -48,10 +47,7 @@ function BasketPage({ searchParams }: BasketPageProps) {
   const applicationWarningTitleId = useId();
   const applicationWarningMessageId = useId();
 
-  const requestableDatasets = basket.filter(
-    (dataset) => !!dataset.identifier && !hasDatasetAccess(dataset)
-  );
-  const hasGrantedDatasets = basket.some(hasDatasetAccess);
+  const requestableDatasets = basket.filter((dataset) => !!dataset.identifier);
   const loginToRequest = () =>
     signIn("keycloak", { callbackUrl: window.location.href });
 
@@ -94,12 +90,7 @@ function BasketPage({ searchParams }: BasketPageProps) {
       return;
     }
     if (!canApply || hasAuthorizationError) return;
-    if (
-      isAccessLoading ||
-      submittingRef.current ||
-      requestableDatasets.length === 0
-    )
-      return;
+    if (submittingRef.current || requestableDatasets.length === 0) return;
     submittingRef.current = true;
     setIsSubmitting(true);
     const identifiers = requestableDatasets
@@ -156,7 +147,6 @@ function BasketPage({ searchParams }: BasketPageProps) {
           disabled={
             !canApply ||
             hasAuthorizationError ||
-            isAccessLoading ||
             isSubmitting ||
             requestableDatasets.length === 0
           }
@@ -228,11 +218,6 @@ function BasketPage({ searchParams }: BasketPageProps) {
             </p>
           </div>
         )}
-        {status === "authenticated" &&
-          !isAccessLoading &&
-          hasGrantedDatasets && (
-            <p role="status">{t("basket.alreadyGrantedExcluded")}</p>
-          )}
         {basket.length > 0 ? (
           <DatasetList datasets={basket} />
         ) : (

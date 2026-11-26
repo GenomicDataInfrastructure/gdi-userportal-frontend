@@ -15,7 +15,6 @@ jest.mock("@/providers/DatasetBasketProvider", () => ({
   useDatasetBasket: () => ({
     basket: [],
     isLoading: false,
-    isAccessLoading: false,
     hasDatasetAccess: () => mockGranted,
     addDatasetToBasket: mockAdd,
     removeDatasetFromBasket: jest.fn(),
@@ -30,7 +29,7 @@ jest.mock("@/i18n/navigation", () => ({
     createElement("a", props, children),
 }));
 
-it("separates navigation and actions and announces granted access as a status", async () => {
+it("separates navigation and actions and announces granted access while still allowing re-request", async () => {
   (
     globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
   ).IS_REACT_ACT_ENVIRONMENT = true;
@@ -74,7 +73,7 @@ it("separates navigation and actions and announces granted access as a status", 
     expect(audit.violations).toEqual([]);
     mockGranted = true;
     await act(async () => render());
-    expect(container.querySelector("button")).toBeNull();
+    expect(container.querySelector("button")?.disabled).toBe(false);
     expect(container.querySelector('[role="status"]')).toBe(status);
     expect(status?.textContent).toContain("accessGranted");
     expect(status?.textContent).toContain(dataset.title);

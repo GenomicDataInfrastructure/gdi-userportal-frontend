@@ -20,7 +20,6 @@ interface DatasetBasketContextType {
   emptyBasket: () => void;
   isLoading: boolean;
   hasDatasetAccess: (dataset: SearchedDataset) => boolean;
-  isAccessLoading: boolean;
 }
 
 const DatasetBasketContext = createContext<
@@ -68,9 +67,6 @@ export const DatasetBasketProvider = ({
     };
   }, [session, status]);
 
-  const isAccessLoading =
-    status === "loading" ||
-    (status === "authenticated" && access?.session !== session);
   const getDatasetGrants = (dataset: SearchedDataset) =>
     status === "authenticated" && access?.session === session
       ? access.entitlements.filter(
@@ -101,7 +97,6 @@ export const DatasetBasketProvider = ({
   }, [basket, isLoading]);
 
   const addDatasetToBasket = (dataset: SearchedDataset) => {
-    if (isAccessLoading || hasDatasetAccess(dataset)) return;
     setBasket((prevBasket) => [...prevBasket, dataset]);
   };
 
@@ -122,7 +117,6 @@ export const DatasetBasketProvider = ({
         isLoading,
         emptyBasket,
         hasDatasetAccess,
-        isAccessLoading,
       }}
     >
       {children}

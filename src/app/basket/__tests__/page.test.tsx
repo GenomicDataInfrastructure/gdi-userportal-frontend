@@ -41,7 +41,6 @@ jest.mock("@/providers/beacon/BeaconAuthorizationProvider", () => ({
     children,
   useBeaconAuthorization: () => mockAuthorization,
 }));
-let mockAccessLoading = false;
 const mockBasket = {
   basket: [
     { id: "owned", identifier: "owned-id" },
@@ -49,13 +48,9 @@ const mockBasket = {
   ],
   isLoading: false,
   emptyBasket: jest.fn(),
-  hasDatasetAccess: (dataset: { id: string }) => dataset.id === "owned",
 };
 jest.mock("@/providers/DatasetBasketProvider", () => ({
-  useDatasetBasket: () => ({
-    ...mockBasket,
-    isAccessLoading: mockAccessLoading,
-  }),
+  useDatasetBasket: () => mockBasket,
 }));
 jest.mock("@/components/Button", () => ({
   __esModule: true,
@@ -90,7 +85,7 @@ jest.mock("../../datasets/DatasetList", () => ({
   default: () => null,
 }));
 
-it("requires login, waits for grants, and requests only datasets without access", async () => {
+it("requires login and requests every dataset in the basket, including granted ones", async () => {
   (
     globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
   ).IS_REACT_ACT_ENVIRONMENT = true;
@@ -111,10 +106,6 @@ it("requires login, waits for grants, and requests only datasets without access"
     expect(mockCreate).not.toHaveBeenCalled();
 
     mockStatus = "authenticated";
-    mockAccessLoading = true;
-    await act(async () => render());
-    expect(button("basket.requestNow").disabled).toBe(true);
-    mockAccessLoading = false;
     await act(async () => render());
     mockCreate.mockResolvedValue({ ok: false, response: { status: 401 } });
     await act(async () => button("basket.requestNow").click());
@@ -126,7 +117,9 @@ it("requires login, waits for grants, and requests only datasets without access"
       response: null,
     });
     await act(async () => button("basket.requestNow").click());
-    expect(mockCreate).toHaveBeenCalledWith({ datasetIds: ["new-id"] });
+    expect(mockCreate).toHaveBeenCalledWith({
+      datasetIds: ["owned-id", "new-id"],
+    });
   } finally {
     act(() => root.unmount());
   }

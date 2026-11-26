@@ -32,7 +32,7 @@ function Probe() {
 
 const dataset = { id: "catalog-id", identifier: "grant-id" } as SearchedDataset;
 
-it("blocks adding granted datasets, ignores expired grants, and clears access on logout", async () => {
+it("allows adding granted datasets for re-request, ignores expired grants, and clears access on logout", async () => {
   (
     globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
   ).IS_REACT_ACT_ENVIRONMENT = true;
@@ -55,7 +55,7 @@ it("blocks adding granted datasets, ignores expired grants, and clears access on
       basket.hasDatasetAccess({ id: "expired-id" } as SearchedDataset)
     ).toBe(false);
     act(() => basket.addDatasetToBasket(dataset));
-    expect(basket.basket).toEqual([]);
+    expect(basket.basket).toEqual([dataset]);
 
     mockRetrieve.mockResolvedValue({ entitlements: [] });
     await act(async () => {

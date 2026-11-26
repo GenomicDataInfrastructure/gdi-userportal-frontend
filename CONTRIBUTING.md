@@ -218,6 +218,10 @@ All TypeScript code is linted with [Prettier](https://prettier.io/).
 ### License and Copyrights
 
 We are [REUSE](https://reuse.software/) compliant. All files must contain copyrights and license on the header.
+Files that cannot hold a comment (images, JSON, generated files) use a
+`<file>.license` sidecar instead, and the documentation site is covered by
+[documentation/REUSE.toml](documentation/REUSE.toml). The pre-commit hook
+checks staged files for this, and CI runs the full `reuse lint`.
 
 ## Code Quality and Accessibility Checks
 
@@ -226,8 +230,8 @@ This project enforces ESLint (including accessibility rules via
 Prettier formatting, and automated accessibility (a11y) testing with
 [Playwright](https://playwright.dev/) and
 [@axe-core/playwright](https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright).
-Shared interactive components (`Link`, `Button`, `Input`) are mapped to their
-native HTML equivalents (`a`, `button`, `input`) in
+Shared interactive components (`Link`, `Input`) are mapped to their
+native HTML equivalents (`a`, `input`) in
 [eslint.config.mjs](eslint.config.mjs) so that jsx-a11y rules apply to them
 the same way they would apply to the native elements.
 
@@ -240,6 +244,7 @@ the same way they would apply to the native elements.
 | `npm run format:fix` | Formats all files in place with Prettier.                                 |
 | `npm run test:a11y`  | Runs the Playwright + axe-core accessibility test suite.                  |
 | `npm run type-check` | Runs the TypeScript compiler in `--noEmit` mode.                          |
+| `npm run lint:reuse` | Checks that every tracked file has copyright and licence information.     |
 | `npm run validate`   | Runs lint, tests, type-check and format check together.                   |
 
 ### Git hooks
@@ -251,11 +256,16 @@ are installed automatically by the `prepare` script the first time you run
 - **pre-commit** (`.husky/pre-commit`) runs
   [lint-staged](https://github.com/lint-staged/lint-staged) on the files
   you have staged:
+  - Every staged file must have REUSE copyright and licence information: SPDX
+    header tags, a `<file>.license` sidecar, or a matching `REUSE.toml`
+    annotation ([scripts/check-reuse.js](scripts/check-reuse.js)). This is
+    check-only; add the header yourself.
   - `{src,tests,e2e,scripts}/**/*.{js,jsx,ts,tsx}` are formatted with
     `prettier --write`, then auto-fixed with `eslint --fix --max-warnings=0`.
   - `*.{json,md,css,scss,yml,yaml}` are formatted with `prettier --write`.
-  - Fixes are re-staged automatically. The commit is only blocked by ESLint
-    problems that cannot be auto-fixed; address those and commit again.
+  - Fixes are re-staged automatically. The commit is only blocked by a
+    missing licence header or by ESLint problems that cannot be auto-fixed;
+    address those and commit again.
 - There is intentionally **no pre-push hook**. The accessibility suite
   (`npm run test:a11y`) is a slower, browser-based check (several minutes
   across Chromium, Firefox and a mobile viewport), so it is only run by the
@@ -284,7 +294,7 @@ never to merge known issues into `main`.
   [tests/accessibility.spec.ts](tests/accessibility.spec.ts) and
   [tests/accessibility.states.spec.ts](tests/accessibility.states.spec.ts)).
   A deliberately introduced axe violation fails this suite.
-- Pull requests that only change `documentation/`, Markdown files or
+- Pull requests that only change `documentation/`, Markdown/MDX files or
   `LICENSES/` skip the Playwright E2E and accessibility browser tests. The
   jobs still run and report, so required checks are not left pending.
 - Required status checks must pass before a pull request can be merged.

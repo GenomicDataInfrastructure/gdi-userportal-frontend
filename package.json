@@ -27,9 +27,13 @@
     "format:fix": "prettier --write --list-different .",
     "validate": "npm run lint && npm run test && npm run type-check && npm run format",
     "test:a11y": "playwright test --config=playwright.accessibility.config.ts",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lint:reuse": "git ls-files -z | xargs -0 node scripts/check-reuse.js"
   },
   "lint-staged": {
+    "*": [
+      "node scripts/check-reuse.js"
+    ],
     "{src,tests,e2e,scripts}/**/*.{js,jsx,ts,tsx}": [
       "prettier --write",
       "eslint --fix --max-warnings=0"

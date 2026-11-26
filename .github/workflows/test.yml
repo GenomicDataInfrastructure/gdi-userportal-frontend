@@ -27,7 +27,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Detect code changes
-        # Docs-only PRs (documentation/, Markdown, LICENSES/) skip the browser
+        # Docs-only PRs (documentation/, Markdown/MDX, LICENSES/) skip the browser
         # tests. Steps are skipped rather than the job, so required status
         # checks still report. Pushes to main always run everything.
         id: changes
@@ -37,7 +37,7 @@ jobs:
         run: |
           git fetch --no-tags --depth=1 origin "$BASE_SHA"
           changed=$(git diff --name-only "$BASE_SHA" HEAD)
-          code=$(printf '%s\n' "$changed" | grep -vE '^documentation/|\.md$|^LICENSES/' || true)
+          code=$(printf '%s\n' "$changed" | grep -vE '^documentation/|\.mdx?$|^LICENSES/' || true)
           if [ -n "$code" ]; then
             echo "code=true" >> "$GITHUB_OUTPUT"
           else
@@ -85,7 +85,12 @@ jobs:
       - name: REUSE Compliance Check
         uses: fsfe/reuse-action@676e2d560c9a403aa252096d99fcab3e1132b0f5 # v6.0.0
       - name: SonarQube Scan
-        if: github.actor != 'dependabot[bot]'
+        # Fork pull requests get no secrets, so SONAR_TOKEN would be empty and
+        # the scan would fail; only scan pushes and same-repository PRs.
+        if: >-
+          github.actor != 'dependabot[bot]' &&
+          (github.event_name != 'pull_request' ||
+           github.event.pull_request.head.repo.full_name == github.repository)
         uses: SonarSource/sonarqube-scan-action@ba9859eae8dd6bd29e412f25ddbbef3d032000f4 # v8.2.2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

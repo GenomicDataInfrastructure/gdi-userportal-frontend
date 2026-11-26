@@ -36,11 +36,15 @@ const eslintConfig = defineConfig([
     files: ["src/**/*.{js,jsx,ts,tsx}"],
     settings: {
       "jsx-a11y": {
-        // Shared components rendering native interactive elements, so
-        // jsx-a11y rules apply to them as if they were the underlying tag.
+        // Shared components that render a native interactive element and
+        // forward its props, so jsx-a11y rules apply to them as if they were
+        // the underlying tag. `Button` is deliberately not mapped: the app's
+        // Button uses `type` for its visual variant, takes its label via a
+        // `text` prop and renders a link when given `href`, so native
+        // <button> rules would not describe it accurately. Rendered buttons
+        // are covered by the axe-core Playwright suite instead.
         components: {
           Link: "a",
-          Button: "button",
           Input: "input",
         },
       },

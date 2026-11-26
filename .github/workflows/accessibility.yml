@@ -34,7 +34,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Detect code changes
-        # Docs-only PRs (documentation/, Markdown, LICENSES/) skip the browser
+        # Docs-only PRs (documentation/, Markdown/MDX, LICENSES/) skip the browser
         # tests. Steps are skipped rather than the job, so required status
         # checks still report. Pushes to main always run everything.
         id: changes
@@ -44,7 +44,7 @@ jobs:
         run: |
           git fetch --no-tags --depth=1 origin "$BASE_SHA"
           changed=$(git diff --name-only "$BASE_SHA" HEAD)
-          code=$(printf '%s\n' "$changed" | grep -vE '^documentation/|\.md$|^LICENSES/' || true)
+          code=$(printf '%s\n' "$changed" | grep -vE '^documentation/|\.mdx?$|^LICENSES/' || true)
           if [ -n "$code" ]; then
             echo "code=true" >> "$GITHUB_OUTPUT"
           else

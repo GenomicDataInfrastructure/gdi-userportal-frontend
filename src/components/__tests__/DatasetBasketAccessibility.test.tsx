@@ -73,7 +73,9 @@ it("separates navigation and actions and announces granted access while still al
     expect(audit.violations).toEqual([]);
     mockGranted = true;
     await act(async () => render());
-    expect(container.querySelector("button")?.disabled).toBe(false);
+    mockAdd.mockClear();
+    await act(async () => container.querySelector("button")!.click());
+    expect(mockAdd).toHaveBeenCalledWith(dataset);
     expect(container.querySelector('[role="status"]')).toBe(status);
     expect(status?.textContent).toContain("accessGranted");
     expect(status?.textContent).toContain(dataset.title);

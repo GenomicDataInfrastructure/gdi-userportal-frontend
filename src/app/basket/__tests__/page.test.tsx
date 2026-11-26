@@ -111,15 +111,18 @@ it("requires login and requests every dataset in the basket, including granted o
     await act(async () => button("basket.requestNow").click());
     expect(mockSignIn).toHaveBeenCalledTimes(2);
     expect(mockBasket.emptyBasket).not.toHaveBeenCalled();
+    mockCreate.mockClear();
     mockCreate.mockResolvedValue({
       ok: true,
       applicationId: 123,
       response: null,
     });
     await act(async () => button("basket.requestNow").click());
+    expect(mockCreate).toHaveBeenCalledTimes(1);
     expect(mockCreate).toHaveBeenCalledWith({
       datasetIds: ["owned-id", "new-id"],
     });
+    expect(mockBasket.emptyBasket).toHaveBeenCalled();
   } finally {
     act(() => root.unmount());
   }

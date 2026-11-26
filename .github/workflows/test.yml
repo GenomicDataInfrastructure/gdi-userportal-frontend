@@ -5,7 +5,10 @@
 
 name: Run Tests
 
-on: push
+on:
+  push:
+    branches: [main]
+  pull_request:
 
 jobs:
   test-frontend:
@@ -14,12 +17,33 @@ jobs:
     permissions:
       contents: read
     env:
+      HUSKY: 0
       E2E_MODE: mocked
       MOCK_API_PORT: 4010
+      # Standard ubuntu-24.04 runners have 4 vCPUs.
+      PLAYWRIGHT_CI_WORKERS: 4
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - name: Detect code changes
+        # Docs-only PRs (documentation/, Markdown, LICENSES/) skip the browser
+        # tests. Steps are skipped rather than the job, so required status
+        # checks still report. Pushes to main always run everything.
+        id: changes
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git fetch --no-tags --depth=1 origin "$BASE_SHA"
+          changed=$(git diff --name-only "$BASE_SHA" HEAD)
+          code=$(printf '%s\n' "$changed" | grep -vE '^documentation/|\.md$|^LICENSES/' || true)
+          if [ -n "$code" ]; then
+            echo "code=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "code=false" >> "$GITHUB_OUTPUT"
+            echo "Docs-only change: skipping browser tests."
+          fi
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
@@ -34,13 +58,15 @@ jobs:
           npm run test
 
       - name: Install Playwright Browsers
+        if: steps.changes.outputs.code != 'false'
         run: npx playwright install chromium firefox
 
       - name: Run Playwright E2E tests
+        if: steps.changes.outputs.code != 'false'
         run: npx playwright test
 
       - name: Upload Playwright report
-        if: always()
+        if: always() && steps.changes.outputs.code != 'false'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: playwright-report

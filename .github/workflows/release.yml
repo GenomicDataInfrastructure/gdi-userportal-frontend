@@ -14,6 +14,7 @@ on:
         default: "patch"
 
 env:
+  HUSKY: 0
   REGISTRY: ghcr.io
   IMAGE_NAME: ghcr.io/genomicdatainfrastructure/gdi-userportal-frontend
   DOCKER_METADATA_OUTPUT_TAGS: ""

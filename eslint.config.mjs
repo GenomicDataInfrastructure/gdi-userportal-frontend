@@ -6,6 +6,8 @@ import { fixupConfigRules } from "@eslint/compat";
 import * as espree from "espree";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import prettier from "eslint-config-prettier/flat";
+import jsxA11y from "eslint-plugin-jsx-a11y";
+import eslintComments from "@eslint-community/eslint-plugin-eslint-comments";
 
 const eslintConfig = defineConfig([
   ...fixupConfigRules(nextVitals),
@@ -18,6 +20,46 @@ const eslintConfig = defineConfig([
           jsx: true,
         },
       },
+    },
+  },
+  {
+    // eslint-config-next already registers the jsx-a11y plugin, so only the
+    // rules from the "strict" preset are applied here to avoid redefining
+    // the plugin.
+    rules: jsxA11y.flatConfigs.strict.rules,
+    files: ["**/*.{js,jsx,ts,tsx}"],
+  },
+  {
+    // Component-to-element mapping is scoped to the app source: the
+    // documentation site (Docusaurus) uses its own unrelated "Link"
+    // component with a different API ("to" vs "href").
+    files: ["src/**/*.{js,jsx,ts,tsx}"],
+    settings: {
+      "jsx-a11y": {
+        // Shared components rendering native interactive elements, so
+        // jsx-a11y rules apply to them as if they were the underlying tag.
+        components: {
+          Link: "a",
+          Button: "button",
+          Input: "input",
+        },
+      },
+    },
+  },
+  {
+    // Every eslint-disable must be targeted, still needed, and justified
+    // with a "-- reason" description (see CONTRIBUTING.md).
+    linterOptions: {
+      reportUnusedDisableDirectives: "error",
+    },
+    plugins: {
+      "@eslint-community/eslint-comments": eslintComments,
+    },
+    rules: {
+      "@eslint-community/eslint-comments/require-description": "error",
+      "@eslint-community/eslint-comments/no-unlimited-disable": "error",
+      "@eslint-community/eslint-comments/disable-enable-pair": "error",
+      "@eslint-community/eslint-comments/no-unused-enable": "error",
     },
   },
   prettier,

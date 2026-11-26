@@ -65,9 +65,13 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
         ),
         // Wide tables scroll within a focusable region so the page reflows.
         table: ({ ...props }) => (
+          // Intentional WAI-ARIA scrollable region pattern: tabIndex makes the
+          // non-interactive landmark keyboard-focusable so it can be scrolled
+          // without a mouse. See https://www.w3.org/WAI/ARIA/apg/patterns/.
           <div
             role="region"
             aria-label={t("scrollableTable")}
+            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- scrollable region must be keyboard-focusable (WCAG 2.1.1)
             tabIndex={0}
             className="mb-6 overflow-x-auto"
           >

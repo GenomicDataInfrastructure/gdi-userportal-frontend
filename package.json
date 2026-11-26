@@ -16,7 +16,7 @@
     "build:script": "next build",
     "start": "npm-run-all prebuild start:script",
     "start:script": "next start",
-    "lint": "eslint . --ignore-pattern coverage --ignore-pattern documentation/.docusaurus",
+    "lint": "eslint . --max-warnings=0 --ignore-pattern coverage --ignore-pattern documentation/.docusaurus",
     "test:script": "jest --coverage",
     "test": "npm-run-all prebuild test:script",
     "harvest:dcat": "node scripts/run-harvester.js",
@@ -26,7 +26,17 @@
     "format": "prettier --check .",
     "format:fix": "prettier --write --list-different .",
     "validate": "npm run lint && npm run test && npm run type-check && npm run format",
-    "test:a11y": "playwright test --config=playwright.accessibility.config.ts"
+    "test:a11y": "playwright test --config=playwright.accessibility.config.ts",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "{src,tests,e2e,scripts}/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix --max-warnings=0"
+    ],
+    "*.{json,md,css,scss,yml,yaml}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
@@ -94,6 +104,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
+    "@eslint-community/eslint-plugin-eslint-comments": "^4.8.1",
     "@eslint/compat": "^2.0.2",
     "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4.0.0",
@@ -107,8 +118,11 @@
     "eslint": "^10.0.0",
     "eslint-config-next": "16.4.6",
     "eslint-config-prettier": "^10.0.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "husky": "^9.1.7",
     "jest": "^30.0.4",
     "jest-environment-jsdom": "^30.4.1",
+    "lint-staged": "^17.6.1",
     "openapi-zod-client": "^1.18.2",
     "postcss": "^8.5.18",
     "prettier": "^3.4.2",
@@ -122,6 +136,9 @@
     "sharp": "^0.35.5",
     "@types/react": "19.3.3",
     "@types/react-dom": "19.3.0",
-    "systeminformation": "^5.33.16"
+    "systeminformation": "^5.33.16",
+    "eslint-plugin-jsx-a11y": {
+      "eslint": "$eslint"
+    }
   }
 }

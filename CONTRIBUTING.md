@@ -34,6 +34,12 @@ All types of contributions are encouraged and valued. See the [Table of Contents
   - [Commit Messages](#commit-messages)
   - [TypeScript Styleguide](#typescript-styleguide)
   - [License and Copyrights](#license-and-copyrights)
+- [Code Quality and Accessibility Checks](#code-quality-and-accessibility-checks)
+  - [Running the checks locally](#running-the-checks-locally)
+  - [Git hooks](#git-hooks)
+  - [Continuous Integration](#continuous-integration)
+  - [Disabling an accessibility rule](#disabling-an-accessibility-rule)
+  - [Troubleshooting](#troubleshooting)
 - [Join The Project Team](#join-the-project-team)
 
 ## Code of Conduct
@@ -212,6 +218,123 @@ All TypeScript code is linted with [Prettier](https://prettier.io/).
 ### License and Copyrights
 
 We are [REUSE](https://reuse.software/) compliant. All files must contain copyrights and license on the header.
+
+## Code Quality and Accessibility Checks
+
+This project enforces ESLint (including accessibility rules via
+[eslint-plugin-jsx-a11y](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y)),
+Prettier formatting, and automated accessibility (a11y) testing with
+[Playwright](https://playwright.dev/) and
+[@axe-core/playwright](https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright).
+Shared interactive components (`Link`, `Button`, `Input`) are mapped to their
+native HTML equivalents (`a`, `button`, `input`) in
+[eslint.config.mjs](eslint.config.mjs) so that jsx-a11y rules apply to them
+the same way they would apply to the native elements.
+
+### Running the checks locally
+
+| Command              | What it does                                                              |
+| -------------------- | ------------------------------------------------------------------------- |
+| `npm run lint`       | Lints the whole project with ESLint, failing on any warning.              |
+| `npm run format`     | Checks that all files are formatted with Prettier (does not modify them). |
+| `npm run format:fix` | Formats all files in place with Prettier.                                 |
+| `npm run test:a11y`  | Runs the Playwright + axe-core accessibility test suite.                  |
+| `npm run type-check` | Runs the TypeScript compiler in `--noEmit` mode.                          |
+| `npm run validate`   | Runs lint, tests, type-check and format check together.                   |
+
+### Git hooks
+
+Git hooks are managed with [Husky](https://typicode.github.io/husky/) and
+are installed automatically by the `prepare` script the first time you run
+`npm install`.
+
+- **pre-commit** (`.husky/pre-commit`) runs
+  [lint-staged](https://github.com/lint-staged/lint-staged) on the files
+  you have staged:
+  - `{src,tests,e2e,scripts}/**/*.{js,jsx,ts,tsx}` are formatted with
+    `prettier --write`, then auto-fixed with `eslint --fix --max-warnings=0`.
+  - `*.{json,md,css,scss,yml,yaml}` are formatted with `prettier --write`.
+  - Fixes are re-staged automatically. The commit is only blocked by ESLint
+    problems that cannot be auto-fixed; address those and commit again.
+- There is intentionally **no pre-push hook**. The accessibility suite
+  (`npm run test:a11y`) is a slower, browser-based check (several minutes
+  across Chromium, Firefox and a mobile viewport), so it is only run by the
+  [Accessibility Tests](.github/workflows/accessibility.yml) CI workflow on
+  every pull request, rather than on every local `git push`. You can still
+  run `npm run test:a11y` locally at any time before pushing if you want
+  earlier feedback.
+
+If you ever need to bypass the pre-commit hook in an emergency, Git
+supports `git commit --no-verify`, but this should be used sparingly and
+never to merge known issues into `main`.
+
+### Continuous Integration
+
+- The [Run Tests](.github/workflows/test.yml) workflow runs on every
+  pull request (and pushes to `main`), and runs the full-project `lint`
+  (including the `jsx-a11y` rules, failing on any warning), the Prettier
+  `format` check, unit tests, Playwright E2E tests, and a type check.
+- The [Accessibility Tests](.github/workflows/accessibility.yml) workflow
+  runs on every pull request (and pushes to `main`) and runs `test:a11y`
+  against Chromium and a 320px mobile viewport on pull requests, plus
+  Firefox on pushes to `main` and manual runs, scanning the agreed core
+  routes (home, about, how-to, legal, services, themes, publishers,
+  allele-frequency, basket, notifications) as well as interactive states
+  such as open menus, dialogs, filters and validation errors (see
+  [tests/accessibility.spec.ts](tests/accessibility.spec.ts) and
+  [tests/accessibility.states.spec.ts](tests/accessibility.states.spec.ts)).
+  A deliberately introduced axe violation fails this suite.
+- Pull requests that only change `documentation/`, Markdown files or
+  `LICENSES/` skip the Playwright E2E and accessibility browser tests. The
+  jobs still run and report, so required checks are not left pending.
+- Required status checks must pass before a pull request can be merged.
+
+### Disabling an accessibility rule
+
+Accessibility rules must not be disabled or excluded without a documented
+reason. If you believe an ESLint `jsx-a11y` rule or an axe check is a false
+positive for a specific, well-understood case:
+
+1. Add an inline `eslint-disable-next-line` (or the equivalent axe
+   exclusion) directly above the affected line, naming the rule and giving
+   the reason after `--`:
+
+   ```tsx
+   // eslint-disable-next-line jsx-a11y/<rule-name> -- why this is safe, JIRA-123
+   ```
+
+2. Open a follow-up Jira issue tracking the exception (for example, to
+   revisit it once an upstream fix or a better pattern is available) and
+   reference it in the description.
+3. Never disable a rule project-wide or for an entire file without the same
+   justification and Jira reference.
+
+ESLint enforces part of this automatically (via
+[@eslint-community/eslint-plugin-eslint-comments](https://eslint-community.github.io/eslint-plugin-eslint-comments/)):
+a disable comment without a `-- description`, a blanket disable that names
+no rule, an unmatched `eslint-disable`/`eslint-enable` pair, and a disable
+comment that no longer suppresses anything all fail `npm run lint`.
+
+### Troubleshooting
+
+- **The pre-commit hook blocks a commit**: the remaining problems are ones
+  ESLint cannot fix automatically. Fix them, `git add` the file and commit
+  again.
+- **Pre-commit hook does not run**: confirm Husky is installed by re-running
+  `npm install` (which triggers the `prepare` script), and check that
+  `git config core.hooksPath` points to `.husky/_`.
+- **Prettier check fails in CI but not locally**: run `npm run format:fix`
+  before committing; `format` only checks, it never rewrites files. Husky
+  is disabled in CI (`HUSKY=0`), so CI never rewrites files either.
+- **`npm install`/`npm ci` warns about a peer dependency conflict for
+  `eslint-plugin-jsx-a11y`**: this is expected and non-fatal.
+  `eslint-plugin-jsx-a11y`'s peer dependency range caps ESLint below the
+  version used here; [package.json](package.json)'s `overrides` entry for
+  `eslint-plugin-jsx-a11y` pins its nested `eslint` peer to this project's
+  version so npm resolves it instead of failing with `ERESOLVE`.
+- **Accessibility test failures**: review the Playwright HTML report
+  uploaded as a CI artifact, or run `npm run test:a11y` locally with
+  `--headed`/`--debug` for interactive debugging.
 
 ## Attribution
 

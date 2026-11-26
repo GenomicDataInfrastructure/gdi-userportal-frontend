@@ -20,8 +20,6 @@ jobs:
       HUSKY: 0
       E2E_MODE: mocked
       MOCK_API_PORT: 4010
-      # Standard ubuntu-24.04 runners have 4 vCPUs.
-      PLAYWRIGHT_CI_WORKERS: 4
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

@@ -35,19 +35,13 @@ function AddToBasketButton({
     removeDatasetFromBasket,
     isLoading,
     hasDatasetAccess,
-    isAccessLoading,
   } = useDatasetBasket();
 
   const isInBasket = dataset
     ? basket.some((ds) => ds.id === dataset.id)
     : false;
   const hasAccess = !!dataset && hasDatasetAccess(dataset);
-  const buttonDisabled =
-    hasAccess ||
-    isAccessLoading ||
-    isLoading ||
-    !dataset?.identifier ||
-    isDisabledProp;
+  const buttonDisabled = isLoading || !dataset?.identifier || isDisabledProp;
 
   const toggleDatasetInBasket = () => {
     if (!dataset) return;
@@ -77,7 +71,7 @@ function AddToBasketButton({
           </span>
         )}
       </span>
-      {!hasAccess && !withoutAccessContent && (
+      {!withoutAccessContent && (
         <Button
           text={isInBasket ? t("removeFromBasket") : t("addToBasket")}
           icon={isInBasket ? faMinusCircle : faPlusCircle}

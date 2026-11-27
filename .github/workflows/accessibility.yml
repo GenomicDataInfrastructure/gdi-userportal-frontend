@@ -20,37 +20,59 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - project: chromium
-            browser: chromium
-          - project: firefox
-            browser: firefox
-          - project: mobile
-            browser: chromium
+        # Firefox runs on pushes to main and manual runs only; pull requests
+        # get Chromium (desktop) and the 320px mobile viewport.
+        project: ${{ fromJSON(github.event_name == 'pull_request' && '["chromium","mobile"]' || '["chromium","firefox","mobile"]') }}
     env:
+      HUSKY: 0
+      PROJECT: ${{ matrix.project }}
+      BROWSER: ${{ matrix.project == 'firefox' && 'firefox' || 'chromium' }}
       E2E_MODE: mocked
       MOCK_API_PORT: 4010
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - name: Detect code changes
+        # Docs-only PRs (documentation/, Markdown/MDX, LICENSES/) skip the browser
+        # tests. Steps are skipped rather than the job, so required status
+        # checks still report. Pushes to main always run everything.
+        id: changes
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git fetch --no-tags --depth=1 origin "$BASE_SHA"
+          changed=$(git diff --name-only "$BASE_SHA" HEAD)
+          code=$(printf '%s\n' "$changed" | grep -vE '^documentation/|\.mdx?$|^LICENSES/' || true)
+          if [ -n "$code" ]; then
+            echo "code=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "code=false" >> "$GITHUB_OUTPUT"
+            echo "Docs-only change: skipping browser tests."
+          fi
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        if: steps.changes.outputs.code != 'false'
         with:
           node-version: 24
           cache: npm
       - name: Install dependencies
+        if: steps.changes.outputs.code != 'false'
         run: npm ci
       - name: Install browser
-        run: npx playwright install --with-deps ${{ matrix.browser }}
+        if: steps.changes.outputs.code != 'false'
+        run: npx playwright install --with-deps "$BROWSER"
       - name: Generate API types
+        if: steps.changes.outputs.code != 'false'
         run: npm run generate:openapi
       - name: Check notification component accessibility
-        if: matrix.project == 'chromium'
+        if: steps.changes.outputs.code != 'false' && matrix.project == 'chromium'
         run: npx jest src/app/notifications/__tests__/page.test.tsx --runInBand
       - name: Run accessibility tests
-        run: npx playwright test --config=playwright.accessibility.config.ts --project=${{ matrix.project }}
+        if: steps.changes.outputs.code != 'false'
+        run: npx playwright test --config=playwright.accessibility.config.ts --project="$PROJECT"
       - name: Upload accessibility report
-        if: always()
+        if: always() && steps.changes.outputs.code != 'false'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: accessibility-report-${{ matrix.project }}

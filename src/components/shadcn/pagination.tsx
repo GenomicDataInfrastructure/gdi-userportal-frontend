@@ -54,6 +54,7 @@ const PaginationLink = ({
   className,
   isActive,
   size = "icon",
+  children,
   ...props
 }: PaginationLinkProps) => (
   <PaginationItem>
@@ -68,7 +69,9 @@ const PaginationLink = ({
         className,
         isActive ? "bg-info text-white hover:text-white" : ""
       )}
-    />
+    >
+      {children}
+    </Link>
   </PaginationItem>
 );
 PaginationLink.displayName = "PaginationLink";

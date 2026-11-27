@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # LNDS rhel-nodejs (ubi9-minimal + Node.js 24.22.1, CVE-2026-111497), as in #1259, pinned by digest.
 # linux/amd64 only. Bump the digest when the :24 tag is rebuilt.
-FROM registry.lnds.lu/library/rhel-nodejs:24@sha256:0ee5eafdbecab3b6057518f3b6817b4086aca3a79fbe1ee55321c8a3ebb68911 AS base
+FROM registry.lnds.lu/library/rhel-nodejs:24@sha256:841ece3e91bc22e182b6d79bb0c277bfe0ca19400066301baadb06031715421d AS base
 USER 0
 RUN microdnf update -y && microdnf clean all
 USER 1001
